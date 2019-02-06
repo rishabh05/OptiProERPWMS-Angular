@@ -44,8 +44,8 @@ export class SigninComponent implements OnInit {
     }
     
     // Captcha code
-    this. getRandomStringForCaptcha();
-    this.customCaptcha(this.randomstring);
+    // this. getRandomStringForCaptcha();
+    // this.customCaptcha(this.randomstring);
     
     // Apply classes on Body
     const element = document.getElementsByTagName("body")[0];
@@ -98,7 +98,7 @@ export class SigninComponent implements OnInit {
     setTimeout(()=>{ 
       this.showLoader = false;
       this.router.navigateByUrl('home/dashboard');
-    }, 500);
+    }, 100);
 
     // code for remember me
     if(this.isRemember == true){
@@ -119,35 +119,35 @@ export class SigninComponent implements OnInit {
    * 
    * @param string 
    */
-  customCaptcha(string){
-    let c = this.myCanvas.nativeElement;
-    let ctx = c.getContext("2d");
-    ctx.font = "15px Arial";
-    ctx.clearRect(0, 0, 252, 144);
-    ctx.fillStyle = "black";
-    ctx.fillText(string, 15, 21);
-  }
+  // customCaptcha(string){
+  //   let c = this.myCanvas.nativeElement;
+  //   let ctx = c.getContext("2d");
+  //   ctx.font = "15px Arial";
+  //   ctx.clearRect(0, 0, 252, 144);
+  //   ctx.fillStyle = "black";
+  //   ctx.fillText(string, 15, 21);
+  // }
 
   /**
    * Function for generate random string
    */
-  getRandomStringForCaptcha(){
-      let chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
-      let string_length = 4;
-      for (var i=0; i<string_length; i++) {
-        let rnum = Math.floor(Math.random() * chars.length);
-        this.randomstring += chars.substring(rnum,rnum+1);
-      }
-  }
+  // getRandomStringForCaptcha(){
+  //     let chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+  //     let string_length = 4;
+  //     for (var i=0; i<string_length; i++) {
+  //       let rnum = Math.floor(Math.random() * chars.length);
+  //       this.randomstring += chars.substring(rnum,rnum+1);
+  //     }
+  // }
 
   /**
    * Function for change captcha value
    */
-  changeCaptcha(){
-    this.randomstring = '';
-    this.getRandomStringForCaptcha();
-    this.customCaptcha(this.randomstring);
-  }
+  // changeCaptcha(){
+  //   this.randomstring = '';
+  //   this.getRandomStringForCaptcha();
+  //   this.customCaptcha(this.randomstring);
+  // }
   // captcha code end
 
   // public  closeRightSidebar() {
