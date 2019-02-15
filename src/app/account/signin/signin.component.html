@@ -20,7 +20,7 @@
 
                     <form class="k-form" #signInForm="ngForm">
                         <label class="k-form-field">
-                          <span class="opti_form-label">User Name
+                          <span class="opti_form-label">{{ 'Username'|translate }}
                           <!-- <span *ngIf="emailId.errors?.email && emailId.touched" 
                           class="float-right opti_error-msg"> Invalid emailId. </span> -->
                           <span *ngIf="emailId.errors?.required && (emailId.dirty || emailId.touched)" 
@@ -33,11 +33,11 @@
                           <input type="text"  name = "email" required [(ngModel)]="userName"
                             #emailId = ngModel class="k-textbox" value="" placeholder="Enter Username"
                             [readonly]=readonlyFlag
-                            />
+                            />  
                       </label>
 
                         <label class="k-form-field">
-                          <span class="opti_form-label">Password *
+                          <span class="opti_form-label">{{ 'Password'|translate }}
                               <span  *ngIf="pwd.errors && (pwd.dirty || pwd.touched)"   class="float-right opti_error-msg">Password is required.</span>
                               <span  *ngIf="this.isError==true &&  (pwd.dirty || pwd.touched) && (emailId.dirty || emailId.touched) && !pwd.errors?.required" class="float-right opti_error-msg">Invalid credentials.</span>
                               
@@ -89,8 +89,8 @@
                 </div>
                 </label>
                 <div class="text-right">
-                    <button type="submit" id=connectbtn class="k-button k-primary opti_fullwidth mt-4" *ngIf="!isCompleteLoginVisible" (click)="isCompleteLoginVisible = !isCompleteLoginVisible">Login</button>
-                    <button type="submit" id=connectbtn *ngIf="isCompleteLoginVisible" class="k-button k-primary opti_fullwidth" (click)="login()">Connect</button>
+                    <button type="submit" id=connectbtn class="k-button k-primary opti_fullwidth mt-4" *ngIf="!isCompleteLoginVisible" (click)="login()">Connect</button>
+                    <button type="submit" id=connectbtn *ngIf="isCompleteLoginVisible" class="k-button k-primary opti_fullwidth" (click)="login()">Login</button>
                 </div>
                 </form>
                 <!-- </div> -->

@@ -10,11 +10,14 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 
 
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ButtonsModule } from '@progress/kendo-angular-buttons';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
+import { TranslateModule, TranslateLoader } from '../../../node_modules/@ngx-translate/core';
+import { TranslateHttpLoader } from '../../../node_modules/@ngx-translate/http-loader';
+import { TrnaslateLazyModule } from '../../translate-lazy.module';
 
 
 
@@ -26,14 +29,26 @@ import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
 
     // BS
     PerfectScrollbarModule,
-
+    HttpClientModule,     
+    TrnaslateLazyModule,
     ButtonsModule,
     DropDownsModule,
 
-    HttpClientModule,         
+       
     FormsModule,
     TooltipModule.forRoot(),
+  
+    // TranslateModule.forRoot({
+    //   loader: {
+    //     provide: TranslateLoader,
+    //     useFactory: (HttpLoaderFactory),
+    //     deps: [HttpClient]
+    //   }
+    // }),
   ],
   declarations: [SignupComponent, SigninComponent, SetPasswordComponent, ResetPasswordComponent]
 })
 export class AccountModule { }
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}

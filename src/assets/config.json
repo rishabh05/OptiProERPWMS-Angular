@@ -1,4 +1,11 @@
 {       
+	"company_name":"Optipro ERP",
+	"app_title":"OptiProERP WMS",
+	"locale":"en",
+	"service_url":"http://localhost:57903/",
+	"admin_db_name":"OPTIPROADMIN",
+	"product_code":"WMS",
+	"system_version":"1.10.1",
     "baseServerAPIEndpoint":"http://172.16.6.139:9090/",
     "firstHomePage": "/home/dashboard",
     "firstHomePageVendor":"/home/vendor/vpinquery",

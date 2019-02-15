@@ -3,16 +3,61 @@ import { Subject, BehaviorSubject } from 'rxjs';
 import { environment } from '../../environments/environment.prod';
 import { opticonstants } from '../constants';
 import { CurrentSidebarInfo } from '../models/sidebar/current-sidebar-info';
+import { HttpClient, HttpErrorResponse } from '../../../node_modules/@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class Commonservice {
 
-  constructor() { } 
+  public href: any = window.location.href;
+  constructor(private httpclient: HttpClient) {
+    this.loadConfig();
+  } 
   // Declaration
   private commonData = new Subject<any>();
   commonData$ = this.commonData.asObservable();
+
+  public async loadConfig(){
+    // let config_call = await fetch( this.get_current_url() +  "/assets/config.json");
+    // let config_data = await config_call.json();
+    // sessionStorage.setItem('system_config', JSON.stringify(config_data));
+
+    //This will get all config
+    this.httpclient.get(this.get_current_url() + '/assets/config.json').subscribe(
+      data => {
+        sessionStorage.setItem('ConfigData', JSON.stringify(data));
+      },
+      (err: HttpErrorResponse) => {
+        console.log(err.message);
+      }
+    );
+  }
+
+  public get_current_url() {
+    let temp: any = this.href.substring(0, this.href.lastIndexOf('/'));
+    if (temp.lastIndexOf('#') != '-1') {
+        temp = temp.substring(0, temp.lastIndexOf('#'));
+    }
+    let sanitized = temp.replace(/^http\:\/\//, '').replace(/\/+/g, '/').replace(/\/+$/, '');
+    temp = (window.location.protocol + '//' + sanitized);
+    return temp;
+}
+
+
+public toast_config = {
+  closeButton: true,
+  progressBar: false,
+  timeOut: 5000,
+  positionClass: 'toast-bottom-right',
+  iconClasses: {
+      error: 'alert alert-danger',
+      info: 'alert alert-info ',
+      success: 'alert alert-success ',
+      warning: 'alert alert-warning'
+  }
+};    
+
 
   // Methods
   public ShareData(data: any) {
