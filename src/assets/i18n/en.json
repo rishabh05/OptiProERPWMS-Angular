@@ -1,5 +1,35 @@
 {
+  "Username": "Username*",
   "Password": "Password*",
-  "Username": "Username*"
+  "SelectWarehouse": "Select Warehouse",
+  "SelectCompany": "Select Company",
+  "PsurlFailed": "PSURL Failed",
+  "Company": "Company",
+  "Warehouse": "Warehouse",
+  "UnPwdBlankErrorMsg": "username or password cannot be blank",
+  "InvalidUnPwdErrMsg": "Invalid username and password",
+  "InvalidUn": "Invalid Username",
+  "UsernotActive": "User not active",
+  "SelectCompanyMsg": "Please Select Company!",
+  "SelectwarehouseMsg": "Please Select Warehouse!",
+  "RememberMe": "Remember Me",
+  "Connect": "Connect",
+  "Login": "Login",
+  "UnBlankErrMsg": "Username is required.",
+  "PwdBlankErrMsg": "Password is required.",
+
+  "15101":"Goods Receipt PO",
+  "15102":"Delivery",
+  "15108":"Warehouse Transfer",
+  "15109":"Bin Transfer",
+  "AdjustmentsandCounting":"Adjustments & Counting",
+  "15112":"Physical Count",
+  "PUR":"Inbound",
+  "InternalMovement":"Inventory Transfer",
+  "SLS":"Outbound",
+  "Production":"Production",
+  "15103":"Production",
+  "Reports":"Label & Report",
+  "15118":"Inbound"
 }
   

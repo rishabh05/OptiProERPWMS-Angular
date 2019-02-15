@@ -20,11 +20,11 @@
 
                     <form class="k-form" #signInForm="ngForm">
                         <label class="k-form-field">
-                          <span class="opti_form-label">{{ 'Username'|translate }}
+                          <span class="opti_form-label">{{ 'Username'|translate}}
                           <!-- <span *ngIf="emailId.errors?.email && emailId.touched" 
                           class="float-right opti_error-msg"> Invalid emailId. </span> -->
                           <span *ngIf="emailId.errors?.required && (emailId.dirty || emailId.touched)" 
-                          class="float-right opti_error-msg" >Username is required.</span>
+                          class="float-right opti_error-msg" >{{'UnBlankErrMsg'|translate}}</span>
                           <!-- <span  *ngIf="this.userNotExist==true && (emailId.dirty || emailId.touched) 
                           && (pwd.dirty || pwd.touched) && !emailId.errors?.required &&
                            !emailId.errors?.valid " class="float-right opti_error-msg">
@@ -37,20 +37,20 @@
                       </label>
 
                         <label class="k-form-field">
-                          <span class="opti_form-label">{{ 'Password'|translate }}
-                              <span  *ngIf="pwd.errors && (pwd.dirty || pwd.touched)"   class="float-right opti_error-msg">Password is required.</span>
+                          <span class="opti_form-label">{{ 'Password'|translate}}
+                              <span  *ngIf="pwd.errors && (pwd.dirty || pwd.touched)"   class="float-right opti_error-msg">{{'PwdBlankErrMsg'|translate}}</span>
                               <span  *ngIf="this.isError==true &&  (pwd.dirty || pwd.touched) && (emailId.dirty || emailId.touched) && !pwd.errors?.required" class="float-right opti_error-msg">Invalid credentials.</span>
                               
                           </span>
                           <input name = "password" required [(ngModel)]="password" 
                           #pwd = ngModel type="password" class="k-textbox" value="" 
-                          placeholder="Your password" [readonly] = readonlyFlag/>
+                          placeholder="{{ 'Password'|translate}}" [readonly] = readonlyFlag/>
                       </label>
 
                         <!-- start if condition -->
                         <ng-container *ngIf="isCompleteLoginVisible">
                             <label class="k-form-field">
-                              <span class="opti_form-label">Company </span>
+                              <span class="opti_form-label">{{'Company'|translate}} </span>
                               <kendo-dropdownlist class="form-control form-control-sm"
                               
                                [data]="companyName" name="selectedItem"
@@ -60,7 +60,7 @@
                             </label>
 
                             <label class="k-form-field">
-                              <span class="opti_form-label">Warehouse </span>
+                              <span class="opti_form-label">{{'Warehouse'|translate}} </span>
                               <kendo-dropdownlist class="form-control form-control-sm"
                                [data]="whsList" (click)="setWarehouseList()" 
                                textField="OPTM_WHSE"
@@ -85,12 +85,12 @@
                         <label class="k-form-field" *ngIf="isCompleteLoginVisible">
                             <div class="opti_checkbox-container">
                                 <input type="checkbox" id="auth-2fa" class="k-checkbox float-left" [(ngModel)]="isRemember" name="isRemember">
-                                <label class="k-checkbox-label" for="auth-2fa">Remember Me</label>
+                                <label class="k-checkbox-label" for="auth-2fa">{{'RememberMe'|translate}}</label>
                 </div>
                 </label>
                 <div class="text-right">
-                    <button type="submit" id=connectbtn class="k-button k-primary opti_fullwidth mt-4" *ngIf="!isCompleteLoginVisible" (click)="login()">Connect</button>
-                    <button type="submit" id=connectbtn *ngIf="isCompleteLoginVisible" class="k-button k-primary opti_fullwidth" (click)="login()">Login</button>
+                    <button type="submit" id=connectbtn class="k-button k-primary opti_fullwidth mt-4" *ngIf="!isCompleteLoginVisible" (click)="login()">{{'Connect'|translate}}</button>
+                    <button type="submit" id=connectbtn *ngIf="isCompleteLoginVisible" class="k-button k-primary opti_fullwidth" (click)="login()">{{'Login'|translate}}</button>
                 </div>
                 </form>
                 <!-- </div> -->

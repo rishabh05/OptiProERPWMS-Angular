@@ -7,7 +7,7 @@ import { ValidateUser } from '../../models/account/ValidateUser';
 import { LicenseData } from '../../models/account/LicenseData';
 import { WHS } from '../../models/account/WHS';
 
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 
 
 @Component({
@@ -36,15 +36,21 @@ export class SigninComponent implements OnInit {
   isCompleteLoginVisible: boolean = false;
   userDetails: ValidateUser[];
   licenseData: LicenseData[];
-  selectedItem: string = "Select Company";
+  selectedItem: string = "";
   selectedWhse: string = "";
   whsList: WHS[] = [];
-  defaultWHS = { OPTM_WHSE: "Select Warehouse", BPLid: 0 };
+  defaultWHS: any;
   public companyName: Array<string> = [];
   readonlyFlag: boolean = false;
 
   constructor(private router: Router, private signinService: SigninService, private commonService: Commonservice, private toastr: ToastrService, private translate: TranslateService) {
-    // translate.setDefaultLang('en');
+    let userLang = navigator.language.split('-')[0];
+    userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
+    translate.use(userLang);
+    translate.onLangChange.subscribe((event: LangChangeEvent) => {
+      this.selectedItem = translate.instant("SelectCompany");
+      this.defaultWHS = { OPTM_WHSE: translate.instant("SelectWarehouse"), BPLid: 0 };
+    });
   }
 
   @ViewChild('myCanvas') myCanvas;
@@ -65,11 +71,8 @@ export class SigninComponent implements OnInit {
     element.className = "";
     element.classList.add("opti_body-login");
     element.classList.add("opti_account-module");
-    // this.userName = this.translate.instant("Username");
     this.getPSURL();
   }
-
-
 
   getPSURL() {
     this.signinService.getPSURL().subscribe(
@@ -77,8 +80,7 @@ export class SigninComponent implements OnInit {
         localStorage.setItem("PSURLFORADMIN", data);
       },
       error => {
-        alert("get PSURL Failed");
-        this.toastr.error('', "get PSURL Failed", this.commonService.toast_config);
+        this.toastr.error('', this.translate.instant("PsurlFailed"), this.commonService.toast_config);
       }
     );
   }
@@ -89,47 +91,50 @@ export class SigninComponent implements OnInit {
   public async login() {
     // this.isCompleteLoginVisible = true;
     if (this.userName == "" || this.password == "") {
-      alert("username or password cannot be blank");
+      this.toastr.error('', this.translate.instant("UnPwdBlankErrorMsg"), this.commonService.toast_config);
       return true;
     }
 
     this.showLoader = true;
     if (!this.isCompleteLoginVisible) {
-      this.signinService.ValidateUserLogin(this.userName, this.password).subscribe(
-        data => {
-          
-          this.userDetails = data.Table;
-          this.handleValidationUserSuccessResponse();
-        },
-        error => {
-          
-          this.showLoader = false;
-
-          alert("Login Failed");
-        }
-      );
+      this.validateUserLogin();
     } else {
       this.selectedItem = document.getElementById("compId").innerText.trim();
       if (this.validateFields()) {
         this.showLoader = false;
         return;
       }
-      this.signinService.getLicenseData(this.selectedItem).subscribe(
-        data => {
-          
-          this.licenseData = data;
-          this.handleLicenseDataSuccessResponse();
-        },
-        error => {
-          
-          this.showLoader = false;
-          alert("license Failed");
-        }
-      );
+      this.getLicenseData();
     }
-
   }
 
+  private validateUserLogin(){
+    this.signinService.ValidateUserLogin(this.userName, this.password).subscribe(
+      data => {
+        
+        this.userDetails = data.Table;
+        this.handleValidationUserSuccessResponse();
+      },
+      error => {
+        this.toastr.error('', this.translate.instant("InvalidUnPwdErrMsg"), 
+        this.commonService.toast_config);
+        this.showLoader = false;
+      }
+    );
+  }
+
+  private getLicenseData(){
+    this.signinService.getLicenseData(this.selectedItem).subscribe(
+      data => {
+        this.licenseData = data;
+        this.handleLicenseDataSuccessResponse();
+      },
+      error => {
+        this.showLoader = false;
+        alert("license Failed");
+      }
+    );
+  }
 
   private handleLicenseDataSuccessResponse() {
 
@@ -155,7 +160,6 @@ export class SigninComponent implements OnInit {
             this.setCookie('CompID', "", 365);
             this.setCookie('whseId', "", 365);
           }
-          alert("login done");
           this.router.navigateByUrl('home/dashboard');
         } else {
           alert(this.licenseData[0].Message + " " + this.licenseData[0].Token);
@@ -168,28 +172,23 @@ export class SigninComponent implements OnInit {
     }
   }
 
-
   private handleValidationUserSuccessResponse() {
     this.showLoader = false;
     if (this.userDetails == null || this.userDetails.length < 1) {
-      alert("Invalid username");
+      this.toastr.error('', this.translate.instant("InvalidUn"), this.commonService.toast_config);
       return true;
     }
     if (this.userDetails[0].OPTM_ACTIVE == 0) {
-      alert("User not active");
+      this.toastr.error('', this.translate.instant("UsernotActive"), this.commonService.toast_config);
       return true;
     }
-
     localStorage.setItem("UserId", this.userName);
-    // document.getElementById("connectbtn").innerText = "Login";
-
     this.isCompleteLoginVisible = true;
     this.readonlyFlag = true;
-    // this.companyName.push("Select Company");
+
     this.userDetails.forEach(element => {
       this.companyName.push(element.OPTM_COMPID);
     });
-
 
     for (var i = 0; i < this.companyName.length; i++) {
       if (this.getCookie('CompID') == this.companyName[i]) {
@@ -201,7 +200,6 @@ export class SigninComponent implements OnInit {
 
 
   public setWarehouseList() {
-
     if (document.getElementById("compId") != null) {
       this.selectedItem = document.getElementById("compId").innerText.trim();
     }
@@ -216,22 +214,21 @@ export class SigninComponent implements OnInit {
         }
       },
       error => {
-        alert("get setWarehouseList Failed");
       }
     );
   }
 
 
   private validateFields(): boolean {
-    if (this.selectedItem == 'Select Company' || this.selectedItem == '') {
+    if (this.selectedItem == this.translate.instant("SelectCompany") || this.selectedItem == '') {
       this.showLoader = false;
-      alert("Please Select Company!");
+      this.toastr.error('', this.translate.instant("SelectCompanyMsg"), this.commonService.toast_config);
       return true;
     }
-    if (document.getElementById("whseId").innerText.trim() == 'Select Warehouse' ||
+    if (document.getElementById("whseId").innerText.trim() == this.translate.instant("SelectWarehouse")||
       document.getElementById("whseId").innerText.trim() == "") {
       this.showLoader = false;
-      alert("Please Select Warehouse!");
+      this.toastr.error('', this.translate.instant("SelectCompanyMsg"), this.commonService.toast_config);
       return true;
     }
     return false;
@@ -268,15 +265,4 @@ export class SigninComponent implements OnInit {
     var expires = "expires=" + d.toUTCString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
   }
-
-
-  /**
-   * Function for redirect to forget password
-   */
-  navigateToResetPassword() {
-    this.router.navigateByUrl('account/resetpassword');
-  }
-
-
-
 }
