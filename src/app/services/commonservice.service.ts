@@ -3,7 +3,7 @@ import { Subject, BehaviorSubject } from 'rxjs';
 import { environment } from '../../environments/environment.prod';
 import { opticonstants } from '../constants';
 import { CurrentSidebarInfo } from '../models/sidebar/current-sidebar-info';
-import { HttpClient, HttpErrorResponse } from '../../../node_modules/@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -45,9 +45,10 @@ export class Commonservice {
 }
 
 
-public toast_config = {
+public toast_config:any = {
   closeButton: true,
   progressBar: false,
+  opacity:1,
   timeOut: 5000,
   positionClass: 'toast-bottom-right',
   iconClasses: {

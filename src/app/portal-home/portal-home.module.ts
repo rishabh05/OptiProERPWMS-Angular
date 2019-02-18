@@ -19,6 +19,7 @@ import { ChartsModule } from '@progress/kendo-angular-charts';
 
 import { SalesOrderModule } from '../sales-order/sales-order.module';
 import { FormModule } from '../form/form.module';
+import { TrnaslateLazyModule } from '../../translate-lazy.module';
 
 
 
@@ -31,7 +32,7 @@ import { FormModule } from '../form/form.module';
     AngularSvgIconModule, 
     BsDropdownModule.forRoot(),
     PerfectScrollbarModule,
-    
+    TrnaslateLazyModule,
     // Angular
     HttpClientModule,         
     FormsModule,

@@ -3,7 +3,7 @@ import { Commonservice } from '../../services/commonservice.service';
 import { Router } from '@angular/router';
 import { opticonstants } from '../../constants';
 import { CurrentSidebarInfo } from '../../models/sidebar/current-sidebar-info';
-// import { UIHelper } from '../../helpers/ui.helpers';
+import { MenuService } from '../../services/menu.service';
 
 @Component({
   selector: 'app-portal-left',
@@ -13,7 +13,7 @@ import { CurrentSidebarInfo } from '../../models/sidebar/current-sidebar-info';
 export class PortalLeftComponent implements OnInit {
 
   
-  constructor(private commonService: Commonservice, private router: Router) { }
+  constructor(private commonService: Commonservice, private router: Router, private menuService: MenuService) { }
   selectedThemeColor: string = 'opticonstants.DEFAULTTHEMECOLOR';
   selectedItem: string;
 
@@ -29,8 +29,59 @@ export class PortalLeftComponent implements OnInit {
         this.selectedThemeColor = data;
       }
     );
-
+    this.getAllMenus();
     
+  }
+
+
+  getAllMenus(){
+    this.menuService.getAllMenus().subscribe(
+      data => {
+        this.displayMenuOptions(data.Modules);
+      },
+      error => {
+        alert("get All Menus Failed");
+      }
+    );
+
+    // var jObject = { CompanyDBId: companyDBObject.CompanyDbName, UserId: companyDBObject.LoggedOnUserName }
+    // var url = this.WMSBaseURL();
+    // var oView = this.getView();
+    // oCtrl = this;
+    // //oCurrentController = this;
+    // oModelReq.loadData(url + "/api/Menu/AllModule", jObject, true, 'POST');
+    // oModelReq.attachRequestCompleted(function (oEvent) {
+    //     var model = oEvent.getSource();
+    //     if (model != null) {
+    //         if (model.oData.Modules.length > 0) {
+    //             sap.ui.getCore().setModel(model.oData, oCtrl.CommonProperties.UserMenus);
+    //             sessionStorage.setItem(oCtrl.SessionProperties.UserMenus, JSON.stringify(model.oData));
+    //             var userMenus = JSON.parse(sessionStorage.getItem(oCtrl.SessionProperties.UserMenus));
+    //             if (userMenus != null) {
+    //                 if (userMenus.Modules.length > 0) {
+    //                     for (var iIndex = 0; iIndex < userMenus.Modules.length; iIndex++) {
+
+    //                         $("." + userMenus.Modules[iIndex].id).css("display", "block");
+    //                         if (userMenus.Modules[iIndex].Screens.length > 0) {
+    //                             for (var sIndex = 0; sIndex < userMenus.Modules[iIndex].Screens.length; sIndex++) {
+    //                                 $("." + userMenus.Modules[iIndex].Screens[sIndex].id).css("display", "block");
+    //                             }
+
+    //                         }
+
+    //                     }
+    //                 }
+    //             }
+
+    //         }
+    //     }
+    // });
+  }
+
+  displayMenuOptions(menus: any[]){
+    menus.forEach(element => {
+      document.getElementById(element.id); 
+    });
   }
 
 

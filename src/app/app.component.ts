@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Commonservice } from './services/commonservice.service';
-import { TranslateService, LangChangeEvent } from '../../node_modules/@ngx-translate/core';
+// import { TranslateService, LangChangeEvent } from '../../node_modules/@ngx-translate/core';
 
 @Component({
   selector: 'app-root',

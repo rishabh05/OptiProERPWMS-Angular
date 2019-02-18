@@ -18,18 +18,21 @@
   "UnBlankErrMsg": "Username is required.",
   "PwdBlankErrMsg": "Password is required.",
 
-  "15101":"Goods Receipt PO",
-  "15102":"Delivery",
-  "15108":"Warehouse Transfer",
-  "15109":"Bin Transfer",
-  "AdjustmentsandCounting":"Adjustments & Counting",
-  "15112":"Physical Count",
-  "PUR":"Inbound",
-  "InternalMovement":"Inventory Transfer",
-  "SLS":"Outbound",
+  "Inbound":"Inbound",
+  "Outbound":"Outbound",
+  "InventoryTransfer":"Inventory Transfer",
+  "WarehouseTransfer":"Warehouse Transfer",
+  "BinTransfer":"Bin Transfer",
+  "AdjustmentsCounting":"Adjustments & Counting",
+  "PhysicalCount":"Physical Count",
   "Production":"Production",
-  "15103":"Production",
-  "Reports":"Label & Report",
-  "15118":"Inbound"
+  "ReceiptFromProduction":"Receipt From Production",
+  "IssueForProduction":"Issue For Production",
+  "LabelPrintingandReports":"Label Printing and Reports",
+  "BinLabel":"Bin Label",
+  "ItemLabel":"Item Label",
+  "InventoryEnquiry":"Inventory Enquiry",
+  "SpotCount":"Spot Count"
+
 }
   

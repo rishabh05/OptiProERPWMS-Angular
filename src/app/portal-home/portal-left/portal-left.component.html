@@ -21,33 +21,25 @@
                     <span>Dashboard</span>
                 </a>
             </li>
-            <!-- <li (click)="listClick($event, 'purchaseinquiry')" [ngClass]="{'active': selectedItem == 'purchaseinquiry'}"><a roterLink="purchaseinquiry"> <svg-icon src="assets/images/left-panel/Purchase-Inquiries.svg" [svgStyle]="{ 'width.px':20, 'height.px':20, 'fill':selectedThemeColor }"></svg-icon><span>Purchase Inquiries</span></a></li> -->
-            <!-- <li (click)="listClick($event, 'sales')" [ngClass]="{'active': selectedItem == 'sales'}"><a roterLink="sales"> <svg-icon src="assets/images/left-panel/Sales-Quotations.svg" [svgStyle]="{ 'width.px':20, 'height.px':20, 'fill':selectedThemeColor }"></svg-icon><span>Sales Quotations</span></a></li> -->
-            <!-- <li (click)="listClick($event, 'customerpurchaseorder')" [ngClass]="{'active': selectedItem == 'customerpurchaseorder'}"><a roterLink="customerpurchaseorder"> <svg-icon src="assets/images/left-panel/Customer-Purchase-Order.svg" [svgStyle]="{ 'width.px':20, 'height.px':20, 'fill':selectedThemeColor }"></svg-icon><span>Customer Purchase Order</span></a></li> -->
-            <li (click)="listClick($event, 'salesorder')" [ngClass]="{'active': selectedItem == 'salesorder'}">
+
+            <li id="PUR" (click)="listClick($event, 'salesorder')" [ngClass]="{'active': selectedItem == 'salesorder'}">
                 <a roterLink="salesorder">
                     <i class="opti-icon-sales-order" [style.color]="selectedThemeColor"></i>
-                    <span>Sales Orders</span>
+                    <span>{{'Inbound'|translate}}</span>
                 </a>
             </li>
-            <!-- <li (click)="listClick($event, 'deliverynotes')" [ngClass]="{'active': selectedItem == 'deliverynotes'}"><a roterLink="deliverynotes"> <svg-icon src="assets/images/left-panel/Delivery-Notes.svg" [svgStyle]="{ 'width.px':20, 'height.px':20, 'fill':selectedThemeColor }"></svg-icon><span>Delivery Notes</span></a></li>
-            <li (click)="listClick($event, 'purchaseinquiry')" [ngClass]="{'active': selectedItem == 'item7'}"><a roterLink=""> <svg-icon src="assets/images/left-panel/Advance-Shipment-Notes.svg" [svgStyle]="{ 'width.px':20, 'height.px':20, 'fill':selectedThemeColor }"></svg-icon><span>Advance Shipment Notes</span></a></li>
-            <li (click)="listClick($event, 'purchaseinquiry')" [ngClass]="{'active': selectedItem == 'item8'}"><a roterLink=""> <svg-icon src="assets/images/left-panel/Open-Invoices.svg" [svgStyle]="{ 'width.px':20, 'height.px':20, 'fill':selectedThemeColor }"></svg-icon><span>Open Invoices</span></a></li>
-            <li (click)="listClick($event, 'purchaseinquiry')" [ngClass]="{'active': selectedItem == 'item9'}"><a roterLink=""> <svg-icon src="assets/images/left-panel/Customer-Contracts.svg" [svgStyle]="{ 'width.px':20, 'height.px':20, 'fill':selectedThemeColor }"></svg-icon><span>Customer Contracts</span></a></li>
-            <li (click)="listClick($event, 'purchaseinquiry')" [ngClass]="{'active': selectedItem == 'item10'}"><a roterLink=""> <svg-icon src="assets/images/left-panel/Customer-Contacts.svg" [svgStyle]="{ 'width.px':20, 'height.px':20, 'fill':selectedThemeColor }"></svg-icon><span>Customer Contacts</span></a></li> -->
-            <li (click)="listClick($event, 'form')" [ngClass]="{'active': selectedItem == 'form'}">
+
+            <li id="SLS" (click)="listClick($event, 'form')" [ngClass]="{'active': selectedItem == 'form'}">
                 <a roterLink="form">
                     <i class="opti-icon-sales-order" [style.color]="selectedThemeColor"></i>
-                    <span>Form Fields</span>
+                    <span>{{'Outbound'|translate}}</span>
                 </a>
             </li>
-            <li class="dropdown" dropdown>
-                <a dropdownToggle class="dropdown-toggle">Dropdown <span class="caret"></span></a>
+            <li class="dropdown" dropdown id="INV">
+                <a dropdownToggle class="dropdown-toggle">{{'InventoryTransfer'|translate}}<span class="caret"></span></a>
                 <ul *dropdownMenu class="dropdown-menu" role="menu">
-                    <li role="menuitem"><a class="dropdown-item" href="#">Action</a></li>
-                    <li role="menuitem"><a class="dropdown-item" href="#">Another action</a></li>
-                    <li role="menuitem"><a class="dropdown-item" href="#">Something else here</a></li>
-                    <li role="menuitem"><a class="dropdown-item" href="#">Separated link</a></li>
+                    <li id="15108" role="menuitem"><a class="dropdown-item" href="#">{{'WarehouseTransfer'|translate}}</a></li>
+                    <li id="15109" role="menuitem"><a class="dropdown-item" href="#">{{'BinTransfer'|translate}}</a></li>
                 </ul>
             </li>
         </ul>

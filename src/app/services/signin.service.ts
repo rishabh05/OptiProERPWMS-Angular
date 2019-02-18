@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class SigninService {
 
-  private baseUrl = "http://localhost:57911";
+  // private baseUrl = "http://localhost:57911";
   // private adminUrl = "http://172.16.6.167/OptiAdmin";
   private venderListUrl: string = "/api/GoodReceiptPO/GetVendorList";
   private validateUser: string = "/api/login/ValidateUserLogin";
@@ -24,6 +24,7 @@ export class SigninService {
   private SubmitPOUrl = "/api/GoodReceiptPO/SubmitGoodsReceiptPO";
   private VenderExistUrl = "/api/GoodReceiptPO/IsVendorExists";
   private POExistUrl = "/api/GoodReceiptPO/IsPOExists";
+  public config_params: any;
 
   public httpOptions = {
     headers: new HttpHeaders({
@@ -32,7 +33,6 @@ export class SigninService {
     })
   }
 
-  public config_params: any;
   constructor(private httpclient: HttpClient) {
     this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
   }

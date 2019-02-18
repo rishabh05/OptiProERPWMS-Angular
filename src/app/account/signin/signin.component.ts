@@ -80,7 +80,8 @@ export class SigninComponent implements OnInit {
         localStorage.setItem("PSURLFORADMIN", data);
       },
       error => {
-        this.toastr.error('', this.translate.instant("PsurlFailed"), this.commonService.toast_config);
+        this.toastr.error('', this.translate.instant("PsurlFailed"), 
+        this.commonService.toast_config.iconClasses.error);
       }
     );
   }
@@ -91,7 +92,7 @@ export class SigninComponent implements OnInit {
   public async login() {
     // this.isCompleteLoginVisible = true;
     if (this.userName == "" || this.password == "") {
-      this.toastr.error('', this.translate.instant("UnPwdBlankErrorMsg"), this.commonService.toast_config);
+      this.toastr.error('', this.translate.instant("UnPwdBlankErrorMsg"), this.commonService.toast_config.iconClasses.error);
       return true;
     }
 
@@ -117,7 +118,7 @@ export class SigninComponent implements OnInit {
       },
       error => {
         this.toastr.error('', this.translate.instant("InvalidUnPwdErrMsg"), 
-        this.commonService.toast_config);
+        this.commonService.toast_config.iconClasses.error);
         this.showLoader = false;
       }
     );
@@ -131,7 +132,8 @@ export class SigninComponent implements OnInit {
       },
       error => {
         this.showLoader = false;
-        alert("license Failed");
+        this.toastr.error('', this.translate.instant("license Failed"), 
+        this.commonService.toast_config.iconClasses.error.iconClasses.error);
       }
     );
   }
@@ -175,11 +177,11 @@ export class SigninComponent implements OnInit {
   private handleValidationUserSuccessResponse() {
     this.showLoader = false;
     if (this.userDetails == null || this.userDetails.length < 1) {
-      this.toastr.error('', this.translate.instant("InvalidUn"), this.commonService.toast_config);
+      this.toastr.error('', this.translate.instant("InvalidUn"), this.commonService.toast_config.iconClasses.error);
       return true;
     }
     if (this.userDetails[0].OPTM_ACTIVE == 0) {
-      this.toastr.error('', this.translate.instant("UsernotActive"), this.commonService.toast_config);
+      this.toastr.error('', this.translate.instant("UsernotActive"), this.commonService.toast_config.iconClasses.error);
       return true;
     }
     localStorage.setItem("UserId", this.userName);
@@ -222,13 +224,13 @@ export class SigninComponent implements OnInit {
   private validateFields(): boolean {
     if (this.selectedItem == this.translate.instant("SelectCompany") || this.selectedItem == '') {
       this.showLoader = false;
-      this.toastr.error('', this.translate.instant("SelectCompanyMsg"), this.commonService.toast_config);
+      this.toastr.error('', this.translate.instant("SelectCompanyMsg"), this.commonService.toast_config.iconClasses.error);
       return true;
     }
     if (document.getElementById("whseId").innerText.trim() == this.translate.instant("SelectWarehouse")||
       document.getElementById("whseId").innerText.trim() == "") {
       this.showLoader = false;
-      this.toastr.error('', this.translate.instant("SelectCompanyMsg"), this.commonService.toast_config);
+      this.toastr.error('', this.translate.instant("SelectCompanyMsg"), this.commonService.toast_config.iconClasses.error);
       return true;
     }
     return false;
