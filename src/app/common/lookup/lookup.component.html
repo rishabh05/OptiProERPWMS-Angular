@@ -1,0 +1,835 @@
+<!-- Grid Modal-->
+<kendo-dialog title="{{popup_title}}" *ngIf="dialogOpened" (close)="close_kendo_dialog()" [minWidth]="750" [width]="750">
+
+
+    <kendo-grid [kendoGridBinding]="serviceData" [filterable]="isColumnFilter" [selectable]="true" [pageable]="true"
+        [resizable]="true" [skip]="skip" (selectionChange)="on_item_select($event)" [pageSize]="10">
+        <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="1">
+            <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+            <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
+            <kendo-pager-next-buttons></kendo-pager-next-buttons>
+            <kendo-pager-info></kendo-pager-info>
+        </ng-template>
+        <ng-template kendoGridToolbarTemplate>
+            <form class="k-form opti_show-hide-grid-column-filter float-left opti_hide-in-mobile p-0">
+                <div class="custom-control custom-checkbox float-left">
+                    <input #chkFilter type="checkbox" id="columnFilter" [(ngModel)]="isColumnFilter" class="custom-control-input"
+                        name="columnfilter" />
+                    <label class="custom-control-label" for="columnFilter"> &nbsp; {{language.enable_filter}}</label>
+                </div>
+            </form>
+        </ng-template>
+
+
+
+        <kendo-grid-column *ngFor="let column of table_head" field="{{column.field}}" title="{{column.title}}" filter="{{column.type}}"
+            format="{{column.format}}" width="{{column.width}}" minResizableWidth="{{column.width}}"></kendo-grid-column>
+
+    </kendo-grid>
+</kendo-dialog>
+<!-- <div class="modal fade" id="lookup_modal" tabindex="-1" role="dialog" aria-labelledby="lookup_modal" aria-hidden="true" data-backdrop="static"
+    data-keyboard="false">
+    <div class="modal-dialog  modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="lookup_modal_title">{{popup_title}}</h5>
+                <button class="close" type="button" data-dismiss="modal" (click)="close_lookup(lookup_modal)" aria-label="Close">
+                    <span aria-hidden="true">
+                        <i class="fa fa-window-close"></i>
+                    </span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="opti_loader " *ngIf="showLoader">
+                    <div class="text-center">
+                        <i class="fa fa-gear fa-3x fa-spin"></i>
+                    </div>
+                </div>
+                <div class="lookup_data" *ngIf="LookupDataLoaded">
+                    <div class="table-responsive">
+                       
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer  pt-2 pb-2">
+                <button class="btn btn-sm btn-grey mr-10" type="button" data-dismiss="modal" (click)="close_lookup(lookup_modal)">
+                    <i class="fa fa-close"></i> {{this.language.close}}</button>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<!-- import data modal -->
+<!-- Grid Modal-->
+<div class="modal fade" id="import_modal" tabindex="-1" role="dialog" aria-labelledby="import_modal" aria-hidden="true"
+    data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog  modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="import_modal_title">{{popup_title}}</h5>
+
+                <button class="close" type="button" data-dismiss="modal" (click)="close_lookup('import_modal')"
+                    aria-label="Close">
+                    <span aria-hidden="true">
+                        <i class="fa fa-window-close"></i>
+                    </span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="opti_loader " *ngIf="showLoader">
+                    <div class="text-center">
+                        <i class="fa fa-gear fa-3x fa-spin"></i>
+                    </div>
+                </div>
+                <div class="lookup_data" *ngIf="LookupDataLoaded">
+                    <div class="form-group row clearfix">
+                        <label class="col-sm-4 col-form-label" for="Status">{{language.file_type}}</label>
+                        <div class="col-sm-6">
+                            <select class="form-control  form-control-sm mt3" [(ngModel)]="fileType" name="fileType" id="fileTypeID">
+                                <option value="excel">{{language.excel}}</option>
+                                <!-- <option value="csv">{{language.csv}}</option> -->
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="form-group row clearfix">
+                        <label class="col-sm-4 col-form-label" for="Status">{{language.template_type}}</label>
+                        <div class="col-sm-6">
+                            <select class="form-control  form-control-sm mt3" (change)="on_template_type_change()"
+                                [(ngModel)]="template_type" name="template_type" id="templateTypeID">
+                                <option value="model">{{language.model}}</option>
+                                <option value="feature">{{language.feature}}</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <hr>
+                    <div class="form-group row clearfix">
+                        <label class="col-sm-4 col-form-label" for="image">{{language.choose_file}}</label>
+                        <div class="col-sm-6">
+                            <input type="file" class="form-control  form-control-sm mt3-file" #myInput id="image"
+                                (change)="file_input($event)">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="{{template_path}}" class="btn btn-sm btn btn-success mr-10" download title="{{this.language.download_template}}">
+                    <i class="fa fa-download"></i> {{this.language.download_template}} </a>
+                <button class="btn btn-sm btn-info mr-10" type="button" (click)="importclick()">
+                    <i class="fa fa-check"></i> {{this.language.import}}</button>
+            </div>
+        </div>
+    </div>
+    <script src="Scripts/angular.min.js"></script>
+    <script src='../../../feature/model/model.component.ts'></script>
+
+    <script src="Scripts/xlsx.full.min.js"></script>
+    <script src="Scripts/jszip.js"></script>
+</div>
+
+<!-- enlarge image modal -->
+
+<div class="modal fade" id="enlarge_image_modal" tabindex="-1" role="dialog" aria-labelledby="enlarge_image_modal"
+    aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog  modal-lg" role="document" style="background:transparent !important;border:none !important;">
+        <div class="modal-content" style="background:transparent !important;border:none !important;">
+            <!-- <div class="modal-header">
+                <h5 class="modal-title" id="enlarge_image_modal_title">{{popup_title}}</h5>
+                <button class="close" type="button" data-dismiss="modal" (click)="close_lookup('enlarge_image_modal')"
+                    aria-label="Close">
+                    <span aria-hidden="true">
+                        <i class="fa fa-window-close"></i>
+                    </span>
+                </button>
+            </div> -->
+            <div class="modal-body">
+                <div class="opti_loader " *ngIf="showLoader">
+                    <div class="text-center">
+                        <i class="fa fa-gear fa-3x fa-spin"></i>
+                    </div>
+                </div>
+                <div class="lookup_data" *ngIf="LookupDataLoaded">
+                    <div class="row image_data">
+                        <div class="col-lg-8" style=" margin: 0 auto; ">
+                            <button class="close" type="button" data-dismiss="modal" (click)="close_lookup('enlarge_image_modal')"
+                                aria-label="Close" style="position: relative;top: 10px;left: 12px;">
+                                <span aria-hidden="true">
+                                    <i class="fa fa-window-close"></i>
+                                </span>
+                            </button>
+                            <img src="{{preview_image}}" class="img-thumbnail rounded float-left" alt="">
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="modal-footer">
+                    <button class="btn btn-sm btn-info mr-10" type="button" data-dismiss="modal" (click)="close_lookup('enlarge_image_modal')">
+                        <i class="fa fa-check"></i> {{this.language.close}}</button>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- tree view modal -->
+<div class="modal fade" id="tree_view" tabindex="-1" role="dialog" aria-labelledby="tree_view" aria-hidden="true"
+    data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog  modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="tree_view_title">{{popup_title}}</h5>
+                <button class="close" type="button" data-dismiss="modal" (click)="close_lookup('tree_view')" aria-label="Close">
+                    <span aria-hidden="true">
+                        <i class="fa fa-window-close"></i>
+                    </span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="opti_loader " *ngIf="showLoader">
+                    <div class="text-center">
+                        <i class="fa fa-gear fa-3x fa-spin"></i>
+                    </div>
+                </div>
+                <div class="lookup_data" *ngIf="LookupDataLoaded">
+                    <div class="col-md-12">
+                        <div class="tree well">
+                            <ul class="parent_ul" *ngIf="tree_data_json.length > 0">
+                                <div *ngFor="let element of tree_data_json; let i= index;">
+                                    <li *ngIf="element.level == 0 && element.parentId==''">
+                                        <span>
+                                            <i class="fa fa-folder"></i> {{element.component}}
+                                        </span>
+                                        <treeview [tree_data_json]="check_component_exist(element.component, i)"
+                                            [complete_dataset]="tree_data_json" *ngIf="check_component_exist(element.component, i).length > 0"></treeview>
+                                    </li>
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-sm btn-info mr-10" type="button" data-dismiss="modal" (click)="close_lookup('tree_view')">
+                        <i class="fa fa-check"></i> {{this.language.close}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- tree view modal -->
+<div class="modal fade" id="simple_table_modal" tabindex="-1" role="dialog" aria-labelledby="simple_table_modal"
+    aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog  modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="simple_table_modal_title">{{popup_title}}</h5>
+                <button class="close" type="button" data-dismiss="modal" (click)="close_lookup('simple_table_modal')"
+                    aria-label="Close">
+                    <span aria-hidden="true">
+                        <i class="fa fa-window-close"></i>
+                    </span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="opti_loader " *ngIf="showLoader">
+                    <div class="text-center">
+                        <i class="fa fa-gear fa-3x fa-spin"></i>
+                    </div>
+                </div>
+                <div class="lookup_data" *ngIf="LookupDataLoaded">
+                    <div class="col-md-12">
+
+                        <kendo-grid [kendoGridBinding]="serviceData" [filterable]="isColumnFilter" [selectable]="true"
+                            [pageSize]="10" [pageable]="true" [resizable]="true">
+                            <ng-template kendoGridToolbarTemplate>
+                                <!-- show hide column start show hide -->
+                                <!-- <kendo-grid-column-chooser class="float-left opti_hide-in-mobile"></kendo-grid-column-chooser>  -->
+                                <form class="k-form opti_show-hide-grid-column-filter float-left opti_hide-in-mobile p-0">
+                                    <div class="custom-control custom-checkbox float-left">
+                                        <input #chkFilter type="checkbox" id="columnFilter" [(ngModel)]="isColumnFilter"
+                                            class="custom-control-input" name="columnfilter" />
+                                        <label class="custom-control-label" for="columnFilter"> &nbsp;
+                                            {{language.enable_filter}}</label>
+                                    </div>
+                                </form>
+                            </ng-template>
+
+
+
+                            <kendo-grid-column *ngFor="let column of table_head" field="{{column.field}}" title="{{column.title}}"
+                                filter="{{column.type}}" format="{{column.format}}" width="{{column.width}}"
+                                minResizableWidth="{{column.width}}"></kendo-grid-column>
+
+                        </kendo-grid>
+
+
+
+                        <!-- <div class="table-responsive">
+                            <table class="table table-bordered lookup_table  table-sm" id="dataTable">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th width="{{width_value}}" *ngFor="let table_columns of table_head; let i = index" [hidden]="table_head_hidden_elements[i]">{{table_columns}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="lookup_table_body">
+                                    <tr *ngFor="let row of serviceData">
+                                        <td width="{{width_value}}" *ngFor="let row_data of Object.keys(row); let i =index" [hidden]="table_head_hidden_elements[i]">
+                                            <span>{{row[row_data]}}</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Configuration screen full width invoice over modal -->
+
+
+ <!-- print report model for detail and summary report  -->
+<div class="modal fade" id="invoice_modal" tabindex="-1" role="dialog" aria-labelledby="invoice_modal" aria-hidden="true"
+    data-backdrop="static" data-keyboard="false" >
+
+    <div class="modal-dialog  modal-xlg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="col-sm-12 row">
+                    <div class="col-sm-6">
+                        <h5 class="modal-title" id="invoice_modal_title">{{popup_title}}</h5>
+                    </div>
+                    <div class="col-sm-6">
+                        <button class="text-right pull-right close" type="button" data-dismiss="modal" (click)="close_lookup('invoice_modal')"
+                            aria-label="Close">
+                            <span aria-hidden="true">
+                                <i class="fa fa-window-close"></i>
+                            </span>
+                        </button>
+                        <button class="text-right pull-right btn btn-sm btn-success mt-1" type="button" (click)="pdf.saveAs(downLoadfileName)"
+                            title="Test Invoice">
+                            <i class="fa fa-download  fa-fw"></i>
+                        </button>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="modal-body">
+                <kendo-pdf-export #pdf margin="0.5cm">
+                    <section class="card">
+                        <div id="invoice-template" class="card-body">
+                            <!-- Invoice Company Details -->
+                            <div id="invoice-company-details" class="row">
+                                <div class="col-sm-12 col-md-12">
+                                    <h3 class="text-center">{{language.quatation}}</h3>
+                                </div>
+                                <hr>
+                                <div class="col-md-6 col-sm-12 text-center text-md-left">
+                                    <div class="media">
+                                        <img src="{{logo_path}}" alt="configurator logo" class="" height="128" />
+                                        <div class="media-body">
+                                            <ul class="ml-2 px-0 list-unstyled">
+                                                <li class="text-bold-800">{{company_name}}</li>
+                                                <li>{{company_address}}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-12 text-center text-md-right">
+                                    <span *ngIf="showCustDetailsSec">
+                                        <!-- <h2>DOC NO</h2> -->
+                                        <p>
+                                            <span class="">
+                                                <b>{{language.order_type}} :</b>
+                                            </span> {{customer_details.order_type | blankhandler}}
+                                        </p>
+                                        <p>
+                                            <span class="">
+                                                <b>{{language.ref_doc_no}}:</b>
+                                            </span> {{refrence_doc_details.ref_doc_no | blankhandler}}
+                                        </p>
+                                        <p>
+                                            <span class="">
+                                                <b>{{language.ref_doc_entry}}:</b>
+                                            </span> {{refrence_doc_details.ref_doc_entry | blankhandler}}
+                                        </p>
+                                        <p>
+                                            <span class="">
+                                                <b>{{language.configuration_id}}:</b>
+                                            </span> {{refrence_doc_details.conf_id | blankhandler}}
+                                        </p>
+                                        <p>
+                                            <span class="">
+                                                <b>{{language.description}}:</b>
+                                            </span> {{refrence_doc_details.conf_desc | blankhandler}}
+                                        </p>
+
+                                    </span>
+                                </div>
+                            </div>
+                            <!--/ Invoice Company Details -->
+                            <!-- Invoice Customer Details -->
+                            <div id="invoice-customer-details" class="row pt-2">
+                                <!-- <div class="col-sm-12 text-center text-md-left">
+                                                        <p class="">
+                                                           
+                                                        </p>
+                                                    </div> -->
+                                <div class="col-md-6 col-sm-3 text-center text-md-left">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12">
+                                            <p>
+                                                <span class="">
+                                                    <b>{{language.customer}}:</b>
+                                                </span> {{customer_details.customer_name | blankhandler}}
+                                            </p>
+                                            <p>
+                                                <span class="">
+                                                    <b>{{language.contact_person}}:</b>
+                                                </span> {{customer_details.person_name | blankhandler}}
+                                            </p>
+                                        </div>
+                                        <div class="row col-sm-12 col-md-12">
+                                            <div class="col-sm-6 col-md-6">
+                                                <p>
+                                                    <span class="">
+                                                        <b>{{language.ship_to}}:</b>
+                                                    </span> {{customer_details.ship_to | blankhandler}}
+                                                </p>
+                                            </div>
+                                            <div class="col-sm-6 col-md-6">
+                                                <span style="width:75px;float:left">
+                                                    <b>{{language.address}} :</b>
+                                                </span>
+                                                <span style="width: calc(100% - 75px); float: left;">
+                                                    {{customer_details.ship_to_address | blankhandler}} </span>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <div class="col-sm-12 col-md-12 row">
+                                            <div class="col-sm-6 col-md-6">
+                                                <p>
+                                                    <span class="">
+                                                        <b>{{language.bill_to}}:</b>
+                                                    </span> {{customer_details.bill_to | blankhandler}}
+                                                </p>
+                                            </div>
+                                            <div class="col-sm-6 col-md-6">
+                                                <p>
+                                                    <span style="width:75px;float:left">
+                                                        <b>{{language.address}} :</b>
+                                                    </span>
+                                                    <span style="width: calc(100% - 75px); float: left;">{{customer_details.bill_to_address
+                                                        | blankhandler}}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-6 col-sm-12 text-center text-md-right">
+                                    <span *ngIf="showPaymentDetails">
+                                        <p>
+                                            <span class="">
+                                                <b>{{language.pay_terms}} :</b>
+                                            </span> Payment in 4 terms</p>
+                                        <p>
+                                            <p>
+                                                <span class="">
+                                                    <b>{{language.payment_method}} :</b>
+                                                </span> By Card
+                                            </p>
+                                    </span>
+
+
+                                    <span *ngIf="showGeneralDetails">
+                                        <p>
+                                            <span class="">
+                                                <b>{{customer_details.doc_type_date_label}}:</b>
+                                            </span> {{customer_details.delivery_until | date: 'MM/dd/yyyy' |
+                                            blankhandler}}
+                                        </p>
+                                        <p>
+                                            <span class="">
+                                                <b>{{language.posting_date}} :</b>
+                                            </span>{{customer_details.posting_date | date: 'MM/dd/yyyy' |
+                                            blankhandler}}
+                                        </p>
+                                        <p>
+                                            <span class="">
+                                                <b>{{language.Bom_Remarks}} :</b>
+                                            </span>{{customer_details.remark | blankhandler}}
+                                        </p>
+                                    </span>
+
+                                </div>
+                            </div>
+                            <!-- Invoice Customer Details -->
+                            <!-- Invoice Items Details -->
+
+                            <div *ngIf="showProdDetailsTable" id="invoice-items-details" class="pt-2">
+                                <div class="row">
+                                    <div class="table-responsive col-sm-12">
+                                        <table class="table table-invoice">
+                                            <thead class="thead-dark">
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>{{language.ModelBom_FeatureValue}}</th>
+                                                    <th>{{language.description}}</th>
+                                                    <th class="text-right">{{language.quantity}}</th>
+                                                    <th class="text-right">{{language.price}} ({{defaultCurrency}})</th>
+                                                    <th class="text-right">{{language.extension}} ({{defaultCurrency}})</th>
+                                                    <th class="text-right">{{language.discount_per}}</th>
+                                                    <th class="text-right">{{language.discounted_price}} ({{defaultCurrency}})</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let row of print_item_list_array" [ngClass]="{'highlight_fg_row' :row.isFG}">
+
+                                                    <td>
+                                                        {{row['sl_no']}}
+                                                    </td>
+                                                    <td>
+                                                        {{row['item']}}
+                                                    </td>
+                                                    <td>
+                                                        {{row['item_desc']}}
+                                                    </td>
+
+                                                    <td class="text-right">
+                                                        {{row['quantity']}}
+                                                    </td>
+                                                    <td class="text-right">
+                                                        {{row['price']}}
+                                                    </td>
+                                                    <td class="text-right">
+                                                        {{row['price_ext']}}
+                                                    </td>
+                                                    <td class="text-right">
+                                                        {{row['feature_discount_percent']}}
+                                                    </td>
+                                                    <td class="text-right">
+                                                        {{row['discounted_price']}} 
+                                                    </td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div *ngIf="showProdGrandDetails" class="row">
+                                    <div class="col-md-7 col-sm-12 text-center text-md-left"></div>
+                                    <div class="col-md-5 col-sm-12">
+                                        <p class="lead">{{language.total}}</p>
+                                        <div class="table-responsive">
+                                            <table class="table table-invoice">
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-bold-800">
+                                                            <b class="">{{language.product_total}} ({{defaultCurrency}})</b>
+                                                        </td>
+                                                        <td class="text-right">{{product_grand_details.step4_final_prod_total}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                            <td class="text-bold-800">
+                                                                <b class="">{{language.accessories_total}}
+                                                                    ({{defaultCurrency}})</b>
+                                                            </td>
+                                                            <td class="pink text-right">{{product_grand_details.step4_final_acc_total}}</td>
+                                                        </tr>
+                                                    <tr>
+                                                        <td width="70%">
+                                                            {{this.language.prod_disc_amount}} ({{defaultCurrency}})
+                                                        </td>
+                                                        <td class="text-right" width="30%">{{product_grand_details.prod_discount_log | toFixed:'3'}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="70%">
+                                                            {{this.language.acc_disc_amount}} ({{defaultCurrency}})
+                                                        </td>
+                                                        <td class="text-right" width="30%">{{product_grand_details.access_dis_amount_log | toFixed:'3'}}</td>
+                                                    </tr>
+                                                    <tr class="bg-grey bg-lighten-4">
+                                                        <td class="text-bold-800">
+                                                            <b class="">{{language.grand_total}} ({{defaultCurrency}})</b>
+                                                        </td>
+                                                        <td class="text-bold-800 text-right">{{product_grand_details.step4_final_grand_total}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- Invoice Footer -->
+                            <div id="invoice-footer">
+                                <div class="row">
+                                    <div class="col-md-7 col-sm-12">
+                                        <!-- <h6>Terms & Condition</h6>
+                                                            <p>You know, being a test pilot isn't always the healthiest business in the world. We predict too much
+                                                                for the next year and yet far too little for the next 10.</p>
+                                                        </div> -->
+
+                                    </div>
+                                </div>
+                                <!--/ Invoice Footer -->
+                            </div>
+                        </div>
+                    </section>
+                </kendo-pdf-export>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modal invoice_modal-->
+
+<!-- rule output modal over modal -->
+<div class="modal_over_modal fade" id="rule_output_table_lookup" tabindex="-1" role="dialog" aria-labelledby="rule_output_table_lookup"
+    aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog  modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="rule_output_table_lookup_title">{{language.rule_output}}</h5>
+                <button class="close" type="button" aria-label="Close" (click)="close_rule_model('rule_output_table_lookup')">
+                    <span aria-hidden="true">
+                        <i class="fa fa-window-close"></i>
+                    </span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="opti_loader" *ngIf="showruleOutputLoader">
+                    <div class="text-center">
+                        <i class="fa fa-gear fa-3x fa-spin"></i>
+                    </div>
+                </div>
+                <div class="lookup_data" *ngIf="RuleOutputLookupDataLoaded">
+                    <div class="col-md-12">
+                        <kendo-grid [kendoGridBinding]="outputServiceData" [resizable]="true" [sortable]="false"
+                            [groupable]="false" [filterable]="false">
+                            <kendo-grid-column field="included" title="" template="" [width]="120" [minResizableWidth]="120">
+                                <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
+                                    {{language.included}}
+                                </ng-template>
+                                <ng-template kendoGridCellTemplate let-row>
+                                    {{row.OPTM_ISINCLUDED}}
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column field="feature" title="" template="" [width]="120" [minResizableWidth]="120">
+                                <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
+                                    {{language.feature}}
+                                </ng-template>
+                                <ng-template kendoGridCellTemplate let-row>
+                                    {{row.OPTM_FEATURECODE}}
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column field="item" title="" template="" [width]="120" [minResizableWidth]="120">
+                                <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
+                                    {{language.item}}
+                                </ng-template>
+                                <ng-template kendoGridCellTemplate let-row>
+                                    {{row.OPTM_ITEMKEY}}
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column field="value" title="" template="" [width]="120" [minResizableWidth]="120">
+                                <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
+                                    {{language.value}}
+                                </ng-template>
+                                <ng-template kendoGridCellTemplate let-row>
+                                    {{row.OPTM_VALUE}}
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column field="uom" title="" template="" [width]="120" [minResizableWidth]="120">
+                                <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
+                                    {{language.uom}}
+                                </ng-template>
+                                <ng-template kendoGridCellTemplate let-row>
+                                    {{row.OPTM_UOM}}
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column field="quantity" title="" template="" [width]="120" [minResizableWidth]="120">
+                                <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
+                                    {{language.quantity}}
+                                </ng-template>
+                                <ng-template kendoGridCellTemplate let-row>
+                                    <div style="text-align:right">{{row.OPTM_QUANTITY}}</div>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column field="edit_quantity" title="" template="" [width]="120"
+                                [minResizableWidth]="120">
+                                <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
+                                    {{language.edit_quantity}}
+                                </ng-template>
+                                <ng-template kendoGridCellTemplate let-row>
+                                    {{(row.OPTM_ISQTYEDIT== 'n') ? language.NO : language.YES}}
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column field="}" title="" template="" [width]="120" [minResizableWidth]="120">
+                                <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
+                                    {{language.price}} ({{defaultCurrency}})
+                                </ng-template>
+                                <ng-template kendoGridCellTemplate let-row>
+                                    <div style="text-align:right">{{row.OPTM_PRICESOURCE | toFixed:'3' }}</div>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column field="edit_price" title="" template="" [width]="120"
+                                [minResizableWidth]="120">
+                                <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
+                                    {{language.edit_price}}
+                                </ng-template>
+                                <ng-template kendoGridCellTemplate let-row>
+                                    {{(row.OPTM_ISPRICEEDIT== 'n') ? language.NO : language.YES}}
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column field="default" title="" template="" [width]="120" [minResizableWidth]="120">
+                                <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
+                                    {{language.default}}
+                                </ng-template>
+                                <ng-template kendoGridCellTemplate let-row>
+                                    {{(row.OPTM_DEFAULT== "False") ? language.NO : language.YES}}
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column field="rule_excluded" title="" template="" [width]="120"
+                                [minResizableWidth]="120">
+                                <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
+                                    {{language.rule_excluded}}
+                                </ng-template>
+                                <ng-template kendoGridCellTemplate let-row>
+                                    {{(row.OPTM_EXCLUDED == "False") ? language.NO : language.YES}}
+                                </ng-template>
+                            </kendo-grid-column>
+                        </kendo-grid>
+                        <!-- <div class="table-responsive">
+                            <table class="table opti_fixed-header  table-sm" id="dataTable">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>{{language.included}}</th>
+                                        <th>{{language.feature}}</th>
+                                        <th>{{language.item}}</th>
+                                        <th>{{language.value}}</th>
+                                        <th>{{language.uom}}</th>
+                                        <th>{{language.quantity}}</th>
+                                        <th>{{language.edit_quantity}}</th>
+                                        <th>{{language.price}} ({{defaultCurrency}})</th>
+                                        <th>{{language.edit_price}}</th>
+                                        <th>{{language.default}}</th>
+                                        <th>{{language.rule_excluded}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="" style="position: relative;" [perfectScrollbar]="" [disabled]="isPerfectSCrollBar">
+                                    <tr *ngFor="let row of outputServiceData; let i=index">
+                                        <td>{{row.OPTM_ISINCLUDED}}</td>
+                                        <td>{{row.OPTM_FEATURECODE}}</td>
+                                        <td>{{row.OPTM_ITEMKEY}}</td>
+                                        <td>{{row.OPTM_VALUE}}</td>
+                                        <td>{{row.OPTM_UOM}}</td>
+                                        <td>{{row.OPTM_QUANTITY}}</td>
+                                        <td>{{(row.OPTM_ISQTYEDIT== 'n') ? language.NO : language.YES}}</td>
+                                        <td>{{row.OPTM_PRICESOURCE}}</td>
+                                        <td>{{(row.OPTM_ISPRICEEDIT== 'n') ? language.NO : language.YES}}</td>
+                                        <td>{{(row.OPTM_DEFAULT== "False") ? language.NO : language.YES}}</td>
+                                        <td>{{(row.OPTM_EXCLUDED == "False") ? language.NO : language.YES}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="rule_selection" tabindex="-1" role="dialog" aria-labelledby="rule_selection" aria-hidden="true"
+    data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog  modal-mlg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="rule_selection_title">{{popup_title}}</h5>
+                <button class="close" type="button" data-dismiss="modal" (click)="close_lookup('rule_selection')"
+                    aria-label="Close">
+                    <span aria-hidden="true">
+                        <i class="fa fa-window-close"></i>
+                    </span>
+                </button>
+            </div>
+            <div class="modal-body mt-3 mb-3">
+                <div class="opti_loader " *ngIf="showLoader">
+                    <div class="text-center">
+                        <i class="fa fa-gear fa-3x fa-spin"></i>
+                    </div>
+                </div>
+                <div class="lookup_data" *ngIf="LookupDataLoaded">
+
+                    <div class="panel-group" id="rule_selection_panels" role="tablist" aria-multiselectable="true">
+                        <div class="panel panel-default custom_panel_box" *ngFor="let rule_data of serviceData; let i = index;">
+                            <div class="panel-heading custom_panel_header" role="tab" id="rule_engine{{rule_data.OPTM_RULEID}}">
+                                <h6 class="panel-title row col-sm-12">
+                                    <div class="col-sm-1">
+                                        <div class="custom-control custom-checkbox mt--3">
+                                            <input type="checkbox" id="rule_check_{{rule_data.OPTM_RULEID}}" name="child_checkbox"
+                                                #checkedvalue (change)="on_checkbox_checked(checkedvalue.checked,rule_data)"
+                                                [checked]="rule_data['Selected']" class="custom-control-input">
+                                            <label class="custom-control-label" for="rule_check_{{rule_data.OPTM_RULEID}}"></label>
+                                        </div>
+                                    </div>
+                                    <div role="button" attr.data-toggle="collapse" attr.data-parent="#rule_panel{{rule_data.OPTM_RULEID}}"
+                                        attr.aria-expanded="false" attr.aria-controls="{{rule_data.OPTM_RULEID}}" class="custom_panel_parent_section col-sm-11">
+                                        {{rule_data.OPTM_RULECODE}}
+                                        <span class="text-right pull-right custom_panel_icon_section">
+                                            <i class="fa fa-plus"></i>
+                                        </span>
+                                    </div>
+                                </h6>
+                            </div>
+                            <div id="rule_panel{{rule_data.OPTM_RULEID}}" class="panel-collapse collapse custom_panel_child_section"
+                                role="tabpanel" attr.aria-labelledby="rule_engine{{rule_data.OPTM_RULEID}}">
+                                <div class="panel-body">
+                                    <table class="inner-table table table-bordered table-strip table-sm">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th style="width:10%">{{language.seq}}</th>
+                                                <th>{{language.expression}}</th>
+                                                <th style="width:15%">{{language.action}}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody *ngIf="rule_data.Expression !== undefined && rule_data.Expression !== '' && rule_data.Expression.length > 0 ">
+                                            <tr *ngFor="let rule_sequence_data of (rule_data.Expression).split('**'); ">
+                                                <td> {{rule_sequence_data.split(',')[0].split(':')[1]}} </td>
+                                                <td> {{rule_sequence_data.split(',')[1].split(':')[1]}}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-sm mr-10 btn-primary" (click)="get_rule_output(rule_data.OPTM_RULEID, rule_sequence_data.split(',')[0].split(':')[1])"
+                                                        title="{{language.view_output}}">
+                                                        <i class="fa fa-eye"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-sm btn-info mr-10" type="button" (click)="rule_select_ok()">
+                        <i class="fa fa-check"></i> {{this.language.ok}}</button>
+                    <button class="btn btn-sm btn-grey mr-10" type="button" data-dismiss="modal" (click)="close_lookup('rule_selection')">
+                        <i class="fa fa-close"></i> {{this.language.close}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
