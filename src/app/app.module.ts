@@ -10,6 +10,8 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { GridModule } from '@progress/kendo-angular-grid';
+
 
 
 export function createTranslateLoader(http: HttpClient) {
@@ -36,6 +38,7 @@ export function createTranslateLoader(http: HttpClient) {
       },
       isolate: false
     }),
+    GridModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

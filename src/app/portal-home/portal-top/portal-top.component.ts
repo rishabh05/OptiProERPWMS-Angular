@@ -21,13 +21,12 @@ export class PortalTopComponent implements OnInit {
   selectedThemeColor: string = opticonstants.DEFAULTTHEMECOLOR;
   
   loggedInUserName: string = 'Prashant';
-  parentName: string = 'Bizchat';
-  applicationVersion:string = '1.0';
+  ks:string = '1.0';
 
   ngOnInit() {
     
     UIHelper.manageThemeCssFile();
-    
+    this.loggedInUserName = localStorage.getItem("UserId");
   }
 
   // open and close theme setting side panel

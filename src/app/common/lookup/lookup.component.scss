@@ -1,0 +1,175 @@
+p {
+    margin-top: 0;
+    margin-bottom: .2rem !important;
+}
+
+// for expand and collapse section 
+.panel-default>.panel-heading {
+    color: #333;
+    background-color: #fff;
+    border-color: #e4e5e7;
+    padding: 0;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.table-invoice td, .table-invoice th{
+    padding: 0.3rem 0.5rem !important
+}
+
+.table-invoice td, .table-invoice th {
+    padding: 0.4rem 0.5rem !important;
+}
+
+.panel-default>.panel-heading a {
+    display: block;
+    padding: 3px 10px;
+    color: black;
+    font-weight: 450;
+    font-size: 14px;
+}
+
+.panel-default>.panel-heading a:before {
+    content: "";
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: 300;
+    line-height: 1.5;
+    font-size: 13.5px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    float: right;
+    transition: transform .25s linear;
+    -webkit-transition: -webkit-transform .25s linear;
+}
+
+.panel-default>.panel-heading {
+    background-color: #eee;
+}
+
+.panel-default>.panel-heading a[aria-expanded="true"]:before,
+.panel-default>.panel-heading a[aria-expanded="true"]:before {
+    content: "\2212";
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+.panel-default>.panel-heading a[aria-expanded="false"]:before,
+.panel-default>.panel-heading a[aria-expanded="false"]:before {
+    content: "\002b";
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
+
+.accordion-option {
+    width: 100%;
+    float: left;
+    clear: both;
+    margin: 15px 0;
+}
+
+.accordion-option .title {
+    font-size: 20px;
+    font-weight: bold;
+    float: left;
+    padding: 0;
+    margin: 0;
+}
+
+.accordion-option .toggle-accordion {
+    float: right;
+    font-size: 16px;
+    color: #6a6c6f;
+}
+
+.accordion-option .toggle-accordion:before {
+    content: "Expand All";
+}
+
+.accordion-option .toggle-accordion.active:before {
+    content: "Collapse All";
+}
+
+.inner-table tr td {
+    vertical-align: middle;
+    ;
+}
+
+.mt--3{
+    margin-top : -3px;
+}
+
+.lookup_search{
+    margin-top: 5px;
+    .opti_search{
+        width: 170px;
+    }
+
+    #search{
+        width: 100%;
+        max-width: 137px;
+    }
+
+    button{
+        float: right;
+        width: 30px;
+    }
+}
+
+#rule_output_table_lookup{
+    table{
+        min-width: 1250px;
+        min-width: 1250px;
+        word-break: break-word;
+        th:nth-child(1),
+        tr td:nth-child(1) {
+            width: 6%;
+        }
+        th:nth-child(2),
+        tr td:nth-child(2) {
+            width: 13%;
+        }
+        th:nth-child(3),
+        tr td:nth-child(3) {
+            width: 20%;
+            word-break: break-word;
+        }
+        th:nth-child(4),
+        tr td:nth-child(4) {
+            width: 14%;
+        }
+        th:nth-child(5),
+        tr td:nth-child(5) {
+            width: 7%;
+        }
+        th:nth-child(6),
+        tr td:nth-child(6) {
+            width: 6%;
+        }
+        th:nth-child(7),
+        tr td:nth-child(7) {
+            width: 8%;
+        }
+        th:nth-child(8),
+        tr td:nth-child(8) {
+            width: 7%;
+        }
+        th:nth-child(9),
+        tr td:nth-child(9) {
+            width: 6%;
+        }
+        th:nth-child(10),
+        tr td:nth-child(10) {
+            width: 5%;
+        }
+        th:nth-child(11),
+        tr td:nth-child(11) {
+            width: 8%;
+        }
+    }
+}

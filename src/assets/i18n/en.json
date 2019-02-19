@@ -32,7 +32,45 @@
   "BinLabel":"Bin Label",
   "ItemLabel":"Item Label",
   "InventoryEnquiry":"Inventory Enquiry",
-  "SpotCount":"Spot Count"
+  "SpotCount":"Spot Count",
+
+  "BatchNo":"Batch No",
+  "FromBin":"From Bin",
+  "ToBin":"To Bin",
+  "OnHandQty":"OnHand Qty",
+  "TransferQty":"Transfer Qty",
+  "Reason":"Reason",
+  "ToWhse":"To Whse",
+  "FromWhse":"From Whse",
+
+  "GoodReceiptPO":"Good Receipt PO",
+  "VenderCode":"Vend. Code",
+  "Name":"Name",
+  "Cancel":"Cancel",
+  "FuturePOs":"Future POs",
+  "PO#":"PO #",
+  "Item":"Item",
+  "DelDate":"Del. Date",
+  "ItemCode":"Item Code",
+  "ItemName":"Item Name",
+  "NonTrackedItems":"Non Tracked Items",
+  "OpenQty":"Open Qty",
+  "ReceiveQty":"Receive Qty",
+  "ReceiveForPO:":"Receive for PO:",
+  "UOM":"UOM",
+  "Manual":"Manual",
+  "ReceivingBin":"Receiving Bin",
+  "Quantity":"Quantity",
+  "Qty":"Qty",
+  "Bin":"Bin",
+  "NoData":"No data",
+  "Save":"Save",
+  "Receive":"Receive",
+  "EnterQuantityErrMsg":"Enter Quantity",
+
+  "ChangeWarehouse":"Change Warehouse",
+  "About":"About",
+  "Logout":"Logout"
 
 }
   
