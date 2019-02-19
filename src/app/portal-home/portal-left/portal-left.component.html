@@ -15,31 +15,104 @@
 
     <section class="opti_left-navigation position-relative" [perfectScrollbar]="">
         <ul class="opti_left-nav-ul">
-            <li (click)="listClick($event, 'dashboard')" [ngClass]="{'active': selectedItem == 'dashboard'}">
+            <!-- <li (click)="listClick($event, 'dashboard')" [ngClass]="{'active': selectedItem == 'dashboard'}">
                 <a roterLink="dashboard">
                     <i class="opti-icon-dashboard" [style.color]="selectedThemeColor"></i>
-                    <span>Dashboard</span>
+                    <span class="text">Dashboard</span>
                 </a>
-            </li>
+            </li> -->
 
             <li id="PUR" (click)="listClick($event, 'salesorder')" [ngClass]="{'active': selectedItem == 'salesorder'}">
                 <a roterLink="salesorder">
-                    <i class="opti-icon-sales-order" [style.color]="selectedThemeColor"></i>
-                    <span>{{'Inbound'|translate}}</span>
+                    <i class="opti-icon-inbound-order" [style.color]="selectedThemeColor"></i>
+                    <span class="text">{{'Inbound'|translate}}</span>
                 </a>
             </li>
 
             <li id="SLS" (click)="listClick($event, 'form')" [ngClass]="{'active': selectedItem == 'form'}">
                 <a roterLink="form">
-                    <i class="opti-icon-sales-order" [style.color]="selectedThemeColor"></i>
-                    <span>{{'Outbound'|translate}}</span>
+                    <i class="opti-icon-outbound-order" [style.color]="selectedThemeColor"></i>
+                    <span class="text">{{'Outbound'|translate}}</span>
                 </a>
             </li>
             <li class="dropdown" dropdown id="INV">
-                <a dropdownToggle class="dropdown-toggle">{{'InventoryTransfer'|translate}}<span class="caret"></span></a>
+                <a dropdownToggle class="dropdown-toggle">
+                    <i class="opti-icon-outbound-order" [style.color]="selectedThemeColor"></i>
+                    <span class="text">{{'InventoryTransfer'|translate}}</span>
+                </a>
                 <ul *dropdownMenu class="dropdown-menu" role="menu">
-                    <li id="15108" role="menuitem"><a class="dropdown-item" href="#">{{'WarehouseTransfer'|translate}}</a></li>
-                    <li id="15109" role="menuitem"><a class="dropdown-item" href="#">{{'BinTransfer'|translate}}</a></li>
+                    <li id="15108" role="menuitem">
+                        <a class="dropdown-item" href="#">
+                            <i class="opti-icon-outbound-order" [style.color]="selectedThemeColor"></i>
+                            <span class="text">{{'WarehouseTransfer'|translate}}</span>
+                        </a>
+                    </li>
+                    <li id="15109" role="menuitem">
+                        <a class="dropdown-item" href="#">
+                            <i class="opti-icon-outbound-order" [style.color]="selectedThemeColor"></i>
+                            <span class="text">{{'BinTransfer'|translate}}</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="dropdown" dropdown id="INV">
+                <a dropdownToggle class="dropdown-toggle">
+                    <i class="opti-icon-outbound-order" [style.color]="selectedThemeColor"></i>
+                    <span class="text">{{'AdjustmentsCounting'|translate}}</span>
+                </a>
+                <ul *dropdownMenu class="dropdown-menu" role="menu">
+                    <li id="15108" role="menuitem">
+                        <a class="dropdown-item" href="#">
+                            <i class="opti-icon-outbound-order" [style.color]="selectedThemeColor"></i>
+                            <span class="text">{{'PhysicalCount'|translate}}</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="dropdown" dropdown id="INV">
+                <a dropdownToggle class="dropdown-toggle">
+                    <i class="opti-icon-outbound-order" [style.color]="selectedThemeColor"></i>
+                    <span class="text">{{'Production'|translate}}</span>
+                </a>
+                <ul *dropdownMenu class="dropdown-menu" role="menu">
+                    <li id="15108" role="menuitem">
+                        <a class="dropdown-item" href="#">
+                            <i class="opti-icon-outbound-order" [style.color]="selectedThemeColor"></i>
+                            <span class="text">{{'ReceiptFromProduction'|translate}}</span>
+                        </a>
+                    </li>
+                    <li id="15109" role="menuitem">
+                        <a class="dropdown-item" href="#">
+                            <i class="opti-icon-outbound-order" [style.color]="selectedThemeColor"></i>
+                            <span class="text">{{'IssueForProduction'|translate}}</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="dropdown" dropdown id="INV">
+                <a dropdownToggle class="dropdown-toggle">
+                    <i class="opti-icon-outbound-order" [style.color]="selectedThemeColor"></i>
+                    <span class="text">{{'LabelPrintingandReports'|translate}}</span>
+                </a>
+                <ul *dropdownMenu class="dropdown-menu" role="menu">
+                    <li id="15108" role="menuitem">
+                        <a class="dropdown-item" href="#">
+                            <i class="opti-icon-outbound-order" [style.color]="selectedThemeColor"></i>
+                            <span class="text">{{'BinLabel'|translate}}</span>
+                        </a>
+                    </li>
+                    <li id="15109" role="menuitem">
+                        <a class="dropdown-item" href="#">
+                            <i class="opti-icon-outbound-order" [style.color]="selectedThemeColor"></i>
+                            <span class="text">{{'ItemLabel'|translate}}</span>
+                        </a>
+                    </li>
+                    <li id="15109" role="menuitem">
+                        <a class="dropdown-item" href="#">
+                            <i class="opti-icon-outbound-order" [style.color]="selectedThemeColor"></i>
+                            <span class="text">{{'InventoryEnquiry'|translate}}</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
         </ul>

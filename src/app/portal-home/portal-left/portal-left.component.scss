@@ -4,13 +4,15 @@
 // 1. Css Start Related to left panel menu listing //
 .opti_left-nav-ul {
     border-radius: 5px;
-    li {
+    width: 100%;
+    background-color: $list-bg-color;
+    > li {
         list-style: none;
-        padding: 10px 15px;
+        padding: 10px;
         background-color: $list-bg-color;
         border-bottom: 1px solid $list-seprator-color;
         cursor: pointer;
-        a {
+        > a {
             color: $light-black;
             display: flex;
             align-items: center;
@@ -18,6 +20,12 @@
             &:hover {
                 text-decoration: none;
                 color: $dark-black;
+            }
+            span.text{
+                align-self: flex-start;
+                justify-self: flex-start;
+                display: flex;
+                flex: 1;
             }
             // img{
             //     margin-top: -4px;
@@ -35,27 +43,100 @@
             border-top-right-radius: 5px;
         }
         &:last-child {
-            border-bottom-left-radius: 5px;
-            border-bottom-right-radius: 5px;
+            border-bottom: none;
         }
         &.dropdown {
             position: static;
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+            & > a.dropdown-toggle{
+                padding: 10px;
+                &:after{
+                    font-family: "OptiProErp";
+                    content: "\e936";
+                    border: none;
+                    display: flex;
+                    align-self: center;
+                    justify-self: flex-end;
+                    justify-content: flex-end;
+                    font-size: 10px;
+                    width: 10px;
+                    height: 9px;
+                    margin: 0 0 0 5px;
+                    line-height: 9px;
+                    transition: all 300ms ease-in-out;
+                }
+            }
+            &.open{
+                &:hover{
+                    background-color: transparent !important;
+                }
+                > a{
+                    background-color: var(--kendo-light-primary-hover-color);
+                }
+                & > a.dropdown-toggle:after{
+                    transform: rotateX(180deg)
+                }
+            }
+            & > .dropdown-menu{
+                margin: 0;
+                padding:0                                                                                                                      ;
+                border: none;
+                border-radius: 0;
+                position: static;
+                box-shadow: inset 0px 0px 6px 0px rgba(0,0,0,0.2);
+                & > li{
+                    & > a{                        
+                        padding: 10px 15px 10px 30px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: flex-start;
+                        &:hover{
+                            background-color: transparent;
+                        }
+                        i{
+                            font-size: 24px;
+                        }
+                    }
+                    &:hover, &.active{
+                        background-color: var(--kendo-light-primary-hover-color);
+                        a, a:hover{
+                            background-color: rgba(255,255,255,0.5)
+                        }
+                    }                    
+                }
+            }
         }
     }
 }
 
 .opti_left-navigation>ul li span {
-    margin-left: 10px;
+    margin-left: 7px;
 }
 
 #opti_LeftPanelID.opti_sidebar-minimize {
     .opti_left-navigation {
         ul {
+            min-width: initial;
             li {
+                & > ul.dropdown-menu{
+                    & > li a{
+                        padding: 10px 15px;
+                        justify-content: center;
+                    }
+                }
+                a.dropdown-toggle{
+                    &:after{
+                        font-size: 8px;
+                        width: 8px;
+                        line-height: 8px;
+                    }
+                }
                 img {
                     width: 100%;
                 }
-                span {
+                span.text {
                     display: none;
                 }
             }
@@ -132,11 +213,12 @@
 // CSS End  Related To Logo //       
 // powered by logo
 #opti_LeftPanelFooterLogo {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    padding: 10px;
-    text-align: center;
+    display: flex;
+    align-self: center;
+    justify-self: flex-end;
+    align-items: center;
+    justify-items: flex-end;
+    justify-content: center;
     img {
         width: 60%;
     }

@@ -25,15 +25,19 @@
         
         #opti_LeftPanelID{
             height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         
         .opti_left-navigation{
-            max-height: calc(100% - 200px); // rigt now 200 is random
-            overflow-y: auto;
-            // padding: 10px;
             margin: 10px;
-            height: auto;
             border-radius: 5px;
+            display: flex;
+            align-self: center;
+            width: calc(100% - 20px);
+            justify-self: flex-start;
+            flex: 1;
         }
     
     // Css Related To Right Content Area

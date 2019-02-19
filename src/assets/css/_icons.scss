@@ -1,19 +1,19 @@
-@import "_icons-variables";
+@import "_icons-variables.scss";
 
 @font-face {
-  font-family: '#{$icomoon-font-family}';
-  src:  url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?dmkmpr');
-  src:  url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?dmkmpr#iefix') format('embedded-opentype'),
-    url('#{$icomoon-font-path}/#{$icomoon-font-family}.ttf?dmkmpr') format('truetype'),
-    url('#{$icomoon-font-path}/#{$icomoon-font-family}.woff?dmkmpr') format('woff'),
-    url('#{$icomoon-font-path}/#{$icomoon-font-family}.svg?dmkmpr##{$icomoon-font-family}') format('svg');
+  font-family: '#{$icon-font-family}';
+  src:  url('#{$icon-font-path}/#{$icon-font-family}.eot?9f81c2');
+  src:  url('#{$icon-font-path}/#{$icon-font-family}.eot?9f81c2#iefix') format('embedded-opentype'),
+    url('#{$icon-font-path}/#{$icon-font-family}.ttf?9f81c2') format('truetype'),
+    url('#{$icon-font-path}/#{$icon-font-family}.woff?9f81c2') format('woff'),
+    url('#{$icon-font-path}/#{$icon-font-family}.svg?9f81c2##{$icon-font-family}') format('svg');
   font-weight: normal;
   font-style: normal;
 }
 
 [class^="opti-icon-"], [class*=" opti-icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: '#{$icomoon-font-family}' !important;
+  font-family: '#{$icon-font-family}' !important;
   speak: none;
   font-style: normal;
   font-weight: normal;
@@ -26,6 +26,36 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.opti-icon-next {
+  &:before {
+    content: $opti-icon-next; 
+  }
+}
+.opti-icon-previous {
+  &:before {
+    content: $opti-icon-previous; 
+  }
+}
+.opti-icon-up {
+  &:before {
+    content: $opti-icon-up; 
+  }
+}
+.opti-icon-down {
+  &:before {
+    content: $opti-icon-down; 
+  }
+}
+.opti-icon-outbound-order {
+  &:before {
+    content: $opti-icon-outbound-order; 
+  }
+}
+.opti-icon-inbound-order {
+  &:before {
+    content: $opti-icon-inbound-order; 
+  }
+}
 .opti-icon-open-Invoices {
   &:before {
     content: $opti-icon-open-Invoices; 
@@ -34,6 +64,11 @@
 .opti-icon-customer {
   &:before {
     content: $opti-icon-customer; 
+  }
+}
+.opti-icon-home {
+  &:before {
+    content: $opti-icon-home; 
   }
 }
 .opti-icon-about-us {
@@ -94,6 +129,11 @@
 .opti-icon-hammenu {
   &:before {
     content: $opti-icon-hammenu; 
+  }
+}
+.opti-icon-search {
+  &:before {
+    content: $opti-icon-search; 
   }
 }
 .opti-icon-notes {
@@ -196,16 +236,6 @@
     content: $opti-icon-purchase-Inquiries; 
   }
 }
-.opti-icon-home {
-  &:before {
-    content: $opti-icon-home; 
-  }
-}
-.opti-icon-search {
-  &:before {
-    content: $opti-icon-search; 
-  }
-}
 .opti-icon-add {
   &:before {
     content: $opti-icon-add; 
@@ -276,3 +306,4 @@
     content: $opti-icon-mobile-logo-old1; 
   }
 }
+
