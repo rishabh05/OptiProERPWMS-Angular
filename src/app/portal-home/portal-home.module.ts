@@ -20,6 +20,7 @@ import { ChartsModule } from '@progress/kendo-angular-charts';
 import { SalesOrderModule } from '../sales-order/sales-order.module';
 import { FormModule } from '../form/form.module';
 import { TrnaslateLazyModule } from '../../translate-lazy.module';
+import { InventoryTransferModule } from '../inventory-transfer/inventory-transfer.module';
 
 
 
@@ -40,7 +41,8 @@ import { TrnaslateLazyModule } from '../../translate-lazy.module';
     NgbModule,
     ChartsModule,
     SalesOrderModule,
-    FormModule
+    FormModule,
+    InventoryTransferModule
     
 
   ],
