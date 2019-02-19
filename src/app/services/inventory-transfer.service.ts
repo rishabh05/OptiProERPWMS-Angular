@@ -40,9 +40,9 @@ export class InventoryTransferService {
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetToBIN", jObject, this.httpOptions);
   }
 
-  getAllItemList(): Observable<any> {
-    var jObject = { ITEMCODE: '', ITEMNAME: '', WHSCODE: localStorage.getItem("whseId"), CompanyDBName: localStorage.getItem("CompID") };
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodsIssue/AllItemLookup", jObject, this.httpOptions);
+  submitBinTransfer(oWhsTransAddLot: any): Observable<any> {
+    var jObject = { BinTransToken: JSON.stringify(oWhsTransAddLot) };
+    return this.httpclient.post(this.config_params.service_url + "/api/BinTransfer/PutAway", jObject, this.httpOptions);
   }
 
 }
