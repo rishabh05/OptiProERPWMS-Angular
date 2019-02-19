@@ -15,15 +15,8 @@ body {
         }
     }
 
-    button:first-child:not(:last-child){
-        margin: 0 5px 0 0;
-    }
-    button:last-child:not(:first-child){
-        margin: 0 0 0 5px;    
-    }
-    button:hover{
-        opacity: 0.8;
-    }
-
-
+    
+}
+body button + button:not(:last-child){
+    margin: 0 5px 0 0;
 }
