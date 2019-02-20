@@ -4,6 +4,8 @@ import { SalesOrderListComponent } from '../sales-order/sales-order-list/sales-o
 import { PortalHomeComponent } from './portal-home.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { FormFieldComponent } from '../form/form-field/form-field.component';
+import { BinTransferComponent } from '../inventory-transfer/bin-transfer/bin-transfer.component';
+import { WhsTransferComponent } from '../inventory-transfer/whs-transfer/whs-transfer.component';
 
 const routes: Routes = [
 
@@ -14,6 +16,8 @@ const routes: Routes = [
       { path:'dashboard', component:DashboardComponent },
       { path: 'salesorder', component:SalesOrderListComponent },
       { path: 'form', component:FormFieldComponent },
+      { path:'binTransfer', component:BinTransferComponent },
+      { path:'whsTransfer', component:WhsTransferComponent },
     ]
     
   }
