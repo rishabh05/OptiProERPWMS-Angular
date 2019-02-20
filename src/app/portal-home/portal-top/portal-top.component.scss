@@ -53,9 +53,21 @@
          }
      }
      .opti_user-profile {
+        & > a{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-items: center;
          img {
              border-radius: 50%;
          }
+         span{
+            color: #fff;
+            margin-left: 7px;
+            font-size: 14px;
+            font-weight: 700;
+         }
+        }
          .dropdown-toggle::after {
              display: none;
          }

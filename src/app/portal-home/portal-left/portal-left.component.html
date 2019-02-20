@@ -37,19 +37,19 @@
             </li>
             <li class="dropdown" dropdown id="INV">
                 <a dropdownToggle class="dropdown-toggle">
-                    <i class="opti-icon-outbound-order" [style.color]="selectedThemeColor"></i>
+                    <i class="opti-icon-inventory-transfer" [style.color]="selectedThemeColor"></i>
                     <span class="text">{{'InventoryTransfer'|translate}}</span>
                 </a>
                 <ul *dropdownMenu class="dropdown-menu" role="menu">
                     <li id="15108" role="menuitem" (click)="listClick($event, 'whsTransfer')" >
                         <a class="dropdown-item" roterLink="whsTransfer">
-                            <i class="opti-icon-outbound-order" [style.color]="selectedThemeColor"></i>
+                            <i class="opti-icon-warehouse-transfer" [style.color]="selectedThemeColor"></i>
                             <span class="text">{{'WarehouseTransfer'|translate}}</span>
                         </a>
                     </li>
                     <li id="15109" role="menuitem" (click)="listClick($event, 'binTransfer')" >
                         <a class="dropdown-item" roterLink="binTransfer">
-                            <i class="opti-icon-outbound-order" [style.color]="selectedThemeColor"></i>
+                            <i class="opti-icon-method-draw-image-1" [style.color]="selectedThemeColor"></i>
                             <span class="text">{{'BinTransfer'|translate}}</span>
                         </a>
                     </li>
@@ -63,7 +63,7 @@
                 <ul *dropdownMenu class="dropdown-menu" role="menu">
                     <li id="15108" role="menuitem">
                         <a class="dropdown-item" href="#">
-                            <i class="opti-icon-outbound-order" [style.color]="selectedThemeColor"></i>
+                            <i class="opti-icon-time" [style.color]="selectedThemeColor"></i>
                             <span class="text">{{'PhysicalCount'|translate}}</span>
                         </a>
                     </li>
@@ -71,45 +71,45 @@
             </li>
             <li class="dropdown" dropdown id="INV">
                 <a dropdownToggle class="dropdown-toggle">
-                    <i class="opti-icon-outbound-order" [style.color]="selectedThemeColor"></i>
+                    <i class="opti-icon-factory" [style.color]="selectedThemeColor"></i>
                     <span class="text">{{'Production'|translate}}</span>
                 </a>
-                <ul *dropdownMenu class="dropdown-menu" role="menu">
-                    <li id="15108" role="menuitem">
-                        <a class="dropdown-item" href="#">
-                            <i class="opti-icon-outbound-order" [style.color]="selectedThemeColor"></i>
-                            <span class="text">{{'ReceiptFromProduction'|translate}}</span>
-                        </a>
-                    </li>
+                <ul *dropdownMenu class="dropdown-menu" role="menu">                    
                     <li id="15109" role="menuitem">
                         <a class="dropdown-item" href="#">
-                            <i class="opti-icon-outbound-order" [style.color]="selectedThemeColor"></i>
+                            <i class="opti-icon-issue" [style.color]="selectedThemeColor"></i>
                             <span class="text">{{'IssueForProduction'|translate}}</span>
                         </a>
                     </li>
+                    <li id="15108" role="menuitem">
+                            <a class="dropdown-item" href="#">
+                                <i class="opti-icon-customer-purchase-order" [style.color]="selectedThemeColor"></i>
+                                <span class="text">{{'ReceiptFromProduction'|translate}}</span>
+                            </a>
+                        </li>
                 </ul>
             </li>
             <li class="dropdown" dropdown id="INV">
                 <a dropdownToggle class="dropdown-toggle">
-                    <i class="opti-icon-outbound-order" [style.color]="selectedThemeColor"></i>
+                    <i class="opti-icon-printer" [style.color]="selectedThemeColor"></i>
                     <span class="text">{{'LabelPrintingandReports'|translate}}</span>
                 </a>
-                <ul *dropdownMenu class="dropdown-menu" role="menu">
-                    <li id="15108" role="menuitem">
-                        <a class="dropdown-item" href="#">
-                            <i class="opti-icon-outbound-order" [style.color]="selectedThemeColor"></i>
-                            <span class="text">{{'BinLabel'|translate}}</span>
-                        </a>
-                    </li>
+                <ul *dropdownMenu class="dropdown-menu" role="menu">                    
                     <li id="15109" role="menuitem">
                         <a class="dropdown-item" href="#">
-                            <i class="opti-icon-outbound-order" [style.color]="selectedThemeColor"></i>
+                            <i class="opti-icon-issue" [style.color]="selectedThemeColor"></i>
                             <span class="text">{{'ItemLabel'|translate}}</span>
                         </a>
                     </li>
+                    <li id="15108" role="menuitem">
+                            <a class="dropdown-item" href="#">
+                                <i class="opti-icon-sales-order" [style.color]="selectedThemeColor"></i>
+                                <span class="text">{{'BinLabel'|translate}}</span>
+                            </a>
+                        </li>
                     <li id="15109" role="menuitem">
                         <a class="dropdown-item" href="#">
-                            <i class="opti-icon-outbound-order" [style.color]="selectedThemeColor"></i>
+                            <i class="opti-icon-sales-order" [style.color]="selectedThemeColor"></i>
                             <span class="text">{{'InventoryEnquiry'|translate}}</span>
                         </a>
                     </li>

@@ -26,6 +26,41 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.opti-icon-time {
+  &:before {
+    content: $opti-icon-time; 
+  }
+}
+.opti-icon-factory {
+  &:before {
+    content: $opti-icon-factory; 
+  }
+}
+.opti-icon-warehouse-transfer {
+  &:before {
+    content: $opti-icon-warehouse-transfer; 
+  }
+}
+.opti-icon-inventory-transfer {
+  &:before {
+    content: $opti-icon-inventory-transfer; 
+  }
+}
+.opti-icon-method-draw-image-1 {
+  &:before {
+    content: $opti-icon-method-draw-image-1; 
+  }
+}
+.opti-icon-issue {
+  &:before {
+    content: $opti-icon-issue; 
+  }
+}
+.opti-icon-printer {
+  &:before {
+    content: $opti-icon-printer; 
+  }
+}
 .opti-icon-next {
   &:before {
     content: $opti-icon-next; 
@@ -306,4 +341,5 @@
     content: $opti-icon-mobile-logo-old1; 
   }
 }
+
 

@@ -21,17 +21,17 @@
                             <li class="opti_icon-spacing">
 
                                 <!-- search for desktop and ipad -->
-                                <div class="opti_search-form opti_hide-in-mobile">
+                                <!-- <div class="opti_search-form opti_hide-in-mobile">
                                     <input class="form-control" type="text" placeholder="Search" aria-label="Search">
                                     <span class="opti_top-search-icon opti_vertical-align opti_mouse-pointer"><img src="assets/images/common/search-black.svg" class="" alt="Search" width="15" /></span>
-                                </div>
+                                </div> -->
                                 <!-- end search for desktop and ipad -->
 
                                 <!-- search for mobile -->
-                                <div class="opti_search-form opti_hide-in-desktop-ipad ">
-                                    <!-- <input class="form-control" type="text" placeholder="Search" aria-label="Search"> -->
+                                <!-- <div class="opti_search-form opti_hide-in-desktop-ipad ">
+                                    <input class="form-control" type="text" placeholder="Search" aria-label="Search">
                                     <span class="opti_top-search-icon opti_vertical-align opti_mouse-pointer" (click)="openVerticallyCentered(mobileSearch)"><img src="assets/images/common/search-white.svg" class="" alt="Search" width="20" height="30" /></span>
-                                </div>
+                                </div> -->
                                 <!-- end search for mobile -->
 
                             </li>
@@ -46,7 +46,7 @@
                         </li> -->
 
                             <!-- if notifications avialble -->
-                            <li class="opti_icon-spacing position-relative" dropdown>
+                            <!-- <li class="opti_icon-spacing position-relative" dropdown>
                                 <span dropdownToggle class="dropdown-toggle opti_mouse-pointer">
                                 <img src="assets/images/common/notifications-button.svg" class="float-left opti_mouse-pointer opti_theme-setting" alt="Theme Setting" width="20" height="30" />
                                 <span class="opt_topbar-count">99+</span>
@@ -65,10 +65,13 @@
                                         </li>
                                     </ul>
                                 </div>
-                            </li>
+                            </li> -->
 
                             <li class="opti_icon-spacing opti_user-profile position-relative" dropdown>
-                                <a dropdownToggle class="dropdown-toggle"><img src="assets/images/common/user-avatar.png" class="opti_mouse-pointer opti_theme-setting" alt="User Profile" width="30" height="30" /></a>
+                                <a dropdownToggle class="dropdown-toggle">
+                                    <img src="assets/images/common/user-avatar.png" class="opti_mouse-pointer opti_theme-setting" alt="User Profile" width="30" height="30" />
+                                    <span>John Doe</span>
+                                </a>
                                 <ul class="dropdown-menu opti_user-profile-drop-down" *dropdownMenu>
                                     <li>
                                         <div class="container-fluid">
@@ -76,7 +79,7 @@
                                                 <div class="col-md-12">
                                                     <div class="opti_profile-box">
                                                         <div class="opti_profile-box-img">
-                                                            <img src="assets/images/common/user-avatar.png" alt="user image" width="80">
+                                                            <img src="assets/images/common/user-avatar.png" alt="user image" width="80"> 
                                                         </div>
                                                         <div class="opti_profile-box-text opti_vertical-align">
                                                             <h5>{{loggedInUserName}}</h5>
