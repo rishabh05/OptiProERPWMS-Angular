@@ -173,13 +173,66 @@ file-drop .drop-zone.over {
 ///////////////////////////// Custom Form Style /////////////////////
 ////////////////////////////////////////////////////////////////////
 .form-with-fix-btnBar{
-    padding-bottom: 61px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding-bottom: 60px;
     .fix-footer-btnBar{
         position: absolute;
-        bottom: 15px;
+        padding-bottom: 15px;
+        bottom: 0;
         left: 0;
         right: 0;
         margin: 0;
+        z-index: 100;
         background-color: #fff;
+        hr{
+            margin-top: 0;
+        }
     }
+}
+/////////////////////////////////////////////////////////////////////
+///////////////////////////// Custom Button Style /////////////////////
+////////////////////////////////////////////////////////////////////
+.btn-danger.k-button{
+    color:#fff;
+    background-color: #ff0f31;
+    &:hover, &:active, &:focus{
+        background-color: #de102d;
+        color:#fff;
+    }
+}
+.btn-success.k-button{
+    color:#fff;
+    background-color: #11bf4f;
+    &:hover, &:active, &:focus{
+        background-color: #10a746;
+        color:#fff;
+    }
+}
+.k-button.btn-transparent{
+    color:#999;
+    background-color: transparent;
+    &:hover, &:active, &:focus{
+        background-color: transparent;
+        color:#333;
+    }
+}
+.k-button.btn-icon-with-text{
+    & > .k-icon{
+        margin-right: 5px;
+    }
+}
+.k-button.btn-icon{
+    font-size: 18px;
+    & > .k-icon{
+        margin-left: 5px;
+    }
+}
+/////////////////////////////////////////////////////////////////////
+///////////////////////////// Modal Style /////////////////////
+////////////////////////////////////////////////////////////////////
+body.modal-open app-root {
+    filter: blur(8px);
+    -webkit-filter: blur(8px);
 }

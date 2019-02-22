@@ -23,6 +23,7 @@
   "InventoryTransfer":"Inventory Transfer",
   "WarehouseTransfer":"Warehouse Transfer",
   "BinTransfer":"Bin Transfer",
+  "AddedItems":"Added Items",
   "AdjustmentsCounting":"Adjustments & Counting",
   "PhysicalCount":"Physical Count",
   "Production":"Production",
@@ -44,7 +45,7 @@
   "FromWhse":"From Whse",
   "Submit":"Submit",
   "AddMore":"Add More",
-  "View Lines": "View Lines",
+  "ViewLines": "View Lines",
 
   "GoodReceiptPO":"Good Receipt PO",
   "VenderCode":"Vend. Code",
@@ -68,6 +69,8 @@
   "Bin":"Bin",
   "NoData":"No data",
   "Save":"Save",
+  "Ok":"Ok",
+  "DeleteAll":"Delete All",  
   "Receive":"Receive",
   "EnterQuantityErrMsg":"Enter Quantity",
 

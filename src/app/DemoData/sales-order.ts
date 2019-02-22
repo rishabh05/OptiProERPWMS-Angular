@@ -576,3 +576,26 @@ export const salesOrderNotes = [
         "Notes":"This is note"
     }
 ]
+
+// ViewLine
+
+// Content Tab
+export const viewLineContent = [  
+    {  
+        "Item":"item001",
+        "Qty":"20",
+        "Batch":"5210",
+        "FromBin":"5",
+        "ToBin":"code1",
+        "Delete":true,
+    }
+ ,  
+    {  
+        "Item":"item001",
+        "Qty":"20",
+        "Batch":"5210",
+        "FromBin":"5",
+        "ToBin":"code1",
+        "Delete":true,
+    }
+]

@@ -46,9 +46,9 @@
     content: $opti-icon-inventory-transfer; 
   }
 }
-.opti-icon-method-draw-image-1 {
+.opti-icon-bin-transfer {
   &:before {
-    content: $opti-icon-method-draw-image-1; 
+    content: $opti-icon-bin-transfer; 
   }
 }
 .opti-icon-issue {
@@ -241,9 +241,24 @@
     content: $opti-icon-settings; 
   }
 }
-.opti-icon-back {
+.opti-icon-arrow-back {
   &:before {
-    content: $opti-icon-back; 
+    content: $opti-icon-arrow-back; 
+  }
+}
+.opti-icon-arrow-up {
+  &:before {
+    content: $opti-icon-arrow-up; 
+  }
+}
+.opti-icon-arrow-next {
+  &:before {
+    content: $opti-icon-arrow-next; 
+  }
+}
+.opti-icon-arrow-down {
+  &:before {
+    content: $opti-icon-arrow-down; 
   }
 }
 .opti-icon-trash {
@@ -341,5 +356,4 @@
     content: $opti-icon-mobile-logo-old1; 
   }
 }
-
 

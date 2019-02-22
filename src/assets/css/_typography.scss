@@ -2,7 +2,7 @@
 
 // font size
 $font-size-small: 12px;
-$font-size-regular: 15px;
+$font-size-regular: 14px;
 $font-size-large: 24px;
 $font-size-x-large: 32px;
 $font-size-xx-large: 48px;
@@ -24,7 +24,7 @@ $font-weight-bold:	700;
 /////////////////////2. Common css start///////////////////////////
 ////////////////////////////////////////////////////////////////
 body{
-    @include font($size: $font-size-small,$weight: $font-weight-regular,  $lh: false);
+    @include font($size: $font-size-regular,$weight: $font-weight-regular,  $lh: false);
 }
 p{
     @include font($size: $font-size-regular,$weight: $font-weight-regular,  $lh: false);

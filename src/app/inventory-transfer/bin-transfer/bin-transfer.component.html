@@ -1,6 +1,6 @@
-<div class="opti_container position-relative bg-white rounded" [perfectScrollbar]=" ">
-  <form class="form-with-fix-btnBar">
-    <div class="opti_container_inner">
+<div class="opti_container position-relative bg-white rounded" >
+  <form class="form-with-fix-btnBar"  *ngIf="!viewLines">
+    <div class="opti_container_inner" [perfectScrollbar]=" ">
 
       <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
           {{'BinTransfer'|translate}}
@@ -93,11 +93,112 @@
           <hr />
       </div>
       <div class="col-sm-4">
-          <button type="button" class="btn k-button k-primary btn-sm">{{'Submit'|translate}}</button>
-          <button type="button" class="btn btn-success k-button btn-sm">{{'AddMore'|translate}}</button>            
-          <button type="button" class="btn btn-light k-button btn-sm">{{'ViewLines'|translate}}</button>
-          <button type="button" class="btn btn-danger k-button btn-sm">{{'Cancel'|translate}}</button>
+          <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-check" role="presentation"></span> {{'Submit'|translate}}</button>
+          <button type="button" class="btn btn-primary k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-plus" role="presentation"></span> {{'AddMore'|translate}}</button>            
+          <button type="button" class="btn btn-primary k-button btn-sm btn-icon-with-text" (click)="toggle()"><span class="k-icon k-i-preview" role="presentation"></span> {{'ViewLines'|translate}}</button>
+          <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
       </div>
     </div>
   </form>
+
+  <!-- USE THIS HTML CODE BLOCK FOR VIEW LINE PAGE -->
+  <form class="form-with-fix-btnBar" *ngIf="viewLines">
+    <div class="opti_container_inner" [perfectScrollbar]=" ">
+
+      <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
+          {{'AddedItems'|translate}}
+      </h3>      
+      <div class="row">
+        <div class="col-sm-12">            
+            <!-- loader start -->
+            <div class="opti_loader opti_loader-content-tab" *ngIf="showLoader">
+              <div class="opti_spinner"></div>
+            </div>
+            <!-- loader end -->  
+
+            <!-- grid start -->
+            <ng-container *ngIf="showLoader==false">
+              <kendo-grid 
+                [kendoGridBinding]="gridData" 
+                [resizable]="false" 
+                [pageSize]="50" 
+                [pageable]="true" 
+                [sortable]="true"  
+                [selectable]="true" 
+                #gridItem>
+
+                <!-- grid for mobile start -->
+                <kendo-grid-column media="(max-width: 767px)" title="Payment List" class="opti_mobile-grid-td">
+                  <ng-template kendoGridCellTemplate let-dataItem>
+                      <dl class="opti_mobile_grid_dl">
+                          <dt>Item</dt>
+                          <dd>{{ dataItem.Item }}</dd>
+
+                          <dt>Batch</dt>
+                          <dd>{{ dataItem.Batch }}</dd>
+
+                          <dt>To Bin</dt>
+                          <dd>{{ dataItem.ToBin }}</dd>
+                      </dl>
+
+                      <dl class="opti_mobile_grid_dl">
+                          <dt>Qty</dt>
+                          <dd>{{ dataItem.Qty }}</dd>
+
+                          <dt>From Bin</dt>
+                          <dd>{{ dataItem.FromBin }}</dd>
+
+                          <dd>
+                            <button type="button" class="k-button-icon k-button">
+                              <span class="k-icon k-i-delete" role="presentation"></span>
+                            </button>
+                          </dd>
+                      </dl>
+                  </ng-template>
+              </kendo-grid-column>
+              <!-- grid for mobile end -->
+
+                <kendo-grid-column media="(min-width: 768px)" field="Item" title="Item" [width]="160"></kendo-grid-column>
+                <kendo-grid-column media="(min-width: 768px)" field="Qty" title="Qty" [width]="160"></kendo-grid-column>
+                <kendo-grid-column media="(min-width: 768px)" field="Batch" [width]="160" title="Batch"></kendo-grid-column>
+                <kendo-grid-column media="(min-width: 768px)" field="FromBin" [width]="160" title="From Bin" ></kendo-grid-column>
+                <kendo-grid-column media="(min-width: 768px)" field="ToBin" title="To Bin" [width]="160"></kendo-grid-column>
+                <kendo-grid-column media="(min-width: 768px)" field="Delete" title="Delete" width="120">
+                  <ng-template kendoGridCellTemplate let-dataItem>
+                    <button type="button" class="k-button-icon k-button"><span class="k-icon k-i-delete" role="presentation"></span></button>
+                  </ng-template>
+                </kendo-grid-column>
+             
+              </kendo-grid>
+            </ng-container>
+            <!-- grid end -->
+        </div>
+      </div>      
+    </div>
+    <div class="fix-footer-btnBar">
+      <div class="col-sm-12">
+          <hr />
+      </div>
+      <div class="col-sm-4">
+          <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text" (click)="toggle()"><span class="k-icon k-i-check" role="presentation"></span> {{'Ok'|translate}}</button>
+          <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="openModal(template)"><span class="k-icon k-i-delete" role="presentation"></span> {{'DeleteAll'|translate}}</button>
+      </div>
+    </div>
+  </form>
+
+  <ng-template #template>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Confirm</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      Do you want to delete all the lines?
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary k-button btn-sm" type="button">Ok</button>
+      <button class="btn btn-default k-button btn-sm" type="button">Close</button>
+    </div>
+  </ng-template>
 </div>   
