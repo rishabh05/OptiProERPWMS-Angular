@@ -3,14 +3,14 @@ import { CommonModule } from '@angular/common';
 import { WhsTransferComponent } from './whs-transfer/whs-transfer.component';
 import { BinTransferComponent } from './bin-transfer/bin-transfer.component';
 import { TrnaslateLazyModule } from 'src/translate-lazy.module';
-import { LookupComponent } from 'src/app/common/lookup/lookup.component';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 
 @NgModule({
-  declarations: [WhsTransferComponent, BinTransferComponent, LookupComponent],
+  declarations: [WhsTransferComponent, BinTransferComponent],
   imports: [
     CommonModule,
-    TrnaslateLazyModule
-    
+    TrnaslateLazyModule,
+    PerfectScrollbarModule,
   ]
 })
 export class InventoryTransferModule { }
