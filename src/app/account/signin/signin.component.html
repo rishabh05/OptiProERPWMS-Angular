@@ -31,7 +31,7 @@
                            User does not exists.</span> -->
                           </span> 
                           <input type="text"  name = "email" required [(ngModel)]="userName"
-                            #emailId = ngModel class="k-textbox" value="" placeholder="Enter Username"
+                            #emailId = ngModel class="k-textbox" value="" placeholder="{{ 'EnterUsername'|translate}}"
                             [readonly]=readonlyFlag
                             />  
                       </label>
@@ -44,7 +44,7 @@
                           </span>
                           <input name = "password" required [(ngModel)]="password" 
                           #pwd = ngModel type="password" class="k-textbox" value="" 
-                          placeholder="{{ 'Password'|translate}}" [readonly] = readonlyFlag/>
+                          placeholder="{{ 'EnterPassword'|translate}}" [readonly] = readonlyFlag/>
                       </label>
 
                         <!-- start if condition -->

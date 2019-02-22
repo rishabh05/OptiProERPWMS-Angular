@@ -8,8 +8,11 @@ import { Component, OnInit } from '@angular/core';
 export class BinTransferComponent implements OnInit {
 
   constructor() { }
-
+  showLookupLoader: boolean;
   ngOnInit() {
   }
 
+  OnItemLookupClick(){
+    this.showLookupLoader = true;
+  }
 }
