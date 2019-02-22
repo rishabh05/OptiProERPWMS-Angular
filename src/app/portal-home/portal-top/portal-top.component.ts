@@ -19,14 +19,14 @@ export class PortalTopComponent implements OnInit {
   constructor(private modalService: NgbModal, private router: Router, private commonService: Commonservice) { }
   
   selectedThemeColor: string = opticonstants.DEFAULTTHEMECOLOR;
-  
-  loggedInUserName: string = 'Prashant';
-  ks:string = '1.0';
+  DBName: string;
+  loggedInUserName: string;
 
   ngOnInit() {
     
     UIHelper.manageThemeCssFile();
     this.loggedInUserName = localStorage.getItem("UserId");
+    this.DBName = localStorage.getItem("CompID");
   }
 
   // open and close theme setting side panel

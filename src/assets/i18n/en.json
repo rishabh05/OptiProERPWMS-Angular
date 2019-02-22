@@ -3,6 +3,9 @@
   "Password": "Password*",
   "SelectWarehouse": "Select Warehouse",
   "SelectCompany": "Select Company",
+  "EnterUsername": "Enter Username",
+  "EnterPassword": "Enter Password",
+  
   "PsurlFailed": "PSURL Failed",
   "Company": "Company",
   "Warehouse": "Warehouse",

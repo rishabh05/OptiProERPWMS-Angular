@@ -1,1 +1,30 @@
-<div class="">as if</div>
+<!-- Grid Modal-->
+<kendo-dialog title="{{popup_title}}" *ngIf="dialogOpened" (close)="close_kendo_dialog()" >
+
+
+    <kendo-grid [data]="serviceData" [filterable]="isColumnFilter" [selectable]="true" [pageable]="true"
+        [resizable]="true" [skip]="skip" (selectionChange)="on_item_select($event)" [pageSize]="10">
+        <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="1">
+            <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+            <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
+            <kendo-pager-next-buttons></kendo-pager-next-buttons>
+            <kendo-pager-info></kendo-pager-info>
+        </ng-template>
+        <ng-template kendoGridToolbarTemplate>
+            <form class="k-form opti_show-hide-grid-column-filter float-left opti_hide-in-mobile p-0">
+                <div class="custom-control custom-checkbox float-left">
+                    <input #chkFilter type="checkbox" id="columnFilter"class="custom-control-input"
+                        name="columnfilter" />
+                    <label class="custom-control-label" for="columnFilter"> &nbsp; enable filter</label>
+                </div>
+            </form>
+        </ng-template>
+
+
+
+        <kendo-grid-column *ngFor="let column of table_head" field="{{column.field}}" title="{{column.title}}" filter="{{column.type}}"
+            format="{{column.format}}" width="{{column.width}}" minResizableWidth="{{column.width}}"></kendo-grid-column>
+
+    </kendo-grid>
+</kendo-dialog>
+

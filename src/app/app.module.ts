@@ -11,6 +11,9 @@ import { ToastrModule } from 'ngx-toastr';
 import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { GridModule } from '@progress/kendo-angular-grid';
+// import { LookupComponent } from 'src/app/common/lookup/lookup.component';
+import { DialogsModule } from '@progress/kendo-angular-dialog';
+
 
 
 
@@ -22,6 +25,7 @@ export function createTranslateLoader(http: HttpClient) {
   declarations: [
     AppComponent,
     LandingComponent
+    
   ],
   imports: [
     BrowserModule,
@@ -39,6 +43,7 @@ export function createTranslateLoader(http: HttpClient) {
       isolate: false
     }),
     GridModule,
+    DialogsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

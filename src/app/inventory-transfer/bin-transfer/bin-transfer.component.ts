@@ -14,6 +14,7 @@ export class BinTransferComponent implements OnInit {
   gridHeight: number;
   showLoader: boolean = false;
   modalRef: BsModalRef;
+  showLookupLoader: boolean;
 
   constructor(private modalService: BsModalService) { }
   // Class variables
@@ -58,5 +59,8 @@ export class BinTransferComponent implements OnInit {
     this.modalRef = this.modalService.show(template,
       Object.assign({}, { class: 'modal-dialog-centered' })
       );
+  }
+  OnItemLookupClick(){
+    this.showLookupLoader = true;
   }
 }
