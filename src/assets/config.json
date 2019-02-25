@@ -6,12 +6,9 @@
 	"admin_db_name":"OPTIPROADMIN",
 	"product_code":"WMS",
 	"system_version":"1.10.1",
-    "baseServerAPIEndpoint":"http://172.16.6.139:9090/",
     "firstHomePage": "/home/dashboard",
     "firstHomePageVendor":"/home/vendor/vpinquery",
     "dateFormat": "DD MMM YY",
     "displayDateFormat":"dd MMM yy",
-    "appVersion": "1.6", 
-    "doccumentPath": "http://139.144.10.218:5000/Upload/",
     "assetsRootpath": "assets"   
 } 
