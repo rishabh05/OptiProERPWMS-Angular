@@ -74,12 +74,16 @@
   "Save":"Save",
   "Ok":"Ok",
   "DeleteAll":"Delete All",  
+  "Close":"Confirm",  
+  "Confirm":"Confirm",
   "Receive":"Receive",
   "EnterQuantityErrMsg":"Enter Quantity",
 
   "ChangeWarehouse":"Change Warehouse",
   "About":"About",
-  "Logout":"Logout"
+  "Logout":"Logout",
+
+  "DoYouWantToDeleteAllTheLines":"Do you want to delete all the lines?",
 
 }
   
