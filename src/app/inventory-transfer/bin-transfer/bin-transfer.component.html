@@ -12,7 +12,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'ItemCode'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" placeholder="Batch No">
+                                <input type="text" class="form-control form-control-sm" placeholder="{{'ItemCode'|translate}}">
                                 <div class="input-group-append">
                                     <button class="k-button k-primary btn" type="button">
                                         <i class="opti-icon-hammenu"></i>
@@ -25,7 +25,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'BatchNo'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" placeholder="Batch No">
+                                <input type="text" class="form-control form-control-sm" placeholder="{{'BatchNo'|translate}}">
                                 <div class="input-group-append">
                                     <button class="k-button k-primary btn" type="button">
                                         <i class="opti-icon-hammenu"></i>
@@ -38,7 +38,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'FromBin'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" placeholder="From Bin">
+                                <input type="text" class="form-control form-control-sm" placeholder="{{'FromBin'|translate}}">
                                 <div class="input-group-append">
                                     <button class="k-button k-primary btn" type="button">
                                         <i class="opti-icon-hammenu"></i>
@@ -51,7 +51,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'ToBin'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" placeholder="To Bin">
+                                <input type="text" class="form-control form-control-sm" placeholder="{{'ToBin'|translate}}">
                                 <div class="input-group-append">
                                     <button class="k-button k-primary btn" type="button">
                                         <i class="opti-icon-hammenu"></i>
@@ -64,7 +64,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'OnHandQty'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" placeholder="OnHand Qty">
+                                <input type="text" class="form-control form-control-sm" placeholder="{{'OnHandQty'|translate}}">
                                 <div class="input-group-append">
                                     <button class="k-button k-primary btn" type="button">
                                         <i class="opti-icon-hammenu"></i>
@@ -77,7 +77,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'TransferQty'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" placeholder="Transfer Qty">
+                                <input type="text" class="form-control form-control-sm" placeholder="{{'TransferQty'|translate}}">
                                 <div class="input-group-append">
                                     <button class="k-button k-primary btn" type="button">
                                         <i class="opti-icon-hammenu"></i>
@@ -90,7 +90,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Reason'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" placeholder="Reason">
+                                <input type="text" class="form-control form-control-sm" placeholder="{{'Reason'|translate}}">
                                 <div class="input-group-append">
                                     <button class="k-button k-primary btn" type="button">
                                         <i class="opti-icon-hammenu"></i>
@@ -147,21 +147,21 @@
                 <kendo-grid-column media="(max-width: 767px)" title="Payment List" class="opti_mobile-grid-td">
                   <ng-template kendoGridCellTemplate let-dataItem>
                       <dl class="opti_mobile_grid_dl">
-                          <dt>Item</dt>
+                          <dt>{{'Item'|translate}}</dt>
                           <dd>{{ dataItem.Item }}</dd>
 
-                          <dt>Batch</dt>
+                          <dt>{{'Batch'|translate}}</dt>
                           <dd>{{ dataItem.Batch }}</dd>
 
-                          <dt>To Bin</dt>
+                          <dt>{{'ToBin'|translate}}</dt>
                           <dd>{{ dataItem.ToBin }}</dd>
                       </dl>
 
                       <dl class="opti_mobile_grid_dl">
-                          <dt>Qty</dt>
+                          <dt>{{'Qty'|translate}}</dt>
                           <dd>{{ dataItem.Qty }}</dd>
 
-                          <dt>From Bin</dt>
+                          <dt>{{'FromBin'|translate}}</dt>
                           <dd>{{ dataItem.FromBin }}</dd>
 
                           <dd>

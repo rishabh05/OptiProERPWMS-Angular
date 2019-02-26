@@ -38,6 +38,7 @@
   "SpotCount":"Spot Count",
 
   "BatchNo":"Batch No",
+  "Batch":"Batch",
   "FromBin":"From Bin",
   "ToBin":"To Bin",
   "OnHandQty":"OnHand Qty",
@@ -48,7 +49,7 @@
   "Submit":"Submit",
   "AddMore":"Add More",
   "ViewLines": "View Lines",
-  "FromWhse": "From Whse",
+ 
 
 
   "GoodReceiptPO":"Good Receipt PO",
@@ -88,7 +89,7 @@
   "GoodsReciptPO":"Goods Recipt PO",
   "VendCode":"Vend. Code",
   "Delivery":"Delivery",
-  "Customer":"Customer",
+  "Customer":"Customer"
   
   "CommonSessionExpireMsg": "Session has Expired"
 }

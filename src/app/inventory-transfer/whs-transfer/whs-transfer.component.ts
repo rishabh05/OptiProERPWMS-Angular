@@ -40,7 +40,8 @@ export class WhsTransferComponent implements OnInit {
         this.lookupfor = "toWhsList";
       },
       error => {
-     
+        this.showLookupLoader = false;
+        this.lookupfor = "toWhsList";
       }
     );
   }
