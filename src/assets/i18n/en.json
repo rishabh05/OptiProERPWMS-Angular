@@ -48,7 +48,7 @@
   "Submit":"Submit",
   "AddMore":"Add More",
   "ViewLines": "View Lines",
-  "FromWhse": "From Whse",
+ 
 
 
   "GoodReceiptPO":"Good Receipt PO",
@@ -88,7 +88,7 @@
   "GoodsReciptPO":"Goods Recipt PO",
   "VendCode":"Vend. Code",
   "Delivery":"Delivery",
-  "Customer":"Customer",
+  "Customer":"Customer"
   
   
 }
