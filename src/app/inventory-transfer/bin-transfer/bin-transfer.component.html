@@ -6,7 +6,7 @@
                 {{'BinTransfer'|translate}}
             </h3>
             <div class="row">
-                <div class="col-sm-4">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
 
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'ItemCode'|translate}}</label>
@@ -104,13 +104,14 @@
             </div>
         </div>
         <div class="fix-footer-btnBar">
-        <div class="col-sm-12">
+        <div class="col-sm-12 col-12">
             <hr />
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-12 col-12">
             <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-check" role="presentation"></span> {{'Submit'|translate}}</button>
-            <button type="button" class="btn btn-primary k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-plus" role="presentation"></span> {{'AddMore'|translate}}</button>            
-            <button type="button" class="btn btn-primary k-button btn-sm btn-icon-with-text" (click)="toggle()"><span class="k-icon k-i-preview" role="presentation"></span> {{'ViewLines'|translate}}</button>
+            <button type="button" class="btn btn-primary k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-plus" role="presentation"></span> {{'AddMore'|translate}}</button>   
+            <button type="button" class="btn btn-primary k-button btn-sm btn-icon-with-text mr-1" (click)="toggle()"><span class="k-icon k-i-preview" role="presentation"></span> {{'ViewLines'|translate}}</button>
+            <div class="clearfix mt-1 d-block d-sm-none"></div> 
             <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
         </div>
         </div>
@@ -124,7 +125,7 @@
           {{'AddedItems'|translate}}
       </h3>      
       <div class="row">
-        <div class="col-sm-12">            
+        <div class="col-sm-12 col-12">            
             <!-- loader start -->
             <div class="opti_loader opti_loader-content-tab" *ngIf="showLoader">
               <div class="opti_spinner"></div>
@@ -191,10 +192,10 @@
       </div>      
     </div>
     <div class="fix-footer-btnBar">
-      <div class="col-sm-12">
+      <div class="col-sm-12 col-12">
           <hr />
       </div>
-      <div class="col-sm-4">
+      <div class="col-sm-12 col-12">
           <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text" (click)="toggle()"><span class="k-icon k-i-check" role="presentation"></span> {{'Ok'|translate}}</button>
           <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="openModal(template)"><span class="k-icon k-i-delete" role="presentation"></span> {{'DeleteAll'|translate}}</button>
       </div>

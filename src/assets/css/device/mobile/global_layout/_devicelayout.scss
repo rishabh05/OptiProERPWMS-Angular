@@ -1,6 +1,7 @@
 #opti_WrapperID{
     display: block;
     align-items: stretch;
+    height: 100vh;
 
     .opti_hide-in-mobile{
         display: none;
@@ -22,12 +23,12 @@
     
     #opti_RightPanelID{ 
         width: 100%;
-        height: auto;
+        height: 100%;
     }
 
     // mian content area
     #opti_MainContentID { // main content height(After deduct top bar height)
-        height: calc(100% - 65px);
+        height: 100vh;
         overflow-y: scroll;
     }
  
@@ -68,9 +69,10 @@
     .opti_menusidebar-mobile-open{
         app-portal-left {
             width: 100%;
-            height: calc(100% - 65px);
+            height: calc(100vh - 65px);
             z-index: 999;
             display: block;
+            bottom: 0;
             .opti_menusidebar-mobile-open{
                 height: 100%;
             }
@@ -113,7 +115,7 @@
     }
 
     #opti_MainContentID {
-        margin-top: 65px;
+        padding-top: 65px;
     }
 
 
@@ -209,4 +211,8 @@ bs-tooltip-container{
     input:focus{
         box-shadow: none;
     }
+}
+
+.form-with-fix-btnBar {
+    padding-bottom: 90px !important;
 }

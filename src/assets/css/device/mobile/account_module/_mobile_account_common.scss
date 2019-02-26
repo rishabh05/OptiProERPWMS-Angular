@@ -19,7 +19,6 @@ body.opti_account-module{
         height: calc(100vh - 40px);
         border-radius: 5px;
         width: 100% !important;
-        background: none !important;
         box-shadow: none !important;
     }
     .opti_vertcal-align-outer-box{
@@ -36,8 +35,8 @@ body.opti_account-module{
 }
 
 body.opti_account-module{
-    background-image: none !important;
-    background:linear-gradient(177deg, #483DF6 2%, #435EF8 10%, #1BA0F1 44%, #25DDF5 91%, #45D790 130%) !important;
+    //background-image: none !important;
+    //background:linear-gradient(177deg, #483DF6 2%, #435EF8 10%, #1BA0F1 44%, #25DDF5 91%, #45D790 130%) !important;
     
 }
 

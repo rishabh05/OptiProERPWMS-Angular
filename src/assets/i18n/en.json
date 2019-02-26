@@ -74,7 +74,7 @@
   "Save":"Save",
   "Ok":"Ok",
   "DeleteAll":"Delete All",  
-  "Close":"Confirm",  
+  "Close":"Close",  
   "Confirm":"Confirm",
   "Receive":"Receive",
   "EnterQuantityErrMsg":"Enter Quantity",
@@ -84,6 +84,11 @@
   "Logout":"Logout",
 
   "DoYouWantToDeleteAllTheLines":"Do you want to delete all the lines?",
-
+  "GoodsReciptPO":"Goods Recipt PO",
+  "VendCode":"Vend. Code",
+  "Delivery":"Delivery",
+  "Customer":"Customer",
+  
+  
 }
   
