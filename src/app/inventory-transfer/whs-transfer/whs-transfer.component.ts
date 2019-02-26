@@ -5,22 +5,26 @@ import { ToWhs } from 'src/app/models/InventoryTransfer/ToWhs';
 import { CurrentSidebarInfo } from 'src/app/models/sidebar/current-sidebar-info';
 import { Router } from '@angular/router';
 import { Commonservice } from 'src/app/services/commonservice.service';
+import { TranslateService } from '../../../../node_modules/@ngx-translate/core';
 
 @Component({
   selector: 'app-whs-transfer',
   templateUrl: './whs-transfer.component.html',
   styleUrls: ['./whs-transfer.component.scss']
 })
+
 export class WhsTransferComponent implements OnInit {
   selectedItem: any;
-
+  toWhse: any;
   fromWhse: string;
   showLookupLoader=true;
   toWhs: ToWhs[];
   serviceData: any[];
   lookupfor: string;
   
-  constructor(private commonService: Commonservice, private router: Router, private inventoryTransferService: InventoryTransferService, private toastr: ToastrService) { }
+  constructor(private commonservice: Commonservice, private router: Router, private inventoryTransferService: InventoryTransferService, private toastr: ToastrService, private translate: TranslateService) {
+
+   }
 
   ngOnInit() {
     this.fromWhse = localStorage.getItem("whseId");
@@ -29,39 +33,79 @@ export class WhsTransferComponent implements OnInit {
   getToWhse(){
     this.inventoryTransferService.getToWHS().subscribe(
       data => {
-
-        if(data == "7001"){
-          // CommonSessionExpireMsg
-          return;
+        if(data != undefined && data.length > 0){
+          if (data[0].ErrorMsg == "7001") {
+              this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, 
+                this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
+              return;
+          } 
         }
-        
+       
         this.showLookupLoader = false;
         this.serviceData = data;
         this.lookupfor = "toWhsList";
       },
       error => {
-        this.showLookupLoader = false;
-        this.lookupfor = "toWhsList";
+        this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
       }
     );
   }
+
   /**
    * 
    * @param event 
    * @param module 
    */
   listClick(event, module) { 
+    if (this.toWhse == "" || this.toWhse == undefined) {
+      this.toastr.error('', this.translate.instant("ToWhsBlankErrMsg"));
+      return;
+    }
     this.selectedItem = module;
-    
     this.closeRightSidebar();
-    
-    //this.router.navigate(['home/' + module]);
     this.router.navigateByUrl('home/' + module, { skipLocationChange: true });
-
   }
+
   closeRightSidebar() {
     let currentSidebarInfo: CurrentSidebarInfo = new CurrentSidebarInfo();
     currentSidebarInfo.SideBarStatus = false;
-    this.commonService.setCurrentSideBar(currentSidebarInfo);
+    this.commonservice.setCurrentSideBar(currentSidebarInfo);
   }
+
+  getLookupValue($event) {
+    this.toWhse = $event[0];
+  }
+
+  OnToWarehouseChange () {
+    if (this.toWhse == "" || this.toWhse == undefined) {
+      return;
+    }
+
+    this.inventoryTransferService.isWHsExists(this.toWhse).subscribe(
+      data => {
+        if(data != undefined && data.length > 0){
+          if (data[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, 
+              this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
+              return;
+          } 
+        }
+        if (data != null) {
+          if (data[0].Result == "0") {
+            this.toastr.error('', this.translate.instant("InvalidWhsErrorMsg"));
+            this.toWhse = "";
+          }
+          else {
+            this.toWhse = data[0].ID;
+          }
+        }
+      },
+      error => {
+        this.toastr.error('', this.translate.instant("InvalidWhsErrorMsg"));
+      }
+    );
+    if (this.fromWhse == this.toWhse && this.fromWhse != "" && this.toWhse != "") {
+      this.toastr.error('', this.translate.instant("FrmnToNotSame"));
+    }
+  }  
 }

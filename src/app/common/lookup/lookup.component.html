@@ -1,5 +1,5 @@
 <!-- Grid Modal-->
-<kendo-dialog title="{{popup_title}}" *ngIf="dialogOpened" (close)="close_kendo_dialog()" [minWidth]="750" [width]="750">
+<kendo-dialog title="t" *ngIf="dialogOpened" (close)="close_kendo_dialog()" [minWidth]="750" [width]="750">
 
 
     <kendo-grid [kendoGridBinding]="serviceData" [filterable]="isColumnFilter" [selectable]="true" [pageable]="true"
@@ -15,7 +15,7 @@
                 <div class="custom-control custom-checkbox float-left">
                     <input #chkFilter type="checkbox" id="columnFilter" class="custom-control-input"
                         name="columnfilter" />
-                    <label class="custom-control-label" for="columnFilter"> &nbsp; Language</label>
+                    <label class="custom-control-label" for="columnFilter"> &nbsp; columnFilter</label>
                 </div>
             </form>
         </ng-template>

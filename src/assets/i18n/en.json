@@ -5,7 +5,7 @@
   "SelectCompany": "Select Company",
   "EnterUsername": "Enter Username",
   "EnterPassword": "Enter Password",
-    "PsurlFailed": "PSURL Failed",
+  "PsurlFailed": "PSURL Failed",
   "Company": "Company",
   "Warehouse": "Warehouse",
   "UnPwdBlankErrorMsg": "username or password cannot be blank",
@@ -49,8 +49,11 @@
   "Submit":"Submit",
   "AddMore":"Add More",
   "ViewLines": "View Lines",
- 
-
+  "WhseCode": "Whse Code",
+  "WhseName": "Whse Name",
+  "InvalidWhsErrorMsg": "Invalid Warehouse",
+  "FrmnToNotSame": "From and To Warehouse can not be Same",
+  "ToWhsBlankErrMsg":"To Whse cannot be blank!",
 
   "GoodReceiptPO":"Good Receipt PO",
   "VenderCode":"Vend. Code",
@@ -89,8 +92,9 @@
   "GoodsReciptPO":"Goods Recipt PO",
   "VendCode":"Vend. Code",
   "Delivery":"Delivery",
-  "Customer":"Customer"
+  "Customer":"Customer",
   
-  "CommonSessionExpireMsg": "Session has Expired"
+  "CommonSessionExpireMsg": "Session has Expired",
+  "CommonNoDataAvailableMsg": "No data available"
 }
   
