@@ -5,8 +5,7 @@
   "SelectCompany": "Select Company",
   "EnterUsername": "Enter Username",
   "EnterPassword": "Enter Password",
-  
-  "PsurlFailed": "PSURL Failed",
+    "PsurlFailed": "PSURL Failed",
   "Company": "Company",
   "Warehouse": "Warehouse",
   "UnPwdBlankErrorMsg": "username or password cannot be blank",
@@ -49,6 +48,8 @@
   "Submit":"Submit",
   "AddMore":"Add More",
   "ViewLines": "View Lines",
+  "FromWhse": "From Whse",
+
 
   "GoodReceiptPO":"Good Receipt PO",
   "VenderCode":"Vend. Code",

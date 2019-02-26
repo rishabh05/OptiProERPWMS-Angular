@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener, TemplateRef } from '@angular/core';
-import { viewLineContent } from 'src/app/DemoData/sales-order';
-import { UIHelper } from 'src/app/helpers/ui.helpers';
+import { viewLineContent } from '../../DemoData/sales-order';
+import { UIHelper } from '../../helpers/ui.helpers';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({

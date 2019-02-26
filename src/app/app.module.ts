@@ -14,7 +14,7 @@ import { GridModule } from '@progress/kendo-angular-grid';
 // import { LookupComponent } from 'src/app/common/lookup/lookup.component';
 import { DialogsModule } from '@progress/kendo-angular-dialog';
 
-
+import { FormsModule } from '@angular/forms';
 
 
 export function createTranslateLoader(http: HttpClient) {
@@ -34,6 +34,7 @@ export function createTranslateLoader(http: HttpClient) {
     HttpClientModule, 
     ToastrModule.forRoot(),
     PerfectScrollbarModule,
+    FormsModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
