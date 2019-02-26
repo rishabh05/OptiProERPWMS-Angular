@@ -90,6 +90,6 @@
   "Delivery":"Delivery",
   "Customer":"Customer",
   
-  
+  "CommonSessionExpireMsg": "Session has Expired"
 }
   

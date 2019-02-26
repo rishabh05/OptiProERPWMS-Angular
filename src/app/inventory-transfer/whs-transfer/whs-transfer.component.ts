@@ -29,6 +29,12 @@ export class WhsTransferComponent implements OnInit {
   getToWhse(){
     this.inventoryTransferService.getToWHS().subscribe(
       data => {
+
+        if(data == "7001"){
+          // CommonSessionExpireMsg
+          return;
+        }
+        
         this.showLookupLoader = false;
         this.serviceData = data;
         this.lookupfor = "toWhsList";
