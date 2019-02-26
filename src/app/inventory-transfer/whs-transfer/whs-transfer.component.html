@@ -5,7 +5,7 @@
             {{'WarehouseTransfer'|translate}}
         </h3>    
         <div class="row">
-          <div class="col-sm-4">            
+          <div class="col-sm-12 col-md-12 col-lg-8 col-xl-6">            
               <div class="form-group row">
                 <label for="inputPassword" class="col-sm-3 col-form-label">{{'FromWhse'|translate}}</label>
                 <div class="col-sm-9">
@@ -30,12 +30,12 @@
       
 
       <div class="row fix-footer-btnBar">
-        <div class="col-sm-12">
+        <div class="col-sm-12 col-12">
             <hr />
         </div>
-        <div class="col-sm-4">                      
+        <div class="col-sm-12 col-12">                      
             <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-close-outline" role="presentation"></span> Cancel</button>
-            <button type="button" class="btn btn-light k-button btn-sm btn-transparent btn-icon"><i class="opti-icon-arrow-next"></i></button>
+            <button type="button" class="btn btn-light k-button btn-sm btn-transparent btn-icon" (click)="listClick($event, 'binTransfer')" roterLink="binTransfer" skipLocationChange><i class="opti-icon-arrow-next"></i></button>
         </div>
       </div>
     </form>    

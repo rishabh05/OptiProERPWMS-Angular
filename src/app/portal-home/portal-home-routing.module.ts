@@ -6,6 +6,8 @@ import { DashboardComponent } from '../dashboard/dashboard.component';
 import { FormFieldComponent } from '../form/form-field/form-field.component';
 import { BinTransferComponent } from '../inventory-transfer/bin-transfer/bin-transfer.component';
 import { WhsTransferComponent } from '../inventory-transfer/whs-transfer/whs-transfer.component';
+import { InboundDetailsComponent } from '../inbound/inbound-details/inbound-details.component';
+import { OutboundDetailsComponent } from '../outbound/outbound-details/outbound-details.component';
 
 const routes: Routes = [
 
@@ -18,6 +20,8 @@ const routes: Routes = [
       { path: 'form', component:FormFieldComponent },
       { path:'binTransfer', component:BinTransferComponent },
       { path:'whsTransfer', component:WhsTransferComponent },
+      { path:'inbound', component:InboundDetailsComponent },
+      { path:'outbound', component:OutboundDetailsComponent },
     ]
     
   }

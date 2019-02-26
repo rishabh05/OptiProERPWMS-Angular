@@ -22,20 +22,20 @@
                 </a>
             </li> -->
 
-            <li id="PUR" (click)="listClick($event, 'salesorder')" [ngClass]="{'active': selectedItem == 'salesorder'}">
-                <a roterLink="salesorder">
+            <li id="PUR" (click)="listClick($event, 'inbound')" [ngClass]="{'active': selectedItem == 'inbound'}">
+                <a roterLink="inbound">
                     <i class="opti-icon-inbound-order" [style.color]="selectedThemeColor"></i>
                     <span class="text">{{'Inbound'|translate}}</span>
                 </a>
             </li>
 
-            <li id="SLS" (click)="listClick($event, 'form')" [ngClass]="{'active': selectedItem == 'form'}">
-                <a roterLink="form">
+            <li id="SLS" (click)="listClick($event, 'outbound')" [ngClass]="{'active': selectedItem == 'outbound'}">
+                <a roterLink="outbound">
                     <i class="opti-icon-outbound-order" [style.color]="selectedThemeColor"></i>
                     <span class="text">{{'Outbound'|translate}}</span>
                 </a>
             </li>
-            <li class="dropdown" dropdown id="INV">
+            <li class="dropdown" dropdown id="INV" [ngClass]="{'active': selectedItem == 'whsTransfer'||'binTransfer'}">
                 <a dropdownToggle class="dropdown-toggle">
                     <i class="opti-icon-inventory-transfer" [style.color]="selectedThemeColor"></i>
                     <span class="text">{{'InventoryTransfer'|translate}}</span>
