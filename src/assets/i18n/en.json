@@ -88,7 +88,9 @@
   "GoodsReciptPO":"Goods Recipt PO",
   "VendCode":"Vend. Code",
   "Delivery":"Delivery",
-  "Customer":"Customer"
+  "Customer":"Customer",
+  "DeleiveryToCustomer":"Delivery to Customer",
+  "OrderNo":"Order No"
   
   
 }

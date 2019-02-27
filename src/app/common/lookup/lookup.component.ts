@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import * as $ from 'jquery';
 import 'bootstrap';
 import { ColumnSetting } from 'src/app/models/CommonData';
+import { OutboundData } from 'src/app/models/outbound/outbound-data';
 // import { UIHelper } from '../../../helpers/ui.helpers';
 // import { Http, ResponseContentType } from '@angular/http';
 
@@ -40,7 +41,11 @@ export class LookupComponent implements OnInit {
     if (this.lookupfor == "toWhsList") {
       this.showToWhsList();
     }
-  
+
+    if (this.lookupfor == "out-customer") {
+      this.showCustomerList();
+    }
+
   }
 
   showToWhsList() {
@@ -81,6 +86,53 @@ export class LookupComponent implements OnInit {
     }
 
   }
-  
-  
+
+
+  showCustomerList() {
+
+
+    this.table_head = [
+      {
+        field: 'CUSTOMER CODE',
+        title: 'CUSTOMER CODE',
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'CUSTOMER NAME',
+        title: 'CUSTOMER NAME',
+        type: 'text',
+        width: '100'
+      }
+
+    ];
+
+
+
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+        // $("#lookup_modal").modal('show');
+      }
+    }
+
+  }
+
+
+  on_item_select(selectedValue: any) {
+    if (this.lookupfor == "out-customer") {
+      console.log("Selectde",selectedValue);
+      let outbounddata = localStorage.getItem('outboundData')
+      if(outbounddata==undefined){
+        let outboundData:any=new OutboundData();
+       // outboundData.CustomerData=selectedValue.SelectedItem[0];  
+        localStorage.setItem("outboundData",outboundData);
+
+      }
+
+
+
+    }
+    this.close_kendo_dialog();
+  }
 }

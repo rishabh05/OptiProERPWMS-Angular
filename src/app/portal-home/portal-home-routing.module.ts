@@ -8,6 +8,7 @@ import { BinTransferComponent } from '../inventory-transfer/bin-transfer/bin-tra
 import { WhsTransferComponent } from '../inventory-transfer/whs-transfer/whs-transfer.component';
 import { InboundDetailsComponent } from '../inbound/inbound-details/inbound-details.component';
 import { OutboundDetailsComponent } from '../outbound/outbound-details/outbound-details.component';
+import { OutCutomerComponent } from '../outbound/out-cutomer/out-cutomer.component';
 
 const routes: Routes = [
 
@@ -21,7 +22,7 @@ const routes: Routes = [
       { path:'binTransfer', component:BinTransferComponent },
       { path:'whsTransfer', component:WhsTransferComponent },
       { path:'inbound', component:InboundDetailsComponent },
-      { path:'outbound', component:OutboundDetailsComponent },
+      { path:'outbound', component:OutCutomerComponent },
     ]
     
   }
