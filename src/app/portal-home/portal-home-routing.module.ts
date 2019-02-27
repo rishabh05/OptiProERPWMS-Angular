@@ -7,8 +7,9 @@ import { FormFieldComponent } from '../form/form-field/form-field.component';
 import { BinTransferComponent } from '../inventory-transfer/bin-transfer/bin-transfer.component';
 import { WhsTransferComponent } from '../inventory-transfer/whs-transfer/whs-transfer.component';
 import { InboundDetailsComponent } from '../inbound/inbound-details/inbound-details.component';
-import { OutboundDetailsComponent } from '../outbound/outbound-details/outbound-details.component';
 import { OutCutomerComponent } from '../outbound/out-cutomer/out-cutomer.component';
+import { OutOrderComponent } from '../outbound/out-order/out-order.component';
+import { OutProdissueComponent } from '../outbound/out-prodissue/out-prodissue.component';
 
 const routes: Routes = [
 
@@ -22,7 +23,12 @@ const routes: Routes = [
       { path:'binTransfer', component:BinTransferComponent },
       { path:'whsTransfer', component:WhsTransferComponent },
       { path:'inbound', component:InboundDetailsComponent },
-      { path:'outbound', component:OutCutomerComponent },
+      // Need to remove these routing
+      { path:'outbound/outcustomer', component:OutCutomerComponent },
+      { path:'outbound/outorder', component:OutOrderComponent },
+      { path:'outbound/outprodissue', component:OutProdissueComponent },
+
+     // { path:'outbound', loadChildren: "../outbound/outbound-routing.module#OutboundRoutingModule" },
     ]
     
   }
@@ -33,4 +39,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class PortalHomeRoutingModule { }
+export class PortalHomeRoutingModule {  
+}

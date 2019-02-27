@@ -3,7 +3,7 @@
         <div class="opti_container_inner" [perfectScrollbar]=" ">
 
             <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
-                {{'DeleiveryToCustomer'|translate}}: {{customerName}}
+                {{'DeleiveryToCustomer'|translate}}: {{selectedCustomer.CustomerName}}
             </h3>
             <div class="row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
@@ -12,12 +12,17 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'OrderNo'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" placeholder="{{'OrderNo'|translate}}">
+                                <input type="text"  name="orderNumber" value='' [(ngModel)]="orderNumber" class="form-control form-control-sm" placeholder="{{'OrderNo'|translate}}">
                                 <div class="input-group-append">
                                     <button class="k-button k-primary btn" (click)="openOrderLookup()" type="button">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
                                 </div>
+                                <div class="input-group-append">
+                                        <button class="k-button k-primary btn" (click)="openOrderDetails()" type="button">
+                                            <i class="opti-icon-hammenu"></i>
+                                        </button>
+                                    </div>
                             </div>
                         </div>
                     </div>
@@ -40,5 +45,5 @@
 </div>
 
 <span *ngIf="showLookup==true">
-    <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData'></app-lookup>
+    <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupkey)="getLookupValue($event)"></app-lookup>
 </span>

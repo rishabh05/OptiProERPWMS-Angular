@@ -9,17 +9,20 @@ import { OutCutomerComponent } from './out-cutomer/out-cutomer.component';
 import { OutOrderComponent } from './out-order/out-order.component';
 import { OutProdissueComponent } from './out-prodissue/out-prodissue.component';
 import { SharedModule } from '../shared-module/shared-module.module';
+import { FormsModule } from '@angular/forms';
+
 
 @NgModule({
   declarations: [OutboundDetailsComponent, OutCutomerComponent, OutOrderComponent, OutProdissueComponent],
   imports: [   
-
+    FormsModule,
     CommonModule,
     TrnaslateLazyModule,
     PerfectScrollbarModule,
 
     OutboundRoutingModule,
     SharedModule
-  ]
+  ],
+  exports:[OutCutomerComponent,OutOrderComponent,OutProdissueComponent]
 })
 export class OutboundModule { }

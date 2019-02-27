@@ -5,10 +5,12 @@ import { OutOrderComponent } from './out-order/out-order.component';
 import { OutProdissueComponent } from './out-prodissue/out-prodissue.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'outcustomer' },
-  { path: 'outcustomer', component: OutCutomerComponent },
-  { path: 'outorder', component: OutOrderComponent },
-  { path: 'outprodissue', component: OutProdissueComponent }
+  { path: '', redirectTo: 'outcustomer',pathMatch:'full' },
+ 
+    { path: 'outcustomer', component: OutCutomerComponent },
+    { path: 'outorder', component: OutOrderComponent },
+    { path: 'outprodissue', component: OutProdissueComponent }
+  
 ];
 
 @NgModule({

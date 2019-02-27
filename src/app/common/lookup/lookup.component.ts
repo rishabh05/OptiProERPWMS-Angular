@@ -27,6 +27,7 @@ export class LookupComponent implements OnInit {
   @Input() fillLookupArray: any;
   @Input() selectedImage: any
   @Output() lookupvalue = new EventEmitter();
+  @Output() lookupkey = new EventEmitter();
   @Input() ruleselected: any;
   @ViewChild('myInput')
   myInputVariable: ElementRef;
@@ -52,14 +53,14 @@ export class LookupComponent implements OnInit {
     if (this.lookupfor == "toWhsList") {
       this.showToWhsList();
     }
-<<<<<<< HEAD
 
     if (this.lookupfor == "out-customer") {
       this.showCustomerList();
     }
 
-=======
->>>>>>> 5dc38d05d9a197b0d9095062b2c8a716de51f3ea
+    if(this.lookupfor=='out-order'){
+      this.showOutSOList();
+    }
   }
 
   showToWhsList() {
@@ -84,11 +85,8 @@ export class LookupComponent implements OnInit {
       }
     }
   }
-<<<<<<< HEAD
-
-
+  
   showCustomerList() {
-
 
     this.table_head = [
       {
@@ -111,35 +109,46 @@ export class LookupComponent implements OnInit {
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
         this.dialogOpened = true;
-        // $("#lookup_modal").modal('show');
       }
     }
 
   }
 
+  showOutSOList(){
+    //"DOCNUM":49,"CARDNAME":"Test SP","CARDCODE":"SP Contact",
+    //"DOCDUEDATE":"01/10/2019","SHIPTOCODE":"","CUSTREFNO":"","SHIPPINGTYPE":""
 
-  on_item_select(selectedValue: any) {
-    if (this.lookupfor == "out-customer") {
-      console.log("Selectde",selectedValue);
-      let outbounddata = localStorage.getItem('outboundData')
-      if(outbounddata==undefined){
-        let outboundData:any=new OutboundData();
-       // outboundData.CustomerData=selectedValue.SelectedItem[0];  
-        localStorage.setItem("outboundData",outboundData);
-
+    this.table_head = [
+      {
+        field: 'DOCNUM',
+        title: 'SO#',
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'DOCDUEDATE',
+        title: 'Del. Date',
+        type: 'date',
+        width: '100'
       }
 
+    ];
 
 
+
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
     }
-    this.close_kendo_dialog();
-=======
-  
+
+  }
   
   on_item_select(selection) {
     const lookup_key = selection.selectedRows[0].dataItem;
     console.log("lookup_key - " + lookup_key);
     console.log(lookup_key);
+    this.lookupkey.emit(lookup_key);
     this.lookupvalue.emit(Object.values(lookup_key));
     console.log(selection);
     selection.selectedRows = [];
@@ -147,6 +156,5 @@ export class LookupComponent implements OnInit {
     selection.selected = false;
     this.serviceData = [];
     this.dialogOpened = false;
->>>>>>> 5dc38d05d9a197b0d9095062b2c8a716de51f3ea
   }
 }

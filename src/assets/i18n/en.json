@@ -97,7 +97,8 @@
   "OrderNo":"Order No",
   
   
-  "CommonSessionExpireMsg": "Session has Expired",
-  "CommonNoDataAvailableMsg": "No data available"
+  "CommonSessionExpireMsg": "Session has Expired.",
+  "CommonNoDataAvailableMsg": "No data available.",
+  "CommonSomeErrorMsg": "Somthing went wrong."
 }
   

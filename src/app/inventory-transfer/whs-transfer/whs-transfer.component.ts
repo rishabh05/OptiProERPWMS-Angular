@@ -35,8 +35,7 @@ export class WhsTransferComponent implements OnInit {
       data => {
         if(data != undefined && data.length > 0){
           if (data[0].ErrorMsg == "7001") {
-              this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, 
-                this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
+              this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
               return;
           } 
         }
