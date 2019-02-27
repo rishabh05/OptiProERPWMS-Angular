@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Subject, BehaviorSubject } from 'rxjs';
+import { Subject, BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../environments/environment.prod';
 import { opticonstants } from '../constants';
 import { CurrentSidebarInfo } from '../models/sidebar/current-sidebar-info';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { ToastrService } from '../../../node_modules/ngx-toastr';
+import { Router } from '../../../node_modules/@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -11,22 +13,30 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 export class Commonservice {
 
   public href: any = window.location.href;
+
+
+  public config_params: any;
+
+  public httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    })
+  }
+
   constructor(private httpclient: HttpClient) {
     this.loadConfig();
-  } 
+    this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
+  }
   // Declaration
   private commonData = new Subject<any>();
   commonData$ = this.commonData.asObservable();
 
-  public async loadConfig(){
-    // let config_call = await fetch( this.get_current_url() +  "/assets/config.json");
-    // let config_data = await config_call.json();
-    // sessionStorage.setItem('system_config', JSON.stringify(config_data));
-
-    //This will get all config
+  public async loadConfig() {
     this.httpclient.get(this.get_current_url() + '/assets/config.json').subscribe(
       data => {
         sessionStorage.setItem('ConfigData', JSON.stringify(data));
+        this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
       },
       (err: HttpErrorResponse) => {
         console.log(err.message);
@@ -37,27 +47,27 @@ export class Commonservice {
   public get_current_url() {
     let temp: any = this.href.substring(0, this.href.lastIndexOf('/'));
     if (temp.lastIndexOf('#') != '-1') {
-        temp = temp.substring(0, temp.lastIndexOf('#'));
+      temp = temp.substring(0, temp.lastIndexOf('#'));
     }
     let sanitized = temp.replace(/^http\:\/\//, '').replace(/\/+/g, '/').replace(/\/+$/, '');
     temp = (window.location.protocol + '//' + sanitized);
     return temp;
-}
+  }
 
 
-public toast_config:any = {
-  closeButton: true,
-  progressBar: false,
-  opacity:1,
-  timeOut: 5000,
-  positionClass: 'toast-bottom-right',
-  iconClasses: {
+  public toast_config: any = {
+    closeButton: true,
+    progressBar: false,
+    opacity: 1,
+    timeOut: 5000,
+    positionClass: 'toast-bottom-right',
+    iconClasses: {
       error: 'alert alert-danger',
       info: 'alert alert-info ',
       success: 'alert alert-success ',
       warning: 'alert alert-warning'
-  }
-};    
+    }
+  };
 
 
   // Methods
@@ -92,29 +102,29 @@ public toast_config:any = {
   }
 
   // sidebar code
-  private isRigntSideBarOpenData=new BehaviorSubject<boolean>(false);
-  currentSideBarOpenStatus=this.isRigntSideBarOpenData.asObservable();
+  private isRigntSideBarOpenData = new BehaviorSubject<boolean>(false);
+  currentSideBarOpenStatus = this.isRigntSideBarOpenData.asObservable();
 
-  public setRightSidebarStatus(open:boolean){
+  public setRightSidebarStatus(open: boolean) {
     this.isRigntSideBarOpenData.next(open);
   }
 
 
   // SideBar Observer
-  private sidebarSubject =new BehaviorSubject<CurrentSidebarInfo>(null);
-  currentSidebarInfo=this.sidebarSubject.asObservable();
+  private sidebarSubject = new BehaviorSubject<CurrentSidebarInfo>(null);
+  currentSidebarInfo = this.sidebarSubject.asObservable();
 
 
-  public setCurrentSideBar(currentSidebarInfoValue:CurrentSidebarInfo){
+  public setCurrentSideBar(currentSidebarInfoValue: CurrentSidebarInfo) {
     this.sidebarSubject.next(currentSidebarInfoValue);
   }
 
 
   // Refresh List
-  private refreshPIListSub =new BehaviorSubject<any>(null);
-  refreshPIListSubscriber=this.refreshPIListSub.asObservable();
+  private refreshPIListSub = new BehaviorSubject<any>(null);
+  refreshPIListSubscriber = this.refreshPIListSub.asObservable();
 
-  public refreshPIList(data:any){
+  public refreshPIList(data: any) {
     this.refreshPIListSub.next(data);
   }
 
@@ -129,12 +139,31 @@ public toast_config:any = {
 
 
   //  share data between landing and signup page
-  private customerUserDataSub =new BehaviorSubject<any>(null);
-  getcustomerUserDataSub=this.customerUserDataSub.asObservable();
+  private customerUserDataSub = new BehaviorSubject<any>(null);
+  getcustomerUserDataSub = this.customerUserDataSub.asObservable();
 
-  public passCustomerUserDataToSignup(data:any){
+  public passCustomerUserDataToSignup(data: any) {
     this.customerUserDataSub.next(data);
   }
 
+  RemoveLicenseAndSignout(toastr: ToastrService, router: Router, message: string) {
+    var jObject = { GUID: localStorage.getItem("GUID"), LoginId: localStorage.getItem("UserId") };
+    this.httpclient.post(this.config_params.service_url + "/Login/RemoveLoggedInUser", jObject, this.httpOptions);
+    this.signOut(toastr, router, message);
+  }
 
+  signOut(toastr: ToastrService, router: Router, message: string){
+    toastr.success('', message, this.toast_config);
+
+    // let login_page = this.common_params.application_path + '/index.html#login';
+        
+    // sessionStorage.removeItem('isLoggedIn');
+    // sessionStorage.removeItem('selectedComp');
+    // sessionStorage.removeItem('loggedInUser');
+    
+    // setTimeout(()=>{   
+    //   this.setisLoggedInData();
+    //   router.navigateByUrl('/login');
+    // }, 1000);
+  }
 }

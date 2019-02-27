@@ -61,9 +61,11 @@ export class SigninComponent implements OnInit {
     if (this.getCookie('cookieEmail') != '' && this.getCookie('cookiePassword') != '') {
       this.userName = this.getCookie('cookieEmail');
       this.password = this.getCookie('cookiePassword');
+      this.isRemember = true;
     } else {
       this.userName = '';
       this.password = '';
+      this.isRemember = false;
     }
 
     // Apply classes on Body

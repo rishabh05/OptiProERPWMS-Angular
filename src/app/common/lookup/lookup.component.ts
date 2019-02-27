@@ -10,6 +10,7 @@ import * as $ from 'jquery';
 import 'bootstrap';
 import { ColumnSetting } from 'src/app/models/CommonData';
 import { OutboundData } from 'src/app/models/outbound/outbound-data';
+import { TranslateService, LangChangeEvent } from '../../../../node_modules/@ngx-translate/core';
 // import { UIHelper } from '../../../helpers/ui.helpers';
 // import { Http, ResponseContentType } from '@angular/http';
 
@@ -32,60 +33,58 @@ export class LookupComponent implements OnInit {
   public table_head: ColumnSetting[] = [];
   dialogOpened: boolean = true;
 
+  constructor(private toastr: ToastrService, private translate: TranslateService) {
+    let userLang = navigator.language.split('-')[0];
+    userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
+    translate.use(userLang);
+    translate.onLangChange.subscribe((event: LangChangeEvent) => {
+    });
+  }
 
   public close_kendo_dialog() {
     this.dialogOpened = false;
   }
 
   ngOnInit() {
+  }
+
+  async ngOnChanges(): Promise<void> {
     if (this.lookupfor == "toWhsList") {
       this.showToWhsList();
     }
+<<<<<<< HEAD
 
     if (this.lookupfor == "out-customer") {
       this.showCustomerList();
     }
 
+=======
+>>>>>>> 5dc38d05d9a197b0d9095062b2c8a716de51f3ea
   }
 
   showToWhsList() {
-    // this.popup_title = this.language.ModelBom;
-    // this.LookupDataLoaded = false;
-    // this.showLoader = true;
-    // this.fill_input_id = 'featureNameId';
-    // this.lookup_key = 'OPTM_FEATUREID';
-    // this.table_head = [this.language.ModelId, this.language.code, this.language.Name];
-
     this.table_head = [
       {
-        field: 'OPTM_FEATURECODE',
-        title: 'this.language.code',
+        field: 'WHSCODE',
+        title: this.translate.instant("WhseCode"),
         type: 'text',
         width: '100'
       },
       {
-        field: 'OPTM_DISPLAYNAME',
-        title: 'this.language.Name',
+        field: 'WHSName',
+        title: this.translate.instant("WhseName"),
         type: 'text',
         width: '100'
       },
-
     ];
 
-
-    // this.table_head_hidden_elements = [true, false, false];
-    // this.width_value = ((100 / this.table_head.length) + '%');
-
-    // this.showLoader = false;
-    // this.LookupDataLoaded = true;
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
         this.dialogOpened = true;
-        // $("#lookup_modal").modal('show');
       }
     }
-
   }
+<<<<<<< HEAD
 
 
   showCustomerList() {
@@ -134,5 +133,20 @@ export class LookupComponent implements OnInit {
 
     }
     this.close_kendo_dialog();
+=======
+  
+  
+  on_item_select(selection) {
+    const lookup_key = selection.selectedRows[0].dataItem;
+    console.log("lookup_key - " + lookup_key);
+    console.log(lookup_key);
+    this.lookupvalue.emit(Object.values(lookup_key));
+    console.log(selection);
+    selection.selectedRows = [];
+    selection.index = 0;
+    selection.selected = false;
+    this.serviceData = [];
+    this.dialogOpened = false;
+>>>>>>> 5dc38d05d9a197b0d9095062b2c8a716de51f3ea
   }
 }

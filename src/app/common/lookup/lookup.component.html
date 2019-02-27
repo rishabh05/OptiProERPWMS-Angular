@@ -1,9 +1,9 @@
 <!-- Grid Modal-->
-<kendo-dialog title="{{popup_title}}" *ngIf="dialogOpened" (close)="close_kendo_dialog()" [minWidth]="750" [width]="750">
+<kendo-dialog title="t" *ngIf="dialogOpened" (close)="close_kendo_dialog()" [minWidth]="750" [width]="750">
 
 
     <kendo-grid [kendoGridBinding]="serviceData" [filterable]="isColumnFilter" [selectable]="true" [pageable]="true"
-        [resizable]="true" [skip]="skip" (selectionChange)="on_item_select($event)" [pageSize]="10">
+        [resizable]="true" [skip]="skip" (selectionChange)="on_item_select($event)" [pageSize]="10" class="no-shadow">
         <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="1">
             <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
             <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
@@ -15,7 +15,7 @@
                 <div class="custom-control custom-checkbox float-left">
                     <input #chkFilter type="checkbox" id="columnFilter" class="custom-control-input"
                         name="columnfilter" />
-                    <label class="custom-control-label" for="columnFilter"> &nbsp; Language</label>
+                    <label class="custom-control-label" for="columnFilter"> &nbsp; columnFilter</label>
                 </div>
             </form>
         </ng-template>
