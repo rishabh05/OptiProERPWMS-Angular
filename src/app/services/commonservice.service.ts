@@ -33,7 +33,8 @@ export class Commonservice {
   commonData$ = this.commonData.asObservable();
 
   public async loadConfig() {
-    this.httpclient.get(this.get_current_url() + '/assets/config.json').subscribe(
+    //this.httpclient.get(this.get_current_url() + '/assets/config.json').subscribe(
+    this.httpclient.get('http://localhost:4200/' + '/assets/config.json').subscribe(
       data => {
         sessionStorage.setItem('ConfigData', JSON.stringify(data));
         this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
@@ -163,7 +164,9 @@ export class Commonservice {
     
     // setTimeout(()=>{   
     //   this.setisLoggedInData();
-    //   router.navigateByUrl('/login');
+    //   this.router.navigate('/account');
+    //   router.navigateByUrl('/account');
     // }, 1000);
+
   }
 }

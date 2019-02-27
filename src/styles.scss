@@ -106,7 +106,12 @@ background-size: 24px;
 box-shadow: 0 0 12px #999999;
 color: #FFFFFF;
 opacity: 1;
-
+}
+.toast-container .toast-error {
+    background-color: #ff574e;
+}
+.toast-container .toast .toast-title{
+    color:#fff;
 }
 /* .toast-container .toast:hover {
 box-shadow: 0 0 12px #000000;

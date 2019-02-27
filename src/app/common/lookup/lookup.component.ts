@@ -40,7 +40,7 @@ export class LookupComponent implements OnInit {
     });
   }
 
-  public close_kendo_dialog() {
+  close_kendo_dialog() {
     this.dialogOpened = false;
   }
 
