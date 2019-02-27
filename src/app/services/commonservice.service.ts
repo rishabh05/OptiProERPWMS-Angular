@@ -153,7 +153,7 @@ export class Commonservice {
   }
 
   signOut(toastr: ToastrService, router: Router, message: string){
-    toastr.success('', message, this.toast_config);
+    toastr.error('', message, this.toast_config);
 
     // let login_page = this.common_params.application_path + '/index.html#login';
         
