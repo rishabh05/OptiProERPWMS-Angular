@@ -19,7 +19,7 @@ p, span, strong, div{
 color: #232323;
 }
 
-section#opti_TopBarID {
+section#opti_TopBarID, body kendo-dialog .k-window-titlebar{
     background:  linear-gradient(to right, rgb(43, 192, 228), rgb(234, 236, 198));
 }
 

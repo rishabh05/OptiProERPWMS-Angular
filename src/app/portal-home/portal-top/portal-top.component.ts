@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { opticonstants } from '../../constants';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
+import { TranslateService } from '@ngx-translate/core';
 
 
 @Component({
@@ -13,10 +15,15 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./portal-top.component.scss']
 })
 export class PortalTopComponent implements OnInit {
+  [x: string]: any;
 
   openThemeSetting: boolean = false;
+  selectedItem: any;
+  defaultWHS: { OPTM_WHSE: any; BPLid: number; };
   
-  constructor(private modalService: NgbModal, private router: Router, private commonService: Commonservice) { }
+  constructor(
+    private modalService: NgbModal, private commonService: Commonservice) { }
+
   
   selectedThemeColor: string = opticonstants.DEFAULTTHEMECOLOR;
   DBName: string;
@@ -46,13 +53,31 @@ export class PortalTopComponent implements OnInit {
     this.openThemeSetting = $evenet;
   }
 
-  signOut() {
-
-  }
+ 
 
   openVerticallyCentered(content) {
     this.modalService.open(content, { centered: true });
   }  
 
+  signOut(toastr: ToastrService, router: Router, message: string){
+    // this.toastr.success('', message, this.toast_config);
+
+    // // let login_page = this.common_params.application_path + '/index.html#login';
+        
+    // sessionStorage.removeItem('isLoggedIn');
+    // sessionStorage.removeItem('selectedComp');
+    // sessionStorage.removeItem('loggedInUser');
+    // sessionStorage.removeItem('ConfigData');
+
+    // localStorage.removeItem('CompID');
+    // localStorage.removeItem('GUID');
+    // localStorage.removeItem('Token');
+    // localStorage.removeItem('UserId');
+    // localStorage.removeItem('whseId');
+    
+    // this.router.navigateByUrl('/account');    
+    this.commonService.RemoveLicenseAndSignout(toastr,router, message)
+
+  }
 
 } 

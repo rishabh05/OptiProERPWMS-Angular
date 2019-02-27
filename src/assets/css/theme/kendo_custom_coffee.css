@@ -20,7 +20,7 @@
   color: #232323;
   }
 
-  section#opti_TopBarID {
+  section#opti_TopBarID, body kendo-dialog .k-window-titlebar {
     background: linear-gradient(84deg, #F2ECE0 -6%, #3E3E3E 16%, #A99465 84%);
   }
 

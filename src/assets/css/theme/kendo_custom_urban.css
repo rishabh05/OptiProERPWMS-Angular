@@ -20,7 +20,7 @@
   color: #232323;
   }
 
-  section#opti_TopBarID {
+  section#opti_TopBarID, body kendo-dialog .k-window-titlebar {
     background: #13688c;
   }
 
@@ -6093,8 +6093,11 @@ div.k-grid-footer {
   flex-direction: row;
   flex-shrink: 0;
   align-items: center;
-  vertical-align: top; }
-
+  vertical-align: top;
+}
+.k-dialog-actions .k-button{
+  color:#fff;
+}
 .k-window-content,
 .k-prompt-container {
   padding: 1rem 1rem;
