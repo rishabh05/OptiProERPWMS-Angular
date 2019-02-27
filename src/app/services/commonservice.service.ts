@@ -11,6 +11,9 @@ import { Router } from '../../../node_modules/@angular/router';
   providedIn: 'root'
 })
 export class Commonservice {
+  static RemoveLicenseAndSignout(): any {
+    throw new Error("Method not implemented.");
+  }
 
   public href: any = window.location.href;
 
@@ -24,7 +27,7 @@ export class Commonservice {
     })
   }
 
-  constructor(private httpclient: HttpClient) {
+  constructor(private httpclient: HttpClient, private toastr: ToastrService, private router: Router ) {
     this.loadConfig();
     this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
   }
@@ -153,8 +156,8 @@ export class Commonservice {
     this.signOut(toastr, router, message);
   }
 
-  signOut(toastr: ToastrService, router: Router, message: string){
-    toastr.success('', message, this.toast_config);
+  signOut(toastr: ToastrService, router: Router, message: string, ){
+    this.toastr.success('', message, this.toast_config);
 
     // let login_page = this.common_params.application_path + '/index.html#login';
         
@@ -167,6 +170,17 @@ export class Commonservice {
     //   this.router.navigate('/account');
     //   router.navigateByUrl('/account');
     // }, 1000);
+    sessionStorage.removeItem('isLoggedIn');
+    sessionStorage.removeItem('selectedComp');
+    sessionStorage.removeItem('loggedInUser');
+    sessionStorage.removeItem('ConfigData');
+
+    localStorage.removeItem('CompID');
+    localStorage.removeItem('GUID');
+    localStorage.removeItem('UserId');
+    localStorage.removeItem('whseId');
+    
+    this.router.navigateByUrl('/account'); 
 
   }
 }
