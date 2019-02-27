@@ -22,11 +22,7 @@ export class PortalTopComponent implements OnInit {
   defaultWHS: { OPTM_WHSE: any; BPLid: number; };
   
   constructor(
-    private modalService: NgbModal, 
-    private router: Router, 
-    private commonService: Commonservice, 
-    private toastr: ToastrService, 
-    private translate: TranslateService) { }
+    private modalService: NgbModal, private commonService: Commonservice) { }
 
   
   selectedThemeColor: string = opticonstants.DEFAULTTHEMECOLOR;
