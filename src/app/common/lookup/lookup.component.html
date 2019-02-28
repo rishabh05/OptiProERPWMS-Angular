@@ -1,5 +1,5 @@
 <!-- Grid Modal-->
-<kendo-dialog title="Title" *ngIf="dialogOpened" (close)="close_kendo_dialog()" [minWidth]="750" [width]="750">
+<kendo-dialog title="{{lookupTitle}}" *ngIf="dialogOpened" (close)="close_kendo_dialog()" [minWidth]="750" [width]="750">
 
 
     <kendo-grid [kendoGridBinding]="serviceData" [filterable]="isColumnFilter" [selectable]="true" [pageable]="true"
