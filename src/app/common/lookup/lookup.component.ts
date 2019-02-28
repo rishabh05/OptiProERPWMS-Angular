@@ -61,6 +61,8 @@ export class LookupComponent implements OnInit {
       this.showNTrackFromBinList();
     }else if(this.lookupfor == "SBTrackFromBin"){
       this.showSBTrackFromBinList();
+    }else if(this.lookupfor == "toBinsList"){
+      this.showSBTrackFromBinList();
     }
   }
 
@@ -202,6 +204,29 @@ export class LookupComponent implements OnInit {
       }
     }
   }  
+
+  showToBinsList(){
+    this.table_head = [
+      {
+        field: 'BINNO',
+        title: this.translate.instant("BinNo"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'WHSCODE',
+        title: this.translate.instant("WhseCode"),
+        type: 'text',
+        width: '100'
+      }
+    ];
+    this.lookupTitle = this.translate.instant("BinNoList");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
   
   on_item_select(selection) {
     const lookup_key = selection.selectedRows[0].dataItem;
