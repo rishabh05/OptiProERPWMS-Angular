@@ -109,7 +109,7 @@
   "SalesOrderList": "Sales Order List",
   "SerialTrackedItem":"Serial Tracked Item",
   "BatchTrackedItem":"Batch Tracked Item",
-  "NoneTrackedItem":"None Tracked Item"
-
+  "NoneTrackedItem":"None Tracked Item",
+  "issueForProduction": "Issue For Production"
 
 }

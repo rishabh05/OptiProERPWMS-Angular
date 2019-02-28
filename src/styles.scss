@@ -69,6 +69,10 @@ font-weight: bold;
 color: #FFFFFF;
 text-shadow: 0 1px 0 #ffffff;
 }
+.toast-close-button span{
+    color:#fff;
+    text-shadow: none;
+}
 .toast-close-button:hover,
 .toast-close-button:focus {
 color: #000000;

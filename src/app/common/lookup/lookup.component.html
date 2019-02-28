@@ -2,8 +2,8 @@
 <kendo-dialog title="{{lookupTitle}}" *ngIf="dialogOpened" (close)="close_kendo_dialog()" [minWidth]="750" [width]="750">
 
 
-    <kendo-grid [kendoGridBinding]="serviceData" [filterable]="isColumnFilter" [selectable]="true" [pageable]="true"
-        [resizable]="true" [skip]="skip" (selectionChange)="on_item_select($event)" [pageSize]="10" class="no-shadow">
+    <kendo-grid [kendoGridBinding]="serviceData" [filterable]="isColumnFilter" [selectable]="true" [pageable]="false"
+        [resizable]="true" [skip]="skip" (selectionChange)="on_item_select($event)" [pageSize]="10" [height]="400" class="no-shadow">
         <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="1">
             <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
             <kendo-pager-numeric-buttons [buttonCount]="10"></kendo-pager-numeric-buttons>
