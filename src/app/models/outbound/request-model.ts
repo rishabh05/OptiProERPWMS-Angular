@@ -4,4 +4,6 @@ export class OutRequest {
     UsernameForLic: string
     DOCNUM:string
     CUSTCODE:string
+    DocEntry:string
+    Whse:string
 }

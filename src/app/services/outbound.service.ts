@@ -29,6 +29,20 @@ export class OutboundService {
     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/Customerlist", body, this.httpOptions);
   }
 
+  public getSOItemList(custCode: string,docNum: string,whse:string): Observable<any> {
+    //DeliveryToken: [{"CompanyDBId":"BUILD128SRC12X",
+   // "DOCENTRY":"165",
+    //"CUSTCODE":"SP Contact","Whse":"01"}]
+
+    this.outRequest=new OutRequest();
+    this.outRequest.DocEntry = docNum;
+    this.outRequest.CUSTCODE = custCode;
+    this.outRequest.Whse=whse;
+    var body: any = { DeliveryToken: this.prepareRequest()};
+
+    return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetOpenSoItemList", body, this.httpOptions);
+  }
+
   public getCustomerSOList( custCode: string,docNum: string=""): Observable<any> {
     this.outRequest=new OutRequest();
     this.outRequest.DOCNUM = docNum;

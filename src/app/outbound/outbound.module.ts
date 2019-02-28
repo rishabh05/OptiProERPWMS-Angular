@@ -10,6 +10,7 @@ import { OutOrderComponent } from './out-order/out-order.component';
 import { OutProdissueComponent } from './out-prodissue/out-prodissue.component';
 import { SharedModule } from '../shared-module/shared-module.module';
 import { FormsModule } from '@angular/forms';
+import { GridModule } from '@progress/kendo-angular-grid';
 
 
 @NgModule({
@@ -19,7 +20,7 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     TrnaslateLazyModule,
     PerfectScrollbarModule,
-
+    GridModule,
     OutboundRoutingModule,
     SharedModule
   ],
