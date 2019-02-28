@@ -20,7 +20,7 @@
   color: #232323;
   }
 
-  section#opti_TopBarID {
+  section#opti_TopBarID, body kendo-dialog .k-window-titlebar {
     background: linear-gradient(141deg, #c3deb6 1%, #83ce4d 45%);
   }
 
@@ -6074,8 +6074,11 @@ div.k-grid-footer {
   display: flex;
   flex-direction: row;
   flex-shrink: 0;
-  align-items: center; }
-
+  align-items: center; 
+}
+body kendo-dialog .k-window-titlebar .k-window-title{
+  color:#828282 !important;
+}
 .k-window-title {
   margin: 0;
   font-size: 1.25rem;

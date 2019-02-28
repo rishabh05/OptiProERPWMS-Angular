@@ -33,6 +33,9 @@ export class LookupComponent implements OnInit {
   myInputVariable: ElementRef;
   public table_head: ColumnSetting[] = [];
   dialogOpened: boolean = true;
+  lookupTitle: string;
+
+
 
   constructor(private toastr: ToastrService, private translate: TranslateService) {
     let userLang = navigator.language.split('-')[0];
@@ -42,7 +45,7 @@ export class LookupComponent implements OnInit {
     });
   }
 
-  public close_kendo_dialog() {
+  close_kendo_dialog() {
     this.dialogOpened = false;
   }
 
@@ -52,13 +55,21 @@ export class LookupComponent implements OnInit {
   async ngOnChanges(): Promise<void> {
     if (this.lookupfor == "toWhsList") {
       this.showToWhsList();
+    } else if (this.lookupfor == "ItemCodeList") {
+      this.showItemCodeList();
+    } else if (this.lookupfor == "BatchNoList") {
+      this.showBatchNoList();
+    } else if (this.lookupfor == "NTrackFromBin") {
+      this.showNTrackFromBinList();
+    } else if (this.lookupfor == "SBTrackFromBin") {
+      this.showSBTrackFromBinList();
     }
 
-    if (this.lookupfor == "out-customer") {
+    else if (this.lookupfor == "out-customer") {
       this.showCustomerList();
     }
 
-    if(this.lookupfor=='out-order'){
+    else if (this.lookupfor == 'out-order') {
       this.showOutSOList();
     }
   }
@@ -78,14 +89,130 @@ export class LookupComponent implements OnInit {
         width: '100'
       },
     ];
-
+    this.lookupTitle = this.translate.instant("WarehouseList");
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
         this.dialogOpened = true;
       }
     }
   }
-  
+
+  showItemCodeList() {
+    this.table_head = [
+      {
+        field: 'ITEMCODE',
+        title: this.translate.instant("ItemCode"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'ITEMNAME',
+        title: this.translate.instant("ItemName"),
+        type: 'text',
+        width: '100'
+      },
+    ];
+    this.lookupTitle = this.translate.instant("ItemCodeList");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
+
+  showBatchNoList() {
+    this.table_head = [
+      {
+        field: 'LOTNO',
+        title: this.translate.instant("LotNo"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'ITEMCODE',
+        title: this.translate.instant("ItemCode"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'TOTALQTY',
+        title: this.translate.instant("TOTALQTY"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'BINNO',
+        title: this.translate.instant("BinNo"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'ITEMNAME',
+        title: this.translate.instant("ItemName"),
+        type: 'text',
+        width: '100'
+      }
+    ];
+    this.lookupTitle = this.translate.instant("BinNoList");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
+
+  showNTrackFromBinList() {
+    this.table_head = [
+      {
+        field: 'BINNO',
+        title: this.translate.instant("BinNo"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'TOTALQTY',
+        title: this.translate.instant("TOTALQTY"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'WHSCODE',
+        title: this.translate.instant("WhseCode"),
+        type: 'text',
+        width: '100'
+      }
+    ];
+    this.lookupTitle = this.translate.instant("BinNoList");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
+
+  showSBTrackFromBinList() {
+    this.table_head = [
+      {
+        field: 'BINNO',
+        title: this.translate.instant("BinNo"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'WHSCODE',
+        title: this.translate.instant("WhseCode"),
+        type: 'text',
+        width: '100'
+      }
+    ];
+    this.lookupTitle = this.translate.instant("BinNoList");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
+
   showCustomerList() {
 
     this.table_head = [
@@ -95,6 +222,7 @@ export class LookupComponent implements OnInit {
         type: 'text',
         width: '100'
       },
+
       {
         field: 'CUSTOMER NAME',
         title: 'CUSTOMER NAME',
@@ -104,19 +232,17 @@ export class LookupComponent implements OnInit {
 
     ];
 
-
-
+    this.lookupTitle = this.translate.instant("CustomerList");
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
         this.dialogOpened = true;
       }
     }
-
   }
 
-  showOutSOList(){
-    //"DOCNUM":49,"CARDNAME":"Test SP","CARDCODE":"SP Contact",
-    //"DOCDUEDATE":"01/10/2019","SHIPTOCODE":"","CUSTREFNO":"","SHIPPINGTYPE":""
+
+  showOutSOList() {
+
 
     this.table_head = [
       {
@@ -134,16 +260,14 @@ export class LookupComponent implements OnInit {
 
     ];
 
-
-
+    this.lookupTitle = this.translate.instant("SalesOrderList");
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
         this.dialogOpened = true;
       }
     }
-
   }
-  
+
   on_item_select(selection) {
     const lookup_key = selection.selectedRows[0].dataItem;
     console.log("lookup_key - " + lookup_key);

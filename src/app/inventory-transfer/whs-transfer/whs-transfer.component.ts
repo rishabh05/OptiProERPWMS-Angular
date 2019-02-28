@@ -5,7 +5,7 @@ import { ToWhs } from 'src/app/models/InventoryTransfer/ToWhs';
 import { CurrentSidebarInfo } from 'src/app/models/sidebar/current-sidebar-info';
 import { Router } from '@angular/router';
 import { Commonservice } from 'src/app/services/commonservice.service';
-import { TranslateService } from '../../../../node_modules/@ngx-translate/core';
+import { TranslateService, LangChangeEvent } from '../../../../node_modules/@ngx-translate/core';
 
 @Component({
   selector: 'app-whs-transfer',
@@ -23,8 +23,12 @@ export class WhsTransferComponent implements OnInit {
   lookupfor: string;
   
   constructor(private commonservice: Commonservice, private router: Router, private inventoryTransferService: InventoryTransferService, private toastr: ToastrService, private translate: TranslateService) {
-
-   }
+    let userLang = navigator.language.split('-')[0];
+    userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
+    translate.use(userLang);
+    translate.onLangChange.subscribe((event: LangChangeEvent) => {
+    });
+  }
 
   ngOnInit() {
     this.fromWhse = localStorage.getItem("whseId");
@@ -38,14 +42,16 @@ export class WhsTransferComponent implements OnInit {
               this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
               return;
           } 
+          console.log(data);
+          this.showLookupLoader = false;
+          this.serviceData = data;
+          this.lookupfor = "toWhsList";
+        }else{
+          this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         }
-       
-        this.showLookupLoader = false;
-        this.serviceData = data;
-        this.lookupfor = "toWhsList";
       },
       error => {
-        this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+        this.toastr.error('', error);
       }
     );
   }
@@ -88,8 +94,7 @@ export class WhsTransferComponent implements OnInit {
               this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
               return;
           } 
-        }
-        if (data != null) {
+          console.log(data);
           if (data[0].Result == "0") {
             this.toastr.error('', this.translate.instant("InvalidWhsErrorMsg"));
             this.toWhse = "";
@@ -100,7 +105,7 @@ export class WhsTransferComponent implements OnInit {
         }
       },
       error => {
-        this.toastr.error('', this.translate.instant("InvalidWhsErrorMsg"));
+        this.toastr.error('', error);
       }
     );
     if (this.fromWhse == this.toWhse && this.fromWhse != "" && this.toWhse != "") {
