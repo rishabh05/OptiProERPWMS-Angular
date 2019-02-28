@@ -76,7 +76,7 @@ export class PortalTopComponent implements OnInit {
     // localStorage.removeItem('whseId');
     
     // this.router.navigateByUrl('/account');    
-    this.commonService.RemoveLicenseAndSignout(toastr,router, message)
+    this.commonService.RemoveLicenseAndSignout(toastr, router, message)
 
   }
 

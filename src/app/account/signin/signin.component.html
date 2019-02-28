@@ -34,7 +34,7 @@
                             #emailId = ngModel class="k-textbox" value="" placeholder="{{ 'EnterUsername'|translate}}"
                             [readonly]=readonlyFlag
                             />  
-                      </label>
+                        </label>
 
                         <label class="k-form-field">
                           <span class="opti_form-label">{{ 'Password'|translate}}
@@ -45,7 +45,7 @@
                           <input name = "password" required [(ngModel)]="password" 
                           #pwd = ngModel type="password" class="k-textbox" value="" 
                           placeholder="{{ 'EnterPassword'|translate}}" [readonly] = readonlyFlag/>
-                      </label>
+                        </label>
 
                         <!-- start if condition -->
                         <ng-container *ngIf="isCompleteLoginVisible">
@@ -86,17 +86,15 @@
                             <div class="opti_checkbox-container">
                                 <input type="checkbox" id="auth-2fa" class="k-checkbox float-left" [(ngModel)]="isRemember" name="isRemember">
                                 <label class="k-checkbox-label" for="auth-2fa">{{'RememberMe'|translate}}</label>
+                            </div>
+                        </label>
+                        <div class="text-right">
+                            <button type="submit" id=connectbtn class="k-button k-primary opti_fullwidth mt-4" *ngIf="!isCompleteLoginVisible" (click)="login()">{{'Connect'|translate}}</button>
+                            <button type="submit" id=connectbtn *ngIf="isCompleteLoginVisible" class="k-button k-primary opti_fullwidth" (click)="login()">{{'Login'|translate}}</button>
+                        </div>
+                    </form>
                 </div>
-                </label>
-                <div class="text-right">
-                    <button type="submit" id=connectbtn class="k-button k-primary opti_fullwidth mt-4" *ngIf="!isCompleteLoginVisible" (click)="login()">{{'Connect'|translate}}</button>
-                    <button type="submit" id=connectbtn *ngIf="isCompleteLoginVisible" class="k-button k-primary opti_fullwidth" (click)="login()">{{'Login'|translate}}</button>
-                </div>
-                </form>
-                <!-- </div> -->
             </div>
         </div>
     </div>
-</div>
-
 </div>
