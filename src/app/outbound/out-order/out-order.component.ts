@@ -25,6 +25,10 @@ export class OutOrderComponent implements OnInit {
   public outbound: OutboundData = new OutboundData();
   public orderNumber:string;
   public showSOIetDetail=false;
+  public soItemsDetail:any=null;
+  serialTrackedItems: any;
+  batchTrackedItems: any;
+  noneTrackedItems: any;
   constructor(private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) { }
 
 
@@ -72,10 +76,16 @@ export class OutOrderComponent implements OnInit {
       let whseId=localStorage.getItem("whseId");
       this.outboundservice.getSOItemList(tempOrderData.CARDCODE,tempOrderData.DOCNUM,whseId).subscribe(
         resp => {
-          this.showSOIetDetail=true;
-          //this.showLookup = true;
-         // this.serviceData = resp;
-         console.log(resp);
+          this.soItemsDetail=resp.RDR1;
+
+          this.serialTrackedItems=[this.soItemsDetail[0]];
+          this.batchTrackedItems=[this.soItemsDetail[1]];
+          this.noneTrackedItems=[this.soItemsDetail[2]];
+
+
+          debugger;
+         console.log("rest",this.soItemsDetail);
+         this.showSOIetDetail=true;
         },
         error => {
           this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));

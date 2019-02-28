@@ -107,9 +107,9 @@
   "CommonSomeErrorMsg": "Somthing went wrong.",
   "CustomerList": "Customer List",
   "SalesOrderList": "Sales Order List",
-  "SerialTrackedItem":"Serial Tracked Item",
-  "BatchTrackedItem":"Batch Tracked Item",
-  "NoneTrackedItem":"None Tracked Item"
-
-
+  "SerialTrackedItem": "Serial Tracked Item",
+  "BatchTrackedItem": "Batch Tracked Item",
+  "NoneTrackedItem": "None Tracked Item",
+  "OpenQty": "Open Qty",
+  "ItemCode": "Item Code"
 }

@@ -19,7 +19,8 @@
                                     </button>
                                 </div>
                                 <div class="input-group-append">
-                                    <button class="k-button k-primary btn" [disabled]="orderNumber==null || orderNumber==''" (click)="openSOOrderList()" type="button">
+                                    <button class="k-button k-primary btn" [disabled]="orderNumber==null || orderNumber==''"
+                                        (click)="openSOOrderList()" type="button">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
                                 </div>
@@ -34,7 +35,7 @@
                 <div class="row">
                     <div class="col-12 col-sm-12 col-md-12">
                         {{'SerialTrackedItem'|translate}}
-                        <kendo-grid [kendoGridBinding]="gridData" [resizable]="false" [pageSize]="selectedValue"
+                        <kendo-grid [kendoGridBinding]="serialTrackedItems" [resizable]="false" [pageSize]="selectedValue"
                             [pageable]="true" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
                             [columnMenu]="{ columnChooser: false }" [height]=gridHeight [selectable]="true" #gridItem>
 
@@ -81,8 +82,7 @@
                             </kendo-grid-column>
                             <!-- grid for mobile end -->
 
-                            <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE" title="Item Code"
-                                [width]="160"></kendo-grid-column>                           
+                            <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE" title="Item Code" [width]="160"></kendo-grid-column>
                             <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" [width]="160" title="OPEN QTY"></kendo-grid-column>
                             <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" [width]="160" title="OPEN QTY"></kendo-grid-column>
 
@@ -93,7 +93,7 @@
                 <div class="row">
                     <div class="col-12 col-sm-12 col-md-12">
                         {{'BatchTrackedItem'|translate}}
-                        <kendo-grid [kendoGridBinding]="gridData" [resizable]="false" [pageSize]="selectedValue"
+                        <kendo-grid [kendoGridBinding]="batchTrackedItems" [resizable]="false" [pageSize]="selectedValue"
                             [pageable]="true" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
                             [columnMenu]="{ columnChooser: false }" [height]=gridHeight [selectable]="true" #gridItem>
 
@@ -139,32 +139,18 @@
                                 </ng-template>
                             </kendo-grid-column>
                             <!-- grid for mobile end -->
-
-                            <kendo-grid-column media="(min-width: 768px)" field="QuotationNumber" title="Quotation Number"
-                                [width]="160"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="QuotationDate" title="Quotation Date"
-                                [width]="160" filter="date" type=date format="{0:dd MMM yy}"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="Remark" [width]="160" title="Remark"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="DeliveryDate" [width]="160" title="DeliveryDate"
-                                filter="date" type=date format="{0:dd MMM yy}"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="SalesEmployee" title="Sales Employee"
-                                [width]="160"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="Owner" title="Owner" [width]="160"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="Total" title="Total" [width]="160"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="ItemServiceType" [width]="160" title="Item/Service Type"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="DocumentDate" title="Document Date"
-                                [width]="160" filter="date" type=date format="{0:dd MMM yy}"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="Status" title="Status" [width]="160"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="Branch" title="Branch" [width]="160"></kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE" title="Item Code" [width]="160"></kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" [width]="160" title="OPEN QTY"></kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" [width]="160" title="OPEN QTY"></kendo-grid-column>
 
                         </kendo-grid>
                     </div>
                 </div>
                 <!-- None Tracked -->
-                <div class="row">
+                <div class="row" >
                     <div class="col-12 col-sm-12 col-md-12">
                         {{'NoneTrackedItem'|translate}}
-                        <kendo-grid [kendoGridBinding]="gridData" [resizable]="false" [pageSize]="selectedValue"
+                        <kendo-grid [kendoGridBinding]="noneTrackedItems" [resizable]="false" [pageSize]="selectedValue"
                             [pageable]="true" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
                             [columnMenu]="{ columnChooser: false }" [height]=gridHeight [selectable]="true" #gridItem>
 
@@ -211,22 +197,9 @@
                             </kendo-grid-column>
                             <!-- grid for mobile end -->
 
-                            <kendo-grid-column media="(min-width: 768px)" field="QuotationNumber" title="Quotation Number"
-                                [width]="160"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="QuotationDate" title="Quotation Date"
-                                [width]="160" filter="date" type=date format="{0:dd MMM yy}"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="Remark" [width]="160" title="Remark"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="DeliveryDate" [width]="160" title="DeliveryDate"
-                                filter="date" type=date format="{0:dd MMM yy}"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="SalesEmployee" title="Sales Employee"
-                                [width]="160"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="Owner" title="Owner" [width]="160"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="Total" title="Total" [width]="160"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="ItemServiceType" [width]="160" title="Item/Service Type"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="DocumentDate" title="Document Date"
-                                [width]="160" filter="date" type=date format="{0:dd MMM yy}"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="Status" title="Status" [width]="160"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="Branch" title="Branch" [width]="160"></kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE" title="Item Code" [width]="160"></kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" [width]="160" title="OPEN QTY"></kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" [width]="160" title="OPEN QTY"></kendo-grid-column>
 
                         </kendo-grid>
                     </div>
