@@ -120,4 +120,15 @@ export class InventoryTransferService {
     }
   }
 
+  isBinExist(ToBin: string, oToWhs: string): Observable<any> {
+    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), BinCode: ToBin, ItemCode: '', WhsCode: oToWhs}]) };
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsBinExist", jObject, this.httpOptions);
+  }
+
+  getToBin(fromBin: string, oToWhs: string): Observable<any> {
+    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), ItemCode: '', WhsCode: oToWhs, FromBin: fromBin}]) };
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetToBIN", jObject, this.httpOptions);
+  }
+
+  
 }
