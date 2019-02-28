@@ -15,6 +15,7 @@ import { GridModule } from '@progress/kendo-angular-grid';
 import { DialogsModule } from '@progress/kendo-angular-dialog';
 
 import { FormsModule } from '@angular/forms';
+import { OutboundModule } from './outbound/outbound.module';
 
 
 export function createTranslateLoader(http: HttpClient) {
@@ -45,6 +46,7 @@ export function createTranslateLoader(http: HttpClient) {
     }),
     GridModule,
     DialogsModule,
+    OutboundModule
   ],
   providers: [],
   bootstrap: [AppComponent]

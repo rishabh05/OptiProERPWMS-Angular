@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import * as $ from 'jquery';
 import 'bootstrap';
 import { ColumnSetting } from 'src/app/models/CommonData';
+import { OutboundData } from 'src/app/models/outbound/outbound-data';
 import { TranslateService, LangChangeEvent } from '../../../../node_modules/@ngx-translate/core';
 // import { UIHelper } from '../../../helpers/ui.helpers';
 // import { Http, ResponseContentType } from '@angular/http';
@@ -26,6 +27,7 @@ export class LookupComponent implements OnInit {
   @Input() fillLookupArray: any;
   @Input() selectedImage: any
   @Output() lookupvalue = new EventEmitter();
+  @Output() lookupkey = new EventEmitter();
   @Input() ruleselected: any;
   @ViewChild('myInput')
   myInputVariable: ElementRef;
@@ -53,14 +55,24 @@ export class LookupComponent implements OnInit {
   async ngOnChanges(): Promise<void> {
     if (this.lookupfor == "toWhsList") {
       this.showToWhsList();
-    }else if(this.lookupfor == "ItemCodeList"){
+    } else if (this.lookupfor == "ItemCodeList") {
       this.showItemCodeList();
-    }else if(this.lookupfor == "BatchNoList"){
+    } else if (this.lookupfor == "BatchNoList") {
       this.showBatchNoList();
-    }else if(this.lookupfor == "NTrackFromBin"){
+    } else if (this.lookupfor == "NTrackFromBin") {
       this.showNTrackFromBinList();
-    }else if(this.lookupfor == "SBTrackFromBin"){
+    } else if (this.lookupfor == "SBTrackFromBin") {
       this.showSBTrackFromBinList();
+    }else if(this.lookupfor == "toBinsList"){
+      this.showSBTrackFromBinList();
+    }
+
+    else if (this.lookupfor == "out-customer") {
+      this.showCustomerList();
+    }
+
+    else if (this.lookupfor == 'out-order') {
+      this.showOutSOList();
     }
   }
 
@@ -86,7 +98,7 @@ export class LookupComponent implements OnInit {
       }
     }
   }
-  
+
   showItemCodeList() {
     this.table_head = [
       {
@@ -202,11 +214,86 @@ export class LookupComponent implements OnInit {
       }
     }
   }  
+
+  showToBinsList(){
+    this.table_head = [
+      {
+        field: 'BINNO',
+        title: this.translate.instant("BinNo"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'WHSCODE',
+        title: this.translate.instant("WhseCode"),
+        type: 'text',
+        width: '100'
+      }
+    ];
+    this.lookupTitle = this.translate.instant("BinNoList");
+  }
+
+  showCustomerList() {
+
+    this.table_head = [
+      {
+        field: 'CUSTOMER CODE',
+        title: 'CUSTOMER CODE',
+        type: 'text',
+        width: '100'
+      },
+
+      {
+        field: 'CUSTOMER NAME',
+        title: 'CUSTOMER NAME',
+        type: 'text',
+        width: '100'
+      }
+
+    ];
+
+    this.lookupTitle = this.translate.instant("CustomerList");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
   
+
+
+  showOutSOList() {
+
+
+    this.table_head = [
+      {
+        field: 'DOCNUM',
+        title: 'SO#',
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'DOCDUEDATE',
+        title: 'Del. Date',
+        type: 'date',
+        width: '100'
+      }
+
+    ];
+
+    this.lookupTitle = this.translate.instant("SalesOrderList");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
+
   on_item_select(selection) {
     const lookup_key = selection.selectedRows[0].dataItem;
     console.log("lookup_key - " + lookup_key);
     console.log(lookup_key);
+    this.lookupkey.emit(lookup_key);
     this.lookupvalue.emit(Object.values(lookup_key));
     console.log(selection);
     selection.selectedRows = [];

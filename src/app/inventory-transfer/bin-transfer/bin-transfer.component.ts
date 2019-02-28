@@ -35,6 +35,7 @@ export class BinTransferComponent implements OnInit {
   SysNumber: any;
   LotWhsCode: any;
   toBin: any;
+  getDefaultBinFlag: boolean;
 
 
   constructor(private commonservice: Commonservice, private router: Router, private inventoryTransferService: InventoryTransferService, private toastr: ToastrService, private translate: TranslateService, private modalService: BsModalService) {
@@ -146,9 +147,6 @@ export class BinTransferComponent implements OnInit {
     );
   }
 
-  OnLotLookupClick() {
-
-  }
 
   OnLotChange() {
     if (this.lotValue == "" || this.lotValue == undefined) {
@@ -239,7 +237,7 @@ export class BinTransferComponent implements OnInit {
 
 
   OnFromBinChange() {
-    if (this.fromBin == "" || this.lotValue == undefined) {
+    if (this.fromBin == "" || this.fromBin == undefined) {
       return;
     }
     this.inventoryTransferService.isFromBinExists(this.ItemTracking, "", this.itemCode, this.lotValue).subscribe(
@@ -283,8 +281,71 @@ export class BinTransferComponent implements OnInit {
     );
   }
 
+  OnToBinChange() {
+    if (this.toBin == "" || this.toBin == undefined) {
+      return;
+    }
+    this.inventoryTransferService.isBinExist(this.itemCode, this.lotValue).subscribe(
+      data => {
+        if (data != null) {
+          if (data.length > 0) {
+            if (data[0].Result == "0") {
+              this.toastr.error('', this.translate.instant("INVALIDBIN"));
+              return;
+            }
+            else {
+              this.toBin = data[0].ID;
+              if (this.toBin == this.fromBin) {
+                this.toastr.error('', this.translate.instant("FrmNToBinCantSame"));
+                this.toBin = "";
+                return;
+              }
+            }
+          }
+          else {
+            this.toBin = "";
+            this.toastr.error('', this.translate.instant("INVALIDBIN"));
+            return;
+          }
+        }
+      },
+      error => {
+        this.toastr.error('', error);
+      }
+    );
+  }
 
-  
+  ShowToBins() {
+
+    this.inventoryTransferService.getToBin(this.ItemTracking, "").subscribe(
+      data => {
+        if (data != null) {
+          if (data.length > 0) {
+
+            if (this.getDefaultBinFlag == false) {
+              this.showLookupLoader = false;
+              this.serviceData = data;
+              this.lookupfor = "toBinsList";
+            }
+            else {
+              if (data[0].BINNO != this.fromBin) {
+                this.toBin = data[0].BINNO;
+              }
+              // oModelWhsTranEditLines = new JSONModel(oWhsTransEditLot)
+              // oCurrentController.getView().setModel(oModelWhsTranEditLines);
+              this.getDefaultBinFlag = false;
+            }
+          }
+          else {
+            this.toastr.error('', this.translate.instant("NoBinsAvailableMsg"));
+          }
+        }
+      },
+      error => {
+        this.toastr.error('', error);
+      }
+    );
+  }
 
   getLookupValue($event) {
     if (this.lookupfor == "ItemCodeList") {

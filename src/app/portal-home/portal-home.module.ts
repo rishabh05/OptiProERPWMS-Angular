@@ -45,8 +45,6 @@ import { OutboundModule } from '../outbound/outbound.module';
     InboundModule,
     OutboundModule,
     InventoryTransferModule
-    
-
   ],
   declarations: [PortalHomeComponent, PortalLeftComponent, PortalRightComponent, PortalTopComponent, DashboardComponent, ThemeManagerComponent],
   providers:[DashboardComponent]
