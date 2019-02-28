@@ -63,6 +63,8 @@ export class LookupComponent implements OnInit {
       this.showNTrackFromBinList();
     } else if (this.lookupfor == "SBTrackFromBin") {
       this.showSBTrackFromBinList();
+    }else if(this.lookupfor == "toBinsList"){
+      this.showSBTrackFromBinList();
     }
 
     else if (this.lookupfor == "out-customer") {
@@ -211,6 +213,24 @@ export class LookupComponent implements OnInit {
         this.dialogOpened = true;
       }
     }
+  }  
+
+  showToBinsList(){
+    this.table_head = [
+      {
+        field: 'BINNO',
+        title: this.translate.instant("BinNo"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'WHSCODE',
+        title: this.translate.instant("WhseCode"),
+        type: 'text',
+        width: '100'
+      }
+    ];
+    this.lookupTitle = this.translate.instant("BinNoList");
   }
 
   showCustomerList() {
@@ -239,6 +259,7 @@ export class LookupComponent implements OnInit {
       }
     }
   }
+  
 
 
   showOutSOList() {
