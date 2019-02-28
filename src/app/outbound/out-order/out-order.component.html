@@ -30,180 +30,44 @@
                 </div>
             </div>
 
-            <div *ngIf="showSOIetDetail==true">
+            <div *ngIf="showSOIetDetail==true && orderNumber!=undefined">               
                 <!-- Serial tracked item -->
-                <div class="row">
+                <div class="row" *ngIf="soItemsDetail!=undefined && soItemsDetail!=null && soItemsDetail.length>0 ">
                     <div class="col-12 col-sm-12 col-md-12">
-                        {{'SerialTrackedItem'|translate}}
-                        <kendo-grid [kendoGridBinding]="serialTrackedItems" [resizable]="false" [pageSize]="selectedValue"
+                        <h4 class="mb-3 mt-3 mb-3 mt-3 border-bottom pb-2">{{'Items'|translate}}</h4>
+                        <kendo-grid class="no-shadow" [kendoGridBinding]="soItemsDetail" [resizable]="true" [pageSize]="selectedValue"
                             [pageable]="true" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
-                            [columnMenu]="{ columnChooser: false }" [height]=gridHeight [selectable]="true" #gridItem>
+                            [columnMenu]="{ columnChooser: false }" [height]=gridHeight [selectable]
+                            ="true" 
+                            [rowClass]="rowCallback"
+                            #gridItem>
 
                             <!-- grid for mobile start -->
-                            <kendo-grid-column media="(max-width: 767px)" title="Payment List" class="opti_mobile-grid-td">
+                            <!-- <kendo-grid-column media="(max-width: 767px)" title="Payment List" class="opti_mobile-grid-td">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <dl class="opti_mobile_grid_dl">
-                                        <dt>Quotation Number</dt>
+                                        <dt>Item Code</dt>
                                         <dd>{{ dataItem.QuotationNumber }}</dd>
 
-                                        <dt>Quotation Date</dt>
+                                        <dt>Open Qty.</dt>
                                         <dd>{{ dataItem.QuotationDate }}</dd>
 
-                                        <dt>Remark</dt>
+                                        <dt>Pick Qty</dt>
                                         <dd>{{ dataItem.Remark }}</dd>
-
-                                        <dt>Delivery Date</dt>
-                                        <dd>{{ dataItem.DeliveryDate }}</dd>
-
-                                        <dt>Sales Employee</dt>
-                                        <dd>{{ dataItem.SalesEmployee }}</dd>
-
-                                        <dt>Owner</dt>
-                                        <dd>{{ dataItem.Owner }}</dd>
-                                    </dl>
-
-                                    <dl class="opti_mobile_grid_dl">
-                                        <dt>Total <span class="opti_arrow-grid-detail float-right text-center opti_vertical-align">&rsaquo;</span></dt>
-                                        <dd>{{ dataItem.Total }}</dd>
-
-                                        <dt>Item Service Type</dt>
-                                        <dd>{{ dataItem.ItemServiceType }}</dd>
-
-                                        <dt>Document Date</dt>
-                                        <dd>{{ dataItem.DocumentDate }}</dd>
-
-                                        <dt>Status</dt>
-                                        <dd>{{ dataItem.Status }}</dd>
-
-                                        <dt>Branch</dt>
-                                        <dd>{{ dataItem.Branch }}</dd>
                                     </dl>
                                 </ng-template>
-                            </kendo-grid-column>
+                            </kendo-grid-column> -->
                             <!-- grid for mobile end -->
-
-                            <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE" title="Item Code" [width]="160"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" [width]="160" title="OPEN QTY"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" [width]="160" title="OPEN QTY"></kendo-grid-column>
+                            
+                            <kendo-grid-column field="ITEMCODE" title="Item Code" [width]="6"></kendo-grid-column>
+                            <kendo-grid-column field="OPENQTY" [width]="6" title="Open Qty."></kendo-grid-column>
+                            <kendo-grid-column field="OPENQTY" [width]="6" title="Pick Qty."></kendo-grid-column>
+                            
 
                         </kendo-grid>
                     </div>
                 </div>
-                <!-- Batch tracked item -->
-                <div class="row">
-                    <div class="col-12 col-sm-12 col-md-12">
-                        {{'BatchTrackedItem'|translate}}
-                        <kendo-grid [kendoGridBinding]="batchTrackedItems" [resizable]="false" [pageSize]="selectedValue"
-                            [pageable]="true" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
-                            [columnMenu]="{ columnChooser: false }" [height]=gridHeight [selectable]="true" #gridItem>
-
-                            <!-- grid for mobile start -->
-                            <kendo-grid-column media="(max-width: 767px)" title="Payment List" class="opti_mobile-grid-td">
-                                <ng-template kendoGridCellTemplate let-dataItem>
-                                    <dl class="opti_mobile_grid_dl">
-                                        <dt>Quotation Number</dt>
-                                        <dd>{{ dataItem.QuotationNumber }}</dd>
-
-                                        <dt>Quotation Date</dt>
-                                        <dd>{{ dataItem.QuotationDate }}</dd>
-
-                                        <dt>Remark</dt>
-                                        <dd>{{ dataItem.Remark }}</dd>
-
-                                        <dt>Delivery Date</dt>
-                                        <dd>{{ dataItem.DeliveryDate }}</dd>
-
-                                        <dt>Sales Employee</dt>
-                                        <dd>{{ dataItem.SalesEmployee }}</dd>
-
-                                        <dt>Owner</dt>
-                                        <dd>{{ dataItem.Owner }}</dd>
-                                    </dl>
-
-                                    <dl class="opti_mobile_grid_dl">
-                                        <dt>Total <span class="opti_arrow-grid-detail float-right text-center opti_vertical-align">&rsaquo;</span></dt>
-                                        <dd>{{ dataItem.Total }}</dd>
-
-                                        <dt>Item Service Type</dt>
-                                        <dd>{{ dataItem.ItemServiceType }}</dd>
-
-                                        <dt>Document Date</dt>
-                                        <dd>{{ dataItem.DocumentDate }}</dd>
-
-                                        <dt>Status</dt>
-                                        <dd>{{ dataItem.Status }}</dd>
-
-                                        <dt>Branch</dt>
-                                        <dd>{{ dataItem.Branch }}</dd>
-                                    </dl>
-                                </ng-template>
-                            </kendo-grid-column>
-                            <!-- grid for mobile end -->
-                            <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE" title="Item Code" [width]="160"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" [width]="160" title="OPEN QTY"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" [width]="160" title="OPEN QTY"></kendo-grid-column>
-
-                        </kendo-grid>
-                    </div>
-                </div>
-                <!-- None Tracked -->
-                <div class="row" >
-                    <div class="col-12 col-sm-12 col-md-12">
-                        {{'NoneTrackedItem'|translate}}
-                        <kendo-grid [kendoGridBinding]="noneTrackedItems" [resizable]="false" [pageSize]="selectedValue"
-                            [pageable]="true" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
-                            [columnMenu]="{ columnChooser: false }" [height]=gridHeight [selectable]="true" #gridItem>
-
-                            <!-- grid for mobile start -->
-                            <kendo-grid-column media="(max-width: 767px)" title="Payment List" class="opti_mobile-grid-td">
-                                <ng-template kendoGridCellTemplate let-dataItem>
-                                    <dl class="opti_mobile_grid_dl">
-                                        <dt>Quotation Number</dt>
-                                        <dd>{{ dataItem.QuotationNumber }}</dd>
-
-                                        <dt>Quotation Date</dt>
-                                        <dd>{{ dataItem.QuotationDate }}</dd>
-
-                                        <dt>Remark</dt>
-                                        <dd>{{ dataItem.Remark }}</dd>
-
-                                        <dt>Delivery Date</dt>
-                                        <dd>{{ dataItem.DeliveryDate }}</dd>
-
-                                        <dt>Sales Employee</dt>
-                                        <dd>{{ dataItem.SalesEmployee }}</dd>
-
-                                        <dt>Owner</dt>
-                                        <dd>{{ dataItem.Owner }}</dd>
-                                    </dl>
-
-                                    <dl class="opti_mobile_grid_dl">
-                                        <dt>Total <span class="opti_arrow-grid-detail float-right text-center opti_vertical-align">&rsaquo;</span></dt>
-                                        <dd>{{ dataItem.Total }}</dd>
-
-                                        <dt>Item Service Type</dt>
-                                        <dd>{{ dataItem.ItemServiceType }}</dd>
-
-                                        <dt>Document Date</dt>
-                                        <dd>{{ dataItem.DocumentDate }}</dd>
-
-                                        <dt>Status</dt>
-                                        <dd>{{ dataItem.Status }}</dd>
-
-                                        <dt>Branch</dt>
-                                        <dd>{{ dataItem.Branch }}</dd>
-                                    </dl>
-                                </ng-template>
-                            </kendo-grid-column>
-                            <!-- grid for mobile end -->
-
-                            <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE" title="Item Code" [width]="160"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" [width]="160" title="OPEN QTY"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" [width]="160" title="OPEN QTY"></kendo-grid-column>
-
-                        </kendo-grid>
-                    </div>
-                </div>
+               
             </div>
         </div>
         <div class="fix-footer-btnBar">
@@ -211,9 +75,8 @@
                 <hr />
             </div>
             <div class="col-sm-12 col-12">
-                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-close-outline"
-                        role="presentation"></span> Cancel</button>
-                <button type="button" class="btn btn-light k-button btn-sm btn-transparent btn-icon" (click)="listClick($event, 'binTransfer')"
+                
+                <button type="button" class="btn btn-light k-button btn-sm btn-transparent btn-icon" (click)="openOutboundCustomer()"
                     roterLink="binTransfer" skipLocationChange><i class="opti-icon-arrow-next"></i></button>
             </div>
         </div>

@@ -110,6 +110,6 @@
   "SerialTrackedItem": "Serial Tracked Item",
   "BatchTrackedItem": "Batch Tracked Item",
   "NoneTrackedItem": "None Tracked Item",
-  "OpenQty": "Open Qty",
-  "ItemCode": "Item Code"
+  "Items": "Items"
+  
 }
