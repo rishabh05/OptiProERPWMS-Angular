@@ -179,6 +179,7 @@ export class Commonservice {
     localStorage.removeItem('GUID');
     localStorage.removeItem('UserId');
     localStorage.removeItem('whseId');
+    localStorage.removeItem('Token');
     
     this.router.navigateByUrl('/account'); 
 
