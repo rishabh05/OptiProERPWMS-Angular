@@ -75,13 +75,13 @@
                     <span class="text">{{'Production'|translate}}</span>
                 </a>
                 <ul *dropdownMenu class="dropdown-menu" role="menu">                    
-                    <li id="15109" role="menuitem" (click)="listClick($event, 'issue')">
+                    <li id="15109" role="menuitem" (click)="listClick($event, 'production/issue')">
                         <a class="dropdown-item" roterLink="issue">
                             <i class="opti-icon-issue" [style.color]="selectedThemeColor"></i>
                             <span class="text">{{'IssueForProduction'|translate}}</span>
                         </a>
                     </li>
-                    <li id="15108" role="menuitem" (click)="listClick($event, 'receipt')">
+                    <li id="15108" role="menuitem" (click)="listClick($event, 'production/receipt')">
                         <a class="dropdown-item" roterLink="receipt">
                             <i class="opti-icon-customer-purchase-order" [style.color]="selectedThemeColor"></i>
                             <span class="text">{{'ReceiptFromProduction'|translate}}</span>

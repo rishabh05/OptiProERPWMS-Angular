@@ -110,6 +110,6 @@
   "SerialTrackedItem": "Serial Tracked Item",
   "BatchTrackedItem": "Batch Tracked Item",
   "NoneTrackedItem": "None Tracked Item",
-  "Items": "Items"
-  
+  "Items": "Items",
+  "issueForProduction": "Issue For Production"
 }

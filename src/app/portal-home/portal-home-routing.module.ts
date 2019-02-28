@@ -23,6 +23,7 @@ const routes: Routes = [
       { path:'binTransfer', component:BinTransferComponent },
       { path:'whsTransfer', component:WhsTransferComponent },
       { path:'inbound', component:InboundDetailsComponent },
+      { path: 'production', loadChildren: "./production/production.module#ProductionModule" },
       // Need to remove these routing
       { path:'outbound/outcustomer', component:OutCutomerComponent },
       { path:'outbound/outorder', component:OutOrderComponent },

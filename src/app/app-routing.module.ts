@@ -8,7 +8,7 @@ const routes: Routes = [
   { path: 'account', loadChildren: "./account/account.module#AccountModule" },
   { path:'landing',component:LandingComponent}, 
   { path: 'home', loadChildren: "./portal-home/portal-home.module#PortalHomeModule" },
-  { path: 'production', loadChildren: "./production/production.module#ProductionModule" }
+  
 ];
 
 @NgModule({

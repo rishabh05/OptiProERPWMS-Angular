@@ -7,7 +7,7 @@ const routes: Routes = [
   
   { path: '', component:ProductionIssueComponent  },
   { path: 'issue', component:ProductionIssueComponent  },
-  { path: 'recipt', component:ProductionReceiptComponent  },
+  { path: 'receipt', component:ProductionReceiptComponent  },
   
 ];
 
