@@ -24,6 +24,7 @@ export class OutOrderComponent implements OnInit {
   public selectedCustomer: any;
   public outbound: OutboundData = new OutboundData();
   public orderNumber:string;
+  public showSOIetDetail=false;
   constructor(private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) { }
 
 
@@ -64,8 +65,26 @@ export class OutOrderComponent implements OnInit {
   }
 
 
-  public openOrderDetails(){
-    
+  public openSOOrderList(){
+    if (this.outbound.OrderData != null && this.outbound != undefined
+      && this.outbound.OrderData != '' && this.outbound.OrderData != null) {
+      let tempOrderData:any=this.outbound.OrderData;
+      let whseId=localStorage.getItem("whseId");
+      this.outboundservice.getSOItemList(tempOrderData.CARDCODE,tempOrderData.DOCNUM,whseId).subscribe(
+        resp => {
+          this.showSOIetDetail=true;
+          //this.showLookup = true;
+         // this.serviceData = resp;
+         console.log(resp);
+        },
+        error => {
+          this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
+        }
+      );
+    }
+    else {
+      this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+    }
   }
 
 }
