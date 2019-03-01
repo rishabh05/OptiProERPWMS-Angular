@@ -5,8 +5,7 @@ import { OutOrderComponent } from './out-order/out-order.component';
 import { OutProdissueComponent } from './out-prodissue/out-prodissue.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'outcustomer',pathMatch:'full' },
- 
+  { path: '', component: OutCutomerComponent}, 
     { path: 'outcustomer', component: OutCutomerComponent },
     { path: 'outorder', component: OutOrderComponent },
     { path: 'outprodissue', component: OutProdissueComponent }

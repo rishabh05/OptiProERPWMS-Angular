@@ -94,7 +94,7 @@ export class PortalLeftComponent implements OnInit {
     this.selectedItem = module;
     
     this.closeRightSidebar();
-    
+    debugger;
     this.router.navigate(['home/' + module]);
   }
 

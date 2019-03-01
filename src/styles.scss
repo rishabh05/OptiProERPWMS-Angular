@@ -198,3 +198,13 @@ padding: 15px 15px 15px 50px;
 width: 25em;
 }
 }
+
+body .k-grid tbody tr.serial{
+    background: #f79d9d
+}
+body .k-grid tbody tr.batch{
+    background: #92cff8
+}
+body .k-grid tbody tr.none{
+    background: #82ee87
+}
