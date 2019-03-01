@@ -10,6 +10,7 @@ import { InboundDetailsComponent } from '../inbound/inbound-details/inbound-deta
 import { OutCutomerComponent } from '../outbound/out-cutomer/out-cutomer.component';
 import { OutOrderComponent } from '../outbound/out-order/out-order.component';
 import { OutProdissueComponent } from '../outbound/out-prodissue/out-prodissue.component';
+import { OutboundModule } from '../outbound/outbound.module';
 
 const routes: Routes = [
 
@@ -23,13 +24,13 @@ const routes: Routes = [
       { path:'binTransfer', component:BinTransferComponent },
       { path:'whsTransfer', component:WhsTransferComponent },
       { path:'inbound', component:InboundDetailsComponent },
-      { path: 'production', loadChildren: "./production/production.module#ProductionModule" },
+      { path: 'production', loadChildren: "../production/production.module#ProductionModule" },
       // Need to remove these routing
-      { path:'outbound/outcustomer', component:OutCutomerComponent },
-      { path:'outbound/outorder', component:OutOrderComponent },
-      { path:'outbound/outprodissue', component:OutProdissueComponent },
+      // { path:'outbound/outcustomer', component:OutCutomerComponent },
+      // { path:'outbound/outorder', component:OutOrderComponent },
+      // { path:'outbound/outprodissue', component:OutProdissueComponent },
 
-     // { path:'outbound', loadChildren: "../outbound/outbound-routing.module#OutboundRoutingModule" },
+      { path:'outbound', loadChildren: "../outbound/outbound.module#OutboundModule" },
     ]
     
   }
