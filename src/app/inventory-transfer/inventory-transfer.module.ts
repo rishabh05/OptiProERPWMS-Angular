@@ -8,6 +8,7 @@ import { GridModule } from '@progress/kendo-angular-grid';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { SharedModule } from '../shared-module/shared-module.module';
 import { FormsModule } from '@angular/forms';
+import { InventoryTransferRoutingModule } from './inventory-transfer-routing.module';
 
 @NgModule({
   declarations: [WhsTransferComponent, BinTransferComponent],
@@ -18,6 +19,7 @@ import { FormsModule } from '@angular/forms';
     TrnaslateLazyModule,
     PerfectScrollbarModule,
     FormsModule,
+    InventoryTransferRoutingModule,
     ModalModule.forRoot()
   ]
 })

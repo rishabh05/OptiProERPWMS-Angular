@@ -41,12 +41,14 @@
                     <span class="text">{{'InventoryTransfer'|translate}}</span>
                 </a>
                 <ul *dropdownMenu class="dropdown-menu" role="menu">
+                    <!-- <li id="15108" role="menuitem" (click)="listClick($event, 'inventory-transfer/whsTransfer')" > -->
                     <li id="15108" role="menuitem" (click)="listClick($event, 'whsTransfer')" >
                         <a class="dropdown-item" roterLink="whsTransfer">
                             <i class="opti-icon-warehouse-transfer" [style.color]="selectedThemeColor"></i>
                             <span class="text">{{'WarehouseTransfer'|translate}}</span>
                         </a>
                     </li>
+                    <!-- <li id="15109" role="menuitem" (click)="listClick($event, 'inventory-transfer/binTransfer')" > -->
                     <li id="15109" role="menuitem" (click)="listClick($event, 'binTransfer')" >
                         <a class="dropdown-item" roterLink="binTransfer">
                             <i class="opti-icon-bin-transfer" [style.color]="selectedThemeColor"></i>
@@ -95,20 +97,20 @@
                     <span class="text">{{'LabelPrintingandReports'|translate}}</span>
                 </a>
                 <ul *dropdownMenu class="dropdown-menu" role="menu">                    
-                    <li id="15109" role="menuitem">
-                        <a class="dropdown-item" href="#">
+                    <li id="15109" role="menuitem" (click)="listClick($event, 'printing-label/item-label')">
+                        <a class="dropdown-item" roterLink="item-label">
                             <i class="opti-icon-issue" [style.color]="selectedThemeColor"></i>
                             <span class="text">{{'ItemLabel'|translate}}</span>
                         </a>
                     </li>
-                    <li id="15108" role="menuitem">
-                            <a class="dropdown-item" href="#">
-                                <i class="opti-icon-sales-order" [style.color]="selectedThemeColor"></i>
-                                <span class="text">{{'BinLabel'|translate}}</span>
-                            </a>
-                        </li>
-                    <li id="15109" role="menuitem">
-                        <a class="dropdown-item" href="#">
+                    <li id="15108" role="menuitem" (click)="listClick($event, 'printing-label/bin-label')">
+                        <a class="dropdown-item" roterLink="bin-label">
+                            <i class="opti-icon-sales-order" [style.color]="selectedThemeColor"></i>
+                            <span class="text">{{'BinLabel'|translate}}</span>
+                        </a>
+                    </li>
+                    <li id="15109" role="menuitem" (click)="listClick($event, 'printing-label/inventory-enquiry')">
+                        <a class="dropdown-item" roterLink="inventory-enquiry">
                             <i class="opti-icon-sales-order" [style.color]="selectedThemeColor"></i>
                             <span class="text">{{'InventoryEnquiry'|translate}}</span>
                         </a>
