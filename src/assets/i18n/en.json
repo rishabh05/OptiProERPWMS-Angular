@@ -111,5 +111,6 @@
   "BatchTrackedItem": "Batch Tracked Item",
   "NoneTrackedItem": "None Tracked Item",
   "Items": "Items",
-  "issueForProduction": "Issue For Production"
+  "issueForProduction": "Issue For Production",
+  "receiptFromProduction":"Receipt From Production"
 }
