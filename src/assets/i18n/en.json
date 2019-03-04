@@ -112,5 +112,14 @@
   "NoneTrackedItem": "None Tracked Item",
   "Items": "Items",
   "issueForProduction": "Issue For Production",
-  "receiptFromProduction":"Receipt From Production"
+  "receiptFromProduction":"Receipt From Production",
+  "binLabelReport": "Bin Label Report",
+  "itemLabelReport": "Item Label Report"  ,
+  "BatchSrBinNo":"Batch/Sr/Bin No.",
+  "noOfCopies":"No. of Copies",
+  "Print":"Print",
+  "BatchSerial":"Batch/Serial",
+  "ItemSummary":"Item Summary",
+  "ItemDetail":"Item Detail",
+  "Description":"Description"
 }

@@ -1,0 +1,60 @@
+<div class="opti_container position-relative bg-white rounded">
+  <form class="opti_input-group-form">
+      <div class="opti_container_inner" [perfectScrollbar]=" ">
+
+          <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
+              {{'InventoryEnquiry'|translate}}
+          </h3>
+
+          <div class="row mb-4">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+              <div class="opti_input-group-radio border-0 px-0">
+                <input type="radio" name="group" id="InventoryEnquiryOptions1" class="k-radio" checked />
+                <label class="k-radio-label" for="InventoryEnquiryOptions1">{{'BatchSerial'|translate}}</label>
+
+                <input type="radio" name="group" id="InventoryEnquiryOptions2" class="k-radio" />
+                <label class="k-radio-label" for="InventoryEnquiryOptions2">{{'ItemSummary'|translate}}</label>
+
+                <input type="radio" name="group" class="k-radio" id="InventoryEnquiryOptions3" />
+                <label class="k-radio-label" for="InventoryEnquiryOptions3">{{'ItemDetail'|translate}}</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+              <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+
+                  <div class="form-group row">
+                      <label for="inputPassword" class="col-sm-3 col-form-label">{{'BatchSrBinNo'|translate}}</label>
+                      <div class="col-sm-9">
+                          <div class="input-group input-group-sm">
+                              <input type="text" class="form-control form-control-sm" name ='customerCode' placeholder="{{'BatchSrBinNo'|translate}}">
+                              <div class="input-group-append has-seprate-btn">
+                                  <button class="k-button k-primary btn" type="button">
+                                      <i class="opti-icon-hammenu"></i>
+                                  </button>
+                                  <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button">
+                                    <i class="opti-icon-qr-code fs-28"></i>
+                                  </button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="form-group row">
+                      <label for="inputPassword" class="col-sm-3 col-form-label">{{'ItemCode'|translate}}</label>
+                      <div class="col-sm-9">
+                          <input type="text" class="form-control form-control-sm" name ='customerCode' placeholder="{{'ItemCode'|translate}}">
+                      </div>
+                  </div>
+                  <div class="form-group row">
+                      <label for="inputPassword" class="col-sm-3 col-form-label">{{'Description'|translate}}</label>
+                      <div class="col-sm-9">
+                          <input type="text" class="form-control form-control-sm" name ='customerCode' placeholder="{{'Description'|translate}}">
+                      </div>
+                  </div>
+
+              </div>
+          </div>
+      </div>
+  </form>
+</div>
