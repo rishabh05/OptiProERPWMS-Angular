@@ -59,6 +59,7 @@
   "InvalidItemCode": "Invalid ItemCode",
   "InvalidBatch": "Batch Number not valid.",
   "InvalidSerial": "Serial Number not valid.",
+  "SerialAlreadyExist": "Serial already exist",
   "LotNo": "Lot No.",
   "TOTALQTY": "Total Qty.",
   "BinNo": "Bin No.",
