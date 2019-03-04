@@ -63,8 +63,8 @@
                     <span class="text">{{'AdjustmentsCounting'|translate}}</span>
                 </a>
                 <ul *dropdownMenu class="dropdown-menu" role="menu">
-                    <li id="15108" role="menuitem">
-                        <a class="dropdown-item" href="#">
+                    <li id="15108" role="menuitem" (click)="listClick($event, 'adjustment-counting/physical-count')">
+                        <a class="dropdown-item" roterLink="physical-count">
                             <i class="opti-icon-time" [style.color]="selectedThemeColor"></i>
                             <span class="text">{{'PhysicalCount'|translate}}</span>
                         </a>

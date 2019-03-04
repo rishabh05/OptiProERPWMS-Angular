@@ -12,4 +12,10 @@ export class OutProdissueComponent implements OnInit {
   ngOnInit() {
   }
 
+  public listItems: Array<{ text: string, value: number }> = [
+      { text: "Small", value: 1 },
+      { text: "Medium", value: 2 },
+      { text: "Large", value: 3 }
+  ];
+
 }

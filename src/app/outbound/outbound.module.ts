@@ -11,7 +11,7 @@ import { OutProdissueComponent } from './out-prodissue/out-prodissue.component';
 import { SharedModule } from '../shared-module/shared-module.module';
 import { FormsModule } from '@angular/forms';
 import { GridModule } from '@progress/kendo-angular-grid';
-
+import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
 
 @NgModule({
   declarations: [OutboundDetailsComponent, OutCutomerComponent, OutOrderComponent, OutProdissueComponent],
@@ -22,7 +22,8 @@ import { GridModule } from '@progress/kendo-angular-grid';
     PerfectScrollbarModule,
     GridModule,
     OutboundRoutingModule,
-    SharedModule
+    SharedModule,
+    DropDownsModule
   ],
   exports:[OutCutomerComponent,OutOrderComponent,OutProdissueComponent]
 })

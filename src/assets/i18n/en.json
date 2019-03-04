@@ -121,5 +121,18 @@
   "BatchSerial":"Batch/Serial",
   "ItemSummary":"Item Summary",
   "ItemDetail":"Item Detail",
-  "Description":"Description"
+  "Description":"Description",
+  "DocNo":"Doc No.",
+  "CountDate":"Count Date",
+  "CountedQty":"Counted Qty",
+  "Scan":"Scan",
+  "QtyOnHand":"Qty OnHand",
+  "UoM":"UoM",
+  "Counted":"Counted",
+  "Save&Next":"Save & Next",
+  "AddLot":"AddLot",
+  "PickQty":"Pick Qty",
+  "SearchBin":"Search Bin",
+  "SelectedMaterials": "Selected Materials",
+  "AvailableQty":"Available Qty"
 }
