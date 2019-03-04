@@ -48,10 +48,16 @@ export class OutboundService {
     this.outRequest.DOCNUM = docNum;
     this.outRequest.CUSTCODE = custCode;
     var body: any = { DeliveryToken:this.prepareRequest() };
-    debugger;
+  
     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/SoCustomerWiseLookup", body, this.httpOptions);
   }
 
+  public getRecieverPOByUMO(itemCode:string){
+    this.outRequest=new OutRequest();
+    this.outRequest.ItemCode;
+    var body:any=[this.prepareRequest()];
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/getUOM", body, this.httpOptions);
+  }
 
   private prepareRequest(): any {
     //    this.outRequest = new OutRequest();
