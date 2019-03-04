@@ -18,7 +18,7 @@ import { RowClassArgs } from '@progress/kendo-angular-grid';
 })
 export class OutOrderComponent implements OnInit {
   private customerName: string = "";
-
+  public pageSize = 20;
   public serviceData: any;
   public lookupfor: any = 'out-order';
   public showLookup: boolean = false;
@@ -71,6 +71,12 @@ export class OutOrderComponent implements OnInit {
   }
 
 
+  public openPOByUOM(e:any) {
+
+    console.log(e);
+
+  }
+
   public openSOOrderList() {
     if (this.outbound.OrderData != null && this.outbound != undefined
       && this.outbound.OrderData != '' && this.outbound.OrderData != null) {
@@ -84,7 +90,7 @@ export class OutOrderComponent implements OnInit {
           if (resp != null && resp != undefined)
             this.soItemsDetail = resp.RDR1;
           localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
-          
+
           this.showSOIetDetail = true;
         },
         error => {
@@ -112,8 +118,8 @@ export class OutOrderComponent implements OnInit {
     }
   }
 
-  public openOutboundCustomer(){
-    this.router.navigateByUrl("home/outbound/outcustomer",{skipLocationChange:true})
+  public openOutboundCustomer() {
+    this.router.navigateByUrl("home/outbound/outcustomer", { skipLocationChange: true })
   }
 
 }
