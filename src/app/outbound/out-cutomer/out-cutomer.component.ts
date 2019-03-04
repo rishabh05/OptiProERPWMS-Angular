@@ -67,6 +67,8 @@ export class OutCutomerComponent implements OnInit {
     this.router.navigateByUrl('home/outbound/outorder', { skipLocationChange: true });
   }
 
-
+  public cancel(){
+    this.router.navigateByUrl('home/dashboard');
+  }
 
 }

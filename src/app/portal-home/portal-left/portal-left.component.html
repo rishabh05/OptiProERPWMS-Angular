@@ -29,7 +29,7 @@
                 </a>
             </li>
 
-            <li id="SLS" (click)="listClick($event, 'outbound/outcustomer')" [ngClass]="{'active': selectedItem == 'outbound'}">
+            <li id="SLS" (click)="listClick($event, 'outbound')" [ngClass]="{'active': selectedItem == 'outbound'}">
                 <a roterLink="outbound">
                     <i class="opti-icon-outbound-order" [style.color]="selectedThemeColor"></i>
                     <span class="text">{{'Outbound'|translate}}</span>
@@ -41,12 +41,14 @@
                     <span class="text">{{'InventoryTransfer'|translate}}</span>
                 </a>
                 <ul *dropdownMenu class="dropdown-menu" role="menu">
+                    <!-- <li id="15108" role="menuitem" (click)="listClick($event, 'inventory-transfer/whsTransfer')" > -->
                     <li id="15108" role="menuitem" (click)="listClick($event, 'whsTransfer')" >
                         <a class="dropdown-item" roterLink="whsTransfer">
                             <i class="opti-icon-warehouse-transfer" [style.color]="selectedThemeColor"></i>
                             <span class="text">{{'WarehouseTransfer'|translate}}</span>
                         </a>
                     </li>
+                    <!-- <li id="15109" role="menuitem" (click)="listClick($event, 'inventory-transfer/binTransfer')" > -->
                     <li id="15109" role="menuitem" (click)="listClick($event, 'binTransfer')" >
                         <a class="dropdown-item" roterLink="binTransfer">
                             <i class="opti-icon-bin-transfer" [style.color]="selectedThemeColor"></i>
@@ -61,8 +63,8 @@
                     <span class="text">{{'AdjustmentsCounting'|translate}}</span>
                 </a>
                 <ul *dropdownMenu class="dropdown-menu" role="menu">
-                    <li id="15108" role="menuitem">
-                        <a class="dropdown-item" href="#">
+                    <li id="15108" role="menuitem" (click)="listClick($event, 'adjustment-counting/physical-count')">
+                        <a class="dropdown-item" roterLink="physical-count">
                             <i class="opti-icon-time" [style.color]="selectedThemeColor"></i>
                             <span class="text">{{'PhysicalCount'|translate}}</span>
                         </a>
@@ -75,13 +77,13 @@
                     <span class="text">{{'Production'|translate}}</span>
                 </a>
                 <ul *dropdownMenu class="dropdown-menu" role="menu">                    
-                    <li id="15109" role="menuitem" (click)="listClick($event, 'issue')">
+                    <li id="15109" role="menuitem" (click)="listClick($event, 'production/production-issue')">
                         <a class="dropdown-item" roterLink="issue">
                             <i class="opti-icon-issue" [style.color]="selectedThemeColor"></i>
                             <span class="text">{{'IssueForProduction'|translate}}</span>
                         </a>
                     </li>
-                    <li id="15108" role="menuitem" (click)="listClick($event, 'receipt')">
+                    <li id="15108" role="menuitem" (click)="listClick($event, 'production/production-receipt')">
                         <a class="dropdown-item" roterLink="receipt">
                             <i class="opti-icon-customer-purchase-order" [style.color]="selectedThemeColor"></i>
                             <span class="text">{{'ReceiptFromProduction'|translate}}</span>
@@ -95,20 +97,20 @@
                     <span class="text">{{'LabelPrintingandReports'|translate}}</span>
                 </a>
                 <ul *dropdownMenu class="dropdown-menu" role="menu">                    
-                    <li id="15109" role="menuitem">
-                        <a class="dropdown-item" href="#">
+                    <li id="15109" role="menuitem" (click)="listClick($event, 'printing-label/item-label')">
+                        <a class="dropdown-item" roterLink="item-label">
                             <i class="opti-icon-issue" [style.color]="selectedThemeColor"></i>
                             <span class="text">{{'ItemLabel'|translate}}</span>
                         </a>
                     </li>
-                    <li id="15108" role="menuitem">
-                            <a class="dropdown-item" href="#">
-                                <i class="opti-icon-sales-order" [style.color]="selectedThemeColor"></i>
-                                <span class="text">{{'BinLabel'|translate}}</span>
-                            </a>
-                        </li>
-                    <li id="15109" role="menuitem">
-                        <a class="dropdown-item" href="#">
+                    <li id="15108" role="menuitem" (click)="listClick($event, 'printing-label/bin-label')">
+                        <a class="dropdown-item" roterLink="bin-label">
+                            <i class="opti-icon-sales-order" [style.color]="selectedThemeColor"></i>
+                            <span class="text">{{'BinLabel'|translate}}</span>
+                        </a>
+                    </li>
+                    <li id="15109" role="menuitem" (click)="listClick($event, 'printing-label/inventory-enquiry')">
+                        <a class="dropdown-item" roterLink="inventory-enquiry">
                             <i class="opti-icon-sales-order" [style.color]="selectedThemeColor"></i>
                             <span class="text">{{'InventoryEnquiry'|translate}}</span>
                         </a>

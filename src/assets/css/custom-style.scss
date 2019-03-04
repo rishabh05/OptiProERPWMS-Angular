@@ -233,6 +233,12 @@ file-drop .drop-zone.over {
         margin-left: 5px;
     }
 }
+.input-group>.input-group-append.has-seprate-btn>.btn:first-child{
+    border-radius: 0 0.25rem 0.25rem 0 !important;
+}
+.input-group>.input-group-append.has-seprate-btn>.btn + .btn.separate-btn{
+    border-radius: 0.25rem;
+}
 /////////////////////////////////////////////////////////////////////
 ///////////////////////////// Modal Style /////////////////////
 ////////////////////////////////////////////////////////////////////
@@ -255,3 +261,12 @@ body.modal-open app-root {
     color:#fff;
     font-size: 18px;
 }
+
+/////////////////////////////////////////////////////////////////////
+///////////////////////////// Kendo Grid custom Style /////////////////////
+////////////////////////////////////////////////////////////////////
+// .k-grid.no-shadow .k-grid-header,
+// .k-grid.no-shadow table,
+// .k-grid.no-shadow{
+//     border-color: #bbb;
+// }

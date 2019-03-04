@@ -6,8 +6,8 @@ import { ProductionReceiptComponent } from './production-receipt/production-rece
 const routes: Routes = [
   
   { path: '', component:ProductionIssueComponent  },
-  { path: 'issue', component:ProductionIssueComponent  },
-  { path: 'recipt', component:ProductionReceiptComponent  },
+  { path: 'production-issue', component:ProductionIssueComponent  },
+  { path: 'production-receipt', component:ProductionReceiptComponent  },
   
 ];
 

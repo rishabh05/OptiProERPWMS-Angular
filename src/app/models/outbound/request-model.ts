@@ -6,4 +6,6 @@ export class OutRequest {
     CUSTCODE:string
     DocEntry:string
     Whse:string
+    ItemCode:string
+    WHSCode
 }

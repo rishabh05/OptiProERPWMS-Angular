@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
 import { OutboundData } from 'src/app/models/outbound/outbound-data';
 import { CodeNode } from 'source-list-map';
+import { RowClassArgs } from '@progress/kendo-angular-grid';
 
 
 
@@ -17,14 +18,18 @@ import { CodeNode } from 'source-list-map';
 })
 export class OutOrderComponent implements OnInit {
   private customerName: string = "";
-
+  public pageSize = 20;
   public serviceData: any;
   public lookupfor: any = 'out-order';
   public showLookup: boolean = false;
   public selectedCustomer: any;
   public outbound: OutboundData = new OutboundData();
-  public orderNumber:string;
-  public showSOIetDetail=false;
+  public orderNumber: string;
+  public showSOIetDetail = false;
+  public soItemsDetail: any = null;
+  serialTrackedItems: any;
+  batchTrackedItems: any;
+  noneTrackedItems: any;
   constructor(private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) { }
 
 
@@ -44,6 +49,7 @@ export class OutOrderComponent implements OnInit {
 
       this.outboundservice.getCustomerSOList(this.selectedCustomer.CustomerCode).subscribe(
         resp => {
+
           this.showLookup = true;
           this.serviceData = resp;
         },
@@ -57,25 +63,42 @@ export class OutOrderComponent implements OnInit {
     }
   }
 
-  getLookupValue(lookupValue: any) {
-    console.log('SelectedOrder', lookupValue);
+  getLookupValue(lookupValue: any) {    
     this.outbound.OrderData = lookupValue;
-    this.orderNumber=this.outbound.OrderData.DOCNUM;
+    this.orderNumber = this.outbound.OrderData.DOCNUM;
     localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
   }
 
 
-  public openSOOrderList(){
+  public openPOByUOM(selection:any) {
+    let selectdeData = selection.selectedRows[0].dataItem;      
+
+    let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+    
+    if (outboundData != undefined && outboundData != '') {
+      this.outbound = JSON.parse(outboundData);
+      this.outbound.SelectedItem=selectdeData;
+      localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+      this.router.navigateByUrl('home/outbound/outprodissue',{skipLocationChange:true});
+    }
+    
+  }
+
+  public openSOOrderList() {
     if (this.outbound.OrderData != null && this.outbound != undefined
       && this.outbound.OrderData != '' && this.outbound.OrderData != null) {
-      let tempOrderData:any=this.outbound.OrderData;
-      let whseId=localStorage.getItem("whseId");
-      this.outboundservice.getSOItemList(tempOrderData.CARDCODE,tempOrderData.DOCNUM,whseId).subscribe(
+
+      let tempOrderData: any = this.outbound.OrderData;
+      this.outbound.OrderData.DOCNUM = tempOrderData.DOCNUM = this.orderNumber;
+
+      let whseId = localStorage.getItem("whseId");
+      this.outboundservice.getSOItemList(tempOrderData.CARDCODE, tempOrderData.DOCNUM, whseId).subscribe(
         resp => {
-          this.showSOIetDetail=true;
-          //this.showLookup = true;
-         // this.serviceData = resp;
-         console.log(resp);
+          if (resp != null && resp != undefined)
+            this.soItemsDetail = resp.RDR1;
+          localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+
+          this.showSOIetDetail = true;
         },
         error => {
           this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
@@ -85,6 +108,25 @@ export class OutOrderComponent implements OnInit {
     else {
       this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
     }
+  }
+
+
+
+  public rowCallback = (context: RowClassArgs) => {
+    switch (context.dataItem.TRACKING) {
+      case 'S':
+        return { serial: true };
+      case 'B':
+        return { batch: true };
+      case 'N':
+        return { none: true };
+      default:
+        return {};
+    }
+  }
+
+  public openOutboundCustomer() {
+    this.router.navigateByUrl("home/outbound/outcustomer", { skipLocationChange: true })
   }
 
 }

@@ -7,9 +7,10 @@ import { FormFieldComponent } from '../form/form-field/form-field.component';
 import { BinTransferComponent } from '../inventory-transfer/bin-transfer/bin-transfer.component';
 import { WhsTransferComponent } from '../inventory-transfer/whs-transfer/whs-transfer.component';
 import { InboundDetailsComponent } from '../inbound/inbound-details/inbound-details.component';
-import { OutCutomerComponent } from '../outbound/out-cutomer/out-cutomer.component';
-import { OutOrderComponent } from '../outbound/out-order/out-order.component';
-import { OutProdissueComponent } from '../outbound/out-prodissue/out-prodissue.component';
+// import { OutCutomerComponent } from '../outbound/out-cutomer/out-cutomer.component';
+// import { OutOrderComponent } from '../outbound/out-order/out-order.component';
+// import { OutProdissueComponent } from '../outbound/out-prodissue/out-prodissue.component';
+// import { OutboundModule } from '../outbound/outbound.module';
 
 const routes: Routes = [
 
@@ -22,13 +23,17 @@ const routes: Routes = [
       { path: 'form', component:FormFieldComponent },
       { path:'binTransfer', component:BinTransferComponent },
       { path:'whsTransfer', component:WhsTransferComponent },
-      { path:'inbound', component:InboundDetailsComponent },
+      { path:'inbound', component:InboundDetailsComponent },     
+      { path: 'adjustment-counting', loadChildren: "../adjustments-counting/adjustments-counting.module#AdjustmentsCountingModule" }, 
+      //{ path: 'inventory-transfer', loadChildren: "../inventory-transfer/inventory-transfer.module#InventoryTransferModule" },
+      { path: 'production', loadChildren: "../production/production.module#ProductionModule" },
+      { path: 'printing-label', loadChildren: "../printing-label/printing-label.module#PrintingLabelModule" },
       // Need to remove these routing
-      { path:'outbound/outcustomer', component:OutCutomerComponent },
-      { path:'outbound/outorder', component:OutOrderComponent },
-      { path:'outbound/outprodissue', component:OutProdissueComponent },
+      // { path:'outbound/outcustomer', component:OutCutomerComponent },
+      // { path:'outbound/outorder', component:OutOrderComponent },
+      // { path:'outbound/outprodissue', component:OutProdissueComponent },
 
-     // { path:'outbound', loadChildren: "../outbound/outbound-routing.module#OutboundRoutingModule" },
+      { path:'outbound', loadChildren: "../outbound/outbound.module#OutboundModule" },
     ]
     
   }

@@ -26,6 +26,11 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.opti-icon-qr-code {
+  &:before {
+    content: $opti-icon-qr-code; 
+  }
+}
 .opti-icon-time {
   &:before {
     content: $opti-icon-time; 

@@ -54,6 +54,19 @@ h6{
     @include font($size: $font-size-small, $weight: $font-weight-regular,  $lh: false);
 }
 
+.fs-18{
+    font-size: 18px;
+}
+.fs-20{
+    font-size: 20px;
+}
+.fs-24{
+    font-size: 24px;
+}
+.fs-28{
+    font-size: 28px;
+}
+
 // Top Bar
 #opti_TopBarID{
     .opti_user-profile{

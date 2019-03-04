@@ -36,8 +36,8 @@
                 <hr />
             </div>
             <div class="col-sm-12 col-12">
-                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-close-outline"
-                        role="presentation"></span> Cancel</button>
+                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="cancel()"><span class="k-icon k-i-close-outline"
+                        role="presentation"></span> {{'Cancel'|translate}}</button>
                 <button type="button" class="btn btn-light k-button btn-sm btn-transparent btn-icon" [disabled]="!customerCode"  (click)="openCustSO()"
                     roterLink="binTransfer" skipLocationChange><i class="opti-icon-arrow-next"></i></button>
             </div>

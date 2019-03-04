@@ -1,4 +1,4 @@
-import { Component, OnInit, setTestabilityGetter, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, setTestabilityGetter, Input, Output, EventEmitter, ElementRef, ViewChild, HostListener } from '@angular/core';
 // import { CommonService } from '../../../services/common.service';
 // import * as XLSX from 'ts-xlsx';
 // import { FeaturemodelService } from '../../../services/featuremodel.service';
@@ -11,6 +11,9 @@ import 'bootstrap';
 import { ColumnSetting } from 'src/app/models/CommonData';
 import { OutboundData } from 'src/app/models/outbound/outbound-data';
 import { TranslateService, LangChangeEvent } from '../../../../node_modules/@ngx-translate/core';
+import { GridComponent } from '@progress/kendo-angular-grid';
+import { UIHelper } from 'src/app/helpers/ui.helpers';
+import { State } from '@progress/kendo-data-query';
 // import { UIHelper } from '../../../helpers/ui.helpers';
 // import { Http, ResponseContentType } from '@angular/http';
 
@@ -34,6 +37,13 @@ export class LookupComponent implements OnInit {
   public table_head: ColumnSetting[] = [];
   dialogOpened: boolean = true;
   lookupTitle: string;
+  
+  isMobile: boolean;
+  isColumnFilter: boolean = false;
+  isColumnGroup: boolean = false;
+  gridHeight: number;
+  showLoader: boolean = false;
+  grid: any;
 
 
 
@@ -63,12 +73,15 @@ export class LookupComponent implements OnInit {
       this.showNTrackFromBinList();
     } else if (this.lookupfor == "SBTrackFromBin") {
       this.showSBTrackFromBinList();
-    }else if(this.lookupfor == "toBinsList"){
+    } else if (this.lookupfor == "toBinsList") {
       this.showSBTrackFromBinList();
     }
 
     else if (this.lookupfor == "out-customer") {
       this.showCustomerList();
+    }
+    else if (this.lookupfor == "out-items") {
+      this.showAvaliableItems();
     }
 
     else if (this.lookupfor == 'out-order') {
@@ -98,6 +111,37 @@ export class LookupComponent implements OnInit {
       }
     }
   }
+
+  showAvaliableItems() {
+    this.table_head = [
+      {
+        field: 'LOTNO',
+        title: 'Serial',
+        type: 'text',
+        width: '100'
+      },
+    
+      {
+        field: 'BINNO',
+        title: this.translate.instant("BinNo"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'TOTALQTY',
+        title: this.translate.instant("AvailableQty"),
+        type: 'numeric',
+        width: '100'
+      },
+    ];
+    this.lookupTitle = this.translate.instant("AvaliableMeterial");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
+
 
   showItemCodeList() {
     this.table_head = [
@@ -213,9 +257,9 @@ export class LookupComponent implements OnInit {
         this.dialogOpened = true;
       }
     }
-  }  
+  }
 
-  showToBinsList(){
+  showToBinsList() {
     this.table_head = [
       {
         field: 'BINNO',
@@ -259,7 +303,7 @@ export class LookupComponent implements OnInit {
       }
     }
   }
-  
+
 
 
   showOutSOList() {
@@ -301,5 +345,32 @@ export class LookupComponent implements OnInit {
     selection.selected = false;
     this.serviceData = [];
     this.dialogOpened = false;
+  }
+
+  onFilterChange(checkBox:any,grid:GridComponent)
+    {
+      if(checkBox.checked==false){
+        this.clearFilter(grid);
+      }
+    }
+  clearFilter(grid:GridComponent){      
+    this.clearFilters()
+  }
+
+  public state: State = {
+      skip: 0,
+      take: 5,
+
+      // Initial filter descriptor
+      filter: {
+        logic: 'and',
+        filters: []
+      }
+  };
+  public clearFilters() {
+    this.state.filter = {
+      logic: 'and', 
+      filters: []
+    };
   }
 }
