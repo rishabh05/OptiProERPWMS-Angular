@@ -134,5 +134,6 @@
   "PickQty":"Pick Qty",
   "SearchBin":"Search Bin",
   "SelectedMaterials": "Selected Materials",
-  "AvailableQty":"Available Qty"
+  "AvailableQty":"Available Qty",
+  "AvaliableMeterial":"Avaliable Meterial"
 }

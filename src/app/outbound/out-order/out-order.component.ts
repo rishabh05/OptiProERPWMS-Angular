@@ -63,18 +63,25 @@ export class OutOrderComponent implements OnInit {
     }
   }
 
-  getLookupValue(lookupValue: any) {
-    console.log('SelectedOrder', lookupValue);
+  getLookupValue(lookupValue: any) {    
     this.outbound.OrderData = lookupValue;
     this.orderNumber = this.outbound.OrderData.DOCNUM;
     localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
   }
 
 
-  public openPOByUOM(e:any) {
+  public openPOByUOM(selection:any) {
+    let selectdeData = selection.selectedRows[0].dataItem;      
 
-    console.log(e);
-
+    let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+    
+    if (outboundData != undefined && outboundData != '') {
+      this.outbound = JSON.parse(outboundData);
+      this.outbound.SelectedItem=selectdeData;
+      localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+      this.router.navigateByUrl('home/outbound/outprodissue',{skipLocationChange:true});
+    }
+    
   }
 
   public openSOOrderList() {

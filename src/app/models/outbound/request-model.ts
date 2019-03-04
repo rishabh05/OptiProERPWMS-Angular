@@ -7,4 +7,5 @@ export class OutRequest {
     DocEntry:string
     Whse:string
     ItemCode:string
+    WHSCode
 }

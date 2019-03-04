@@ -63,12 +63,15 @@ export class LookupComponent implements OnInit {
       this.showNTrackFromBinList();
     } else if (this.lookupfor == "SBTrackFromBin") {
       this.showSBTrackFromBinList();
-    }else if(this.lookupfor == "toBinsList"){
+    } else if (this.lookupfor == "toBinsList") {
       this.showSBTrackFromBinList();
     }
 
     else if (this.lookupfor == "out-customer") {
       this.showCustomerList();
+    }
+    else if (this.lookupfor == "out-items") {
+      this.showAvaliableItems();
     }
 
     else if (this.lookupfor == 'out-order') {
@@ -98,6 +101,37 @@ export class LookupComponent implements OnInit {
       }
     }
   }
+
+  showAvaliableItems() {
+    this.table_head = [
+      {
+        field: 'LOTNO',
+        title: 'Serial',
+        type: 'text',
+        width: '100'
+      },
+    
+      {
+        field: 'BINNO',
+        title: this.translate.instant("BinNo"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'TOTALQTY',
+        title: this.translate.instant("AvailableQty"),
+        type: 'numeric',
+        width: '100'
+      },
+    ];
+    this.lookupTitle = this.translate.instant("AvaliableMeterial");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
+
 
   showItemCodeList() {
     this.table_head = [
@@ -213,9 +247,9 @@ export class LookupComponent implements OnInit {
         this.dialogOpened = true;
       }
     }
-  }  
+  }
 
-  showToBinsList(){
+  showToBinsList() {
     this.table_head = [
       {
         field: 'BINNO',
@@ -259,7 +293,7 @@ export class LookupComponent implements OnInit {
       }
     }
   }
-  
+
 
 
   showOutSOList() {
