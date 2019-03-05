@@ -37,7 +37,8 @@ export class LookupComponent implements OnInit {
   public table_head: ColumnSetting[] = [];
   dialogOpened: boolean = true;
   lookupTitle: string;
-  
+  pagable:boolean=false;
+  pagesize:number=50;
   isMobile: boolean;
   isColumnFilter: boolean = false;
   isColumnGroup: boolean = false;
@@ -113,6 +114,8 @@ export class LookupComponent implements OnInit {
   }
 
   showAvaliableItems() {
+    this.pagable=true;
+    this.pagesize=50;
     this.table_head = [
       {
         field: 'LOTNO',

@@ -7,13 +7,13 @@
     [filterable]=isColumnFilter
     [groupable]=isColumnGroup 
     [selectable]="true" 
-    [pageable]="false"
+    [pageable]="pagable"
     [sort]="state.sort"
     [filter]="state.filter"
     [resizable]="true" 
     [skip]="skip" 
     (selectionChange)="on_item_select($event)" 
-    [pageSize]="100" 
+    [pageSize]="pagesize" 
     style="max-height:400px" 
     class="no-shadow">
     
