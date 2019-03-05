@@ -28,6 +28,7 @@ export class OutOrderComponent implements OnInit {
   public orderNumber: string;
   public showSOIetDetail = false;
   public soItemsDetail: any = null;
+  public viewLines :boolean;
   serialTrackedItems: any;
   batchTrackedItems: any;
   noneTrackedItems: any;
