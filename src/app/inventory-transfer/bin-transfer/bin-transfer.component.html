@@ -32,7 +32,10 @@
                     </div>
 
                     <div class="form-group row" *ngIf="showBatchNo">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'BatchNo'|translate}}</label>
+                        <label for="inputPassword" class="col-sm-3 col-form-label">
+                            <span *ngIf="!isItemSerialTrack">{{'BatchNo'|translate}}</span>
+                            <span *ngIf="isItemSerialTrack">{{'SerialNo'|translate}}</span>
+                        </label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
                                 <input type="text" class="form-control form-control-sm" placeholder="{{'BatchNo'|translate}}" name="lotValue" [(ngModel)]="lotValue" (blur)="OnLotChange()">
@@ -48,7 +51,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'FromBin'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" placeholder="{{'FromBin'|translate}}" (blur)="OnFromBinChange()">
+                                <input type="text" class="form-control form-control-sm" placeholder="{{'FromBin'|translate}}" name="fromBin" [(ngModel)]="fromBin" (blur)="OnFromBinChange()">
                                 <div class="input-group-append">
                                     <button class="k-button k-primary btn" type="button" (click)="ShowFromBins()">
                                         <i class="opti-icon-hammenu"></i>
@@ -61,7 +64,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'ToBin'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" placeholder="{{'ToBin'|translate}}" (blur)="OnToBinChange()">
+                                <input type="text" class="form-control form-control-sm" placeholder="{{'ToBin'|translate}}" name="toBin" [(ngModel)]="toBin" (blur)="OnToBinChange()">
                                 <div class="input-group-append">
                                     <button class="k-button k-primary btn" type="button" (click)="ShowToBins()">
                                         <i class="opti-icon-hammenu"></i>
@@ -72,23 +75,25 @@
                     </div>
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">
-                            <span>{{'OnHandQty'|translate}}</span>
-                            <span *ngIf="false">{{'OnHandQty'|translate}}</span>
+                            <span *ngIf="!isItemSerialTrack">{{'OnHandQty'|translate}}</span>
+                            <span *ngIf="isItemSerialTrack">{{'SerialQty'|translate}}</span>
                         </label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control form-control-sm" placeholder="{{'OnHandQty'|translate}}" readonly>
+                            <input type="text" class="form-control form-control-sm" placeholder="0.000" 
+                            name="onHandQty" [(ngModel)]="onHandQty" disabled>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'TransferQty'|translate}}</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control form-control-sm" placeholder="{{'TransferQty'|translate}}">
+                            <input type="text" class="form-control form-control-sm" placeholder="0.000" 
+                            name="transferQty" [(ngModel)]="transferQty" [disabled]="editTransferQty">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Reason'|translate}}</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control form-control-sm" placeholder="{{'Reason'|translate}}">
+                            <input type="text" class="form-control form-control-sm" placeholder="{{'Reason'|translate}}" name="Remarks" [(ngModel)]="Remarks">
                         </div>
                     </div>
 
