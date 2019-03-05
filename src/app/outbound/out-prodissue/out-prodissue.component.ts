@@ -15,38 +15,50 @@ export class OutProdissueComponent implements OnInit {
   public lookupData: any;
   public lookupFor: any = 'out-items';
   public showLookup: boolean = false;
+  public selectedItems: any;
+  public pickQty: number;
+  public uomList: any=[];
+
   constructor(private ourboundService: OutboundService) { }
 
   ngOnInit() {
     let outboundData = localStorage.getItem(CommonConstants.OutboundData);
-    debugger;
+
     if (outboundData != undefined && outboundData != '') {
       this.outbound = JSON.parse(outboundData);
       this.selected = this.outbound.SelectedItem;
+      this.selectedItems = [this.selected];
     }
+
+    this.ourboundService.getUOMList(this.selected.ITEMCODE).subscribe(
+      data => {
+      console.log("UOM",data);
+        this.uomList=data;
+      }
+    )
   }
 
-  public listItems: Array<{ text: string, value: number }> = [
-    { text: "Small", value: 1 },
-    { text: "Medium", value: 2 },
-    { text: "Large", value: 3 }
-  ];
 
+
+  valueChange(e: any) {
+
+  }
 
   public openAvaliableMeterials() {
     let itemCode = this.selected.ITEMCODE;
     let docEntry = this.selected.DOCENTRY;
     this.ourboundService.getAvaliableMeterial(itemCode, docEntry).subscribe(
       (resp: any) => {
-        console.log("AvaliableItem", resp);
-        this.lookupData=resp;
-        this.showLookup=true;
+
+        this.lookupData = resp;
+        this.showLookup = true;
       }
     )
   }
 
-  
-  getLookupValue(lookupValue: any) {    
+
+  getLookupValue(lookupValue: any) {
+    console.log(lookupValue);
     // this.outbound.OrderData = lookupValue;
     // this.orderNumber = this.outbound.OrderData.DOCNUM;
     // localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));

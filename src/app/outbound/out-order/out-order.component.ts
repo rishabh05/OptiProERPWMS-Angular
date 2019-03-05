@@ -11,6 +11,7 @@ import { RowClassArgs } from '@progress/kendo-angular-grid';
 
 
 
+
 @Component({
   selector: 'app-out-order',
   templateUrl: './out-order.component.html',
@@ -63,7 +64,8 @@ export class OutOrderComponent implements OnInit {
     }
   }
 
-  getLookupValue(lookupValue: any) {    
+  getLookupValue(lookupValue: any) {  
+    
     this.outbound.OrderData = lookupValue;
     this.orderNumber = this.outbound.OrderData.DOCNUM;
     localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));

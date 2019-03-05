@@ -49,10 +49,10 @@ export class OutboundService {
     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/SoCustomerWiseLookup", body, this.httpOptions);
   }
 
-  public getRecieverPOByUMO(itemCode:string){
+  public getUOMList(itemCode:string){
     this.outRequest=new OutRequest();
-    this.outRequest.ItemCode;
-    var body:any=[this.prepareRequest()];
+    this.outRequest.ItemCode=itemCode;
+    var body:any={ItemKey:this.prepareRequest()};
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/getUOM", body, this.httpOptions);
   }
 

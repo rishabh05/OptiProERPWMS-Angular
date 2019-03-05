@@ -37,14 +37,17 @@ export class LookupComponent implements OnInit {
   public table_head: ColumnSetting[] = [];
   dialogOpened: boolean = true;
   lookupTitle: string;
-  pagable:boolean=false;
-  pagesize:number=50;
+  pagable: boolean = false;
+  pagesize: number = 50;
   isMobile: boolean;
   isColumnFilter: boolean = false;
   isColumnGroup: boolean = false;
   gridHeight: number;
   showLoader: boolean = false;
   grid: any;
+  showSelection: boolean = false;
+  selectedValues: Array<any> = [];
+  public mySelection: number[] = [];
 
 
 
@@ -114,8 +117,9 @@ export class LookupComponent implements OnInit {
   }
 
   showAvaliableItems() {
-    this.pagable=true;
-    this.pagesize=50;
+    this.pagable = true;
+    this.pagesize = 50;
+    this.showSelection = true;
     this.table_head = [
       {
         field: 'LOTNO',
@@ -123,7 +127,7 @@ export class LookupComponent implements OnInit {
         type: 'text',
         width: '100'
       },
-    
+
       {
         field: 'BINNO',
         title: this.translate.instant("BinNo"),
@@ -135,11 +139,12 @@ export class LookupComponent implements OnInit {
         title: this.translate.instant("AvailableQty"),
         type: 'numeric',
         width: '100'
-      },
+      }
     ];
     this.lookupTitle = this.translate.instant("AvaliableMeterial");
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
+        console.log('ServiceData', this.serviceData);
         this.dialogOpened = true;
       }
     }
@@ -337,42 +342,60 @@ export class LookupComponent implements OnInit {
   }
 
   on_item_select(selection) {
-    const lookup_key = selection.selectedRows[0].dataItem;
-    console.log("lookup_key - " + lookup_key);
-    console.log(lookup_key);
-    this.lookupkey.emit(lookup_key);
-    this.lookupvalue.emit(Object.values(lookup_key));
-    console.log(selection);
-    selection.selectedRows = [];
-    selection.index = 0;
-    selection.selected = false;
-    this.serviceData = [];
-    this.dialogOpened = false;
+    if (!this.showSelection) {
+      const lookup_key = selection.selectedRows[0].dataItem;
+      console.log("lookup_key - " + lookup_key);
+      console.log(lookup_key);
+      this.lookupkey.emit(lookup_key);
+      this.lookupvalue.emit(Object.values(lookup_key));
+      console.log(selection);
+      selection.selectedRows = [];
+      selection.index = 0;
+      selection.selected = false;
+      this.serviceData = [];
+      this.dialogOpened = false;
+    }
   }
 
-  onFilterChange(checkBox:any,grid:GridComponent)
-    {
-      if(checkBox.checked==false){
-        this.clearFilter(grid);
-      }
+  onCheckboxClick(checked: any, index: number) {
+    let servivceItem: any = this.serviceData[index];
+    if (checked) {
+      this.selectedValues.push(servivceItem);
     }
-  clearFilter(grid:GridComponent){      
+    else {
+      let rixd: number= this.selectedValues.findIndex(i => i.LOTNO == servivceItem.LOTNO && i.LOTNO == servivceItem.BINNO)
+      this.selectedValues.slice(rixd, 1);
+    }
+  }
+
+
+  onFilterChange(checkBox: any, grid: GridComponent) {
+    if (checkBox.checked == false) {
+      this.clearFilter(grid);
+    }
+  }
+  clearFilter(grid: GridComponent) {
     this.clearFilters()
   }
 
-  public state: State = {
-      skip: 0,
-      take: 5,
+  Done() {
+    this.lookupkey.emit(this.selectedValues);
+    this.dialogOpened=false;
+  }
 
-      // Initial filter descriptor
-      filter: {
-        logic: 'and',
-        filters: []
-      }
+  public state: State = {
+    skip: 0,
+    take: 5,
+
+    // Initial filter descriptor
+    filter: {
+      logic: 'and',
+      filters: []
+    }
   };
   public clearFilters() {
     this.state.filter = {
-      logic: 'and', 
+      logic: 'and',
       filters: []
     };
   }
