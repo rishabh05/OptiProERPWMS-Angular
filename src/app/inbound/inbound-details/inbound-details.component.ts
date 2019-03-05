@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./inbound-details.component.scss']
 })
 export class InboundDetailsComponent implements OnInit {
-
+  public viewLines :boolean;
   constructor() { }
 
   ngOnInit() {
