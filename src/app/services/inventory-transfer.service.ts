@@ -127,7 +127,6 @@ export class InventoryTransferService {
 
   getToBin(fromBin: string, oToWhs: string): Observable<any> {
     var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), ItemCode: '', WhsCode: localStorage.getItem("whseId"), FromBin: fromBin}]) };
-    debugger
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetToBIN", jObject, this.httpOptions);
   }
 
