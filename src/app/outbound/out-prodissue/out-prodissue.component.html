@@ -20,35 +20,34 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row mt-4">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
                     <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'OrderNo'|translate}}</label>
-                        <div class="col-sm-9">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">{{'OrderNo'|translate}}</label>
+                        <div class="col-sm-8">
                             <div class="input-group input-group-sm">
                                 <input type="text" name="orderNumber" value='' class="form-control form-control-sm"
                                     placeholder="{{'OrderNo'|translate}}">
                                 <div class="input-group-append has-seprate-btn">
-                                    
+                                    <button class="k-button k-primary btn " type="button">
+                                        <i class="opti-icon-search"></i>
+                                    </button> 
                                     <button class="k-button k-primary btn separate-btn" [disabled]="selected==null || selected==''"
                                         (click)="openAvaliableMeterials()" type="button">
-                                        <i class="opti-icon-search"></i>
-                                    </button>
-                                    <button class="k-button k-primary btn" type="button">
                                         <i class="opti-icon-hammenu"></i>
-                                    </button> 
+                                    </button>                                    
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row mt-4 mb-3">
-                <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
+            <div class="row mt-1">
+                <div class="col-12">
 
-                    <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-12">{{'SelectedMaterials'|translate}}</label>
-                        <div class="col-sm-12">
+                    <div class="row">
+                        <h5 class="h5 col-12 col-sm-6 mb-3 col-md-6 col-lg-9">{{'SelectedMaterials'|translate}}</h5>
+                        <div class="col-sm-6 col-md-6 mb-3 col-lg-3">
                             <input type="text" class="form-control form-control-sm" name='customerCode' placeholder="{{'SearchBin'|translate}}">
                         </div>
                     </div>
@@ -80,7 +79,7 @@
             <div class="col-sm-12 col-12">
                 <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-save"
                         role="presentation"></span> {{'Save'|translate}}</button>
-                <div class="clearfix mt-1 d-block d-sm-none"></div>
+                <!-- <div class="clearfix mt-1 d-block d-sm-none"></div> -->
                 <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-close-outline"
                         role="presentation"></span> {{'Cancel'|translate}}</button>
             </div>

@@ -119,7 +119,7 @@ export class OutOrderComponent implements OnInit {
       case 'B':
         return { batch: true };
       case 'N':
-        return { none: true };
+        return { none: false };
       default:
         return {};
     }
