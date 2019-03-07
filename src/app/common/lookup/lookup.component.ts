@@ -62,7 +62,30 @@ export class LookupComponent implements OnInit {
   close_kendo_dialog() {
     this.dialogOpened = false;
   }
+  public state: State = {
+    skip: 0,
+    take: 5,
 
+    // Initial filter descriptor
+    filter: {
+      logic: 'and',
+      filters: []
+    }
+  };
+  public clearFilters() {
+    this.state.filter = {
+      logic: 'and',
+      filters: []
+    };
+  }
+  onFilterChange(checkBox: any, grid: GridComponent) {
+    if (checkBox.checked == false) {
+      this.clearFilter(grid);
+    }
+  }
+  clearFilter(grid: GridComponent) {
+    this.clearFilters()
+  }
   ngOnInit() {
   }
 
@@ -91,6 +114,8 @@ export class LookupComponent implements OnInit {
     else if (this.lookupfor == 'out-order') {
       this.showOutSOList();
     }
+    this.clearFilters();
+    this.isColumnFilter = false
   }
 
   showToWhsList() {
@@ -368,35 +393,13 @@ export class LookupComponent implements OnInit {
     }
   }
 
+  
 
-  onFilterChange(checkBox: any, grid: GridComponent) {
-    if (checkBox.checked == false) {
-      this.clearFilter(grid);
-    }
-  }
-  clearFilter(grid: GridComponent) {
-    this.clearFilters()
-  }
 
   Done() {
     this.lookupkey.emit(this.selectedValues);
     this.dialogOpened=false;
   }
 
-  public state: State = {
-    skip: 0,
-    take: 5,
-
-    // Initial filter descriptor
-    filter: {
-      logic: 'and',
-      filters: []
-    }
-  };
-  public clearFilters() {
-    this.state.filter = {
-      logic: 'and',
-      filters: []
-    };
-  }
+  
 }
