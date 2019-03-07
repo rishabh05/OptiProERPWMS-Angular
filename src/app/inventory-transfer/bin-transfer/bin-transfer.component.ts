@@ -38,7 +38,7 @@ export class BinTransferComponent implements OnInit {
   getDefaultBinFlag: boolean = false;
   isItemSerialTrack: boolean;
   editTransferQty: boolean;
-
+  PageTitle: string;
 
   constructor(private commonservice: Commonservice, private router: Router, private inventoryTransferService: InventoryTransferService, private toastr: ToastrService, private translate: TranslateService, private modalService: BsModalService) {
     let userLang = navigator.language.split('-')[0];
@@ -60,7 +60,6 @@ export class BinTransferComponent implements OnInit {
     // check mobile device
     this.isMobile = UIHelper.isMobile();
 
-    localStorage.setItem("towhseId", "01");
   }
   // End UI Section
 
@@ -71,15 +70,20 @@ export class BinTransferComponent implements OnInit {
     // check mobile device
     this.isMobile = UIHelper.isMobile();
 
-  //  this.getViewLineList();
+    //  this.getViewLineList();
     this.viewLines = false;
+    
+    if(localStorage.getItem("towhseId") == localStorage.getItem("whseId")){
+      this.PageTitle = this.translate.instant("BinTransfer");
+    }else{
+      this.PageTitle = this.translate.instant("WarehouseTransfer")+ " From: "+ localStorage.getItem("whseId")+" To: "+localStorage.getItem("towhseId");
+    }
   }
 
 
   /** Simple method to toggle element visibility */
-  public ShowSavedData(): void 
-  {
-    this.viewLines = !this.viewLines; 
+  public ShowSavedData(): void {
+    this.viewLines = !this.viewLines;
   }
 
   public getViewLineList() {
@@ -100,7 +104,7 @@ export class BinTransferComponent implements OnInit {
     this.inventoryTransferService.getItemCodeList().subscribe(
       data => {
         if (data != undefined && data.length > 0) {
-          console.log("ItemList - " + data.toString());
+          // console.log("ItemList - " + data.toString());
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
@@ -291,7 +295,7 @@ export class BinTransferComponent implements OnInit {
     if (this.toBin == "" || this.toBin == undefined) {
       return;
     }
-    this.inventoryTransferService.isBinExist(this.toBin, "01").subscribe(
+    this.inventoryTransferService.isToBinExist(this.toBin, localStorage.getItem("towhseId")).subscribe(
       data => {
         if (data != null) {
           if (data.length > 0) {
@@ -322,7 +326,7 @@ export class BinTransferComponent implements OnInit {
   }
 
   ShowToBins() {
-    this.inventoryTransferService.getToBin(this.fromBin, localStorage.getItem("whseId")).subscribe(
+    this.inventoryTransferService.getToBin(this.fromBin, localStorage.getItem("towhseId")).subscribe(
       data => {
         if (data != null) {
           if (data.length > 0) {
@@ -352,16 +356,16 @@ export class BinTransferComponent implements OnInit {
     );
   }
 
-  IsInvTransferDetailLineExists(Detail: any, Item: string, LotNumber: string, Binno: string, ToBin: string, remarks: string, InvType: string): boolean {
+  IsInvTransferDetailLineExists(Item: string, LotNumber: string, Binno: string, ToBin: string, remarks: string, InvType: string): boolean {
     var sumLotQuantity = 0;
-    for (var i = 0; i < Detail.length; i++) {
-      if (Detail[i].ItemCode == Item &&
-        Detail[i].LotNo == LotNumber &&
-        Detail[i].BinNo == Binno &&
-        Detail[i].ToBin == ToBin &&
-        Detail[i].Remarks == remarks &&
-        Detail[i].InvType == InvType)
-        return Detail[i];
+    for (var i = 0; i < this.TransferedItemsDetail.length; i++) {
+      if (this.TransferedItemsDetail[i].ItemCode == Item &&
+        this.TransferedItemsDetail[i].LotNo == LotNumber &&
+        this.TransferedItemsDetail[i].BinNo == Binno &&
+        this.TransferedItemsDetail[i].ToBin == ToBin &&
+        this.TransferedItemsDetail[i].Remarks == remarks &&
+        this.TransferedItemsDetail[i].InvType == InvType)
+        return this.TransferedItemsDetail[i];
     }
     return false;
   }
@@ -377,8 +381,8 @@ export class BinTransferComponent implements OnInit {
     var oWhsTransAddLot: any = {};
     oWhsTransAddLot.Detail = [];
     // oWhsTransAddLot.Detail = localStorage.getItem("InvPutAwayLot");
-    var alreadyExist = false;//this.IsInvTransferDetailLineExists(oWhsTransAddLot.Detail, this.itemCode,
-    // this.lotValue, this.fromBin, this.toBin, "", "");
+    var alreadyExist = this.IsInvTransferDetailLineExists(this.itemCode,
+      this.lotValue, this.fromBin, this.toBin, "", "");
     if (!alreadyExist) {
       this.TransferedItemsDetail.push({
         LineNum: '01',
@@ -398,6 +402,7 @@ export class BinTransferComponent implements OnInit {
       });
 
       // localStorage.setItem("InvPutAwayLot", this.TransferedItemsDetail);
+      this.clearData();
     }
     else {
       if (this.ItemTracking == "S") {
@@ -440,6 +445,104 @@ export class BinTransferComponent implements OnInit {
         // dialog.open();
       }
     }
+  }
+
+  SubmitPutAway() {
+    var oWhsTransAddLot: any = {};
+    oWhsTransAddLot.Detail = [];
+    oWhsTransAddLot.Header = [];
+    oWhsTransAddLot.UDF = [];
+    // var oFromWhs = JSON.parse(sessionStorage.getItem(oCurrentController.SessionProperties.FromWhse));
+    // var oToWhs = JSON.parse(sessionStorage.getItem(oCurrentController.SessionProperties.ToWhse));
+    for (var i = 0; i < this.TransferedItemsDetail.length; i++) {
+      this.TransferedItemsDetail[i].LineNum = i;
+    }
+    oWhsTransAddLot.Detail = this.TransferedItemsDetail;
+    // var oScreenName = sessionStorage.getItem(oCurrentController.SessionProperties.ShowTranScreen);
+    // var Screen = JSON.parse(sessionStorage.getItem(oCurrentController.SessionProperties.SCREENNAME));
+    // if (Screen == "1") {
+
+    //     Screen = "INV";
+    // }
+    // else {
+    //     Screen = "WHS";
+    // }
+
+    oWhsTransAddLot.Header.push({
+      WhseCode: localStorage.getItem("whseId"),
+      ToWhsCode: localStorage.getItem("towhseId"), //oToWhs,
+      Type: "Items", //oScreenName,
+      DiServerToken: localStorage.getItem("Token"), //companyDBObject.DIServerToken,
+      CompanyDBId: localStorage.getItem("CompID"), //companyDBObject.CompanyDbName,
+      TransType: "WHS",
+      //--------------------Adding Parameters for the Licence--------------------------------------------
+      GUID: localStorage.getItem("GUID"),
+      UsernameForLic: localStorage.getItem("UserId")
+      //------------------End for the Licence Parameter------------------------------------------------------
+    });
+
+    // var UDF = JSON.parse(sessionStorage.getItem(oCurrentController.SessionProperties.UDFSaveSession));
+    // if (UDF != null && UDF.length > 0) {
+    //     for (var iIndex = 0; iIndex < UDF.length ; iIndex++) {
+    //         oWhsTransAddLot.UDF.push({
+    //             Key: UDF[iIndex].Key,
+    //             Value: UDF[iIndex].Value,
+    //             LotNo: UDF[iIndex].LotNo,
+    //             Flag: UDF[iIndex].Source,
+    //             LineNo: UDF[iIndex].LineNo
+
+    //         });
+    //     }
+
+    // }
+
+    this.inventoryTransferService.submitBinTransfer(oWhsTransAddLot).subscribe(
+      data => {
+
+        if (data != null) {
+          if (data.length > 0) {
+            //--------------------------------------Function to Check for the Licence---------------------------------------
+            if (data[0].ErrorMsg != undefined) {
+              if (data[0].ErrorMsg == "7001") {
+                this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+                  this.translate.instant("CommonSessionExpireMsg"));
+                return;
+              }
+            }
+            //-----------------------------------End for the Function Check for Licence--------------------------------
+            if (data[0].ErrorMsg == "") {
+
+              this.toastr.success('', this.translate.instant("ItemsTranSuccessfully") + data[0].SuccessNo);
+
+              oWhsTransAddLot = {};
+              oWhsTransAddLot.Header = [];
+              oWhsTransAddLot.Detail = [];
+              oWhsTransAddLot.UDF = [];
+
+              this.clearData();
+            }
+            else {
+              this.toastr.success('', data[0].ErrorMsg);
+            }
+          }
+        }
+      },
+      error => {
+        this.toastr.error('', error);
+      }
+    );
+  }
+
+  clearData() {
+    this.itemCode = "";
+    this.itemName = "";
+    this.ItemTracking = "";
+    this.lotValue = "";
+    this.transferQty = "";
+    this.toBin = "";
+    this.fromBin = "";
+    this.onHandQty = "";
+    this.Remarks = "";
   }
 
 
@@ -502,6 +605,8 @@ export class BinTransferComponent implements OnInit {
     } else if (this.lookupfor == "BatchNoList") {
       this.lotValue = $event[0];
       this.fromBin = $event[6];
+      this.transferQty = $event[7];
+      this.onHandQty = $event[7];
     } else if (this.lookupfor == "SBTrackFromBin") {
       this.fromBin = $event[3];
       this.transferQty = $event[6];
@@ -538,6 +643,7 @@ export class BinTransferComponent implements OnInit {
     else if (this.ItemTracking == "N") {
       this.isItemSerialTrack = false;
       this.showBatchNo = false;
+      this.editTransferQty = false;
       // olbllotno.setText("")
     }
 
@@ -545,4 +651,22 @@ export class BinTransferComponent implements OnInit {
     this.toBin = "";
     this.lotValue = "";
   }
+
+  ViewLinesRowDeleteClick(selection, rowindex) {
+
+    this.TransferedItemsDetail.splice(rowindex, 1);
+    console.log(this.TransferedItemsDetail.length);
+    // const itemDetails = selection.selectedRows[0].dataItem;
+    // this.TransferedItemsDetail.splice(index, 1);
+
+  }
+
+  OnOKClick() {
+    this.viewLines = false;
+  }
+
+  deleteAllClick() {
+    this.TransferedItemsDetail = [];
+  }
+
 }

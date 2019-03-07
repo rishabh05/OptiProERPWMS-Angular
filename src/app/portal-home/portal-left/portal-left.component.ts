@@ -106,4 +106,7 @@ export class PortalLeftComponent implements OnInit {
     this.commonService.setCurrentSideBar(currentSidebarInfo);
   }
 
+  OnBinTransferClick(){
+    localStorage.setItem("towhseId", localStorage.getItem("whseId"));
+  }
 }

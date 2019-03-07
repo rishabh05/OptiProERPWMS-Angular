@@ -3,7 +3,7 @@
         <div class="opti_container_inner" [perfectScrollbar]=" ">
 
             <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
-                {{'BinTransfer'|translate}}
+                {{PageTitle}}
             </h3>
             <div class="row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
@@ -26,7 +26,8 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'ItemName'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm"  name="itemName" [(ngModel)]="itemName" disabled>
+                                <input type="text" class="form-control form-control-sm"  name="itemName" 
+                                [(ngModel)]="itemName" [disabled]=true>
                             </div>
                         </div>
                     </div>
@@ -80,7 +81,7 @@
                         </label>
                         <div class="col-sm-9">
                             <input  type="number" min="0" class="form-control form-control-sm text-right" placeholder="0.000" 
-                            name="onHandQty" [(ngModel)]="onHandQty" disabled>
+                            name="onHandQty" [(ngModel)]="onHandQty" [disabled]=true>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -105,7 +106,7 @@
             <hr />
         </div>
         <div class="col-sm-12 col-12">
-            <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-check" role="presentation"></span> {{'Submit'|translate}}</button>
+            <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text" (click)="SubmitPutAway()"><span class="k-icon k-i-check" role="presentation"></span> {{'Submit'|translate}}</button>
             <button type="button" class="btn btn-primary k-button btn-sm btn-icon-with-text" (click)="AddLineLots()"><span class="k-icon k-i-plus" role="presentation" ></span> {{'AddMore'|translate}}</button>   
             <button type="button" class="btn btn-primary k-button btn-sm btn-icon-with-text mr-1" (click)="ShowSavedData()"><span class="k-icon k-i-preview" role="presentation"></span> {{'ViewLines'|translate}}</button>
             <div class="clearfix mt-1 d-block d-sm-none"></div> 
@@ -132,6 +133,7 @@
             <!-- grid start -->
             <ng-container *ngIf="showLoader==false">
               <kendo-grid 
+              class="no-shadow"
                 [kendoGridBinding]="TransferedItemsDetail" 
                 [resizable]="false" 
                 [pageSize]="50" 
@@ -171,17 +173,16 @@
               </kendo-grid-column>
               <!-- grid for mobile end -->
 
-                <kendo-grid-column media="(min-width: 768px)" field="ItemCode" title="Item" [width]="160"></kendo-grid-column>
-                <kendo-grid-column media="(min-width: 768px)" field="Qty" class="text-right" title="Qty" [width]="160"></kendo-grid-column>
+                <kendo-grid-column class="pl-1" media="(min-width: 768px)" field="ItemCode" title="Item" [width]="160"></kendo-grid-column>
+                <kendo-grid-column media="(min-width: 768px)" field="Qty" headerClass="text-right" class="text-right" title="Qty" [width]="60"></kendo-grid-column>
                 <kendo-grid-column media="(min-width: 768px)" field="LotNo" [width]="160" title="Batch"></kendo-grid-column>
                 <kendo-grid-column media="(min-width: 768px)" field="BinNo" [width]="160" title="From Bin" ></kendo-grid-column>
                 <kendo-grid-column media="(min-width: 768px)" field="ToBin" title="To Bin" [width]="160"></kendo-grid-column>
-                <kendo-grid-column media="(min-width: 768px)" field="Delete" title="Delete" width="120">
-                  <ng-template kendoGridCellTemplate let-dataItem>
-                    <button type="button" class="k-button-icon k-button"><span class="k-icon k-i-delete" role="presentation"></span></button>
+                <kendo-grid-column media="(min-width: 768px)" field="Delete" title="Delete" width="60">
+                  <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                    <button type="button" class="k-button-icon k-button" (click)="ViewLinesRowDeleteClick($event, rowIndex)"><span class="k-icon k-i-delete" role="presentation"></span></button>
                   </ng-template>
                 </kendo-grid-column>
-             
               </kendo-grid>
             </ng-container>
             <!-- grid end -->
@@ -193,7 +194,7 @@
           <hr />
       </div>
       <div class="col-sm-12 col-12">
-          <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text" (click)="toggle()"><span class="k-icon k-i-check" role="presentation"></span> {{'Ok'|translate}}</button>
+          <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text" (click)="OnOKClick()"><span class="k-icon k-i-check" role="presentation"></span> {{'Ok'|translate}}</button>
           <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="openModal(template)"><span class="k-icon k-i-delete" role="presentation"></span> {{'DeleteAll'|translate}}</button>
       </div>
     </div>
@@ -210,7 +211,7 @@
         {{'DoYouWantToDeleteAllTheLines'|translate}}
     </div>
     <div class="modal-footer">
-      <button class="btn btn-primary k-button btn-sm" type="button">{{'Ok'|translate}}</button>
+      <button class="btn btn-primary k-button btn-sm" type="button" (click) = "deleteAllClick()">{{'Ok'|translate}}</button>
       <button class="btn btn-default k-button btn-sm" type="button">{{'Close'|translate}}</button>
     </div>
   </ng-template>

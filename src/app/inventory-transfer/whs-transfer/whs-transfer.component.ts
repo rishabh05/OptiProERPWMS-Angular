@@ -32,6 +32,7 @@ export class WhsTransferComponent implements OnInit {
 
   ngOnInit() {
     this.fromWhse = localStorage.getItem("whseId");
+    
   }
 
   getToWhse(){
@@ -66,6 +67,7 @@ export class WhsTransferComponent implements OnInit {
       this.toastr.error('', this.translate.instant("ToWhsBlankErrMsg"));
       return;
     }
+    localStorage.setItem("towhseId", this.toWhse);
     this.selectedItem = module;
     this.closeRightSidebar();
     this.router.navigateByUrl('home/' + module, { skipLocationChange: true });
@@ -85,7 +87,6 @@ export class WhsTransferComponent implements OnInit {
     if (this.toWhse == "" || this.toWhse == undefined) {
       return;
     }
-
     this.inventoryTransferService.isWHsExists(this.toWhse).subscribe(
       data => {
         if(data != undefined && data.length > 0){
