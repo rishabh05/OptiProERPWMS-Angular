@@ -239,6 +239,12 @@ file-drop .drop-zone.over {
 .input-group>.input-group-append.has-seprate-btn>.btn + .btn.separate-btn{
     border-radius: 0.25rem;
 }
+.btn-group-sm>.btn, .btn-sm {
+    padding:.313rem .5rem;
+    font-size: 1rem;
+    display: inline-flex;
+}
+
 /////////////////////////////////////////////////////////////////////
 ///////////////////////////// Modal Style /////////////////////
 ////////////////////////////////////////////////////////////////////
