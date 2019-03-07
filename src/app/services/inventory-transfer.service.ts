@@ -40,11 +40,6 @@ export class InventoryTransferService {
     return this.httpclient.post(this.config_params.service_url + "/api/GoodsIssue/GetLotWithoutBinNItemCode", jObject, this.httpOptions);
   }
 
-  getToBIN(fromBin: string): Observable<any> {
-    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), ItemCode: '', WhsCode: localStorage.getItem("whseId"), FromBin: fromBin }]) };
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetToBIN", jObject, this.httpOptions);
-  }
-
   submitBinTransfer(oWhsTransAddLot: any): Observable<any> {
     var jObject = { BinTransToken: JSON.stringify(oWhsTransAddLot) };
     return this.httpclient.post(this.config_params.service_url + "/api/BinTransfer/PutAway", jObject, this.httpOptions);
@@ -120,7 +115,7 @@ export class InventoryTransferService {
     }
   }
 
-  isBinExist(ToBin: string, oToWhs: string): Observable<any> {
+  isToBinExist(ToBin: string, oToWhs: string): Observable<any> {
     var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), BinCode: ToBin, ItemCode: '', WhsCode: oToWhs}]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsBinExist", jObject, this.httpOptions);
   }
@@ -130,5 +125,6 @@ export class InventoryTransferService {
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetToBIN", jObject, this.httpOptions);
   }
 
-  
+
+
 }

@@ -68,6 +68,7 @@
   "ToBinMsg": "To bin cannot be blank",
   "EnterLotQuantity": "Enter Batch Quantity",
   "WhsTransferEdit.overwrite": "Do you want to overwrite the quantity?",
+  "ItemsTranSuccessfully": "Items Transferred Successfully with reference no.",
   "LotNo": "Lot No.",
   "TOTALQTY": "Total Qty.",
   "BinNo": "Bin No.",

@@ -20,20 +20,21 @@ export class PortalTopComponent implements OnInit {
   openThemeSetting: boolean = false;
   selectedItem: any;
   defaultWHS: { OPTM_WHSE: any; BPLid: number; };
-  
-  constructor(
-    private modalService: NgbModal, private commonService: Commonservice) { }
-
-  
   selectedThemeColor: string = opticonstants.DEFAULTTHEMECOLOR;
   DBName: string;
   loggedInUserName: string;
+  loggedinWarehouse: string;
+
+
+  constructor(
+    private modalService: NgbModal, private commonService: Commonservice) { }
 
   ngOnInit() {
     
     UIHelper.manageThemeCssFile();
     this.loggedInUserName = localStorage.getItem("UserId");
     this.DBName = localStorage.getItem("CompID");
+    this.loggedinWarehouse = localStorage.getItem("whseId");
   }
 
   // open and close theme setting side panel
