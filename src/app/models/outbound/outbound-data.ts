@@ -1,5 +1,6 @@
 export class OutboundData{
 CustomerData:any;
 OrderData:any;
-SelectedItem:any
+SelectedItem:any;
+SelectedMeterials:any
 }

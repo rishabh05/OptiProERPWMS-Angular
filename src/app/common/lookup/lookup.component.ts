@@ -145,6 +145,7 @@ export class LookupComponent implements OnInit {
     this.pagable = true;
     this.pagesize = 50;
     this.showSelection = true;
+    this.selectedValues=[];
     this.table_head = [
       {
         field: 'LOTNO',
@@ -388,8 +389,8 @@ export class LookupComponent implements OnInit {
       this.selectedValues.push(servivceItem);
     }
     else {
-      let rixd: number= this.selectedValues.findIndex(i => i.LOTNO == servivceItem.LOTNO && i.LOTNO == servivceItem.BINNO)
-      this.selectedValues.slice(rixd, 1);
+     // let rixd: number= this.selectedValues.findIndex(i => i.LOTNO == servivceItem.LOTNO && i.LOTNO == servivceItem.BINNO)
+      this.selectedValues.slice(index, 1);
     }
   }
 
