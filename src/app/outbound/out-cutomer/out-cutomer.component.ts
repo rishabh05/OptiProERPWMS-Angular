@@ -20,6 +20,7 @@ export class OutCutomerComponent implements OnInit {
   public selectedCustomerElement: any;
   public customerName:string='';
   public customerCode:string='';
+  public viewLines: boolean;
 
 
   constructor(private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) { }

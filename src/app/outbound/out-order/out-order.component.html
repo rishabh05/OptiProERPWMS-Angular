@@ -32,7 +32,13 @@
                 <!-- Serial tracked item -->
                 <div class="row" *ngIf="soItemsDetail!=undefined && soItemsDetail!=null && soItemsDetail.length>0 ">
                     <div class="col-12 col-sm-12 col-md-12">
-                        <h4 class="mb-3 mt-3 mb-3 mt-3 border-bottom pb-2">{{'Items'|translate}}</h4>
+                        <h4 class="mt-3">{{'Items'|translate}}</h4>                        
+                        <div class="col-12 mb-2 border-bottom pb-2"></div>
+                        <ul class="color-label">
+                            <li><span class="color-block blue"></span><span>Blue</span></li>
+                            <li><span class="color-block red"></span><span>Red</span></li>
+                            <li><span class="color-block green"></span><span>Green</span></li>
+                        </ul>
                         <kendo-grid class="no-shadow" [kendoGridBinding]="soItemsDetail" [resizable]="true" [pageSize]="pageSize"
                             [pageable]="true" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
                             [columnMenu]="{ columnChooser: false }" [height]=gridHeight [selectable]
@@ -75,7 +81,7 @@
             </div>
             <div class="col-sm-12 col-12">
                 
-                <button type="button" class="btn btn-light k-button btn-sm btn-transparent btn-icon" (click)="openOutboundCustomer()"
+                <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" (click)="openOutboundCustomer()"
                     roterLink="binTransfer" skipLocationChange><i class="opti-icon-arrow-back"></i></button>
             </div>
         </div>

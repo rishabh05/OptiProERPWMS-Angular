@@ -171,6 +171,24 @@ height: 4px;
 background-color: #000000;
 opacity: 0.4;
 }
+body .k-grid tbody tr.serial{
+    background-color: #ffcece
+}
+body .k-grid tbody tr.serial:hover{
+    background-color: #e2b5b5
+}
+body .k-grid tbody tr.batch{
+    background-color: #b6def9
+}
+body .k-grid tbody tr.batch:hover{
+    background-color: #a5d1ef
+}
+body .k-grid tbody tr.none{
+    background-color: #b6f9c4
+}
+body .k-grid tbody tr.none:hover{
+    background-color: #a1eab0
+}
 
 @media all and (max-width: 240px) {
 .toast-container .toast.div {
@@ -199,12 +217,3 @@ width: 25em;
 }
 }
 
-body .k-grid tbody tr.serial{
-    background: #f79d9d
-}
-body .k-grid tbody tr.batch{
-    background: #92cff8
-}
-body .k-grid tbody tr.none{
-    background: #82ee87
-}
