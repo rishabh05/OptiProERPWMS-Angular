@@ -118,5 +118,10 @@ export class WhsTransferComponent implements OnInit {
 
   viewSwitch(){
     this.whsView = !this.whsView;
+    if (this.toWhse == "" || this.toWhse == undefined) {
+      this.toastr.error('', this.translate.instant("ToWhsBlankErrMsg"));
+      return;
+    }
+    localStorage.setItem("towhseId", this.toWhse);
   }
 }

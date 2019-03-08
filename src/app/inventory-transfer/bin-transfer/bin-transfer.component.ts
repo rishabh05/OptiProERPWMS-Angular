@@ -24,7 +24,7 @@ export class BinTransferComponent implements OnInit {
   itemCode: string = "";
   lotValue: string = "";
   fromBin: string = "";
-  transferQty: any = "";
+  transferQty: string = "";
   itemName: string = "";
   ItemTracking: string = "";
   serviceData: any[];
@@ -158,7 +158,7 @@ export class BinTransferComponent implements OnInit {
           this.showItemName = true;
           // oWhsTransEditLot.Remarks = data[0].getValue();
           this.ItemTracking = data[0].TRACKING;
-          this.transferQty = 0.000;
+          this.transferQty = "0.000";
           this.onHandQty = 0.000;
           this.CheckTrackingandVisiblity();
           if(localStorage.getItem("whseId") != localStorage.getItem("towhseId")){
@@ -198,7 +198,8 @@ export class BinTransferComponent implements OnInit {
             this.onHandQty = data[0].TOTALQTY;
             // oWhsTransEditLot.Qty = oCurrentController.getFormatedValue(oWhsTransEditLot.Qty);
             this.transferQty = this.onHandQty
-
+            this.formatTransferNumbers();
+            this.formatOnHandQty();
             // oWhsTransEditLot.Item = data[0].ITEMCODE;
             // oWhsTransEditLot.ITEMNAME = data[0].ITEMCODE;
             // oWhsTransEditLot.Tracking = data[0].TRACKING;
@@ -267,6 +268,9 @@ export class BinTransferComponent implements OnInit {
         if (data != null) {
           if (data.length > 0) {
             this.showLookupLoader = false;
+            // for(var i; i<data.length(); i++){
+            //   data[i].
+            // }
             this.serviceData = data;
             if (this.ItemTracking != "N") {
               this.lookupfor = "SBTrackFromBin";
@@ -593,7 +597,7 @@ export class BinTransferComponent implements OnInit {
       // }
     }
     else {
-      if (this.transferQty <= 0) {
+      if (Number(this.transferQty) <= 0) {
         this.toastr.error('', this.translate.instant("Enterquantitygreaterthanzero"));
         return false;
       }
@@ -620,7 +624,7 @@ export class BinTransferComponent implements OnInit {
       this.itemName = $event[1];
       this.ItemTracking = $event[2];
       this.showItemName = true;
-      this.transferQty = 0.000;
+      this.transferQty = "0.000";
       this.onHandQty = 0.000;
       if(localStorage.getItem("whseId") != localStorage.getItem("towhseId")){
         this.getDefaultBin();
@@ -642,6 +646,8 @@ export class BinTransferComponent implements OnInit {
     } else if (this.lookupfor == "toBinsList") {
       this.toBin = $event[0];
     }
+    this.formatTransferNumbers();
+    this.formatOnHandQty();
   }
 
   CheckTrackingandVisiblity() {
@@ -695,4 +701,26 @@ export class BinTransferComponent implements OnInit {
     document.getElementById("modalCloseBtn").click();
   }
 
+  formatTransferNumbers(){
+    var splitString = this.transferQty.toString().split(".", 2);
+    if(splitString.length == 1){
+      this.transferQty = this.transferQty+".000";
+    }else{
+      this.transferQty =  Number(this.transferQty).toFixed(3);
+    }
+  }
+
+  formatOnHandQty(){
+    var splitString = this.onHandQty.toString().split(".", 2);
+    if(splitString.length == 1){
+      this.onHandQty = this.onHandQty+".000";
+    }else{
+      this.onHandQty =  Number(this.onHandQty).toFixed(3);
+    }
+  }
+
+  // SelectAll(id){
+  //   document.getElementById(id).focus();
+  //   document.getElementById(id).onselect(id);
+  // }
 }
