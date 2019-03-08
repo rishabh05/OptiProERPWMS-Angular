@@ -43,4 +43,6 @@
   <app-bin-transfer *ngIf="!whsView"></app-bin-transfer>
   <span [hidden]="showLookupLoader">
     <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
-    </span>
+  </span>
+
+
