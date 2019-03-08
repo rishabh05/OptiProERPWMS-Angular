@@ -1,12 +1,13 @@
-import { Component, OnInit, HostListener, TemplateRef } from '@angular/core';
+import { Component, OnInit, HostListener, TemplateRef, ViewChild, ElementRef } from '@angular/core';
 import { viewLineContent } from '../../DemoData/sales-order';
 import { UIHelper } from '../../helpers/ui.helpers';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { BsModalService, BsModalRef, ModalDirective } from 'ngx-bootstrap/modal';
 import { Commonservice } from 'src/app/services/commonservice.service';
 import { Router } from '../../../../node_modules/@angular/router';
 import { ToastrService } from '../../../../node_modules/ngx-toastr';
 import { InventoryTransferService } from 'src/app/services/inventory-transfer.service';
 import { LangChangeEvent, TranslateService } from '../../../../node_modules/@ngx-translate/core';
+import { Template } from '@angular/compiler/src/render3/r3_ast';
 
 @Component({
   selector: 'app-bin-transfer',
@@ -39,6 +40,7 @@ export class BinTransferComponent implements OnInit {
   isItemSerialTrack: boolean;
   editTransferQty: boolean;
   PageTitle: string;
+  ModalContent: string;
 
   constructor(private commonservice: Commonservice, private router: Router, private inventoryTransferService: InventoryTransferService, private toastr: ToastrService, private translate: TranslateService, private modalService: BsModalService) {
     let userLang = navigator.language.split('-')[0];
@@ -94,10 +96,25 @@ export class BinTransferComponent implements OnInit {
   }
 
 
-  openModal(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(template,
-      Object.assign({}, { class: 'modal-dialog-centered' })
-    );
+  // openModal(template: TemplateRef<any>) {
+  //   this.modalRef = this.modalService.show(template,
+  //     Object.assign({}, { class: 'modal-dialog-centered' })
+  //   );
+  // }
+  @ViewChild('autoShownModal') autoShownModal: ModalDirective;
+  @ViewChild('transferedItemsBtn') transferedItemsBtn: ElementRef;
+  isModalShown: boolean = false;
+ 
+  showModal(): void {
+    this.isModalShown = true;
+  }
+ 
+  hideModal(): void {
+    this.autoShownModal.hide();
+  }
+ 
+  onHidden(): void {
+    this.isModalShown = false;
   }
 
   OnItemCodeLookupClick() {
@@ -409,7 +426,8 @@ export class BinTransferComponent implements OnInit {
     oWhsTransAddLot.Detail = [];
     // oWhsTransAddLot.Detail = localStorage.getItem("InvPutAwayLot");
     var itemIndex = this.IsInvTransferDetailLineExists(this.itemCode,
-      this.lotValue, this.fromBin, this.toBin, this.Remarks, "");
+    this.lotValue, this.fromBin, this.toBin, this.Remarks, "");
+    var transferedItemsDetail;
     if (itemIndex == -1) {
       this.TransferedItemsDetail.push({
         LineNum: '01',
@@ -437,12 +455,22 @@ export class BinTransferComponent implements OnInit {
         return false;
       }
       else {
-        this.toastr.error('', this.translate.instant("WhsTransferEdit.overwrite"));
-        this.TransferedItemsDetail[itemIndex].Qty = this.transferQty;
+        //this.toastr.error('', this.translate.instant("WhsTransferEdit.overwrite"));
+        this.showModal();
+        this.ModalContent = this.translate.instant("WhsTransferEdit.overwrite");
+        let that = this;
+        
+        setTimeout(()=>{   
+          let el: HTMLElement = this.transferedItemsBtn.nativeElement as HTMLElement; 
+          el.onclick = function(){
+            that.TransferedItemsDetail[itemIndex].Qty = that.transferQty;
+            that.autoShownModal.hide();
+          }
+        }, 1000);
       }
     }
   }
-
+  
   SubmitPutAway() {
     this.AddLineLots();
     var oWhsTransAddLot: any = {};
