@@ -21,6 +21,8 @@ export class WhsTransferComponent implements OnInit {
   toWhs: ToWhs[];
   serviceData: any[];
   lookupfor: string;
+
+  public whsView:boolean = true;
   
   constructor(private commonservice: Commonservice, private router: Router, private inventoryTransferService: InventoryTransferService, private toastr: ToastrService, private translate: TranslateService) {
     let userLang = navigator.language.split('-')[0];
@@ -113,4 +115,8 @@ export class WhsTransferComponent implements OnInit {
       this.toastr.error('', this.translate.instant("FrmnToNotSame"));
     }
   }  
+
+  viewSwitch(){
+    this.whsView = !this.whsView;
+  }
 }
