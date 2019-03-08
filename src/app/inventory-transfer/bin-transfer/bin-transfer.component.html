@@ -203,7 +203,7 @@
   <ng-template #template>
     <div class="modal-header">
       <h4 class="modal-title pull-left">{{'Confirm'|translate}}</h4>
-      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <button id="modalCloseBtn" type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
@@ -211,8 +211,8 @@
         {{'DoYouWantToDeleteAllTheLines'|translate}}
     </div>
     <div class="modal-footer">
-      <button class="btn btn-primary k-button btn-sm" type="button" (click) = "deleteAllClick()">{{'Ok'|translate}}</button>
-      <button class="btn btn-default k-button btn-sm" type="button">{{'Close'|translate}}</button>
+      <button class="btn btn-primary k-button btn-sm" type="button" (click) = "deleteAllOkClick()">{{'Ok'|translate}}</button>
+      <button class="btn btn-default k-button btn-sm" type="button" (click)="modalRef.hide()">{{'Cancel'|translate}}</button>
     </div>
   </ng-template>
 </div>   

@@ -144,7 +144,9 @@ export class BinTransferComponent implements OnInit {
           this.transferQty = 0.000;
           this.onHandQty = 0.000;
           this.CheckTrackingandVisiblity();
-          this.getDefaultBin();
+          if(localStorage.getItem("whseId") != localStorage.getItem("towhseId")){
+            this.getDefaultBin();
+          }
         } else {
           this.toastr.error('', this.translate.instant("InvalidItemCode"));
           this.showItemName = false;
@@ -592,7 +594,9 @@ export class BinTransferComponent implements OnInit {
       this.showItemName = true;
       this.transferQty = 0.000;
       this.onHandQty = 0.000;
-      this.getDefaultBin();
+      if(localStorage.getItem("whseId") != localStorage.getItem("towhseId")){
+        this.getDefaultBin();
+      }
       this.CheckTrackingandVisiblity();
     } else if (this.lookupfor == "BatchNoList") {
       this.lotValue = $event[0];
@@ -658,8 +662,9 @@ export class BinTransferComponent implements OnInit {
     this.viewLines = false;
   }
 
-  deleteAllClick() {
+  deleteAllOkClick() {
     this.TransferedItemsDetail = [];
+    document.getElementById("modalCloseBtn").click();
   }
 
 }
