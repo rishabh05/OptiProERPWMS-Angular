@@ -30,7 +30,7 @@ export class BinTransferComponent implements OnInit {
   lookupfor: string;
   showItemName: boolean = false;
   showBatchNo: boolean = false;
-  Remarks: string="";
+  Remarks: string = "";
   onHandQty: any;
   SysNumber: any;
   LotWhsCode: any;
@@ -72,11 +72,11 @@ export class BinTransferComponent implements OnInit {
 
     //  this.getViewLineList();
     this.viewLines = false;
-    
-    if(localStorage.getItem("towhseId") == localStorage.getItem("whseId")){
+
+    if (localStorage.getItem("towhseId") == localStorage.getItem("whseId")) {
       this.PageTitle = this.translate.instant("BinTransfer");
-    }else{
-      this.PageTitle = this.translate.instant("WarehouseTransfer")+ " From: "+ localStorage.getItem("whseId")+" To: "+localStorage.getItem("towhseId");
+    } else {
+      this.PageTitle = this.translate.instant("WarehouseTransfer") + " From: " + localStorage.getItem("whseId") + " To: " + localStorage.getItem("towhseId");
     }
   }
 
@@ -144,7 +144,7 @@ export class BinTransferComponent implements OnInit {
           this.transferQty = "0.000";
           this.onHandQty = 0.000;
           this.CheckTrackingandVisiblity();
-          if(localStorage.getItem("whseId") != localStorage.getItem("towhseId")){
+          if (localStorage.getItem("whseId") != localStorage.getItem("towhseId")) {
             this.getDefaultBin();
           }
         } else {
@@ -198,27 +198,27 @@ export class BinTransferComponent implements OnInit {
     );
   }
 
-  
+
   getDefaultBin() {
     this.inventoryTransferService.getDefaultBin(this.itemCode, localStorage.getItem("towhseId")).subscribe(
       data => {
         this.getDefaultBinFlag = true;
         if (data != null) {
-              if (data != this.fromBin) {
-                  this.toBin = data;
-              }
-              return;
+          if (data != this.fromBin) {
+            this.toBin = data;
           }
-          else {
-              this.ShowToBins();
-          }
+          return;
+        }
+        else {
+          this.ShowToBins();
+        }
       },
       error => {
         this.toastr.error('', error);
       }
     );
 
-}
+  }
 
 
   ShowLOTList() {
@@ -251,16 +251,16 @@ export class BinTransferComponent implements OnInit {
         if (data != null) {
           if (data.length > 0) {
             this.showLookupLoader = false;
-            // for(var i; i<data.length(); i++){
-            //   data[i].
-            // }
-            this.serviceData = data;
             if (this.ItemTracking != "N") {
               this.lookupfor = "SBTrackFromBin";
             }
             else {
               this.lookupfor = "NTrackFromBin";
+              for (var i=0; i < data.length; i++) {
+                data[i].TOTALQTY = data[i].TOTALQTY.toFixed(3);
+              }
             }
+            this.serviceData = data;
           }
           else {
             this.toastr.error('', this.translate.instant("NoBinsAvailableMsg"));
@@ -289,7 +289,7 @@ export class BinTransferComponent implements OnInit {
               // olblQtyOnhand.setValue(oCurrentController.getFormatedValue(modelBins.oData[0].TOTALQTY.toString()));
               this.SysNumber = data[0].SYSNUMBER;
               this.LotWhsCode = data[0].WHSCODE;
-            //  this.Remarks;// = otxtReason.getValue();
+              //  this.Remarks;// = otxtReason.getValue();
             }
             else {
               if (data[0].Result == "0") {
@@ -598,7 +598,7 @@ export class BinTransferComponent implements OnInit {
       this.showItemName = true;
       this.transferQty = "0.000";
       this.onHandQty = 0.000;
-      if(localStorage.getItem("whseId") != localStorage.getItem("towhseId")){
+      if (localStorage.getItem("whseId") != localStorage.getItem("towhseId")) {
         this.getDefaultBin();
       }
       this.CheckTrackingandVisiblity();
@@ -673,23 +673,20 @@ export class BinTransferComponent implements OnInit {
     document.getElementById("modalCloseBtn").click();
   }
 
-  formatTransferNumbers(){
-    var splitString = this.transferQty.toString().split(".", 2);
-    if(splitString.length == 1){
-      this.transferQty = this.transferQty+".000";
-    }else{
-      this.transferQty =  Number(this.transferQty).toFixed(3);
-    }
+  formatTransferNumbers() {
+    this.transferQty = Number(this.transferQty).toFixed(3);
+    // var splitString = this.transferQty.toString().split(".", 2);
+    // if (splitString.length == 1) {
+    //   this.transferQty = this.transferQty + ".000";
+    // } else {
+    //   this.transferQty = Number(this.transferQty).toFixed(3);
+    // }
   }
 
-  formatOnHandQty(){
-    var splitString = this.onHandQty.toString().split(".", 2);
-    if(splitString.length == 1){
-      this.onHandQty = this.onHandQty+".000";
-    }else{
-      this.onHandQty =  Number(this.onHandQty).toFixed(3);
-    }
+  formatOnHandQty() {
+    this.onHandQty = Number(this.onHandQty).toFixed(3);
   }
+
 
   // SelectAll(id){
   //   document.getElementById(id).focus();
