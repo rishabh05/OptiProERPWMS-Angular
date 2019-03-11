@@ -23,7 +23,7 @@ const routes: Routes = [
       { path: 'form', component:FormFieldComponent },
       { path:'binTransfer', component:BinTransferComponent },
       { path:'whsTransfer', component:WhsTransferComponent },
-      { path:'inbound', component:InboundDetailsComponent },     
+      { path:'inbound', loadChildren:"../inbound/inbound.module#InboundModule"},     
       { path: 'adjustment-counting', loadChildren: "../adjustments-counting/adjustments-counting.module#AdjustmentsCountingModule" }, 
       //{ path: 'inventory-transfer', loadChildren: "../inventory-transfer/inventory-transfer.module#InventoryTransferModule" },
       { path: 'production', loadChildren: "../production/production.module#ProductionModule" },

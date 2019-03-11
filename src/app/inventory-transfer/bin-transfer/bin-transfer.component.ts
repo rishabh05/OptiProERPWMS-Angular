@@ -2,11 +2,11 @@ import { Component, OnInit, HostListener, TemplateRef, ViewChild, ElementRef } f
 import { viewLineContent } from '../../DemoData/sales-order';
 import { UIHelper } from '../../helpers/ui.helpers';
 import { BsModalService, BsModalRef, ModalDirective } from 'ngx-bootstrap/modal';
-import { Commonservice } from 'src/app/services/commonservice.service';
-import { Router } from '../../../../node_modules/@angular/router';
-import { ToastrService } from '../../../../node_modules/ngx-toastr';
-import { InventoryTransferService } from 'src/app/services/inventory-transfer.service';
-import { LangChangeEvent, TranslateService } from '../../../../node_modules/@ngx-translate/core';
+import { Commonservice } from '../../services/commonservice.service';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { InventoryTransferService } from '../../services/inventory-transfer.service';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { Template } from '@angular/compiler/src/render3/r3_ast';
 
 @Component({
@@ -719,21 +719,9 @@ export class BinTransferComponent implements OnInit {
 
   formatTransferNumbers() {
     this.transferQty = Number(this.transferQty).toFixed(3);
-    // var splitString = this.transferQty.toString().split(".", 2);
-    // if (splitString.length == 1) {
-    //   this.transferQty = this.transferQty + ".000";
-    // } else {
-    //   this.transferQty = Number(this.transferQty).toFixed(3);
-    // }
   }
 
   formatOnHandQty() {
     this.onHandQty = Number(this.onHandQty).toFixed(3);
   }
-
-
-  // SelectAll(id){
-  //   document.getElementById(id).focus();
-  //   document.getElementById(id).onselect(id);
-  // }
 }

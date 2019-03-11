@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { TrnaslateLazyModule } from 'src/translate-lazy.module';
+import { TrnaslateLazyModule } from '../../translate-lazy.module';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { InboundRoutingModule } from './inbound-routing.module';
 import { InboundDetailsComponent } from './inbound-details/inbound-details.component';
+import { InboundMasterComponent } from './inbound-master.component';
 
 @NgModule({
-  declarations: [InboundDetailsComponent],
+  declarations: [InboundDetailsComponent, InboundMasterComponent],
   imports: [
     CommonModule,
     TrnaslateLazyModule,

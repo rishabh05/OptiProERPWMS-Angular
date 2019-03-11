@@ -6,7 +6,7 @@ import { ItemLabelComponent } from './item-label/item-label.component';
 import { BinLabelComponent } from './bin-label/bin-label.component';
 import { InventoryEnquiryComponent } from './inventory-enquiry/inventory-enquiry.component';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { TrnaslateLazyModule } from 'src/translate-lazy.module';
+import { TrnaslateLazyModule } from '../../translate-lazy.module';
 
 @NgModule({
   declarations: [ItemLabelComponent, BinLabelComponent, InventoryEnquiryComponent],
