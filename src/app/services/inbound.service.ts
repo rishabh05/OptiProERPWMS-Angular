@@ -34,5 +34,10 @@ export class InboundService {
     };
     return this.httpclient.post(this.config_params.service_url +"/api/GoodReceiptPO/GetVendorList", jObject, this.httpOptions);
   }
+
+  IsVendorExists(vendor: string): Observable<any> {
+    var jObject = { VendorCode: JSON.stringify([{ UserId: '', CompanyDBId: localStorage.getItem("CompID"), VendorCode: vendor}]) };
+    return this.httpclient.post(this.config_params.service_url +"/api/GoodReceiptPO/IsVendorExists", jObject, this.httpOptions);
+  }
 }
 

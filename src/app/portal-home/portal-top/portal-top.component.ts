@@ -6,7 +6,7 @@ import { opticonstants } from '../../constants';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 
 
 @Component({
@@ -27,7 +27,13 @@ export class PortalTopComponent implements OnInit {
 
 
   constructor(
-    private modalService: NgbModal, private commonService: Commonservice) { }
+    private modalService: NgbModal, private commonService: Commonservice, private toastr: ToastrService, private router: Router, private translate: TranslateService) {
+      let userLang = navigator.language.split('-')[0];
+      userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
+      translate.use(userLang);
+      translate.onLangChange.subscribe((event: LangChangeEvent) => {
+      });
+  }
 
   ngOnInit() {
     
@@ -60,7 +66,7 @@ export class PortalTopComponent implements OnInit {
     this.modalService.open(content, { centered: true });
   }  
 
-  signOut(toastr: ToastrService, router: Router, message: string){
+  signOut(){
     // this.toastr.success('', message, this.toast_config);
 
     // // let login_page = this.common_params.application_path + '/index.html#login';
@@ -77,7 +83,8 @@ export class PortalTopComponent implements OnInit {
     // localStorage.removeItem('whseId');
     
     // this.router.navigateByUrl('/account');    
-    this.commonService.RemoveLicenseAndSignout(toastr, router, message)
+    this.commonService.RemoveLicenseAndSignout(this.toastr, this.router, 
+    this.translate.instant("CommonSessionExpireMsg"))
 
   }
 

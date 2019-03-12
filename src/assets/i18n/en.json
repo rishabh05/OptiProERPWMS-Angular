@@ -112,6 +112,7 @@
   "GoodsReciptPO": "Goods Recipt PO",
   "VendCode": "Vend. Code",
   "VendorList": "Vendor List",
+  "VendorExistMessge": "Vendor does not exist!",
   "Delivery": "Delivery",
   "Customer": "Customer",
   "DeleiveryToCustomer": "Delivery to Customer",
