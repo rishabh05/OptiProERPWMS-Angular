@@ -21,12 +21,12 @@ export class InboundDetailsComponent implements OnInit {
 
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent) {
-      let userLang = navigator.language.split('-')[0];
-      userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
-      translate.use(userLang);
-      translate.onLangChange.subscribe((event: LangChangeEvent) => {
-      });
-     }
+    let userLang = navigator.language.split('-')[0];
+    userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
+    translate.use(userLang);
+    translate.onLangChange.subscribe((event: LangChangeEvent) => {
+    });
+  }
 
   ngOnInit() {
   }
@@ -77,7 +77,7 @@ export class InboundDetailsComponent implements OnInit {
             this.VendCode = data[0].ID;
             this.VendName = data[0].Name;
           }
-        }else{
+        } else {
           this.toastr.error('', this.translate.instant("VendorExistMessge"));
         }
       },

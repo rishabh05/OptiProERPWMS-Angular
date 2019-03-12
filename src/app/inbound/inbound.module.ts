@@ -9,10 +9,11 @@ import { InboundRoutingModule } from './inbound-routing.module';
 import { InboundDetailsComponent } from './inbound-details/inbound-details.component';
 import { InboundMasterComponent } from './inbound-master.component';
 import { InboundPolistComponent } from './inbound-polist/inbound-polist.component';
+import { InboundGRPOComponent } from './inbound-grpo/inbound-grpo.component';
 
 
 @NgModule({
-  declarations: [InboundDetailsComponent, InboundMasterComponent, InboundPolistComponent],
+  declarations: [InboundDetailsComponent, InboundMasterComponent, InboundPolistComponent, InboundGRPOComponent],
   imports: [
     CommonModule,
     GridModule,
