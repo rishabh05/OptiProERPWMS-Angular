@@ -3,7 +3,7 @@ import { viewLineContent } from '../../DemoData/sales-order';
 import { UIHelper } from '../../helpers/ui.helpers';
 import { BsModalService, BsModalRef, ModalDirective } from 'ngx-bootstrap/modal';
 import { Commonservice } from 'src/app/services/commonservice.service';
-import { Router } from '../../../../node_modules/@angular/router';
+import { Router, ActivatedRoute } from '../../../../node_modules/@angular/router';
 import { ToastrService } from '../../../../node_modules/ngx-toastr';
 import { InventoryTransferService } from 'src/app/services/inventory-transfer.service';
 import { LangChangeEvent, TranslateService } from '../../../../node_modules/@ngx-translate/core';
@@ -42,7 +42,7 @@ export class BinTransferComponent implements OnInit {
   PageTitle: string;
   ModalContent: string;
 
-  constructor(private commonservice: Commonservice, private router: Router, private inventoryTransferService: InventoryTransferService, private toastr: ToastrService, private translate: TranslateService, private modalService: BsModalService) {
+  constructor(private commonservice: Commonservice,private activatedRoute :ActivatedRoute, private router: Router, private inventoryTransferService: InventoryTransferService, private toastr: ToastrService, private translate: TranslateService, private modalService: BsModalService) {
     let userLang = navigator.language.split('-')[0];
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
     translate.use(userLang);
@@ -723,4 +723,7 @@ export class BinTransferComponent implements OnInit {
   //   document.getElementById(id).focus();
   //   document.getElementById(id).onselect(id);
   // }
+  goback(){
+    console.log(this.activatedRoute)
+  }
 }
