@@ -8,11 +8,11 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import * as $ from 'jquery';
 import 'bootstrap';
-import { ColumnSetting } from 'src/app/models/CommonData';
-import { OutboundData } from 'src/app/models/outbound/outbound-data';
-import { TranslateService, LangChangeEvent } from '../../../../node_modules/@ngx-translate/core';
+import { ColumnSetting } from '../../models/CommonData';
+import { OutboundData } from '../../models/outbound/outbound-data';
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { GridComponent } from '@progress/kendo-angular-grid';
-import { UIHelper } from 'src/app/helpers/ui.helpers';
+import { UIHelper } from '../../helpers/ui.helpers';
 import { State } from '@progress/kendo-data-query';
 // import { UIHelper } from '../../../helpers/ui.helpers';
 // import { Http, ResponseContentType } from '@angular/http';
@@ -103,7 +103,9 @@ export class LookupComponent implements OnInit {
     } else if (this.lookupfor == "toBinsList") {
       this.showSBTrackFromBinList();
     }
-
+    else if(this.lookupfor == "VendorList"){
+      this.showVendorList();
+    }
     else if (this.lookupfor == "out-customer") {
       this.showCustomerList();
     }
@@ -338,7 +340,28 @@ export class LookupComponent implements OnInit {
     }
   }
 
-
+  showVendorList() {
+    this.table_head = [
+      {
+        field: 'CARDCODE',
+        title: this.translate.instant("VenderCode"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'CARDNAME',
+        title: this.translate.instant("Name"),
+        type: 'text',
+        width: '100'
+      }
+    ];
+    this.lookupTitle = this.translate.instant("VendorList");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
 
   showOutSOList() {
 

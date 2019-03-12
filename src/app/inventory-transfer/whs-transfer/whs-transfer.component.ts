@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { InventoryTransferService } from '../../services/inventory-transfer.service';
 import { ToastrService } from 'ngx-toastr';
-import { ToWhs } from 'src/app/models/InventoryTransfer/ToWhs';
-import { CurrentSidebarInfo } from 'src/app/models/sidebar/current-sidebar-info';
+import { ToWhs } from '../../models/InventoryTransfer/ToWhs';
+import { CurrentSidebarInfo } from '../../models/sidebar/current-sidebar-info';
 import { Router } from '@angular/router';
-import { Commonservice } from 'src/app/services/commonservice.service';
-import { TranslateService, LangChangeEvent } from '../../../../node_modules/@ngx-translate/core';
+import { Commonservice } from '../../services/commonservice.service';
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-whs-transfer',

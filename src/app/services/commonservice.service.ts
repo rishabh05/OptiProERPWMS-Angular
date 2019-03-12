@@ -4,8 +4,8 @@ import { environment } from '../../environments/environment.prod';
 import { opticonstants } from '../constants';
 import { CurrentSidebarInfo } from '../models/sidebar/current-sidebar-info';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { ToastrService } from '../../../node_modules/ngx-toastr';
-import { Router } from '../../../node_modules/@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'

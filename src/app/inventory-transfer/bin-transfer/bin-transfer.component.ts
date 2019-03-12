@@ -2,11 +2,11 @@ import { Component, OnInit, HostListener, TemplateRef, ViewChild, ElementRef } f
 import { viewLineContent } from '../../DemoData/sales-order';
 import { UIHelper } from '../../helpers/ui.helpers';
 import { BsModalService, BsModalRef, ModalDirective } from 'ngx-bootstrap/modal';
-import { Commonservice } from 'src/app/services/commonservice.service';
-import { Router, ActivatedRoute } from '../../../../node_modules/@angular/router';
-import { ToastrService } from '../../../../node_modules/ngx-toastr';
-import { InventoryTransferService } from 'src/app/services/inventory-transfer.service';
-import { LangChangeEvent, TranslateService } from '../../../../node_modules/@ngx-translate/core';
+import { Commonservice } from '../../services/commonservice.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { InventoryTransferService } from '../../services/inventory-transfer.service';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { Template } from '@angular/compiler/src/render3/r3_ast';
 
 @Component({
@@ -31,7 +31,7 @@ export class BinTransferComponent implements OnInit {
   lookupfor: string;
   showItemName: boolean = false;
   showBatchNo: boolean = false;
-  Remarks: string="";
+  Remarks: string = "";
   onHandQty: any;
   SysNumber: any;
   LotWhsCode: any;
@@ -41,6 +41,7 @@ export class BinTransferComponent implements OnInit {
   editTransferQty: boolean;
   PageTitle: string;
   ModalContent: string;
+  TransferedItemsDetail: any[] = [];
 
   constructor(private commonservice: Commonservice,private activatedRoute :ActivatedRoute, private router: Router, private inventoryTransferService: InventoryTransferService, private toastr: ToastrService, private translate: TranslateService, private modalService: BsModalService) {
     let userLang = navigator.language.split('-')[0];
@@ -74,11 +75,11 @@ export class BinTransferComponent implements OnInit {
 
     //  this.getViewLineList();
     this.viewLines = false;
-    
-    if(localStorage.getItem("towhseId") == localStorage.getItem("whseId")){
+
+    if (localStorage.getItem("towhseId") == localStorage.getItem("whseId")) {
       this.PageTitle = this.translate.instant("BinTransfer");
-    }else{
-      this.PageTitle = this.translate.instant("WarehouseTransfer")+ " From: "+ localStorage.getItem("whseId")+" To: "+localStorage.getItem("towhseId");
+    } else {
+      this.PageTitle = this.translate.instant("WarehouseTransfer") + " From: " + localStorage.getItem("whseId") + " To: " + localStorage.getItem("towhseId");
     }
   }
 
@@ -96,23 +97,23 @@ export class BinTransferComponent implements OnInit {
   }
 
 
-  // openModal(template: TemplateRef<any>) {
-  //   this.modalRef = this.modalService.show(template,
-  //     Object.assign({}, { class: 'modal-dialog-centered' })
-  //   );
-  // }
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template,
+      Object.assign({}, { class: 'modal-dialog-centered' })
+    );
+  }
   @ViewChild('autoShownModal') autoShownModal: ModalDirective;
   @ViewChild('transferedItemsBtn') transferedItemsBtn: ElementRef;
   isModalShown: boolean = false;
- 
+
   showModal(): void {
     this.isModalShown = true;
   }
- 
+
   hideModal(): void {
     this.autoShownModal.hide();
   }
- 
+
   onHidden(): void {
     this.isModalShown = false;
   }
@@ -161,7 +162,7 @@ export class BinTransferComponent implements OnInit {
           this.transferQty = "0.000";
           this.onHandQty = 0.000;
           this.CheckTrackingandVisiblity();
-          if(localStorage.getItem("whseId") != localStorage.getItem("towhseId")){
+          if (localStorage.getItem("whseId") != localStorage.getItem("towhseId")) {
             this.getDefaultBin();
           }
         } else {
@@ -215,27 +216,27 @@ export class BinTransferComponent implements OnInit {
     );
   }
 
-  
+
   getDefaultBin() {
     this.inventoryTransferService.getDefaultBin(this.itemCode, localStorage.getItem("towhseId")).subscribe(
       data => {
         this.getDefaultBinFlag = true;
         if (data != null) {
-              if (data != this.fromBin) {
-                  this.toBin = data;
-              }
-              return;
+          if (data != this.fromBin) {
+            this.toBin = data;
           }
-          else {
-              this.ShowToBins();
-          }
+          return;
+        }
+        else {
+          this.ShowToBins();
+        }
       },
       error => {
         this.toastr.error('', error);
       }
     );
 
-}
+  }
 
 
   ShowLOTList() {
@@ -249,6 +250,9 @@ export class BinTransferComponent implements OnInit {
             return;
           }
           this.showLookupLoader = false;
+          for (var i = 0; i < data.length; i++) {
+            data[i].TOTALQTY = data[i].TOTALQTY.toFixed(3);
+          }
           this.serviceData = data;
           this.lookupfor = "BatchNoList";
         } else {
@@ -268,16 +272,16 @@ export class BinTransferComponent implements OnInit {
         if (data != null) {
           if (data.length > 0) {
             this.showLookupLoader = false;
-            // for(var i; i<data.length(); i++){
-            //   data[i].
-            // }
-            this.serviceData = data;
             if (this.ItemTracking != "N") {
               this.lookupfor = "SBTrackFromBin";
             }
             else {
               this.lookupfor = "NTrackFromBin";
+              for (var i = 0; i < data.length; i++) {
+                data[i].TOTALQTY = data[i].TOTALQTY.toFixed(3);
+              }
             }
+            this.serviceData = data;
           }
           else {
             this.toastr.error('', this.translate.instant("NoBinsAvailableMsg"));
@@ -306,7 +310,7 @@ export class BinTransferComponent implements OnInit {
               // olblQtyOnhand.setValue(oCurrentController.getFormatedValue(modelBins.oData[0].TOTALQTY.toString()));
               this.SysNumber = data[0].SYSNUMBER;
               this.LotWhsCode = data[0].WHSCODE;
-            //  this.Remarks;// = otxtReason.getValue();
+              //  this.Remarks;// = otxtReason.getValue();
             }
             else {
               if (data[0].Result == "0") {
@@ -415,18 +419,14 @@ export class BinTransferComponent implements OnInit {
   }
 
 
-  TransferedItemsDetail: any[] = [];
+
 
   AddLineLots() {
     if (!this.CheckValidation()) {
       return;
     }
-
-    var oWhsTransAddLot: any = {};
-    oWhsTransAddLot.Detail = [];
-    // oWhsTransAddLot.Detail = localStorage.getItem("InvPutAwayLot");
     var itemIndex = this.IsInvTransferDetailLineExists(this.itemCode,
-    this.lotValue, this.fromBin, this.toBin, this.Remarks, "");
+      this.lotValue, this.fromBin, this.toBin, this.Remarks, "");
     var transferedItemsDetail;
     if (itemIndex == -1) {
       this.TransferedItemsDetail.push({
@@ -459,19 +459,25 @@ export class BinTransferComponent implements OnInit {
         this.showModal();
         this.ModalContent = this.translate.instant("WhsTransferEdit.overwrite");
         let that = this;
-        
-        setTimeout(()=>{   
-          let el: HTMLElement = this.transferedItemsBtn.nativeElement as HTMLElement; 
-          el.onclick = function(){
+
+        setTimeout(() => {
+          let el: HTMLElement = this.transferedItemsBtn.nativeElement as HTMLElement;
+          el.onclick = function () {
             that.TransferedItemsDetail[itemIndex].Qty = that.transferQty;
             that.autoShownModal.hide();
+            that.clearData();
           }
         }, 1000);
       }
     }
   }
-  
+
+  showValidation: boolean = true;
   SubmitPutAway() {
+    this.showValidation = true;
+    if (this.TransferedItemsDetail.length > 0) {
+      this.showValidation = false;
+    }
     this.AddLineLots();
     var oWhsTransAddLot: any = {};
     oWhsTransAddLot.Header = [];
@@ -483,20 +489,18 @@ export class BinTransferComponent implements OnInit {
       this.TransferedItemsDetail[i].LineNum = i;
     }
     oWhsTransAddLot.Detail = this.TransferedItemsDetail;
-    // var oScreenName = sessionStorage.getItem(oCurrentController.SessionProperties.ShowTranScreen);
-    // var Screen = JSON.parse(sessionStorage.getItem(oCurrentController.SessionProperties.SCREENNAME));
-    // if (Screen == "1") {
-
-    //     Screen = "INV";
-    // }
-    // else {
-    //     Screen = "WHS";
-    // }
+    let type;
+    if (localStorage.getItem("whseId") == localStorage.getItem("towhseId")) {
+      type = "";
+    }
+    else {
+      type = "Items";
+    }
 
     oWhsTransAddLot.Header.push({
       WhseCode: localStorage.getItem("whseId"),
       ToWhsCode: localStorage.getItem("towhseId"), //oToWhs,
-      Type: "", //oScreenName,
+      Type: type,
       DiServerToken: localStorage.getItem("Token"), //companyDBObject.DIServerToken,
       CompanyDBId: localStorage.getItem("CompID"), //companyDBObject.CompanyDbName,
       TransType: "WHS",
@@ -543,7 +547,7 @@ export class BinTransferComponent implements OnInit {
               oWhsTransAddLot.Header = [];
               oWhsTransAddLot.Detail = [];
               oWhsTransAddLot.UDF = [];
-
+              this.TransferedItemsDetail = [];
               this.clearData();
             }
             else {
@@ -573,18 +577,24 @@ export class BinTransferComponent implements OnInit {
 
   CheckValidation() {
     if (this.itemCode == "") {
-      this.toastr.error('', this.translate.instant("ItemCannotbeBlank"));
+      if (this.showValidation) {
+        this.toastr.error('', this.translate.instant("ItemCannotbeBlank"));
+      }
       return false;
     }
     if (this.ItemTracking == "B") {
       if (this.lotValue == "") {
-        this.toastr.error('', this.translate.instant("Lotcannotbeblank"));
+        if (this.showValidation) {
+          this.toastr.error('', this.translate.instant("Lotcannotbeblank"));
+        }
         return false;
       }
     }
     if (this.ItemTracking == "S") {
       if (this.lotValue == "") {
-        this.toastr.error('', this.translate.instant("SerialNoCantBlank"));
+        if (this.showValidation) {
+          this.toastr.error('', this.translate.instant("SerialNoCantBlank"));
+        }
         return false;
       }
       // if (oCurrentController.GetQuantity() <= 0 || oCurrentController.GetQuantity() > 1) {
@@ -598,7 +608,9 @@ export class BinTransferComponent implements OnInit {
     }
     else {
       if (Number(this.transferQty) <= 0) {
-        this.toastr.error('', this.translate.instant("Enterquantitygreaterthanzero"));
+        if (this.showValidation) {
+          this.toastr.error('', this.translate.instant("Enterquantitygreaterthanzero"));
+        }
         return false;
       }
     }
@@ -607,11 +619,15 @@ export class BinTransferComponent implements OnInit {
       return false;
     }
     if (this.toBin == "") {
-      this.toastr.error('', this.translate.instant("ToBinMsg"));
+      if (this.showValidation) {
+        this.toastr.error('', this.translate.instant("ToBinMsg"));
+      }
       return false;
     }
     if (this.transferQty == "") {
-      this.toastr.error('', this.translate.instant("EnterLotQuantity"));
+      if (this.showValidation) {
+        this.toastr.error('', this.translate.instant("EnterLotQuantity"));
+      }
       return false;
     }
     return true;
@@ -626,7 +642,7 @@ export class BinTransferComponent implements OnInit {
       this.showItemName = true;
       this.transferQty = "0.000";
       this.onHandQty = 0.000;
-      if(localStorage.getItem("whseId") != localStorage.getItem("towhseId")){
+      if (localStorage.getItem("whseId") != localStorage.getItem("towhseId")) {
         this.getDefaultBin();
       }
       this.CheckTrackingandVisiblity();
@@ -701,28 +717,13 @@ export class BinTransferComponent implements OnInit {
     document.getElementById("modalCloseBtn").click();
   }
 
-  formatTransferNumbers(){
-    var splitString = this.transferQty.toString().split(".", 2);
-    if(splitString.length == 1){
-      this.transferQty = this.transferQty+".000";
-    }else{
-      this.transferQty =  Number(this.transferQty).toFixed(3);
-    }
+  formatTransferNumbers() {
+    this.transferQty = Number(this.transferQty).toFixed(3);
   }
 
-  formatOnHandQty(){
-    var splitString = this.onHandQty.toString().split(".", 2);
-    if(splitString.length == 1){
-      this.onHandQty = this.onHandQty+".000";
-    }else{
-      this.onHandQty =  Number(this.onHandQty).toFixed(3);
-    }
+  formatOnHandQty() {
+    this.onHandQty = Number(this.onHandQty).toFixed(3);
   }
-
-  // SelectAll(id){
-  //   document.getElementById(id).focus();
-  //   document.getElementById(id).onselect(id);
-  // }
   goback(){
     console.log(this.activatedRoute)
   }
