@@ -1,3 +1,97 @@
-<p>
-  inbound-polist works!
-</p>
+<div class="opti_container position-relative bg-white rounded" >
+  <form class="form-with-fix-btnBar"  *ngIf="!viewLines">
+        <div class="opti_container_inner" [perfectScrollbar]=" ">
+
+            <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
+                {{'GoodsReciptPO'|translate}}
+            </h3>
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+                    
+                    <div class="form-group row">
+                      <label for="inputPassword" class="col-sm-3 col-form-label">{{'FuturePOs'|translate}}</label>
+                      <div class="col-sm-9">
+                        <div class="opti_input-group-checkbox">
+                          <input type="checkbox" id="ch7" class="k-checkbox" checked />
+                          <label class="k-checkbox-label" for="ch7"></label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'PO#'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control form-control-sm" name ='customerCode' placeholder="{{'PO#'|translate}}">
+                                <div class="input-group-append has-seprate-btn">
+                                    <button class="k-button k-primary btn" type="button">
+                                        <i class="opti-icon-hammenu"></i>
+                                    </button>
+                                    <button class="k-button k-primary btn separate-btn" type="button">
+                                          <i class="opti-icon-search"></i>
+                                      </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'Item'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input type="text" placeholder="{{'Item'|translate}}" class="form-control form-control-sm" name="VendName" [disabled]="true">
+                            </div>
+                        </div>
+                    </div>
+                    
+
+                </div>
+            </div>
+            <div class="row">
+              <div class="col-12 col-sm-12 col-md-12">
+                <h4 class="mt-3">{{'NonTrackedItems'|translate}}</h4>
+                <div class="col-12 mb-2 border-bottom pb-2"></div>
+                <kendo-grid class="no-shadow" [kendoGridBinding]="soItemsDetail" [resizable]="true" [pageSize]="pageSize"
+                    [pageable]="true" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
+                    [columnMenu]="{ columnChooser: false }" [height]=gridHeight [selectable]
+                    ="true" 
+                    [rowClass]="rowCallback" 
+                    (selectionChange)="openPOByUOM($event,soItemsDetail.ITEMCODE)"
+                    #gridItem>
+
+                    <!-- grid for mobile start -->
+                    <!-- <kendo-grid-column media="(max-width: 767px)" title="Payment List" class="opti_mobile-grid-td">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            <dl class="opti_mobile_grid_dl">
+                                <dt>Item Code</dt>
+                                <dd>{{ dataItem.QuotationNumber }}</dd>
+
+                                <dt>Open Qty.</dt>
+                                <dd>{{ dataItem.QuotationDate }}</dd>
+
+                                <dt>Pick Qty</dt>
+                                <dd>{{ dataItem.Remark }}</dd>
+                            </dl>
+                        </ng-template>
+                    </kendo-grid-column> -->
+                    <!-- grid for mobile end -->
+                    
+                    <kendo-grid-column field="ITEMCODE" title="Item Code" [width]="6"></kendo-grid-column>
+                    <kendo-grid-column field="OPENQTY" [width]="6" title="Open Qty."></kendo-grid-column>
+                    <kendo-grid-column field="OPENQTY" [width]="6" title="Pick Qty."></kendo-grid-column>
+                    
+
+                </kendo-grid>
+              </div>
+            </div>
+        </div>
+        <div class="fix-footer-btnBar">
+            <div class="col-sm-12 col-12">
+                <hr />
+            </div>
+            <div class="col-sm-12 col-12">                      
+                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-close-outline" role="presentation"></span> Cancel</button>
+                
+            </div>
+        </div>
+  </form>
+</div>   
