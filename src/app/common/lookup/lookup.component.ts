@@ -106,6 +106,12 @@ export class LookupComponent implements OnInit {
     else if(this.lookupfor == "VendorList"){
       this.showVendorList();
     }
+    else if(this.lookupfor == "POList"){
+      this.showPOList();
+    }
+    else if(this.lookupfor == "POItemList"){
+      this.showPOItemList();
+    }
     else if (this.lookupfor == "out-customer") {
       this.showCustomerList();
     }
@@ -363,9 +369,65 @@ export class LookupComponent implements OnInit {
     }
   }
 
+  showPOItemList() {
+    this.table_head = [
+      {
+        field: 'ItemCode',
+        title: this.translate.instant("ItemCode"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'ItemName',
+        title: this.translate.instant("ItemName"),
+        type: 'text',
+        width: '100'
+      },
+    ];
+    this.lookupTitle = this.translate.instant("ItemCodeList");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
+
+  showPOList() {
+    this.table_head = [
+      {
+        field: 'DocNum',
+        title: this.translate.instant("PO#"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'DocDueDate',
+        title: this.translate.instant("DelDate"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'CardCode',
+        title: this.translate.instant("VenderCode"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'CardName',
+        title: this.translate.instant("Name"),
+        type: 'text',
+        width: '100'
+      }
+    ];
+    this.lookupTitle = this.translate.instant("POList");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
+  
   showOutSOList() {
-
-
     this.table_head = [
       {
         field: 'DOCNUM',
@@ -379,7 +441,6 @@ export class LookupComponent implements OnInit {
         type: 'date',
         width: '100'
       }
-
     ];
 
     this.lookupTitle = this.translate.instant("SalesOrderList");

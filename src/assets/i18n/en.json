@@ -81,6 +81,8 @@
   "VenderCode": "Vend. Code",
   "Name": "Name",
   "Cancel": "Cancel",
+  "POList": "PO List",
+  "POExistMessage": "PO does not exist!",
   "FuturePOs": "Future POs",
   "PO#": "PO #",
   "Item": "Item",

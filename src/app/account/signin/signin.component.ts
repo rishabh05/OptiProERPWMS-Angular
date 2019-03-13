@@ -76,6 +76,11 @@ export class SigninComponent implements OnInit {
     this.getPSURL();
   }
 
+  async ngOnChanges(): Promise<void> {
+    this.commonService.loadConfig();
+    this.signinService.loadConfig();
+  }
+
   getPSURL() {
     this.signinService.getPSURL().subscribe(
       data => {

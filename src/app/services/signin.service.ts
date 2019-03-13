@@ -37,6 +37,10 @@ export class SigninService {
     this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
   }
 
+  public loadConfig(){
+    this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
+  }
+
   getPSURL(): Observable<any> {
     this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
     let jObject = {};

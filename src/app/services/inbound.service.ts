@@ -62,8 +62,26 @@ export class InboundService {
         UsernameForLic: localStorage.getItem("UserId")
       }])
     };
-
     return this.httpclient.post(this.config_params.service_url+ "/api/GoodReceiptPO/GetPOList", jObject, this.httpOptions);
+  }
+
+  IsPOExists(poCode: string, cardCode: string): Observable<any> {
+    var jObject = { POCode: JSON.stringify([{ UserId: '', CompanyDBId: localStorage.getItem("CompID"), POCode: poCode, CardCode: cardCode}]) };
+    return this.httpclient.post(this.config_params.service_url +"/api/GoodReceiptPO/IsPOExists", jObject, this.httpOptions);
+  }
+
+  GetOpenPOLines(futurepo: boolean, itemCode: string, po: string): Observable<any> {
+    let jObject = {
+      GoodsReceiptToken: JSON.stringify([{
+        UserId: '',
+        CompanyDBId: localStorage.getItem("CompID"),
+        DOCNUM: po,
+        ItemCode: itemCode,
+        WhsCode: localStorage.getItem("whseId"),
+        FuturePO: futurepo
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url +"/api/GoodReceiptPO/GetOpenPOLines", jObject, this.httpOptions);
   }
 }
 
