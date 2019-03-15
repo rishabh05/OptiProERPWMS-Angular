@@ -77,6 +77,7 @@ export class SigninComponent implements OnInit {
   }
 
   async ngOnChanges(): Promise<void> {
+    debugger
     this.commonService.loadConfig();
     this.signinService.loadConfig();
   }
@@ -140,7 +141,7 @@ export class SigninComponent implements OnInit {
       error => {
         this.showLoader = false;
         this.toastr.error('', this.translate.instant("license Failed"), 
-        this.commonService.toast_config.iconClasses.error.iconClasses.error);
+        this.commonService.toast_config.iconClasses.error);
       }
     );
   }

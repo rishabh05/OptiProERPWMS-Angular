@@ -83,5 +83,37 @@ export class InboundService {
     };
     return this.httpclient.post(this.config_params.service_url +"/api/GoodReceiptPO/GetOpenPOLines", jObject, this.httpOptions);
   }
+
+  getAutoLot(itemCode: string): Observable<any> {
+    let jObject = {
+      GoodsReceiptToken: JSON.stringify([{
+        UserId: '',
+        CompanyDBId: localStorage.getItem("CompID"),
+        ItemCode: itemCode
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url +"/api/GoodReceiptPO/GetAutoLot", jObject, this.httpOptions);
+  }
+
+  getUOMs(itemCode: string): Observable<any> {
+    let jObject = {
+      ItemKey: JSON.stringify([{
+        CompanyDBId: localStorage.getItem("CompID"),
+        ItemCode: itemCode
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url +"/api/GoodReceiptPO/getUOM", jObject, this.httpOptions);
+  }
+
+  getRevBins(QCrequired: string): Observable<any> {
+    var jObject = {
+      WhsCode: JSON.stringify([{
+        CompanyDBId: localStorage.getItem("CompID"), ItemCode: '',
+        WhsCode: localStorage.getItem("whseId"), QCRequired: QCrequired,
+        PageId: "GRPO"
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url +"/api/GoodReceiptPO/GetBinsForReceiptWithReceivingBin", jObject, this.httpOptions);
+  }
 }
 

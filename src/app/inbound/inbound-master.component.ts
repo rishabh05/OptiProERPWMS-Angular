@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AutoLot } from 'src/app/models/Inbound/AutoLot';
 
 @Component({
   selector: 'app-inbound-master',
@@ -11,8 +12,8 @@ export class InboundMasterComponent implements OnInit {
 
   public inboundComponent: number = 1;
   public selectedVernder: string;
-  // public autoLots: AutoLot[];
-  // public openPOmodel: OpenPOLinesModel;
+  public autoLots: AutoLot[];
+  public openPOmodel: any;
   // public oSubmitPOLotsArray: oSubmitPOLots[] = []; 
   public AddtoGRPOFlag: boolean = false;
   // public SubmitPOArray: OpenPOLinesModel[] = [];
@@ -25,13 +26,13 @@ export class InboundMasterComponent implements OnInit {
     this.selectedVernder = vender;
   }
   
-  // setAutoLots(autoLots: AutoLot[]){
-  //   this.autoLots = autoLots;
-  // }
+  setAutoLots(autoLots: AutoLot[]){
+    this.autoLots = autoLots;
+  }
 
-  // setClickedItemDetail(openPOmodel){
-  //   this.openPOmodel = openPOmodel;
-  // }
+  setClickedItemDetail(openPOmodel){
+    this.openPOmodel = openPOmodel;
+  }
 
   // public savePOLots(oSubmitPOLot: oSubmitPOLots){
   //   this.oSubmitPOLotsArray.push(oSubmitPOLot);
