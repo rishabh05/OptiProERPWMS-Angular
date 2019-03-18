@@ -16,6 +16,8 @@ import { DialogsModule } from '@progress/kendo-angular-dialog';
 
 import { FormsModule } from '@angular/forms';
 import { OutboundModule } from './outbound/outbound.module';
+import { InputsModule } from '@progress/kendo-angular-inputs';
+
 
 
 export function createTranslateLoader(http: HttpClient) {
@@ -46,7 +48,8 @@ export function createTranslateLoader(http: HttpClient) {
     }),
     GridModule,
     DialogsModule,
-    OutboundModule
+    OutboundModule,
+    InputsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

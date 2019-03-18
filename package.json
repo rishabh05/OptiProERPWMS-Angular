@@ -31,7 +31,7 @@
     "@progress/kendo-angular-excel-export": "1 - 2",
     "@progress/kendo-angular-grid": "^3.4.0",
     "@progress/kendo-angular-inputs": "2 - 3",
-    "@progress/kendo-angular-intl": "^1.0.0",
+    "@progress/kendo-angular-intl": "^1.4.0",
     "@progress/kendo-angular-l10n": "^1.1.0",
     "@progress/kendo-angular-popup": "^2.0.0",
     "@progress/kendo-data-query": "^1.0.0",

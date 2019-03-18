@@ -118,7 +118,7 @@ export class LookupComponent implements OnInit {
 
   showAvaliableItems() {
     this.pagable = true;
-    this.pagesize = 50;
+    this.pagesize = 100;
     this.showSelection = true;
     this.selectedValues=[];
     this.table_head = [
@@ -359,6 +359,7 @@ export class LookupComponent implements OnInit {
   }
 
   onCheckboxClick(checked: any, index: number) {
+    debugger;
     let servivceItem: any = this.serviceData[index];
     if (checked) {
       this.selectedValues.push(servivceItem);
