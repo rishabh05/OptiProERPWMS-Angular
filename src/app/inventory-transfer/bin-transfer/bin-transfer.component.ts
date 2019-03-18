@@ -1,12 +1,13 @@
-import { Component, OnInit, HostListener, TemplateRef } from '@angular/core';
+import { Component, OnInit, HostListener, TemplateRef, ViewChild, ElementRef } from '@angular/core';
 import { viewLineContent } from '../../DemoData/sales-order';
 import { UIHelper } from '../../helpers/ui.helpers';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-import { Commonservice } from 'src/app/services/commonservice.service';
-import { Router } from '../../../../node_modules/@angular/router';
-import { ToastrService } from '../../../../node_modules/ngx-toastr';
-import { InventoryTransferService } from 'src/app/services/inventory-transfer.service';
-import { LangChangeEvent, TranslateService } from '../../../../node_modules/@ngx-translate/core';
+import { BsModalService, BsModalRef, ModalDirective } from 'ngx-bootstrap/modal';
+import { Commonservice } from '../../services/commonservice.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { InventoryTransferService } from '../../services/inventory-transfer.service';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
+import { Template } from '@angular/compiler/src/render3/r3_ast';
 
 @Component({
   selector: 'app-bin-transfer',
@@ -23,14 +24,14 @@ export class BinTransferComponent implements OnInit {
   itemCode: string = "";
   lotValue: string = "";
   fromBin: string = "";
-  transferQty: any = "";
+  transferQty: string = "";
   itemName: string = "";
   ItemTracking: string = "";
   serviceData: any[];
   lookupfor: string;
   showItemName: boolean = false;
   showBatchNo: boolean = false;
-  Remarks: string;
+  Remarks: string = "";
   onHandQty: any;
   SysNumber: any;
   LotWhsCode: any;
@@ -39,8 +40,10 @@ export class BinTransferComponent implements OnInit {
   isItemSerialTrack: boolean;
   editTransferQty: boolean;
   PageTitle: string;
+  ModalContent: string;
+  TransferedItemsDetail: any[] = [];
 
-  constructor(private commonservice: Commonservice, private router: Router, private inventoryTransferService: InventoryTransferService, private toastr: ToastrService, private translate: TranslateService, private modalService: BsModalService) {
+  constructor(private commonservice: Commonservice,private activatedRoute :ActivatedRoute, private router: Router, private inventoryTransferService: InventoryTransferService, private toastr: ToastrService, private translate: TranslateService, private modalService: BsModalService) {
     let userLang = navigator.language.split('-')[0];
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
     translate.use(userLang);
@@ -72,11 +75,11 @@ export class BinTransferComponent implements OnInit {
 
     //  this.getViewLineList();
     this.viewLines = false;
-    
-    if(localStorage.getItem("towhseId") == localStorage.getItem("whseId")){
+
+    if (localStorage.getItem("towhseId") == localStorage.getItem("whseId")) {
       this.PageTitle = this.translate.instant("BinTransfer");
-    }else{
-      this.PageTitle = this.translate.instant("WarehouseTransfer")+ " From: "+ localStorage.getItem("whseId")+" To: "+localStorage.getItem("towhseId");
+    } else {
+      this.PageTitle = this.translate.instant("WarehouseTransfer") + " From: " + localStorage.getItem("whseId") + " To: " + localStorage.getItem("towhseId");
     }
   }
 
@@ -98,6 +101,21 @@ export class BinTransferComponent implements OnInit {
     this.modalRef = this.modalService.show(template,
       Object.assign({}, { class: 'modal-dialog-centered' })
     );
+  }
+  @ViewChild('autoShownModal') autoShownModal: ModalDirective;
+  @ViewChild('transferedItemsBtn') transferedItemsBtn: ElementRef;
+  isModalShown: boolean = false;
+
+  showModal(): void {
+    this.isModalShown = true;
+  }
+
+  hideModal(): void {
+    this.autoShownModal.hide();
+  }
+
+  onHidden(): void {
+    this.isModalShown = false;
   }
 
   OnItemCodeLookupClick() {
@@ -141,10 +159,12 @@ export class BinTransferComponent implements OnInit {
           this.showItemName = true;
           // oWhsTransEditLot.Remarks = data[0].getValue();
           this.ItemTracking = data[0].TRACKING;
-          this.transferQty = 0.000;
+          this.transferQty = "0.000";
           this.onHandQty = 0.000;
           this.CheckTrackingandVisiblity();
-
+          if (localStorage.getItem("whseId") != localStorage.getItem("towhseId")) {
+            this.getDefaultBin();
+          }
         } else {
           this.toastr.error('', this.translate.instant("InvalidItemCode"));
           this.showItemName = false;
@@ -179,7 +199,8 @@ export class BinTransferComponent implements OnInit {
             this.onHandQty = data[0].TOTALQTY;
             // oWhsTransEditLot.Qty = oCurrentController.getFormatedValue(oWhsTransEditLot.Qty);
             this.transferQty = this.onHandQty
-
+            this.formatTransferNumbers();
+            this.formatOnHandQty();
             // oWhsTransEditLot.Item = data[0].ITEMCODE;
             // oWhsTransEditLot.ITEMNAME = data[0].ITEMCODE;
             // oWhsTransEditLot.Tracking = data[0].TRACKING;
@@ -196,6 +217,28 @@ export class BinTransferComponent implements OnInit {
   }
 
 
+  getDefaultBin() {
+    this.inventoryTransferService.getDefaultBin(this.itemCode, localStorage.getItem("towhseId")).subscribe(
+      data => {
+        this.getDefaultBinFlag = true;
+        if (data != null) {
+          if (data != this.fromBin) {
+            this.toBin = data;
+          }
+          return;
+        }
+        else {
+          this.ShowToBins();
+        }
+      },
+      error => {
+        this.toastr.error('', error);
+      }
+    );
+
+  }
+
+
   ShowLOTList() {
     this.inventoryTransferService.getLotList(localStorage.getItem("whseId"), this.fromBin, this.itemCode, this.lotValue).subscribe(
       data => {
@@ -207,6 +250,9 @@ export class BinTransferComponent implements OnInit {
             return;
           }
           this.showLookupLoader = false;
+          for (var i = 0; i < data.length; i++) {
+            data[i].TOTALQTY = data[i].TOTALQTY.toFixed(3);
+          }
           this.serviceData = data;
           this.lookupfor = "BatchNoList";
         } else {
@@ -226,13 +272,16 @@ export class BinTransferComponent implements OnInit {
         if (data != null) {
           if (data.length > 0) {
             this.showLookupLoader = false;
-            this.serviceData = data;
             if (this.ItemTracking != "N") {
               this.lookupfor = "SBTrackFromBin";
             }
             else {
               this.lookupfor = "NTrackFromBin";
+              for (var i = 0; i < data.length; i++) {
+                data[i].TOTALQTY = data[i].TOTALQTY.toFixed(3);
+              }
             }
+            this.serviceData = data;
           }
           else {
             this.toastr.error('', this.translate.instant("NoBinsAvailableMsg"));
@@ -261,7 +310,7 @@ export class BinTransferComponent implements OnInit {
               // olblQtyOnhand.setValue(oCurrentController.getFormatedValue(modelBins.oData[0].TOTALQTY.toString()));
               this.SysNumber = data[0].SYSNUMBER;
               this.LotWhsCode = data[0].WHSCODE;
-              this.Remarks;// = otxtReason.getValue();
+              //  this.Remarks;// = otxtReason.getValue();
             }
             else {
               if (data[0].Result == "0") {
@@ -356,41 +405,37 @@ export class BinTransferComponent implements OnInit {
     );
   }
 
-  IsInvTransferDetailLineExists(Item: string, LotNumber: string, Binno: string, ToBin: string, remarks: string, InvType: string): boolean {
+  IsInvTransferDetailLineExists(Item: string, LotNumber: string, Binno: string, ToBin: string, remarks: string, InvType: string): any {
     var sumLotQuantity = 0;
     for (var i = 0; i < this.TransferedItemsDetail.length; i++) {
       if (this.TransferedItemsDetail[i].ItemCode == Item &&
         this.TransferedItemsDetail[i].LotNo == LotNumber &&
         this.TransferedItemsDetail[i].BinNo == Binno &&
         this.TransferedItemsDetail[i].ToBin == ToBin &&
-        this.TransferedItemsDetail[i].Remarks == remarks &&
-        this.TransferedItemsDetail[i].InvType == InvType)
-        return this.TransferedItemsDetail[i];
+        this.TransferedItemsDetail[i].Remarks == remarks)
+        return i;
     }
-    return false;
+    return -1;
   }
 
 
-  TransferedItemsDetail: any[] = [];
+
 
   AddLineLots() {
     if (!this.CheckValidation()) {
       return;
     }
-
-    var oWhsTransAddLot: any = {};
-    oWhsTransAddLot.Detail = [];
-    // oWhsTransAddLot.Detail = localStorage.getItem("InvPutAwayLot");
-    var alreadyExist = this.IsInvTransferDetailLineExists(this.itemCode,
-      this.lotValue, this.fromBin, this.toBin, "", "");
-    if (!alreadyExist) {
+    var itemIndex = this.IsInvTransferDetailLineExists(this.itemCode,
+      this.lotValue, this.fromBin, this.toBin, this.Remarks, "");
+    var transferedItemsDetail;
+    if (itemIndex == -1) {
       this.TransferedItemsDetail.push({
         LineNum: '01',
         LotNo: this.lotValue,
         ItemCode: this.itemCode,
         ItemName: this.itemName,
         Qty: this.transferQty,
-        SysNumber: this.SysNumber,
+        SysNumber: "0",
         BinNo: this.fromBin,
         ToBin: this.toBin,
         Tracking: this.ItemTracking,
@@ -410,47 +455,33 @@ export class BinTransferComponent implements OnInit {
         return false;
       }
       else {
-        // var psOverwrite = oCurrentController.GetResourceString("WhsTransferEdit.overwrite");
-        // var psDialogConfirm = oCurrentController.GetResourceString("GoodsReceiptPOViewLots.DialogTitle");
-        // var psMsgOk = oCurrentController.GetResourceString("GoodsReceiptPOViewLots.Ok");
-        // var psMsgCancel = oCurrentController.GetResourceString("GoodsReceiptPOViewLots.Cancel");
+        //this.toastr.error('', this.translate.instant("WhsTransferEdit.overwrite"));
+        this.showModal();
+        this.ModalContent = this.translate.instant("WhsTransferEdit.overwrite");
+        let that = this;
 
-        // var dialog = new Dialog({
-        //     title: psDialogConfirm,
-        //     type: 'Message',
-        //     content: new Text({ text: psOverwrite }),
-        //     beginButton: new Button({
-        //         text: psMsgOk,
-        //         press: function () {
-        //             //InvDetailLine.Qty = (parseFloat(InvDetailLine.Qty) + parseFloat(this.GetQuantity()));
-        //             InvDetailLine.Qty = parseFloat(oCurrentController.GetQuantity());
-        //             oCurrentController.ClearModel();
-        //             oCurrentController.EnableModel();
-        //             sessionStorage.removeItem(oCurrentController.SessionProperties.InvPutAwayLot);
-        //             sessionStorage.setItem(oCurrentController.SessionProperties.InvPutAwayLot, JSON.stringify(oWhsTransAddLot));
-        //             dialog.close();
-        //         }
-        //     }),
-        //     endButton: new Button({
-        //         text: psMsgCancel,
-        //         press: function () {
-        //             dialog.close();
-        //         }
-        //     }),
-        //     afterClose: function () {
-        //         dialog.destroy();
-        //     }
-        // });
-
-        // dialog.open();
+        setTimeout(() => {
+          let el: HTMLElement = this.transferedItemsBtn.nativeElement as HTMLElement;
+          el.onclick = function () {
+            that.TransferedItemsDetail[itemIndex].Qty = that.transferQty;
+            that.autoShownModal.hide();
+            that.clearData();
+          }
+        }, 1000);
       }
     }
   }
 
+  showValidation: boolean = true;
   SubmitPutAway() {
+    this.showValidation = true;
+    if (this.TransferedItemsDetail.length > 0) {
+      this.showValidation = false;
+    }
+    this.AddLineLots();
     var oWhsTransAddLot: any = {};
-    oWhsTransAddLot.Detail = [];
     oWhsTransAddLot.Header = [];
+    oWhsTransAddLot.Detail = [];
     oWhsTransAddLot.UDF = [];
     // var oFromWhs = JSON.parse(sessionStorage.getItem(oCurrentController.SessionProperties.FromWhse));
     // var oToWhs = JSON.parse(sessionStorage.getItem(oCurrentController.SessionProperties.ToWhse));
@@ -458,20 +489,18 @@ export class BinTransferComponent implements OnInit {
       this.TransferedItemsDetail[i].LineNum = i;
     }
     oWhsTransAddLot.Detail = this.TransferedItemsDetail;
-    // var oScreenName = sessionStorage.getItem(oCurrentController.SessionProperties.ShowTranScreen);
-    // var Screen = JSON.parse(sessionStorage.getItem(oCurrentController.SessionProperties.SCREENNAME));
-    // if (Screen == "1") {
-
-    //     Screen = "INV";
-    // }
-    // else {
-    //     Screen = "WHS";
-    // }
+    let type;
+    if (localStorage.getItem("whseId") == localStorage.getItem("towhseId")) {
+      type = "";
+    }
+    else {
+      type = "Items";
+    }
 
     oWhsTransAddLot.Header.push({
       WhseCode: localStorage.getItem("whseId"),
       ToWhsCode: localStorage.getItem("towhseId"), //oToWhs,
-      Type: "Items", //oScreenName,
+      Type: type,
       DiServerToken: localStorage.getItem("Token"), //companyDBObject.DIServerToken,
       CompanyDBId: localStorage.getItem("CompID"), //companyDBObject.CompanyDbName,
       TransType: "WHS",
@@ -518,7 +547,7 @@ export class BinTransferComponent implements OnInit {
               oWhsTransAddLot.Header = [];
               oWhsTransAddLot.Detail = [];
               oWhsTransAddLot.UDF = [];
-
+              this.TransferedItemsDetail = [];
               this.clearData();
             }
             else {
@@ -548,18 +577,24 @@ export class BinTransferComponent implements OnInit {
 
   CheckValidation() {
     if (this.itemCode == "") {
-      this.toastr.error('', this.translate.instant("ItemCannotbeBlank"));
+      if (this.showValidation) {
+        this.toastr.error('', this.translate.instant("ItemCannotbeBlank"));
+      }
       return false;
     }
     if (this.ItemTracking == "B") {
       if (this.lotValue == "") {
-        this.toastr.error('', this.translate.instant("Lotcannotbeblank"));
+        if (this.showValidation) {
+          this.toastr.error('', this.translate.instant("Lotcannotbeblank"));
+        }
         return false;
       }
     }
     if (this.ItemTracking == "S") {
       if (this.lotValue == "") {
-        this.toastr.error('', this.translate.instant("SerialNoCantBlank"));
+        if (this.showValidation) {
+          this.toastr.error('', this.translate.instant("SerialNoCantBlank"));
+        }
         return false;
       }
       // if (oCurrentController.GetQuantity() <= 0 || oCurrentController.GetQuantity() > 1) {
@@ -572,8 +607,10 @@ export class BinTransferComponent implements OnInit {
       // }
     }
     else {
-      if (this.transferQty <= 0) {
-        this.toastr.error('', this.translate.instant("Enterquantitygreaterthanzero"));
+      if (Number(this.transferQty) <= 0) {
+        if (this.showValidation) {
+          this.toastr.error('', this.translate.instant("Enterquantitygreaterthanzero"));
+        }
         return false;
       }
     }
@@ -582,11 +619,15 @@ export class BinTransferComponent implements OnInit {
       return false;
     }
     if (this.toBin == "") {
-      this.toastr.error('', this.translate.instant("ToBinMsg"));
+      if (this.showValidation) {
+        this.toastr.error('', this.translate.instant("ToBinMsg"));
+      }
       return false;
     }
     if (this.transferQty == "") {
-      this.toastr.error('', this.translate.instant("EnterLotQuantity"));
+      if (this.showValidation) {
+        this.toastr.error('', this.translate.instant("EnterLotQuantity"));
+      }
       return false;
     }
     return true;
@@ -599,8 +640,11 @@ export class BinTransferComponent implements OnInit {
       this.itemName = $event[1];
       this.ItemTracking = $event[2];
       this.showItemName = true;
-      this.transferQty = 0.000;
+      this.transferQty = "0.000";
       this.onHandQty = 0.000;
+      if (localStorage.getItem("whseId") != localStorage.getItem("towhseId")) {
+        this.getDefaultBin();
+      }
       this.CheckTrackingandVisiblity();
     } else if (this.lookupfor == "BatchNoList") {
       this.lotValue = $event[0];
@@ -618,6 +662,8 @@ export class BinTransferComponent implements OnInit {
     } else if (this.lookupfor == "toBinsList") {
       this.toBin = $event[0];
     }
+    this.formatTransferNumbers();
+    this.formatOnHandQty();
   }
 
   CheckTrackingandVisiblity() {
@@ -652,9 +698,10 @@ export class BinTransferComponent implements OnInit {
     this.lotValue = "";
   }
 
-  ViewLinesRowDeleteClick(selection, rowindex) {
+  ViewLinesRowDeleteClick(rowindex, gridData: any) {
 
     this.TransferedItemsDetail.splice(rowindex, 1);
+    gridData.data = this.TransferedItemsDetail;
     console.log(this.TransferedItemsDetail.length);
     // const itemDetails = selection.selectedRows[0].dataItem;
     // this.TransferedItemsDetail.splice(index, 1);
@@ -665,8 +712,19 @@ export class BinTransferComponent implements OnInit {
     this.viewLines = false;
   }
 
-  deleteAllClick() {
+  deleteAllOkClick() {
     this.TransferedItemsDetail = [];
+    document.getElementById("modalCloseBtn").click();
   }
 
+  formatTransferNumbers() {
+    this.transferQty = Number(this.transferQty).toFixed(3);
+  }
+
+  formatOnHandQty() {
+    this.onHandQty = Number(this.onHandQty).toFixed(3);
+  }
+  goback(){
+    console.log(this.activatedRoute)
+  }
 }

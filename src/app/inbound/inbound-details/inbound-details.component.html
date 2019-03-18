@@ -12,9 +12,9 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'VendCode'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" placeholder="{{'VendCode'|translate}}">
+                                <input type="text" class="form-control form-control-sm" name="VendCode" [(ngModel)]="VendCode" placeholder="{{'VendCode'|translate}}" (blur)="OnVendorChange()">
                                 <div class="input-group-append">
-                                    <button class="k-button k-primary btn" type="button">
+                                    <button class="k-button k-primary btn" type="button" (click)="onVendorLookupClick()">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
                                 </div>
@@ -23,16 +23,11 @@
                     </div>
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Name'|translate}}</label>
-                        <!-- <div class="col-sm-9">
+                        <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" placeholder="Batch No">
-                                <div class="input-group-append">
-                                    <button class="k-button k-primary btn" type="button">
-                                        <i class="opti-icon-hammenu"></i>
-                                    </button>
-                                </div>
+                                <input type="text" class="form-control form-control-sm" name="VendName" [(ngModel)]="VendName" [disabled]="true">
                             </div>
-                        </div> -->
+                        </div>
                     </div>
 
                 </div>
@@ -44,7 +39,7 @@
             </div>
             <div class="col-sm-12 col-12">                      
                 <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-close-outline" role="presentation"></span> Cancel</button>
-                <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" (click)="listClick($event, 'binTransfer')" roterLink="binTransfer" skipLocationChange><i class="opti-icon-arrow-next"></i></button>
+                <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" (click)="onNextClick()" roterLink="binTransfer" skipLocationChange><i class="opti-icon-arrow-next"></i></button>
             </div>
         </div>
   </form>
@@ -67,3 +62,6 @@
     </div>
   </ng-template> -->
 </div>   
+<span [hidden]="showLookupLoader">
+    <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
+</span>

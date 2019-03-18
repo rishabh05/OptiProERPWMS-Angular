@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { InventoryTransferService } from '../../services/inventory-transfer.service';
 import { ToastrService } from 'ngx-toastr';
-import { ToWhs } from 'src/app/models/InventoryTransfer/ToWhs';
-import { CurrentSidebarInfo } from 'src/app/models/sidebar/current-sidebar-info';
+import { ToWhs } from '../../models/InventoryTransfer/ToWhs';
+import { CurrentSidebarInfo } from '../../models/sidebar/current-sidebar-info';
 import { Router } from '@angular/router';
-import { Commonservice } from 'src/app/services/commonservice.service';
-import { TranslateService, LangChangeEvent } from '../../../../node_modules/@ngx-translate/core';
+import { Commonservice } from '../../services/commonservice.service';
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-whs-transfer',
@@ -21,6 +21,8 @@ export class WhsTransferComponent implements OnInit {
   toWhs: ToWhs[];
   serviceData: any[];
   lookupfor: string;
+
+  public whsView:boolean = true;
   
   constructor(private commonservice: Commonservice, private router: Router, private inventoryTransferService: InventoryTransferService, private toastr: ToastrService, private translate: TranslateService) {
     let userLang = navigator.language.split('-')[0];
@@ -113,4 +115,13 @@ export class WhsTransferComponent implements OnInit {
       this.toastr.error('', this.translate.instant("FrmnToNotSame"));
     }
   }  
+
+  viewSwitch(){
+    this.whsView = !this.whsView;
+    if (this.toWhse == "" || this.toWhse == undefined) {
+      this.toastr.error('', this.translate.instant("ToWhsBlankErrMsg"));
+      return;
+    }
+    localStorage.setItem("towhseId", this.toWhse);
+  }
 }

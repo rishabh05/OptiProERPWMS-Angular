@@ -87,7 +87,7 @@
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'TransferQty'|translate}}</label>
                         <div class="col-sm-9">
-                            <input type="number" min="0" class="form-control form-control-sm text-right" placeholder="0.000" 
+                            <input id="txtfld" type="number" min="0" class="form-control form-control-sm text-right" placeholder="0.000" (blur)="formatTransferNumbers()"
                             name="transferQty" [(ngModel)]="transferQty" [disabled]="editTransferQty">
                         </div>
                     </div>
@@ -110,7 +110,7 @@
             <button type="button" class="btn btn-primary k-button btn-sm btn-icon-with-text" (click)="AddLineLots()"><span class="k-icon k-i-plus" role="presentation" ></span> {{'AddMore'|translate}}</button>   
             <button type="button" class="btn btn-primary k-button btn-sm btn-icon-with-text mr-1" (click)="ShowSavedData()"><span class="k-icon k-i-preview" role="presentation"></span> {{'ViewLines'|translate}}</button>
             <div class="clearfix mt-1 d-block d-sm-none"></div> 
-            <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
+            <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-close-outline" (click)="goback()" role="presentation"></span> {{'Cancel'|translate}}</button>
         </div>
         </div>
   </form>
@@ -180,7 +180,7 @@
                 <kendo-grid-column media="(min-width: 768px)" field="ToBin" title="To Bin" [width]="160"></kendo-grid-column>
                 <kendo-grid-column media="(min-width: 768px)" field="Delete" title="Delete" width="60">
                   <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                    <button type="button" class="k-button-icon k-button" (click)="ViewLinesRowDeleteClick($event, rowIndex)"><span class="k-icon k-i-delete" role="presentation"></span></button>
+                    <button type="button" class="k-button-icon k-button" (click)="ViewLinesRowDeleteClick(rowIndex, gridItem)"><span class="k-icon k-i-delete" role="presentation"></span></button>
                   </ng-template>
                 </kendo-grid-column>
               </kendo-grid>
@@ -203,7 +203,7 @@
   <ng-template #template>
     <div class="modal-header">
       <h4 class="modal-title pull-left">{{'Confirm'|translate}}</h4>
-      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <button id="modalCloseBtn" type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
@@ -211,11 +211,32 @@
         {{'DoYouWantToDeleteAllTheLines'|translate}}
     </div>
     <div class="modal-footer">
-      <button class="btn btn-primary k-button btn-sm" type="button" (click) = "deleteAllClick()">{{'Ok'|translate}}</button>
-      <button class="btn btn-default k-button btn-sm" type="button">{{'Close'|translate}}</button>
+      <button class="btn btn-primary k-button btn-sm" type="button" (click) = "deleteAllOkClick()">{{'Ok'|translate}}</button>
+      <button class="btn btn-default k-button btn-sm" type="button" (click)="modalRef.hide()">{{'Cancel'|translate}}</button>
     </div>
   </ng-template>
 </div>   
+
+<div *ngIf="isModalShown" [config]="{ show: true }" (onHidden)="onHidden()" bsModal #autoShownModal="bs-modal"
+     class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-auto-name">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="dialog-auto-name" class="modal-title pull-left">{{'Confirm'|translate}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="hideModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        <div class="modal-body">
+            {{ModalContent}}
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary k-button btn-sm" type="button" #transferedItemsBtn>{{'Ok'|translate}}</button>
+            <button class="btn btn-default k-button btn-sm" type="button" (click)="hideModal()">{{'Cancel'|translate}}</button>
+        </div>
+    </div>
+  </div>
+</div>
 
 <span [hidden]="showLookupLoader">
     <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>

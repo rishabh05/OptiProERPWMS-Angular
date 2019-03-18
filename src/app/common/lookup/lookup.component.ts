@@ -8,11 +8,11 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import * as $ from 'jquery';
 import 'bootstrap';
-import { ColumnSetting } from 'src/app/models/CommonData';
-import { OutboundData } from 'src/app/models/outbound/outbound-data';
-import { TranslateService, LangChangeEvent } from '../../../../node_modules/@ngx-translate/core';
+import { ColumnSetting } from '../../models/CommonData';
+import { OutboundData } from '../../models/outbound/outbound-data';
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { GridComponent } from '@progress/kendo-angular-grid';
-import { UIHelper } from 'src/app/helpers/ui.helpers';
+import { UIHelper } from '../../helpers/ui.helpers';
 import { State } from '@progress/kendo-data-query';
 // import { UIHelper } from '../../../helpers/ui.helpers';
 // import { Http, ResponseContentType } from '@angular/http';
@@ -62,7 +62,30 @@ export class LookupComponent implements OnInit {
   close_kendo_dialog() {
     this.dialogOpened = false;
   }
+  public state: State = {
+    skip: 0,
+    take: 5,
 
+    // Initial filter descriptor
+    filter: {
+      logic: 'and',
+      filters: []
+    }
+  };
+  public clearFilters() {
+    this.state.filter = {
+      logic: 'and',
+      filters: []
+    };
+  }
+  onFilterChange(checkBox: any, grid: GridComponent) {
+    if (checkBox.checked == false) {
+      this.clearFilter(grid);
+    }
+  }
+  clearFilter(grid: GridComponent) {
+    this.clearFilters()
+  }
   ngOnInit() {
   }
 
@@ -80,7 +103,15 @@ export class LookupComponent implements OnInit {
     } else if (this.lookupfor == "toBinsList") {
       this.showSBTrackFromBinList();
     }
-
+    else if(this.lookupfor == "VendorList"){
+      this.showVendorList();
+    }
+    else if(this.lookupfor == "POList"){
+      this.showPOList();
+    }
+    else if(this.lookupfor == "POItemList"){
+      this.showPOItemList();
+    }
     else if (this.lookupfor == "out-customer") {
       this.showCustomerList();
     }
@@ -91,6 +122,8 @@ export class LookupComponent implements OnInit {
     else if (this.lookupfor == 'out-order') {
       this.showOutSOList();
     }
+    this.clearFilters();
+    this.isColumnFilter = false
   }
 
   showToWhsList() {
@@ -313,11 +346,88 @@ export class LookupComponent implements OnInit {
     }
   }
 
+  showVendorList() {
+    this.table_head = [
+      {
+        field: 'CARDCODE',
+        title: this.translate.instant("VenderCode"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'CARDNAME',
+        title: this.translate.instant("Name"),
+        type: 'text',
+        width: '100'
+      }
+    ];
+    this.lookupTitle = this.translate.instant("VendorList");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
 
+  showPOItemList() {
+    this.table_head = [
+      {
+        field: 'ItemCode',
+        title: this.translate.instant("ItemCode"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'ItemName',
+        title: this.translate.instant("ItemName"),
+        type: 'text',
+        width: '100'
+      },
+    ];
+    this.lookupTitle = this.translate.instant("ItemCodeList");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
 
+  showPOList() {
+    this.table_head = [
+      {
+        field: 'DocNum',
+        title: this.translate.instant("PO#"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'DocDueDate',
+        title: this.translate.instant("DelDate"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'CardCode',
+        title: this.translate.instant("VenderCode"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'CardName',
+        title: this.translate.instant("Name"),
+        type: 'text',
+        width: '100'
+      }
+    ];
+    this.lookupTitle = this.translate.instant("POList");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
+  
   showOutSOList() {
-
-
     this.table_head = [
       {
         field: 'DOCNUM',
@@ -331,7 +441,6 @@ export class LookupComponent implements OnInit {
         type: 'date',
         width: '100'
       }
-
     ];
 
     this.lookupTitle = this.translate.instant("SalesOrderList");
@@ -370,35 +479,13 @@ export class LookupComponent implements OnInit {
     }
   }
 
+  
 
-  onFilterChange(checkBox: any, grid: GridComponent) {
-    if (checkBox.checked == false) {
-      this.clearFilter(grid);
-    }
-  }
-  clearFilter(grid: GridComponent) {
-    this.clearFilters()
-  }
 
   Done() {
     this.lookupkey.emit(this.selectedValues);
     this.dialogOpened=false;
   }
 
-  public state: State = {
-    skip: 0,
-    take: 5,
-
-    // Initial filter descriptor
-    filter: {
-      logic: 'and',
-      filters: []
-    }
-  };
-  public clearFilters() {
-    this.state.filter = {
-      logic: 'and',
-      filters: []
-    };
-  }
+  
 }

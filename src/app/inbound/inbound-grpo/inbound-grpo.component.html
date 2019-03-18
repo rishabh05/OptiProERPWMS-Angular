@@ -1,0 +1,119 @@
+<div class="opti_container position-relative bg-white rounded" >
+    <form class="form-with-fix-btnBar"  *ngIf="!viewLines">
+          <div class="opti_container_inner" [perfectScrollbar]=" ">
+  
+              <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
+                  {{'ReceiveForPO'|translate}}: {{Ponumber}}
+              </h3>
+              
+  
+              <!-- Kendo Table Grid Row start -->
+              <div class="row">
+                <div class="col-12 col-sm-12 col-md-12">
+                  <kendo-grid class="no-shadow" [kendoGridBinding]="openPOLineModel" [resizable]="true" [pageSize]="pageSize"
+                      [pageable]="true" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
+                      [columnMenu]="{ columnChooser: false }" [height]=gridHeight [selectable]
+                      ="true" 
+                      [rowClass]="rowCallback" 
+                      (selectionChange)="openPOByUOM($event,soItemsDetail.ITEMCODE)"
+                      #gridItem>
+  
+                     
+                      <kendo-grid-column field="ITEMCODE" title="{{'ItemCode'|translate}}"></kendo-grid-column>
+                    <kendo-grid-column field="OPENQTY" title="{{'OpenQty'|translate}}" class="text-right">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            {{dataItem.OPENQTY | number:'1.3-5'}}
+                            </ng-template>  
+                    </kendo-grid-column>
+                    <kendo-grid-column field="RPTQTY" title="{{'ReceiveQty'|translate}}" class="text-right">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            {{dataItem.RPTQTY | number:'1.3-5'}}
+                            </ng-template>  
+                    </kendo-grid-column>
+                    <kendo-grid-column field="UOM1" title="{{'UoM'|translate}}">
+                        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                            <kendo-dropdownlist class="form-control" name="uomSelectedVal"
+                             [(ngModel)]="uomSelectedVal" [data]="dataItem.UOMList" textField="UomName" valueField="UomCode"></kendo-dropdownlist>
+                        </ng-template>
+                    </kendo-grid-column> 
+                    
+                  </kendo-grid>
+                </div>
+              </div>
+              <!-- Kendo Table Grid Row end -->
+  
+              <div class="row row mt-4">
+                  <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+  
+                      <div class="form-group row">
+                          <label for="inputPassword" class="col-sm-3 col-form-label">{{'ReceivingBin'|translate}}</label>
+                          <div class="col-sm-9">
+                              <div class="input-group input-group-sm">
+                                  <input type="text" class="form-control form-control-sm" 
+                                  name="RecvbBinvalue" [(ngModel)]=RecvbBinvalue 
+                                  placeholder="{{'ReceivingBin'|translate}}">
+                                  <div class="input-group-append has-seprate-btn">
+                                      <button class="k-button k-primary btn" type="button">
+                                          <i class="opti-icon-hammenu"></i>
+                                      </button>
+                                      <button class="k-button k-primary btn separate-btn" type="button">
+                                          <i class="opti-icon-search"></i>
+                                      </button>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="form-group row">
+                          <label for="inputPassword" class="col-sm-3 col-form-label">{{'Quantity'|translate}}</label>
+                          <div class="col-sm-9">
+                              <div class="d-flex">
+                                  <input type="text" class="form-control form-control-sm" name="qty" [(ngModel)]=qty placeholder="{{'Quantity'|translate}}">
+                                  <div class="ml-1 d-flex">
+                                      <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button" (click)="addQuantity(event)"><i class="opti-icon-add1 fs-28"></i></button>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      
+  
+                  </div>
+              </div>
+  
+  
+              <!-- Kendo Table Grid Row start -->
+              <div class="row mt-3">
+                <div class="col-12 col-sm-12 col-md-12">  
+  
+                  <kendo-grid class="no-shadow" [kendoGridBinding]="soItemsDetail" [resizable]="true" [pageSize]="pageSize"
+                      [pageable]="true" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
+                      [columnMenu]="{ columnChooser: false }" [height]=gridHeight [selectable]
+                      ="true" 
+                      [rowClass]="rowCallback" 
+                      (selectionChange)="openPOByUOM($event,soItemsDetail.ITEMCODE)"
+                      #gridItem>
+                                            
+                      <kendo-grid-column field="OPENQTY" headerClass="text-right" class="text-right" [width]="6" title="{{'Qty'|translate}}"></kendo-grid-column>
+                      <kendo-grid-column field="OPENQTY" [width]="6" title="{{'Bin'|translate}}"></kendo-grid-column>                   
+  
+                  </kendo-grid>
+                </div>
+              </div>
+              <!-- Kendo Table Grid Row end -->
+  
+  
+          </div>
+          <div class="fix-footer-btnBar">
+              <div class="col-sm-12 col-12">
+                  <hr />
+              </div>
+              <div class="col-sm-12 col-12">                      
+                  <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-close-outline" role="presentation"></span> Cancel</button>
+                  
+              </div>
+          </div>
+    </form>
+  </div>   
+  
+  
+
+
