@@ -32,12 +32,12 @@ export class InboundService {
         UsernameForLic: localStorage.getItem("UserId")
       }])
     };
-    return this.httpclient.post(this.config_params.service_url +"/api/GoodReceiptPO/GetVendorList", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetVendorList", jObject, this.httpOptions);
   }
 
   IsVendorExists(vendor: string): Observable<any> {
-    var jObject = { VendorCode: JSON.stringify([{ UserId: '', CompanyDBId: localStorage.getItem("CompID"), VendorCode: vendor}]) };
-    return this.httpclient.post(this.config_params.service_url +"/api/GoodReceiptPO/IsVendorExists", jObject, this.httpOptions);
+    var jObject = { VendorCode: JSON.stringify([{ UserId: '', CompanyDBId: localStorage.getItem("CompID"), VendorCode: vendor }]) };
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsVendorExists", jObject, this.httpOptions);
   }
 
   getItemList(futurepo: boolean, vendercode: string, po: string): Observable<any> {
@@ -49,7 +49,7 @@ export class InboundService {
         FuturePO: futurepo, PO: po
       }])
     };
-    return this.httpclient.post(this.config_params.service_url+ "/api/GoodReceiptPO/GetItemList", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetItemList", jObject, this.httpOptions);
   }
 
   getPOList(futurepo: boolean, vendercode: string, itemcode: string): Observable<any> {
@@ -62,12 +62,12 @@ export class InboundService {
         UsernameForLic: localStorage.getItem("UserId")
       }])
     };
-    return this.httpclient.post(this.config_params.service_url+ "/api/GoodReceiptPO/GetPOList", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetPOList", jObject, this.httpOptions);
   }
 
   IsPOExists(poCode: string, cardCode: string): Observable<any> {
-    var jObject = { POCode: JSON.stringify([{ UserId: '', CompanyDBId: localStorage.getItem("CompID"), POCode: poCode, CardCode: cardCode}]) };
-    return this.httpclient.post(this.config_params.service_url +"/api/GoodReceiptPO/IsPOExists", jObject, this.httpOptions);
+    var jObject = { POCode: JSON.stringify([{ UserId: '', CompanyDBId: localStorage.getItem("CompID"), POCode: poCode, CardCode: cardCode }]) };
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsPOExists", jObject, this.httpOptions);
   }
 
   GetOpenPOLines(futurepo: boolean, itemCode: string, po: string): Observable<any> {
@@ -81,7 +81,7 @@ export class InboundService {
         FuturePO: futurepo
       }])
     };
-    return this.httpclient.post(this.config_params.service_url +"/api/GoodReceiptPO/GetOpenPOLines", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetOpenPOLines", jObject, this.httpOptions);
   }
 
   getAutoLot(itemCode: string): Observable<any> {
@@ -92,7 +92,7 @@ export class InboundService {
         ItemCode: itemCode
       }])
     };
-    return this.httpclient.post(this.config_params.service_url +"/api/GoodReceiptPO/GetAutoLot", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetAutoLot", jObject, this.httpOptions);
   }
 
   getUOMs(itemCode: string): Observable<any> {
@@ -102,7 +102,7 @@ export class InboundService {
         ItemCode: itemCode
       }])
     };
-    return this.httpclient.post(this.config_params.service_url +"/api/GoodReceiptPO/getUOM", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/getUOM", jObject, this.httpOptions);
   }
 
   getRevBins(QCrequired: string): Observable<any> {
@@ -113,7 +113,12 @@ export class InboundService {
         PageId: "GRPO"
       }])
     };
-    return this.httpclient.post(this.config_params.service_url +"/api/GoodReceiptPO/GetBinsForReceiptWithReceivingBin", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetBinsForReceiptWithReceivingBin", jObject, this.httpOptions);
+  }
+
+  binChange(binCode: string): Observable<any> {
+    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), BinCode: binCode, ItemCode: '', WhsCode: localStorage.getItem("whseId") }]) };
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsBinExist", jObject, this.httpOptions);
   }
 }
 

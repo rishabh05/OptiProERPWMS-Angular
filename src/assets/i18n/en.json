@@ -127,6 +127,7 @@
   "SerialTrackedItem": "Serial Tracked Item",
   "BatchTrackedItem": "Batch Tracked Item",
   "NoneTrackedItem": "None Tracked Item",
+  "BinLookupTitle": "Bin Lookup",
   "Items": "Items",
   "issueForProduction": "Issue For Production",
   "receiptFromProduction":"Receipt From Production",

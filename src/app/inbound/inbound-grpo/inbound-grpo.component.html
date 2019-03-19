@@ -10,8 +10,8 @@
               <!-- Kendo Table Grid Row start -->
               <div class="row">
                 <div class="col-12 col-sm-12 col-md-12">
-                  <kendo-grid class="no-shadow" [kendoGridBinding]="openPOLineModel" [resizable]="true" [pageSize]="pageSize"
-                      [pageable]="true" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
+                  <kendo-grid class="no-shadow" [kendoGridBinding]="openPOLineModel" [resizable]="true" [pageSize]="2"
+                      [pageable]="false" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
                       [columnMenu]="{ columnChooser: false }" [height]=gridHeight [selectable]
                       ="true" 
                       [rowClass]="rowCallback" 
@@ -51,14 +51,14 @@
                               <div class="input-group input-group-sm">
                                   <input type="text" class="form-control form-control-sm" 
                                   name="RecvbBinvalue" [(ngModel)]=RecvbBinvalue 
-                                  placeholder="{{'ReceivingBin'|translate}}">
+                                  placeholder="{{'ReceivingBin'|translate}}" (blur)="OnBinChange()">
                                   <div class="input-group-append has-seprate-btn">
-                                      <button class="k-button k-primary btn" type="button">
+                                      <button class="k-button k-primary btn" type="button" (click)= "ShowBins()">
                                           <i class="opti-icon-hammenu"></i>
                                       </button>
-                                      <button class="k-button k-primary btn separate-btn" type="button">
+                                      <!-- <button class="k-button k-primary btn separate-btn" type="button">
                                           <i class="opti-icon-search"></i>
-                                      </button>
+                                      </button> -->
                                   </div>
                               </div>
                           </div>
@@ -114,6 +114,7 @@
     </form>
   </div>   
   
-  
-
+  <span [hidden]="showLookupLoader">
+    <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
+  </span>
 

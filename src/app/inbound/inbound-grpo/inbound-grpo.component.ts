@@ -18,12 +18,16 @@ export class InboundGRPOComponent implements OnInit {
 
   openPOLineModel: OpenPOLinesModel[] = [];
   Ponumber: any;
-  RecvbBinvalue: any;
+  RecvbBinvalue: any="";
   uomSelectedVal: UOM;
   UOMList: UOM[];
   qty: number;
   showButton: boolean = false;
   recvingQuantityBinArray: RecvingQuantityBin[] = [];
+  defaultRecvBin: boolean = false;
+  serviceData: any[];
+  lookupfor: string;
+  showLookupLoader = true;
 
 
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
@@ -39,24 +43,74 @@ export class InboundGRPOComponent implements OnInit {
     this.openPOLineModel[0] = this.inboundMasterComponent.openPOmodel;
     this.Ponumber = this.openPOLineModel[0].DOCENTRY;
     this.getUOMList();
-    this.GetRecBinList();
+    if (this.RecvbBinvalue == "") {
+      this.defaultRecvBin = true;
+      this.ShowBins();
+    }
   }
 
   /**
     * Method to get list of inquries from server.
    */
-  public GetRecBinList() {
+  public ShowBins() {
     this.inboundService.getRevBins(this.openPOLineModel[0].QCREQUIRED).subscribe(
       (data: any) => {
         console.log(data);
-
-        // this.revingBins = data;
-        if (data.length > 0) {
-          this.RecvbBinvalue = data[0].BINNO;
+        if (data != null) {
+          if (this.defaultRecvBin == true) {
+            this.RecvbBinvalue = data[0].BINNO;
+            this.defaultRecvBin = false
+          }
+          else {
+            if (data.length > 0) {
+              console.log(data);
+              this.showLookupLoader = false;
+              this.serviceData = data;
+              this.lookupfor = "RecvBinList";
+              return;
+            }
+            else {
+              this.toastr.error('', this.translate.instant("NoBinsAvailableMsg"));
+            }
+          }
         }
       },
       error => {
         console.log("Error: ", error);
+      }
+    );
+  }
+
+
+  OnBinChange() {
+    if (this.RecvbBinvalue == "") {
+      return;
+    }
+    this.inboundService.binChange(this.openPOLineModel[0].QCREQUIRED).subscribe(
+      (data: any) => {
+        console.log(data);
+        if (data != null) {
+          if (data.length > 0) {
+            if (data[0].Result == "0") {
+              this.toastr.error('', this.translate.instant("INVALIDBIN"));
+              this.RecvbBinvalue = "";
+              return;
+            }
+            else {
+              this.RecvbBinvalue = data[0].ID;
+              // oCurrentController.isReCeivingBinExist();
+            }
+          }
+        }
+        else {
+          this.toastr.error('', this.translate.instant("INVALIDBIN"));
+          this.RecvbBinvalue = "";
+          return;
+        }
+      },
+      error => {
+        console.log("Error: ", error);
+        this.RecvbBinvalue = "";
       }
     );
   }
@@ -80,6 +134,8 @@ export class InboundGRPOComponent implements OnInit {
     );
   }
 
+
+
   addQuantity(e) {
     if (this.qty == 0 || this.qty == undefined) {
       alert("Please enter quantity");
@@ -100,5 +156,5 @@ export class InboundGRPOComponent implements OnInit {
       alert("can not item add in same bin");
       return;
     }
-  }  
+  }
 }

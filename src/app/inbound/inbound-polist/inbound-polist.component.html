@@ -52,10 +52,10 @@
             </div>
             <div class="row" *ngIf="showSerialTrackItem">
               <div class="col-12 col-sm-12 col-md-12">
-                <h4 class="mt-3">{{'SerialTrackedItem'|translate}}</h4>
+                <h4 class="mt-3 mb-0">{{'SerialTrackedItem'|translate}}</h4>
                 <div class="col-12 mb-2 border-bottom pb-2"></div>
-                <kendo-grid class="no-shadow" [kendoGridBinding]="SerialItemsDetail" [resizable]="true" [pageSize]="pageSize"
-                    [pageable]="true" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
+                <kendo-grid class="no-shadow" [kendoGridBinding]="SerialItemsDetail" [resizable]="true" [pageSize]="5"
+                    [pageable]="false" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
                     [columnMenu]="{ columnChooser: false }" [height]=gridHeight [selectable]
                     ="true" 
                     [rowClass]="rowCallback" 
@@ -79,10 +79,10 @@
 
             <div class="row" *ngIf="showBatchTrackItem">
                 <div class="col-12 col-sm-12 col-md-12">
-                  <h4 class="mt-3">{{'BatchTrackedItem'|translate}}</h4>
+                  <h4 class="mt-3 mb-0">{{'BatchTrackedItem'|translate}}</h4>
                   <div class="col-12 mb-2 border-bottom pb-2"></div>
-                  <kendo-grid class="no-shadow" [kendoGridBinding]="BatchItemsDetail" [resizable]="true" [pageSize]="pageSize"
-                      [pageable]="true" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
+                  <kendo-grid class="no-shadow" [kendoGridBinding]="BatchItemsDetail" [resizable]="true" [pageSize]="5"
+                      [pageable]="false" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
                       [columnMenu]="{ columnChooser: false }" [height]=gridHeight [selectable]
                       ="true" 
                       [rowClass]="rowCallback" 
@@ -106,10 +106,10 @@
               
               <div class="row" *ngIf="showNonTrackItem">
                 <div class="col-12 col-sm-12 col-md-12">
-                  <h4 class="mt-3">{{'NonTrackedItems'|translate}}</h4>
+                  <h4 class="mt-3 mb-0">{{'NonTrackedItems'|translate}}</h4>
                   <div class="col-12 mb-2 border-bottom pb-2"></div>
-                  <kendo-grid class="no-shadow" [kendoGridBinding]="NonItemsDetail" [resizable]="true" [pageSize]="pageSize"
-                      [pageable]="true" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
+                  <kendo-grid class="no-shadow" [kendoGridBinding]="NonItemsDetail" [resizable]="true" [pageSize]="5"
+                      [pageable]="false" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
                       [columnMenu]="{ columnChooser: false }" [height]=gridHeight [selectable]
                       ="true" 
                       [rowClass]="rowCallback" 
