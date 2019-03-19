@@ -12,6 +12,7 @@ import { SharedModule } from '../shared-module/shared-module.module';
 import { FormsModule } from '@angular/forms';
 import { GridModule } from '@progress/kendo-angular-grid';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
+import { InputsModule } from '@progress/kendo-angular-inputs';
 
 @NgModule({
   declarations: [ OutCutomerComponent, OutOrderComponent, OutProdissueComponent],
@@ -23,7 +24,8 @@ import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
     GridModule,
     OutboundRoutingModule,
     SharedModule,
-    DropDownsModule
+    DropDownsModule,
+    InputsModule
   ],
   exports:[OutCutomerComponent,OutOrderComponent,OutProdissueComponent]
 })
