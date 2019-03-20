@@ -51,6 +51,8 @@ export class SigninComponent implements OnInit {
       this.selectedItem = translate.instant("SelectCompany");
       this.defaultWHS = { OPTM_WHSE: translate.instant("SelectWarehouse"), BPLid: 0 };
     });
+    this.commonService.loadConfig();
+
   }
 
   @ViewChild('myCanvas') myCanvas;

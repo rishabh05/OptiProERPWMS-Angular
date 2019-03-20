@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AutoLot } from 'src/app/models/Inbound/AutoLot';
+import { OpenPOLinesModel } from 'src/app/models/Inbound/OpenPOLinesModel';
 
 @Component({
   selector: 'app-inbound-master',
@@ -14,9 +15,9 @@ export class InboundMasterComponent implements OnInit {
   public selectedVernder: string;
   public autoLots: AutoLot[];
   public openPOmodel: any;
-  // public oSubmitPOLotsArray: oSubmitPOLots[] = []; 
+  public oSubmitPOLotsArray: any[] = []; 
   public AddtoGRPOFlag: boolean = false;
-  // public SubmitPOArray: OpenPOLinesModel[] = [];
+  public SubmitPOArray: OpenPOLinesModel[] = [];
   
 
   ngOnInit() {
@@ -34,13 +35,13 @@ export class InboundMasterComponent implements OnInit {
     this.openPOmodel = openPOmodel;
   }
 
-  // public savePOLots(oSubmitPOLot: oSubmitPOLots){
-  //   this.oSubmitPOLotsArray.push(oSubmitPOLot);
-  //   this.AddtoGRPOFlag = true;
-  // }
+  public savePOLots(oSubmitPOLot: any){
+    this.oSubmitPOLotsArray.push(oSubmitPOLot);
+    this.AddtoGRPOFlag = true;
+  }
 
-  // public AddPOList(openPOLinesModel: OpenPOLinesModel){
-  //   this.SubmitPOArray.push(openPOLinesModel);
-  // }
+  public AddPOList(openPOLinesModel: OpenPOLinesModel){
+    this.SubmitPOArray.push(openPOLinesModel);
+  }
 
 }

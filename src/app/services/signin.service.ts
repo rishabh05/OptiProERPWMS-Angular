@@ -76,6 +76,9 @@ export class SigninService {
       LoginId: localStorage.getItem("UserId"),
       CompanyId: compId
     };
+    if(this.config_params == null){
+      this.loadConfig();
+    }
     return this.httpclient.post(this.config_params.service_url + this.lisenceDataUrl, jObject, this.httpOptions);
   }
 }
