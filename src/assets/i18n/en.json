@@ -153,5 +153,8 @@
   "SearchBin":"Search Bin",
   "SelectedMaterials": "Selected Materials",
   "AvailableQty":"Available Qty",
-  "AvaliableMeterial":"Avaliable Meterial"
+  "AvaliableMeterial":"Avaliable Meterial",
+  "MfrSerialNo":"Mfr Serial No.",
+  "ExpiryDate":"Expiry Date"
+  
 }

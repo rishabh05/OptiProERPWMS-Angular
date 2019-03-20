@@ -213,10 +213,14 @@ box-shadow: 0px 1px 15px #13688c;
 
 .k-button.k-primary, .k-slider .k-draghandle, .k-switch-background,
 .km-switch-background, .k-switch-on .k-switch-handle,
-.km-switch-on .km-switch-handle {
+.km-switch-on .km-switch-handle, .k-datepicker .k-select {
   color: #ffffff;
   background-color: #13688c;
   border-color: #13688c; }
+
+.k-datepicker .k-select .k-icon{
+  color:#fff
+}
 
 .k-button.k-primary:hover, .k-button.k-primary.k-state-hover, .k-action-buttons .k-primary:hover, .k-slider .k-draghandle:hover {
   color: #ffffff;
@@ -3742,7 +3746,7 @@ kendo-sortable {
   .k-button:focus, .k-button.k-state-focused {
     box-shadow: 0 0 0 3px rgba(218, 236, 244, 0.5); }
 
-.k-button.k-primary:focus, .k-button.k-primary.k-state-focused {
+.k-button.k-primary:focus, .k-button.k-primary.k-state-focused, .k-datepicker .k-select:active, .k-datepicker .k-select:focus {
   box-shadow: 0 0 0 3px rgba(19, 104, 140, 0.5); }
 
 .k-button-group {

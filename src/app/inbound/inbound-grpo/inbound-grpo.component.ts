@@ -28,7 +28,9 @@ export class InboundGRPOComponent implements OnInit {
   serviceData: any[];
   lookupfor: string;
   showLookupLoader = true;
-
+  viewLines:any[];
+  getLookupValue:any[];
+  public value: Date = new Date();
 
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent) {

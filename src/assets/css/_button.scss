@@ -20,3 +20,9 @@ body {
 body button + button:not(:last-child){
     margin: 0 5px 0 0;
 }
+
+.k-datepicker .k-select{
+    margin: -1px -1px -1px 0;
+    position: relative;
+    z-index: 1;
+}

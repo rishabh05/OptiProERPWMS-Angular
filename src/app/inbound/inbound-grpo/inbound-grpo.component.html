@@ -14,7 +14,7 @@
                       [pageable]="false" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
                       [columnMenu]="{ columnChooser: false }" [height]=gridHeight [selectable]
                       ="true" 
-                      [rowClass]="rowCallback" 
+                      
                       (selectionChange)="openPOByUOM($event,soItemsDetail.ITEMCODE)"
                       #gridItem>
   
@@ -64,6 +64,12 @@
                           </div>
                       </div>
                       <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'ReceivingBin'|translate}}</label>
+                        <div class="col-sm-9">
+                            <kendo-datepicker [value]="value"></kendo-datepicker>
+                        </div>
+                    </div>
+                      <div class="form-group row">
                           <label for="inputPassword" class="col-sm-3 col-form-label">{{'Quantity'|translate}}</label>
                           <div class="col-sm-9">
                               <div class="d-flex">
@@ -85,15 +91,17 @@
                 <div class="col-12 col-sm-12 col-md-12">  
   
                   <kendo-grid class="no-shadow" [kendoGridBinding]="soItemsDetail" [resizable]="true" [pageSize]="pageSize"
-                      [pageable]="true" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
+                      [pageable]="false" [sortable]="true" [filterable]=false [groupable]=false
                       [columnMenu]="{ columnChooser: false }" [height]=gridHeight [selectable]
                       ="true" 
-                      [rowClass]="rowCallback" 
                       (selectionChange)="openPOByUOM($event,soItemsDetail.ITEMCODE)"
                       #gridItem>
                                             
-                      <kendo-grid-column field="OPENQTY" headerClass="text-right" class="text-right" [width]="6" title="{{'Qty'|translate}}"></kendo-grid-column>
+                      <kendo-grid-column field="OPENQTY" [width]="6" title="{{'MfrSerialNo'|translate}}"></kendo-grid-column>
+                      <kendo-grid-column field="OPENQTY" [width]="6" title="{{'SerialNo'|translate}}"></kendo-grid-column>                   
+                      <kendo-grid-column field="OPENQTY" headerClass="text-right" class="text-right" [width]="6" title="{{'Qty'|translate}}"></kendo-grid-column>                   
                       <kendo-grid-column field="OPENQTY" [width]="6" title="{{'Bin'|translate}}"></kendo-grid-column>                   
+                      <kendo-grid-column field="OPENQTY" [width]="6" title="{{'ExpiryDate'|translate}}"></kendo-grid-column>                   
   
                   </kendo-grid>
                 </div>

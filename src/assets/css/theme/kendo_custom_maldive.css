@@ -199,10 +199,13 @@ body .k-grid tr.k-grid-norecords td{
 
 .k-button.k-primary, .k-slider .k-draghandle, .k-switch-background,
 .km-switch-background, .k-switch-on .k-switch-handle,
-.km-switch-on .km-switch-handle {
+.km-switch-on .km-switch-handle, .k-datepicker .k-select {
   color: #000000;
   background-color: #0ed2f7;
   border-color: #0ed2f7; }
+  .k-datepicker .k-select .k-icon{
+    color:#000;
+  }
 
 .k-button.k-primary:hover, .k-button.k-primary.k-state-hover, .k-action-buttons .k-primary:hover, .k-slider .k-draghandle:hover {
   color: #ffffff;
@@ -3728,7 +3731,7 @@ kendo-sortable {
   .k-button:focus, .k-button.k-state-focused {
     box-shadow: 0 0 0 3px rgba(178, 254, 250, 0.5); }
 
-.k-button.k-primary:focus, .k-button.k-primary.k-state-focused {
+.k-button.k-primary:focus, .k-button.k-primary.k-state-focused, .k-datepicker .k-select:focus, .k-datepicker .k-select:active {
   box-shadow: 0 0 0 3px rgba(14, 210, 247, 0.5); }
 
 .k-button-group {

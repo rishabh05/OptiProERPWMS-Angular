@@ -30,6 +30,7 @@ export class OutProdissueComponent implements OnInit {
   public _remainingMeterial: number = 0;
   public _pickedMeterialQty: number = 0;
   public OrderType: string = '';
+  public OperationType: any[];
 
 
   constructor(private ourboundService: OutboundService, private router: Router) { }

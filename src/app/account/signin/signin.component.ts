@@ -51,12 +51,13 @@ export class SigninComponent implements OnInit {
       this.selectedItem = translate.instant("SelectCompany");
       this.defaultWHS = { OPTM_WHSE: translate.instant("SelectWarehouse"), BPLid: 0 };
     });
+    console.log("cons")
   }
 
   @ViewChild('myCanvas') myCanvas;
 
   ngOnInit() {
-
+    console.log("sign")
     // Get cookie start
     if (this.getCookie('cookieEmail') != '' && this.getCookie('cookiePassword') != '') {
       this.userName = this.getCookie('cookieEmail');
