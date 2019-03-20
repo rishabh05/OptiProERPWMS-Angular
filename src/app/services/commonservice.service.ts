@@ -16,8 +16,6 @@ export class Commonservice {
   }
 
   public href: any = window.location.href;
-
-
   public config_params: any;
 
   public httpOptions = {

@@ -88,23 +88,55 @@
   
               <!-- Kendo Table Grid Row start -->
               <div class="row mt-3">
-                <div class="col-12 col-sm-12 col-md-12">  
+                <!-- <div class="col-12 col-sm-12 col-md-12">  
   
-                  <kendo-grid class="no-shadow" [kendoGridBinding]="soItemsDetail" [resizable]="true" [pageSize]="pageSize"
-                      [pageable]="false" [sortable]="true" [filterable]=false [groupable]=false
+                  <kendo-grid class="no-shadow" [kendoGridBinding]="recvingQuantityBinArray" [resizable]="true" [pageSize]="pageSize"
+                      [pageable]="true" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
                       [columnMenu]="{ columnChooser: false }" [height]=gridHeight [selectable]
                       ="true" 
-                      (selectionChange)="openPOByUOM($event,soItemsDetail.ITEMCODE)"
+                      [rowClass]="rowCallback" 
+                      (selectionChange)="openPOByUOM($event, recvingQuantityBinArray.ITEMCODE)"
                       #gridItem>
                                             
-                      <kendo-grid-column field="OPENQTY" [width]="6" title="{{'MfrSerialNo'|translate}}"></kendo-grid-column>
-                      <kendo-grid-column field="OPENQTY" [width]="6" title="{{'SerialNo'|translate}}"></kendo-grid-column>                   
-                      <kendo-grid-column field="OPENQTY" headerClass="text-right" class="text-right" [width]="6" title="{{'Qty'|translate}}"></kendo-grid-column>                   
-                      <kendo-grid-column field="OPENQTY" [width]="6" title="{{'Bin'|translate}}"></kendo-grid-column>                   
-                      <kendo-grid-column field="OPENQTY" [width]="6" title="{{'ExpiryDate'|translate}}"></kendo-grid-column>                   
+                      <kendo-grid-column field="Quantity" headerClass="text-right" class="text-right" [width]="6" title="{{'Qty'|translate}}"></kendo-grid-column>
+                      <kendo-grid-column field="Bin" [width]="6" title="{{'Bin'|translate}}"></kendo-grid-column>                   
   
                   </kendo-grid>
+                </div> -->
+
+                <div class="col-md-12">
+                    <kendo-grid [kendoGridBinding]="recvingQuantityBinArray"  [sortable]="true"  [selectable]="true" #gridItem>
+                        <!-- [kendoGridBinding]="gridData | customPipeItem:searchRequest"  -->
+                        <!-- (selectionChange)="openInqueryDetailOnSelectInquery(gridItem, $event, true, gridItem)" -->
+    
+                        <!-- grid template start -->
+                        <ng-template kendoGridToolbarTemplate>
+                            <!-- show hide column start show hide -->
+                            <kendo-grid-column-chooser class="float-left"></kendo-grid-column-chooser>
+    
+                            <!-- checkbox -->
+                            <form class="k-form opti_show-hide-grid-column-filter float-left">
+                                <div class="k-form-field float-left">
+                                    <input #chkFilter type="checkbox" (change)="onFilterChange(chkFilter,gridItem)" id="opti_RcvItemAddColumnFilterID" [(ngModel)]="isColumnFilter2"
+                                        class="k-checkbox" name="columnfilter" />
+                                    <label class="k-checkbox-label" for="opti_RcvItemAddColumnFilterID">Enable Filter</label>
+                                </div>
+    
+                                <div class="k-form-field float-left">
+                                    <input type="checkbox" id="opti_RcvItemAddColumnGroupID" [(ngModel)]="isColumnGroup2" class="k-checkbox" name="columnGroup"
+                                    />
+                                    <label class="k-checkbox-label" for="opti_RcvItemAddColumnGroupID">Enable Grouping</label>
+                                </div>
+                            </form>
+    
+                        </ng-template>
+    
+                        <kendo-grid-column field="Quantity" title="Quantity" class="text-right"></kendo-grid-column>
+                        <kendo-grid-column field="Bin" title="Bin"></kendo-grid-column>
+                    </kendo-grid>
                 </div>
+
+
               </div>
               <!-- Kendo Table Grid Row end -->
   
@@ -115,8 +147,10 @@
                   <hr />
               </div>
               <div class="col-sm-12 col-12">                      
-                  <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-close-outline" role="presentation"></span> Cancel</button>
-                  
+                  <!-- <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-close-outline" role="presentation"></span> Cancel</button> -->
+                  <button class="k-button k-primary" *ngIf="showButton" type="button" (click)="save($event)">Save</button>
+                <button class="k-button k-primary" *ngIf="showButton" type="button" (click)="receive($event)">Receive</button>
+                <button class="k-button k-primary" type="button" (click)="cancel($event)">Cancel</button>
               </div>
           </div>
     </form>
