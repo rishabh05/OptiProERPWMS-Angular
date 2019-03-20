@@ -18,6 +18,7 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 export class SigninComponent implements OnInit {
 
   showLoader: boolean = false;
+  showFullPageLoader: boolean = false;
   isError: boolean = false;
 
   invalidCredentialMsg: string = "";
@@ -58,7 +59,7 @@ export class SigninComponent implements OnInit {
   @ViewChild('myCanvas') myCanvas;
 
   ngOnInit() {
-    console.log("sign")
+    this.showFullPageLoader = false;
     // Get cookie start
     if (this.getCookie('cookieEmail') != '' && this.getCookie('cookiePassword') != '') {
       this.userName = this.getCookie('cookieEmail');
@@ -78,8 +79,7 @@ export class SigninComponent implements OnInit {
     this.getPSURL();
   }
 
-  async ngOnChanges(): Promise<void> {
-    debugger
+  async ngOnChanges(): Promise<void> { 
     this.commonService.loadConfig();
     this.signinService.loadConfig();
   }
@@ -113,6 +113,7 @@ export class SigninComponent implements OnInit {
       this.selectedItem = document.getElementById("compId").innerText.trim();
       if (this.validateFields()) {
         this.showLoader = false;
+        
         return;
       }
       this.getLicenseData();
@@ -135,6 +136,7 @@ export class SigninComponent implements OnInit {
   }
 
   private getLicenseData(){
+    this.showFullPageLoader = true;
     this.signinService.getLicenseData(this.selectedItem).subscribe(
       data => {
         this.licenseData = data;
@@ -142,6 +144,7 @@ export class SigninComponent implements OnInit {
       },
       error => {
         this.showLoader = false;
+        this.showFullPageLoader = false;
         this.toastr.error('', this.translate.instant("license Failed"), 
         this.commonService.toast_config.iconClasses.error);
       }
@@ -149,12 +152,12 @@ export class SigninComponent implements OnInit {
   }
 
   private handleLicenseDataSuccessResponse() {
-
+   
     this.selectedWhse = document.getElementById("whseId").innerText.trim();
-    this.showLoader = false;
+    this.showLoader = false;    
     if (this.licenseData.length > 1) {
       if (this.licenseData[1].ErrMessage == "" || this.licenseData[1].ErrMessage == null) {
-        if (this.licenseData[0].Message == "True") {
+        if (this.licenseData[0].Message == "True") {          
           this.selectedItem = document.getElementById("compId").innerText.trim();
           localStorage.setItem("GUID", this.licenseData[1].GUID);
           localStorage.setItem("CompID", this.selectedItem);
@@ -172,7 +175,9 @@ export class SigninComponent implements OnInit {
             this.setCookie('CompID', "", 365);
             this.setCookie('whseId', "", 365);
           }
+         setTimeout(()=> {
           this.router.navigateByUrl('home/dashboard');
+         }, 10)
         } else {
           alert(this.licenseData[0].Message + " " + this.licenseData[0].Token);
         }

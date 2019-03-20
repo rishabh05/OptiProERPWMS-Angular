@@ -12756,4 +12756,10 @@ body .k-grid tr.k-grid-norecords td{
       box-shadow: 0 0 40px rgba(41, 43, 44, 0.1); }
     .k-chat .k-message-box .k-button:hover {
       color: #329ac2; }
+
+.opti_FullPageLoader .blob{
+  background-color: #329ac2;
+  box-shadow: 0 0 1rem rgba(50, 154, 194, 0.25);
+}
+
   

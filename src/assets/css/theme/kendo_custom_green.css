@@ -12759,3 +12759,7 @@ html .k-upload {
     box-shadow: 0 0 40px rgba(41, 43, 44, 0.1); }
   .k-chat .k-message-box .k-button:hover {
     color: #8bcb6e; }
+    .opti_FullPageLoader .blob{
+      background-color: #8bcb6e;
+      box-shadow: 0 0 1rem rgba(139, 103, 110, 0.25);
+    }
