@@ -103,6 +103,9 @@ export class LookupComponent implements OnInit {
     } else if (this.lookupfor == "toBinsList") {
       this.showSBTrackFromBinList();
     }
+    else if (this.lookupfor == "RecvBinList") {
+      this.showRecvBinList();
+    }
     else if(this.lookupfor == "VendorList"){
       this.showVendorList();
     }
@@ -317,6 +320,23 @@ export class LookupComponent implements OnInit {
       }
     ];
     this.lookupTitle = this.translate.instant("BinNoList");
+  }
+
+  showRecvBinList() {
+    this.table_head = [
+      {
+        field: 'BINNO',
+        title: this.translate.instant("BinNo"),
+        type: 'text',
+        width: '100'
+      }
+    ];
+    this.lookupTitle = this.translate.instant("BinLookupTitle");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
   }
 
   showCustomerList() {

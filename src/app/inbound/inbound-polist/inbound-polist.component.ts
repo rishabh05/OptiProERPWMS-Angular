@@ -30,6 +30,8 @@ export class InboundPolistComponent implements OnInit {
   autoLot: any[];
   openPOLineModel: any;
   openPOLinesModel: any[];
+  viewLines: any[];
+  
 
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent) {

@@ -33,6 +33,7 @@ export class OutProdissueComponent implements OnInit {
   public _pickedMeterialQty: number = 0;
   public OrderType: string = '';
   public oldSelectedMeterials: any = Array<MeterialModel>();
+  public OperationType: any[];
 
 
   constructor(private ourboundService: OutboundService, private router: Router, private toastr: ToastrService, private translate: TranslateService) { }

@@ -11,6 +11,7 @@ import { InboundMasterComponent } from './inbound-master.component';
 import { InboundPolistComponent } from './inbound-polist/inbound-polist.component';
 import { InboundGRPOComponent } from './inbound-grpo/inbound-grpo.component';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
+import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
 
 @NgModule({
   declarations: [InboundDetailsComponent, InboundMasterComponent, InboundPolistComponent, InboundGRPOComponent],
@@ -23,7 +24,8 @@ import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
     FormsModule,
 
     InboundRoutingModule,
-    DropDownsModule
+    DropDownsModule,
+    DateInputsModule
   ]
 })
 export class InboundModule { }
