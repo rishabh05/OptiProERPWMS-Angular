@@ -152,5 +152,12 @@
   "SearchBin":"Search Bin",
   "SelectedMaterials": "Selected Materials",
   "AvailableQty":"Available Qty",
-  "AvaliableMeterial":"Avaliable Meterial"
+  "AvaliableMeterial":"Avaliable Meterial",
+  "MeterialCanNotBeZero":"Issue meterial quantity can not be 0.",
+  "MeterialCanNotBeLTZero":"Issue meterial quantity can not be less then 0.",
+  "QtyGTOpen":"Issue meterial quantity can not be greated then Open Quantity.",
+  "QtyGTTotal":"Issue meterial quantity can not be greater then its total quantity.",
+  "MeterialCanNotBeBlank":"Issue meterial quantity can not be blank.",
+  "PickedAllRequiredItems":"You picked all requerde items."
+
 }
