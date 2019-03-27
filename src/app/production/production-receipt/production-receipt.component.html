@@ -26,7 +26,91 @@
                   </div>
               </div>
           </div>
+
+          <!-- container row -->
+          <div class="row">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+                <div class="form-group row">
+                    <label for="inputPassword" class="col-sm-3 col-form-label">{{'Item'|translate}}</label>
+                    <div class="col-sm-9 d-flex align-items-center">
+                        <p class="mb-0">demotext</p>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+                <div class="form-group row">
+                    <label for="inputPassword" class="col-sm-3 col-form-label">{{'SerialQty'|translate}}</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control form-control-sm text-right" name ='customerCode' placeholder="{{'SerialQty'|translate}}">
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+                <div class="form-group row">
+                    <label for="inputPassword" class="col-sm-3 col-form-label">{{'Serial'|translate}}</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control form-control-sm" name ='customerCode' placeholder="{{'Serial'|translate}}">
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+                <div class="form-group row">
+                    <label for="inputPassword" class="col-sm-3 col-form-label">{{'ExpiryDate'|translate}}</label>
+                    <div class="col-sm-9">
+                        <kendo-datepicker [value]="value"></kendo-datepicker>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+                <div class="form-group row">
+                    <label for="inputPassword" class="col-sm-3 col-form-label">{{'Bin'|translate}}</label>
+                    <div class="col-sm-9">
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control form-control-sm" name ='customerCode' placeholder="{{'Bin'|translate}}">
+                            <div class="input-group-append">
+                                <button class="k-button k-primary btn" type="button">
+                                    <i class="opti-icon-hammenu"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+                <div class="form-group row">
+                    <label for="inputPassword" class="col-sm-3 col-form-label">{{'OpenQty'|translate}}</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control form-control-sm text-right" name ='customerCode' placeholder="{{'OpenQty'|translate}}">
+                    </div>
+                </div>
+            </div>
+          </div>
+
+          <h5>{{'AssignedQuantity'|translate}}</h5>
+          <div class="row">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+                <div class="form-group row">
+                    <label for="inputPassword" class="col-sm-3 col-form-label">{{'AssignedQty'|translate}}</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control form-control-sm text-right" name ='customerCode' placeholder="{{'AssignedQty'|translate}}">
+                    </div>
+                </div>
+            </div>
+          </div>
+          <!-- container row end -->
+
       </div>
+
       <div class="fix-footer-btnBar">
           <div class="col-sm-12 col-12">
               <hr />

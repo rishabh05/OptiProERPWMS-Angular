@@ -161,7 +161,7 @@
   "FromBinList": "From Bin  List",
   "BatchSrBinList": "Batch/Sr/Bin No. List",
   "NoOfCopiesCannotbeBlank": "No. of copies cannot be blank",
-  "Total": "Total",
+  "Total": "Total", 
   "StockQty": "Stock Qty",
   "MeterialCanNotBeZero":"Issue meterial quantity can not be 0.",
   "MeterialCanNotBeLTZero":"Issue meterial quantity can not be less then 0.",
@@ -171,6 +171,9 @@
   "PickedAllRequiredItems":"You picked all requerde items.",
 
   "MfrSerialNo":"Mfr Serial No.",
-  "ExpiryDate":"Expiry Date"
+  "ExpiryDate":"Expiry Date",
+  "AcceptQty":"Accept Qty",
+  "AssignedQuantity":"Assigned Quantity",
+  "OrderList": "Order List"
   
 }

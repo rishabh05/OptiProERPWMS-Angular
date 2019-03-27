@@ -6,6 +6,7 @@ import { ProductionIssueComponent } from './production-issue/production-issue.co
 import { ProductionReceiptComponent } from './production-receipt/production-receipt.component';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { TrnaslateLazyModule } from 'src/translate-lazy.module';
+import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
 
 @NgModule({
   declarations: [ProductionIssueComponent, ProductionReceiptComponent],
@@ -13,7 +14,8 @@ import { TrnaslateLazyModule } from 'src/translate-lazy.module';
     CommonModule,
     ProductionRoutingModule,
     TrnaslateLazyModule,
-    PerfectScrollbarModule
+    PerfectScrollbarModule,
+    DateInputsModule
   ]
 })
 export class ProductionModule { }
