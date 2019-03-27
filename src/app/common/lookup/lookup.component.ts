@@ -423,7 +423,7 @@ export class LookupComponent implements OnInit {
       {
         field: 'DocDueDate',
         title: this.translate.instant("DelDate"),
-        type: 'text',
+        type: 'date',
         width: '100'
       },
       {

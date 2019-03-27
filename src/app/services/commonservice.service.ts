@@ -171,7 +171,7 @@ export class Commonservice {
     sessionStorage.removeItem('isLoggedIn');
     sessionStorage.removeItem('selectedComp');
     sessionStorage.removeItem('loggedInUser');
-    sessionStorage.removeItem('ConfigData');
+    // sessionStorage.removeItem('ConfigData');
 
     localStorage.removeItem('CompID');
     localStorage.removeItem('GUID');

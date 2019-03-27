@@ -1,7 +1,9 @@
 <!-- Grid Modal-->
-<kendo-dialog title="{{lookupTitle}}" *ngIf="dialogOpened" (close)="close_kendo_dialog()" [minWidth]="750" [width]="750">
+<kendo-dialog *ngIf="dialogOpened" (close)="close_kendo_dialog()" [minWidth]="750" [width]="750">
 
-
+    <kendo-dialog-titlebar>
+        {{lookupTitle}}
+    </kendo-dialog-titlebar>
     <kendo-grid  [kendoGridBinding]="serviceData"
         [filterable]=isColumnFilter [groupable]=isColumnGroup [selectable]="true" [pageable]="pagable" [sort]="state.sort"
         [filter]="state.filter" [resizable]="true" [skip]="skip" (selectionChange)="on_item_select($event)" [pageSize]="pagesize"

@@ -8,6 +8,7 @@ import { TranslateService, LangChangeEvent } from '../../../../node_modules/@ngx
 import { UOM } from 'src/app/models/Inbound/UOM';
 import { OpenPOLinesModel } from 'src/app/models/Inbound/OpenPOLinesModel';
 import { RecvingQuantityBin } from 'src/app/models/Inbound/RecvingQuantityBin';
+import { AutoLot } from 'src/app/models/Inbound/AutoLot';
 
 @Component({
   selector: 'app-inbound-grpo',
@@ -18,7 +19,7 @@ export class InboundGRPOComponent implements OnInit {
 
   openPOLineModel: OpenPOLinesModel[] = [];
   Ponumber: any;
-  RecvbBinvalue: any="";
+  RecvbBinvalue: any = "";
   uomSelectedVal: UOM;
   UOMList: UOM[];
   qty: number;
@@ -28,9 +29,12 @@ export class InboundGRPOComponent implements OnInit {
   serviceData: any[];
   lookupfor: string;
   showLookupLoader = true;
-  viewLines:any[];
-  getLookupValue:any[];
+  viewLines: any[];
+  getLookupValue: any[];
   public value: Date = new Date();
+  searlNo: any;
+  MfrSerial: any;
+  expiryDate: string;
 
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent) {
@@ -149,14 +153,35 @@ export class InboundGRPOComponent implements OnInit {
       return;
     }
 
-    let result = this.recvingQuantityBinArray.find(element => element.Bin == this.RecvbBinvalue);
-    if (result == undefined) {
-      this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.qty, this.RecvbBinvalue));
-      this.showButton = true;
-      this.qty = undefined;
-    } else {
-      this.toastr.error('', this.translate.instant("BinValidation"));
-      return;
+    let autoLots = this.inboundMasterComponent.autoLots;
+    this.addSerialQty(autoLots, this.qty);
+    // let result = this.recvingQuantityBinArray.find(element => element.Bin == this.RecvbBinvalue);
+    // if (result == undefined) {
+    //   this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.qty, this.RecvbBinvalue));
+    //   this.showButton = true;
+    //   this.qty = undefined;
+    // } else {
+    //   this.toastr.error('', this.translate.instant("BinValidation"));
+    //   return;
+    // }
+  }
+
+
+  addSerialQty(autoLots: AutoLot[], qty: any) {
+    while(qty>0 && qty != 0){
+      for(var i=0; i<autoLots.length; i++){
+        if(autoLots[i].OPRTYPE == "1"){
+          this.searlNo = autoLots[i].STRING
+        }
+        if(autoLots[i].OPRTYPE === "2"){
+          this.searlNo += Number(autoLots[i].STRING) + 1
+        }
+        if(autoLots[i].OPRTYPE == "2" && autoLots[i].OPERATION == "2"){
+
+        }
+      }
+      this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, this.qty, this.RecvbBinvalue, this.expiryDate));
+      qty = qty-1;  
     }
   }
 
@@ -241,11 +266,10 @@ export class InboundGRPOComponent implements OnInit {
     return oSubmitPOLotsObj;
   }
 
-  SubmitGoodsReceiptPO(oSubmitPOLotsObj: any){
+  SubmitGoodsReceiptPO(oSubmitPOLotsObj: any) {
     this.inboundService.SubmitGoodsReceiptPO(oSubmitPOLotsObj).subscribe(
       (data: any) => {
         console.log(data);
-        debugger
         if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
           // alert("Goods Receipt PO generated successfully with Doc No: " + data.DocEntry);
           this.toastr.success('', this.translate.instant("GRPOSuccessMessage" + data.DocEntry));
