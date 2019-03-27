@@ -108,6 +108,12 @@ export class SigninComponent implements OnInit {
         return;
       }
       this.getLicenseData();
+    //  this.showLoader = false;
+    //   // localStorage.setItem("GUID", this.licenseData[1].GUID);
+    //    localStorage.setItem("CompID", "BUILD128SRC12X");
+    //    localStorage.setItem("whseId", "01");
+    //    localStorage.setItem("Token", "2bf91be7-819c-4443-a1bc-82dc150da05d");
+    //   this.router.navigateByUrl('home/dashboard'); 
     }
   }
 
@@ -130,9 +136,16 @@ export class SigninComponent implements OnInit {
     this.signinService.getLicenseData(this.selectedItem).subscribe(
       data => {
         this.licenseData = data;
-        this.handleLicenseDataSuccessResponse();
+        if(this.licenseData!=null && this.licenseData!=undefined){
+          this.handleLicenseDataSuccessResponse();
+        }else{
+          this.showLoader = false;  
+          this.toastr.error('', this.translate.instant("license Failed"));
+        }
+        
       },
       error => {
+        
         this.showLoader = false;
         this.toastr.error('', this.translate.instant("license Failed"), 
         this.commonService.toast_config.iconClasses.error.iconClasses.error);

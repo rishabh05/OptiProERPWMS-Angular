@@ -1,0 +1,8 @@
+<kendo-dialog  *ngIf="opened" [width]="1024" [height]="600" (close)="close()">
+    <kendo-dialog-titlebar>
+        {{fileNameLabel}}
+    </kendo-dialog-titlebar>
+    <iframe width='100%' height='500px' [src]='base64String | pdfpipe'></iframe>
+    <!-- <button type="button"  (click)="OnCancelClick()" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-close-outline"
+        role="presentation"></span> {{'Cancel'|translate}}</button> -->
+</kendo-dialog>

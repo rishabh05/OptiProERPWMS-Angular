@@ -1,60 +1,147 @@
 <div class="opti_container position-relative bg-white rounded">
-  <form class="opti_input-group-form">
-      <div class="opti_container_inner" [perfectScrollbar]=" ">
+    <form class="opti_input-group-form form-with-fix-btnBar">
+        <div class="opti_container_inner" [perfectScrollbar]=" ">
 
-          <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
-              {{'InventoryEnquiry'|translate}}
-          </h3>
+            <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
+                {{'InventoryEnquiry'|translate}}
+            </h3>
 
-          <div class="row mb-4">
-            <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
-              <div class="opti_input-group-radio border-0 px-0">
-                <input type="radio" name="group" id="InventoryEnquiryOptions1" class="k-radio" checked />
-                <label class="k-radio-label" for="InventoryEnquiryOptions1">{{'BatchSerial'|translate}}</label>
+            <div class="row mb-4">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+                    <div class="opti_input-group-radio border-0 px-0">
+                        <input type="radio" name="group" (change)="handleCheckChange($event)" id="InventoryEnquiryOptions1" class="k-radio" checked />
+                        <label class="k-radio-label" for="InventoryEnquiryOptions1">{{'BatchSerial'|translate}}</label>
 
-                <input type="radio" name="group" id="InventoryEnquiryOptions2" class="k-radio" />
-                <label class="k-radio-label" for="InventoryEnquiryOptions2">{{'ItemSummary'|translate}}</label>
+                        <input type="radio" name="group"  (change)="handleCheckChange($event)"id="InventoryEnquiryOptions2" class="k-radio" />
+                        <label class="k-radio-label" for="InventoryEnquiryOptions2">{{'ItemSummary'|translate}}</label>
 
-                <input type="radio" name="group" class="k-radio" id="InventoryEnquiryOptions3" />
-                <label class="k-radio-label" for="InventoryEnquiryOptions3">{{'ItemDetail'|translate}}</label>
-              </div>
+                        <input type="radio" name="group"  (change)="handleCheckChange($event)" class="k-radio" id="InventoryEnquiryOptions3" />
+                        <label class="k-radio-label" for="InventoryEnquiryOptions3">{{'ItemDetail'|translate}}</label>
+                    </div>
+                </div>
             </div>
-          </div>
 
-          <div class="row">
-              <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
 
-                  <div class="form-group row">
-                      <label for="inputPassword" class="col-sm-3 col-form-label">{{'BatchSrBinNo'|translate}}</label>
-                      <div class="col-sm-9">
-                          <div class="input-group input-group-sm">
-                              <input type="text" class="form-control form-control-sm" name ='customerCode' placeholder="{{'BatchSrBinNo'|translate}}">
-                              <div class="input-group-append has-seprate-btn">
-                                  <button class="k-button k-primary btn" type="button">
-                                      <i class="opti-icon-hammenu"></i>
-                                  </button>
-                                  <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button">
-                                    <i class="opti-icon-qr-code fs-28"></i>
-                                  </button>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="form-group row">
-                      <label for="inputPassword" class="col-sm-3 col-form-label">{{'ItemCode'|translate}}</label>
-                      <div class="col-sm-9">
-                          <input type="text" class="form-control form-control-sm" name ='customerCode' placeholder="{{'ItemCode'|translate}}">
-                      </div>
-                  </div>
-                  <div class="form-group row">
-                      <label for="inputPassword" class="col-sm-3 col-form-label">{{'Description'|translate}}</label>
-                      <div class="col-sm-9">
-                          <input type="text" class="form-control form-control-sm" name ='customerCode' placeholder="{{'Description'|translate}}">
-                      </div>
-                  </div>
+                    <div class="form-group row" *ngIf="batchSerial">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'BatchSrBinNo'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control form-control-sm" 
+                                [(ngModel)]="lotNo" (blur)="OnLotsChange()"
+                                    name='batchSrNo' placeholder="{{'BatchSrBinNo'|translate}}">
+                                <div class="input-group-append has-seprate-btn">
+                                    <button class="k-button k-primary btn" (click)="OnBatchSerialLookupClick()" type="button">
+                                        <i class="opti-icon-hammenu"></i>
+                                    </button>
+                                    <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
+                                        type="button">
+                                        <i class="opti-icon-qr-code fs-28"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'ItemCode'|translate}}</label>
+                        <div class="col-sm-9">
+                            <input type="text" [disabled]="disableItemCode" [(ngModel)]="itemCode" (blur)="OnItemCodeChange()"
+                             class="form-control form-control-sm"
+                                name='itemCode' placeholder="{{'ItemCode'|translate}}" *ngIf="batchSerial">
+                            <div class="input-group input-group-sm" *ngIf="itemSummary || itemDetail">
+                                <input type="text" [disabled]="disableItemCode" [(ngModel)]="itemCode" 
+                                class="form-control form-control-sm"  (blur)="OnItemCodeChange()"
+                                    name='itemCode' placeholder="{{'ItemCode'|translate}}">
+                                <div class="input-group-append has-seprate-btn">
+                                    <button class="k-button k-primary btn" (click)="OnItemCodeLookupClick()" type="button">
+                                        <i class="opti-icon-hammenu"></i>
+                                    </button>
+                                    <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
+                                        type="button">
+                                        <i class="opti-icon-qr-code fs-28"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'Description'|translate}}</label>
+                        <div class="col-sm-9">
+                                
+                            <input type="text" [disabled]="disableDescription" [(ngModel)]="itemNameLabel" class="form-control form-control-sm"
+                                name='descriptionCode' placeholder="{{'Description'|translate}}">
+                                
+                        </div>
+                    </div>
 
-              </div>
-          </div>
-      </div>
-  </form>
+                </div>
+            </div>
+            <div *ngIf="showQuantityGrid">
+                <!-- Kendo Table Grid Row start -->
+                <div class="row mt-3">
+                    <div class="col-12 col-sm-12 col-md-12">
+                        <kendo-grid class="no-shadow" [kendoGridBinding]="quantityGridData" [resizable]="true" [pageSize]="pageSize"
+                            [pageable]="true" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
+                            [columnMenu]="{ columnChooser: false }" [height]=gridHeight [selectable]="true" #gridItem>
+
+                            <!-- grid for mobile start -->
+                            <!-- <kendo-grid-column media="(max-width: 767px)" title="Payment List" class="opti_mobile-grid-td">
+                      <ng-template kendoGridCellTemplate let-dataItem>
+                          <dl class="opti_mobile_grid_dl">
+                              <dt>Item Code</dt>
+                              <dd>{{ dataItem.QuotationNumber }}</dd>
+
+                              <dt>Open Qty.</dt>
+                              <dd>{{ dataItem.QuotationDate }}</dd>
+
+                              <dt>Pick Qty</dt>
+                              <dd>{{ dataItem.Remark }}</dd>
+                          </dl>
+                      </ng-template>
+                  </kendo-grid-column> -->
+                            <!-- grid for mobile end -->
+
+                            <kendo-grid-column *ngIf="!nonTracked" field="LOTNO" title="{{'LotNo'|translate}}" [width]="6"></kendo-grid-column>
+                            <kendo-grid-column field="BINNO" [width]="6" title="{{'BinNo'|translate}}"></kendo-grid-column>
+                            <kendo-grid-column field="TOTALQTY" headerClass="text-right" title="{{'StockQty'|translate}}"  class="text-right" [width]="6"
+                                title="{{'ReceiveQty'|translate}}"></kendo-grid-column>
+
+
+                        </kendo-grid>
+                    </div>
+                </div>
+                <!-- Kendo Table Grid Row end -->
+
+                <div class="row mt-3 justify-content-end">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-4">
+
+                        <div class="form-group row justify-content-end">
+                            <label for="inputPassword" class="col-form-label col-4 col-sm-4 text-right pr-0">{{'Total'|translate}}</label>
+                            <div class="col-sm-8 col-8">
+                                <input type="text" class="form-control form-control-sm text-right" disabled [(ngModel)]="totalSum" name='totalValue'
+                                    placeholder="{{'Total'|translate}}">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="fix-footer-btnBar">
+            <div class="col-sm-12 col-12">
+                <hr />
+            </div>
+            <div class="col-sm-12 col-12">
+                <!-- <button type="button"  (click)="OnPrintClick()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-printer"
+                role="presentation"></span> {{'Print'|translate}}</button> -->
+                <button type="button" (click)="OnCancelClick" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-close-outline"
+                        role="presentation"></span> {{'Cancel'|translate}}</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div [hidden]="showLookupLoader">
+    <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
 </div>
