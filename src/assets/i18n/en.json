@@ -56,7 +56,7 @@
   "ToWhsBlankErrMsg": "To Whse cannot be blank!",
   "WarehouseList": "Warehouse List",
   "ItemCodeList": "Item Code List",
-  "InvalidItemCode": "Invalid ItemCode",
+  "InvalidItemCode": "Invalid Item Code",
   "InvalidBatch": "Batch Number not valid.",
   "InvalidSerial": "Serial Number not valid.",
   "SerialAlreadyExist": "Serial already exist",
@@ -156,6 +156,13 @@
   "SelectedMaterials": "Selected Materials",
   "AvailableQty":"Available Qty",
   "AvaliableMeterial":"Avaliable Meterial",
+
+
+  "FromBinList": "From Bin  List",
+  "BatchSrBinList": "Batch/Sr/Bin No. List",
+  "NoOfCopiesCannotbeBlank": "No. of copies cannot be blank",
+  "Total": "Total",
+  "StockQty": "Stock Qty",
   "MeterialCanNotBeZero":"Issue meterial quantity can not be 0.",
   "MeterialCanNotBeLTZero":"Issue meterial quantity can not be less then 0.",
   "QtyGTOpen":"Issue meterial quantity can not be greated then Open Quantity.",

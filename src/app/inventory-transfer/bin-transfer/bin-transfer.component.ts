@@ -26,7 +26,7 @@ export class BinTransferComponent implements OnInit {
   fromBin: string = "";
   transferQty: string = "";
   itemName: string = "";
-  ItemTracking: string = "";
+  ItemTracking: string = ""; 
   serviceData: any[];
   lookupfor: string;
   showItemName: boolean = false;
