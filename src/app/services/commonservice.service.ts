@@ -16,8 +16,6 @@ export class Commonservice {
   }
 
   public href: any = window.location.href;
-
-
   public config_params: any;
 
   public httpOptions = {
@@ -173,7 +171,7 @@ export class Commonservice {
     sessionStorage.removeItem('isLoggedIn');
     sessionStorage.removeItem('selectedComp');
     sessionStorage.removeItem('loggedInUser');
-    sessionStorage.removeItem('ConfigData');
+    // sessionStorage.removeItem('ConfigData');
 
     localStorage.removeItem('CompID');
     localStorage.removeItem('GUID');

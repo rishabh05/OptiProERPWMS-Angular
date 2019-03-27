@@ -199,10 +199,13 @@ body .k-grid tr.k-grid-norecords td{
 
 .k-button.k-primary, .k-slider .k-draghandle, .k-switch-background,
 .km-switch-background, .k-switch-on .k-switch-handle,
-.km-switch-on .km-switch-handle {
+.km-switch-on .km-switch-handle, .k-datepicker .k-select {
   color: #ffffff;
   background-color: #8bcb6e;
   border-color: #8bcb6e; }
+  .k-datepicker .k-select .k-icon{
+    color:#fff;
+  }
 
 .k-button.k-primary:hover, .k-button.k-primary.k-state-hover, .k-action-buttons .k-primary:hover, .k-slider .k-draghandle:hover {
   color: #ffffff;
@@ -3728,7 +3731,7 @@ kendo-sortable {
   .k-button:focus, .k-button.k-state-focused {
     box-shadow: 0 0 0 3px rgba(215, 241, 203, 0.5); }
 
-.k-button.k-primary:focus, .k-button.k-primary.k-state-focused {
+.k-button.k-primary:focus, .k-button.k-primary.k-state-focused, .k-datepicker .k-select:focus, .k-datepicker .k-select:active {
   box-shadow: 0 0 0 3px rgba(139, 203, 110, 0.5); }
 
 .k-button-group {
@@ -12756,3 +12759,7 @@ html .k-upload {
     box-shadow: 0 0 40px rgba(41, 43, 44, 0.1); }
   .k-chat .k-message-box .k-button:hover {
     color: #8bcb6e; }
+    .opti_FullPageLoader .blob{
+      background-color: #8bcb6e;
+      box-shadow: 0 0 1rem rgba(139, 203, 110, 0.25);
+    }

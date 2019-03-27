@@ -199,10 +199,13 @@
   
   .k-button.k-primary, .k-slider .k-draghandle, .k-switch-background,
   .km-switch-background, .k-switch-on .k-switch-handle,
-  .km-switch-on .km-switch-handle {
+  .km-switch-on .km-switch-handle, .k-datepicker .k-select {
     color: #ffffff;
     background-color: #595959;
     border-color: #595959; }
+    .k-datepicker .k-select .k-icon{
+      color:#fff;
+    }
   
   .k-button.k-primary:hover, .k-button.k-primary.k-state-hover, .k-action-buttons .k-primary:hover, .k-slider .k-draghandle:hover {
     color: #ffffff;
@@ -12753,4 +12756,10 @@
       box-shadow: 0 0 40px rgba(41, 43, 44, 0.1); }
     .k-chat .k-message-box .k-button:hover {
       color: #595959; }
+
+.opti_FullPageLoader .blob{
+  background-color: #595959;
+  box-shadow: 0 0 1rem rgba(89, 89, 89, 0.25);
+}
+
   

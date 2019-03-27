@@ -44,7 +44,7 @@
                           </span>
                           <input name = "password" required [(ngModel)]="password" 
                           #pwd = ngModel type="password" class="k-textbox" value="" 
-                          placeholder="{{ 'EnterPassword'|translate}}" [readonly] = readonlyFlag/>
+                          placeholder="{{'EnterPassword'|translate}}" [readonly]=readonlyFlag />
                         </label>
 
                         <!-- start if condition -->
@@ -97,4 +97,17 @@
             </div>
         </div>
     </div>
+
+    <!-- Full page loader start -->
+    <div class="opti_FullPageLoader" *ngIf="showFullPageLoader==true">
+        <div class="blob blob-0"></div>
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+        <div class="blob blob-4"></div>
+        <div class="blob blob-5"></div>
+    </div>
+
+    <!-- Full page loader loader end -->
 </div>
+

@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonConstants } from 'src/app/const/common-constants';
-import { HttpClient } from '@angular/common/http';
 import { OutboundService } from 'src/app/services/outbound.service';
 import { OutboundData } from 'src/app/models/outbound/outbound-data';
 import { MeterialModel } from 'src/app/models/outbound/meterial-model';
-import { parse } from 'url';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { TranslateService } from '@ngx-translate/core';
+
 
 @Component({
   selector: 'app-out-prodissue',
@@ -14,11 +16,13 @@ import { parse } from 'url';
 export class OutProdissueComponent implements OnInit {
   public outbound: OutboundData;
   public selected: any = null;
+  public step: number = 0.001;
   public lookupData: any;
   public lookupFor: any = 'out-items';
   public showLookup: boolean = false;
   public selectedItems: any;
   public totalPickQty: number = 0.000;
+  public mask: string = "0.000";
   public uomList: any = [];
   public selectedMeterials: any = Array<MeterialModel>();
   public comingSelectedMeterials: any = Array<MeterialModel>();
@@ -27,9 +31,12 @@ export class OutProdissueComponent implements OnInit {
   public _requiredMeterialQty: number = 0;
   public _remainingMeterial: number = 0;
   public _pickedMeterialQty: number = 0;
+  public OrderType: string = '';
+  public oldSelectedMeterials: any = Array<MeterialModel>();
+  public OperationType: any[];
 
 
-  constructor(private ourboundService: OutboundService) { }
+  constructor(private ourboundService: OutboundService, private router: Router, private toastr: ToastrService, private translate: TranslateService) { }
 
   ngOnInit() {
     let outboundData = localStorage.getItem(CommonConstants.OutboundData);
@@ -37,23 +44,33 @@ export class OutProdissueComponent implements OnInit {
     if (outboundData != undefined && outboundData != '') {
       this.outbound = JSON.parse(outboundData);
       this.selected = this.outbound.SelectedItem;
+      this.OrderType = this.selected.TRACKING;
       this._requiredMeterialQty = parseFloat(this.selected.OPENQTY);
       this._remainingMeterial = this._requiredMeterialQty - this._pickedMeterialQty;
       this.selectedItems = [this.selected];
-    }
 
-    this.ourboundService.getUOMList(this.selected.ITEMCODE).subscribe(
-      data => {
-        this.uomList = data;
+      if (this.OrderType == 'N') {
+        this.ourboundService.getAvaliableMeterialForNoneTracked(this.selected.ITEMCODE).subscribe(
+          mdata => {
+            let el: any = document.getElementById('gridSelectedMeterial');
+            this.getLookupValue(mdata, el, true);
+          }
+        );
       }
-    )
+
+
+      this.ourboundService.getUOMList(this.selected.ITEMCODE).subscribe(
+        data => {
+          this.uomList = data;
+        }
+      )
+    }
   }
 
-  calculatePickQty(avlQty: number) {
-
+  calculatePickQty() {
   }
 
-  valueChange(e: any) {
+  valueChange() {
 
   }
 
@@ -124,20 +141,63 @@ export class OutProdissueComponent implements OnInit {
 
   needMeterial() {
     this.calculateTotalAndRemainingQty();
-    return this._pickedMeterialQty < this._remainingMeterial;
+
+    return this._pickedMeterialQty < this._requiredMeterialQty;
   }
 
-  onIssueMeterialQtyChange() {
-    debugger;
-    this.calculateTotalAndRemainingQty();
-    if (this._pickedMeterialQty <= 0) {
-      alert('Issue meterial quantity can not be 0');
+  onIssueMeterialQtyChange(idx: number, txt: any) {
+
+    let oldValue: number = parseFloat(this.oldSelectedMeterials[idx].MeterialPickQty);
+
+    if (this.selectedMeterials[idx].MeterialPickQty === null || this.selectedMeterials[idx].MeterialPickQty === undefined) {
+      this.selectedMeterials[idx].MeterialPickQty = oldValue;
     }
+    //let oldValue: number = parseFloat(this.selectedMeterials[idx].MeterialPickQty);
+
+    if (txt.value === '' || txt.value === undefined || txt.value === null) {
+      this.toastr.error('', this.translate.instant("MeterialCanNotBeBlank"));
+      txt.value = oldValue;
+      this.selectedMeterials[idx].MeterialPickQty = oldValue;
+      return;
+    }
+
+    this.selectedMeterials[idx].MeterialPickQty = parseFloat(txt.value);
+
+    if (this.selectedMeterials[idx].MeterialPickQty > this.selectedMeterials[idx].TOTALQTY) {
+
+      this.toastr.error('', this.translate.instant("QtyGTTotal"));
+      txt.value = oldValue;
+      this.selectedMeterials[idx].MeterialPickQty = oldValue;
+    }
+
+    this.calculateTotalAndRemainingQty();
+
+    if (this._pickedMeterialQty < 0) {
+
+      this.toastr.error('', this.translate.instant("MeterialCanNotBeLTZero"));
+
+      txt.value = oldValue;
+      this.selectedMeterials[idx].MeterialPickQty = oldValue;
+
+      this.calculateTotalAndRemainingQty();
+      return;
+    }
+
+    if (this._pickedMeterialQty > this._requiredMeterialQty) {
+      this.toastr.error('', this.translate.instant("QtyGTOpen"));
+
+      txt.value = oldValue;
+      this.selectedMeterials[idx].MeterialPickQty = oldValue;
+      this.calculateTotalAndRemainingQty();
+      return;
+    }
+
+
   }
 
   calculateTotalAndRemainingQty() {
-    if (this.selectedMeterials != undefined && this.selectedMeterials != undefined && this.selectedMeterials.length > 0) {
-      this._pickedMeterialQty = this.selectedMeterials.map(i => i.MeterialPickQty).reduce((sum, c) => sum + c);
+    if (this.selectedMeterials != null && this.selectedMeterials != undefined && this.selectedMeterials.length > 0) {
+      this._pickedMeterialQty = this.selectedMeterials.map(i => i.MeterialPickQty).reduce((sum, c) => parseFloat(sum) + parseFloat(c));
       this._remainingMeterial = this._requiredMeterialQty - this._pickedMeterialQty;
     }
     else {
@@ -149,7 +209,8 @@ export class OutProdissueComponent implements OnInit {
   public openAvaliableMeterials() {
 
     if (this.needMeterial() == false) {
-      alert('You picked all requerde items.');
+      this.toastr.error('', this.translate.instant("PickedAllRequiredItems"));
+      //alert('You picked all requerde items.');
       return;
     }
 
@@ -163,13 +224,13 @@ export class OutProdissueComponent implements OnInit {
     )
   }
 
-
-
-  getLookupValue(lookupValue: any, gridSelectedMeterial: any) {
+  getLookupValue(lookupValue: any, gridSelectedMeterial: any, updateGrid: boolean = true) {
 
     this.comingSelectedMeterials = lookupValue;
     this.manageMeterial();
-    gridSelectedMeterial.data = this.selectedMeterials;
+    console.log("SelectedMeterial", this.selectedMeterials);
+    if (updateGrid == true)
+      gridSelectedMeterial.data = this.selectedMeterials;
 
     this.outbound = JSON.parse(localStorage.getItem(CommonConstants.OutboundData));
     this.outbound.SelectedMeterials = lookupValue;
@@ -179,6 +240,7 @@ export class OutProdissueComponent implements OnInit {
   removeSelectedMeterial(idx: any, grd: any) {
     this.selectedMeterials.splice(idx, 1);
     grd.data = this.selectedMeterials;
+    this.calculateTotalAndRemainingQty();
   }
 
 
@@ -188,23 +250,31 @@ export class OutProdissueComponent implements OnInit {
     let pickedMeterialQty: number = this._pickedMeterialQty;
     let remailingMeterialQty: number = requiredMeterialQty - pickedMeterialQty;
 
-    if (pickedMeterialQty < remailingMeterialQty) {
+    if (pickedMeterialQty < requiredMeterialQty) {
 
       for (let i = 0; i < this.comingSelectedMeterials.length; i++) {
 
         let meterial = this.comingSelectedMeterials[i];
         let avaliableMeterialQty = parseFloat(meterial.TOTALQTY);
 
-        meterial.MeterialPickQty = avaliableMeterialQty - remailingMeterialQty;
-
-        if (meterial.MeterialPickQty < 0) {
-          meterial.MeterialPickQty = 0.000;
-        }
-        else {
+        if (avaliableMeterialQty >= remailingMeterialQty) {
           meterial.MeterialPickQty = remailingMeterialQty;
         }
+        else {
+          meterial.MeterialPickQty = avaliableMeterialQty;
+        }
+
+        // meterial.MeterialPickQty = avaliableMeterialQty - remailingMeterialQty;
+
+        // if (meterial.MeterialPickQty < 0) {
+        //   meterial.MeterialPickQty = 0.000;
+        // }
+        // else {
+        //   meterial.MeterialPickQty = remailingMeterialQty;
+        // }
 
         this.selectedMeterials.push(meterial);
+
 
         pickedMeterialQty = pickedMeterialQty + meterial.MeterialPickQty;
         remailingMeterialQty = requiredMeterialQty - pickedMeterialQty;
@@ -222,10 +292,29 @@ export class OutProdissueComponent implements OnInit {
 
     }
 
-
+    this.oldSelectedMeterials = JSON.parse(JSON.stringify(this.selectedMeterials));
 
   }
 
+  addMetToCollection() {
+    let outboundData = localStorage.getItem(CommonConstants.OutboundData);
 
+    if (outboundData != undefined && outboundData != '') {
+
+      this.outbound = JSON.parse(outboundData);
+
+      let OrderDataCollection: any={OrderData: this.outbound.OrderData, SelectedMeterials:  this.outbound.SelectedMeterials};            
+      if(this.outbound.SavedData===undefined || this.outbound.SavedData.length<=0){
+        this.outbound.SavedData=[];
+      }
+      this.outbound.SavedData.push(OrderDataCollection);
+    }
+    localStorage.setItem(CommonConstants.OutboundData,JSON.stringify( this.outbound));
+  }
+
+  back() {
+    this.router.navigateByUrl('home/outbound/outorder', { skipLocationChange: true });
+  }
 }
+
 

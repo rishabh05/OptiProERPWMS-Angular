@@ -61,6 +61,10 @@ export class OutboundService {
     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetAllPickPackAndOtherSerialBatch", body, this.httpOptions);    
   }
 
+  public getAvaliableMeterialForNoneTracked(itemCode:string){
+    var body:any={WHSCODE:JSON.stringify([{COMPANYDBNAME:localStorage.getItem("CompID"),WHSCODE:localStorage.getItem("whseId"),ITEMCODE:itemCode}])};
+    return this.httpclient.post(this.config_params.service_url + "/api/ProductionIssue/GetBinsToIssueForNonTrackItem", body, this.httpOptions);    
+  }
   private prepareRequest(): any {
     //    this.outRequest = new OutRequest();
     this.outRequest.CompanyDBId = localStorage.getItem("CompID");

@@ -81,6 +81,8 @@
   "VenderCode": "Vend. Code",
   "Name": "Name",
   "Cancel": "Cancel",
+  "POList": "PO List",
+  "POExistMessage": "PO does not exist!",
   "FuturePOs": "Future POs",
   "PO#": "PO #",
   "Item": "Item",
@@ -105,10 +107,12 @@
   "Confirm": "Confirm",
   "Receive": "Receive",
   "EnterQuantityErrMsg": "Enter Quantity",
+  "BinValidation": "Cannot add row with same bin",
   "ChangeWarehouse": "Change Warehouse",
   "About": "About",
   "Logout": "Logout",
   "DoYouWantToDeleteAllTheLines": "Do you want to delete all lines?",
+  "GRPOSuccessMessage":"Goods Receipt PO generated successfully with Doc No: ",
   "GoodsReciptPO": "Goods Recipt PO",
   "VendCode": "Vend. Code",
   "VendorList": "Vendor List",
@@ -125,6 +129,7 @@
   "SerialTrackedItem": "Serial Tracked Item",
   "BatchTrackedItem": "Batch Tracked Item",
   "NoneTrackedItem": "None Tracked Item",
+  "BinLookupTitle": "Bin Lookup",
   "Items": "Items",
   "issueForProduction": "Issue For Production",
   "receiptFromProduction":"Receipt From Production",
@@ -157,5 +162,15 @@
   "BatchSrBinList": "Batch/Sr/Bin No. List",
   "NoOfCopiesCannotbeBlank": "No. of copies cannot be blank",
   "Total": "Total",
-  "StockQty": "Stock Qty"
+  "StockQty": "Stock Qty",
+  "MeterialCanNotBeZero":"Issue meterial quantity can not be 0.",
+  "MeterialCanNotBeLTZero":"Issue meterial quantity can not be less then 0.",
+  "QtyGTOpen":"Issue meterial quantity can not be greated then Open Quantity.",
+  "QtyGTTotal":"Issue meterial quantity can not be greater then its total quantity.",
+  "MeterialCanNotBeBlank":"Issue meterial quantity can not be blank.",
+  "PickedAllRequiredItems":"You picked all requerde items.",
+
+  "MfrSerialNo":"Mfr Serial No.",
+  "ExpiryDate":"Expiry Date"
+  
 }

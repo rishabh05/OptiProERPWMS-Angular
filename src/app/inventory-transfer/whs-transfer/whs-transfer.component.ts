@@ -17,11 +17,10 @@ export class WhsTransferComponent implements OnInit {
   selectedItem: any;
   toWhse: any;
   fromWhse: string;
-  showLookupLoader=true;
   toWhs: ToWhs[];
   serviceData: any[];
   lookupfor: string;
-
+  showLookupLoader=true;
   public whsView:boolean = true;
   
   constructor(private commonservice: Commonservice, private router: Router, private inventoryTransferService: InventoryTransferService, private toastr: ToastrService, private translate: TranslateService) {
