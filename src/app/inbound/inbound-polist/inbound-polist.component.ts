@@ -46,6 +46,7 @@ export class InboundPolistComponent implements OnInit {
   }
 
   onPOlookupClick() {
+    console.log("item POlookup click :");
     this.inboundService.getPOList(this.futurepo,
       this.inboundMasterComponent.selectedVernder, this.itemCode).subscribe(
         (data: any) => {
@@ -69,6 +70,7 @@ export class InboundPolistComponent implements OnInit {
   }
 
   onItemlookupClick() {
+    console.log("item lookup click :");
     this.inboundService.getItemList(this.futurepo, this.inboundMasterComponent.selectedVernder,
       this.poCode).subscribe(
         (data: any) => {
@@ -93,9 +95,11 @@ export class InboundPolistComponent implements OnInit {
   }
 
   openPOLines() {
+    console.log("search click : in open poline method");
     this.inboundService.GetOpenPOLines(this.futurepo, this.itemCode,
       this.poCode).subscribe(
         (data: any) => {
+          console.log("api call resonse section");
           console.log(data);
           this.showNonTrackItem = false;
           this.showBatchTrackItem = false;
@@ -120,13 +124,14 @@ export class InboundPolistComponent implements OnInit {
             } if (this.BatchItemsDetail.length > 0) {
               this.showBatchTrackItem = true;
             } if (this.SerialItemsDetail.length > 0) {
-              this.showSerialTrackItem = true;
+              this.showSerialTrackItem = true; 
             }
           } else if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
+          console.log("api call resonse section end of if");
         },
         error => {
           console.log("Error: ", error);
@@ -177,8 +182,10 @@ export class InboundPolistComponent implements OnInit {
     this.inboundService.getAutoLot(itemCode).subscribe(
       (data: any) => {
         console.log(data);
+        
         if (data.Table != undefined) {
           this.autoLot = data.Table;
+          console.log("autolot value from polist:"+this.autoLot);
         } else if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
           this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
             this.translate.instant("CommonSessionExpireMsg"));

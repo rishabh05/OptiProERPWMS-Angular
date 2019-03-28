@@ -124,7 +124,7 @@ export class InboundGRPOComponent implements OnInit {
   }
 
   /**
-   * Method to get list of inquries from server.
+   * Method to get list of uoms from server.
   */
   public getUOMList() {
     this.inboundService.getUOMs(this.openPOLineModel[0].ITEMCODE).subscribe(
@@ -155,16 +155,9 @@ export class InboundGRPOComponent implements OnInit {
     }
 
     let autoLots = this.inboundMasterComponent.autoLots;
+    console.log("received autolot value from master:"+autoLots);
     this.addBatchSerialQty(autoLots, this.qty);
-    // let result = this.recvingQuantityBinArray.find(element => element.Bin == this.RecvbBinvalue);
-    // if (result == undefined) {
-    //   this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.qty, this.RecvbBinvalue));
-    //   this.showButton = true;
-    //   this.qty = undefined;
-    // } else {
-    //   this.toastr.error('', this.translate.instant("BinValidation"));
-    //   return;
-    // }
+
   }
 
   addNonTrackQty(autoLots: AutoLot[], qty: any) {
@@ -178,7 +171,11 @@ export class InboundGRPOComponent implements OnInit {
     // }
     this.qty = undefined;
   }
-
+  /**
+   * method to create logic for autolot for serial batch qty.
+   * @param autoLots 
+   * @param qty 
+   */
   addBatchSerialQty(autoLots: AutoLot[], qty: any) {
     while (qty > 0 && qty != 0) {
       for (var i = 0; i < autoLots.length; i++) {
