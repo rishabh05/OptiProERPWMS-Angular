@@ -136,7 +136,7 @@ export class LookupComponent implements OnInit {
       this.showBinList();
     }
     else if(this.lookupfor == "OrderList"){
-      this.showBinList();
+      this.orderList();
     }
     this.clearFilters();
     this.isColumnFilter = false
@@ -549,7 +549,7 @@ export class LookupComponent implements OnInit {
   orderList() {
     this.table_head = [
       {
-        field: 'OrderNo',
+        field: 'Order No',
         title: this.translate.instant("OrderNo"),
         type: 'text',
         width: '100'
@@ -573,7 +573,7 @@ export class LookupComponent implements OnInit {
 
 
   onCheckboxClick(checked: any, index: number) {
-    debugger;
+    
     let servivceItem: any = this.serviceData[index];
     if (checked) {
       this.selectedValues.push(servivceItem);

@@ -1,126 +1,137 @@
 <div class="opti_container position-relative bg-white rounded">
-  <form class="form-with-fix-btnBar" >
-      <div class="opti_container_inner" [perfectScrollbar]=" ">
+    <form class="form-with-fix-btnBar">
+        <div class="opti_container_inner" [perfectScrollbar]=" ">
 
-          <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
-              {{'receiptFromProduction'|translate}}
-          </h3>
-          <div class="row">
-              <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+            <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
+                {{'receiptFromProduction'|translate}}
+            </h3>
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
 
-                  <div class="form-group row">
-                      <label for="inputPassword" class="col-sm-3 col-form-label">{{'OrderNo'|translate}}</label>
-                      <div class="col-sm-9">
-                          <div class="input-group input-group-sm">
-                              <input type="text" class="form-control form-control-sm" name ='customerCode' placeholder="{{'OrderNo'|translate}}">
-                              <div class="input-group-append has-seprate-btn">
-                                  <button class="k-button k-primary btn" type="button">
-                                      <i class="opti-icon-hammenu"></i>
-                                  </button>
-                                  <button class="k-button k-primary btn separate-btn" type="button">
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'OrderNo'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control form-control-sm" name='customerCode' placeholder="{{'OrderNo'|translate}}">
+                                <div class="input-group-append has-seprate-btn">
+                                    <button class="k-button k-primary btn" (click)="OnOrderLookupClick()" type="button">
+                                        <i class="opti-icon-hammenu"></i>
+                                    </button>
+                                    <button class="k-button k-primary btn separate-btn" type="button">
                                         <i class="opti-icon-search"></i>
                                     </button>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-
-          <!-- container row -->
-          <div class="row">
-            <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
-                <div class="form-group row">
-                    <label for="inputPassword" class="col-sm-3 col-form-label">{{'Item'|translate}}</label>
-                    <div class="col-sm-9 d-flex align-items-center">
-                        <p class="mb-0">demotext</p>
-                    </div>
-                </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
-                <div class="form-group row">
-                    <label for="inputPassword" class="col-sm-3 col-form-label">{{'SerialQty'|translate}}</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control form-control-sm text-right" name ='customerCode' placeholder="{{'SerialQty'|translate}}">
-                    </div>
-                </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
-                <div class="form-group row">
-                    <label for="inputPassword" class="col-sm-3 col-form-label">{{'Serial'|translate}}</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control form-control-sm" name ='customerCode' placeholder="{{'Serial'|translate}}">
-                    </div>
-                </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
-                <div class="form-group row">
-                    <label for="inputPassword" class="col-sm-3 col-form-label">{{'ExpiryDate'|translate}}</label>
-                    <div class="col-sm-9">
-                        <kendo-datepicker [value]="value"></kendo-datepicker>
-                    </div>
-                </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
-                <div class="form-group row">
-                    <label for="inputPassword" class="col-sm-3 col-form-label">{{'Bin'|translate}}</label>
-                    <div class="col-sm-9">
-                        <div class="input-group input-group-sm">
-                            <input type="text" class="form-control form-control-sm" name ='customerCode' placeholder="{{'Bin'|translate}}">
-                            <div class="input-group-append">
-                                <button class="k-button k-primary btn" type="button">
-                                    <i class="opti-icon-hammenu"></i>
-                                </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
-                <div class="form-group row">
-                    <label for="inputPassword" class="col-sm-3 col-form-label">{{'OpenQty'|translate}}</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control form-control-sm text-right" name ='customerCode' placeholder="{{'OpenQty'|translate}}">
+
+            <!-- container row -->
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'Item'|translate}}</label>
+                        <div class="col-sm-9 d-flex align-items-center">
+                            <p class="mb-0">demotext</p>
+                        </div>
                     </div>
                 </div>
             </div>
-          </div>
-
-          <h5>{{'AssignedQuantity'|translate}}</h5>
-          <div class="row">
-            <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
-                <div class="form-group row">
-                    <label for="inputPassword" class="col-sm-3 col-form-label">{{'AssignedQty'|translate}}</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control form-control-sm text-right" name ='customerCode' placeholder="{{'AssignedQty'|translate}}">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'SerialQty'|translate}}</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control form-control-sm text-right" name='customerCode'
+                                placeholder="{{'SerialQty'|translate}}">
+                        </div>
                     </div>
                 </div>
             </div>
-          </div>
-          <!-- container row end -->
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'Serial'|translate}}</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control form-control-sm" name='customerCode' placeholder="{{'Serial'|translate}}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'ExpiryDate'|translate}}</label>
+                        <div class="col-sm-9">
+                            <kendo-datepicker [value]="value"></kendo-datepicker>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'Bin'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control form-control-sm" name='customerCode' placeholder="{{'Bin'|translate}}">
+                                <div class="input-group-append">
+                                    <button class="k-button k-primary btn" type="button">
+                                        <i class="opti-icon-hammenu"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'OpenQty'|translate}}</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control form-control-sm text-right" name='customerCode'
+                                placeholder="{{'OpenQty'|translate}}">
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-      </div>
+            <h5>{{'AssignedQuantity'|translate}}</h5>
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'AssignedQty'|translate}}</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control form-control-sm text-right" name='customerCode'
+                                placeholder="{{'AssignedQty'|translate}}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- container row end -->
 
-      <div class="fix-footer-btnBar">
-          <div class="col-sm-12 col-12">
-              <hr />
-          </div>
-          <div class="col-sm-12 col-12">
-              <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-close-outline"
-                    role="presentation"></span> {{'Cancel'|translate}}</button>
-              <!-- <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" 
+        </div>
+
+        <div class="fix-footer-btnBar">
+            <div class="col-sm-12 col-12">
+                <hr />
+            </div>
+            <div class="col-sm-12 col-12">
+                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-close-outline"
+                        role="presentation"></span> {{'Cancel'|translate}}</button>
+                <!-- <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" 
                   roterLink="binTransfer" skipLocationChange><i class="opti-icon-arrow-next"></i></button> -->
-          </div>
-      </div>
-  </form>
+            </div>
+    </div>
+    </form>
+</div>
+
+<div *ngIf="showLookupLoader==false">
+    <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
+</div>
+ <!-- loader start -->
+ <div class="opti_loader" *ngIf="showLookupLoader==true">
+    <div class="opti_spinner"></div>
 </div>

@@ -176,8 +176,6 @@ export class InventoryEnquiryComponent implements OnInit {
    */
   getLookupValue($event) {
     
-    
-    
     if (this.lookupfor == "LotsList") {
       //this.lotNo = $event[0];
       this.isFromLotChange = false;// reset this variable for batch value is not from on change.
