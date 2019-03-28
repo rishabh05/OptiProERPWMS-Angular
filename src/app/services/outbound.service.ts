@@ -57,7 +57,10 @@ export class OutboundService {
   }
 
   public getAvaliableMeterial(itemCode:string,docentry:string){
-    var body:any={DeliveryToken:JSON.stringify([{COMPANYDBNAME:localStorage.getItem("CompID"),WHSCODE:localStorage.getItem("whseId"),ITEMCODE:itemCode,DocEntry:docentry}])};
+    var body:any={DeliveryToken:JSON.stringify([{
+      COMPANYDBNAME:localStorage.getItem("CompID"),
+      WHSCODE:localStorage.getItem("whseId"),ITEMCODE:itemCode,DocEntry:docentry}])};
+      
     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetAllPickPackAndOtherSerialBatch", body, this.httpOptions);    
   }
 
