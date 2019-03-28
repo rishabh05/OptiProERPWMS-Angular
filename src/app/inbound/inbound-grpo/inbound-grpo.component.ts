@@ -35,6 +35,8 @@ export class InboundGRPOComponent implements OnInit {
   searlNo: any;
   MfrSerial: any = "";
   expiryDate: string = "";
+  isNonTrack: boolean = true;
+  isSerial: boolean;
 
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent) {
@@ -154,74 +156,73 @@ export class InboundGRPOComponent implements OnInit {
       return;
     }
 
-    let autoLots = this.inboundMasterComponent.autoLots;
-    this.addBatchSerialQty(autoLots, this.qty);
-    // let result = this.recvingQuantityBinArray.find(element => element.Bin == this.RecvbBinvalue);
-    // if (result == undefined) {
-    //   this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.qty, this.RecvbBinvalue));
-    //   this.showButton = true;
-    //   this.qty = undefined;
-    // } else {
-    //   this.toastr.error('', this.translate.instant("BinValidation"));
-    //   return;
-    // }
+    if (this.isNonTrack) {
+      this.addNonTrackQty(this.qty);
+    } else {
+      let autoLots = this.inboundMasterComponent.autoLots;
+      if (this.isSerial) {
+        while (this.qty > 0 && this.qty != 0) {
+          this.addBatchSerialQty(autoLots, this.qty);
+          let result = this.recvingQuantityBinArray.find(element => element.searlNo == this.searlNo);
+          if (result == undefined) {
+            this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, 1, this.RecvbBinvalue, this.expiryDate));
+            this.qty = this.qty - 1;
+          }
+        }
+        this.qty = undefined;
+      } else {
+        this.addBatchSerialQty(autoLots, this.qty);
+        this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, this.qty, this.RecvbBinvalue, this.expiryDate));
+      }
+    }
   }
 
-  addNonTrackQty(autoLots: AutoLot[], qty: any) {
-    // while (qty > 0 && qty != 0) {
-      
-      let result = this.recvingQuantityBinArray.find(element => element.searlNo == this.searlNo);
-      if (result == undefined) {
-        this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, 1, this.RecvbBinvalue, this.expiryDate));
-        qty = qty - 1;
-      }
-    // }
-    this.qty = undefined;
+  addNonTrackQty(qty: any) {
+    let result = this.recvingQuantityBinArray.find(element => element.Bin == this.RecvbBinvalue);
+    if (result == undefined) {
+      this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, qty, this.RecvbBinvalue, this.expiryDate));
+      this.showButton = true;
+      this.qty = undefined;
+    } else {
+      this.toastr.error('', this.translate.instant("BinValidation"));
+      return;
+    }
   }
 
   addBatchSerialQty(autoLots: AutoLot[], qty: any) {
-    while (qty > 0 && qty != 0) {
-      for (var i = 0; i < autoLots.length; i++) {
-        if (autoLots[i].OPRTYPE == "1") {
-          this.searlNo = autoLots[i].STRING
-        }
-        if (autoLots[i].OPRTYPE === "2" && autoLots[i].OPERATION == "2") {
-          if (this.recvingQuantityBinArray.length > 0) {
-            var strlength = autoLots[i].STRING.length;
-            var numberLength = (parseInt(autoLots[i].STRING)).toString().length;
-            var finlNumber = parseInt(autoLots[i].STRING) + 1
-            var finalString = this.forwardZero(finlNumber, strlength - numberLength);
-            this.searlNo = this.searlNo + finalString;
-            // this.inboundMasterComponent.autoLots[i].STRING = finalString;
-            autoLots[i].STRING = finalString;
-          } else {
-            var finalString = autoLots[i].STRING;
-            this.searlNo = this.searlNo + finalString;
-          }
-        }
-        if (autoLots[i].OPRTYPE == "2" && autoLots[i].OPERATION == "3") {
-          if (this.recvingQuantityBinArray.length > 0) {
-            var strlength = autoLots[i].STRING.length;
-            var numberLength = (parseInt(autoLots[i].STRING)).toString().length;
-            var finlNumber = parseInt(autoLots[i].STRING) - 1
-            var finalString = this.forwardZero(finlNumber, strlength - numberLength);
-            // this.inboundMasterComponent.autoLots[i].STRING = finalString;
-            autoLots[i].STRING = finalString;
-          } else {
-            var finalString = autoLots[i].STRING;
-            this.searlNo = this.searlNo + finalString;
-          }
+    for (var i = 0; i < autoLots.length; i++) {
+      if (autoLots[i].OPRTYPE == "1") {
+        this.searlNo = autoLots[i].STRING
+      }
+      if (autoLots[i].OPRTYPE === "2" && autoLots[i].OPERATION == "2") {
+        if (this.recvingQuantityBinArray.length > 0) {
+          var strlength = autoLots[i].STRING.length;
+          var numberLength = (parseInt(autoLots[i].STRING)).toString().length;
+          var finlNumber = parseInt(autoLots[i].STRING) + 1
+          var finalString = this.forwardZero(finlNumber, strlength - numberLength);
+          this.searlNo = this.searlNo + finalString;
+          // this.inboundMasterComponent.autoLots[i].STRING = finalString;
+          autoLots[i].STRING = finalString;
+        } else {
+          var finalString = autoLots[i].STRING;
+          this.searlNo = this.searlNo + finalString;
         }
       }
-      let result = this.recvingQuantityBinArray.find(element => element.searlNo == this.searlNo);
-      if (result == undefined) {
-        this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, 1, this.RecvbBinvalue, this.expiryDate));
-        qty = qty - 1;
-      }else {
-        continue;
+      if (autoLots[i].OPRTYPE == "2" && autoLots[i].OPERATION == "3") {
+        if (this.recvingQuantityBinArray.length > 0) {
+          var strlength = autoLots[i].STRING.length;
+          var numberLength = (parseInt(autoLots[i].STRING)).toString().length;
+          var finlNumber = parseInt(autoLots[i].STRING) - 1
+          var finalString = this.forwardZero(finlNumber, strlength - numberLength);
+          // this.inboundMasterComponent.autoLots[i].STRING = finalString;
+          autoLots[i].STRING = finalString;
+        } else {
+          var finalString = autoLots[i].STRING;
+          this.searlNo = this.searlNo + finalString;
+        }
       }
     }
-    this.qty = undefined;
+
   }
 
   forwardZero(num: number, size: number): string {

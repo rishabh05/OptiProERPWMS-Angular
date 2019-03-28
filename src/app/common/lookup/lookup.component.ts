@@ -135,6 +135,9 @@ export class LookupComponent implements OnInit {
     else if(this.lookupfor == "ToBinList"){
       this.showBinList();
     }
+    else if(this.lookupfor == "OrderList"){
+      this.orderList();
+    }
     this.clearFilters();
     this.isColumnFilter = false
   }
@@ -543,10 +546,34 @@ export class LookupComponent implements OnInit {
     }
   }
 
+  orderList() {
+    this.table_head = [
+      {
+        field: 'Order No',
+        title: this.translate.instant("OrderNo"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'Item',
+        title: this.translate.instant("Item"),
+        type: 'text',
+        width: '100'
+      }
+    ];
+    this.lookupTitle = this.translate.instant("OrderList");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
+
+
 
 
   onCheckboxClick(checked: any, index: number) {
-    debugger;
+    
     let servivceItem: any = this.serviceData[index];
     if (checked) {
       this.selectedValues.push(servivceItem);
