@@ -79,7 +79,7 @@ export class OutProdissueComponent implements OnInit {
     let needMeterial: boolean = false;
     let localTotalPickQty: number = this.totalPickQty;
     let requiredQty: number = parseFloat(this.selected.OPENQTY) - localTotalPickQty;
-    debugger;
+    
     if (localTotalPickQty >= requiredQty) {
       return false;
     }

@@ -1,59 +1,76 @@
 <div class="opti_container position-relative bg-white rounded">
-  <form class="form-with-fix-btnBar" >
-      <div class="opti_container_inner" [perfectScrollbar]=" ">
+    <form class="form-with-fix-btnBar">
+        <div class="opti_container_inner" [perfectScrollbar]=" ">
 
-          <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
-              {{'itemLabelReport'|translate}}
-          </h3>
-          <div class="row">
-              <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+            <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
+                {{'itemLabelReport'|translate}}
+            </h3>
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
 
-                  <div class="form-group row">
-                      <label for="inputPassword" class="col-sm-3 col-form-label">{{'ItemCode'|translate}}</label>
-                      <div class="col-sm-9">
-                          <div class="input-group input-group-sm">
-                              <input type="text" class="form-control form-control-sm" name ='customerCode' placeholder="{{'ItemCode'|translate}}">
-                              <div class="input-group-append">
-                                  <button class="k-button k-primary btn" type="button">
-                                      <i class="opti-icon-hammenu"></i>
-                                  </button>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="form-group row">
-                    <label for="inputPassword" class="col-sm-3 col-form-label">{{'BatchSrBinNo'|translate}}</label>
-                    <div class="col-sm-9">
-                        <div class="input-group input-group-sm">
-                            <input type="text" class="form-control form-control-sm" name ='customerCode' placeholder="{{'BatchSrBinNo'|translate}}">
-                            <div class="input-group-append">
-                                <button class="k-button k-primary btn" type="button">
-                                    <i class="opti-icon-hammenu"></i>
-                                </button>
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'ItemCode'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+
+                                <input type="text" class="form-control form-control-sm" name='customerCode' [(ngModel)]="itemCode"
+                                    (blur)="OnItemCodeChange()" #itemCodeIp placeholder="{{'ItemCode'|translate}}">
+                                <div class="input-group-append">
+                                    <button class="k-button k-primary btn" type="button" (click)="OnItemCodeLookupClick()">
+                                        <i class="opti-icon-hammenu"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                  </div>
-                  <div class="form-group row">
-                    <label for="inputPassword" class="col-sm-3 col-form-label">{{'noOfCopies'|translate}}</label>
-                    <div class="col-sm-9">
-                      <input type="text" class="form-control form-control-sm" name ='customerCode' placeholder="{{'noOfCopies'|translate}}">
-                    </div>
-                  </div>
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'BatchSrBinNo'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
 
-              </div>
-          </div>
-      </div>
-      <div class="fix-footer-btnBar">
-          <div class="col-sm-12 col-12">
-              <hr />
-          </div>
-          <div class="col-sm-12 col-12">
-              <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-printer"
-                      role="presentation"></span> {{'Print'|translate}}</button>
-              <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-close-outline"
-                        role="presentation"></span> {{'Cancel'|translate}}</button>
-          </div>
-      </div>
-  </form>
+                                <input type="text" class="form-control form-control-sm" #batchSrBinIp name='binNoInput'
+                                    placeholder="{{'BatchSrBinNo'|translate}}" [(ngModel)]="binNo" (blur)="OnLotsChange()">
+                                <div class="input-group-append">
+                                    <button class="k-button k-primary btn" type="button" (click)="OnBatchSerialLookupClick()">
+                                        <i class="opti-icon-hammenu"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'noOfCopies'|translate}}</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control form-control-sm" #noOfCopiesIp [(ngModel)]="noOfCopies"
+                                name='noOfCopies' placeholder="{{'noOfCopies'|translate}}">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="fix-footer-btnBar">
+            <div class="col-sm-12 col-12">
+                <hr />
+            </div>
+            <div class="col-sm-12 col-12">
+                <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text" (click)="OnPrintClick()"><span
+                        class="k-icon k-i-printer" role="presentation"></span> {{'Print'|translate}}</button>
+                <button type="button" (click)="OnCancelClick()" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
+                        class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div *ngIf="showLookupLoader==false">
+    <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
+</div>
+
+<div>
+    <app-display-pdf *ngIf="displayPDF" [base64String]='base64String' [fileName]='fileName' (redirectTo)="getValueOfRedirect($event)"></app-display-pdf>
+</div>
+
+<div class="opti_loader" *ngIf="showLookupLoader==true">
+    <div class="opti_spinner"></div>
 </div>

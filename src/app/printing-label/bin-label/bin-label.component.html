@@ -12,9 +12,10 @@
                     <label for="inputPassword" class="col-sm-3 col-form-label">{{'FromBin'|translate}}</label>
                     <div class="col-sm-9">
                         <div class="input-group input-group-sm">
-                            <input type="text" class="form-control form-control-sm" name ='customerCode' placeholder="{{'FromBin'|translate}}">
+                            <input type="text" class="form-control form-control-sm" #fromBinIp=ngModel
+                             [(ngModel)] ='fromBin' (blur)="OnFromBinChange()" name ='fromBin' placeholder="{{'FromBin'|translate}}">
                             <div class="input-group-append">
-                                <button class="k-button k-primary btn" type="button">
+                                <button class="k-button k-primary btn" type="button"  (click)="OnFromBinLookupClick()">
                                     <i class="opti-icon-hammenu"></i>
                                 </button>
                             </div>
@@ -25,19 +26,20 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">{{'ToBin'|translate}}</label>
                   <div class="col-sm-9">
                       <div class="input-group input-group-sm">
-                          <input type="text" class="form-control form-control-sm" name ='customerCode' placeholder="{{'ToBin'|translate}}">
+                          <input type="text" (blur)="OnToBinChange()" class="form-control form-control-sm" [(ngModel)]='toBin' #toBinIp=ngModel
+                           name ='toBin' placeholder="{{'ToBin'|translate}}">
                           <div class="input-group-append">
-                              <button class="k-button k-primary btn" type="button">
+                              <button class="k-button k-primary btn" type="button" (click)="OnToBinLookupClick()">
                                   <i class="opti-icon-hammenu"></i>
                               </button>
-                          </div>
+                          </div> 
                       </div>
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="inputPassword" class="col-sm-3 col-form-label">{{'noOfCopies'|translate}}</label>
                   <div class="col-sm-9">
-                    <input type="text" class="form-control form-control-sm" name ='customerCode' placeholder="{{'noOfCopies'|translate}}">
+                    <input type="text"   [(ngModel)]="noOfCopies" #numberOfCopiesIp=ngModel class="form-control form-control-sm" name ='customerCode' placeholder="{{'noOfCopies'|translate}}">
                   </div>
                 </div>
 
@@ -49,11 +51,18 @@
             <hr />
         </div>
         <div class="col-sm-12 col-12">
-            <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-printer"
+            <button type="button"  (click)="OnPrintClick()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-printer"
               role="presentation"></span> {{'Print'|translate}}</button>
-            <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-close-outline"
+            <button type="button" (click)="OnCancelClick()" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-close-outline"
               role="presentation"></span> {{'Cancel'|translate}}</button>
         </div>
     </div>
   </form>
+</div>
+<div [hidden]="showLookupLoader">
+        <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
+</div>
+<div>
+    <app-display-pdf *ngIf ="displayPDF" [base64String] = 'base64String' [fileName] = 'fileName'
+        (redirectTo)="getValueOfRedirect($event)"></app-display-pdf>
 </div>

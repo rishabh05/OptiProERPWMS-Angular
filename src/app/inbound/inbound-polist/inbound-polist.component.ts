@@ -31,7 +31,7 @@ export class InboundPolistComponent implements OnInit {
   openPOLineModel: any;
   openPOLinesModel: any[];
   viewLines: any[];
-  
+
 
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent) {
@@ -192,10 +192,10 @@ export class InboundPolistComponent implements OnInit {
 
         this.inboundMasterComponent.setAutoLots(this.autoLot);
         this.openPOLineModel = this.openPOLinesModel.find(e => e.ITEMCODE == itemCode);
-        this.inboundMasterComponent.setClickedItemDetail(this.openPOLineModel);
-
-        // this.isInspectionGrid = false;
-        this.inboundMasterComponent.inboundComponent = 3;
+        if (this.openPOLineModel != null) {
+          this.inboundMasterComponent.setClickedItemDetail(this.openPOLineModel);
+          this.inboundMasterComponent.inboundComponent = 3;
+        }
       },
       error => {
         console.log("Error: ", error);

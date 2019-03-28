@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FormFieldComponent } from './form-field.component';
+import { DisplayPdfComponent } from './display-pdf.component';
 
-describe('FormFieldComponent', () => {
-  let component: FormFieldComponent;
-  let fixture: ComponentFixture<FormFieldComponent>;
+describe('DisplayPdfComponent', () => {
+  let component: DisplayPdfComponent;
+  let fixture: ComponentFixture<DisplayPdfComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FormFieldComponent ]
+      declarations: [ DisplayPdfComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FormFieldComponent);
+    fixture = TestBed.createComponent(DisplayPdfComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

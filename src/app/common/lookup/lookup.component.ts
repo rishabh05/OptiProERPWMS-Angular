@@ -90,6 +90,7 @@ export class LookupComponent implements OnInit {
   }
 
   async ngOnChanges(): Promise<void> {
+    
     if (this.lookupfor == "toWhsList") {
       this.showToWhsList();
     } else if (this.lookupfor == "ItemCodeList") {
@@ -124,6 +125,18 @@ export class LookupComponent implements OnInit {
 
     else if (this.lookupfor == 'out-order') {
       this.showOutSOList();
+    }
+    else if(this.lookupfor == "LotsList"){
+      this.showLotsList();
+    }
+    else if(this.lookupfor ==  "FromBinList"){
+      this.showBinList();
+    }
+    else if(this.lookupfor == "ToBinList"){
+      this.showBinList();
+    }
+    else if(this.lookupfor == "OrderList"){
+      this.orderList();
     }
     this.clearFilters();
     this.isColumnFilter = false
@@ -423,7 +436,7 @@ export class LookupComponent implements OnInit {
       {
         field: 'DocDueDate',
         title: this.translate.instant("DelDate"),
-        type: 'text',
+        type: 'date',
         width: '100'
       },
       {
@@ -487,8 +500,80 @@ export class LookupComponent implements OnInit {
     }
   }
 
+  showLotsList() {
+    this.table_head = [
+      {
+        field: 'LOTNO',
+        title: this.translate.instant("BatchNo"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'ITEMCODE',
+        title: this.translate.instant("ItemCode"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'BINNO',
+        title: this.translate.instant("BinNo"),
+        type: 'text',
+        width: '100'
+      }
+    ];
+    this.lookupTitle = this.translate.instant("BatchSrBinList");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
+
+  showBinList() {
+    this.table_head = [
+      {
+        field: 'BINNO',
+        title: this.translate.instant("BinNo"),
+        type: 'text',
+        width: '100'
+      }
+    ];
+    this.lookupTitle = this.translate.instant("FromBinList");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
+
+  orderList() {
+    this.table_head = [
+      {
+        field: 'Order No',
+        title: this.translate.instant("OrderNo"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'Item',
+        title: this.translate.instant("Item"),
+        type: 'text',
+        width: '100'
+      }
+    ];
+    this.lookupTitle = this.translate.instant("OrderList");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
+
+
+
+
   onCheckboxClick(checked: any, index: number) {
-    debugger;
+    
     let servivceItem: any = this.serviceData[index];
     if (checked) {
       this.selectedValues.push(servivceItem);

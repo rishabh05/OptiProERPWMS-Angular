@@ -6,14 +6,19 @@ import { ProductionIssueComponent } from './production-issue/production-issue.co
 import { ProductionReceiptComponent } from './production-receipt/production-receipt.component';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { TrnaslateLazyModule } from 'src/translate-lazy.module';
+import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
+import { SharedModule } from '../shared-module/shared-module.module';
+
 
 @NgModule({
   declarations: [ProductionIssueComponent, ProductionReceiptComponent],
   imports: [
+    SharedModule,
     CommonModule,
     ProductionRoutingModule,
     TrnaslateLazyModule,
-    PerfectScrollbarModule
+    PerfectScrollbarModule,
+    DateInputsModule
   ]
 })
 export class ProductionModule { }
