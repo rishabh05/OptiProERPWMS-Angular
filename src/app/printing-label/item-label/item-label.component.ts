@@ -73,6 +73,7 @@ export class ItemLabelComponent implements OnInit {
    */
   OnItemCodeLookupClick() {
     console.log('button click');
+    this.showLookupLoader = true;
     this.getItemList();
   }
 
