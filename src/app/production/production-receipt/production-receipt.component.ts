@@ -40,7 +40,7 @@ export class ProductionReceiptComponent implements OnInit {
   }
 
   OnOrderLookupClick(){
-    this.showOrderList();
+    //this.showOrderList();
   }
   /**
   * Method to get list of inquries from server.
