@@ -13,12 +13,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import 'hammerjs';
-import { ChartsModule } from '@progress/kendo-angular-charts';
 
-import { SalesOrderModule } from '../sales-order/sales-order.module';
-import { FormModule } from '../form/form.module';
+// import { FormModule } from '../form/form.module';
 import { TrnaslateLazyModule } from '../../translate-lazy.module';
 import { InventoryTransferModule } from '../inventory-transfer/inventory-transfer.module';
 import { InboundModule } from '../inbound/inbound.module';
@@ -38,10 +35,6 @@ import { OutboundModule } from '../outbound/outbound.module';
     HttpClientModule,         
     FormsModule,
 
-    NgbModule,
-    ChartsModule,
-    SalesOrderModule,
-    FormModule,
     InboundModule,
     OutboundModule,
     InventoryTransferModule
