@@ -50,6 +50,7 @@ export class InboundPolistComponent implements OnInit {
     this.inboundService.getPOList(this.futurepo,
       this.inboundMasterComponent.selectedVernder, this.itemCode).subscribe(
         (data: any) => {
+          console.log("get polist response:");
           if (data != undefined) {
             if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
               this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
@@ -58,6 +59,7 @@ export class InboundPolistComponent implements OnInit {
             }
             this.showLookupLoader = false;
             this.serviceData = data.Table;
+            console.log("get polist response serviceData:",this.serviceData);
             this.lookupfor = "POList";
           } else {
             this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
@@ -191,7 +193,7 @@ export class InboundPolistComponent implements OnInit {
             this.translate.instant("CommonSessionExpireMsg"));
           return;
         }
-        if (this.autoLot.length > 0) {
+        if (this.autoLot.length > 0) { 
         }
         else {
           this.autoLot.push(new AutoLot("N", itemCode, "", "", "", ""));
