@@ -48,8 +48,6 @@ export class InboundGRPOComponent implements OnInit {
     translate.use(userLang);
     translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
-    
-    
   }
 
   ngOnInit() {
@@ -168,16 +166,13 @@ export class InboundGRPOComponent implements OnInit {
       this.toastr.error('', this.translate.instant("EnterQuantityErrMsg"));
       return;
     }
-
     if (this.RecvbBinvalue == "" || this.RecvbBinvalue == undefined) {
       this.toastr.error('', this.translate.instant("INVALIDBIN"));
       return;
     }
-
     if (this.isNonTrack) {
       this.addNonTrackQty(this.qty);
     } else {
-      //let autoLots = this.inboundMasterComponent.autoLots;
       let autoLots = JSON.parse(localStorage.getItem("primaryAutoLots"));
       if (this.isSerial) {
         while (this.qty > 0 && this.qty != 0) {
@@ -186,7 +181,6 @@ export class InboundGRPOComponent implements OnInit {
           if (result == undefined) {
             this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, 1, this.RecvbBinvalue, this.expiryDate));
             this.qty = this.qty - 1;
-            //this.primaryAutoLots=JSON.parse(localStorage.getItem("primaryAutoLots"));
           }
         }
       } else {
@@ -203,7 +197,7 @@ export class InboundGRPOComponent implements OnInit {
     if (result == undefined) {
       this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, qty, this.RecvbBinvalue, this.expiryDate));
     }else{
-      this.batchCalculation(autoLots, this.qty);
+      this.batchCalculation(autoLots, this.qty); 
     }
   }
   addNonTrackQty(qty: any) {
