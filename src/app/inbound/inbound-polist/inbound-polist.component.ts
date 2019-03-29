@@ -176,12 +176,15 @@ export class InboundPolistComponent implements OnInit {
   }
 
   onClickOpenPOLineRowOpenAutoLot(selection) {
+    debugger;
     const poline = selection.selectedRows[0].dataItem;
     this.getAutoLot(poline.ITEMCODE);
   }
 
   getAutoLot(itemCode: string) {
+    
     this.inboundService.getAutoLot(itemCode).subscribe(
+     
       (data: any) => {
         console.log(data);
         
@@ -198,13 +201,14 @@ export class InboundPolistComponent implements OnInit {
         else {
           this.autoLot.push(new AutoLot("N", itemCode, "", "", "", ""));
         }
-
-        this.inboundMasterComponent.setAutoLots(this.autoLot);
+        
+        //this.inboundMasterComponent.setAutoLots(this.autoLot);
+        localStorage.setItem("primaryAutoLots",JSON.stringify(this.autoLot));
         this.openPOLineModel = this.openPOLinesModel.find(e => e.ITEMCODE == itemCode);
         if (this.openPOLineModel != null) {
           this.inboundMasterComponent.setClickedItemDetail(this.openPOLineModel);
           this.inboundMasterComponent.inboundComponent = 3;
-        }
+        } 
       },
       error => {
         console.log("Error: ", error);

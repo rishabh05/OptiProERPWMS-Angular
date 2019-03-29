@@ -38,6 +38,7 @@ export class InboundGRPOComponent implements OnInit {
   expiryDate: string = "";
   isNonTrack: boolean = false;
   isSerial: boolean = false;
+  serialNoTitle:string = "";
 
   public primaryAutoLots: AutoLot[];
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
@@ -47,24 +48,25 @@ export class InboundGRPOComponent implements OnInit {
     translate.use(userLang);
     translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
-    console.log("primaryAlot")
-    localStorage.setItem("primaryAutoLots",JSON.stringify(this.inboundMasterComponent.autoLots));
+    
+    
   }
 
   ngOnInit() {
-    debugger;
-    //this.primaryAutoLots = this.inboundMasterComponent.autoLots;
+    
     this.openPOLineModel[0] = this.inboundMasterComponent.openPOmodel;
     if (this.openPOLineModel != undefined && this.openPOLineModel != null) {
       this.Ponumber = this.openPOLineModel[0].DOCENTRY;
       this.tracking = this.openPOLineModel[0].TRACKING;
       if (this.tracking == "S") {
         this.isSerial = true;
+        this.serialNoTitle = "Serial" 
       } else if (this.tracking == "N") {
         this.isNonTrack = true;
       } else if (this.tracking == "B") {
         this.isSerial = false;
         this.isNonTrack = false;
+        this.serialNoTitle = "Batch" 
       }
       this.getUOMList();
       if (this.RecvbBinvalue == "") {
@@ -161,7 +163,7 @@ export class InboundGRPOComponent implements OnInit {
 
 
   addQuantity() {
-    debugger;
+    
     if (this.qty == 0 || this.qty == undefined) {
       this.toastr.error('', this.translate.instant("EnterQuantityErrMsg"));
       return;
@@ -187,21 +189,28 @@ export class InboundGRPOComponent implements OnInit {
             //this.primaryAutoLots=JSON.parse(localStorage.getItem("primaryAutoLots"));
           }
         }
-        this.qty = undefined;
       } else {
-        this.addBatchSerialQty(autoLots, this.qty);
-        this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, this.qty, this.RecvbBinvalue, this.expiryDate));
+        this.batchCalculation(autoLots, this.qty);
+        //this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, this.qty, this.RecvbBinvalue, this.expiryDate));
       }
     }
+    this.qty = undefined; 
   }
 
+  batchCalculation(autoLots: AutoLot[], qty: any) {
+    this.addBatchSerialQty(autoLots, this.qty);
+    let result = this.recvingQuantityBinArray.find(element => element.searlNo == this.searlNo);
+    if (result == undefined) {
+      this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, qty, this.RecvbBinvalue, this.expiryDate));
+    }else{
+      this.batchCalculation(autoLots, this.qty);
+    }
+  }
   addNonTrackQty(qty: any) {
-    debugger;
     let result = this.recvingQuantityBinArray.find(element => element.Bin == this.RecvbBinvalue);
     if (result == undefined) {
       this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, qty, this.RecvbBinvalue, this.expiryDate));
       this.showButton = true;
-      this.qty = undefined;
     } else {
       this.toastr.error('', this.translate.instant("BinValidation"));
       return;
@@ -213,8 +222,8 @@ export class InboundGRPOComponent implements OnInit {
    * @param qty 
    */
   addBatchSerialQty(autoLots: AutoLot[], qty: any) {
-    debugger;
-    this.searlNo = "";
+    
+    this.searlNo = "";              
     for (var i = 0; i < autoLots.length; i++) {
       if (autoLots[i].OPRTYPE == "1") {
         this.searlNo = this.searlNo + autoLots[i].STRING

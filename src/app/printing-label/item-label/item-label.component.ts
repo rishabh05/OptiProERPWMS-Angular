@@ -98,9 +98,9 @@ export class ItemLabelComponent implements OnInit {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
-          this.showLookupLoader = false;
-          this.serviceData = data;
-          this.lookupfor = "ItemCodeList";
+          this.showLookupLoader = false; 
+          this.serviceData = data; 
+          this.lookupfor = "ItemCodeList"; 
         }
         else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
