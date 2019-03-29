@@ -242,7 +242,7 @@ export class InboundGRPOComponent implements OnInit {
           var numberLength = (parseInt(autoLots[i].STRING)).toString().length;
           var finlNumber = parseInt(autoLots[i].STRING) - 1
           var finalString = this.forwardZero(finlNumber, strlength - numberLength);
-          // this.inboundMasterComponent.autoLots[i].STRING = finalString;
+          this.searlNo = this.searlNo + finalString; 
           autoLots[i].STRING = finalString;
         } else {
           var finalString = autoLots[i].STRING;
