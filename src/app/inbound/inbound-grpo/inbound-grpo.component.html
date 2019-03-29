@@ -63,6 +63,22 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'ScanInputs'|translate}}</label>
+                        <div class="col-sm-9">
+                            <input type="radio" name="group" (change)="handleCheckChange($event)" id="InventoryEnquiryOptions1" class="k-radio" checked />
+                            <label class="k-radio-label" for="InventoryEnquiryOptions1">{{'MfrSerial'|translate}}</label>
+                            <div class="clearfix mt-2"></div>
+                            <input type="radio" name="group"  (change)="handleCheckChange($event)"id="InventoryEnquiryOptions2" class="k-radio" />
+                            <label class="k-radio-label" for="InventoryEnquiryOptions2">{{'SysSerial'|translate}}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label py-0 text-right"><i class="opti-icon-qr-code fs-28"></i></label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control form-control-sm" name="qty" [(ngModel)]=qty placeholder="{{'ScanSerial'|translate}}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Quantity'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="d-flex">
@@ -86,46 +102,24 @@
                 <div class="col-md-12">
                     <kendo-grid *ngIf="!isNonTrack" class="no-shadow" [kendoGridBinding]="recvingQuantityBinArray" [sortable]="true" [selectable]="true" #gridItem>
 
-                        <!-- grid template start -->
-                        <ng-template kendoGridToolbarTemplate>
-                            <!-- show hide column start show hide -->
-                            <kendo-grid-column-chooser class="float-left"></kendo-grid-column-chooser>
-
-                            <!-- checkbox -->
-                            <form class="k-form opti_show-hide-grid-column-filter float-left">
-                                <div class="k-form-field float-left">
-                                    <input #chkFilter type="checkbox" (change)="onFilterChange(chkFilter,gridItem)" id="opti_RcvItemAddColumnFilterID" [(ngModel)]="isColumnFilter2"
-                                        class="k-checkbox" name="columnfilter" />
-                                    <label class="k-checkbox-label" for="opti_RcvItemAddColumnFilterID">Enable Filter</label>
-                                </div>
-
-                                <div class="k-form-field float-left">
-                                    <input type="checkbox" id="opti_RcvItemAddColumnGroupID" [(ngModel)]="isColumnGroup2" class="k-checkbox" name="columnGroup"
-                                    />
-                                    <label class="k-checkbox-label" for="opti_RcvItemAddColumnGroupID">Enable Grouping</label>
-                                </div>
-                            </form>
-
-                        </ng-template>
-
-                        <kendo-grid-column field="MfrSerial" [width]="6" title="{{'MfrSerialNo'|translate}}">
+                        <kendo-grid-column field="MfrSerial" [width]="18" title="{{'MfrSerialNo'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem>
                                 <input type="text" class="form-control form-control-sm" name="RecvbBinvalue">
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column field="searlNo" [width]="6" title="{{serialNoTitle}}"></kendo-grid-column>
-                        <kendo-grid-column field="Quantity" headerClass="text-right" class="text-right" [width]="6" title="{{'Qty'|translate}}">
+                        <kendo-grid-column field="searlNo" [width]="18" title="{{serialNoTitle}}"></kendo-grid-column>
+                        <kendo-grid-column field="Quantity" headerClass="text-right" class="text-right" [width]="18" title="{{'Qty'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem>
                                 {{dataItem.Quantity | number:'1.3-5'}}
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column field="Bin" [width]="6" title="{{'Bin'|translate}}"></kendo-grid-column>
-                        <kendo-grid-column field="expiryDate" [width]="6" title="{{'ExpiryDate'|translate}}">
+                        <kendo-grid-column field="Bin" [width]="18" title="{{'Bin'|translate}}"></kendo-grid-column>
+                        <kendo-grid-column field="expiryDate" [width]="18" title="{{'ExpiryDate'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem>
                                 {{dataItem.expiryDate | date:'MM/dd/yy'}}
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column field="" [width]="6" title="">
+                        <kendo-grid-column field="" [width]="10" title="">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                 <button type="button" class="k-button-icon k-button" (click)="DeleteRowClick(rowIndex, gridItem)">
                                     <span class="k-icon k-i-delete" role="presentation"></span>
@@ -136,48 +130,61 @@
 
 
                     <kendo-grid *ngIf="isNonTrack" class="no-shadow" [kendoGridBinding]="recvingQuantityBinArray" [sortable]="true" [selectable]="true" #gridItem>
-
-                            <!-- grid template start -->
-                            <ng-template kendoGridToolbarTemplate>
-                                <!-- show hide column start show hide -->
-                                <kendo-grid-column-chooser class="float-left"></kendo-grid-column-chooser>
-    
-                                <!-- checkbox -->
-                                <form class="k-form opti_show-hide-grid-column-filter float-left">
-                                    <div class="k-form-field float-left">
-                                        <input #chkFilter type="checkbox" (change)="onFilterChange(chkFilter,gridItem)" id="opti_RcvItemAddColumnFilterID" [(ngModel)]="isColumnFilter2"
-                                            class="k-checkbox" name="columnfilter" />
-                                        <label class="k-checkbox-label" for="opti_RcvItemAddColumnFilterID">Enable Filter</label>
-                                    </div>
-    
-                                    <div class="k-form-field float-left">
-                                        <input type="checkbox" id="opti_RcvItemAddColumnGroupID" [(ngModel)]="isColumnGroup2" class="k-checkbox" name="columnGroup"
-                                        />
-                                        <label class="k-checkbox-label" for="opti_RcvItemAddColumnGroupID">Enable Grouping</label>
-                                    </div>
-                                </form>
-    
+                        <kendo-grid-column field="Quantity" headerClass="text-right" class="text-right" [width]="45" title="{{'Qty'|translate}}">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                {{dataItem.Quantity | number:'1.3-5'}}
                             </ng-template>
- 
-                            <kendo-grid-column field="Quantity" headerClass="text-right" class="text-right" [width]="6" title="{{'Qty'|translate}}">
-                                <ng-template kendoGridCellTemplate let-dataItem>
-                                    {{dataItem.Quantity | number:'1.3-5'}}
-                                </ng-template>
-                            </kendo-grid-column>
-                            <kendo-grid-column field="Bin" [width]="6" title="{{'Bin'|translate}}"></kendo-grid-column>
+                        </kendo-grid-column>
+                        <kendo-grid-column field="Bin" [width]="45" title="{{'Bin'|translate}}"></kendo-grid-column>
 
-                            <kendo-grid-column field="" [width]="6" title="">
-                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                    <button type="button" class="k-button-icon k-button" (click)="DeleteRowClick(rowIndex, gridItem)">
-                                        <span class="k-icon k-i-delete" role="presentation"></span>
-                                    </button>
-                                </ng-template>
-                            </kendo-grid-column>
-                        </kendo-grid>
+                        <kendo-grid-column field="" [width]="10" title="">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <button type="button" class="k-button-icon k-button" (click)="DeleteRowClick(rowIndex, gridItem)">
+                                    <span class="k-icon k-i-delete" role="presentation"></span>
+                                </button>
+                            </ng-template>
+                        </kendo-grid-column>
+                    </kendo-grid>
 
                 </div>
             </div>
             <!-- Kendo Table Grid Row end -->
+
+            <div class="row mt-3">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'TargetWhse'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control form-control-sm" name="RecvbBinvalue" [(ngModel)]=RecvbBinvalue placeholder="{{'TargetWhse'|translate}}"
+                                    (blur)="OnBinChange()">
+                                <div class="input-group-append has-seprate-btn">
+                                    <button class="k-button k-primary btn" type="button" (click)="ShowBins()">
+                                        <i class="opti-icon-hammenu"></i>
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'TargetBin'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control form-control-sm" name="RecvbBinvalue" [(ngModel)]=RecvbBinvalue placeholder="{{'TargetBin'|translate}}"
+                                    (blur)="OnBinChange()">
+                                <div class="input-group-append has-seprate-btn">
+                                    <button class="k-button k-primary btn" type="button" (click)="ShowBins()">
+                                        <i class="opti-icon-hammenu"></i>
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
         <div class="fix-footer-btnBar">
             <div class="col-sm-12 col-12">
