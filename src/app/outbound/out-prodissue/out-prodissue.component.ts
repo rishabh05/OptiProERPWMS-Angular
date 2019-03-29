@@ -39,6 +39,7 @@ export class OutProdissueComponent implements OnInit {
   constructor(private ourboundService: OutboundService, private router: Router, private toastr: ToastrService, private translate: TranslateService) { }
 
   ngOnInit() {
+    //lsOutbound
     let outboundData = localStorage.getItem(CommonConstants.OutboundData);
 
     if (outboundData != undefined && outboundData != '') {
@@ -231,7 +232,7 @@ export class OutProdissueComponent implements OnInit {
     console.log("SelectedMeterial", this.selectedMeterials);
     if (updateGrid == true)
       gridSelectedMeterial.data = this.selectedMeterials;
-
+//lsOutbound
     this.outbound = JSON.parse(localStorage.getItem(CommonConstants.OutboundData));
     this.outbound.SelectedMeterials = lookupValue;
     localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
@@ -297,19 +298,39 @@ export class OutProdissueComponent implements OnInit {
   }
 
   addMetToCollection() {
+    //lsOutbound
     let outboundData = localStorage.getItem(CommonConstants.OutboundData);
 
     if (outboundData != undefined && outboundData != '') {
 
       this.outbound = JSON.parse(outboundData);
 
-      let OrderDataCollection: any={OrderData: this.outbound.OrderData, SelectedMeterials:  this.outbound.SelectedMeterials};            
-      if(this.outbound.SavedData===undefined || this.outbound.SavedData.length<=0){
-        this.outbound.SavedData=[];
+      // get element
+      let item: any = this.outbound.TempSavedData.filter(i => i.SelectedItem.ITEMCODE == this.outbound.SelectedItem.ITEMCODE)
+
+      let idx = this.outbound.TempSavedData.indexOf(item);
+
+      debugger;
+      if (idx !== -1) {
+        item.SelectedMeterials.push(this.outbound.SelectedMeterials);
+        this.outbound.TempSavedData.splice(idx, 1, item);
+
       }
-      this.outbound.SavedData.push(OrderDataCollection);
+      else {
+
+
+        let OrderDataCollection: any = { SelectedItem: this.outbound.SelectedItem, SelectedMeterials: this.outbound.SelectedMeterials };
+
+        if (this.outbound.TempSavedData === undefined || this.outbound.TempSavedData.length <= 0) {
+          this.outbound.TempSavedData = [];
+        }
+
+        this.outbound.TempSavedData.push(OrderDataCollection);
+      }
     }
-    localStorage.setItem(CommonConstants.OutboundData,JSON.stringify( this.outbound));
+//lsOutbound
+    localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+    this.back();
   }
 
   back() {

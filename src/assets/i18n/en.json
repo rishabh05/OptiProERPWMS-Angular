@@ -175,6 +175,7 @@
   "AcceptQty":"Accept Qty",
   "AssignedQuantity":"Assigned Quantity",
   "OrderList": "Order List",
+  "SelectVendorValidateMsg": "Please select vendor code before proceed next.",
   "TargetBin": "Target Bin",
   "TargetWhse":"Target Whse",
   "ScanSerial": "Scan Serial"

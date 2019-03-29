@@ -117,7 +117,7 @@
                                 <input type="text" class="form-control form-control-sm" name="RecvbBinvalue">
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column field="searlNo" [width]="18" title="{{'SerialNo'|translate}}"></kendo-grid-column>
+                        <kendo-grid-column field="searlNo" [width]="18" title="{{serialNoTitle}}"></kendo-grid-column>
                         <kendo-grid-column field="Quantity" headerClass="text-right" class="text-right" [width]="18" title="{{'Qty'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem>
                                 {{dataItem.Quantity | number:'1.3-5'}}

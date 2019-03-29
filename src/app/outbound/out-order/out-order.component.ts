@@ -28,7 +28,7 @@ export class OutOrderComponent implements OnInit {
   public orderNumber: string;
   public showSOIetDetail = false;
   public soItemsDetail: any = null;
-  public viewLines :boolean;
+  public viewLines: boolean;
   serialTrackedItems: any;
   batchTrackedItems: any;
   noneTrackedItems: any;
@@ -36,11 +36,20 @@ export class OutOrderComponent implements OnInit {
 
 
   ngOnInit() {
+    // lsOutbound
+        
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+
     console.log("OutboundData:", outboundData);
     if (outboundData != undefined && outboundData != '') {
       this.outbound = JSON.parse(outboundData);
       this.selectedCustomer = this.outbound.CustomerData;
+
+      if(this.outbound.OrderData.DOCNUM!==undefined && this.outbound.OrderData.DOCNUM!==null)
+      {
+        this.orderNumber = this.outbound.OrderData.DOCNUM;
+        this.openSOOrderList();
+      }
     }
 
   }
@@ -65,26 +74,28 @@ export class OutOrderComponent implements OnInit {
     }
   }
 
-  getLookupValue(lookupValue: any) {  
-    
+  getLookupValue(lookupValue: any) {
+
     this.outbound.OrderData = lookupValue;
     this.orderNumber = this.outbound.OrderData.DOCNUM;
+    // lsOutbound
     localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
   }
 
 
-  public openPOByUOM(selection:any) {
-    let selectdeData = selection.selectedRows[0].dataItem;      
-
+  public openPOByUOM(selection: any) {
+    let selectdeData = selection.selectedRows[0].dataItem;
+    CommonConstants.OutboundData
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
-    
+
     if (outboundData != undefined && outboundData != '') {
       this.outbound = JSON.parse(outboundData);
-      this.outbound.SelectedItem=selectdeData;
+      this.outbound.SelectedItem = selectdeData;
+      //lsOutbound
       localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
-      this.router.navigateByUrl('home/outbound/outprodissue',{skipLocationChange:true});
+      this.router.navigateByUrl('home/outbound/outprodissue', { skipLocationChange: true });
     }
-    
+
   }
 
   public openSOOrderList() {
@@ -93,7 +104,7 @@ export class OutOrderComponent implements OnInit {
 
       let tempOrderData: any = this.outbound.OrderData;
       this.outbound.OrderData.DOCNUM = tempOrderData.DOCNUM = this.orderNumber;
-
+//lsOutbound
       let whseId = localStorage.getItem("whseId");
       this.outboundservice.getSOItemList(tempOrderData.CARDCODE, tempOrderData.DOCNUM, whseId).subscribe(
         resp => {
@@ -113,8 +124,6 @@ export class OutOrderComponent implements OnInit {
     }
   }
 
-
-
   public rowCallback = (context: RowClassArgs) => {
     switch (context.dataItem.TRACKING) {
       case 'S':
@@ -131,5 +140,22 @@ export class OutOrderComponent implements OnInit {
   public openOutboundCustomer() {
     this.router.navigateByUrl("home/outbound/outcustomer", { skipLocationChange: true })
   }
+
+  public addToDeleiver() {
+//lsOutbound
+    let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+
+    if (outboundData != undefined && outboundData != '') {
+      this.outbound = JSON.parse(outboundData);
+      
+      let deleivery:any={OrderData: this.outbound.OrderData,MeterialData:this.outbound.TempSavedData};
+      this.outbound.DeleiveryCollection.push(deleivery)
+
+      localStorage.setItem(CommonConstants.OutboundData,JSON.stringify( this.outbound));
+      this.openOutboundCustomer();
+    }
+  }
+
+  public deleiver() { }
 
 }

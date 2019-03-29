@@ -43,7 +43,7 @@ export class InboundDetailsComponent implements OnInit {
             return;
           }
           this.showLookupLoader = false;
-          this.serviceData = data.Table;
+          this.serviceData = data.Table;  
           this.lookupfor = "VendorList";
         } else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
@@ -72,6 +72,7 @@ export class InboundDetailsComponent implements OnInit {
           }
           if (data[0].Result == "0") {
             this.toastr.error('', this.translate.instant("VendorExistMessge"));
+            this.VendCode = "";
             return;
           } else {
             this.VendCode = data[0].ID;
@@ -79,6 +80,7 @@ export class InboundDetailsComponent implements OnInit {
           }
         } else {
           this.toastr.error('', this.translate.instant("VendorExistMessge"));
+          this.VendCode = "";
         }
       },
       error => {
@@ -96,7 +98,13 @@ export class InboundDetailsComponent implements OnInit {
   }
 
   public onNextClick() {
-    this.inboundMasterComponent.selectedVernder = this.VendCode;
-    this.inboundMasterComponent.inboundComponent = 2;
+    if(this.VendCode != undefined && this.VendCode !=""){
+      this.inboundMasterComponent.selectedVernder = this.VendCode;
+      this.inboundMasterComponent.inboundComponent = 2;
+    }
+    else{
+      this.toastr.error('', this.translate.instant("SelectVendorValidateMsg"));
+    }
+    
   }
 }

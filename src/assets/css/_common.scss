@@ -95,7 +95,10 @@ body{
       height: 100%;
       text-align: center;
       z-index: 99;
-  
+      .full-section {
+        top: 0;
+        z-index: 100;
+        }
         @extend .opti_vertical-align;
         .opti_spinner {
             border: 3px solid #c7c7c7;
