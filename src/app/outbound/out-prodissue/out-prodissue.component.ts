@@ -310,7 +310,7 @@ export class OutProdissueComponent implements OnInit {
 
       let idx = this.outbound.TempSavedData.indexOf(item);
 
-      debugger;
+      
       if (idx !== -1) {
         item.SelectedMeterials.push(this.outbound.SelectedMeterials);
         this.outbound.TempSavedData.splice(idx, 1, item);

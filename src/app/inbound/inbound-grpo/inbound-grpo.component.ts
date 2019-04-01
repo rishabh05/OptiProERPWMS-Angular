@@ -43,7 +43,7 @@ export class InboundGRPOComponent implements OnInit {
   isSerial: boolean = false;
   serialNoTitle:string = "";
   isAutoLotEnabled: boolean;
-  isDisabledScanInput:boolean = true;
+  isDisabledScanInput:boolean = false; 
   ScanSerial: string="";
 
   targetBin:string = "";
@@ -64,7 +64,7 @@ export class InboundGRPOComponent implements OnInit {
   }
 
   ngOnInit() {
-    debugger;
+    
     this.openPOLineModel[0] = this.inboundMasterComponent.openPOmodel;
     if (this.openPOLineModel != undefined && this.openPOLineModel != null) {
       this.Ponumber = this.openPOLineModel[0].DOCENTRY;
@@ -177,10 +177,15 @@ export class InboundGRPOComponent implements OnInit {
       }
     );
   }
-
+   
   handleCheckChange($event){
-    console.log("handle radio change event");
-
+    
+    if($event.currentTarget.id=="InventoryEnquiryOptions1"){
+     // mfr serial radio selected.
+    }
+    if($event.currentTarget.id=="InventoryEnquiryOptions2"){
+     // mfr serial radio selected.
+    }
   }
   validateQuantity(): boolean {
 
@@ -296,7 +301,7 @@ export class InboundGRPOComponent implements OnInit {
 
   }
   deleteButtonConfirmation(rowindex, gridData: any) {
-    debugger;
+    
     if(confirm()) {
       console.log("Implement delete functionality here");
       this.DeleteRowClick(rowindex,gridData); 
@@ -309,7 +314,7 @@ export class InboundGRPOComponent implements OnInit {
       
       this.DeleteRowClick(rowindex,gridData); 
     }
-   // debugger;
+   
     // this.confDialogService.confirm('Please confirm..', 'Do you really want to ... ?')
     // .then((confirmed) => console.log('User confirmed:', confirmed))
     // .catch(() => console.log('User dismissed the dialog (e.g., by using ESC, clicking the cross icon, or clicking outside the dialog)'));
