@@ -138,6 +138,9 @@ export class InboundService {
   //   return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetBinsForReceiptWithReceivingBin", jObject, this.httpOptions);
   // }
 
+  /**
+   * get whs list for target whs.
+   */
   getQCTargetWhse(): Observable<any> {
     var jObject = {
       WhsCode: JSON.stringify([{
@@ -149,7 +152,12 @@ export class InboundService {
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetWHS", jObject, this.httpOptions);
   }
 
+  /**
+   * check whs is valid or not.
+   * @param whsCode 
+   */
   isWHSExists(whsCode:string){
+
     var jObject = { WhsCode: JSON.stringify([{ CompanyDBId:  localStorage.getItem("CompID"), ItemCode: '', WhsCode: whsCode}]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsWhsExist", jObject, this.httpOptions);
   }
