@@ -181,6 +181,8 @@
   "ScanSerial": "Scan Serial",
   "ScanInputs": "Scan Inputs",
   "SysSerial" : "Sys Serial",
-  "MfrSerial" : "Mfr Serial"
+  "MfrSerial" : "Mfr Serial",
+  "AddToDeleiver":"Add To Deleiver",
+  "Deleiver":"Deleiver"
   
 }

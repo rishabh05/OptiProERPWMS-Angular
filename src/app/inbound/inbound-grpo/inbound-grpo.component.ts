@@ -173,8 +173,9 @@ export class InboundGRPOComponent implements OnInit {
     }
     if (this.RecvbBinvalue == "" || this.RecvbBinvalue == undefined) {
       this.toastr.error('', this.translate.instant("INVALIDBIN"));
-      return;
+      return; 
     }
+    debugger;
     if (this.isNonTrack) {
       this.addNonTrackQty(this.qty);
     } else {
@@ -376,9 +377,9 @@ export class InboundGRPOComponent implements OnInit {
     this.inboundMasterComponent.inboundComponent = 2;
   }
 
-  DeleteRowClick(rowindex, gridData: any) {
+  DeleteRowClick(rowindex, gridData: any) { 
     this.recvingQuantityBinArray.splice(rowindex, 1);
     gridData.data = this.recvingQuantityBinArray;
-    console.log("primaryAutoLots",this.primaryAutoLots.toString()); 
+    
   }
 }
