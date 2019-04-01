@@ -422,7 +422,8 @@ export class InventoryEnquiryComponent implements OnInit {
       }
     );
   }
-
+ 
+ 
   OnCancelClick(){
     this.router.navigate(['home/dashboard']);
   }

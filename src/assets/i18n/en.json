@@ -181,6 +181,9 @@
   "ScanSerial": "Scan Serial",
   "ScanInputs": "Scan Inputs",
   "SysSerial" : "Sys Serial",
-  "MfrSerial" : "Mfr Serial"
+  "MfrSerial" : "Mfr Serial",
+  "Serial" : "Serial",
+  "Batch" : "Batch",
+  "DoYouWantToDelete": "Are you sure to delete ?"
   
 }

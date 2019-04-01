@@ -9,6 +9,8 @@ import { UOM } from 'src/app/models/Inbound/UOM';
 import { OpenPOLinesModel } from 'src/app/models/Inbound/OpenPOLinesModel';
 import { RecvingQuantityBin } from 'src/app/models/Inbound/RecvingQuantityBin';
 import { AutoLot } from 'src/app/models/Inbound/AutoLot';
+import { ISubscription } from 'rxjs/Subscription';
+import { ConfirmdialogService } from 'src/app/common/confirm-dialog/confirmdialog.service';
 
 @Component({
   selector: 'app-inbound-grpo',
@@ -31,7 +33,7 @@ export class InboundGRPOComponent implements OnInit {
   lookupfor: string;
   showLookupLoader = true;
   viewLines: any[];
-  getLookupValue: any[];
+  //getLookupValue: any[];
   public value: Date = new Date();
   searlNo: any = "";
   MfrSerial: any = "";
@@ -40,9 +42,16 @@ export class InboundGRPOComponent implements OnInit {
   isSerial: boolean = false;
   serialNoTitle:string = "";
 
+  targetBin:string = "";
+  targetWhse:string = "";
+
+  targetBinSubs: ISubscription;
+  targetWhseSubs: ISubscription;
+
+  targetBinClick: boolean = false;
   public primaryAutoLots: AutoLot[];
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
-    private inboundMasterComponent: InboundMasterComponent) {
+    private inboundMasterComponent: InboundMasterComponent,private confDialogService: ConfirmdialogService) {
     let userLang = navigator.language.split('-')[0];
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
     translate.use(userLang);
@@ -58,13 +67,13 @@ export class InboundGRPOComponent implements OnInit {
       this.tracking = this.openPOLineModel[0].TRACKING;
       if (this.tracking == "S") {
         this.isSerial = true;
-        this.serialNoTitle = "Serial" 
+        this.serialNoTitle = this.translate.instant("Serial") ;
       } else if (this.tracking == "N") {
         this.isNonTrack = true;
       } else if (this.tracking == "B") {
         this.isSerial = false;
         this.isNonTrack = false;
-        this.serialNoTitle = "Batch" 
+        this.serialNoTitle = this.translate.instant("Batch") ;
       }
       this.getUOMList();
       if (this.RecvbBinvalue == "") {
@@ -78,6 +87,7 @@ export class InboundGRPOComponent implements OnInit {
     * Method to get list of inquries from server.
    */
   public ShowBins() {
+    this.targetBinClick = false;
     this.inboundService.getRevBins(this.openPOLineModel[0].QCREQUIRED).subscribe(
       (data: any) => {
         console.log(data);
@@ -111,7 +121,7 @@ export class InboundGRPOComponent implements OnInit {
     if (this.RecvbBinvalue == "") {
       return;
     }
-    this.inboundService.binChange(this.openPOLineModel[0].QCREQUIRED).subscribe(
+    this.inboundService.binChange(this.RecvbBinvalue).subscribe(
       (data: any) => {
         console.log(data);
         if (data != null) {
@@ -136,7 +146,7 @@ export class InboundGRPOComponent implements OnInit {
       error => {
         console.log("Error: ", error);
         this.RecvbBinvalue = "";
-      }
+      } 
     );
   }
 
@@ -170,7 +180,7 @@ export class InboundGRPOComponent implements OnInit {
       this.toastr.error('', this.translate.instant("INVALIDBIN"));
       return; 
     }
-    debugger;
+    
     if (this.isNonTrack) {
       this.addNonTrackQty(this.qty);
     } else {
@@ -252,6 +262,26 @@ export class InboundGRPOComponent implements OnInit {
       }
     }
 
+  }
+  deleteButtonConfirmation(rowindex, gridData: any) {
+    debugger;
+    if(confirm()) {
+      console.log("Implement delete functionality here");
+      this.DeleteRowClick(rowindex,gridData); 
+    }
+  }
+
+  public openConfirmationDialog(rowindex, gridData: any) {
+    
+    if(confirm("Are you sure to delete ?")) {
+      
+      this.DeleteRowClick(rowindex,gridData); 
+    }
+   // debugger;
+    // this.confDialogService.confirm('Please confirm..', 'Do you really want to ... ?')
+    // .then((confirmed) => console.log('User confirmed:', confirmed))
+    // .catch(() => console.log('User dismissed the dialog (e.g., by using ESC, clicking the cross icon, or clicking outside the dialog)'));
+    // this.DeleteRowClick(rowindex,gridData); 
   }
 
   forwardZero(num: number, size: number): string {
@@ -376,4 +406,156 @@ export class InboundGRPOComponent implements OnInit {
     gridData.data = this.recvingQuantityBinArray;
     
   }
+
+
+  // item section.
+   /**
+   * Method to get list of inquries from server.
+   */
+  public getTargetWhseList() {
+
+    this.targetWhseSubs = this.inboundService.getQCTargetWhse().subscribe(
+      data => {
+        if (data != undefined && data.length > 0) {
+          if (data[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
+          this.showLookupLoader = false;
+          this.serviceData = data;
+          this.lookupfor = "toWhsList";
+          
+        }
+        else {
+          this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+        }
+      },
+      error => {
+        this.toastr.error('', error);
+      },
+    );
+  }
+
+  
+  // item section.
+   /**
+   * Method to get list of inquries from server.
+   */
+  public getTargetBinList() {
+   this.targetBinClick =true;
+    //this.showLoader = true; this.getPIlistSubs = 
+    this.targetBinSubs = this.inboundService.getRevBins("N").subscribe(
+      (data: any) => {
+        console.log(data);
+        if (data != null) {
+         
+            if (data.length > 0) {
+              console.log(data);
+              this.showLookupLoader = false;
+              this.serviceData = data;
+              this.lookupfor = "RecvBinList";
+             
+              return;
+            }
+            else {
+              this.toastr.error('', this.translate.instant("NoBinsAvailableMsg"));
+            }
+        }
+      },
+      error => {
+        console.log("Error: ", error);
+      }
+    );
+  }
+
+   /**
+   * @param $event this will return the value on row click of lookup grid.
+   */
+  getLookupValue($event) {
+
+    if (this.lookupfor == "RecvBinList") {
+     //this.itemCode = $event[0];
+     if(this.targetBinClick){
+      this.targetBin = $event[0];
+      this.targetBinClick= false;
+     }else{
+      this.RecvbBinvalue = $event[0];
+     }
+     
+    }
+    else if (this.lookupfor == "toWhsList") {
+      console.log("value of lots" + $event);
+      console.log("value of lots" + $event.LOTNO);
+      this.targetWhse = $event[0];
+      //this.itemCode = $event[2];
+
+    }
+  }
+
+  OnTargetBinChange() {
+    if (this.targetBin == "") {
+      return;
+    }
+    this.inboundService.binChange(this.targetBin).subscribe(
+      (data: any) => {
+        console.log(data);
+        if (data != null) {
+          if (data.length > 0) {
+            if (data[0].Result == "0") {
+              this.toastr.error('', this.translate.instant("INVALIDBIN"));
+              this.targetBin = "";
+              return;
+            }
+            else {
+              this.targetBin = data[0].ID;
+              // oCurrentController.isReCeivingBinExist();
+            }
+          }
+        }
+        else {
+          this.toastr.error('', this.translate.instant("INVALIDBIN"));
+          this.targetBin = "";
+          return;
+        }
+      },
+      error => {
+        console.log("Error: ", error);
+        this.targetBin = "";
+      }
+    );
+  }
+
+  onQCWHSChange(){
+    if (this.targetWhse == "") {
+      return;
+    }
+    this.inboundService.isWHSExists(this.targetWhse).subscribe(
+      (data: any) => {
+        console.log(data);
+        if (data != null) {
+          if (data.length > 0) {
+            if (data[0].Result == "0") {
+              this.toastr.error('', this.translate.instant("InvalidWhsErrorMsg"));
+              this.targetWhse = "";
+              return;
+            }
+            else {
+              this.targetWhse = data[0].ID;
+              // oCurrentController.isReCeivingBinExist();
+            }
+          }
+        }
+        else {
+          this.toastr.error('', this.translate.instant("InvalidWhsErrorMsg"));
+          this.targetWhse = "";
+          return;
+        }
+      },
+      error => {
+        console.log("Error: ", error);
+        this.targetWhse = "";
+      }
+    );
+  }
+
 }

@@ -65,17 +65,17 @@
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'ScanInputs'|translate}}</label>
                         <div class="col-sm-9">
-                            <input type="radio" name="group" (change)="handleCheckChange($event)" id="InventoryEnquiryOptions1" class="k-radio" checked />
+                            <input type="radio" name="InventoryEnquiryOptions1" (change)="handleCheckChange($event)" id="InventoryEnquiryOptions1" class="k-radio" checked />
                             <label class="k-radio-label" for="InventoryEnquiryOptions1">{{'MfrSerial'|translate}}</label>
                             <div class="clearfix mt-2"></div>
-                            <input type="radio" name="group"  (change)="handleCheckChange($event)"id="InventoryEnquiryOptions2" class="k-radio" />
+                            <input type="radio" name="InventoryEnquiryOptions2"  (change)="handleCheckChange($event)"id="InventoryEnquiryOptions2" class="k-radio" />
                             <label class="k-radio-label" for="InventoryEnquiryOptions2">{{'SysSerial'|translate}}</label>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label py-0 text-right"><i class="opti-icon-qr-code fs-28"></i></label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control form-control-sm" name="qty" [(ngModel)]=qty placeholder="{{'ScanSerial'|translate}}">
+                            <input type="text" class="form-control form-control-sm" name="ScanSerial" [(ngModel)]=qty placeholder="{{'ScanSerial'|translate}}">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -118,13 +118,13 @@
                             <ng-template kendoGridCellTemplate let-dataItem>
                                 {{dataItem.expiryDate | date:'MM/dd/yy'}}
                             </ng-template>
-                        </kendo-grid-column>
+                        </kendo-grid-column> 
                         <kendo-grid-column field="" [width]="10" title="">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                <button type="button" class="k-button-icon k-button" (click)="DeleteRowClick(rowIndex, gridItem)">
+                                <button type="button" class="k-button-icon k-button" (click)="openConfirmationDialog(rowIndex, gridItem)">
                                     <span class="k-icon k-i-delete" role="presentation"></span>
                                 </button>
-                            </ng-template>
+                            </ng-template> 
                         </kendo-grid-column>
                     </kendo-grid>
 
@@ -139,10 +139,10 @@
 
                         <kendo-grid-column field="" [width]="10" title="">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                <button type="button" class="k-button-icon k-button" (click)="DeleteRowClick(rowIndex, gridItem)">
+                                <button type="button" class="k-button-icon k-button" (click)="openConfirmationDialog(rowIndex, gridItem)">
                                     <span class="k-icon k-i-delete" role="presentation"></span>
                                 </button>
-                            </ng-template>
+                            </ng-template> 
                         </kendo-grid-column>
                     </kendo-grid>
 
@@ -156,10 +156,10 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'TargetWhse'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" name="RecvbBinvalue" [(ngModel)]=RecvbBinvalue placeholder="{{'TargetWhse'|translate}}"
-                                    (blur)="OnBinChange()">
+                                <input type="text" class="form-control form-control-sm" name="targetWhse" [(ngModel)]=targetWhse placeholder="{{'TargetWhse'|translate}}"
+                                    (blur)="onQCWHSChange()">
                                 <div class="input-group-append has-seprate-btn">
-                                    <button class="k-button k-primary btn" type="button" (click)="ShowBins()">
+                                    <button class="k-button k-primary btn" type="button" (click)="getTargetWhseList()">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
 
@@ -171,10 +171,10 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'TargetBin'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" name="RecvbBinvalue" [(ngModel)]=RecvbBinvalue placeholder="{{'TargetBin'|translate}}"
-                                    (blur)="OnBinChange()">
+                                <input type="text" class="form-control form-control-sm" name="targetBinValue" [(ngModel)]=targetBin placeholder="{{'TargetBin'|translate}}"
+                                    (blur)="OnTargetBinChange()">
                                 <div class="input-group-append has-seprate-btn">
-                                    <button class="k-button k-primary btn" type="button" (click)="ShowBins()">
+                                    <button class="k-button k-primary btn" type="button" (click)="getTargetBinList()">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
 

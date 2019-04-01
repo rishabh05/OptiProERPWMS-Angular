@@ -128,5 +128,31 @@ export class InboundService {
     
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/SubmitGoodsReceiptPO", jObject, this.httpOptions);
   }
+
+  // getTargetBins(QCrequired: string): Observable<any> {
+  //   var jObject = {
+  //     WhsCode: JSON.stringify([{
+  //       CompanyDBId: localStorage.getItem("CompID"), ItemCode: '',
+  //       WhsCode: localStorage.getItem("whseId"), QCRequired: QCrequired,ageId: "GRPO"}])
+  //   };
+  //   return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetBinsForReceiptWithReceivingBin", jObject, this.httpOptions);
+  // }
+
+  getQCTargetWhse(): Observable<any> {
+    var jObject = {
+      WhsCode: JSON.stringify([{
+          CompanyDBId: localStorage.getItem("CompID"),
+          //Need to pass Username as Warehouses are filled Accordind to the Permission from Admin Portal 
+          //Chane dt 2-July-2018
+          UserId: localStorage.getItem("UserId")
+      }])};
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetWHS", jObject, this.httpOptions);
+  }
+
+  isWHSExists(whsCode:string){
+    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId:  localStorage.getItem("CompID"), ItemCode: '', WhsCode: whsCode}]) };
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsWhsExist", jObject, this.httpOptions);
+  }
+  
 }
 
