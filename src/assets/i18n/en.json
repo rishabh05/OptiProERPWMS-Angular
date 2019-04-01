@@ -186,6 +186,8 @@
   "Batch" : "Batch",
   "DoYouWantToDelete": "Are you sure to delete ?",
   "AddToDeleiver":"Add To Deleiver",
-  "Deleiver":"Deleiver"
-  
+  "Deleiver":"Deleiver",
+  "NoOpenQuantity":"No open quantity available"
+
+   
 }

@@ -21,6 +21,7 @@ export class InboundGRPOComponent implements OnInit {
 
   openPOLineModel: OpenPOLinesModel[] = [];
   Ponumber: any;
+  OpenQty:number;
   tracking: string="";
   RecvbBinvalue: any = "";
   uomSelectedVal: UOM;
@@ -42,6 +43,7 @@ export class InboundGRPOComponent implements OnInit {
   isSerial: boolean = false;
   serialNoTitle:string = "";
   isAutoLotEnabled: boolean;
+  isDisabledScanInput:boolean = true;
   ScanSerial: string="";
 
   targetBin:string = "";
@@ -62,10 +64,12 @@ export class InboundGRPOComponent implements OnInit {
   }
 
   ngOnInit() {
+    debugger;
     this.openPOLineModel[0] = this.inboundMasterComponent.openPOmodel;
     if (this.openPOLineModel != undefined && this.openPOLineModel != null) {
       this.Ponumber = this.openPOLineModel[0].DOCENTRY;
       this.tracking = this.openPOLineModel[0].TRACKING;
+      this.OpenQty = this.openPOLineModel[0].OPENQTY;
       if (this.tracking == "S") {
         this.isSerial = true;
         this.serialNoTitle = this.translate.instant("Serial") ;
@@ -174,9 +178,29 @@ export class InboundGRPOComponent implements OnInit {
     );
   }
 
+  handleCheckChange($event){
+    console.log("handle radio change event");
 
+  }
+  validateQuantity(): boolean {
+
+    let quantitySum: number = 0;
+    for (var i = 0; i < this.recvingQuantityBinArray.length; i++) {
+      quantitySum += Number(this.recvingQuantityBinArray[i].Quantity);
+    }
+    quantitySum = quantitySum + Number(this.qty);
+    if (quantitySum > Number(this.OpenQty)) {
+      this.toastr.error('', this.translate.instant("NoOpenQuantity"));
+      this.qty = 0;
+      return false;
+    } else {
+      return true;
+    }
+    
+  }
   addQuantity() {
     
+
     if (this.qty == 0 || this.qty == undefined) {
       this.toastr.error('', this.translate.instant("EnterQuantityErrMsg"));
       return;
@@ -185,7 +209,9 @@ export class InboundGRPOComponent implements OnInit {
       this.toastr.error('', this.translate.instant("INVALIDBIN"));
       return; 
     }
-    
+    if(!this.validateQuantity()){
+      return;
+    }
     if (this.isNonTrack) {
       this.addNonTrackQty(this.qty);
     } else {
