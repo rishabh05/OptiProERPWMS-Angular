@@ -184,6 +184,8 @@
   "MfrSerial" : "Mfr Serial",
   "Serial" : "Serial",
   "Batch" : "Batch",
-  "DoYouWantToDelete": "Are you sure to delete ?"
+  "DoYouWantToDelete": "Are you sure to delete ?",
+  "AddToDeleiver":"Add To Deleiver",
+  "Deleiver":"Deleiver"
   
 }

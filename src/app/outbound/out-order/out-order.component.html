@@ -78,14 +78,15 @@
             </div>
             <div class="col-sm-12 col-12">
 
-                <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" (click)="openOutboundCustomer()"
+                <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon mr-1" (click)="openOutboundCustomer()"
                     roterLink="binTransfer" skipLocationChange><i class="opti-icon-arrow-back"></i></button>
 
-                <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent " (click)="addToDeleiver()"
-                    roterLink="binTransfer" skipLocationChange><i class="opti-icon-arrow-back"></i>Add To Deleiver</button>
+                
+                <button type="button" (click)="addToDeleiver()" class="btn btn-primary k-button btn-sm btn-icon-with-text ml-1"><span class="k-icon k-i-plus"
+                        role="presentation"></span> {{'AddToDeleiver'|translate}}</button>
 
-                <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent" (click)="deleiver()"
-                    roterLink="binTransfer" skipLocationChange><i class="opti-icon-arrow-back"></i>>Deleiver</button>
+                <button type="button" (click)="deleiver()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-check"
+                            role="presentation"></span> {{'Deleiver'|translate}}</button>
             </div>
         </div>
     </form>

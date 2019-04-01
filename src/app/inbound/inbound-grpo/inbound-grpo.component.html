@@ -64,8 +64,8 @@
                     </div>
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'ScanInputs'|translate}}</label>
-                        <div class="col-sm-9">
-                            <input type="radio" name="InventoryEnquiryOptions1" (change)="handleCheckChange($event)" id="InventoryEnquiryOptions1" class="k-radio" checked />
+                        <div class="col-sm-9" [disabled]="!isAutoLotEnabled">
+                            <input type="radio" name="group" (change)="handleCheckChange($event)" id="InventoryEnquiryOptions1" class="k-radio" checked />
                             <label class="k-radio-label" for="InventoryEnquiryOptions1">{{'MfrSerial'|translate}}</label>
                             <div class="clearfix mt-2"></div>
                             <input type="radio" name="InventoryEnquiryOptions2"  (change)="handleCheckChange($event)"id="InventoryEnquiryOptions2" class="k-radio" />
@@ -75,7 +75,7 @@
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label py-0 text-right"><i class="opti-icon-qr-code fs-28"></i></label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control form-control-sm" name="ScanSerial" [(ngModel)]=qty placeholder="{{'ScanSerial'|translate}}">
+                            <input type="text" class="form-control form-control-sm" name="ScanSerial" [(ngModel)]=ScanSerial placeholder="{{'ScanSerial'|translate}}">
                         </div>
                     </div>
                     <div class="form-group row">

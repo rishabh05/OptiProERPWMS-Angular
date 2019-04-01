@@ -41,6 +41,8 @@ export class InboundGRPOComponent implements OnInit {
   isNonTrack: boolean = false;
   isSerial: boolean = false;
   serialNoTitle:string = "";
+  isAutoLotEnabled: boolean;
+  ScanSerial: string="";
 
   targetBin:string = "";
   targetWhse:string = "";
@@ -60,7 +62,6 @@ export class InboundGRPOComponent implements OnInit {
   }
 
   ngOnInit() {
-    
     this.openPOLineModel[0] = this.inboundMasterComponent.openPOmodel;
     if (this.openPOLineModel != undefined && this.openPOLineModel != null) {
       this.Ponumber = this.openPOLineModel[0].DOCENTRY;
@@ -74,6 +75,10 @@ export class InboundGRPOComponent implements OnInit {
         this.isSerial = false;
         this.isNonTrack = false;
         this.serialNoTitle = this.translate.instant("Batch") ;
+      }
+      let autoLots = JSON.parse(localStorage.getItem("primaryAutoLots"));
+      if(autoLots != undefined){
+        this.isAutoLotEnabled = true;
       }
       this.getUOMList();
       if (this.RecvbBinvalue == "") {
@@ -184,6 +189,7 @@ export class InboundGRPOComponent implements OnInit {
     if (this.isNonTrack) {
       this.addNonTrackQty(this.qty);
     } else {
+      
       let autoLots = JSON.parse(localStorage.getItem("primaryAutoLots"));
       if (this.isSerial) {
         while (this.qty > 0 && this.qty != 0) {
