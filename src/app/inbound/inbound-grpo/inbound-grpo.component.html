@@ -64,7 +64,7 @@
                                 placeholder="MM/dd/yy"></kendo-datepicker>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <div class="form-group row" *ngIf="showScanInput">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'ScanInputs'|translate}}</label>
                         <div class="col-sm-9">
                             <fieldset [disabled]=isDisabledScanInput>
@@ -81,7 +81,7 @@
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label py-0 text-right"><i class="opti-icon-qr-code fs-28"></i></label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control form-control-sm" name="qty" [(ngModel)]=qty
+                            <input type="text" class="form-control form-control-sm" name="ScanInputs" [(ngModel)]=ScanInputs
                                 placeholder="{{'ScanSerial'|translate}}">
                         </div>
                     </div>
@@ -114,7 +114,8 @@
 
                         <kendo-grid-column field="MfrSerial" [width]="18" title="{{'MfrSerialNo'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem>
-                                <input type="text" class="form-control form-control-sm" name="RecvbBinvalue">
+                                <input type="text" class="form-control form-control-sm"
+                                name="dataItem.MfrSerial" [(ngModel)]=dataItem.MfrSerial>
                             </ng-template>
                         </kendo-grid-column>
                         <kendo-grid-column field="searlNo" [width]="18" title="{{serialNoTitle}}"></kendo-grid-column>
@@ -163,7 +164,7 @@
             </div>
             <!-- Kendo Table Grid Row end -->
 
-            <div class="row mt-3">
+            <div class="row mt-3" *ngIf="IsQCRequired">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'TargetWhse'|translate}}</label>

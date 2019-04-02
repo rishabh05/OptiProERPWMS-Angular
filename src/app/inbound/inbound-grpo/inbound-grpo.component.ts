@@ -42,18 +42,19 @@ export class InboundGRPOComponent implements OnInit {
   isNonTrack: boolean = false;
   isSerial: boolean = false;
   serialNoTitle:string = "";
-  isAutoLotEnabled: boolean;
   isDisabledScanInput:boolean = false; 
   ScanSerial: string="";
-
+  ScanInputs: any ="";
   targetBin:string = "";
   targetWhse:string = "";
-
+  IsQCRequired: boolean;
   targetBinSubs: ISubscription;
   targetWhseSubs: ISubscription;
-
+  showScanInput: boolean=true;
   targetBinClick: boolean = false;
   public primaryAutoLots: AutoLot[];
+  radioSelected: any=0;
+
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent,private confDialogService: ConfirmdialogService) {
     let userLang = navigator.language.split('-')[0];
@@ -64,26 +65,36 @@ export class InboundGRPOComponent implements OnInit {
   }
 
   ngOnInit() {
-    
     this.openPOLineModel[0] = this.inboundMasterComponent.openPOmodel;
     if (this.openPOLineModel != undefined && this.openPOLineModel != null) {
       this.Ponumber = this.openPOLineModel[0].DOCENTRY;
       this.tracking = this.openPOLineModel[0].TRACKING;
       this.OpenQty = this.openPOLineModel[0].OPENQTY;
+      this.showScanInput = true;
       if (this.tracking == "S") {
         this.isSerial = true;
         this.serialNoTitle = this.translate.instant("Serial") ;
       } else if (this.tracking == "N") {
         this.isNonTrack = true;
+        this.showScanInput = false;
       } else if (this.tracking == "B") {
         this.isSerial = false;
         this.isNonTrack = false;
         this.serialNoTitle = this.translate.instant("Batch") ;
       }
       let autoLots = JSON.parse(localStorage.getItem("primaryAutoLots"));
-      if(autoLots != undefined){
-        this.isAutoLotEnabled = true;
+      if(autoLots.length > 0 && autoLots[0].AUTOLOT == "Y"){
+        this.isDisabledScanInput = true;
+      }else{
+        this.isDisabledScanInput = false;
       }
+
+      if(this.openPOLineModel[0].QCREQUIRED == "Y"){
+        this.IsQCRequired = true;
+      }else{
+        this.IsQCRequired = false;
+      }
+
       this.getUOMList();
       if (this.RecvbBinvalue == "") {
         this.defaultRecvBin = true;
@@ -182,9 +193,11 @@ export class InboundGRPOComponent implements OnInit {
     
     if($event.currentTarget.id=="InventoryEnquiryOptions1"){
      // mfr serial radio selected.
+     this.radioSelected = 0;
     }
     if($event.currentTarget.id=="InventoryEnquiryOptions2"){
      // mfr serial radio selected.
+     this.radioSelected = 1;
     }
   }
   validateQuantity(): boolean {
@@ -217,10 +230,18 @@ export class InboundGRPOComponent implements OnInit {
     if(!this.validateQuantity()){
       return;
     }
+
+
+
+
     if (this.isNonTrack) {
       this.addNonTrackQty(this.qty);
     } else {
-      
+      if(this.radioSelected == 0){
+        this.MfrSerial = this.ScanInputs;
+      }else if(this.radioSelected == 1){
+        this.searlNo = this.ScanInputs;
+      }
       let autoLots = JSON.parse(localStorage.getItem("primaryAutoLots"));
       if (this.isSerial) {
         while (this.qty > 0 && this.qty != 0) {
@@ -233,7 +254,6 @@ export class InboundGRPOComponent implements OnInit {
         }
       } else {
         this.batchCalculation(autoLots, this.qty);
-        //this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, this.qty, this.RecvbBinvalue, this.expiryDate));
       }
     }
     this.qty = undefined; 
