@@ -187,7 +187,14 @@
   "DoYouWantToDelete": "Are you sure to delete ?",
   "AddToDeleiver":"Add To Deleiver",
   "Deleiver":"Deleiver",
-  "NoOpenQuantity":"No open quantity available"
+  "NoOpenQuantity":"No open quantity available",
+
+  "SysBatch" : "Sys Batch",
+  "MfrBatch" : "Mfr Batch",
+  "ScanBatch": "Scan Batch",
+  "BatchNo": "Batch No.",
+  "MfrBatchNo":"Mfr Batch No."
+
 
    
 }

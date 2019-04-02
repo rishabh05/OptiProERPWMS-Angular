@@ -41,7 +41,15 @@ export class InboundGRPOComponent implements OnInit {
   expiryDate: string = "";
   isNonTrack: boolean = false;
   isSerial: boolean = false;
+  
+  //locale string variables
   serialNoTitle:string = "";
+  mfrRadioText: string = "";
+  sysRadioText: string = "";
+  scanInputPlaceholder: string = "";
+  mfrGridColumnText: string = "";
+  SRBatchColumnText: string = "";
+
   isAutoLotEnabled: boolean;
   isDisabledScanInput:boolean = false; 
   ScanSerial: string="";
@@ -72,13 +80,13 @@ export class InboundGRPOComponent implements OnInit {
       this.OpenQty = this.openPOLineModel[0].OPENQTY;
       if (this.tracking == "S") {
         this.isSerial = true;
-        this.serialNoTitle = this.translate.instant("Serial") ;
-      } else if (this.tracking == "N") {
+        this.setLocalStringForSerial();
+      } else if (this.tracking == "N") { 
         this.isNonTrack = true;
       } else if (this.tracking == "B") {
         this.isSerial = false;
         this.isNonTrack = false;
-        this.serialNoTitle = this.translate.instant("Batch") ;
+        this.setLocalStringForBatch();
       }
       let autoLots = JSON.parse(localStorage.getItem("primaryAutoLots"));
       if(autoLots != undefined){
@@ -90,6 +98,23 @@ export class InboundGRPOComponent implements OnInit {
         this.ShowBins();
       }
     }
+  }
+
+  setLocalStringForBatch(){
+    this.serialNoTitle = this.translate.instant("SerialNo");
+    this.mfrRadioText  = this.translate.instant("MfrBatch");
+    this.sysRadioText  = this.translate.instant("SysBatch");
+    this.scanInputPlaceholder  = this.translate.instant("ScanBatch");
+    this.mfrGridColumnText = this.translate.instant("MfrBatchNo");
+    this.SRBatchColumnText = this.translate.instant("BatchNo") ;
+  }
+  setLocalStringForSerial(){
+    this.serialNoTitle = this.translate.instant("SerialNo");
+    this.mfrRadioText = this.translate.instant("MfrSerial");
+    this.sysRadioText = this.translate.instant("SysSerial");
+    this.scanInputPlaceholder =  this.translate.instant("ScanSerial");
+    this.mfrGridColumnText = this.translate.instant("MfrSerialNo");
+    this.SRBatchColumnText = this.translate.instant("SerialNo");
   }
 
   /**
@@ -158,7 +183,13 @@ export class InboundGRPOComponent implements OnInit {
       } 
     );
   }
-
+  
+  /**
+   * Method to validate entered scan code .
+  */
+  onScanCodeChange(){
+    this.onGS1ItemScan()
+  }
   /**
    * Method to get list of uoms from server.
   */
@@ -204,8 +235,6 @@ export class InboundGRPOComponent implements OnInit {
     
   }
   addQuantity() {
-    
-
     if (this.qty == 0 || this.qty == undefined) {
       this.toastr.error('', this.translate.instant("EnterQuantityErrMsg"));
       return;
@@ -593,6 +622,184 @@ export class InboundGRPOComponent implements OnInit {
         this.targetWhse = "";
       }
     );
+  }
+
+  onGS1ItemScan(){
+    
+  //   if ((result != "" && result.length != undefined) || (result != "error decoding QR Code" && result.length != undefined)) {
+  //     oCurrentController.getView().byId("ScanSerial").setValue(result);
+  // }
+  // if (oCurrentController.getView().byId("ScanSerial").getValue() == "")
+  //     return;
+
+  // var oModelReq = new JSONModel();
+  // var oScan = {};
+  // // oScan.Vsvendorid = this.CommonProperties.CustomerCode;
+  // oScan.Vsvendorid = JSON.parse(sessionStorage.getItem(this.SessionProperties.VendorCode));
+  // //oScan.Vsvendorid = "";
+  // oScan.StrScan = oCurrentController.getView().byId("ScanSerial").getValue();
+  // oScan.CompanyDBId = companyDBObject.CompanyDbName;
+  // var oScanArr = [];
+  // oScanArr.push(oScan)
+  // var jObject = { Gs1Token: JSON.stringify(oScanArr) };
+  // var psURL = this.WMSBaseURL();
+  // oModelReq.loadData(psURL + '/api/Gs1/GS1SETUP', jObject, true, 'POST');
+  // oModelReq.attachRequestCompleted(function (oEvent) {
+  //     var data = oEvent.getSource();
+  //     var psInvalidItemCode = "";
+  //     var piManualOrSingleDimentionBarcode = 0;
+  //     var oSelectPOLines = JSON.parse(sessionStorage.getItem(oCurrentController.SessionProperties.SelectPOLines));
+  //     if (data != null) {
+  //         if (data.oData != null) {
+  //             if (data.oData.length > 0) {
+
+  //                 if (data.oData[0].Error != null) {
+  //                     if (data.oData[0].Error == "Invalidcodescan") {
+  //                         piManualOrSingleDimentionBarcode = 1
+  //                     } else {
+  //                         oCurrentController.ShowMessageDialog(oCurrentController.GetResourceString(data.oData[0].Error), oCurrentController.MessageState.MessageStateError, "Error");
+  //                         $("input[type=file]").val("");
+  //                         return;
+  //                     }
+  //                 }
+
+  //                 if (piManualOrSingleDimentionBarcode == 0) {
+  //                     if (data.oData[0].Value.toUpperCase() != oSelectPOLines.POLinesList[0].ItemCode.toUpperCase()) {
+  //                         psInvalidItemCode = oCurrentController.GetResourceString("GoodsReceiptLineModification.InvalidItemCode");
+  //                         oCurrentController.ShowMessageDialog(psInvalidItemCode, oCurrentController.MessageState.MessageStateError, "Error");
+  //                         $("input[type=file]").val("");
+  //                         return;
+  //                     }
+  //                     //}
+  //                     var piExpDateExist = 0;
+  //                     var oGetExpDate = oTextExpiryDate.getValue();
+  //                     //if (data.oData[0].Error != "Invalidcodescan") {
+  //                     for (var i = 0; i < data.oData.length; i++) {
+  //                         if (data.oData[i].Key == '10' || data.oData[i].Key == '21' || data.oData[i].Key == '23') {
+  //                             //oGoodsReceipt.LotNumber = data.oData[i].Value;
+  //                             oCurrentController.getView().byId("ScanSerial").setValue(data.oData[i].Value);
+  //                         }
+  //                         if (data.oData[i].Key == '15' || data.oData[i].Key == '17') {
+  //                             var d = data.oData[i].Value.split('/');
+  //                             var oepxpdt = d[0] + '-' + d[1] + '-' + d[2];
+  //                             //oGoodsReceipt.ExpiryDate = oepxpdt;
+  //                             oTextExpiryDate.setValue(oepxpdt)
+  //                             piExpDateExist = 1;
+  //                         }
+
+  //                         if (data.oData[i].Key == '30' || data.oData[i].Key == '310' ||
+  //                                     data.oData[i].Key == '315' || data.oData[i].Key == '316' || data.oData[i].Key == '320') {
+  //                             if (oSelectPOLines.POLinesList[0].Tracking == "S") {
+  //                                 oAddserial.setValue("1");
+  //                             }
+  //                             else {
+  //                                 oAddserial.setValue(data.oData[i].Value);
+  //                             }
+  //                         }
+  //                     }
+  //                 }
+  //             }
+  //             var iIndex = 0;
+  //             //var oSelectPOLines = JSON.parse(sessionStorage.getItem(oCurrentController.SessionProperties.SelectPOLines));
+  //             var selectModeObject = sap.ui.getCore().getModel(oCurrentController.CommonProperties.SelectMode);
+  //             if (selectModeObject == null) {
+  //                 selectModeObject = JSON.parse(sessionStorage.getItem(oCurrentController.SessionProperties.SelectMode));
+  //             }
+  //             if (result != "error decoding QR Code") {
+  //                 if ((oSelectPOLines.Autolot[0].AUTOLOT == "Y" || oSelectPOLines.Autolot[0].AUTOLOT == "N" || oSelectPOLines.Autolot[0].AUTOLOT == null) && selectModeObject.SelectMode === "WMS" && oSelectPOLines.POLinesList[0].Tracking == "S" && oScanSerial.getValue() != "") {
+  //                     oAddserial.setValue("1");
+  //                     oAddserial.setEnabled(false);
+  //                 }
+  //                 else {
+  //                     //oAddserial.setValue("");
+  //                     oAddserial.setEnabled(true);
+  //                 }
+  //                 if ((oSelectPOLines.Autolot[0].AUTOLOT == "Y" || oSelectPOLines.Autolot[0].AUTOLOT == "N" || oSelectPOLines.Autolot[0].AUTOLOT == null) && selectModeObject.SelectMode === "WMS" && oSelectPOLines.POLinesList[0].Tracking != "S" && oScanSerial.getValue() != "") {
+  //                     var omodelSelectedTable = oCurrentController.getView().byId("TblGoodsReceiptLineRows").getModel();
+  //                     var getUpperTableData = omodelSelectedTable.getData();
+  //                     if (getUpperTableData != null) {
+  //                         if (getUpperTableData.GoodsReceiptLineRow != null) {
+  //                             if (getUpperTableData.GoodsReceiptLineRow.length > 0) {
+  //                                 for (var iUpperIndex = 0; iUpperIndex < getUpperTableData.GoodsReceiptLineRow.length; iUpperIndex++) {
+  //                                     if (getUpperTableData.GoodsReceiptLineRow[iUpperIndex].MfgSerNo == "" && SelectInputsType == "Mfg") {
+  //                                         oAddserial.setValue(getUpperTableData.GoodsReceiptLineRow[iUpperIndex].QUANTITY);
+  //                                         oAddserial.setEnabled(false);
+  //                                         break;
+
+  //                                     }
+  //                                     else {
+  //                                         oAddserial.setEnabled(true);
+
+  //                                     }
+
+  //                                 }
+  //                                 for (var iUpperIndex = 0; iUpperIndex < getUpperTableData.GoodsReceiptLineRow.length; iUpperIndex++) {
+  //                                     if (getUpperTableData.GoodsReceiptLineRow[iUpperIndex].SysSerNo == "" && SelectInputsType == "Sys") {
+  //                                         oAddserial.setValue(getUpperTableData.GoodsReceiptLineRow[iUpperIndex].QUANTITY);
+  //                                         oAddserial.setEnabled(false);
+  //                                         break;
+  //                                     }
+  //                                     else {
+  //                                         oAddserial.setEnabled(true);
+
+  //                                     }
+
+  //                                 }
+  //                             }
+  //                         }
+  //                     }
+  //                     window.setTimeout(function () {
+  //                         oCurrentController.getView().byId("txtAddSerial").focus();
+  //                     }, 1);
+                     
+  //                 }
+  //                 //Bug No. 17817 Neeraj Kushwaha
+  //                 if ((oSelectPOLines.Autolot[0].AUTOLOT == "Y" || oSelectPOLines.Autolot[0].AUTOLOT == "N" || oSelectPOLines.Autolot[0].AUTOLOT == null) && selectModeObject.SelectMode === "WMS" && oScanSerial.getValue() != "") {
+  //                     var omodelSelectedTable = oCurrentController.getView().byId("TblGoodsReceiptLineRows").getModel();
+  //                     var getUpperTableData = omodelSelectedTable.getData();
+  //                     if (getUpperTableData != null) {
+  //                         if (getUpperTableData.GoodsReceiptLineRow != null) {
+  //                             if (getUpperTableData.GoodsReceiptLineRow.length > 0) {
+  //                                 if (SelectInputsType == "Mfg") {
+                                     
+  //                                 }
+  //                                 else {
+  //                                     for (var iUpperIndex = 0; iUpperIndex < getUpperTableData.GoodsReceiptLineRow.length; iUpperIndex++) {
+  //                                         if (getUpperTableData.GoodsReceiptLineRow[iUpperIndex].SysSerNo == oCurrentController.getView().byId("ScanSerial").getValue()) {
+  //                                             oCurrentController.ShowMessageDialog(oCurrentController.GetResourceString("GoodsReceiptPOLines.RecordAlreadyExist"), oCurrentController.MessageState.MessageStateError, "Error")
+  //                                             sap.ui.core.BusyIndicator.hide();
+  //                                             return;
+
+  //                                         }
+  //                                     }
+  //                                 }
+  //                             }
+  //                         }
+  //                     }
+
+  //                 }
+  //                 oCurrentController.onAddRowClick();
+
+  //                 if (piExpDateExist == 1) {
+  //                     oTextExpiryDate.setValue(oGetExpDate);
+  //                 }
+
+  //             }
+  //             else {
+  //                 var psMsg
+  //                 if (result == "error decoding QR Code") {
+  //                     psMsg = "Cannot read QC Code, please scan again";
+  //                 } else {
+  //                     psMsg = result + ", Please scan again.";
+  //                 }
+  //                 oCurrentController.getView().byId("ScanSerial").setValue("");
+  //                 oCurrentController.ShowMessageDialog(psMsg, oCurrentController.MessageState.MessageStateError, "Error");
+  //             }
+  //             $("input[type=file]").val("");
+  //             oAddserial.setValue();
+  //         }
+  //     }
+  // });
   }
 
 }

@@ -70,19 +70,19 @@
                             <fieldset [disabled]=isDisabledScanInput>
                                 <input type="radio" name="group" (change)="handleCheckChange($event)" id="InventoryEnquiryOptions1"
                                     class="k-radio" checked />
-                                <label class="k-radio-label" for="InventoryEnquiryOptions1">{{'MfrSerial'|translate}}</label>
+                                <label class="k-radio-label" for="InventoryEnquiryOptions1">{{mfrRadioText}}</label>
                                 <div class="clearfix mt-2"></div>
                                 <input type="radio" name="group" (change)="handleCheckChange($event)" id="InventoryEnquiryOptions2"
                                     class="k-radio" />
-                                <label class="k-radio-label" for="InventoryEnquiryOptions2">{{'SysSerial'|translate}}</label>
+                                <label class="k-radio-label" for="InventoryEnquiryOptions2">{{sysRadioText}}</label>
                             </fieldset>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label py-0 text-right"><i class="opti-icon-qr-code fs-28"></i></label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control form-control-sm" name="qty" [(ngModel)]=qty
-                                placeholder="{{'ScanSerial'|translate}}">
+                            <input type="text" class="form-control form-control-sm" name="qty" [(ngModel)]=qty (blur)="onScanCodeChange()"
+                                placeholder="{{scanInputPlaceholder}}">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -112,12 +112,12 @@
                     <kendo-grid *ngIf="!isNonTrack" class="no-shadow" [kendoGridBinding]="recvingQuantityBinArray"
                         [sortable]="true" [selectable]="true" #gridItem>
 
-                        <kendo-grid-column field="MfrSerial" [width]="18" title="{{'MfrSerialNo'|translate}}">
+                        <kendo-grid-column field="MfrSerial" [width]="18" title="{{mfrGridColumnText}}">
                             <ng-template kendoGridCellTemplate let-dataItem>
                                 <input type="text" class="form-control form-control-sm" name="RecvbBinvalue">
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column field="searlNo" [width]="18" title="{{serialNoTitle}}"></kendo-grid-column>
+                        <kendo-grid-column field="searlNo" [width]="18" title="{{SRBatchColumnText}}"></kendo-grid-column>
                         <kendo-grid-column field="Quantity" headerClass="text-right" class="text-right" [width]="18"
                             title="{{'Qty'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem>
