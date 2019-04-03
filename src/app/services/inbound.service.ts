@@ -53,6 +53,7 @@ export class InboundService {
   }
 
   getPOList(futurepo: boolean, vendercode: string, itemcode: string): Observable<any> {
+    console.log("get polist method :");
     let jObject = {
       GoodsReceiptToken: JSON.stringify([{
         UserId: itemcode,
@@ -62,6 +63,7 @@ export class InboundService {
         UsernameForLic: localStorage.getItem("UserId")
       }])
     };
+    console.log("get polist method call api :");
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetPOList", jObject, this.httpOptions);
   }
 
@@ -126,5 +128,47 @@ export class InboundService {
     
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/SubmitGoodsReceiptPO", jObject, this.httpOptions);
   }
+
+  // getTargetBins(QCrequired: string): Observable<any> {
+  //   var jObject = {
+  //     WhsCode: JSON.stringify([{
+  //       CompanyDBId: localStorage.getItem("CompID"), ItemCode: '',
+  //       WhsCode: localStorage.getItem("whseId"), QCRequired: QCrequired,ageId: "GRPO"}])
+  //   };
+  //   return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetBinsForReceiptWithReceivingBin", jObject, this.httpOptions);
+  // }
+
+  /**
+   * get whs list for target whs.
+   */
+  getQCTargetWhse(): Observable<any> {
+    var jObject = {
+      WhsCode: JSON.stringify([{
+          CompanyDBId: localStorage.getItem("CompID"),
+          //Need to pass Username as Warehouses are filled Accordind to the Permission from Admin Portal 
+          //Chane dt 2-July-2018
+          UserId: localStorage.getItem("UserId")
+      }])};
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetWHS", jObject, this.httpOptions);
+  }
+
+  /**
+   * check whs is valid or not.
+   * @param whsCode 
+   */
+  isWHSExists(whsCode:string){
+
+    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId:  localStorage.getItem("CompID"), ItemCode: '', WhsCode: whsCode}]) };
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsWhsExist", jObject, this.httpOptions);
+  }
+  /**
+   * check and scan code.
+   * @param whsCode 
+   */
+  checkAndScanCode(vendCode:string,scanInputString){
+    var jObject = {Gs1Token: JSON.stringify([{Vsvendorid:vendCode,StrScan:scanInputString,CompanyDBId:localStorage.getItem("CompID")}])};
+    return this.httpclient.post(this.config_params.service_url + "/api/Gs1/GS1SETUP", jObject, this.httpOptions);
+  }
+  
 }
 

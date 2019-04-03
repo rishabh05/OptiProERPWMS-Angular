@@ -13,7 +13,7 @@ import { ISubscription } from 'rxjs/Subscription';
   styleUrls: ['./inventory-enquiry.component.scss']
 })
 export class InventoryEnquiryComponent implements OnInit {
-
+  pageSize: number = 5;
   itemCode: string = "";
   lotNo: string = "";
   itemName: string = "";
@@ -422,7 +422,8 @@ export class InventoryEnquiryComponent implements OnInit {
       }
     );
   }
-
+ 
+ 
   OnCancelClick(){
     this.router.navigate(['home/dashboard']);
   }

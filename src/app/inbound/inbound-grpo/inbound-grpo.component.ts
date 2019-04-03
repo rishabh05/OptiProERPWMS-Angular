@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { InboundMasterComponent } from 'src/app/inbound/inbound-master.component';
 import { Router } from '../../../../node_modules/@angular/router';
 import { InboundService } from 'src/app/services/inbound.service';
@@ -9,6 +9,8 @@ import { UOM } from 'src/app/models/Inbound/UOM';
 import { OpenPOLinesModel } from 'src/app/models/Inbound/OpenPOLinesModel';
 import { RecvingQuantityBin } from 'src/app/models/Inbound/RecvingQuantityBin';
 import { AutoLot } from 'src/app/models/Inbound/AutoLot';
+import { ISubscription } from 'rxjs/Subscription';
+import { ConfirmdialogService } from 'src/app/common/confirm-dialog/confirmdialog.service';
 
 @Component({
   selector: 'app-inbound-grpo',
@@ -19,6 +21,8 @@ export class InboundGRPOComponent implements OnInit {
 
   openPOLineModel: OpenPOLinesModel[] = [];
   Ponumber: any;
+  OpenQty:number;
+  tracking: string="";
   RecvbBinvalue: any = "";
   uomSelectedVal: UOM;
   UOMList: UOM[];
@@ -30,16 +34,39 @@ export class InboundGRPOComponent implements OnInit {
   lookupfor: string;
   showLookupLoader = true;
   viewLines: any[];
-  getLookupValue: any[];
+  //getLookupValue: any[];
   public value: Date = new Date();
-  searlNo: any;
+  searlNo: any = "";
   MfrSerial: any = "";
   expiryDate: string = "";
-  isNonTrack: boolean = true;
-  isSerial: boolean;
+  isNonTrack: boolean = false;
+  isSerial: boolean = false;
+  
+  //locale string variables
+  serialNoTitle:string = "";
+  mfrRadioText: string = "";
+  sysRadioText: string = "";
+  scanInputPlaceholder: string = "";
+  mfrGridColumnText: string = "";
+  SRBatchColumnText: string = "";
 
+  isAutoLotEnabled: boolean;
+  isDisabledScanInput:boolean = false; 
+  ScanSerial: string="";
+  ScanInputs: any ="";
+  targetBin:string = "";
+  targetWhse:string = "";
+  IsQCRequired: boolean;
+  targetBinSubs: ISubscription;
+  targetWhseSubs: ISubscription;
+  showScanInput: boolean=true;
+  targetBinClick: boolean = false;
+  public primaryAutoLots: AutoLot[];
+  radioSelected: any=0;
+  
+  @ViewChild('Quantity') QuantityField;
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
-    private inboundMasterComponent: InboundMasterComponent) {
+    private inboundMasterComponent: InboundMasterComponent,private confDialogService: ConfirmdialogService) {
     let userLang = navigator.language.split('-')[0];
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
     translate.use(userLang);
@@ -49,20 +76,65 @@ export class InboundGRPOComponent implements OnInit {
 
   ngOnInit() {
     this.openPOLineModel[0] = this.inboundMasterComponent.openPOmodel;
-    this.Ponumber = this.openPOLineModel[0].DOCENTRY;
-    this.getUOMList();
-    if (this.RecvbBinvalue == "") {
-      this.defaultRecvBin = true;
-      this.ShowBins();
+    if (this.openPOLineModel != undefined && this.openPOLineModel != null) {
+      this.Ponumber = this.openPOLineModel[0].DOCENTRY;
+      this.tracking = this.openPOLineModel[0].TRACKING;
+      this.OpenQty = this.openPOLineModel[0].OPENQTY;
+      this.showScanInput = true;
+      if (this.tracking == "S") {
+        this.isSerial = true;
+        this.setLocalStringForSerial();
+      } else if (this.tracking == "N") { 
+        this.isNonTrack = true;
+        this.showScanInput = false;
+      } else if (this.tracking == "B") {
+        this.isSerial = false;
+        this.isNonTrack = false;
+        this.setLocalStringForBatch();
+      }
+      let autoLots = JSON.parse(localStorage.getItem("primaryAutoLots"));
+      if(autoLots.length > 0 && autoLots[0].AUTOLOT == "Y"){
+        this.isDisabledScanInput = true;
+      }else{
+        this.isDisabledScanInput = false;
+      }
+
+      if(this.openPOLineModel[0].QCREQUIRED == "Y"){
+        this.IsQCRequired = true;
+      }else{
+        this.IsQCRequired = false;
+      }
+
+      this.getUOMList();
+      if (this.RecvbBinvalue == "") {
+        this.defaultRecvBin = true;
+        this.ShowBins();
+      }
     }
-    // var today = new Date();
-    // this.expiryDate = today.toLocaleDateString("en-US");
+  }
+
+  setLocalStringForBatch(){
+    this.serialNoTitle = this.translate.instant("SerialNo");
+    this.mfrRadioText  = this.translate.instant("MfrBatch");
+    this.sysRadioText  = this.translate.instant("SysBatch");
+    this.scanInputPlaceholder  = this.translate.instant("ScanBatch");
+    this.mfrGridColumnText = this.translate.instant("MfrBatchNo");
+    this.SRBatchColumnText = this.translate.instant("BatchNo") ;
+  }
+  setLocalStringForSerial(){
+    this.serialNoTitle = this.translate.instant("SerialNo");
+    this.mfrRadioText = this.translate.instant("MfrSerial");
+    this.sysRadioText = this.translate.instant("SysSerial");
+    this.scanInputPlaceholder =  this.translate.instant("ScanSerial");
+    this.mfrGridColumnText = this.translate.instant("MfrSerialNo");
+    this.SRBatchColumnText = this.translate.instant("SerialNo");
   }
 
   /**
     * Method to get list of inquries from server.
    */
   public ShowBins() {
+    this.targetBinClick = false;
     this.inboundService.getRevBins(this.openPOLineModel[0].QCREQUIRED).subscribe(
       (data: any) => {
         console.log(data);
@@ -96,7 +168,7 @@ export class InboundGRPOComponent implements OnInit {
     if (this.RecvbBinvalue == "") {
       return;
     }
-    this.inboundService.binChange(this.openPOLineModel[0].QCREQUIRED).subscribe(
+    this.inboundService.binChange(this.RecvbBinvalue).subscribe(
       (data: any) => {
         console.log(data);
         if (data != null) {
@@ -121,12 +193,19 @@ export class InboundGRPOComponent implements OnInit {
       error => {
         console.log("Error: ", error);
         this.RecvbBinvalue = "";
-      }
+      } 
     );
   }
-
+  
   /**
-   * Method to get list of inquries from server.
+   * Method to validate entered scan code .
+  */
+  onScanCodeChange(){
+  debugger;
+    this.onGS1ItemScan()
+  }
+  /**
+   * Method to get list of uoms from server.
   */
   public getUOMList() {
     this.inboundService.getUOMs(this.openPOLineModel[0].ITEMCODE).subscribe(
@@ -143,23 +222,59 @@ export class InboundGRPOComponent implements OnInit {
       }
     );
   }
+   
+  handleCheckChange($event){
+    
+    if($event.currentTarget.id=="InventoryEnquiryOptions1"){
+     // mfr serial radio selected.
+     this.radioSelected = 0;
+    }
+    if($event.currentTarget.id=="InventoryEnquiryOptions2"){
+     // mfr serial radio selected.
+     this.radioSelected = 1;
+    }
+  }
+  validateQuantity(): boolean {
 
-
+    let quantitySum: number = 0;
+    for (var i = 0; i < this.recvingQuantityBinArray.length; i++) {
+      quantitySum += Number(this.recvingQuantityBinArray[i].Quantity);
+    }
+    quantitySum = quantitySum + Number(this.qty);
+    if (quantitySum > Number(this.OpenQty)) {
+      this.toastr.error('', this.translate.instant("NoOpenQuantity"));
+      this.qty = 0;
+      return false;
+    } else {
+      return true;
+    }
+    
+  }
   addQuantity() {
     if (this.qty == 0 || this.qty == undefined) {
       this.toastr.error('', this.translate.instant("EnterQuantityErrMsg"));
       return;
     }
-
     if (this.RecvbBinvalue == "" || this.RecvbBinvalue == undefined) {
       this.toastr.error('', this.translate.instant("INVALIDBIN"));
+      return; 
+    }
+    if(!this.validateQuantity()){
       return;
     }
+
+
+
 
     if (this.isNonTrack) {
       this.addNonTrackQty(this.qty);
     } else {
-      let autoLots = this.inboundMasterComponent.autoLots;
+      if(this.radioSelected == 0){
+        this.MfrSerial = this.ScanInputs;
+      }else if(this.radioSelected == 1){
+        this.searlNo = this.ScanInputs;
+      }
+      let autoLots = JSON.parse(localStorage.getItem("primaryAutoLots"));
       if (this.isSerial) {
         while (this.qty > 0 && this.qty != 0) {
           this.addBatchSerialQty(autoLots, this.qty);
@@ -169,30 +284,43 @@ export class InboundGRPOComponent implements OnInit {
             this.qty = this.qty - 1;
           }
         }
-        this.qty = undefined;
       } else {
-        this.addBatchSerialQty(autoLots, this.qty);
-        this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, this.qty, this.RecvbBinvalue, this.expiryDate));
+        this.batchCalculation(autoLots, this.qty);
       }
     }
+    this.qty = undefined; 
   }
 
+  batchCalculation(autoLots: AutoLot[], qty: any) {
+    this.addBatchSerialQty(autoLots, this.qty);
+    let result = this.recvingQuantityBinArray.find(element => element.searlNo == this.searlNo);
+    if (result == undefined) {
+      this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, qty, this.RecvbBinvalue, this.expiryDate));
+    }else{
+      this.batchCalculation(autoLots, this.qty); 
+    }
+  }
   addNonTrackQty(qty: any) {
     let result = this.recvingQuantityBinArray.find(element => element.Bin == this.RecvbBinvalue);
     if (result == undefined) {
       this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, qty, this.RecvbBinvalue, this.expiryDate));
       this.showButton = true;
-      this.qty = undefined;
     } else {
       this.toastr.error('', this.translate.instant("BinValidation"));
       return;
     }
   }
-
+  /**
+   * method to create logic for autolot for serial batch qty.
+   * @param autoLots 
+   * @param qty 
+   */
   addBatchSerialQty(autoLots: AutoLot[], qty: any) {
+    
+    this.searlNo = "";              
     for (var i = 0; i < autoLots.length; i++) {
       if (autoLots[i].OPRTYPE == "1") {
-        this.searlNo = autoLots[i].STRING
+        this.searlNo = this.searlNo + autoLots[i].STRING
       }
       if (autoLots[i].OPRTYPE === "2" && autoLots[i].OPERATION == "2") {
         if (this.recvingQuantityBinArray.length > 0) {
@@ -214,7 +342,7 @@ export class InboundGRPOComponent implements OnInit {
           var numberLength = (parseInt(autoLots[i].STRING)).toString().length;
           var finlNumber = parseInt(autoLots[i].STRING) - 1
           var finalString = this.forwardZero(finlNumber, strlength - numberLength);
-          // this.inboundMasterComponent.autoLots[i].STRING = finalString;
+          this.searlNo = this.searlNo + finalString; 
           autoLots[i].STRING = finalString;
         } else {
           var finalString = autoLots[i].STRING;
@@ -223,6 +351,26 @@ export class InboundGRPOComponent implements OnInit {
       }
     }
 
+  }
+  deleteButtonConfirmation(rowindex, gridData: any) {
+    
+    if(confirm()) {
+      console.log("Implement delete functionality here");
+      this.DeleteRowClick(rowindex,gridData); 
+    }
+  }
+
+  public openConfirmationDialog(rowindex, gridData: any) {
+    
+    if(confirm("Are you sure to delete ?")) {
+      
+      this.DeleteRowClick(rowindex,gridData); 
+    }
+   
+    // this.confDialogService.confirm('Please confirm..', 'Do you really want to ... ?')
+    // .then((confirmed) => console.log('User confirmed:', confirmed))
+    // .catch(() => console.log('User dismissed the dialog (e.g., by using ESC, clicking the cross icon, or clicking outside the dialog)'));
+    // this.DeleteRowClick(rowindex,gridData); 
   }
 
   forwardZero(num: number, size: number): string {
@@ -342,8 +490,249 @@ export class InboundGRPOComponent implements OnInit {
     this.inboundMasterComponent.inboundComponent = 2;
   }
 
-  DeleteRowClick(rowindex, gridData: any) {
+  DeleteRowClick(rowindex, gridData: any) { 
     this.recvingQuantityBinArray.splice(rowindex, 1);
     gridData.data = this.recvingQuantityBinArray;
+    
   }
+
+
+  // item section.
+   /**
+   * Method to get list of inquries from server.
+   */
+  public getTargetWhseList() {
+
+    this.targetWhseSubs = this.inboundService.getQCTargetWhse().subscribe(
+      data => {
+        if (data != undefined && data.length > 0) {
+          if (data[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
+          this.showLookupLoader = false;
+          this.serviceData = data;
+          this.lookupfor = "toWhsList";
+          
+        }
+        else {
+          this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+        }
+      },
+      error => {
+        this.toastr.error('', error);
+      },
+    );
+  }
+
+  
+  // item section.
+   /**
+   * Method to get list of inquries from server.
+   */
+  public getTargetBinList() {
+   this.targetBinClick =true;
+    //this.showLoader = true; this.getPIlistSubs = 
+    this.targetBinSubs = this.inboundService.getRevBins("N").subscribe(
+      (data: any) => {
+        console.log(data);
+        if (data != null) {
+         
+            if (data.length > 0) {
+              console.log(data);
+              this.showLookupLoader = false;
+              this.serviceData = data;
+              this.lookupfor = "RecvBinList";
+             
+              return;
+            }
+            else {
+              this.toastr.error('', this.translate.instant("NoBinsAvailableMsg"));
+            }
+        }
+      },
+      error => {
+        console.log("Error: ", error);
+      }
+    );
+  }
+
+   /**
+   * @param $event this will return the value on row click of lookup grid.
+   */
+  getLookupValue($event) {
+
+    if (this.lookupfor == "RecvBinList") {
+     //this.itemCode = $event[0];
+     if(this.targetBinClick){
+      this.targetBin = $event[0];
+      this.targetBinClick= false;
+     }else{
+      this.RecvbBinvalue = $event[0];
+     }
+     
+    }
+    else if (this.lookupfor == "toWhsList") {
+      console.log("value of lots" + $event);
+      console.log("value of lots" + $event.LOTNO);
+      this.targetWhse = $event[0];
+      //this.itemCode = $event[2];
+
+    }
+  }
+
+  OnTargetBinChange() {
+    if (this.targetBin == "") {
+      return;
+    }
+    this.inboundService.binChange(this.targetBin).subscribe(
+      (data: any) => {
+        console.log(data);
+        if (data != null) {
+          if (data.length > 0) {
+            if (data[0].Result == "0") {
+              this.toastr.error('', this.translate.instant("INVALIDBIN"));
+              this.targetBin = "";
+              return;
+            }
+            else {
+              this.targetBin = data[0].ID;
+              // oCurrentController.isReCeivingBinExist();
+            }
+          }
+        }
+        else {
+          this.toastr.error('', this.translate.instant("INVALIDBIN"));
+          this.targetBin = "";
+          return;
+        }
+      },
+      error => {
+        console.log("Error: ", error);
+        this.targetBin = "";
+      }
+    );
+  }
+
+  onQCWHSChange(){
+    if (this.targetWhse == "") {
+      return;
+    }
+    this.inboundService.isWHSExists(this.targetWhse).subscribe(
+      (data: any) => {
+        console.log(data);
+        if (data != null) {
+          if (data.length > 0) {
+            if (data[0].Result == "0") {
+              this.toastr.error('', this.translate.instant("InvalidWhsErrorMsg"));
+              this.targetWhse = "";
+              return;
+            }
+            else {
+              this.targetWhse = data[0].ID;
+              // oCurrentController.isReCeivingBinExist();
+            }
+          }
+        }
+        else {
+          this.toastr.error('', this.translate.instant("InvalidWhsErrorMsg"));
+          this.targetWhse = "";
+          return;
+        }
+      },
+      error => {
+        console.log("Error: ", error);
+        this.targetWhse = "";
+      }
+    );
+  }
+
+  onGS1ItemScan(){
+    if(this.ScanInputs!=null && this.ScanInputs!= undefined && 
+      this.ScanInputs!="" && this.ScanInputs!="error decoding QR Code"){
+
+      }else{
+        // if any message is required to show then show.
+        this.ScanInputs = "";
+        return;
+      }
+      this.openPOLineModel;
+      let piManualOrSingleDimentionBarcode =0;
+      this.inboundService.checkAndScanCode(this.openPOLineModel[0].CardCode,this.ScanInputs).subscribe(
+        (data: any) => {
+          console.log(data);
+          if (data != null) {
+            if (data.Error != null) {
+              if (data.Error == "Invalidcodescan") {
+                piManualOrSingleDimentionBarcode = 1
+                this.toastr.error('', this.translate.instant("InvalidScanCode"));
+                // nothing is done in old code.
+              } else {
+                // some message is handle in else section in old code
+                //return;
+              }
+              return;
+            }
+
+            // now check if the  code is for avilable item or not other wise invalid item error.
+            if (piManualOrSingleDimentionBarcode == 0) {
+              if (data[0].Value.toUpperCase() != this.openPOLineModel[0].ITEMCODE.toUpperCase()) {
+                this.toastr.error('', this.translate.instant("InvalidItemCode"));
+                  this.ScanInputs = "";
+                  return;
+              }
+              
+              var piExpDateExist = 0;
+              //var oGetExpDate = oTextExpiryDate.getValue();
+            
+              for (var i = 0; i < data.length; i++) {
+                  if (data[i].Key == '10' || data[i].Key == '21' || data[i].Key == '23') {
+                      this.ScanInputs = data[i].value;
+                      // make sure ScanInputs variable me puri string aati hai.. to uski value change karne
+                      // se kuch affect na kare.
+                      //scan input field par set karna hai.. ye value 10,21,23 k case me.
+                  }
+                  if (data[i].Key == '15' || data[i].Key == '17') {
+                      var d = data[i].Value.split('/');
+                      var oepxpdt = d[0] + '/' + d[1] + '/' + d[2];
+                      // set value to date field
+                      this.expiryDate = oepxpdt;
+                      piExpDateExist = 1; //taken this variable for date purpose check if later used.
+                  }
+
+                  if (data[i].Key == '30' || data[i].Key == '310' ||
+                              data[i].Key == '315' || data[i].Key == '316' || data[i].Key == '320') {
+                      if (this.openPOLineModel[0].TRACKING == "S") {
+                          //oAddserial.setValue("1");
+                          this.qty  = 1;
+                      }
+                      else {
+                          this.qty= data[i].Value;
+                      }
+                  }
+              }
+          }
+
+            var index = 0;
+            var selectedMode = "WMS"; // I dont know why we are setting it to wms.
+            let autoLots = JSON.parse(localStorage.getItem("primaryAutoLots"));
+            if ((autoLots.Autolot[0].AUTOLOT == "Y" || autoLots.Autolot[0].AUTOLOT == "N" || autoLots.Autolot[0].AUTOLOT == null) && 
+            selectedMode === "WMS" && this.openPOLineModel[0].TRACKING == "S" && this.ScanInputs != "") {
+              //oAddserial.setValue("1");  I think not needed to set value because we are already setting in above code.
+            //  QuantityField.setEnabled(false);
+            }
+            else {
+              //oAddserial.setValue("");
+             // QuantityField.setEnabled(true);
+            }
+
+          }  
+        },
+        error => {
+          console.log("Error: ", error);
+          this.targetWhse = "";
+        });
+ 
+  }  
+
 }

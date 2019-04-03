@@ -194,7 +194,7 @@ export class LookupComponent implements OnInit {
     this.lookupTitle = this.translate.instant("AvaliableMeterial");
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
-        console.log('ServiceData', this.serviceData);
+       // console.log('ServiceData', this.serviceData);
         this.dialogOpened = true;
       }
     }
@@ -487,11 +487,11 @@ export class LookupComponent implements OnInit {
   on_item_select(selection) {
     if (!this.showSelection) {
       const lookup_key = selection.selectedRows[0].dataItem;
-      console.log("lookup_key - " + lookup_key);
-      console.log(lookup_key);
+      //console.log("lookup_key - " + lookup_key);
+     // console.log(lookup_key);
       this.lookupkey.emit(lookup_key);
       this.lookupvalue.emit(Object.values(lookup_key));
-      console.log(selection);
+    //  console.log(selection);
       selection.selectedRows = [];
       selection.index = 0;
       selection.selected = false;

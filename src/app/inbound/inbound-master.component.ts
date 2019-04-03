@@ -13,7 +13,7 @@ export class InboundMasterComponent implements OnInit {
 
   public inboundComponent: number = 1;
   public selectedVernder: string;
-  public autoLots: AutoLot[];
+  //public autoLots: AutoLot[];
   public openPOmodel: any;
   public oSubmitPOLotsArray: any[] = []; 
   public AddtoGRPOFlag: boolean = false;
@@ -27,9 +27,9 @@ export class InboundMasterComponent implements OnInit {
     this.selectedVernder = vender;
   }
   
-  setAutoLots(autoLots: AutoLot[]){
-    this.autoLots = autoLots;
-  }
+  // setAutoLots(autoLots: AutoLot[]){
+  //   this.autoLots = autoLots;
+  // }
 
   setClickedItemDetail(openPOmodel){
     this.openPOmodel = openPOmodel;
