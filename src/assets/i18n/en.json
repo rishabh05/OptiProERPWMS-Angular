@@ -193,7 +193,8 @@
   "MfrBatch" : "Mfr Batch",
   "ScanBatch": "Scan Batch",
   "BatchNo": "Batch No.",
-  "MfrBatchNo":"Mfr Batch No."
+  "MfrBatchNo":"Mfr Batch No.",
+  "InvalidScanCode": "Invalid scan code!"
 
 
    

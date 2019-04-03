@@ -167,7 +167,6 @@ export class InboundService {
    */
   checkAndScanCode(vendCode:string,scanInputString){
     var jObject = {Gs1Token: JSON.stringify([{Vsvendorid:vendCode,StrScan:scanInputString,CompanyDBId:localStorage.getItem("CompID")}])};
-    
     return this.httpclient.post(this.config_params.service_url + "/api/Gs1/GS1SETUP", jObject, this.httpOptions);
   }
   

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { InboundMasterComponent } from 'src/app/inbound/inbound-master.component';
 import { Router } from '../../../../node_modules/@angular/router';
 import { InboundService } from 'src/app/services/inbound.service';
@@ -53,15 +53,18 @@ export class InboundGRPOComponent implements OnInit {
   isAutoLotEnabled: boolean;
   isDisabledScanInput:boolean = false; 
   ScanSerial: string="";
-
+  ScanInputs: any ="";
   targetBin:string = "";
   targetWhse:string = "";
-
+  IsQCRequired: boolean;
   targetBinSubs: ISubscription;
   targetWhseSubs: ISubscription;
-
+  showScanInput: boolean=true;
   targetBinClick: boolean = false;
   public primaryAutoLots: AutoLot[];
+  radioSelected: any=0;
+  
+  @ViewChild('Quantity') QuantityField;
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent,private confDialogService: ConfirmdialogService) {
     let userLang = navigator.language.split('-')[0];
@@ -72,26 +75,36 @@ export class InboundGRPOComponent implements OnInit {
   }
 
   ngOnInit() {
-    
     this.openPOLineModel[0] = this.inboundMasterComponent.openPOmodel;
     if (this.openPOLineModel != undefined && this.openPOLineModel != null) {
       this.Ponumber = this.openPOLineModel[0].DOCENTRY;
       this.tracking = this.openPOLineModel[0].TRACKING;
       this.OpenQty = this.openPOLineModel[0].OPENQTY;
+      this.showScanInput = true;
       if (this.tracking == "S") {
         this.isSerial = true;
         this.setLocalStringForSerial();
       } else if (this.tracking == "N") { 
         this.isNonTrack = true;
+        this.showScanInput = false;
       } else if (this.tracking == "B") {
         this.isSerial = false;
         this.isNonTrack = false;
         this.setLocalStringForBatch();
       }
       let autoLots = JSON.parse(localStorage.getItem("primaryAutoLots"));
-      if(autoLots != undefined){
-        this.isAutoLotEnabled = true;
+      if(autoLots.length > 0 && autoLots[0].AUTOLOT == "Y"){
+        this.isDisabledScanInput = true;
+      }else{
+        this.isDisabledScanInput = false;
       }
+
+      if(this.openPOLineModel[0].QCREQUIRED == "Y"){
+        this.IsQCRequired = true;
+      }else{
+        this.IsQCRequired = false;
+      }
+
       this.getUOMList();
       if (this.RecvbBinvalue == "") {
         this.defaultRecvBin = true;
@@ -188,6 +201,7 @@ export class InboundGRPOComponent implements OnInit {
    * Method to validate entered scan code .
   */
   onScanCodeChange(){
+  debugger;
     this.onGS1ItemScan()
   }
   /**
@@ -213,9 +227,11 @@ export class InboundGRPOComponent implements OnInit {
     
     if($event.currentTarget.id=="InventoryEnquiryOptions1"){
      // mfr serial radio selected.
+     this.radioSelected = 0;
     }
     if($event.currentTarget.id=="InventoryEnquiryOptions2"){
      // mfr serial radio selected.
+     this.radioSelected = 1;
     }
   }
   validateQuantity(): boolean {
@@ -246,10 +262,18 @@ export class InboundGRPOComponent implements OnInit {
     if(!this.validateQuantity()){
       return;
     }
+
+
+
+
     if (this.isNonTrack) {
       this.addNonTrackQty(this.qty);
     } else {
-      
+      if(this.radioSelected == 0){
+        this.MfrSerial = this.ScanInputs;
+      }else if(this.radioSelected == 1){
+        this.searlNo = this.ScanInputs;
+      }
       let autoLots = JSON.parse(localStorage.getItem("primaryAutoLots"));
       if (this.isSerial) {
         while (this.qty > 0 && this.qty != 0) {
@@ -262,7 +286,6 @@ export class InboundGRPOComponent implements OnInit {
         }
       } else {
         this.batchCalculation(autoLots, this.qty);
-        //this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, this.qty, this.RecvbBinvalue, this.expiryDate));
       }
     }
     this.qty = undefined; 
@@ -625,181 +648,91 @@ export class InboundGRPOComponent implements OnInit {
   }
 
   onGS1ItemScan(){
-    
-  //   if ((result != "" && result.length != undefined) || (result != "error decoding QR Code" && result.length != undefined)) {
-  //     oCurrentController.getView().byId("ScanSerial").setValue(result);
-  // }
-  // if (oCurrentController.getView().byId("ScanSerial").getValue() == "")
-  //     return;
+    if(this.ScanInputs!=null && this.ScanInputs!= undefined && 
+      this.ScanInputs!="" && this.ScanInputs!="error decoding QR Code"){
 
-  // var oModelReq = new JSONModel();
-  // var oScan = {};
-  // // oScan.Vsvendorid = this.CommonProperties.CustomerCode;
-  // oScan.Vsvendorid = JSON.parse(sessionStorage.getItem(this.SessionProperties.VendorCode));
-  // //oScan.Vsvendorid = "";
-  // oScan.StrScan = oCurrentController.getView().byId("ScanSerial").getValue();
-  // oScan.CompanyDBId = companyDBObject.CompanyDbName;
-  // var oScanArr = [];
-  // oScanArr.push(oScan)
-  // var jObject = { Gs1Token: JSON.stringify(oScanArr) };
-  // var psURL = this.WMSBaseURL();
-  // oModelReq.loadData(psURL + '/api/Gs1/GS1SETUP', jObject, true, 'POST');
-  // oModelReq.attachRequestCompleted(function (oEvent) {
-  //     var data = oEvent.getSource();
-  //     var psInvalidItemCode = "";
-  //     var piManualOrSingleDimentionBarcode = 0;
-  //     var oSelectPOLines = JSON.parse(sessionStorage.getItem(oCurrentController.SessionProperties.SelectPOLines));
-  //     if (data != null) {
-  //         if (data.oData != null) {
-  //             if (data.oData.length > 0) {
+      }else{
+        // if any message is required to show then show.
+        this.ScanInputs = "";
+        return;
+      }
+      this.openPOLineModel;
+      let piManualOrSingleDimentionBarcode =0;
+      this.inboundService.checkAndScanCode(this.openPOLineModel[0].CardCode,this.ScanInputs).subscribe(
+        (data: any) => {
+          console.log(data);
+          if (data != null) {
+            if (data.Error != null) {
+              if (data.Error == "Invalidcodescan") {
+                piManualOrSingleDimentionBarcode = 1
+                this.toastr.error('', this.translate.instant("InvalidScanCode"));
+                // nothing is done in old code.
+              } else {
+                // some message is handle in else section in old code
+                //return;
+              }
+              return;
+            }
 
-  //                 if (data.oData[0].Error != null) {
-  //                     if (data.oData[0].Error == "Invalidcodescan") {
-  //                         piManualOrSingleDimentionBarcode = 1
-  //                     } else {
-  //                         oCurrentController.ShowMessageDialog(oCurrentController.GetResourceString(data.oData[0].Error), oCurrentController.MessageState.MessageStateError, "Error");
-  //                         $("input[type=file]").val("");
-  //                         return;
-  //                     }
-  //                 }
+            // now check if the  code is for avilable item or not other wise invalid item error.
+            if (piManualOrSingleDimentionBarcode == 0) {
+              if (data[0].Value.toUpperCase() != this.openPOLineModel[0].ITEMCODE.toUpperCase()) {
+                this.toastr.error('', this.translate.instant("InvalidItemCode"));
+                  this.ScanInputs = "";
+                  return;
+              }
+              
+              var piExpDateExist = 0;
+              //var oGetExpDate = oTextExpiryDate.getValue();
+            
+              for (var i = 0; i < data.length; i++) {
+                  if (data[i].Key == '10' || data[i].Key == '21' || data[i].Key == '23') {
+                      this.ScanInputs = data[i].value;
+                      // make sure ScanInputs variable me puri string aati hai.. to uski value change karne
+                      // se kuch affect na kare.
+                      //scan input field par set karna hai.. ye value 10,21,23 k case me.
+                  }
+                  if (data[i].Key == '15' || data[i].Key == '17') {
+                      var d = data[i].Value.split('/');
+                      var oepxpdt = d[0] + '/' + d[1] + '/' + d[2];
+                      // set value to date field
+                      this.expiryDate = oepxpdt;
+                      piExpDateExist = 1; //taken this variable for date purpose check if later used.
+                  }
 
-  //                 if (piManualOrSingleDimentionBarcode == 0) {
-  //                     if (data.oData[0].Value.toUpperCase() != oSelectPOLines.POLinesList[0].ItemCode.toUpperCase()) {
-  //                         psInvalidItemCode = oCurrentController.GetResourceString("GoodsReceiptLineModification.InvalidItemCode");
-  //                         oCurrentController.ShowMessageDialog(psInvalidItemCode, oCurrentController.MessageState.MessageStateError, "Error");
-  //                         $("input[type=file]").val("");
-  //                         return;
-  //                     }
-  //                     //}
-  //                     var piExpDateExist = 0;
-  //                     var oGetExpDate = oTextExpiryDate.getValue();
-  //                     //if (data.oData[0].Error != "Invalidcodescan") {
-  //                     for (var i = 0; i < data.oData.length; i++) {
-  //                         if (data.oData[i].Key == '10' || data.oData[i].Key == '21' || data.oData[i].Key == '23') {
-  //                             //oGoodsReceipt.LotNumber = data.oData[i].Value;
-  //                             oCurrentController.getView().byId("ScanSerial").setValue(data.oData[i].Value);
-  //                         }
-  //                         if (data.oData[i].Key == '15' || data.oData[i].Key == '17') {
-  //                             var d = data.oData[i].Value.split('/');
-  //                             var oepxpdt = d[0] + '-' + d[1] + '-' + d[2];
-  //                             //oGoodsReceipt.ExpiryDate = oepxpdt;
-  //                             oTextExpiryDate.setValue(oepxpdt)
-  //                             piExpDateExist = 1;
-  //                         }
+                  if (data[i].Key == '30' || data[i].Key == '310' ||
+                              data[i].Key == '315' || data[i].Key == '316' || data[i].Key == '320') {
+                      if (this.openPOLineModel[0].TRACKING == "S") {
+                          //oAddserial.setValue("1");
+                          this.qty  = 1;
+                      }
+                      else {
+                          this.qty= data[i].Value;
+                      }
+                  }
+              }
+          }
 
-  //                         if (data.oData[i].Key == '30' || data.oData[i].Key == '310' ||
-  //                                     data.oData[i].Key == '315' || data.oData[i].Key == '316' || data.oData[i].Key == '320') {
-  //                             if (oSelectPOLines.POLinesList[0].Tracking == "S") {
-  //                                 oAddserial.setValue("1");
-  //                             }
-  //                             else {
-  //                                 oAddserial.setValue(data.oData[i].Value);
-  //                             }
-  //                         }
-  //                     }
-  //                 }
-  //             }
-  //             var iIndex = 0;
-  //             //var oSelectPOLines = JSON.parse(sessionStorage.getItem(oCurrentController.SessionProperties.SelectPOLines));
-  //             var selectModeObject = sap.ui.getCore().getModel(oCurrentController.CommonProperties.SelectMode);
-  //             if (selectModeObject == null) {
-  //                 selectModeObject = JSON.parse(sessionStorage.getItem(oCurrentController.SessionProperties.SelectMode));
-  //             }
-  //             if (result != "error decoding QR Code") {
-  //                 if ((oSelectPOLines.Autolot[0].AUTOLOT == "Y" || oSelectPOLines.Autolot[0].AUTOLOT == "N" || oSelectPOLines.Autolot[0].AUTOLOT == null) && selectModeObject.SelectMode === "WMS" && oSelectPOLines.POLinesList[0].Tracking == "S" && oScanSerial.getValue() != "") {
-  //                     oAddserial.setValue("1");
-  //                     oAddserial.setEnabled(false);
-  //                 }
-  //                 else {
-  //                     //oAddserial.setValue("");
-  //                     oAddserial.setEnabled(true);
-  //                 }
-  //                 if ((oSelectPOLines.Autolot[0].AUTOLOT == "Y" || oSelectPOLines.Autolot[0].AUTOLOT == "N" || oSelectPOLines.Autolot[0].AUTOLOT == null) && selectModeObject.SelectMode === "WMS" && oSelectPOLines.POLinesList[0].Tracking != "S" && oScanSerial.getValue() != "") {
-  //                     var omodelSelectedTable = oCurrentController.getView().byId("TblGoodsReceiptLineRows").getModel();
-  //                     var getUpperTableData = omodelSelectedTable.getData();
-  //                     if (getUpperTableData != null) {
-  //                         if (getUpperTableData.GoodsReceiptLineRow != null) {
-  //                             if (getUpperTableData.GoodsReceiptLineRow.length > 0) {
-  //                                 for (var iUpperIndex = 0; iUpperIndex < getUpperTableData.GoodsReceiptLineRow.length; iUpperIndex++) {
-  //                                     if (getUpperTableData.GoodsReceiptLineRow[iUpperIndex].MfgSerNo == "" && SelectInputsType == "Mfg") {
-  //                                         oAddserial.setValue(getUpperTableData.GoodsReceiptLineRow[iUpperIndex].QUANTITY);
-  //                                         oAddserial.setEnabled(false);
-  //                                         break;
+            var index = 0;
+            var selectedMode = "WMS"; // I dont know why we are setting it to wms.
+            let autoLots = JSON.parse(localStorage.getItem("primaryAutoLots"));
+            if ((autoLots.Autolot[0].AUTOLOT == "Y" || autoLots.Autolot[0].AUTOLOT == "N" || autoLots.Autolot[0].AUTOLOT == null) && 
+            selectedMode === "WMS" && this.openPOLineModel[0].TRACKING == "S" && this.ScanInputs != "") {
+              //oAddserial.setValue("1");  I think not needed to set value because we are already setting in above code.
+            //  QuantityField.setEnabled(false);
+            }
+            else {
+              //oAddserial.setValue("");
+             // QuantityField.setEnabled(true);
+            }
 
-  //                                     }
-  //                                     else {
-  //                                         oAddserial.setEnabled(true);
-
-  //                                     }
-
-  //                                 }
-  //                                 for (var iUpperIndex = 0; iUpperIndex < getUpperTableData.GoodsReceiptLineRow.length; iUpperIndex++) {
-  //                                     if (getUpperTableData.GoodsReceiptLineRow[iUpperIndex].SysSerNo == "" && SelectInputsType == "Sys") {
-  //                                         oAddserial.setValue(getUpperTableData.GoodsReceiptLineRow[iUpperIndex].QUANTITY);
-  //                                         oAddserial.setEnabled(false);
-  //                                         break;
-  //                                     }
-  //                                     else {
-  //                                         oAddserial.setEnabled(true);
-
-  //                                     }
-
-  //                                 }
-  //                             }
-  //                         }
-  //                     }
-  //                     window.setTimeout(function () {
-  //                         oCurrentController.getView().byId("txtAddSerial").focus();
-  //                     }, 1);
-                     
-  //                 }
-  //                 //Bug No. 17817 Neeraj Kushwaha
-  //                 if ((oSelectPOLines.Autolot[0].AUTOLOT == "Y" || oSelectPOLines.Autolot[0].AUTOLOT == "N" || oSelectPOLines.Autolot[0].AUTOLOT == null) && selectModeObject.SelectMode === "WMS" && oScanSerial.getValue() != "") {
-  //                     var omodelSelectedTable = oCurrentController.getView().byId("TblGoodsReceiptLineRows").getModel();
-  //                     var getUpperTableData = omodelSelectedTable.getData();
-  //                     if (getUpperTableData != null) {
-  //                         if (getUpperTableData.GoodsReceiptLineRow != null) {
-  //                             if (getUpperTableData.GoodsReceiptLineRow.length > 0) {
-  //                                 if (SelectInputsType == "Mfg") {
-                                     
-  //                                 }
-  //                                 else {
-  //                                     for (var iUpperIndex = 0; iUpperIndex < getUpperTableData.GoodsReceiptLineRow.length; iUpperIndex++) {
-  //                                         if (getUpperTableData.GoodsReceiptLineRow[iUpperIndex].SysSerNo == oCurrentController.getView().byId("ScanSerial").getValue()) {
-  //                                             oCurrentController.ShowMessageDialog(oCurrentController.GetResourceString("GoodsReceiptPOLines.RecordAlreadyExist"), oCurrentController.MessageState.MessageStateError, "Error")
-  //                                             sap.ui.core.BusyIndicator.hide();
-  //                                             return;
-
-  //                                         }
-  //                                     }
-  //                                 }
-  //                             }
-  //                         }
-  //                     }
-
-  //                 }
-  //                 oCurrentController.onAddRowClick();
-
-  //                 if (piExpDateExist == 1) {
-  //                     oTextExpiryDate.setValue(oGetExpDate);
-  //                 }
-
-  //             }
-  //             else {
-  //                 var psMsg
-  //                 if (result == "error decoding QR Code") {
-  //                     psMsg = "Cannot read QC Code, please scan again";
-  //                 } else {
-  //                     psMsg = result + ", Please scan again.";
-  //                 }
-  //                 oCurrentController.getView().byId("ScanSerial").setValue("");
-  //                 oCurrentController.ShowMessageDialog(psMsg, oCurrentController.MessageState.MessageStateError, "Error");
-  //             }
-  //             $("input[type=file]").val("");
-  //             oAddserial.setValue();
-  //         }
-  //     }
-  // });
-  }
+          }  
+        },
+        error => {
+          console.log("Error: ", error);
+          this.targetWhse = "";
+        });
+ 
+  }  
 
 }
