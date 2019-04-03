@@ -2,7 +2,7 @@
 	"company_name":"Optipro ERP",
 	"app_title":"OptiProERP WMS",
 	"locale":"en",
-	"service_url":"http://localhost:57911",
+	"service_url":"http://localhost:57930",
 	"admin_db_name":"OPTIPROADMIN",
 	"product_code":"WMS",
 	"system_version":"1.10.1",

@@ -37,16 +37,16 @@ export class OutOrderComponent implements OnInit {
 
   ngOnInit() {
     // lsOutbound
-        
+
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
 
     console.log("OutboundData:", outboundData);
+
     if (outboundData != undefined && outboundData != '') {
       this.outbound = JSON.parse(outboundData);
       this.selectedCustomer = this.outbound.CustomerData;
 
-      if(this.outbound.OrderData.DOCNUM!==undefined && this.outbound.OrderData.DOCNUM!==null)
-      {
+      if (this.outbound.OrderData !== undefined && this.outbound.OrderData !== null && this.outbound.OrderData.DOCNUM !== undefined && this.outbound.OrderData.DOCNUM !== null) {
         this.orderNumber = this.outbound.OrderData.DOCNUM;
         this.openSOOrderList();
       }
@@ -104,7 +104,7 @@ export class OutOrderComponent implements OnInit {
 
       let tempOrderData: any = this.outbound.OrderData;
       this.outbound.OrderData.DOCNUM = tempOrderData.DOCNUM = this.orderNumber;
-//lsOutbound
+      //lsOutbound
       let whseId = localStorage.getItem("whseId");
       this.outboundservice.getSOItemList(tempOrderData.CARDCODE, tempOrderData.DOCNUM, whseId).subscribe(
         resp => {
@@ -142,16 +142,16 @@ export class OutOrderComponent implements OnInit {
   }
 
   public addToDeleiver() {
-//lsOutbound
+    //lsOutbound
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
 
     if (outboundData != undefined && outboundData != '') {
       this.outbound = JSON.parse(outboundData);
-      
-      let deleivery:any={OrderData: this.outbound.OrderData,MeterialData:this.outbound.TempSavedData};
+
+      let deleivery: any = { OrderData: this.outbound.OrderData, MeterialData: this.outbound.TempSavedData };
       this.outbound.DeleiveryCollection.push(deleivery)
 
-      localStorage.setItem(CommonConstants.OutboundData,JSON.stringify( this.outbound));
+      localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
       this.openOutboundCustomer();
     }
   }
