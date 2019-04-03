@@ -6,6 +6,8 @@ import { MeterialModel } from 'src/app/models/outbound/meterial-model';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
+import { forEach } from '@angular/router/src/utils/collection';
+import { anyChanged } from '@progress/kendo-angular-grid/dist/es2015/utils';
 
 
 @Component({
@@ -43,9 +45,19 @@ export class OutProdissueComponent implements OnInit {
     let outboundData = localStorage.getItem(CommonConstants.OutboundData);
 
     if (outboundData != undefined && outboundData != '') {
+
       this.outbound = JSON.parse(outboundData);
+
       this.selected = this.outbound.SelectedItem;
       this.OrderType = this.selected.TRACKING;
+
+
+
+      if (this.OrderType != 'N') {
+        this.manageOldCollection();
+
+      }
+
       this._requiredMeterialQty = parseFloat(this.selected.OPENQTY);
       this._remainingMeterial = this._requiredMeterialQty - this._pickedMeterialQty;
       this.selectedItems = [this.selected];
@@ -59,7 +71,6 @@ export class OutProdissueComponent implements OnInit {
         );
       }
 
-
       this.ourboundService.getUOMList(this.selected.ITEMCODE).subscribe(
         data => {
           this.uomList = data;
@@ -68,10 +79,23 @@ export class OutProdissueComponent implements OnInit {
     }
   }
 
-  calculatePickQty() {
-  }
+  manageOldCollection() {
+    let itemMeterials
+    if (this.outbound.TempMeterials !== undefined
+      && this.outbound.TempMeterials !== null
+      && this.outbound.TempMeterials.length > 0) {
 
-  valueChange() {
+      itemMeterials = this.outbound.TempMeterials.filter(
+        (m: any) => m.ITEMCODE
+          === this.outbound.SelectedItem.ITEMCODE);
+    }
+    if (itemMeterials !== undefined && itemMeterials !== null
+      && itemMeterials.length > 0) {
+      this.selectedMeterials = itemMeterials;
+      this.manageMeterial();
+      this.calculateTotalAndRemainingQty();
+      
+    }
 
   }
 
@@ -79,7 +103,7 @@ export class OutProdissueComponent implements OnInit {
     let needMeterial: boolean = false;
     let localTotalPickQty: number = this.totalPickQty;
     let requiredQty: number = parseFloat(this.selected.OPENQTY) - localTotalPickQty;
-    
+
     if (localTotalPickQty >= requiredQty) {
       return false;
     }
@@ -232,7 +256,7 @@ export class OutProdissueComponent implements OnInit {
     console.log("SelectedMeterial", this.selectedMeterials);
     if (updateGrid == true)
       gridSelectedMeterial.data = this.selectedMeterials;
-//lsOutbound
+    //lsOutbound
     this.outbound = JSON.parse(localStorage.getItem(CommonConstants.OutboundData));
     this.outbound.SelectedMeterials = lookupValue;
     localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
@@ -305,30 +329,75 @@ export class OutProdissueComponent implements OnInit {
 
       this.outbound = JSON.parse(outboundData);
 
-      // get element
-      let item: any = this.outbound.TempSavedData.filter(i => i.SelectedItem.ITEMCODE == this.outbound.SelectedItem.ITEMCODE)
+      if (this.outbound.TempMeterials !== undefined
+        && this.outbound.TempMeterials !== null && this.outbound.TempMeterials.length > 0) {
 
-      let idx = this.outbound.TempSavedData.indexOf(item);
+        let itemMeterials = this.outbound.TempMeterials.filter((t: any) =>
+          t.ITEMCODE === this.outbound.SelectedItem.ITEMCODE);
 
-      
-      if (idx !== -1) {
-        item.SelectedMeterials.push(this.outbound.SelectedMeterials);
-        this.outbound.TempSavedData.splice(idx, 1, item);
+        this.outbound.TempMeterials = this.outbound.TempMeterials.filter((t: any) =>
+          t.ITEMCODE !== this.outbound.SelectedItem.ITEMCODE);
 
+        this.selectedMeterials.forEach(m => this.outbound.TempMeterials.push(m));
+
+
+        //let newMeterial = this.removeData(this.outbound.TempMeterials, itemMeterials);
+
+
+        // if (newMeterial !== undefined && newMeterial !== null && newMeterial.length > 0)
+
+        //   this.selectedMeterials.forEach(m => newMeterial.push(m));
+
+        // //   this.outbound.TempMeterials.forEach(i => newMeterial.push(i));
+        // // newMeterial[0].forEach(i => dt.push(i));
+
+        // this.outbound.TempMeterials = newMeterial;
+
+        // this.outbound.TempMeterials.push(newMeterial);
       }
       else {
 
+        this.outbound.TempMeterials = [];
+        this.selectedMeterials.forEach(element => {
+          this.outbound.TempMeterials.push(element)
+        });
+        //this.outbound.TempMeterials.push(this.selectedMeterials);
 
-        let OrderDataCollection: any = { SelectedItem: this.outbound.SelectedItem, SelectedMeterials: this.outbound.SelectedMeterials };
-
-        if (this.outbound.TempSavedData === undefined || this.outbound.TempSavedData.length <= 0) {
-          this.outbound.TempSavedData = [];
-        }
-
-        this.outbound.TempSavedData.push(OrderDataCollection);
       }
+
+      //   // // get element
+      //   // let item: any = this.outbound.TempSavedData.filter(i => i.SelectedItem.ITEMCODE == this.outbound.SelectedItem.ITEMCODE)
+
+      //   // let idx = this.outbound.TempSavedData.indexOf(item);
+
+      //   // debugger;
+      //   // if (idx !== -1) {
+      //   //   item.SelectedMeterials.push(this.outbound.SelectedMeterials);
+      //   //   this.outbound.TempSavedData.splice(idx, 1, item);
+
+      //   // }
+      //   // else {
+
+      //   //   let OrderDataCollection: any = {
+      //   //     Order: this.outbound.OrderData,
+
+      //   //     SelectedItems: [
+      //   //       {
+      //   //         Item: this.selected,
+      //   //         Meterials: this.selectedMeterials,
+      //   //       }
+
+      //   //     ]
+      //   //   };
+
+      //   //   if (this.outbound.TempSavedData === undefined || this.outbound.TempSavedData.length <= 0) {
+      //   //     this.outbound.TempSavedData = [];
+      //   //   }
+
+      //   //   this.outbound.TempSavedData.push(OrderDataCollection);
+      //   }
     }
-//lsOutbound
+    // //lsOutbound
     localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
     this.back();
   }
@@ -336,6 +405,50 @@ export class OutProdissueComponent implements OnInit {
   back() {
     this.router.navigateByUrl('home/outbound/outorder', { skipLocationChange: true });
   }
+
+  intersection(array1: any[], array2: any[]): any[] {
+    let result: any[] = [];
+    for (let i = 0; i < array1.length; i++) {
+      for (let j = 0; j < array2.length; j++) {
+        if (array1[i] === array2[j] && result.indexOf(array1[i]) === -1) {
+          result.push(array1[i]);
+          break;
+        }
+      }
+    }
+    return result;
+  };
+
+  filterData(m1: any[], m2: any[]): any[] {
+    let result: any[] = [];
+    for (let i = 0; i < m1.length; i++) {
+      let data = m2.filter((m: any) =>
+        m.BINNO !== m1[i].BINNO &&
+        m.LOTNO !== m1[i].LOTNO
+      );
+      if (data !== undefined && data !== null && data.length > 0) {
+        result.push(data);
+      }
+    }
+    return result;
+  }
+
+  removeData(m1: any[], m2: any[]): any[] {
+
+    for (let index = 0; index < m2.length; index++) {
+
+      let data = m1.filter((m: any) =>
+        m.BINNO !== m2[index].BINNO &&
+        m.LOTNO !== m2[index].LOTNO
+      );
+
+      let idx = m1.indexOf(data);
+      if (idx > -1) {
+        m1 = m1.splice(idx, 1);
+      }
+      return m1;
+
+    }
+  }
+
 }
-
-
