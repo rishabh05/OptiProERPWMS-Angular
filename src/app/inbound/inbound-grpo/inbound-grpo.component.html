@@ -205,10 +205,11 @@
                 <hr />
             </div>
             <div class="col-sm-12 col-12">
-
+ 
                 <button class="k-button k-primary" *ngIf="showButton" type="button" (click)="save($event)">Save</button>
                 <button class="k-button k-primary" *ngIf="showButton" type="button" (click)="receive($event)">Receive</button>
-                <button class="k-button k-primary" type="button" (click)="cancel($event)">Cancel</button>
+                <!-- <button class="k-button k-primary" type="button" (click)="cancel($event)">Cancel</button> -->
+                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="cancel($event)"><span class="k-icon k-i-close-outline" role="presentation" ></span> Cancel</button>
             </div>
         </div>
     </form>

@@ -201,7 +201,6 @@ export class InboundGRPOComponent implements OnInit {
    * Method to validate entered scan code .
   */
   onScanCodeChange(){
-  debugger;
     this.onGS1ItemScan()
   }
   /**
@@ -277,7 +276,9 @@ export class InboundGRPOComponent implements OnInit {
       let autoLots = JSON.parse(localStorage.getItem("primaryAutoLots"));
       if (this.isSerial) {
         while (this.qty > 0 && this.qty != 0) {
+          if(autoLots.length>0 && autoLots[0].AUTOLOT=="Y"){
           this.addBatchSerialQty(autoLots, this.qty);
+        }
           let result = this.recvingQuantityBinArray.find(element => element.searlNo == this.searlNo);
           if (result == undefined) {
             this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, 1, this.RecvbBinvalue, this.expiryDate));
@@ -292,7 +293,10 @@ export class InboundGRPOComponent implements OnInit {
   }
 
   batchCalculation(autoLots: AutoLot[], qty: any) {
-    this.addBatchSerialQty(autoLots, this.qty);
+    if(autoLots.length>0 && autoLots[0].AUTOLOT=="Y"){
+      this.addBatchSerialQty(autoLots, this.qty);
+    }
+ 
     let result = this.recvingQuantityBinArray.find(element => element.searlNo == this.searlNo);
     if (result == undefined) {
       this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, qty, this.RecvbBinvalue, this.expiryDate));
@@ -350,8 +354,8 @@ export class InboundGRPOComponent implements OnInit {
         }
       }
     }
-
   }
+
   deleteButtonConfirmation(rowindex, gridData: any) {
     
     if(confirm()) {
@@ -650,7 +654,6 @@ export class InboundGRPOComponent implements OnInit {
   onGS1ItemScan(){
     if(this.ScanInputs!=null && this.ScanInputs!= undefined && 
       this.ScanInputs!="" && this.ScanInputs!="error decoding QR Code"){
-
       }else{
         // if any message is required to show then show.
         this.ScanInputs = "";
@@ -671,12 +674,13 @@ export class InboundGRPOComponent implements OnInit {
                 // some message is handle in else section in old code
                 //return;
               }
-              return;
+              return; 
             }
-
+             console.log("Inapi call section openPoline::",JSON.stringify(this.openPOLineModel));
             // now check if the  code is for avilable item or not other wise invalid item error.
+            var itemCode=this.openPOLineModel[0].ITEMCODE.toUpperCase()
             if (piManualOrSingleDimentionBarcode == 0) {
-              if (data[0].Value.toUpperCase() != this.openPOLineModel[0].ITEMCODE.toUpperCase()) {
+              if (data[0].Value.toUpperCase() != itemCode.toUpperCase()) {
                 this.toastr.error('', this.translate.instant("InvalidItemCode"));
                   this.ScanInputs = "";
                   return;
@@ -684,10 +688,10 @@ export class InboundGRPOComponent implements OnInit {
               
               var piExpDateExist = 0;
               //var oGetExpDate = oTextExpiryDate.getValue();
-            
+              var tracking = this.openPOLineModel[0].TRACKING;
               for (var i = 0; i < data.length; i++) {
                   if (data[i].Key == '10' || data[i].Key == '21' || data[i].Key == '23') {
-                      this.ScanInputs = data[i].value;
+                      this.ScanInputs = data[i].Value;
                       // make sure ScanInputs variable me puri string aati hai.. to uski value change karne
                       // se kuch affect na kare.
                       //scan input field par set karna hai.. ye value 10,21,23 k case me.
@@ -702,7 +706,7 @@ export class InboundGRPOComponent implements OnInit {
 
                   if (data[i].Key == '30' || data[i].Key == '310' ||
                               data[i].Key == '315' || data[i].Key == '316' || data[i].Key == '320') {
-                      if (this.openPOLineModel[0].TRACKING == "S") {
+                      if (tracking == "S") {
                           //oAddserial.setValue("1");
                           this.qty  = 1;
                       }
@@ -716,16 +720,16 @@ export class InboundGRPOComponent implements OnInit {
             var index = 0;
             var selectedMode = "WMS"; // I dont know why we are setting it to wms.
             let autoLots = JSON.parse(localStorage.getItem("primaryAutoLots"));
-            if ((autoLots.Autolot[0].AUTOLOT == "Y" || autoLots.Autolot[0].AUTOLOT == "N" || autoLots.Autolot[0].AUTOLOT == null) && 
-            selectedMode === "WMS" && this.openPOLineModel[0].TRACKING == "S" && this.ScanInputs != "") {
+            if ((autoLots[0].AUTOLOT == "Y" || autoLots[0].AUTOLOT == "N" || autoLots[0].AUTOLOT == null)
+             && selectedMode === "WMS" && tracking == "S" && this.ScanInputs != "") {
               //oAddserial.setValue("1");  I think not needed to set value because we are already setting in above code.
-            //  QuantityField.setEnabled(false);
+              this.QuantityField.nativeElement.disabled =false;
             }
-            else {
+            else {  
               //oAddserial.setValue("");
-             // QuantityField.setEnabled(true);
+              this.QuantityField.nativeElement.disabled =true;
             }
-
+            this.addQuantity();       
           }  
         },
         error => {
@@ -736,3 +740,4 @@ export class InboundGRPOComponent implements OnInit {
   }  
 
 }
+ 

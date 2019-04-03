@@ -108,4 +108,8 @@ export class InboundDetailsComponent implements OnInit {
     }
     
   }
+
+  OnCancelClick(){
+    this.router.navigate(['home/dashboard']);
+  }
 }
