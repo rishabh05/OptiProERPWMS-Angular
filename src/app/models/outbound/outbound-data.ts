@@ -4,7 +4,8 @@ export class OutboundData {
     SelectedItem: any;
     SelectedMeterials: any;
     TempSavedData: Array<any> = [];
-    DeleiveryCollection: Array<any> = []
+    DeleiveryCollection: Array<any> = [];
+    TempMeterials:Array<any>=[];
 }
 
 export class CurrentOutBoundData {

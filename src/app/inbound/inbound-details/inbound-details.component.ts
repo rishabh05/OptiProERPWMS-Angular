@@ -18,6 +18,7 @@ export class InboundDetailsComponent implements OnInit {
   lookupfor: string;
   VendCode: string;
   VendName: string;
+  
 
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent) {
@@ -106,5 +107,9 @@ export class InboundDetailsComponent implements OnInit {
       this.toastr.error('', this.translate.instant("SelectVendorValidateMsg"));
     }
     
+  }
+
+  OnCancelClick(){
+    this.router.navigate(['home/dashboard']);
   }
 }

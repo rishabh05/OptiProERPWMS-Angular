@@ -70,11 +70,11 @@
                             <fieldset [disabled]=isDisabledScanInput>
                                 <input type="radio" name="group" (change)="handleCheckChange($event)" id="InventoryEnquiryOptions1"
                                     class="k-radio" checked />
-                                <label class="k-radio-label" for="InventoryEnquiryOptions1">{{'MfrSerial'|translate}}</label>
+                                <label class="k-radio-label" for="InventoryEnquiryOptions1">{{mfrRadioText}}</label>
                                 <div class="clearfix mt-2"></div>
                                 <input type="radio" name="group" (change)="handleCheckChange($event)" id="InventoryEnquiryOptions2"
                                     class="k-radio" />
-                                <label class="k-radio-label" for="InventoryEnquiryOptions2">{{'SysSerial'|translate}}</label>
+                                <label class="k-radio-label" for="InventoryEnquiryOptions2">{{sysRadioText}}</label>
                             </fieldset>
                         </div>
                     </div>
@@ -82,14 +82,14 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label py-0 text-right"><i class="opti-icon-qr-code fs-28"></i></label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control form-control-sm" name="ScanInputs" [(ngModel)]=ScanInputs
-                                placeholder="{{'ScanSerial'|translate}}">
+                            (blur)="onScanCodeChange()" placeholder="{{'ScanSerial'|translate}}">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Quantity'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="d-flex">
-                                <input type="text" class="form-control form-control-sm" name="qty" [(ngModel)]=qty
+                                <input type="text" class="form-control form-control-sm" #Quantity name="qty" [(ngModel)]=qty
                                     placeholder="{{'Quantity'|translate}}">
                                 <div class="ml-1 d-flex">
                                     <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
@@ -112,13 +112,13 @@
                     <kendo-grid *ngIf="!isNonTrack" class="no-shadow" [kendoGridBinding]="recvingQuantityBinArray"
                         [sortable]="true" [selectable]="true" #gridItem>
 
-                        <kendo-grid-column field="MfrSerial" [width]="18" title="{{'MfrSerialNo'|translate}}">
+                        <kendo-grid-column field="MfrSerial" [width]="18" title="{{mfrGridColumnText}}">
                             <ng-template kendoGridCellTemplate let-dataItem>
                                 <input type="text" class="form-control form-control-sm"
                                 name="dataItem.MfrSerial" [(ngModel)]=dataItem.MfrSerial>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column field="searlNo" [width]="18" title="{{serialNoTitle}}"></kendo-grid-column>
+                        <kendo-grid-column field="searlNo" [width]="18" title="{{SRBatchColumnText}}"></kendo-grid-column>
                         <kendo-grid-column field="Quantity" headerClass="text-right" class="text-right" [width]="18"
                             title="{{'Qty'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem>
@@ -205,10 +205,11 @@
                 <hr />
             </div>
             <div class="col-sm-12 col-12">
-
+ 
                 <button class="k-button k-primary" *ngIf="showButton" type="button" (click)="save($event)">Save</button>
                 <button class="k-button k-primary" *ngIf="showButton" type="button" (click)="receive($event)">Receive</button>
-                <button class="k-button k-primary" type="button" (click)="cancel($event)">Cancel</button>
+                <!-- <button class="k-button k-primary" type="button" (click)="cancel($event)">Cancel</button> -->
+                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="cancel($event)"><span class="k-icon k-i-close-outline" role="presentation" ></span> Cancel</button>
             </div>
         </div>
     </form>
