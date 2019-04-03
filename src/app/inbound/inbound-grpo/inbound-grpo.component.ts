@@ -226,7 +226,7 @@ export class InboundGRPOComponent implements OnInit {
     
     if($event.currentTarget.id=="InventoryEnquiryOptions1"){
      // mfr serial radio selected.
-     this.radioSelected = 0;
+     this.radioSelected = 0; 
     }
     if($event.currentTarget.id=="InventoryEnquiryOptions2"){
      // mfr serial radio selected.
@@ -680,7 +680,7 @@ export class InboundGRPOComponent implements OnInit {
             // now check if the  code is for avilable item or not other wise invalid item error.
             var itemCode=this.openPOLineModel[0].ITEMCODE.toUpperCase()
             if (piManualOrSingleDimentionBarcode == 0) {
-              if (data[0].Value.toUpperCase() != itemCode.toUpperCase()) {
+              if (data[0]!=null && (data[0].Value.toUpperCase() != itemCode.toUpperCase())) {
                 this.toastr.error('', this.translate.instant("InvalidItemCode"));
                   this.ScanInputs = "";
                   return;
@@ -699,7 +699,7 @@ export class InboundGRPOComponent implements OnInit {
                   if (data[i].Key == '15' || data[i].Key == '17') {
                       var d = data[i].Value.split('/');
                       var oepxpdt = d[0] + '/' + d[1] + '/' + d[2];
-                      // set value to date field
+                      // set value to date field 
                       this.expiryDate = oepxpdt;
                       piExpDateExist = 1; //taken this variable for date purpose check if later used.
                   }
