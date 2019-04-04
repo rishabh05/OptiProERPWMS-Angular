@@ -75,12 +75,12 @@ export class InboundGRPOComponent implements OnInit {
     translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
   }
-
+ 
   ngOnInit() {
     this.openPOLineModel[0] = this.inboundMasterComponent.openPOmodel;
     if (this.openPOLineModel != undefined && this.openPOLineModel != null) {
       this.Ponumber = this.openPOLineModel[0].DOCENTRY;
-      this.tracking = this.openPOLineModel[0].TRACKING;
+      this.tracking = this.openPOLineModel[0].TRACKING; 
       this.OpenQty = this.openPOLineModel[0].OPENQTY;
       this.showScanInput = true;
       if (this.tracking == "S") {
