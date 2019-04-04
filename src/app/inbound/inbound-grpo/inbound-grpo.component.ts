@@ -225,21 +225,12 @@ export class InboundGRPOComponent implements OnInit {
       }
     );
   }
-<<<<<<< HEAD
-   
-  handleCheckChange($event){
-    
-    if($event.currentTarget.id=="InventoryEnquiryOptions1"){
-     // mfr serial radio selected.
-     this.radioSelected = 0; 
-=======
 
   handleCheckChange($event) {
 
     if ($event.currentTarget.id == "InventoryEnquiryOptions1") {
       // mfr serial radio selected.
       this.radioSelected = 0;
->>>>>>> 330eeb58c4242440949379af76f718cf0f0b34d3
     }
     if ($event.currentTarget.id == "InventoryEnquiryOptions2") {
       // mfr serial radio selected.
@@ -694,6 +685,7 @@ export class InboundGRPOComponent implements OnInit {
   onGS1ItemScan(){
     if(this.ScanInputs!=null && this.ScanInputs!= undefined && 
       this.ScanInputs!="" && this.ScanInputs!="error decoding QR Code"){
+
       }else{
         // if any message is required to show then show.
         this.ScanInputs = "";
@@ -720,7 +712,7 @@ export class InboundGRPOComponent implements OnInit {
             // now check if the  code is for avilable item or not other wise invalid item error.
             var itemCode=this.openPOLineModel[0].ITEMCODE.toUpperCase()
             if (piManualOrSingleDimentionBarcode == 0) {
-              if (data[0]!=null && (data[0].Value.toUpperCase() != itemCode.toUpperCase())) {
+              if (data[0]!=null && data[0].Value!=null && (data[0].Value.toUpperCase() != itemCode.toUpperCase())) {
                 this.toastr.error('', this.translate.instant("InvalidItemCode"));
                   this.ScanInputs = "";
                   return;
@@ -763,11 +755,11 @@ export class InboundGRPOComponent implements OnInit {
             if ((autoLots[0].AUTOLOT == "Y" || autoLots[0].AUTOLOT == "N" || autoLots[0].AUTOLOT == null)
              && selectedMode === "WMS" && tracking == "S" && this.ScanInputs != "") {
               //oAddserial.setValue("1");  I think not needed to set value because we are already setting in above code.
-              this.QuantityField.nativeElement.disabled =false;
+              this.QuantityField.nativeElement.disabled =true;
             }
             else {  
               //oAddserial.setValue("");
-              this.QuantityField.nativeElement.disabled =true;
+              this.QuantityField.nativeElement.disabled =false;
             }
             this.addQuantity();       
           }  

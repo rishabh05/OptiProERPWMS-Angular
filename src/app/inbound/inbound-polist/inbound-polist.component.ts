@@ -97,11 +97,11 @@ export class InboundPolistComponent implements OnInit {
   }
 
   openPOLines() {
-    console.log("search click : in open poline method");
+    console.log("search click : in open poline method :openPOLines()");
     this.inboundService.GetOpenPOLines(this.futurepo, this.itemCode,
       this.poCode).subscribe(
         (data: any) => {
-          console.log("api call resonse section");
+          console.log("api call resonse section :openPOLines()");
           console.log(data);
           this.showNonTrackItem = false;
           this.showBatchTrackItem = false;
@@ -133,7 +133,7 @@ export class InboundPolistComponent implements OnInit {
               this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
-          console.log("api call resonse section end of if");
+          console.log("api call resonse section end of if :openPOLines()");
         },
         error => {
           console.log("Error: ", error);
