@@ -291,6 +291,11 @@ export class InboundGRPOComponent implements OnInit {
       }
     }
     this.qty = undefined;
+    if(this.recvingQuantityBinArray.length > 0){
+      this.showButton = true;
+    }else{
+      this.showButton = false;
+    }
   }
 
   batchCalculation(autoLots: AutoLot[], qty: any) {
@@ -308,7 +313,7 @@ export class InboundGRPOComponent implements OnInit {
   addNonTrackQty(qty: any) {
     let result = this.recvingQuantityBinArray.find(element => element.Bin == this.RecvbBinvalue);
     if (result == undefined) {
-      this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, qty, this.RecvbBinvalue, this.expiryDate));
+      this.recvingQuantityBinArray.push(new RecvingQuantityBin("", "",  qty, this.RecvbBinvalue, this.expiryDate));
       this.showButton = true;
     } else {
       this.toastr.error('', this.translate.instant("BinValidation"));
@@ -329,36 +334,55 @@ export class InboundGRPOComponent implements OnInit {
       }
       if (autoLots[i].OPRTYPE === "2" && autoLots[i].OPERATION == "2") {
         if (this.recvingQuantityBinArray.length > 0) {
-          var strlength = autoLots[i].STRING.length;
-          var numberLength = (parseInt(autoLots[i].STRING)).toString().length;
-          var finlNumber = parseInt(autoLots[i].STRING) + 1
-          var finalString = this.forwardZero(finlNumber, strlength - numberLength);
-          this.searlNo = this.searlNo + finalString;
-          // this.inboundMasterComponent.autoLots[i].STRING = finalString;
-          this.LastSerialNumber[i] = finalString;
-          this.LineId[i] = autoLots[i].LineId;
+          // var strlength = autoLots[i].STRING.length;
+          // var numberLength = (parseInt(autoLots[i].STRING)).toString().length;
+          // var finlNumber = parseInt(autoLots[i].STRING) + 1
+          // var finalString = this.forwardZero(finlNumber, strlength - numberLength);
+
+          var finalString = this.getAutoLotStringOPR2(autoLots[i].STRING);
           autoLots[i].STRING = finalString;
+          this.searlNo = this.searlNo + finalString;
+          this.LastSerialNumber[0] = this.getAutoLotStringOPR2(finalString);
+          this.LineId[0] = autoLots[i].LINEID;
+          
         } else {
           var finalString = autoLots[i].STRING;
           this.searlNo = this.searlNo + finalString;
-          this.LastSerialNumber[i] = finalString;
-          this.LineId[i] = autoLots[i].LineId;
+          this.LastSerialNumber[0] = this.getAutoLotStringOPR2(finalString);
+          this.LineId[0] = autoLots[i].LINEID;
         }
       }
       if (autoLots[i].OPRTYPE == "2" && autoLots[i].OPERATION == "3") {
         if (this.recvingQuantityBinArray.length > 0) {
-          var strlength = autoLots[i].STRING.length;
-          var numberLength = (parseInt(autoLots[i].STRING)).toString().length;
-          var finlNumber = parseInt(autoLots[i].STRING) - 1
-          var finalString = this.forwardZero(finlNumber, strlength - numberLength);
+          var finalString = this.getAutoLotStringOPR3(autoLots[i].STRING);
           this.searlNo = this.searlNo + finalString;
           autoLots[i].STRING = finalString;
+          this.LastSerialNumber[0] = this.getAutoLotStringOPR3(autoLots[i].STRING);
+          this.LineId[0] = autoLots[i].LINEID;
         } else {
           var finalString = autoLots[i].STRING;
           this.searlNo = this.searlNo + finalString;
+          this.LastSerialNumber[0] = this.getAutoLotStringOPR3(autoLots[i].STRING);
+          this.LineId[0] = autoLots[i].LINEID;
         }
       }
     }
+  }
+
+  getAutoLotStringOPR2(autolotString: string):string{
+    var strlength = autolotString.length;
+    var numberLength = (parseInt(autolotString)).toString().length;
+    var finlNumber = parseInt(autolotString) - 1
+    var finalString = this.forwardZero(finlNumber, strlength - numberLength);
+    return finalString;
+  }
+
+  getAutoLotStringOPR3(autolotString: string):string{
+    var strlength = autolotString.length;
+    var numberLength = (parseInt(autolotString)).toString().length;
+    var finlNumber = parseInt(autolotString) - 1
+    var finalString = this.forwardZero(finlNumber, strlength - numberLength);
+    return finalString;
   }
 
   deleteButtonConfirmation(rowindex, gridData: any) {
@@ -394,6 +418,7 @@ export class InboundGRPOComponent implements OnInit {
   }
 
   receive(e) {
+    debugger
     alert("Do you want to print all labels after submit ?");
     var oSubmitPOLotsObj = this.prepareSubmitPurchaseOrder();
     this.SubmitGoodsReceiptPO(oSubmitPOLotsObj);
@@ -411,14 +436,14 @@ export class InboundGRPOComponent implements OnInit {
       PONumber: this.Ponumber,
       CompanyDBId: localStorage.getItem("CompID"),
       LineNo: this.openPOLineModel[0].LINENUM,
-      ShipQty: this.openPOLineModel[0].RPTQTY.toString(),
+      ShipQty: 1,
       OpenQty: this.openPOLineModel[0].OPENQTY,
       WhsCode: localStorage.getItem("whseId"),
       Tracking: this.openPOLineModel[0].TRACKING,
       ItemCode: this.openPOLineModel[0].ITEMCODE,
       LastSerialNumber: 0,
       Line: 0,
-      UOM: this.openPOLineModel[0].UOM,
+      UOM: this.uomSelectedVal.UomEntry,
       GUID: localStorage.getItem("GUID"),
       UsernameForLic: localStorage.getItem("UserId")
       //------end Of parameter For License----
@@ -502,7 +527,7 @@ export class InboundGRPOComponent implements OnInit {
         console.log(data);
         if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
           // alert("Goods Receipt PO generated successfully with Doc No: " + data.DocEntry);
-          this.toastr.success('', this.translate.instant("GRPOSuccessMessage" + data.DocEntry));
+          this.toastr.success('', this.translate.instant("GRPOSuccessMessage" + data[0].DocEntry));
           this.inboundMasterComponent.inboundComponent = 2;
         } else if (data[0].ErrorMsg == "7001") {
           this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
@@ -511,7 +536,7 @@ export class InboundGRPOComponent implements OnInit {
         }
         else {
           // alert(data[0].ErrorMsg);
-          this.toastr.success('', data[0].ErrorMsg);
+          this.toastr.error('', data[0].ErrorMsg);
         }
       },
       error => {

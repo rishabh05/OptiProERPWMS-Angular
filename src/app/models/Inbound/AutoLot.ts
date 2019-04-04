@@ -1,7 +1,7 @@
 export class AutoLot {
     AUTOLOT: string;
     ItemCode: string;
-    LineId: string;
+    LINEID: string;
     OPERATION: string;
     OPRTYPE: string;
     STRING: string;
@@ -9,7 +9,7 @@ export class AutoLot {
     public constructor (AUTOLOT, ItemCode, LineId, OPERATION, OPRTYPE, STRING) {
         this.AUTOLOT = AUTOLOT;
         this.ItemCode = ItemCode;
-        this.LineId = LineId;
+        this.LINEID = LineId;
         this.OPERATION = OPERATION;
         this.OPRTYPE = OPRTYPE;
         this.STRING = STRING;
