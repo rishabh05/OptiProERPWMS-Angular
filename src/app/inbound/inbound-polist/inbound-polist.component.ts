@@ -206,6 +206,7 @@ export class InboundPolistComponent implements OnInit {
         localStorage.setItem("primaryAutoLots",JSON.stringify(this.autoLot));
         this.openPOLineModel = this.openPOLinesModel.find(e => e.ITEMCODE == itemCode);
         if (this.openPOLineModel != null) {
+          this.openPOLineModel.RPTQTY = 0;
           this.inboundMasterComponent.setClickedItemDetail(this.openPOLineModel);
           this.inboundMasterComponent.inboundComponent = 3;
         } 

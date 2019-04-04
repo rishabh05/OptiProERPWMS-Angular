@@ -65,7 +65,7 @@ export class InboundGRPOComponent implements OnInit {
   radioSelected: any = 0;
   LastSerialNumber: any[];
   LineId: any[];
-
+  previousReceivedQty:number = 0;
   @ViewChild('Quantity') QuantityField;
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent, private confDialogService: ConfirmdialogService) {
@@ -77,7 +77,11 @@ export class InboundGRPOComponent implements OnInit {
   }
  
   ngOnInit() {
+
     this.openPOLineModel[0] = this.inboundMasterComponent.openPOmodel;
+    //update below variable with local storage data
+    //previousReceivedQty:number = 0;
+   // also update this.openPOLineModel[0].RPTQTY with local storage value
     if (this.openPOLineModel != undefined && this.openPOLineModel != null) {
       this.Ponumber = this.openPOLineModel[0].DOCENTRY;
       this.tracking = this.openPOLineModel[0].TRACKING; 
@@ -296,6 +300,20 @@ export class InboundGRPOComponent implements OnInit {
     }else{
       this.showButton = false;
     }
+    this.updateReceiveQty();
+   
+  }
+  updateReceiveQty(){
+    let quantitySum: number = 0;
+    quantitySum = this.previousReceivedQty;
+    for (var i = 0; i < this.recvingQuantityBinArray.length; i++) {
+      quantitySum += Number(this.recvingQuantityBinArray[i].Quantity);
+    }
+    if(this.openPOLineModel!=null && this.openPOLineModel.length>0){
+      this.openPOLineModel[0].RPTQTY = quantitySum ;
+    }
+    
+    
   }
 
   batchCalculation(autoLots: AutoLot[], qty: any) {
