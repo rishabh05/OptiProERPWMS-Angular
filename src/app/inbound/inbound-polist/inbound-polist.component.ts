@@ -97,6 +97,7 @@ export class InboundPolistComponent implements OnInit {
   }
 
   openPOLines() {
+    
     console.log("search click : in open poline method :openPOLines()");
     this.inboundService.GetOpenPOLines(this.futurepo, this.itemCode,
       this.poCode).subscribe(
@@ -112,6 +113,7 @@ export class InboundPolistComponent implements OnInit {
             this.NonItemsDetail = [];
             this.SerialItemsDetail = [];
             this.openPOLinesModel = data.Table;
+            this.updateReceivedQtyForSavedItems()
             this.openPOLinesModel.forEach(element => {
               if (element.TRACKING == "N") {
                 this.NonItemsDetail.push(element);
@@ -139,6 +141,7 @@ export class InboundPolistComponent implements OnInit {
           console.log("Error: ", error);
         }
       );
+      
   }
 
   OnPOChange() {
@@ -216,6 +219,24 @@ export class InboundPolistComponent implements OnInit {
       }
     );
   }
+  public oSavedPOLotsArray: any[] = []; 
+  updateReceivedQtyForSavedItems() {
+    this.oSavedPOLotsArray = JSON.parse(localStorage.getItem("GRPOReceieveData"));
+    if (this.oSavedPOLotsArray != undefined && this.oSavedPOLotsArray != null &&
+      this.oSavedPOLotsArray.length > 0 && this.openPOLinesModel != undefined &&
+      this.openPOLinesModel != null && this.openPOLinesModel.length > 0) {
+      for (var i = 0; i < this.openPOLinesModel.length; i++) {
+        for (var j = 0; j < this.oSavedPOLotsArray.length; j++) {
+          if (this.oSavedPOLotsArray[j].POReceiptLots != undefined && this.oSavedPOLotsArray[j].POReceiptLots != undefined
+            && this.oSavedPOLotsArray[j].POReceiptLots.length > 0 &&
+            this.oSavedPOLotsArray[j].POReceiptLots[0].PONumber == this.poCode &&
+            this.oSavedPOLotsArray[j].POReceiptLots[0].ItemCode == this.openPOLinesModel[i].ITEMCODE) {
+            this.openPOLinesModel[i].RPTQTY = this.oSavedPOLotsArray[j].POReceiptLots[0].ShipQty;
+          }
+        }
+      }
+    }
+  }  
 
   onCancelClick() {
     this.inboundMasterComponent.inboundComponent = 1;
