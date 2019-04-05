@@ -41,21 +41,21 @@ export class InboundGRPOComponent implements OnInit {
   expiryDate: string = "";
   isNonTrack: boolean = false;
   isSerial: boolean = false;
-  
+
   //locale string variables
-  serialNoTitle:string = "";
+  serialNoTitle: string = "";
   mfrRadioText: string = "";
   sysRadioText: string = "";
   scanInputPlaceholder: string = "";
   mfrGridColumnText: string = "";
   SRBatchColumnText: string = "";
-
+  public oSubmitPOLotsArray: any[] = []; 
   isAutoLotEnabled: boolean;
-  isDisabledScanInput:boolean = false; 
-  ScanSerial: string="";
-  ScanInputs: any ="";
-  targetBin:string = "";
-  targetWhse:string = "";
+  isDisabledScanInput: boolean = false;
+  ScanSerial: string = "";
+  ScanInputs: any = "";
+  targetBin: string = "";
+  targetWhse: string = "";
   IsQCRequired: boolean;
   targetBinSubs: ISubscription;
   targetWhseSubs: ISubscription;
@@ -75,18 +75,18 @@ export class InboundGRPOComponent implements OnInit {
     translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
   }
- 
+
   ngOnInit() {
     this.openPOLineModel[0] = this.inboundMasterComponent.openPOmodel;
     if (this.openPOLineModel != undefined && this.openPOLineModel != null) {
       this.Ponumber = this.openPOLineModel[0].DOCENTRY;
-      this.tracking = this.openPOLineModel[0].TRACKING; 
+      this.tracking = this.openPOLineModel[0].TRACKING;
       this.OpenQty = this.openPOLineModel[0].OPENQTY;
       this.showScanInput = true;
       if (this.tracking == "S") {
         this.isSerial = true;
         this.setLocalStringForSerial();
-      } else if (this.tracking == "N") { 
+      } else if (this.tracking == "N") {
         this.isNonTrack = true;
         this.showScanInput = false;
       } else if (this.tracking == "B") {
@@ -117,19 +117,19 @@ export class InboundGRPOComponent implements OnInit {
     this.LineId = [];
   }
 
-  setLocalStringForBatch(){
+  setLocalStringForBatch() {
     this.serialNoTitle = this.translate.instant("SerialNo");
-    this.mfrRadioText  = this.translate.instant("MfrBatch");
-    this.sysRadioText  = this.translate.instant("SysBatch");
-    this.scanInputPlaceholder  = this.translate.instant("ScanBatch");
+    this.mfrRadioText = this.translate.instant("MfrBatch");
+    this.sysRadioText = this.translate.instant("SysBatch");
+    this.scanInputPlaceholder = this.translate.instant("ScanBatch");
     this.mfrGridColumnText = this.translate.instant("MfrBatchNo");
-    this.SRBatchColumnText = this.translate.instant("BatchNo") ;
+    this.SRBatchColumnText = this.translate.instant("BatchNo");
   }
-  setLocalStringForSerial(){
+  setLocalStringForSerial() {
     this.serialNoTitle = this.translate.instant("SerialNo");
     this.mfrRadioText = this.translate.instant("MfrSerial");
     this.sysRadioText = this.translate.instant("SysSerial");
-    this.scanInputPlaceholder =  this.translate.instant("ScanSerial");
+    this.scanInputPlaceholder = this.translate.instant("ScanSerial");
     this.mfrGridColumnText = this.translate.instant("MfrSerialNo");
     this.SRBatchColumnText = this.translate.instant("SerialNo");
   }
@@ -200,11 +200,11 @@ export class InboundGRPOComponent implements OnInit {
       }
     );
   }
-  
+
   /**
    * Method to validate entered scan code .
   */
-  onScanCodeChange(){
+  onScanCodeChange() {
     this.onGS1ItemScan()
   }
   /**
@@ -252,8 +252,8 @@ export class InboundGRPOComponent implements OnInit {
     } else {
       return true;
     }
-
   }
+
   addQuantity() {
     if (this.qty == 0 || this.qty == undefined) {
       this.toastr.error('', this.translate.instant("EnterQuantityErrMsg"));
@@ -277,9 +277,9 @@ export class InboundGRPOComponent implements OnInit {
       let autoLots = JSON.parse(localStorage.getItem("primaryAutoLots"));
       if (this.isSerial) {
         while (this.qty > 0 && this.qty != 0) {
-          if(autoLots.length>0 && autoLots[0].AUTOLOT=="Y"){
-          this.addBatchSerialQty(autoLots, this.qty);
-        }
+          if (autoLots.length > 0 && autoLots[0].AUTOLOT == "Y") {
+            this.addBatchSerialQty(autoLots, this.qty);
+          }
           let result = this.recvingQuantityBinArray.find(element => element.searlNo == this.searlNo);
           if (result == undefined) {
             this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, 1, this.RecvbBinvalue, this.expiryDate));
@@ -291,18 +291,18 @@ export class InboundGRPOComponent implements OnInit {
       }
     }
     this.qty = undefined;
-    if(this.recvingQuantityBinArray.length > 0){
+    if (this.recvingQuantityBinArray.length > 0) {
       this.showButton = true;
-    }else{
+    } else {
       this.showButton = false;
     }
   }
 
   batchCalculation(autoLots: AutoLot[], qty: any) {
-    if(autoLots.length>0 && autoLots[0].AUTOLOT=="Y"){
+    if (autoLots.length > 0 && autoLots[0].AUTOLOT == "Y") {
       this.addBatchSerialQty(autoLots, this.qty);
     }
- 
+
     let result = this.recvingQuantityBinArray.find(element => element.searlNo == this.searlNo);
     if (result == undefined) {
       this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, qty, this.RecvbBinvalue, this.expiryDate));
@@ -313,7 +313,7 @@ export class InboundGRPOComponent implements OnInit {
   addNonTrackQty(qty: any) {
     let result = this.recvingQuantityBinArray.find(element => element.Bin == this.RecvbBinvalue);
     if (result == undefined) {
-      this.recvingQuantityBinArray.push(new RecvingQuantityBin("", "",  qty, this.RecvbBinvalue, this.expiryDate));
+      this.recvingQuantityBinArray.push(new RecvingQuantityBin("", "", qty, this.RecvbBinvalue, this.expiryDate));
       this.showButton = true;
     } else {
       this.toastr.error('', this.translate.instant("BinValidation"));
@@ -344,7 +344,7 @@ export class InboundGRPOComponent implements OnInit {
           this.searlNo = this.searlNo + finalString;
           this.LastSerialNumber[0] = this.getAutoLotStringOPR2(finalString);
           this.LineId[0] = autoLots[i].LINEID;
-          
+
         } else {
           var finalString = autoLots[i].STRING;
           this.searlNo = this.searlNo + finalString;
@@ -369,15 +369,15 @@ export class InboundGRPOComponent implements OnInit {
     }
   }
 
-  getAutoLotStringOPR2(autolotString: string):string{
+  getAutoLotStringOPR2(autolotString: string): string {
     var strlength = autolotString.length;
     var numberLength = (parseInt(autolotString)).toString().length;
-    var finlNumber = parseInt(autolotString) - 1
+    var finlNumber = parseInt(autolotString) + 1
     var finalString = this.forwardZero(finlNumber, strlength - numberLength);
     return finalString;
   }
 
-  getAutoLotStringOPR3(autolotString: string):string{
+  getAutoLotStringOPR3(autolotString: string): string {
     var strlength = autolotString.length;
     var numberLength = (parseInt(autolotString)).toString().length;
     var finlNumber = parseInt(autolotString) - 1
@@ -411,14 +411,15 @@ export class InboundGRPOComponent implements OnInit {
     return s;
   }
 
+
   save() {
-    var oSubmitPOLotsObj: any = this.prepareSubmitPurchaseOrder();
-    this.inboundMasterComponent.savePOLots(oSubmitPOLotsObj);
+    var oSubmitPOLotsObj = this.prepareSubmitPurchaseOrder();
+    this.oSubmitPOLotsArray.push(oSubmitPOLotsObj);
+    localStorage.setItem("GRPOReceieveData", JSON.stringify(this.oSubmitPOLotsArray));
     this.inboundMasterComponent.inboundComponent = 2;
   }
 
   receive(e) {
-    debugger
     alert("Do you want to print all labels after submit ?");
     var oSubmitPOLotsObj = this.prepareSubmitPurchaseOrder();
     this.SubmitGoodsReceiptPO(oSubmitPOLotsObj);
@@ -472,7 +473,7 @@ export class InboundGRPOComponent implements OnInit {
         LotNumber: this.recvingQuantityBinArray[iBtchIndex].searlNo, //getUpperTableData.GoodsReceiptLineRow[iBtchIndex].SysSerNo,
         LotQty: this.recvingQuantityBinArray[iBtchIndex].Quantity.toString(),
         SysSerial: "0",
-        ExpireDate: "",//GetSubmitDateFormat(getUpperTableData.GoodsReceiptLineRow[iBtchIndex].EXPDATE), // oCurrentController.GetSubmitDateFormat(oActualGRPOModel.PoDetails[iIndex].ExpireDate),//oActualGRPOModel.PoDetails[iIndex].ExpireDate,
+        ExpireDate: this.GetSubmitDateFormat(this.expiryDate),//GetSubmitDateFormat(getUpperTableData.GoodsReceiptLineRow[iBtchIndex].EXPDATE), // oCurrentController.GetSubmitDateFormat(oActualGRPOModel.PoDetails[iIndex].ExpireDate),//oActualGRPOModel.PoDetails[iIndex].ExpireDate,
         VendorLot: this.recvingQuantityBinArray[iBtchIndex].MfrSerial,
         //NoOfLabels: oActualGRPOModel.PoDetails[iIndex].NoOfLabels,
         //Containers: piContainers,
@@ -494,32 +495,32 @@ export class InboundGRPOComponent implements OnInit {
   }
 
 
-  //   GetSubmitDateFormat (EXPDATE) {
-  //     if (EXPDATE == "" || EXPDATE == null)
-  //         return EXPDATE;
-  //     else {
-  //         var d = new Date(EXPDATE);
-  //         var day;
+  GetSubmitDateFormat(EXPDATE) {
+    if (EXPDATE == "" || EXPDATE == null)
+      return "";
+    else {
+      var d = new Date(EXPDATE);
+      var day;
 
-  //         if (d.getDate().toString().length < 2) {
-  //             day = "0" + d.getDate();
-  //         }
-  //         else {
-  //             day = d.getDate();
-  //         }
+      if (d.getDate().toString().length < 2) {
+        day = "0" + d.getDate();
+      }
+      else {
+        day = d.getDate();
+      }
 
 
-  //         var mth;
-  //         if ((d.getMonth() + 1).toString().length < 2) {
-  //             mth = "0" + (d.getMonth() + 1).toString();
-  //         }
-  //         else {
-  //             mth = d.getMonth() + 1;
-  //         }
-  //         // return day + ":" + mth + ":" + d.getFullYear();
-  //         return mth + "/" + day + "/" + d.getFullYear();
-  //     }
-  // }
+      var mth;
+      if ((d.getMonth() + 1).toString().length < 2) {
+        mth = "0" + (d.getMonth() + 1).toString();
+      }
+      else {
+        mth = d.getMonth() + 1;
+      }
+      // return day + ":" + mth + ":" + d.getFullYear();
+      return mth + "/" + day + "/" + d.getFullYear();
+    }
+  }
 
   SubmitGoodsReceiptPO(oSubmitPOLotsObj: any) {
     this.inboundService.SubmitGoodsReceiptPO(oSubmitPOLotsObj).subscribe(
@@ -707,94 +708,93 @@ export class InboundGRPOComponent implements OnInit {
     );
   }
 
-  onGS1ItemScan(){
-    if(this.ScanInputs!=null && this.ScanInputs!= undefined && 
-      this.ScanInputs!="" && this.ScanInputs!="error decoding QR Code"){
+  onGS1ItemScan() {
+    if (this.ScanInputs != null && this.ScanInputs != undefined &&
+      this.ScanInputs != "" && this.ScanInputs != "error decoding QR Code") {
 
-      }else{
-        // if any message is required to show then show.
-        this.ScanInputs = "";
-        return;
-      }
-      this.openPOLineModel;
-      let piManualOrSingleDimentionBarcode =0;
-      this.inboundService.checkAndScanCode(this.openPOLineModel[0].CardCode,this.ScanInputs).subscribe(
-        (data: any) => {
-          console.log(data);
-          if (data != null) {
-            if (data.Error != null) {
-              if (data.Error == "Invalidcodescan") {
-                piManualOrSingleDimentionBarcode = 1
-                this.toastr.error('', this.translate.instant("InvalidScanCode"));
-                // nothing is done in old code.
-              } else {
-                // some message is handle in else section in old code
-                //return;
-              }
-              return; 
+    } else {
+      // if any message is required to show then show.
+      this.ScanInputs = "";
+      return;
+    }
+    this.openPOLineModel;
+    let piManualOrSingleDimentionBarcode = 0;
+    this.inboundService.checkAndScanCode(this.openPOLineModel[0].CardCode, this.ScanInputs).subscribe(
+      (data: any) => {
+        console.log(data);
+        if (data != null) {
+          if (data.Error != null) {
+            if (data.Error == "Invalidcodescan") {
+              piManualOrSingleDimentionBarcode = 1
+              this.toastr.error('', this.translate.instant("InvalidScanCode"));
+              // nothing is done in old code.
+            } else {
+              // some message is handle in else section in old code
+              //return;
             }
-             console.log("Inapi call section openPoline::",JSON.stringify(this.openPOLineModel));
-            // now check if the  code is for avilable item or not other wise invalid item error.
-            var itemCode=this.openPOLineModel[0].ITEMCODE.toUpperCase()
-            if (piManualOrSingleDimentionBarcode == 0) {
-              if (data[0]!=null && data[0].Value!=null && (data[0].Value.toUpperCase() != itemCode.toUpperCase())) {
-                this.toastr.error('', this.translate.instant("InvalidItemCode"));
-                  this.ScanInputs = "";
-                  return;
-              }
-              
-              var piExpDateExist = 0;
-              //var oGetExpDate = oTextExpiryDate.getValue();
-              var tracking = this.openPOLineModel[0].TRACKING;
-              for (var i = 0; i < data.length; i++) {
-                  if (data[i].Key == '10' || data[i].Key == '21' || data[i].Key == '23') {
-                      this.ScanInputs = data[i].Value;
-                      // make sure ScanInputs variable me puri string aati hai.. to uski value change karne
-                      // se kuch affect na kare.
-                      //scan input field par set karna hai.. ye value 10,21,23 k case me.
-                  }
-                  if (data[i].Key == '15' || data[i].Key == '17') {
-                      var d = data[i].Value.split('/');
-                      var oepxpdt = d[0] + '/' + d[1] + '/' + d[2];
-                      // set value to date field 
-                      this.expiryDate = oepxpdt;
-                      piExpDateExist = 1; //taken this variable for date purpose check if later used.
-                  }
+            return;
+          }
+          console.log("Inapi call section openPoline::", JSON.stringify(this.openPOLineModel));
+          // now check if the  code is for avilable item or not other wise invalid item error.
+          var itemCode = this.openPOLineModel[0].ITEMCODE.toUpperCase()
+          if (piManualOrSingleDimentionBarcode == 0) {
+            if (data[0] != null && data[0].Value != null && (data[0].Value.toUpperCase() != itemCode.toUpperCase())) {
+              this.toastr.error('', this.translate.instant("InvalidItemCode"));
+              this.ScanInputs = "";
+              return;
+            }
 
-                  if (data[i].Key == '30' || data[i].Key == '310' ||
-                              data[i].Key == '315' || data[i].Key == '316' || data[i].Key == '320') {
-                      if (tracking == "S") {
-                          //oAddserial.setValue("1");
-                          this.qty  = 1;
-                      }
-                      else {
-                          this.qty= data[i].Value;
-                      }
-                  }
+            var piExpDateExist = 0;
+            //var oGetExpDate = oTextExpiryDate.getValue();
+            var tracking = this.openPOLineModel[0].TRACKING;
+            for (var i = 0; i < data.length; i++) {
+              if (data[i].Key == '10' || data[i].Key == '21' || data[i].Key == '23') {
+                this.ScanInputs = data[i].Value;
+                // make sure ScanInputs variable me puri string aati hai.. to uski value change karne
+                // se kuch affect na kare.
+                //scan input field par set karna hai.. ye value 10,21,23 k case me.
               }
+              if (data[i].Key == '15' || data[i].Key == '17') {
+                var d = data[i].Value.split('/');
+                var oepxpdt = d[0] + '/' + d[1] + '/' + d[2];
+                // set value to date field 
+                this.expiryDate = oepxpdt;
+                piExpDateExist = 1; //taken this variable for date purpose check if later used.
+              }
+
+              if (data[i].Key == '30' || data[i].Key == '310' ||
+                data[i].Key == '315' || data[i].Key == '316' || data[i].Key == '320') {
+                if (tracking == "S") {
+                  //oAddserial.setValue("1");
+                  this.qty = 1;
+                }
+                else {
+                  this.qty = data[i].Value;
+                }
+              }
+            }
           }
 
-            var index = 0;
-            var selectedMode = "WMS"; // I dont know why we are setting it to wms.
-            let autoLots = JSON.parse(localStorage.getItem("primaryAutoLots"));
-            if ((autoLots[0].AUTOLOT == "Y" || autoLots[0].AUTOLOT == "N" || autoLots[0].AUTOLOT == null)
-             && selectedMode === "WMS" && tracking == "S" && this.ScanInputs != "") {
-              //oAddserial.setValue("1");  I think not needed to set value because we are already setting in above code.
-              this.QuantityField.nativeElement.disabled =true;
-            }
-            else {  
-              //oAddserial.setValue("");
-              this.QuantityField.nativeElement.disabled =false;
-            }
-            this.addQuantity();       
-          }  
-        },
-        error => {
-          console.log("Error: ", error);
-          this.targetWhse = "";
-        });
- 
-  }  
+          var index = 0;
+          var selectedMode = "WMS"; // I dont know why we are setting it to wms.
+          let autoLots = JSON.parse(localStorage.getItem("primaryAutoLots"));
+          if ((autoLots[0].AUTOLOT == "Y" || autoLots[0].AUTOLOT == "N" || autoLots[0].AUTOLOT == null)
+            && selectedMode === "WMS" && tracking == "S" && this.ScanInputs != "") {
+            //oAddserial.setValue("1");  I think not needed to set value because we are already setting in above code.
+            this.QuantityField.nativeElement.disabled = true;
+          }
+          else {
+            //oAddserial.setValue("");
+            this.QuantityField.nativeElement.disabled = false;
+          }
+          this.addQuantity();
+        }
+      },
+      error => {
+        console.log("Error: ", error);
+        this.targetWhse = "";
+      });
+
+  }
 
 }
- 
