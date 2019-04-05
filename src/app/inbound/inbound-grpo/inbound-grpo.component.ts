@@ -431,6 +431,7 @@ export class InboundGRPOComponent implements OnInit {
 
 
   save() {
+
     var oSubmitPOLotsObj = this.prepareSubmitPurchaseOrder();
     this.oSubmitPOLotsArray.push(oSubmitPOLotsObj);
     localStorage.setItem("GRPOReceieveData", JSON.stringify(this.oSubmitPOLotsArray));
@@ -455,7 +456,7 @@ export class InboundGRPOComponent implements OnInit {
       PONumber: this.Ponumber,
       CompanyDBId: localStorage.getItem("CompID"),
       LineNo: this.openPOLineModel[0].LINENUM,
-      ShipQty: 1,
+      ShipQty: this.openPOLineModel[0].RPTQTY,
       OpenQty: this.openPOLineModel[0].OPENQTY,
       WhsCode: localStorage.getItem("whseId"),
       Tracking: this.openPOLineModel[0].TRACKING,
