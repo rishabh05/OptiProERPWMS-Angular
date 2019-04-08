@@ -178,6 +178,7 @@ export class Commonservice {
     localStorage.removeItem('UserId');
     localStorage.removeItem('whseId');
     localStorage.removeItem('Token');
+    localStorage.removeItem('GRPOReceieveData');
     
     this.router.navigateByUrl('/account'); 
 

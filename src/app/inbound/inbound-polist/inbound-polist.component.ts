@@ -32,6 +32,7 @@ export class InboundPolistComponent implements OnInit {
   openPOLinesModel: any[];
   unmatchedPOLinesModel: any[];
   viewLines: any[];
+  public oSavedPOLotsArray: any[] = []; 
 
 
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
@@ -97,7 +98,25 @@ export class InboundPolistComponent implements OnInit {
       );
   }
 
+
+  public oSubmitPOLotsArray: any[] = []; 
+  
+  updateRecQty() {
+    var dataModel = localStorage.getItem("GRPOReceieveData");
+    if(dataModel == null){
+// update rec qty to 0
+    }else{
+      this.oSubmitPOLotsArray = JSON.parse(dataModel);
+     }
+    // this.manageRecords(oSubmitPOLotsObj);
+    // this.oSubmitPOLotsArray.push(oSubmitPOLotsObj);
+    localStorage.setItem("GRPOReceieveData", JSON.stringify(this.oSubmitPOLotsArray));
+    this.inboundMasterComponent.inboundComponent = 2;
+  }
+
   openPOLines() {
+
+
     
     console.log("search click : in open poline method :openPOLines()");
     this.inboundService.GetOpenPOLines(this.futurepo, this.itemCode,
@@ -221,7 +240,7 @@ export class InboundPolistComponent implements OnInit {
       }
     );
   }
-  public oSavedPOLotsArray: any[] = []; 
+  
   updateReceivedQtyForSavedItems() {
     this.oSavedPOLotsArray = JSON.parse(localStorage.getItem("GRPOReceieveData"));
     if (this.oSavedPOLotsArray != undefined && this.oSavedPOLotsArray != null &&

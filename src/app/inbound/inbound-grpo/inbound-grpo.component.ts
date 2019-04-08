@@ -448,14 +448,35 @@ export class InboundGRPOComponent implements OnInit {
 
 
   save() {
-
     var oSubmitPOLotsObj = this.prepareSubmitPurchaseOrder();
+    var dataModel = localStorage.getItem("GRPOReceieveData");
+    if(dataModel == null){
+      this.oSubmitPOLotsArray = [];
+    }else{
+      this.oSubmitPOLotsArray = JSON.parse(dataModel);
+    }
+    this.manageRecords(oSubmitPOLotsObj);
     this.oSubmitPOLotsArray.push(oSubmitPOLotsObj);
     localStorage.setItem("GRPOReceieveData", JSON.stringify(this.oSubmitPOLotsArray));
     this.inboundMasterComponent.inboundComponent = 2;
   }
 
+  manageRecords(oSubmitPOLotsObj: any){
+    var size = this.oSubmitPOLotsArray.length;
+    for(var i=0; i<size; i++){
+      if(this.oSubmitPOLotsArray[i].POReceiptLots.PONumber == oSubmitPOLotsObj.PONumber && 
+        this.oSubmitPOLotsArray[i].POReceiptLots.ItemCode == oSubmitPOLotsObj.ItemCode && 
+        this.oSubmitPOLotsArray[i].POReceiptLots.LineNo == oSubmitPOLotsObj.LineNo){
+          this.oSubmitPOLotsArray.splice(i, 1); 
+      }
+    }
+  }
+
   receive(e) {
+    var dataModel = localStorage.getItem("GRPOReceieveData");
+    if(dataModel != null){
+      alert("Do you want submit all the data or current record?");
+    }
     alert("Do you want to print all labels after submit ?");
     var oSubmitPOLotsObj = this.prepareSubmitPurchaseOrder();
     this.SubmitGoodsReceiptPO(oSubmitPOLotsObj);
@@ -473,7 +494,7 @@ export class InboundGRPOComponent implements OnInit {
       PONumber: this.Ponumber,
       CompanyDBId: localStorage.getItem("CompID"),
       LineNo: this.openPOLineModel[0].LINENUM,
-      ShipQty: this.openPOLineModel[0].RPTQTY,
+      ShipQty: this.openPOLineModel[0].RPTQTY.toString(),
       OpenQty: this.openPOLineModel[0].OPENQTY,
       WhsCode: localStorage.getItem("whseId"),
       Tracking: this.openPOLineModel[0].TRACKING,

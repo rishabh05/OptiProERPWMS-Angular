@@ -18,7 +18,8 @@ export class InboundDetailsComponent implements OnInit {
   lookupfor: string;
   VendCode: string;
   VendName: string;
-  
+  showGRPOGridAndBtn: boolean = false;
+  public oSubmitPOLotsArray: any[] = [];
 
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent) {
@@ -30,6 +31,53 @@ export class InboundDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.dateAvailableToReceieve();
+  }
+
+  dateAvailableToReceieve() {
+    var dataModel = localStorage.getItem("GRPOReceieveData");
+    if (dataModel == null) {
+      this.showGRPOGridAndBtn = false;
+    } else {
+      this.oSubmitPOLotsArray = JSON.parse(dataModel);
+      this.showGRPOGridAndBtn = true;
+    }
+  }
+
+  onRowSelection(){
+    this.inboundMasterComponent.inboundComponent = 2;
+  }
+
+  receive() {
+    for(var i=0; i<this.oSubmitPOLotsArray.length; i++){
+      var oSubmitPOLotsObj = this.oSubmitPOLotsArray[i];
+      this.SubmitGoodsReceiptPO(oSubmitPOLotsObj);
+    }
+  }
+
+  SubmitGoodsReceiptPO(oSubmitPOLotsObj: any) {
+    this.inboundService.SubmitGoodsReceiptPO(oSubmitPOLotsObj).subscribe(
+      (data: any) => {
+        console.log(data);
+        if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
+          // alert("Goods Receipt PO generated successfully with Doc No: " + data.DocEntry);
+          this.toastr.success('', this.translate.instant("GRPOSuccessMessage" + data[0].DocEntry));
+          
+        } else if (data[0].ErrorMsg == "7001") {
+          this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+            this.translate.instant("CommonSessionExpireMsg"));
+          return;
+        }
+        else {
+          // alert(data[0].ErrorMsg);
+          this.toastr.error('', data[0].ErrorMsg);
+        }
+      },
+      error => {
+        console.log("Error: ", error);
+        // alert("fail");
+      }
+    );
   }
 
   onVendorLookupClick() {
@@ -44,7 +92,7 @@ export class InboundDetailsComponent implements OnInit {
             return;
           }
           this.showLookupLoader = false;
-          this.serviceData = data.Table;  
+          this.serviceData = data.Table;
           this.lookupfor = "VendorList";
         } else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
@@ -99,17 +147,17 @@ export class InboundDetailsComponent implements OnInit {
   }
 
   public onNextClick() {
-    if(this.VendCode != undefined && this.VendCode !=""){
+    if (this.VendCode != undefined && this.VendCode != "") {
       this.inboundMasterComponent.selectedVernder = this.VendCode;
       this.inboundMasterComponent.inboundComponent = 2;
     }
-    else{
+    else {
       this.toastr.error('', this.translate.instant("SelectVendorValidateMsg"));
     }
-    
+
   }
 
-  OnCancelClick(){
+  OnCancelClick() {
     this.router.navigate(['home/dashboard']);
   }
 }
