@@ -429,6 +429,7 @@ export class InboundGRPOComponent implements OnInit {
     // .catch(() => console.log('User dismissed the dialog (e.g., by using ESC, clicking the cross icon, or clicking outside the dialog)'));
     // this.DeleteRowClick(rowindex,gridData); 
   }
+
   getConfirmDialogValue($event){
     console.log("Event value",$event);
     this.showConfirmDialog = false;
@@ -445,7 +446,6 @@ export class InboundGRPOComponent implements OnInit {
     while (s.length < size) s = "0" + s;
     return s;
   }
-
 
   save() {
     var oSubmitPOLotsObj = this.prepareSubmitPurchaseOrder();
@@ -565,8 +565,6 @@ export class InboundGRPOComponent implements OnInit {
       else {
         day = d.getDate();
       }
-
-
       var mth;
       if ((d.getMonth() + 1).toString().length < 2) {
         mth = "0" + (d.getMonth() + 1).toString();
@@ -611,7 +609,11 @@ export class InboundGRPOComponent implements OnInit {
   DeleteRowClick(rowindex, gridData: any) {
     this.recvingQuantityBinArray.splice(rowindex, 1);
     gridData.data = this.recvingQuantityBinArray;
-
+    if (this.recvingQuantityBinArray.length > 0) {
+      this.showButton = true;
+    } else {
+      this.showButton = false;
+    }
   }
 
 
