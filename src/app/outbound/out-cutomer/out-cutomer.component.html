@@ -10,39 +10,71 @@
 
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Customer'|translate}}</label>
-                        <div class="col-sm-9">
-                            <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" name ='customerCode' [(ngModel)]="customerCode" placeholder="{{'Customer'|translate}}">
+                        <div class="col-sm-9">                            
+                            <div class="input-group input-group-sm"  >
+                                <input [disabled]='orderCollection!=undefined && orderCollection!=null && orderCollection.length>0'  type="text" class="form-control form-control-sm" name='customerCode' [(ngModel)]="customerCode"
+                                    placeholder="{{'Customer'|translate}}">
                                 <div class="input-group-append">
-                                    <button class="k-button k-primary btn" (click)="openCustomerLookup()" type="button">
+                                    <button [disabled]='orderCollection!=undefined && orderCollection!=null && orderCollection.length>0' class="k-button k-primary btn" (click)="openCustomerLookup()" type="button">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="form-group row" *ngIf="customerName!=undefined && customerName!=''">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Name'|translate}}</label>
                         <div class="col-sm-9">
-                           {{customerName}}
+                            {{customerName}}
                         </div>
                     </div>
                 </div>
             </div>
+
+            <div class="row"  *ngIf='orderCollection!==undefined && orderCollection!==null && orderCollection.length>0'>
+                <div class="col-12">
+                    
+                    <div>
+                        <!-- (selectionChange)="openPOByUOM($event,soItemsDetail.ITEMCODE)" -->
+                        <kendo-grid class="no-shadow" [kendoGridBinding]="orderCollection" [resizable]="false"
+                            [pageSize]="50" [pageable]="true" [sortable]="true" [filterable]=isColumnFilter
+                            [groupable]=isColumnGroup [columnMenu]="{ columnChooser: false }" [height]=gridHeight
+                            [selectable]="true" #gridItem>
+
+                            <kendo-grid-column field="DOCNUM" title="Order No" ></kendo-grid-column>
+                            <kendo-grid-column field="DOCNUM"  [width]="80" title="{{'Delete'|translate}}"
+                            >
+                            <ng-template kendoGridCellTemplate let-idx="rowIndex">
+                                <button id="removeSelectedMeterial" (click)="removeSelectedMeterial(idx,gridSelectedMeterial)"
+                                    class="k-button-icon k-button"> 
+                                    <span class="k-icon k-i-delete" role="presentation"></span></button>
+                            </ng-template>
+                        </kendo-grid-column>
+                        </kendo-grid>
+
+                    </div>
+                </div>
+            </div>
+
         </div>
         <div class="fix-footer-btnBar">
             <div class="col-sm-12 col-12">
                 <hr />
             </div>
             <div class="col-sm-12 col-12">
-                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="cancel()"><span class="k-icon k-i-close-outline"
-                        role="presentation"></span> {{'Cancel'|translate}}</button>
-                <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" [disabled]="!customerCode"  (click)="openCustSO()"
-                    roterLink="binTransfer" skipLocationChange><i class="opti-icon-arrow-next"></i></button>
+                <button type="button" (click)="prepareDeleiveryCollection()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
+                        class="k-icon k-i-check" role="presentation"></span> {{'Deleiver'|translate}}</button>
+                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="cancel()"><span
+                        class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" [disabled]="!customerCode"
+                    (click)="openCustSO()" roterLink="binTransfer" skipLocationChange><i class="opti-icon-arrow-next"></i></button>
+
             </div>
         </div>
     </form>
+
+
 </div>
 
 <span *ngIf="showLookup==true">

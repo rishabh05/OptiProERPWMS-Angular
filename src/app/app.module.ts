@@ -17,6 +17,7 @@ import { DialogsModule } from '@progress/kendo-angular-dialog';
 import { FormsModule } from '@angular/forms';
 import { OutboundModule } from './outbound/outbound.module';
 import { InputsModule } from '@progress/kendo-angular-inputs';
+import { UniquePipe } from './unique.pipe';
 
 
 export function createTranslateLoader(http: HttpClient) {
@@ -27,6 +28,7 @@ export function createTranslateLoader(http: HttpClient) {
   declarations: [
     AppComponent,
     LandingComponent,
+    UniquePipe,
     
     
   ],

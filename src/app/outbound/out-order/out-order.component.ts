@@ -6,11 +6,7 @@ import { Commonservice } from 'src/app/services/commonservice.service';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
 import { OutboundData } from 'src/app/models/outbound/outbound-data';
-import { CodeNode } from 'source-list-map';
 import { RowClassArgs } from '@progress/kendo-angular-grid';
-
-
-
 
 @Component({
   selector: 'app-out-order',
@@ -40,7 +36,6 @@ export class OutOrderComponent implements OnInit {
 
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
 
-    console.log("OutboundData:", outboundData);
 
     if (outboundData != undefined && outboundData != '') {
       this.outbound = JSON.parse(outboundData);
@@ -148,8 +143,25 @@ export class OutOrderComponent implements OnInit {
     if (outboundData != undefined && outboundData != '') {
       this.outbound = JSON.parse(outboundData);
 
-      let deleivery: any = { OrderData: this.outbound.OrderData, MeterialData: this.outbound.TempSavedData };
-      this.outbound.DeleiveryCollection.push(deleivery)
+      // this.outbound.DeleiveryCollection = this.outbound.DeleiveryCollection.filter(t => t.Item.DOCNUM !== this.outbound.OrderData.DOCNUM);
+      //this.outbound.DeleiveryCollection=this.outbound.DeleiveryCollection.
+      let deleivery: any[] = this.outbound.TempMeterials;
+
+      for (let index = 0; index < this.outbound.DeleiveryCollection.length; index++) {
+        const d = this.outbound.DeleiveryCollection[index];
+        for (let j = 0; j < deleivery.length; j++) {
+          const element = deleivery[j];
+          if (d.Item.DOCENTRY == element.Item.DOCENTRY && d.Order.DOCNUM == element.Order.DOCNUM) {
+             deleivery.slice(index, 1);
+          }
+        }
+      }
+
+
+      if (deleivery !== undefined && deleivery !== null && deleivery.length > 0) {
+        deleivery.forEach(d => this.outbound.DeleiveryCollection.push(d));
+      }
+
 
       localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
       this.openOutboundCustomer();
