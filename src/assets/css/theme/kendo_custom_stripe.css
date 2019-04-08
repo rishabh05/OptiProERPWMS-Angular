@@ -3,6 +3,7 @@
 /*****************************************************************************************/
 :root {
   --kendo-primary-color: #1fa2ff;
+  --kendo-primary-light-color: #51b5fd;
   --kendo-light-primary-hover-color: rgba(31, 162, 255, 0.2);
   --kendo-secondry-color: #9dd0f3; 
   --kendo-white-color: #fff;
@@ -76,10 +77,9 @@ button{
     border-color: var(--kendo-primary-color);
 }
 
-.k-grid-header thead tr th a.k-link,
-  .k-indicator-container,
-  a, h1, h2, h3, h4, h5, h6,
-  .k-grid-header .k-header{
+
+.k-indicator-container,
+  a, h1, h2, h3, h4, h5, h6{
       color: var(--kendo-primary-color);
   }
 
@@ -105,6 +105,7 @@ body .k-grid tr.k-grid-norecords td{
   text-align: center;
   font-size: 16px;
 }
+
   /*****************************************************************************************/
   /*********************************** END OUR CUSTOM CODE *********************************/
   /*****************************************************************************************/
@@ -5250,7 +5251,28 @@ body .k-grid tr.k-grid-norecords td{
   .k-tabstrip-right .k-item.k-state-hover,
   .k-tabstrip-right .k-item.k-state-active {
     border-left-color: transparent; }
-  
+
+  .k-grid-header, .k-grid-header .k-header {
+    background-color: var(--kendo-primary-light-color);
+    color:#fff;
+  }
+  .k-grid-header .k-header:first-child {
+    border-radius: 4px 0 0 0;
+  }
+  .k-grid-header .k-header:last-child {
+    border-radius: 0 4px 0 0;
+  }
+  .k-grid-toolbar + .k-grid-aria-root .k-grid-header .k-header, 
+  .k-grid-toolbar + .k-grid-aria-root .k-grid-header{
+    border-radius:0 !important;
+  }
+  .k-grid-header .k-header > .k-link{
+    color: #fff;
+  }
+  .k-grid-header .k-i-sort-asc-sm, .k-grid-header .k-i-sort-desc-sm,
+   .k-grid-header .k-grid-filter span{
+    color:#fff;
+  }
   .k-toolbar {
     padding: 0.375rem 0.375rem;
     border-width: 1px;
@@ -12764,3 +12786,4 @@ body .k-grid tr.k-grid-norecords td{
   background-color: #1fa2ff;
   box-shadow: 0 0 1rem rgba(31, 162, 255, 0.25);
 }
+
