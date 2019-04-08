@@ -450,7 +450,7 @@ export class InboundGRPOComponent implements OnInit {
   save() {
     var oSubmitPOLotsObj = this.prepareSubmitPurchaseOrder();
     var dataModel = localStorage.getItem("GRPOReceieveData");
-    if(dataModel == null){
+    if(dataModel == null|| dataModel == undefined || dataModel == ""){
       this.oSubmitPOLotsArray = [];
     }else{
       this.oSubmitPOLotsArray = JSON.parse(dataModel);
@@ -462,13 +462,13 @@ export class InboundGRPOComponent implements OnInit {
   }
 
   manageRecords(oSubmitPOLotsObj: any){
-    var size = this.oSubmitPOLotsArray.length;
+    var size = this.oSubmitPOLotsArray.length;  
     for(var i=0; i<size; i++){
-      if(this.oSubmitPOLotsArray[i].POReceiptLots.PONumber == oSubmitPOLotsObj.PONumber && 
-        this.oSubmitPOLotsArray[i].POReceiptLots.ItemCode == oSubmitPOLotsObj.ItemCode && 
-        this.oSubmitPOLotsArray[i].POReceiptLots.LineNo == oSubmitPOLotsObj.LineNo){
+      if(this.oSubmitPOLotsArray[i].POReceiptLots.PONumber == oSubmitPOLotsObj.POReceiptLots[0].PONumber && 
+        this.oSubmitPOLotsArray[i].POReceiptLots.ItemCode == oSubmitPOLotsObj.POReceiptLots[0].ItemCode && 
+        this.oSubmitPOLotsArray[i].POReceiptLots.LineNo == oSubmitPOLotsObj.POReceiptLots[0].LineNo){
           this.oSubmitPOLotsArray.splice(i, 1); 
-      }
+      } 
     }
   }
 
