@@ -17,7 +17,7 @@ import { DialogsModule } from '@progress/kendo-angular-dialog';
 import { FormsModule } from '@angular/forms';
 import { OutboundModule } from './outbound/outbound.module';
 import { InputsModule } from '@progress/kendo-angular-inputs';
-import { ComonConfirmDialogComponent } from './common/comon-confirm-dialog/comon-confirm-dialog.component';
+
 
 
 export function createTranslateLoader(http: HttpClient) {
@@ -28,9 +28,6 @@ export function createTranslateLoader(http: HttpClient) {
   declarations: [
     AppComponent,
     LandingComponent,
-    ComonConfirmDialogComponent,
-    
-    
   ],
   imports: [
     BrowserModule,

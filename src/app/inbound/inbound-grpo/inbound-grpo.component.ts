@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ComponentFactory } from '@angular/core';
 import { InboundMasterComponent } from 'src/app/inbound/inbound-master.component';
 import { Router } from '../../../../node_modules/@angular/router';
 import { InboundService } from 'src/app/services/inbound.service';
@@ -11,7 +11,7 @@ import { RecvingQuantityBin } from 'src/app/models/Inbound/RecvingQuantityBin';
 import { AutoLot } from 'src/app/models/Inbound/AutoLot';
 import { ISubscription } from 'rxjs/Subscription';
 import { ConfirmdialogService } from 'src/app/common/confirm-dialog/confirmdialog.service';
-
+import {ConfirmDialogComponent} from 'src/app/common/confirm-dialog/confirm-dialog/confirm-dialog.component';
 @Component({
   selector: 'app-inbound-grpo',
   templateUrl: './inbound-grpo.component.html',
@@ -19,6 +19,7 @@ import { ConfirmdialogService } from 'src/app/common/confirm-dialog/confirmdialo
 })
 export class InboundGRPOComponent implements OnInit {
 
+  dialogMsg:string="Do you want to delete?"
   openPOLineModel: OpenPOLinesModel[] = [];
   Ponumber: any;
   OpenQty: number;
@@ -32,7 +33,7 @@ export class InboundGRPOComponent implements OnInit {
   defaultRecvBin: boolean = false;
   serviceData: any[];
   lookupfor: string;
-  showLookupLoader = true;
+  showLookupLoader = false;
   viewLines: any[];
   //getLookupValue: any[];
   public value: Date = new Date();
@@ -66,6 +67,7 @@ export class InboundGRPOComponent implements OnInit {
   LastSerialNumber: any[];
   LineId: any[];
   previousReceivedQty:number = 0;
+  confirmDialogCmponentFactory: ComponentFactory<ConfirmDialogComponent>;
   @ViewChild('Quantity') QuantityField;
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent, private confDialogService: ConfirmdialogService) {
@@ -110,7 +112,7 @@ export class InboundGRPOComponent implements OnInit {
       } else {
         this.IsQCRequired = false;
       }
-
+ 
       this.getUOMList();
       if (this.RecvbBinvalue == "") {
         this.defaultRecvBin = true;
@@ -404,22 +406,37 @@ export class InboundGRPOComponent implements OnInit {
   }
 
   deleteButtonConfirmation(rowindex, gridData: any) {
-    if (confirm()) {
-      console.log("Implement delete functionality here");
-      this.DeleteRowClick(rowindex, gridData);
-    }
-  }
+    // if (confirm()) {
+    //   console.log("Implement delete functionality here");
+    //   this.DeleteRowClick(rowindex, gridData);
 
+    // }
+  }
+  showConfirmDialog:boolean;
+  rowindexForDelete:any;
+  gridDataAfterDelete:any[];
   public openConfirmationDialog(rowindex, gridData: any) {
 
-    if (confirm("Are you sure to delete ?")) {
-      this.DeleteRowClick(rowindex, gridData);
-    }
+    this.showConfirmDialog = true;
+    this.rowindexForDelete = rowindex;
+    this.gridDataAfterDelete = gridData;
+    // if (confirm("Are you sure to delete ?")) {
+    //   this.DeleteRowClick(rowindex, gridData);
+    // }
 
     // this.confDialogService.confirm('Please confirm..', 'Do you really want to ... ?')
     // .then((confirmed) => console.log('User confirmed:', confirmed))
     // .catch(() => console.log('User dismissed the dialog (e.g., by using ESC, clicking the cross icon, or clicking outside the dialog)'));
     // this.DeleteRowClick(rowindex,gridData); 
+  }
+  getConfirmDialogValue($event){
+    console.log("Event value",$event);
+    this.showConfirmDialog = false;
+    if($event==true){
+      this.DeleteRowClick(this.rowindexForDelete,this.gridDataAfterDelete); 
+    }else{
+      //nothing to do.
+    }
   }
 
   forwardZero(num: number, size: number): string {

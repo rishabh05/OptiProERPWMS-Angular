@@ -7,7 +7,7 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 })
 export class ComonConfirmDialogComponent implements OnInit {
 
-  @Input() titleMessage: any;
+  @Input() titleMessage: any; 
   @Input() yesButtonText: any;
   @Input() noButtonText: any;
   @Output() isYesClick = new EventEmitter();

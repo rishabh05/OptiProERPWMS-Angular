@@ -30,6 +30,7 @@ export class InboundPolistComponent implements OnInit {
   autoLot: any[];
   openPOLineModel: any;
   openPOLinesModel: any[];
+  unmatchedPOLinesModel: any[];
   viewLines: any[];
 
 
@@ -113,6 +114,7 @@ export class InboundPolistComponent implements OnInit {
             this.NonItemsDetail = [];
             this.SerialItemsDetail = [];
             this.openPOLinesModel = data.Table;
+            this.unmatchedPOLinesModel = data.Table;
             this.updateReceivedQtyForSavedItems()
             this.openPOLinesModel.forEach(element => {
               if (element.TRACKING == "N") {
@@ -232,10 +234,23 @@ export class InboundPolistComponent implements OnInit {
             this.oSavedPOLotsArray[j].POReceiptLots[0].PONumber == this.poCode &&
             this.oSavedPOLotsArray[j].POReceiptLots[0].ItemCode == this.openPOLinesModel[i].ITEMCODE) {
             this.openPOLinesModel[i].RPTQTY = this.oSavedPOLotsArray[j].POReceiptLots[0].ShipQty;
+            this.unmatchedPOLinesModel.slice(i,1);
           }
-        }
+        } 
       }
     }
+    // else{
+    //   if(this.oSavedPOLotsArray != undefined || this.oSavedPOLotsArray != null ||
+    //     this.oSavedPOLotsArray.length == 0 ){
+    //       for(var k = 0; k<this.openPOLinesModel.length; k++){
+    //         this.openPOLinesModel[k].RPTQTY = 0;
+    //       }
+    //     }
+    // }
+    console.log("unmatchedPOlines items size:",this.unmatchedPOLinesModel.length);
+    console.log("unmatchedPOlines items :",JSON.stringify(this.unmatchedPOLinesModel));
+    console.log("OpenPOlines items size:",this.unmatchedPOLinesModel.length);
+    console.log("OpenPOlines items :",JSON.stringify(this.openPOLineModel));
   }  
 
   onCancelClick() {

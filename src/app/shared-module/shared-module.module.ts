@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LookupComponent } from '../common/lookup/lookup.component';
+import { ComonConfirmDialogComponent } from '../common/comon-confirm-dialog/comon-confirm-dialog.component';
 import { GridModule } from '@progress/kendo-angular-grid';
 import { DialogsModule } from '@progress/kendo-angular-dialog';
 import { FormsModule } from '@angular/forms';
@@ -13,8 +14,8 @@ import {ConfirmdialogService} from '../common/confirm-dialog/confirmdialog.servi
     FormsModule,
     DialogsModule],
     providers:[ ConfirmdialogService],
-  declarations: [ LookupComponent,ConfirmDialogComponent ],
+  declarations: [ LookupComponent,ConfirmDialogComponent,ComonConfirmDialogComponent ],
   entryComponents: [ ConfirmDialogComponent ],
-  exports:      [ LookupComponent,ConfirmDialogComponent ]
+  exports:      [ LookupComponent,ConfirmDialogComponent,ComonConfirmDialogComponent ]
 })
 export class SharedModule { }

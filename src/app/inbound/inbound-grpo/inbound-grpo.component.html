@@ -215,6 +215,10 @@
     </form>
 </div>
 
-<span [hidden]="showLookupLoader">
+<span *ngIf="showLookupLoader">
     <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
+</span>
+<span *ngIf="showConfirmDialog">
+<app-comon-confirm-dialog [titleMessage]="dialogMsg" 
+[yesButtonText]='yes' [noButtonText]='no' (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
 </span>
