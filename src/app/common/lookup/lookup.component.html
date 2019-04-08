@@ -1,5 +1,5 @@
 <!-- Grid Modal-->
-<kendo-dialog  *ngIf="dialogOpened" (close)="close_kendo_dialog()" [minWidth]="750" [width]="750">
+<kendo-dialog [width]="750"  *ngIf="dialogOpened" (close)="close_kendo_dialog()">
 
     <kendo-dialog-titlebar>
         {{lookupTitle}}

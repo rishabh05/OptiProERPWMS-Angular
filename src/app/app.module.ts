@@ -19,6 +19,7 @@ import { OutboundModule } from './outbound/outbound.module';
 import { InputsModule } from '@progress/kendo-angular-inputs';
 
 
+
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -27,8 +28,6 @@ export function createTranslateLoader(http: HttpClient) {
   declarations: [
     AppComponent,
     LandingComponent,
-    
-    
   ],
   imports: [
     BrowserModule,
