@@ -30,7 +30,9 @@ export class InboundPolistComponent implements OnInit {
   autoLot: any[];
   openPOLineModel: any;
   openPOLinesModel: any[];
+  unmatchedPOLinesModel: any[];
   viewLines: any[];
+  public oSavedPOLotsArray: any[] = []; 
 
 
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
@@ -96,12 +98,31 @@ export class InboundPolistComponent implements OnInit {
       );
   }
 
+
+  public oSubmitPOLotsArray: any[] = []; 
+  
+  updateRecQty() {
+    var dataModel = localStorage.getItem("GRPOReceieveData");
+    if(dataModel == null){
+// update rec qty to 0
+    }else{
+      this.oSubmitPOLotsArray = JSON.parse(dataModel);
+     }
+    // this.manageRecords(oSubmitPOLotsObj);
+    // this.oSubmitPOLotsArray.push(oSubmitPOLotsObj);
+    localStorage.setItem("GRPOReceieveData", JSON.stringify(this.oSubmitPOLotsArray));
+    this.inboundMasterComponent.inboundComponent = 2;
+  }
+
   openPOLines() {
-    console.log("search click : in open poline method");
+
+
+    
+    console.log("search click : in open poline method :openPOLines()");
     this.inboundService.GetOpenPOLines(this.futurepo, this.itemCode,
       this.poCode).subscribe(
         (data: any) => {
-          console.log("api call resonse section");
+          console.log("api call resonse section :openPOLines()");
           console.log(data);
           this.showNonTrackItem = false;
           this.showBatchTrackItem = false;
@@ -112,6 +133,8 @@ export class InboundPolistComponent implements OnInit {
             this.NonItemsDetail = [];
             this.SerialItemsDetail = [];
             this.openPOLinesModel = data.Table;
+            this.unmatchedPOLinesModel = data.Table;
+            this.updateReceivedQtyForSavedItems()
             this.openPOLinesModel.forEach(element => {
               if (element.TRACKING == "N") {
                 this.NonItemsDetail.push(element);
@@ -133,12 +156,13 @@ export class InboundPolistComponent implements OnInit {
               this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
-          console.log("api call resonse section end of if");
+          console.log("api call resonse section end of if :openPOLines()");
         },
         error => {
           console.log("Error: ", error);
         }
       );
+      
   }
 
   OnPOChange() {
@@ -206,6 +230,7 @@ export class InboundPolistComponent implements OnInit {
         localStorage.setItem("primaryAutoLots",JSON.stringify(this.autoLot));
         this.openPOLineModel = this.openPOLinesModel.find(e => e.ITEMCODE == itemCode);
         if (this.openPOLineModel != null) {
+          this.openPOLineModel.RPTQTY = 0;
           this.inboundMasterComponent.setClickedItemDetail(this.openPOLineModel);
           this.inboundMasterComponent.inboundComponent = 3;
         } 
@@ -215,6 +240,37 @@ export class InboundPolistComponent implements OnInit {
       }
     );
   }
+  
+  updateReceivedQtyForSavedItems() {
+    this.oSavedPOLotsArray = JSON.parse(localStorage.getItem("GRPOReceieveData"));
+    if (this.oSavedPOLotsArray != undefined && this.oSavedPOLotsArray != null &&
+      this.oSavedPOLotsArray.length > 0 && this.openPOLinesModel != undefined &&
+      this.openPOLinesModel != null && this.openPOLinesModel.length > 0) {
+      for (var i = 0; i < this.openPOLinesModel.length; i++) {
+        for (var j = 0; j < this.oSavedPOLotsArray.length; j++) {
+          if (this.oSavedPOLotsArray[j].POReceiptLots != undefined && this.oSavedPOLotsArray[j].POReceiptLots != undefined
+            && this.oSavedPOLotsArray[j].POReceiptLots.length > 0 &&
+            this.oSavedPOLotsArray[j].POReceiptLots[0].PONumber == this.poCode &&
+            this.oSavedPOLotsArray[j].POReceiptLots[0].ItemCode == this.openPOLinesModel[i].ITEMCODE) {
+            this.openPOLinesModel[i].RPTQTY = this.oSavedPOLotsArray[j].POReceiptLots[0].ShipQty;
+            this.unmatchedPOLinesModel.slice(i,1);
+          }
+        } 
+      }
+    }
+    // else{
+    //   if(this.oSavedPOLotsArray != undefined || this.oSavedPOLotsArray != null ||
+    //     this.oSavedPOLotsArray.length == 0 ){
+    //       for(var k = 0; k<this.openPOLinesModel.length; k++){
+    //         this.openPOLinesModel[k].RPTQTY = 0;
+    //       }
+    //     }
+    // }
+    console.log("unmatchedPOlines items size:",this.unmatchedPOLinesModel.length);
+    console.log("unmatchedPOlines items :",JSON.stringify(this.unmatchedPOLinesModel));
+    console.log("OpenPOlines items size:",this.unmatchedPOLinesModel.length);
+    console.log("OpenPOlines items :",JSON.stringify(this.openPOLineModel));
+  }  
 
   onCancelClick() {
     this.inboundMasterComponent.inboundComponent = 1;

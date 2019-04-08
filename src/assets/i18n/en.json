@@ -35,8 +35,6 @@
   "ItemLabel": "Item Label",
   "InventoryEnquiry": "Inventory Enquiry",
   "SpotCount": "Spot Count",
-  "BatchNo": "Batch No",
-  "Batch": "Batch",
   "FromBin": "From Bin",
   "ToBin": "To Bin",
   "OnHandQty": "OnHand Qty.",
@@ -194,7 +192,8 @@
   "ScanBatch": "Scan Batch",
   "BatchNo": "Batch No.",
   "MfrBatchNo":"Mfr Batch No.",
-  "InvalidScanCode": "Invalid scan code!"
+  "InvalidScanCode": "Invalid scan code!",
+  "PurchaseOrderNumber" :"Purchase Order Number"
 
 
    

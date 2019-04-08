@@ -26,3 +26,15 @@ body button + button:not(:last-child){
     position: relative;
     z-index: 1;
 }
+
+button.btn.btn-outline-secondary.btn-sm.btn-transparent.btn-icon {
+    border-color: #bfbfbf;
+    color: #ffffff;
+    border-radius: 5px;
+    background-color: #c3c3c3;
+    &:hover, &:active, &:focus {
+        border-color: #afaeae;
+        color: #ffffff;
+        background-color: #a9a8a8;
+    }
+}

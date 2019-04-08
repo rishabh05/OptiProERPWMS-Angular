@@ -124,8 +124,7 @@ export class InboundService {
   }
 
   SubmitGoodsReceiptPO(oSubmitPOLots: any): Observable<any> {
-    var jObject = { GoodsReceiptToken: JSON.stringify(oSubmitPOLots) };
-    
+    var jObject = { GoodsReceiptToken: JSON.stringify(oSubmitPOLots) };    
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/SubmitGoodsReceiptPO", jObject, this.httpOptions);
   }
 

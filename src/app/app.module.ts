@@ -20,6 +20,7 @@ import { InputsModule } from '@progress/kendo-angular-inputs';
 import { UniquePipe } from './unique.pipe';
 
 
+
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -28,9 +29,6 @@ export function createTranslateLoader(http: HttpClient) {
   declarations: [
     AppComponent,
     LandingComponent,
-    UniquePipe,
-    
-    
   ],
   imports: [
     BrowserModule,

@@ -75,7 +75,7 @@ body{
     button[disabled], .k-button[disabled], [disabled] .k-button{
         opacity: 0.2;
         outline: none;
-        cursor: default;
+        cursor: not-allowed;
         filter: grayscale(0.1);
         pointer-events: none;
         box-shadow: none;

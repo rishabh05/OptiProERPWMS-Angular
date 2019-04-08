@@ -88,7 +88,7 @@ export class LookupComponent implements OnInit {
   }
   ngOnInit() {
   }
-
+ 
   async ngOnChanges(): Promise<void> {
     
     if (this.lookupfor == "toWhsList") {

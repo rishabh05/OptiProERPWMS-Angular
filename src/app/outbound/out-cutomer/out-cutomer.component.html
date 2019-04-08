@@ -26,7 +26,9 @@
                     <div class="form-group row" *ngIf="customerName!=undefined && customerName!=''">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Name'|translate}}</label>
                         <div class="col-sm-9">
-                            {{customerName}}
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control form-control-sm" name="customerName" value="{{customerName}}" [disabled]="true">
+                            </div>
                         </div>
                     </div>
                 </div>
