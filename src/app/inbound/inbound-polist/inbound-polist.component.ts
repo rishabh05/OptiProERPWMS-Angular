@@ -106,9 +106,9 @@ export class InboundPolistComponent implements OnInit {
 // update rec qty to 0
     }else{
       this.oSubmitPOLotsArray = JSON.parse(dataModel);
-    }
-    this.manageRecords(oSubmitPOLotsObj);
-    this.oSubmitPOLotsArray.push(oSubmitPOLotsObj);
+     }
+    // this.manageRecords(oSubmitPOLotsObj);
+    // this.oSubmitPOLotsArray.push(oSubmitPOLotsObj);
     localStorage.setItem("GRPOReceieveData", JSON.stringify(this.oSubmitPOLotsArray));
     this.inboundMasterComponent.inboundComponent = 2;
   }

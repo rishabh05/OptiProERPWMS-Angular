@@ -23,7 +23,7 @@
             </li> -->
 
             <li id="PUR" (click)="listClick($event, 'inbound')" [ngClass]="{'active': selectedItem == 'inbound'}">
-                <a roterLink="inbound">
+                <a roterLink="inbound" (click)="onInboundClick()">
                     <i class="opti-icon-inbound-order" [style.color]="selectedThemeColor"></i>
                     <span class="text">{{'Inbound'|translate}}</span>
                 </a>
