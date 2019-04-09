@@ -28,13 +28,13 @@ body button + button:not(:last-child){
 }
 
 button.btn.btn-outline-secondary.btn-sm.btn-transparent.btn-icon {
-    border-color: #bfbfbf;
+    border-color: #1fa2ff;
     color: #ffffff;
     border-radius: 5px;
-    background-color: #c3c3c3;
+    background-color: #1fa2ff;
     &:hover, &:active, &:focus {
-        border-color: #afaeae;
+        border-color: #1b8ee0;
         color: #ffffff;
-        background-color: #a9a8a8;
+        background-color: #1b8ee0;
     }
 }
