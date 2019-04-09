@@ -183,7 +183,7 @@
   "Serial" : "Serial",
   "Batch" : "Batch",
   "DoYouWantToDelete": "Are you sure to delete ?",
-  "AddToDeleiver":"Add To Deleiver",
+  "AddToDeleiver":"Add To Deleivery",
   "Deleiver":"Deleiver",
   "NoOpenQuantity":"No open quantity available",
 
@@ -193,7 +193,8 @@
   "BatchNo": "Batch No.",
   "MfrBatchNo":"Mfr Batch No.",
   "InvalidScanCode": "Invalid scan code!",
-  "PurchaseOrderNumber" :"Purchase Order Number"
+  "PurchaseOrderNumber" :"Purchase Order Number",
+  "DeleiverySuccess":"Order deleivery successfully generated"
 
 
    
