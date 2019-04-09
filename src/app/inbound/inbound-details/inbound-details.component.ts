@@ -36,11 +36,11 @@ export class InboundDetailsComponent implements OnInit {
 
   dateAvailableToReceieve() {
     var dataModel = localStorage.getItem("GRPOReceieveData");
-    if (dataModel == null) {
+    if (dataModel == null || dataModel == undefined || dataModel == "") {
       this.showGRPOGridAndBtn = false;
     } else {
       this.oSubmitPOLotsArray = JSON.parse(dataModel);
-      this.showGRPOGridAndBtn = true;
+      this.showGRPOGridAndBtn = true; 
     }
   }
 

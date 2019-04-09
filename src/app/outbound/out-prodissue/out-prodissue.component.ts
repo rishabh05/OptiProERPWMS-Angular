@@ -86,15 +86,18 @@ export class OutProdissueComponent implements OnInit {
       && this.outbound.TempMeterials.length > 0) {
 
       itemMeterials = this.outbound.TempMeterials.filter(
-        (m: any) => m.ITEMCODE
-          === this.outbound.SelectedItem.ITEMCODE);
+        (m: any) => m.Item.ITEMCODE
+          === this.outbound.SelectedItem.ITEMCODE && this.outbound.OrderData.DOCNUM === m.Item.DOCNUM);
     }
     if (itemMeterials !== undefined && itemMeterials !== null
       && itemMeterials.length > 0) {
-      this.selectedMeterials = itemMeterials;
+
+      itemMeterials.forEach(element => {
+        this.selectedMeterials.push(element.Meterial)
+      });;
       this.manageMeterial();
       this.calculateTotalAndRemainingQty();
-      
+
     }
 
   }
@@ -332,70 +335,28 @@ export class OutProdissueComponent implements OnInit {
       if (this.outbound.TempMeterials !== undefined
         && this.outbound.TempMeterials !== null && this.outbound.TempMeterials.length > 0) {
 
-        let itemMeterials = this.outbound.TempMeterials.filter((t: any) =>
-          t.ITEMCODE === this.outbound.SelectedItem.ITEMCODE);
 
         this.outbound.TempMeterials = this.outbound.TempMeterials.filter((t: any) =>
-          t.ITEMCODE !== this.outbound.SelectedItem.ITEMCODE);
+          t.Item.ITEMCODE !== this.outbound.SelectedItem.ITEMCODE || t.Item.DOCNUM !== this.outbound.OrderData.DOCNUM);
 
-        this.selectedMeterials.forEach(m => this.outbound.TempMeterials.push(m));
-
-
-        //let newMeterial = this.removeData(this.outbound.TempMeterials, itemMeterials);
-
-
-        // if (newMeterial !== undefined && newMeterial !== null && newMeterial.length > 0)
-
-        //   this.selectedMeterials.forEach(m => newMeterial.push(m));
-
-        // //   this.outbound.TempMeterials.forEach(i => newMeterial.push(i));
-        // // newMeterial[0].forEach(i => dt.push(i));
-
-        // this.outbound.TempMeterials = newMeterial;
-
-        // this.outbound.TempMeterials.push(newMeterial);
+        this.selectedMeterials.forEach(m => {
+          let item = { Order: this.outbound.OrderData, Item: this.outbound.SelectedItem, Meterial: m }
+          this.outbound.TempMeterials.push(item)
+        }
+        );
       }
       else {
 
         this.outbound.TempMeterials = [];
         this.selectedMeterials.forEach(element => {
-          this.outbound.TempMeterials.push(element)
+          let item = { Order: this.outbound.OrderData, Item: this.outbound.SelectedItem, Meterial: element }
+          this.outbound.TempMeterials.push(item)
         });
-        //this.outbound.TempMeterials.push(this.selectedMeterials);
+
 
       }
 
-      //   // // get element
-      //   // let item: any = this.outbound.TempSavedData.filter(i => i.SelectedItem.ITEMCODE == this.outbound.SelectedItem.ITEMCODE)
 
-      //   // let idx = this.outbound.TempSavedData.indexOf(item);
-
-      //   // debugger;
-      //   // if (idx !== -1) {
-      //   //   item.SelectedMeterials.push(this.outbound.SelectedMeterials);
-      //   //   this.outbound.TempSavedData.splice(idx, 1, item);
-
-      //   // }
-      //   // else {
-
-      //   //   let OrderDataCollection: any = {
-      //   //     Order: this.outbound.OrderData,
-
-      //   //     SelectedItems: [
-      //   //       {
-      //   //         Item: this.selected,
-      //   //         Meterials: this.selectedMeterials,
-      //   //       }
-
-      //   //     ]
-      //   //   };
-
-      //   //   if (this.outbound.TempSavedData === undefined || this.outbound.TempSavedData.length <= 0) {
-      //   //     this.outbound.TempSavedData = [];
-      //   //   }
-
-      //   //   this.outbound.TempSavedData.push(OrderDataCollection);
-      //   }
     }
     // //lsOutbound
     localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));

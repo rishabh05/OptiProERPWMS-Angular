@@ -429,6 +429,7 @@ export class InboundGRPOComponent implements OnInit {
     // .catch(() => console.log('User dismissed the dialog (e.g., by using ESC, clicking the cross icon, or clicking outside the dialog)'));
     // this.DeleteRowClick(rowindex,gridData); 
   }
+
   getConfirmDialogValue($event){
     console.log("Event value",$event);
     this.showConfirmDialog = false;
@@ -446,11 +447,10 @@ export class InboundGRPOComponent implements OnInit {
     return s;
   }
 
-
   save() {
     var oSubmitPOLotsObj = this.prepareSubmitPurchaseOrder();
     var dataModel = localStorage.getItem("GRPOReceieveData");
-    if(dataModel == null){
+    if(dataModel == null|| dataModel == undefined || dataModel == ""){
       this.oSubmitPOLotsArray = [];
     }else{
       this.oSubmitPOLotsArray = JSON.parse(dataModel);
@@ -462,13 +462,13 @@ export class InboundGRPOComponent implements OnInit {
   }
 
   manageRecords(oSubmitPOLotsObj: any){
-    var size = this.oSubmitPOLotsArray.length;
+    var size = this.oSubmitPOLotsArray.length;  
     for(var i=0; i<size; i++){
-      if(this.oSubmitPOLotsArray[i].POReceiptLots.PONumber == oSubmitPOLotsObj.PONumber && 
-        this.oSubmitPOLotsArray[i].POReceiptLots.ItemCode == oSubmitPOLotsObj.ItemCode && 
-        this.oSubmitPOLotsArray[i].POReceiptLots.LineNo == oSubmitPOLotsObj.LineNo){
+      if(this.oSubmitPOLotsArray[i].POReceiptLots.PONumber == oSubmitPOLotsObj.POReceiptLots[0].PONumber && 
+        this.oSubmitPOLotsArray[i].POReceiptLots.ItemCode == oSubmitPOLotsObj.POReceiptLots[0].ItemCode && 
+        this.oSubmitPOLotsArray[i].POReceiptLots.LineNo == oSubmitPOLotsObj.POReceiptLots[0].LineNo){
           this.oSubmitPOLotsArray.splice(i, 1); 
-      }
+      } 
     }
   }
 
@@ -565,8 +565,6 @@ export class InboundGRPOComponent implements OnInit {
       else {
         day = d.getDate();
       }
-
-
       var mth;
       if ((d.getMonth() + 1).toString().length < 2) {
         mth = "0" + (d.getMonth() + 1).toString();
@@ -611,7 +609,11 @@ export class InboundGRPOComponent implements OnInit {
   DeleteRowClick(rowindex, gridData: any) {
     this.recvingQuantityBinArray.splice(rowindex, 1);
     gridData.data = this.recvingQuantityBinArray;
-
+    if (this.recvingQuantityBinArray.length > 0) {
+      this.showButton = true;
+    } else {
+      this.showButton = false;
+    }
   }
 
 

@@ -35,8 +35,8 @@
             </div>
 
             <!-- Kendo Table Grid Row start -->
-            <div class="row">
-                <div class="col-12 col-sm-12 col-md-12">
+            <div class="row" *ngIf = "showGRPOGridAndBtn">
+                <div class="col-12 col-sm-12 col-md-12" >
                     <kendo-grid class="no-shadow" [kendoGridBinding]="openPOLineModel" [resizable]="true" [pageSize]="2" [sortable]="true"
                         [height]=gridHeight
                         [selectable]="true" (selectionChange)="openPOByUOM($event,soItemsDetail.ITEMCODE)" #gridItem>
@@ -62,7 +62,7 @@
                 <hr />
             </div>
             <div class="col-sm-12 col-12">                      
-                    <button class="btn btn-success k-button btn-sm btn-icon-with-text" type="button"><span class="k-icon k-i-check" role="presentation"></span> {{'Receive'|translate}}</button>
+                    <button  *ngIf = "showGRPOGridAndBtn" class="btn btn-success k-button btn-sm btn-icon-with-text" type="button"><span class="k-icon k-i-check" role="presentation"></span> {{'Receive'|translate}}</button>
                 <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="OnCancelClick()"><span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
                 <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" (click)="onNextClick()" roterLink="binTransfer" skipLocationChange><i class="opti-icon-arrow-next"></i></button>
             </div>
