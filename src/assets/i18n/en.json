@@ -193,7 +193,12 @@
   "BatchNo": "Batch No.",
   "MfrBatchNo":"Mfr Batch No.",
   "InvalidScanCode": "Invalid scan code!",
-  "PurchaseOrderNumber" :"Purchase Order Number"
+  "PurchaseOrderNumber" :"Purchase Order Number",
+  "PrintAllLabelsAfterSubmit" : "Do you want to print all labels after submit ?",
+  "ReceiveCurrentOrAll" : "Receive current OR all saved lines",
+  "DoYouWantToDeleteConf" : "Do you want to delete?",
+  "All" : "All",
+  "Current" : "Current"
 
 
    

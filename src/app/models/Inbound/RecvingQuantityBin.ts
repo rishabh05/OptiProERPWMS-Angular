@@ -1,16 +1,16 @@
 export class RecvingQuantityBin{
     
-    public MfrSerial: string;
-    public searlNo: string;
-    public Quantity: number;
+    public VendorLot: string;
+    public LotNumber: string;
+    public LotQty: number;
     public Bin: string;
     public expiryDate: string;
     // public Bin: string;
 
     constructor(MfrSerial: string, serial: string, qty:number, bin: string, expiryDate: string){
-        this.MfrSerial = MfrSerial;
-        this.searlNo = serial;
-        this.Quantity = qty;
+        this.VendorLot = MfrSerial;
+        this.LotNumber = serial;
+        this.LotQty = qty;
         this.Bin = bin;
         this.expiryDate = expiryDate;
     }
