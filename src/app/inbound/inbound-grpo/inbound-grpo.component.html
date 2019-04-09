@@ -153,7 +153,7 @@
 
                         <kendo-grid-column field="" [width]="10" title="">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                <button type="button" class="k-button-icon k-button" (click)="openConfirmationDialog(rowIndex, gridItem)">
+                                <button type="button" class="k-button-icon k-button" (click)="openConfirmForDelete(rowIndex, gridItem)">
                                     <span class="k-icon k-i-delete" role="presentation"></span>
                                 </button>
                             </ng-template>

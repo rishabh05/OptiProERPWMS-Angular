@@ -443,7 +443,7 @@ export class InboundGRPOComponent implements OnInit {
         if ($event.From == "recCurrentOrAll") {
 
           this.submitCurrentGRPO();
-        }
+        } 
       }
     }
   }
@@ -507,7 +507,10 @@ submitCurrentGRPO(){
     //   this.tempPOLotsArray.push(oSubmitPOLotsObj);
     // } 
     var dataModel = localStorage.getItem("GRPOReceieveData");
-    this.SubmitGoodsReceiptPO(dataModel);
+    if(dataModel != null && dataModel != undefined && dataModel != ""){
+      this.SubmitGoodsReceiptPO(JSON.parse(dataModel));
+    }
+    
     
   }
 
@@ -530,7 +533,7 @@ submitCurrentGRPO(){
         if(oSubmitPOLots.POReceiptLots[i].PONumber == this.Ponumber &&
           oSubmitPOLots.POReceiptLots[i].ItemCode == this.ItemCode &&
           oSubmitPOLots.POReceiptLots[i].Tracking == this.tracking ){
-            this.recvingQuantityBinArray = oSubmitPOLots.POReceiptLotDetails[i];
+            this.recvingQuantityBinArray[i] = oSubmitPOLots.POReceiptLotDetails[i];
           }
       }
     }
@@ -563,15 +566,14 @@ submitCurrentGRPO(){
 
   receive(e) {
     var dataModel = localStorage.getItem("GRPOReceieveData");
-    if(dataModel != null){
+    if(dataModel == null|| dataModel == undefined || dataModel == ""){
+      this.submitCurrentGRPO();
+    }else{
       this.yesButtonText = this.translate.instant("All");
       this.noButtonText = this.translate.instant("Current");
       this.dialogFor = "recCurrentOrAll";
       this.dialogMsg =  this.translate.instant("ReceiveCurrentOrAll")
       this.showConfirmDialog = true; // show dialog
-     
-    }else{
-      this.submitCurrentGRPO();
     }
   //  alert("Do you want to print all labels after submit ?");
     
@@ -675,7 +677,7 @@ submitCurrentGRPO(){
         console.log(data);
         if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
           // alert("Goods Receipt PO generated successfully with Doc No: " + data.DocEntry);
-          this.toastr.success('', this.translate.instant("GRPOSuccessMessage" + data[0].DocEntry));
+          this.toastr.success('', this.translate.instant("GRPOSuccessMessage") + data[0].DocEntry);
           this.inboundMasterComponent.inboundComponent = 2;
         } else if (data[0].ErrorMsg == "7001") {
           this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
