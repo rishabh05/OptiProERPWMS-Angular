@@ -11,7 +11,7 @@ import { RecvingQuantityBin } from 'src/app/models/Inbound/RecvingQuantityBin';
 import { AutoLot } from 'src/app/models/Inbound/AutoLot';
 import { ISubscription } from 'rxjs/Subscription';
 import { ConfirmdialogService } from 'src/app/common/confirm-dialog/confirmdialog.service';
-import {ConfirmDialogComponent} from 'src/app/common/confirm-dialog/confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogComponent } from 'src/app/common/confirm-dialog/confirm-dialog/confirm-dialog.component';
 @Component({
   selector: 'app-inbound-grpo',
   templateUrl: './inbound-grpo.component.html',
@@ -19,7 +19,7 @@ import {ConfirmDialogComponent} from 'src/app/common/confirm-dialog/confirm-dial
 })
 export class InboundGRPOComponent implements OnInit {
 
-  dialogMsg:string="Do you want to delete?"
+  dialogMsg: string = "Do you want to delete?"
   openPOLineModel: OpenPOLinesModel[] = [];
   Ponumber: any;
   OpenQty: number;
@@ -50,7 +50,7 @@ export class InboundGRPOComponent implements OnInit {
   scanInputPlaceholder: string = "";
   mfrGridColumnText: string = "";
   SRBatchColumnText: string = "";
-  public oSubmitPOLotsArray: any[] = []; 
+  public oSubmitPOLotsArray: any[] = [];
   isAutoLotEnabled: boolean;
   isDisabledScanInput: boolean = false;
   ScanSerial: string = "";
@@ -66,7 +66,7 @@ export class InboundGRPOComponent implements OnInit {
   radioSelected: any = 0;
   LastSerialNumber: any[];
   LineId: any[];
-  previousReceivedQty:number = 0;
+  previousReceivedQty: number = 0;
   confirmDialogCmponentFactory: ComponentFactory<ConfirmDialogComponent>;
   @ViewChild('Quantity') QuantityField;
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
@@ -83,7 +83,7 @@ export class InboundGRPOComponent implements OnInit {
     this.openPOLineModel[0] = this.inboundMasterComponent.openPOmodel;
     //update below variable with local storage data
     //previousReceivedQty:number = 0;
-   // also update this.openPOLineModel[0].RPTQTY with local storage value
+    // also update this.openPOLineModel[0].RPTQTY with local storage value
     if (this.openPOLineModel != undefined && this.openPOLineModel != null) {
       this.Ponumber = this.openPOLineModel[0].DOCENTRY;
       this.tracking = this.openPOLineModel[0].TRACKING;
@@ -112,7 +112,7 @@ export class InboundGRPOComponent implements OnInit {
       } else {
         this.IsQCRequired = false;
       }
- 
+
       this.getUOMList();
       if (this.RecvbBinvalue == "") {
         this.defaultRecvBin = true;
@@ -303,19 +303,19 @@ export class InboundGRPOComponent implements OnInit {
       this.showButton = false;
     }
     this.updateReceiveQty();
-   
+
   }
-  updateReceiveQty(){
+  updateReceiveQty() {
     let quantitySum: number = 0;
     quantitySum = this.previousReceivedQty;
     for (var i = 0; i < this.recvingQuantityBinArray.length; i++) {
       quantitySum += Number(this.recvingQuantityBinArray[i].Quantity);
     }
-    if(this.openPOLineModel!=null && this.openPOLineModel.length>0){
-      this.openPOLineModel[0].RPTQTY = quantitySum ;
+    if (this.openPOLineModel != null && this.openPOLineModel.length > 0) {
+      this.openPOLineModel[0].RPTQTY = quantitySum;
     }
-    
-    
+
+
   }
 
   batchCalculation(autoLots: AutoLot[], qty: any) {
@@ -412,9 +412,9 @@ export class InboundGRPOComponent implements OnInit {
 
     // }
   }
-  showConfirmDialog:boolean;
-  rowindexForDelete:any;
-  gridDataAfterDelete:any[];
+  showConfirmDialog: boolean;
+  rowindexForDelete: any;
+  gridDataAfterDelete: any[];
   public openConfirmationDialog(rowindex, gridData: any) {
 
     this.showConfirmDialog = true;
@@ -430,12 +430,12 @@ export class InboundGRPOComponent implements OnInit {
     // this.DeleteRowClick(rowindex,gridData); 
   }
 
-  getConfirmDialogValue($event){
-    console.log("Event value",$event);
+  getConfirmDialogValue($event) {
+    console.log("Event value", $event);
     this.showConfirmDialog = false;
-    if($event==true){
-      this.DeleteRowClick(this.rowindexForDelete,this.gridDataAfterDelete); 
-    }else{
+    if ($event == true) {
+      this.DeleteRowClick(this.rowindexForDelete, this.gridDataAfterDelete);
+    } else {
       //nothing to do.
     }
   }
@@ -450,9 +450,9 @@ export class InboundGRPOComponent implements OnInit {
   save() {
     var oSubmitPOLotsObj = this.prepareSubmitPurchaseOrder();
     var dataModel = localStorage.getItem("GRPOReceieveData");
-    if(dataModel == null|| dataModel == undefined || dataModel == ""){
+    if (dataModel == null || dataModel == undefined || dataModel == "") {
       this.oSubmitPOLotsArray = [];
-    }else{
+    } else {
       this.oSubmitPOLotsArray = JSON.parse(dataModel);
     }
     this.manageRecords(oSubmitPOLotsObj);
@@ -461,20 +461,20 @@ export class InboundGRPOComponent implements OnInit {
     this.inboundMasterComponent.inboundComponent = 2;
   }
 
-  manageRecords(oSubmitPOLotsObj: any){
-    var size = this.oSubmitPOLotsArray.length;  
-    for(var i=0; i<size; i++){
-      if(this.oSubmitPOLotsArray[i].POReceiptLots.PONumber == oSubmitPOLotsObj.POReceiptLots[0].PONumber && 
-        this.oSubmitPOLotsArray[i].POReceiptLots.ItemCode == oSubmitPOLotsObj.POReceiptLots[0].ItemCode && 
-        this.oSubmitPOLotsArray[i].POReceiptLots.LineNo == oSubmitPOLotsObj.POReceiptLots[0].LineNo){
-          this.oSubmitPOLotsArray.splice(i, 1); 
-      } 
+  manageRecords(oSubmitPOLotsObj: any) {
+    var size = this.oSubmitPOLotsArray.length;
+    for (var i = 0; i < size; i++) {
+      if (this.oSubmitPOLotsArray[i].POReceiptLots.PONumber == oSubmitPOLotsObj.POReceiptLots[0].PONumber &&
+        this.oSubmitPOLotsArray[i].POReceiptLots.ItemCode == oSubmitPOLotsObj.POReceiptLots[0].ItemCode &&
+        this.oSubmitPOLotsArray[i].POReceiptLots.LineNo == oSubmitPOLotsObj.POReceiptLots[0].LineNo) {
+        this.oSubmitPOLotsArray.splice(i, 1);
+      }
     }
   }
 
   receive(e) {
     var dataModel = localStorage.getItem("GRPOReceieveData");
-    if(dataModel != null){
+    if (dataModel != null) {
       alert("Do you want submit all the data or current record?");
     }
     alert("Do you want to print all labels after submit ?");
@@ -484,6 +484,7 @@ export class InboundGRPOComponent implements OnInit {
 
   prepareSubmitPurchaseOrder(): any {
     var oSubmitPOLotsObj: any = {};
+    oSubmitPOLotsObj.PONumber = this.Ponumber;
     oSubmitPOLotsObj.POReceiptLots = [];
     oSubmitPOLotsObj.POReceiptLotDetails = [];
     oSubmitPOLotsObj.UDF = [];
