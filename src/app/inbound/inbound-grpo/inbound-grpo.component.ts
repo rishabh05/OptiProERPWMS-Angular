@@ -10,8 +10,7 @@ import { OpenPOLinesModel } from 'src/app/models/Inbound/OpenPOLinesModel';
 import { RecvingQuantityBin } from 'src/app/models/Inbound/RecvingQuantityBin';
 import { AutoLot } from 'src/app/models/Inbound/AutoLot';
 import { ISubscription } from 'rxjs/Subscription';
-import { ConfirmdialogService } from 'src/app/common/confirm-dialog/confirmdialog.service';
-import {ConfirmDialogComponent} from 'src/app/common/confirm-dialog/confirm-dialog/confirm-dialog.component';
+
 @Component({
   selector: 'app-inbound-grpo',
   templateUrl: './inbound-grpo.component.html',
@@ -53,7 +52,7 @@ export class InboundGRPOComponent implements OnInit {
   scanInputPlaceholder: string = "";
   mfrGridColumnText: string = "";
   SRBatchColumnText: string = "";
-  public oSubmitPOLotsArray: any[] = []; 
+  public oSubmitPOLotsArray: any[] = [];
   isAutoLotEnabled: boolean;
   isDisabledScanInput: boolean = false;
   ScanSerial: string = "";
@@ -69,11 +68,16 @@ export class InboundGRPOComponent implements OnInit {
   radioSelected: any = 0;
   LastSerialNumber: any[];
   LineId: any[];
-  previousReceivedQty:number = 0;
-  confirmDialogCmponentFactory: ComponentFactory<ConfirmDialogComponent>;
+  previousReceivedQty: number = 0;
+
+  showConfirmDialog:boolean;
+  rowindexForDelete:any;
+  gridDataAfterDelete:any[];
+
+
   @ViewChild('Quantity') QuantityField;
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
-    private inboundMasterComponent: InboundMasterComponent, private confDialogService: ConfirmdialogService) {
+    private inboundMasterComponent: InboundMasterComponent) {
     let userLang = navigator.language.split('-')[0];
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
     translate.use(userLang);
@@ -86,7 +90,7 @@ export class InboundGRPOComponent implements OnInit {
     this.openPOLineModel[0] = this.inboundMasterComponent.openPOmodel;
     //update below variable with local storage data
     //previousReceivedQty:number = 0;
-   // also update this.openPOLineModel[0].RPTQTY with local storage value
+    // also update this.openPOLineModel[0].RPTQTY with local storage value
     if (this.openPOLineModel != undefined && this.openPOLineModel != null) {
       this.Ponumber = this.openPOLineModel[0].DOCENTRY;
       this.tracking = this.openPOLineModel[0].TRACKING;
@@ -116,14 +120,13 @@ export class InboundGRPOComponent implements OnInit {
       } else {
         this.IsQCRequired = false;
       }
- 
+
       this.getUOMList();
       if (this.RecvbBinvalue == "") {
         this.defaultRecvBin = true;
         this.ShowBins();
       }
     }
-    
     this.LastSerialNumber = [];
     this.LineId = [];
     this.showSavedDataToGrid()
@@ -231,7 +234,6 @@ export class InboundGRPOComponent implements OnInit {
     this.inboundService.getUOMs(this.openPOLineModel[0].ITEMCODE).subscribe(
       (data: any) => {
         console.log(data);
-
         this.openPOLineModel[0].UOMList = data;
         if (this.openPOLineModel[0].UOMList.length > 0) {
           this.uomSelectedVal = this.openPOLineModel[0].UOMList[0];
@@ -244,7 +246,6 @@ export class InboundGRPOComponent implements OnInit {
   }
 
   handleCheckChange($event) {
-
     if ($event.currentTarget.id == "InventoryEnquiryOptions1") {
       // mfr serial radio selected.
       this.radioSelected = 0;
@@ -314,19 +315,19 @@ export class InboundGRPOComponent implements OnInit {
       this.showButton = false;
     }
     this.updateReceiveQty();
-   
+
   }
-  updateReceiveQty(){
+  updateReceiveQty() {
     let quantitySum: number = 0;
     quantitySum = this.previousReceivedQty;
     for (var i = 0; i < this.recvingQuantityBinArray.length; i++) {
       quantitySum += Number(this.recvingQuantityBinArray[i].LotQty);
     }
-    if(this.openPOLineModel!=null && this.openPOLineModel.length>0){
-      this.openPOLineModel[0].RPTQTY = quantitySum ;
+    if (this.openPOLineModel != null && this.openPOLineModel.length > 0) {
+      this.openPOLineModel[0].RPTQTY = quantitySum;
     }
-    
-    
+
+
   }
 
   batchCalculation(autoLots: AutoLot[], qty: any) {
@@ -417,9 +418,7 @@ export class InboundGRPOComponent implements OnInit {
   }
 
   
-  showConfirmDialog:boolean;
-  rowindexForDelete:any;
-  gridDataAfterDelete:any[];
+
   public openConfirmForDelete(rowindex, gridData: any) {
     this.dialogFor = "deleteRow";
     this.dialogMsg =  this.translate.instant("DoYouWantToDelete")

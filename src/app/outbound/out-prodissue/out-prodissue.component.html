@@ -60,12 +60,12 @@
 
                 </div>
             </div>
-            <div class="row">
+            <div class="row">                
                 <div class="col-12">
                     <kendo-grid class="no-shadow" [data]="selectedMeterials" [resizable]="true" [pageSize]="50"
                         [pageable]="false" [sortable]="true" [selectable]="true" id="gridSelectedMeterial" #gridSelectedMeterial>
 
-                        <kendo-grid-column *ngIf="OperationType!='N'" field="LOTNO" title="{{selected.ITEMCODE}}" [width]="30"></kendo-grid-column>
+                        <kendo-grid-column *ngIf="OperationType==='S' || OperationType==='B'" field="LOTNO" title="{{selected.ITEMCODE}}" [width]="30"></kendo-grid-column>
                         <kendo-grid-column field="BINNO" title="{{'BINNO'|translate}}" [width]="30"></kendo-grid-column>
                         <kendo-grid-column field="TOTALQTY" format="{0:n3}" headerClass="text-right" class=" text-right" title="{{'TOTALQTY'|translate}}"
                             [width]="10"></kendo-grid-column>
