@@ -523,7 +523,8 @@ submitCurrentGRPO(){
     var oSubmitPOLots: any = {};
     var dataModel = localStorage.getItem("GRPOReceieveData");
     if(dataModel == null|| dataModel == undefined || dataModel == ""){
-      this.oSubmitPOLotsArray = []; 
+      //this.oSubmitPOLotsArray = []; 
+      oSubmitPOLots = {};
     }else{
       oSubmitPOLots = JSON.parse(dataModel); 
     }
@@ -535,11 +536,11 @@ submitCurrentGRPO(){
           oSubmitPOLots.POReceiptLots[i].ItemCode == this.ItemCode &&
           oSubmitPOLots.POReceiptLots[i].Tracking == this.tracking ){
 
-            for(var i=0; i<oSubmitPOLots.POReceiptLotDetails.length; i++ ){
-              if(oSubmitPOLots.POReceiptLotDetails[i].ParentLineNo == oSubmitPOLots.POReceiptLots[i].Line){
-                this.recvingQuantityBinArray.push(oSubmitPOLots.POReceiptLotDetails[i]);
+            for(var j=0; j<oSubmitPOLots.POReceiptLotDetails.length; j++ ){
+              if(oSubmitPOLots.POReceiptLotDetails[j].ParentLineNo == oSubmitPOLots.POReceiptLots[i].Line){
+                this.recvingQuantityBinArray.push(oSubmitPOLots.POReceiptLotDetails[j]);
                 this.previousReceivedQty = Number(this.previousReceivedQty) + Number(oSubmitPOLots
-                  .POReceiptLotDetails[i].LotQty);
+                  .POReceiptLotDetails[j].LotQty);
               }
             }
           }
@@ -569,15 +570,14 @@ submitCurrentGRPO(){
       if(oSubmitPOLotsObj.POReceiptLots[i].PONumber == this.Ponumber && 
         oSubmitPOLotsObj.POReceiptLots[i].ItemCode == this.openPOLineModel[0].ITEMCODE && 
         oSubmitPOLotsObj.POReceiptLots[i].LineNo == this.openPOLineModel[0].LINENUM){
-          oSubmitPOLotsObj.POReceiptLots.splice(i, 1); 
            var s = oSubmitPOLotsObj.POReceiptLotDetails.length;
-          for(var i=0; i<oSubmitPOLotsObj.POReceiptLotDetails.length; i++ ){
-            if(oSubmitPOLotsObj.POReceiptLotDetails[i].ParentLineNo == oSubmitPOLotsObj.POReceiptLots[i].Line){
-              oSubmitPOLotsObj.POReceiptLotDetails.splice(i, 1);
-              i = -1;
+          for(var j=0; j<oSubmitPOLotsObj.POReceiptLotDetails.length; j++ ){
+            if(oSubmitPOLotsObj.POReceiptLotDetails[j].ParentLineNo == oSubmitPOLotsObj.POReceiptLots[i].Line){
+              oSubmitPOLotsObj.POReceiptLotDetails.splice(j, 1);
+              j = -1;
             }
-          }        
-          
+          }    
+          oSubmitPOLotsObj.POReceiptLots.splice(i, 1);     
           // oSubmitPOLotsObj.POReceiptLotDetails.forEach(element => {
           //   if(oSubmitPOLotsObj.POReceiptLotDetails[i].POItemCode == this.Ponumber+this.ItemCode){
           //     oSubmitPOLotsObj.POReceiptLotDetails.splice(i, 1);
