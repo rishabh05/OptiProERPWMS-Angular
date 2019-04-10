@@ -35,7 +35,7 @@ export class InboundGRPOComponent implements OnInit {
   defaultRecvBin: boolean = false;
   serviceData: any[];
   lookupfor: string;
-  showLookupLoader = false;
+  showLookupLoader = true;
   viewLines: any[];
   //getLookupValue: any[];
   public value: Date = new Date();
@@ -737,7 +737,7 @@ submitCurrentGRPO(){
     }
     if (this.recvingQuantityBinArray.length > 0) {
       var qtyForRemove = this.recvingQuantityBinArray[rowindex].LotQty;
-      if (this.openPOLineModel[0].RPTQTY > qtyForRemove) {
+      if (this.openPOLineModel[0].RPTQTY >= qtyForRemove) {
         this.openPOLineModel[0].RPTQTY = this.openPOLineModel[0].RPTQTY - qtyForRemove;
       } 
     } 
