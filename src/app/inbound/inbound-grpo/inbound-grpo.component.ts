@@ -128,6 +128,11 @@ export class InboundGRPOComponent implements OnInit {
     this.LineId = [];
     this.showSavedDataToGrid()
   }
+  
+  updateReceiveQtyForGrid(){
+    var dataModel = localStorage.getItem("GRPOReceieveData");
+    
+  }
 
   setLocalStringForBatch() {
     this.serialNoTitle = this.translate.instant("SerialNo");
@@ -438,7 +443,7 @@ export class InboundGRPOComponent implements OnInit {
     } else {
       if ($event.Status == "cancel") {
         // when user click on cross button nothing to do.
-      } else {
+      } else { 
         //means user click on negative button
         if ($event.From == "recCurrentOrAll") {
 
@@ -524,18 +529,27 @@ submitCurrentGRPO(){
     var oSubmitPOLots: any = {};
     var dataModel = localStorage.getItem("GRPOReceieveData");
     if(dataModel == null|| dataModel == undefined || dataModel == ""){
-      this.oSubmitPOLotsArray = [];
+      this.oSubmitPOLotsArray = []; 
     }else{
-      oSubmitPOLots = JSON.parse(dataModel);
+      oSubmitPOLots = JSON.parse(dataModel); 
     }
-    if(oSubmitPOLots.POReceiptLotDetails.length>0){
-      for(var i=0; i<oSubmitPOLots.POReceiptLotDetails.length; i++ ){
+    if(oSubmitPOLots.POReceiptLots.length>0){
+      for(var i=0; i<oSubmitPOLots.POReceiptLots.length; i++ ){
         if(oSubmitPOLots.POReceiptLots[i].PONumber == this.Ponumber &&
           oSubmitPOLots.POReceiptLots[i].ItemCode == this.ItemCode &&
           oSubmitPOLots.POReceiptLots[i].Tracking == this.tracking ){
-            this.recvingQuantityBinArray[i] = oSubmitPOLots.POReceiptLotDetails[i];
+
+            for(var i=0; i<oSubmitPOLots.POReceiptLotDetails.length; i++ ){
+              if(oSubmitPOLots.POReceiptLotDetails[i].POItemCode == this.Ponumber+this.ItemCode){
+                this.recvingQuantityBinArray.push(oSubmitPOLots.POReceiptLotDetails[i]);
+                this.previousReceivedQty = Number(this.previousReceivedQty) + Number(oSubmitPOLots
+                  .POReceiptLotDetails[i].LotQty);
+              }
+            }
           }
       }
+      // this.updateReceiveQty();
+      this.openPOLineModel[0].RPTQTY = this.previousReceivedQty;
     }
     if (this.tracking == "S") {
       this.isNonTrack = false;
@@ -547,6 +561,11 @@ submitCurrentGRPO(){
       this.isNonTrack = false;
       
     }
+    if (this.recvingQuantityBinArray.length > 0) {
+      this.showButton = true;
+    } else {
+      this.showButton = false;
+    }
   }
   manageRecords(oSubmitPOLotsObj: any): any{
     var size = oSubmitPOLotsObj.POReceiptLots.length;  
@@ -555,7 +574,19 @@ submitCurrentGRPO(){
         oSubmitPOLotsObj.POReceiptLots[i].ItemCode == this.openPOLineModel[0].ITEMCODE && 
         oSubmitPOLotsObj.POReceiptLots[i].LineNo == this.openPOLineModel[0].LINENUM){
           oSubmitPOLotsObj.POReceiptLots.splice(i, 1); 
-          oSubmitPOLotsObj.POReceiptLotDetails.splice(i, 1); 
+           var s = oSubmitPOLotsObj.POReceiptLotDetails.length;
+          for(var i=0; i<oSubmitPOLotsObj.POReceiptLotDetails.length; i++ ){
+            if(oSubmitPOLotsObj.POReceiptLotDetails[i].POItemCode == this.Ponumber+this.ItemCode){
+              oSubmitPOLotsObj.POReceiptLotDetails.splice(i, 1);
+              i = -1;
+            }
+          }        
+          
+          // oSubmitPOLotsObj.POReceiptLotDetails.forEach(element => {
+          //   if(oSubmitPOLotsObj.POReceiptLotDetails[i].POItemCode == this.Ponumber+this.ItemCode){
+          //     oSubmitPOLotsObj.POReceiptLotDetails.splice(i, 1);
+          //   }
+          // });
           oSubmitPOLotsObj.UDF.splice(i, 1); 
           oSubmitPOLotsObj.LastSerialNumber.splice(i, 1); 
           // this.oSubmitPOLotsArray.splice(i, 1); 
@@ -600,25 +631,26 @@ submitCurrentGRPO(){
       UsernameForLic: localStorage.getItem("UserId")
       //------end Of parameter For License----
     });
-
-    oSubmitPOLotsObj.UDF.push({
-      Key: "OPTM_TARGETWHS",//UDF[iIndex].Key,
-      Value: this.targetWhse,
-      //LotNo: UDF[iIndex].LotNo,
-      Flag: 'D', // D = Line, H= Header, L = Lots
-      LineNo: 0
-    });
-    oSubmitPOLotsObj.UDF.push({
-      Key: "OPTM_TARGETBIN",//UDF[iIndex].Key,
-      Value: this.targetBin,
-      //LotNo: UDF[iIndex].LotNo,
-      Flag: 'D', // D = Line, H= Header, L = Lots
-      LineNo: 0
-    });
+    oSubmitPOLotsObj.UDF = [];  
+    // oSubmitPOLotsObj.UDF.push({
+    //   Key: "OPTM_TARGETWHS",//UDF[iIndex].Key,
+    //   Value: this.targetWhse,
+    //   //LotNo: UDF[iIndex].LotNo,
+    //   Flag: 'D', // D = Line, H= Header, L = Lots
+    //   LineNo: 0
+    // });
+    // oSubmitPOLotsObj.UDF.push({
+    //   Key: "OPTM_TARGETBIN",//UDF[iIndex].Key,
+    //   Value: this.targetBin,
+    //   //LotNo: UDF[iIndex].LotNo,
+    //   Flag: 'D', // D = Line, H= Header, L = Lots
+    //   LineNo: 0
+    // });
 
 
     for (var iBtchIndex = 0; iBtchIndex < this.recvingQuantityBinArray.length; iBtchIndex++) {
       oSubmitPOLotsObj.POReceiptLotDetails.push({ 
+        POItemCode: this.Ponumber+this.openPOLineModel[0].ITEMCODE,
         Bin: this.recvingQuantityBinArray[iBtchIndex].Bin,
         LineNo: this.openPOLineModel[0].LINENUM,
         LotNumber: this.recvingQuantityBinArray[iBtchIndex].LotNumber, //getUpperTableData.GoodsReceiptLineRow[iBtchIndex].SysSerNo,
