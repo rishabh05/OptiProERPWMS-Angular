@@ -121,8 +121,8 @@ export class InboundService {
   binChange(binCode: string): Observable<any> {
     var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), BinCode: binCode, ItemCode: '', WhsCode: localStorage.getItem("whseId") }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsBinExist", jObject, this.httpOptions);
-  }
-
+  } 
+ 
   SubmitGoodsReceiptPO(oSubmitPOLots: any): Observable<any> {
     var jObject = { GoodsReceiptToken: JSON.stringify(oSubmitPOLots) };    
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/SubmitGoodsReceiptPO", jObject, this.httpOptions);
