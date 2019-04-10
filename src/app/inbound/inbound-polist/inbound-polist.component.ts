@@ -33,6 +33,7 @@ export class InboundPolistComponent implements OnInit {
   unmatchedPOLinesModel: any[];
   viewLines: any[];
   public oSavedPOLotsArray: any[] = []; 
+  showGRPOButton:boolean = false;
 
 
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
@@ -96,22 +97,6 @@ export class InboundPolistComponent implements OnInit {
           console.log("Error: ", error);
         }
       );
-  }
-
-
-  public oSubmitPOLotsArray: any[] = []; 
-  
-  updateRecQty() { 
-    var dataModel = localStorage.getItem("GRPOReceieveData");
-    if(dataModel == null || dataModel == undefined || dataModel == ""){
-    // update rec qty to 0
-    }else{
-      this.oSubmitPOLotsArray = JSON.parse(dataModel);
-     }
-    // this.manageRecords(oSubmitPOLotsObj);
-    // this.oSubmitPOLotsArray.push(oSubmitPOLotsObj);
-    localStorage.setItem("GRPOReceieveData", JSON.stringify(this.oSubmitPOLotsArray));
-    this.inboundMasterComponent.inboundComponent = 2;
   }
 
   openPOLines() {
@@ -197,18 +182,14 @@ export class InboundPolistComponent implements OnInit {
   }
 
   onClickOpenPOLineRowOpenAutoLot(selection) {
-    
     const poline = selection.selectedRows[0].dataItem;
     this.getAutoLot(poline.ITEMCODE);
   }
 
   getAutoLot(itemCode: string) {
-    
     this.inboundService.getAutoLot(itemCode).subscribe(
-     
       (data: any) => {
         console.log(data);
-        
         if (data.Table != undefined) {
           this.autoLot = data.Table;
           console.log("autolot value from polist:"+this.autoLot);
@@ -248,7 +229,7 @@ export class InboundPolistComponent implements OnInit {
 
     for(var k = 0; k<this.openPOLinesModel.length; k++){
       this.openPOLinesModel[k].RPTQTY = 0;
-     }  
+    }  
 
     if (this.oSavedPOLotsArray != undefined && this.oSavedPOLotsArray != null &&
       this.oSavedPOLotsArray.length > 0 && this.openPOLinesModel != undefined &&
@@ -260,7 +241,7 @@ export class InboundPolistComponent implements OnInit {
             this.oSavedPOLotsArray[j].POReceiptLots[0].PONumber == this.poCode &&
             this.oSavedPOLotsArray[j].POReceiptLots[0].ItemCode == this.openPOLinesModel[i].ITEMCODE) {
             this.openPOLinesModel[i].RPTQTY = this.oSavedPOLotsArray[j].POReceiptLots[0].ShipQty;
-            //unmatchedPOLinesModel.splice(i,1); 
+            this.showGRPOButton = true
           }
         }  
       } 
@@ -295,6 +276,10 @@ export class InboundPolistComponent implements OnInit {
   }
 
   onCancelClick() {
+    this.inboundMasterComponent.inboundComponent = 1;
+  }
+
+  onAddtoGRPOClick(){
     this.inboundMasterComponent.inboundComponent = 1;
   }
 }

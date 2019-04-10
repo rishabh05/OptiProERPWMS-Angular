@@ -10,6 +10,7 @@ export class ComonConfirmDialogComponent implements OnInit {
   @Input() titleMessage: any; 
   @Input() yesButtonText: any;
   @Input() noButtonText: any;
+  @Input() fromWhere: any;
   @Output() isYesClick = new EventEmitter();
   constructor() { }
 
@@ -19,16 +20,18 @@ export class ComonConfirmDialogComponent implements OnInit {
   public opened: boolean = true;
 
   public close(status) {
+    this.isYesClick.emit({Status:status,From: this.fromWhere});
 
-    if (status == "yes") {
-      this.isYesClick.emit(true);
-    } else {
-      this.isYesClick.emit(false);
-    }
+    // if (status == "yes") {
+
+     
+    // } else {
+    //   this.isYesClick.emit(status,this.fromWhere);
+    // }
     this.opened = false;
   }
-
+ 
   public open() {
-    this.opened = true;
+    this.opened = true; 
   }
 }

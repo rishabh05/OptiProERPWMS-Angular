@@ -112,17 +112,17 @@
                     <kendo-grid *ngIf="!isNonTrack" class="no-shadow" [kendoGridBinding]="recvingQuantityBinArray"
                         [sortable]="true" [selectable]="true" #gridItem>
 
-                        <kendo-grid-column field="MfrSerial" [width]="18" title="{{mfrGridColumnText}}">
+                        <kendo-grid-column field="VendorLot" [width]="18" title="{{mfrGridColumnText}}">
                             <ng-template kendoGridCellTemplate let-dataItem>
                                 <input type="text" class="form-control form-control-sm"
-                                name="dataItem.MfrSerial" [(ngModel)]=dataItem.MfrSerial>
+                                name="dataItem.VendorLot" [(ngModel)]=dataItem.VendorLot>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column field="searlNo" [width]="18" title="{{SRBatchColumnText}}"></kendo-grid-column>
-                        <kendo-grid-column field="Quantity" headerClass="text-right" class="text-right" [width]="18"
+                        <kendo-grid-column field="LotNumber" [width]="18" title="{{SRBatchColumnText}}"></kendo-grid-column>
+                        <kendo-grid-column field="LotQty" headerClass="text-right" class="text-right" [width]="18"
                             title="{{'Qty'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem>
-                                {{dataItem.Quantity | number:'1.3-5'}}
+                                {{dataItem.LotQty | number:'1.3-5'}}
                             </ng-template>
                         </kendo-grid-column>
                         <kendo-grid-column field="Bin" [width]="18" title="{{'Bin'|translate}}"></kendo-grid-column>
@@ -133,7 +133,7 @@
                         </kendo-grid-column>
                         <kendo-grid-column field="" [width]="10" title="">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                <button type="button" class="k-button-icon k-button" (click)="openConfirmationDialog(rowIndex, gridItem)">
+                                <button type="button" class="k-button-icon k-button" (click)="openConfirmForDelete(rowIndex, gridItem)">
                                     <span class="k-icon k-i-delete" role="presentation"></span>
                                 </button>
                             </ng-template>
@@ -143,17 +143,17 @@
 
                     <kendo-grid *ngIf="isNonTrack" class="no-shadow" [kendoGridBinding]="recvingQuantityBinArray"
                         [sortable]="true" [selectable]="true" #gridItem>
-                        <kendo-grid-column field="Quantity" headerClass="text-right" class="text-right" [width]="45"
+                        <kendo-grid-column field="LotQty" headerClass="text-right" class="text-right" [width]="45"
                             title="{{'Qty'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem>
-                                {{dataItem.Quantity | number:'1.3-5'}}
+                                {{dataItem.LotQty | number:'1.3-5'}}
                             </ng-template>
                         </kendo-grid-column>
                         <kendo-grid-column field="Bin" [width]="45" title="{{'Bin'|translate}}"></kendo-grid-column>
 
                         <kendo-grid-column field="" [width]="10" title="">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                <button type="button" class="k-button-icon k-button" (click)="openConfirmationDialog(rowIndex, gridItem)">
+                                <button type="button" class="k-button-icon k-button" (click)="openConfirmForDelete(rowIndex, gridItem)">
                                     <span class="k-icon k-i-delete" role="presentation"></span>
                                 </button>
                             </ng-template>
@@ -220,5 +220,5 @@
 </span>
 <span *ngIf="showConfirmDialog">
 <app-comon-confirm-dialog [titleMessage]="dialogMsg" 
-[yesButtonText]='yes' [noButtonText]='no' (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
+[yesButtonText]="yesButtonText" [fromWhere] ="dialogFor"  [noButtonText]="noButtonText" (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
 </span>
