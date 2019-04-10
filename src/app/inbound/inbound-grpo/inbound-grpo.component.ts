@@ -132,10 +132,7 @@ export class InboundGRPOComponent implements OnInit {
     this.showSavedDataToGrid()
   }
   
-  updateReceiveQtyForGrid(){
-    var dataModel = localStorage.getItem("GRPOReceieveData");
-    
-  }
+ 
 
   setLocalStringForBatch() {
     this.serialNoTitle = this.translate.instant("SerialNo");
@@ -319,15 +316,13 @@ export class InboundGRPOComponent implements OnInit {
   }
   updateReceiveQty() {
     let quantitySum: number = 0;
-    quantitySum = this.previousReceivedQty;
+    //quantitySum = 0;//this.openPOLineModel[0].RPTQTY;
     for (var i = 0; i < this.recvingQuantityBinArray.length; i++) {
       quantitySum += Number(this.recvingQuantityBinArray[i].LotQty);
     }
     if (this.openPOLineModel != null && this.openPOLineModel.length > 0) {
       this.openPOLineModel[0].RPTQTY = quantitySum;
     }
-
-
   }
 
   batchCalculation(autoLots: AutoLot[], qty: any) {
@@ -436,7 +431,7 @@ export class InboundGRPOComponent implements OnInit {
           break;
         case ("recCurrentOrAll"):
           //do something. //yes mean all click
-          this.prepareAllData(); 
+          this.prepareAllData();  
           break;
       }
     } else {
@@ -532,7 +527,9 @@ submitCurrentGRPO(){
     }else{
       oSubmitPOLots = JSON.parse(dataModel); 
     }
-    if(oSubmitPOLots.POReceiptLots.length>0){
+    if(oSubmitPOLots != null && oSubmitPOLots != undefined && oSubmitPOLots.POReceiptLots != null &&
+      oSubmitPOLots.POReceiptLots != undefined && oSubmitPOLots.POReceiptLots != "" 
+      && oSubmitPOLots.POReceiptLots.length>0){
       for(var i=0; i<oSubmitPOLots.POReceiptLots.length; i++ ){
         if(oSubmitPOLots.POReceiptLots[i].PONumber == this.Ponumber &&
           oSubmitPOLots.POReceiptLots[i].ItemCode == this.ItemCode &&
@@ -722,7 +719,7 @@ submitCurrentGRPO(){
             this.translate.instant("CommonSessionExpireMsg"));
           return;
         }
-        else {
+        else { 
           // alert(data[0].ErrorMsg);
           this.toastr.error('', data[0].ErrorMsg);
         }
@@ -739,13 +736,20 @@ submitCurrentGRPO(){
   }
 
   DeleteRowClick(rowindex, gridData: any) {
-    this.recvingQuantityBinArray.splice(rowindex, 1);
-    gridData.data = this.recvingQuantityBinArray;
+
     if (this.recvingQuantityBinArray.length > 0) {
       this.showButton = true;
     } else {
       this.showButton = false;
     }
+    if (this.recvingQuantityBinArray.length > 0) {
+      var qtyForRemove = this.recvingQuantityBinArray[rowindex].LotQty;
+      if (this.openPOLineModel[0].RPTQTY > qtyForRemove) {
+        this.openPOLineModel[0].RPTQTY = this.openPOLineModel[0].RPTQTY - qtyForRemove;
+      } 
+    } 
+    this.recvingQuantityBinArray.splice(rowindex, 1);
+    gridData.data = this.recvingQuantityBinArray;
   }
 
 
