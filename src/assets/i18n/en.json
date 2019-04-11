@@ -117,6 +117,7 @@
   "VendorExistMessge": "Vendor does not exist!",
   "Delivery": "Delivery",
   "Customer": "Customer",
+  "CustomerCode": "Customer Code",
   "DeleiveryToCustomer": "Delivery to Customer",
   "OrderNo": "Order No",
   "CommonSessionExpireMsg": "Session has Expired.",
@@ -201,7 +202,8 @@
   "All" : "All",
   "Current" : "Current",
   "yes" : "Yes",
-  "no" : "No"
+  "no" : "No",
+  "DeleiveryForSO":"Delievery for SO#"
 
 
    
