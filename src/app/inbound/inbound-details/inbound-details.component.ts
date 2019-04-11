@@ -40,18 +40,18 @@ export class InboundDetailsComponent implements OnInit {
   }
 
   dateAvailableToReceieve() {
-    var dataModel = localStorage.getItem("GRPOReceieveData");
+    var dataModel = localStorage.getItem("addToGRPOPONumbers");
     if (dataModel == null || dataModel == undefined || dataModel == "") {
       this.showGRPOGridAndBtn = false;
     } else {
       var inboundData = JSON.parse(dataModel);
-      this.Polist = inboundData.POReceiptLots;
+      this.Polist = inboundData.PONumbers;
       this.showGRPOGridAndBtn = true; 
     }
   }
 
   receive() {
-    var dataModel = localStorage.getItem("GRPOReceieveData");
+    var dataModel = localStorage.getItem("AddToGRPO");
     if(dataModel != null && dataModel != undefined && dataModel != ""){
       this.SubmitGoodsReceiptPO(JSON.parse(dataModel));
     }
@@ -63,24 +63,29 @@ export class InboundDetailsComponent implements OnInit {
         console.log(data);
         if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
           // alert("Goods Receipt PO generated successfully with Doc No: " + data.DocEntry);
-          this.toastr.success('', this.translate.instant("GRPOSuccessMessage" + data[0].DocEntry));
-          
+          this.toastr.success('', this.translate.instant("GRPOSuccessMessage") + data[0].DocEntry);
+          localStorage.setItem("Line", "0");
+          localStorage.setItem("GRPOReceieveData", "");
+          localStorage.setItem("AddToGRPO", "");
+          localStorage.setItem("addToGRPOPONumbers", "");
+          this.dateAvailableToReceieve();
         } else if (data[0].ErrorMsg == "7001") {
           this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
             this.translate.instant("CommonSessionExpireMsg"));
           return;
         }
-        else {
+        else { 
           // alert(data[0].ErrorMsg);
           this.toastr.error('', data[0].ErrorMsg);
         }
       },
       error => {
         console.log("Error: ", error);
+        // alert("fail");
       }
     );
   }
-
+  
   onVendorLookupClick() {
     this.inboundService.getVendorList().subscribe(
       (data: any) => {
@@ -205,7 +210,7 @@ export class InboundDetailsComponent implements OnInit {
   removePODetailData(POReceiptLots: any, inboundData: any){
     for(var i=0; i<inboundData.POReceiptLots.length; i++){
       if(inboundData.POReceiptLots[i].POItemCode == POReceiptLots.PONumber+POReceiptLots.ItemCode){
-        
+
       }
     }
   }
