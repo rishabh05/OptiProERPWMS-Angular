@@ -34,7 +34,7 @@ export class InboundPolistComponent implements OnInit {
   viewLines: any[];
   public oSavedPOLotsArray: any = {}; 
   showGRPOButton:boolean = false;
-
+  selectedVendor: string= "";
 
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent) {
@@ -46,6 +46,7 @@ export class InboundPolistComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.selectedVendor = this.inboundMasterComponent.selectedVernder;
   }
 
   onPOlookupClick() {
