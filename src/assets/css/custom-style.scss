@@ -280,3 +280,21 @@ body.modal-open app-root {
 // .k-grid.no-shadow{
 //     border-color: #bbb;
 // }
+
+/////////////////////////////////////////////////////////////////////
+///////////////////////////// Page header custom Style /////////////////////
+////////////////////////////////////////////////////////////////////
+body .opti_container .opti_container_inner{
+    h3.border-bottom.d-flex.pt-1.pb-3.mb-4{
+        font-size: 24px;
+        padding-bottom: 0.5rem !important;
+        padding-top: 0 !important;
+        margin-bottom: 10px !important;
+    }
+    h4.mt-3.mb-0{
+        font-size: 18px;
+        padding-bottom: 0rem !important;
+        padding-top: 0 !important;
+        margin-bottom: 0!important;
+    }
+}

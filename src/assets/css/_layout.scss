@@ -57,11 +57,12 @@
         #opti_MainContentID {
             height: calc(100% - 65px); // top bar height 65px
             overflow: hidden;
+           
         }
 
     // Css Related To top panel
         section#opti_TopBarID {
-            min-height: $top-bar-height;
+            min-height: $top-bar-height - 20px !important;
         }
 
     //Opti right section 
