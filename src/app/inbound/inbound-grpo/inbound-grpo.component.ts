@@ -10,8 +10,7 @@ import { OpenPOLinesModel } from 'src/app/models/Inbound/OpenPOLinesModel';
 import { RecvingQuantityBin } from 'src/app/models/Inbound/RecvingQuantityBin';
 import { AutoLot } from 'src/app/models/Inbound/AutoLot';
 import { ISubscription } from 'rxjs/Subscription';
-import { ConfirmdialogService } from 'src/app/common/confirm-dialog/confirmdialog.service';
-import {ConfirmDialogComponent} from 'src/app/common/confirm-dialog/confirm-dialog/confirm-dialog.component';
+
 @Component({
   selector: 'app-inbound-grpo',
   templateUrl: './inbound-grpo.component.html',
@@ -53,7 +52,7 @@ export class InboundGRPOComponent implements OnInit {
   scanInputPlaceholder: string = "";
   mfrGridColumnText: string = "";
   SRBatchColumnText: string = "";
-  public oSubmitPOLotsArray: any[] = []; 
+  public oSubmitPOLotsArray: any[] = [];
   isAutoLotEnabled: boolean;
   isDisabledScanInput: boolean = false;
   ScanSerial: string = "";
@@ -69,11 +68,16 @@ export class InboundGRPOComponent implements OnInit {
   radioSelected: any = 0;
   LastSerialNumber: any[];
   LineId: any[];
-  previousReceivedQty:number = 0;
-  confirmDialogCmponentFactory: ComponentFactory<ConfirmDialogComponent>;
+  previousReceivedQty: number = 0;
+
+  showConfirmDialog:boolean;
+  rowindexForDelete:any;
+  gridDataAfterDelete:any[];
+
+
   @ViewChild('Quantity') QuantityField;
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
-    private inboundMasterComponent: InboundMasterComponent, private confDialogService: ConfirmdialogService) {
+    private inboundMasterComponent: InboundMasterComponent) {
     let userLang = navigator.language.split('-')[0];
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
     translate.use(userLang);
@@ -86,7 +90,7 @@ export class InboundGRPOComponent implements OnInit {
     this.openPOLineModel[0] = this.inboundMasterComponent.openPOmodel;
     //update below variable with local storage data
     //previousReceivedQty:number = 0;
-   // also update this.openPOLineModel[0].RPTQTY with local storage value
+    // also update this.openPOLineModel[0].RPTQTY with local storage value
     if (this.openPOLineModel != undefined && this.openPOLineModel != null) {
       this.Ponumber = this.openPOLineModel[0].DOCENTRY;
       this.tracking = this.openPOLineModel[0].TRACKING;
@@ -116,18 +120,19 @@ export class InboundGRPOComponent implements OnInit {
       } else {
         this.IsQCRequired = false;
       }
- 
+
       this.getUOMList();
       if (this.RecvbBinvalue == "") {
         this.defaultRecvBin = true;
         this.ShowBins();
       }
     }
-    
     this.LastSerialNumber = [];
     this.LineId = [];
     this.showSavedDataToGrid()
   }
+  
+ 
 
   setLocalStringForBatch() {
     this.serialNoTitle = this.translate.instant("SerialNo");
@@ -226,7 +231,6 @@ export class InboundGRPOComponent implements OnInit {
     this.inboundService.getUOMs(this.openPOLineModel[0].ITEMCODE).subscribe(
       (data: any) => {
         console.log(data);
-
         this.openPOLineModel[0].UOMList = data;
         if (this.openPOLineModel[0].UOMList.length > 0) {
           this.uomSelectedVal = this.openPOLineModel[0].UOMList[0];
@@ -239,7 +243,6 @@ export class InboundGRPOComponent implements OnInit {
   }
 
   handleCheckChange($event) {
-
     if ($event.currentTarget.id == "InventoryEnquiryOptions1") {
       // mfr serial radio selected.
       this.radioSelected = 0;
@@ -309,19 +312,17 @@ export class InboundGRPOComponent implements OnInit {
       this.showButton = false;
     }
     this.updateReceiveQty();
-   
+
   }
-  updateReceiveQty(){
+  updateReceiveQty() {
     let quantitySum: number = 0;
-    quantitySum = this.previousReceivedQty;
+    //quantitySum = 0;//this.openPOLineModel[0].RPTQTY;
     for (var i = 0; i < this.recvingQuantityBinArray.length; i++) {
       quantitySum += Number(this.recvingQuantityBinArray[i].LotQty);
     }
-    if(this.openPOLineModel!=null && this.openPOLineModel.length>0){
-      this.openPOLineModel[0].RPTQTY = quantitySum ;
+    if (this.openPOLineModel != null && this.openPOLineModel.length > 0) {
+      this.openPOLineModel[0].RPTQTY = quantitySum;
     }
-    
-    
   }
 
   batchCalculation(autoLots: AutoLot[], qty: any) {
@@ -412,9 +413,7 @@ export class InboundGRPOComponent implements OnInit {
   }
 
   
-  showConfirmDialog:boolean;
-  rowindexForDelete:any;
-  gridDataAfterDelete:any[];
+
   public openConfirmForDelete(rowindex, gridData: any) {
     this.dialogFor = "deleteRow";
     this.dialogMsg =  this.translate.instant("DoYouWantToDelete")
@@ -432,13 +431,13 @@ export class InboundGRPOComponent implements OnInit {
           break;
         case ("recCurrentOrAll"):
           //do something. //yes mean all click
-          this.prepareAllData(); 
+          this.prepareAllData();  
           break;
       }
     } else {
       if ($event.Status == "cancel") {
         // when user click on cross button nothing to do.
-      } else {
+      } else { 
         //means user click on negative button
         if ($event.From == "recCurrentOrAll") {
 
@@ -454,7 +453,7 @@ submitCurrentGRPO(){
   oSubmitPOLotsObj.POReceiptLotDetails = [];
   oSubmitPOLotsObj.UDF = [];
   oSubmitPOLotsObj.LastSerialNumber = [];
- var oSubmitPOLotsObj = this.prepareSubmitPurchaseOrder(oSubmitPOLotsObj); // current data only.
+  var oSubmitPOLotsObj = this.prepareSubmitPurchaseOrder(oSubmitPOLotsObj); // current data only.
   this.SubmitGoodsReceiptPO(oSubmitPOLotsObj);
 }
 
@@ -524,18 +523,30 @@ submitCurrentGRPO(){
     var oSubmitPOLots: any = {};
     var dataModel = localStorage.getItem("GRPOReceieveData");
     if(dataModel == null|| dataModel == undefined || dataModel == ""){
-      this.oSubmitPOLotsArray = [];
+      //this.oSubmitPOLotsArray = []; 
+      oSubmitPOLots = {};
     }else{
-      oSubmitPOLots = JSON.parse(dataModel);
+      oSubmitPOLots = JSON.parse(dataModel); 
     }
-    if(oSubmitPOLots.POReceiptLotDetails.length>0){
-      for(var i=0; i<oSubmitPOLots.POReceiptLotDetails.length; i++ ){
+    if(oSubmitPOLots != null && oSubmitPOLots != undefined && oSubmitPOLots.POReceiptLots != null &&
+      oSubmitPOLots.POReceiptLots != undefined && oSubmitPOLots.POReceiptLots != "" 
+      && oSubmitPOLots.POReceiptLots.length>0){
+      for(var i=0; i<oSubmitPOLots.POReceiptLots.length; i++ ){
         if(oSubmitPOLots.POReceiptLots[i].PONumber == this.Ponumber &&
           oSubmitPOLots.POReceiptLots[i].ItemCode == this.ItemCode &&
           oSubmitPOLots.POReceiptLots[i].Tracking == this.tracking ){
-            this.recvingQuantityBinArray[i] = oSubmitPOLots.POReceiptLotDetails[i];
+
+            for(var j=0; j<oSubmitPOLots.POReceiptLotDetails.length; j++ ){
+              if(oSubmitPOLots.POReceiptLotDetails[j].ParentLineNo == oSubmitPOLots.POReceiptLots[i].Line){
+                this.recvingQuantityBinArray.push(oSubmitPOLots.POReceiptLotDetails[j]);
+                this.previousReceivedQty = Number(this.previousReceivedQty) + Number(oSubmitPOLots
+                  .POReceiptLotDetails[j].LotQty);
+              }
+            }
           }
       }
+      // this.updateReceiveQty();
+      this.openPOLineModel[0].RPTQTY = this.previousReceivedQty;
     }
     if (this.tracking == "S") {
       this.isNonTrack = false;
@@ -547,6 +558,11 @@ submitCurrentGRPO(){
       this.isNonTrack = false;
       
     }
+    if (this.recvingQuantityBinArray.length > 0) {
+      this.showButton = true;
+    } else {
+      this.showButton = false;
+    }
   }
   manageRecords(oSubmitPOLotsObj: any): any{
     var size = oSubmitPOLotsObj.POReceiptLots.length;  
@@ -554,8 +570,19 @@ submitCurrentGRPO(){
       if(oSubmitPOLotsObj.POReceiptLots[i].PONumber == this.Ponumber && 
         oSubmitPOLotsObj.POReceiptLots[i].ItemCode == this.openPOLineModel[0].ITEMCODE && 
         oSubmitPOLotsObj.POReceiptLots[i].LineNo == this.openPOLineModel[0].LINENUM){
-          oSubmitPOLotsObj.POReceiptLots.splice(i, 1); 
-          oSubmitPOLotsObj.POReceiptLotDetails.splice(i, 1); 
+           var s = oSubmitPOLotsObj.POReceiptLotDetails.length;
+          for(var j=0; j<oSubmitPOLotsObj.POReceiptLotDetails.length; j++ ){
+            if(oSubmitPOLotsObj.POReceiptLotDetails[j].ParentLineNo == oSubmitPOLotsObj.POReceiptLots[i].Line){
+              oSubmitPOLotsObj.POReceiptLotDetails.splice(j, 1);
+              j = -1;
+            }
+          }    
+          oSubmitPOLotsObj.POReceiptLots.splice(i, 1);     
+          // oSubmitPOLotsObj.POReceiptLotDetails.forEach(element => {
+          //   if(oSubmitPOLotsObj.POReceiptLotDetails[i].POItemCode == this.Ponumber+this.ItemCode){
+          //     oSubmitPOLotsObj.POReceiptLotDetails.splice(i, 1);
+          //   }
+          // });
           oSubmitPOLotsObj.UDF.splice(i, 1); 
           oSubmitPOLotsObj.LastSerialNumber.splice(i, 1); 
           // this.oSubmitPOLotsArray.splice(i, 1); 
@@ -580,57 +607,63 @@ submitCurrentGRPO(){
     
   }
 
+
   prepareSubmitPurchaseOrder(oSubmitPOLotsObj : any): any {
     oSubmitPOLotsObj = this.manageRecords(oSubmitPOLotsObj);
-
+    if(localStorage.getItem("Line") == null|| localStorage.getItem("Line") == undefined || 
+    localStorage.getItem("Line") == ""){
+      localStorage.setItem("Line", "0");
+    }
     oSubmitPOLotsObj.POReceiptLots.push({
       DiServerToken: localStorage.getItem("Token"),
       PONumber: this.Ponumber,
       CompanyDBId: localStorage.getItem("CompID"),
       LineNo: this.openPOLineModel[0].LINENUM,
       ShipQty: this.openPOLineModel[0].RPTQTY.toString(),
-      OpenQty: this.openPOLineModel[0].OPENQTY,
+      OpenQty: this.openPOLineModel[0].OPENQTY.toString(),
       WhsCode: localStorage.getItem("whseId"),
       Tracking: this.openPOLineModel[0].TRACKING,
       ItemCode: this.openPOLineModel[0].ITEMCODE,
       LastSerialNumber: 0,
-      Line: 0,
-      UOM: this.uomSelectedVal.UomEntry,
+      Line: Number(localStorage.getItem("Line")),
       GUID: localStorage.getItem("GUID"),
+      UOM: this.uomSelectedVal.UomEntry,
       UsernameForLic: localStorage.getItem("UserId")
+     
       //------end Of parameter For License----
     });
-
+    // oSubmitPOLotsObj.UDF = [];  
     oSubmitPOLotsObj.UDF.push({
       Key: "OPTM_TARGETWHS",//UDF[iIndex].Key,
       Value: this.targetWhse,
       //LotNo: UDF[iIndex].LotNo,
       Flag: 'D', // D = Line, H= Header, L = Lots
-      LineNo: 0
+      LineNo: Number(localStorage.getItem("Line"))
     });
     oSubmitPOLotsObj.UDF.push({
       Key: "OPTM_TARGETBIN",//UDF[iIndex].Key,
       Value: this.targetBin,
       //LotNo: UDF[iIndex].LotNo,
       Flag: 'D', // D = Line, H= Header, L = Lots
-      LineNo: 0
+      LineNo: Number(localStorage.getItem("Line"))
     });
 
 
     for (var iBtchIndex = 0; iBtchIndex < this.recvingQuantityBinArray.length; iBtchIndex++) {
       oSubmitPOLotsObj.POReceiptLotDetails.push({ 
+       // POItemCode: this.Ponumber+this.openPOLineModel[0].ITEMCODE,
         Bin: this.recvingQuantityBinArray[iBtchIndex].Bin,
         LineNo: this.openPOLineModel[0].LINENUM,
         LotNumber: this.recvingQuantityBinArray[iBtchIndex].LotNumber, //getUpperTableData.GoodsReceiptLineRow[iBtchIndex].SysSerNo,
-        LotQty: this.recvingQuantityBinArray[iBtchIndex].LotQty.toString(),
+        LotQty: this.recvingQuantityBinArray[iBtchIndex].LotQty,
         SysSerial: "0",
         ExpireDate: this.GetSubmitDateFormat(this.expiryDate),//GetSubmitDateFormat(getUpperTableData.GoodsReceiptLineRow[iBtchIndex].EXPDATE), // oCurrentController.GetSubmitDateFormat(oActualGRPOModel.PoDetails[iIndex].ExpireDate),//oActualGRPOModel.PoDetails[iIndex].ExpireDate,
         VendorLot: this.recvingQuantityBinArray[iBtchIndex].VendorLot,
         //NoOfLabels: oActualGRPOModel.PoDetails[iIndex].NoOfLabels,
         //Containers: piContainers,
         SuppSerial: this.recvingQuantityBinArray[iBtchIndex].VendorLot,
-        ParentLineNo: 0
-        //InvType: oActualGRPOModel.GoodsReceiptLineRow[iIndex].LotStatus,
+        ParentLineNo: Number(localStorage.getItem("Line")),
+        LotSteelRollId : ""
       });
     }
 
@@ -641,7 +674,7 @@ submitCurrentGRPO(){
         ItemCode: this.openPOLineModel[0].ITEMCODE
       });
     }
-
+    localStorage.setItem("Line", ""+Number(localStorage.getItem("Line"))+1);
     return oSubmitPOLotsObj;
   }
 
@@ -678,13 +711,15 @@ submitCurrentGRPO(){
         if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
           // alert("Goods Receipt PO generated successfully with Doc No: " + data.DocEntry);
           this.toastr.success('', this.translate.instant("GRPOSuccessMessage") + data[0].DocEntry);
+          localStorage.setItem("Line", "0");
+          localStorage.setItem("GRPOReceieveData", "");
           this.inboundMasterComponent.inboundComponent = 2;
         } else if (data[0].ErrorMsg == "7001") {
           this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
             this.translate.instant("CommonSessionExpireMsg"));
           return;
         }
-        else {
+        else { 
           // alert(data[0].ErrorMsg);
           this.toastr.error('', data[0].ErrorMsg);
         }
@@ -701,13 +736,20 @@ submitCurrentGRPO(){
   }
 
   DeleteRowClick(rowindex, gridData: any) {
-    this.recvingQuantityBinArray.splice(rowindex, 1);
-    gridData.data = this.recvingQuantityBinArray;
+
     if (this.recvingQuantityBinArray.length > 0) {
       this.showButton = true;
     } else {
       this.showButton = false;
     }
+    if (this.recvingQuantityBinArray.length > 0) {
+      var qtyForRemove = this.recvingQuantityBinArray[rowindex].LotQty;
+      if (this.openPOLineModel[0].RPTQTY > qtyForRemove) {
+        this.openPOLineModel[0].RPTQTY = this.openPOLineModel[0].RPTQTY - qtyForRemove;
+      } 
+    } 
+    this.recvingQuantityBinArray.splice(rowindex, 1);
+    gridData.data = this.recvingQuantityBinArray;
   }
 
 

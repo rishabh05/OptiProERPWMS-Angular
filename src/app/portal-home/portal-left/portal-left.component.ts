@@ -5,6 +5,8 @@ import { opticonstants } from '../../constants';
 import { CurrentSidebarInfo } from '../../models/sidebar/current-sidebar-info';
 import { MenuService } from '../../services/menu.service';
 import { UIHelper } from 'src/app/helpers/ui.helpers';
+import { CommandName } from 'selenium-webdriver';
+import { CommonConstants } from 'src/app/const/common-constants';
 
 @Component({
   selector: 'app-portal-left',
@@ -119,5 +121,10 @@ export class PortalLeftComponent implements OnInit {
 
   onInboundClick(){
     localStorage.setItem("GRPOReceieveData", "");
+    localStorage.setItem("Line", "0")
+  }
+
+  onOutboundClick(){
+    localStorage.setItem(CommonConstants.OutboundData, null);
   }
 }

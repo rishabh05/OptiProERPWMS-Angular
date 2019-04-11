@@ -45,6 +45,8 @@ export class OutOrderComponent implements OnInit {
         this.orderNumber = this.outbound.OrderData.DOCNUM;
         this.openSOOrderList();
       }
+
+      this.calculatePickQty();
     }
 
   }
@@ -105,6 +107,8 @@ export class OutOrderComponent implements OnInit {
         resp => {
           if (resp != null && resp != undefined)
             this.soItemsDetail = resp.RDR1;
+            this.calculatePickQty();
+          console.log("SOItem", this.soItemsDetail);
           localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
 
           this.showSOIetDetail = true;
@@ -152,7 +156,7 @@ export class OutOrderComponent implements OnInit {
         for (let j = 0; j < deleivery.length; j++) {
           const element = deleivery[j];
           if (d.Item.DOCENTRY == element.Item.DOCENTRY && d.Order.DOCNUM == element.Order.DOCNUM) {
-             deleivery.slice(index, 1);
+            deleivery.slice(index, 1);
           }
         }
       }
@@ -170,4 +174,37 @@ export class OutOrderComponent implements OnInit {
 
   public deleiver() { }
 
+
+  calculatePickQty() {
+
+    if (this.soItemsDetail != undefined && this.soItemsDetail !== null) {
+
+      for (let i = 0; i < this.soItemsDetail.length; i++) {
+        const soelement = this.soItemsDetail[i];
+        let totalPickQty: number = 0;
+
+        if (this.outbound !== null && this.outbound != undefined && this.outbound.SelectedMeterials != null && this.outbound.SelectedMeterials != undefined && this.outbound.SelectedMeterials.length > 0) {
+
+          for (let j = 0; j < this.outbound.TempMeterials.length; j++) {
+
+            const element = this.outbound.TempMeterials[j];
+
+            if (soelement.ITEMCODE === element.Item.ITEMCODE && this.outbound.OrderData.DOCNUM===element.Order.DOCNUM) {
+              totalPickQty = totalPickQty + element.Meterial.MeterialPickQty;
+            }
+          }
+        }
+
+        // Total Qty of Item
+        soelement.RPTQTY = totalPickQty;
+        this.soItemsDetail[i] = soelement;
+
+      }
+
+
+    }
+
+
+  }
 }
+

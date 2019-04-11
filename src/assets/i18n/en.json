@@ -117,6 +117,7 @@
   "VendorExistMessge": "Vendor does not exist!",
   "Delivery": "Delivery",
   "Customer": "Customer",
+  "CustomerCode": "Customer Code",
   "DeleiveryToCustomer": "Delivery to Customer",
   "OrderNo": "Order No",
   "CommonSessionExpireMsg": "Session has Expired.",
@@ -183,7 +184,7 @@
   "Serial" : "Serial",
   "Batch" : "Batch",
   "DoYouWantToDelete": "Are you sure to delete ?",
-  "AddToDeleiver":"Add To Deleiver",
+  "AddToDeleiver":"Add To Deleivery",
   "Deleiver":"Deleiver",
   "NoOpenQuantity":"No open quantity available",
 
@@ -194,11 +195,13 @@
   "MfrBatchNo":"Mfr Batch No.",
   "InvalidScanCode": "Invalid scan code!",
   "PurchaseOrderNumber" :"Purchase Order Number",
+  "DeleiverySuccess":"Order deleivery successfully generated",
   "PrintAllLabelsAfterSubmit" : "Do you want to print all labels after submit ?",
   "ReceiveCurrentOrAll" : "Receive current OR all saved lines",
   "DoYouWantToDeleteConf" : "Do you want to delete?",
   "All" : "All",
-  "Current" : "Current"
+  "Current" : "Current",
+  "DeleiveryForSO":"Delievery for SO#"
 
 
    

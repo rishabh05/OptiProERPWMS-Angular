@@ -1,7 +1,9 @@
 <div class="opti_container position-relative bg-white rounded">
     <form class="form-with-fix-btnBar ">
         <div class="opti_container_inner" [perfectScrollbar]=" ">
-            <!-- <h3 class="border-bottom d-flex pt-1 pb-3 mb-4"> Delivery to Customer: Test SP </h3> -->
+                <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
+                        {{'DeleiveryForSO'|translate}}: {{outbound.OrderData.DOCNUM}}
+                    </h3>
             <div class="row">
                 <div class="col-12">
                         
@@ -74,12 +76,12 @@
 
                 </div>
             </div>
-            <div class="row">
+            <div class="row">                
                 <div class="col-12">
                     <kendo-grid class="no-shadow" [data]="selectedMeterials" [resizable]="true" [pageSize]="50"
                         [pageable]="false" [sortable]="true" [selectable]="true" id="gridSelectedMeterial" #gridSelectedMeterial>
 
-                        <kendo-grid-column *ngIf="OperationType!='N'" field="LOTNO" title="{{selected.ITEMCODE}}" [width]="30"></kendo-grid-column>
+                        <kendo-grid-column *ngIf="OperationType==='S' || OperationType==='B'" field="LOTNO" title="{{selected.ITEMCODE}}" [width]="30"></kendo-grid-column>
                         <kendo-grid-column field="BINNO" title="{{'BINNO'|translate}}" [width]="30"></kendo-grid-column>
                         <kendo-grid-column field="TOTALQTY" format="{0:n3}" headerClass="text-right" class=" text-right" title="{{'TOTALQTY'|translate}}"
                             [width]="10"></kendo-grid-column>

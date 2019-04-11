@@ -166,7 +166,6 @@ export class OutProdissueComponent implements OnInit {
     return this.totalPickQty >= this.selected.OPENQTY;
   }
 
-
   needMeterial() {
     this.calculateTotalAndRemainingQty();
 

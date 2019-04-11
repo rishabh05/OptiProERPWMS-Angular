@@ -33,7 +33,7 @@
             </li>
 
             <li id="SLS" (click)="listClick($event, 'outbound')" [ngClass]="{'active': selectedItem == 'outbound'}">
-                <a roterLink="outbound">
+                <a roterLink="outbound" (click)="onOutboundClick()">
                     <i class="opti-icon-outbound-order" [style.color]="selectedThemeColor"></i>
                     <span class="text">{{'Outbound'|translate}}</span>
                 </a>

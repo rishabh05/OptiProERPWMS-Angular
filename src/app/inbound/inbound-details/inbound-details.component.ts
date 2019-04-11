@@ -19,7 +19,12 @@ export class InboundDetailsComponent implements OnInit {
   VendCode: string;
   VendName: string;
   showGRPOGridAndBtn: boolean = false;
-  public oSubmitPOLotsArray: any[] = [];
+  public Polist: any[] = [];
+  dialogFor: string = "";
+  dialogMsg:string="Do you want to delete?"
+  showConfirmDialog:boolean;
+  rowindexForDelete:any;
+  gridDataAfterDelete:any[];
 
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent) {
@@ -39,19 +44,16 @@ export class InboundDetailsComponent implements OnInit {
     if (dataModel == null || dataModel == undefined || dataModel == "") {
       this.showGRPOGridAndBtn = false;
     } else {
-      this.oSubmitPOLotsArray = JSON.parse(dataModel);
+      var inboundData = JSON.parse(dataModel);
+      this.Polist = inboundData.POReceiptLots;
       this.showGRPOGridAndBtn = true; 
     }
   }
 
-  onRowSelection(){
-    this.inboundMasterComponent.inboundComponent = 2;
-  }
-
   receive() {
-    for(var i=0; i<this.oSubmitPOLotsArray.length; i++){
-      var oSubmitPOLotsObj = this.oSubmitPOLotsArray[i];
-      this.SubmitGoodsReceiptPO(oSubmitPOLotsObj);
+    var dataModel = localStorage.getItem("GRPOReceieveData");
+    if(dataModel != null && dataModel != undefined && dataModel != ""){
+      this.SubmitGoodsReceiptPO(JSON.parse(dataModel));
     }
   }
 
@@ -75,7 +77,6 @@ export class InboundDetailsComponent implements OnInit {
       },
       error => {
         console.log("Error: ", error);
-        // alert("fail");
       }
     );
   }
@@ -85,7 +86,6 @@ export class InboundDetailsComponent implements OnInit {
       (data: any) => {
         console.log(data);
         if (data != undefined) {
-          // console.log("ItemList - " + data.toString());
           if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
@@ -139,8 +139,6 @@ export class InboundDetailsComponent implements OnInit {
     );
   }
 
-
-
   getLookupValue($event) {
     this.VendCode = $event[0];
     this.VendName = $event[1];
@@ -154,10 +152,61 @@ export class InboundDetailsComponent implements OnInit {
     else {
       this.toastr.error('', this.translate.instant("SelectVendorValidateMsg"));
     }
-
   }
 
   OnCancelClick() {
     this.router.navigate(['home/dashboard']);
+  }
+
+  onPOSelection(){
+    this.inboundMasterComponent.inboundComponent = 2;
+  }
+
+  public openConfirmForDelete(rowindex, gridData: any) {
+    this.dialogFor = "deleteRow";
+    this.dialogMsg =  this.translate.instant("DoYouWantToDelete")
+    this.rowindexForDelete = rowindex;
+    this.gridDataAfterDelete = gridData;
+    this.showConfirmDialog = true;
+  }
+
+  getConfirmDialogValue($event) {
+    this.showConfirmDialog = false;
+    if ($event.Status == "yes") {
+      switch ($event.From) {
+        case ("deleteRow"):
+          this.DeleteRowClick(this.rowindexForDelete, this.gridDataAfterDelete);
+          break;
+      }
+    } else {
+      if ($event.Status == "cancel") {
+        // when user click on cross button nothing to do.
+      } 
+    }
+  }
+
+  DeleteRowClick(rowindex, gridData: any) {
+    gridData.splice(rowindex, 1);
+    var dataModel = localStorage.getItem("GRPOReceieveData");
+    if (dataModel == null || dataModel == undefined || dataModel == "") {
+    } else {
+      var inboundData = JSON.parse(dataModel);
+      this.removePODetailData(inboundData.POReceiptLots[rowindex], inboundData);
+      inboundData.POReceiptLots.splice(rowindex, 1);
+    }
+    gridData.data = this.Polist;
+    if (this.Polist.length > 0) {
+      this.showGRPOGridAndBtn = true;
+    } else {
+      this.showGRPOGridAndBtn = false;
+    }
+  }
+
+  removePODetailData(POReceiptLots: any, inboundData: any){
+    for(var i=0; i<inboundData.POReceiptLots.length; i++){
+      if(inboundData.POReceiptLots[i].POItemCode == POReceiptLots.PONumber+POReceiptLots.ItemCode){
+        
+      }
+    }
   }
 }

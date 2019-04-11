@@ -30,27 +30,23 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
             <!-- Kendo Table Grid Row start -->
             <div class="row" *ngIf = "showGRPOGridAndBtn">
                 <div class="col-12 col-sm-12 col-md-12" >
-                    <kendo-grid class="no-shadow" [kendoGridBinding]="openPOLineModel" [resizable]="true" [pageSize]="2" [sortable]="true"
+                    <kendo-grid class="no-shadow" [kendoGridBinding]="Polist" [resizable]="true" [pageSize]="2" [sortable]="true"
                         [height]=gridHeight
-                        [selectable]="true" (selectionChange)="openPOByUOM($event,soItemsDetail.ITEMCODE)" #gridItem>
-
-
-                        <kendo-grid-column field="PurchaseOrderNumber" headerClass="text-center" class="text-center" title="{{'PurchaseOrderNumber'|translate}}"></kendo-grid-column>
+                        [selectable]="true" (selectionChange)="onPOSelection($event)" #gridItem>
+                        <kendo-grid-column field="PONumber" headerClass="text-center" class="text-center" title="{{'PurchaseOrderNumber'|translate}}"></kendo-grid-column>
                         <kendo-grid-column field="" title="" [width]="50">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                <button class="k-button-icon k-button" type="button">
+                                <button class="k-button-icon k-button" type="button" (click)="openConfirmForDelete(rowIndex, gridItem)">
                                     <span class="k-icon k-i-delete"></span>
                                 </button>
                             </ng-template>
                         </kendo-grid-column>
-
                     </kendo-grid>
                 </div>
             </div>
@@ -90,3 +86,8 @@
 <span *ngIf="showLookupLoader == false">
     <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
 </span>
+
+<span *ngIf="showConfirmDialog">
+        <app-comon-confirm-dialog [titleMessage]="dialogMsg" 
+        [yesButtonText]="yesButtonText" [fromWhere] ="dialogFor"  [noButtonText]="noButtonText" (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
+        </span>

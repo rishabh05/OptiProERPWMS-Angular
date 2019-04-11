@@ -68,6 +68,12 @@ export class OutboundService {
     var body:any={WHSCODE:JSON.stringify([{COMPANYDBNAME:localStorage.getItem("CompID"),WHSCODE:localStorage.getItem("whseId"),ITEMCODE:itemCode}])};
     return this.httpclient.post(this.config_params.service_url + "/api/ProductionIssue/GetBinsToIssueForNonTrackItem", body, this.httpOptions);    
   }
+
+  public addDeleivery(req:any){
+    var body:any={DeliveryToken:JSON.stringify(req)};
+    return this.httpclient.post(this.config_params.service_url + "/api/Delivery/SubmitDelivery", body, this.httpOptions);    
+  }
+
   private prepareRequest(): any {
     //    this.outRequest = new OutRequest();
     this.outRequest.CompanyDBId = localStorage.getItem("CompID");
