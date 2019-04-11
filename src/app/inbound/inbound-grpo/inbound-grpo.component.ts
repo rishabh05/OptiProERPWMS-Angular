@@ -35,7 +35,7 @@ export class InboundGRPOComponent implements OnInit {
   defaultRecvBin: boolean = false;
   serviceData: any[];
   lookupfor: string;
-  showLookupLoader = false;
+  showLookupLoader = true;
   viewLines: any[];
   //getLookupValue: any[];
   public value: Date = new Date();
@@ -73,6 +73,8 @@ export class InboundGRPOComponent implements OnInit {
   showConfirmDialog:boolean;
   rowindexForDelete:any;
   gridDataAfterDelete:any[];
+
+  showPDF: boolean = false;
 
 
   @ViewChild('Quantity') QuantityField;
@@ -409,7 +411,9 @@ export class InboundGRPOComponent implements OnInit {
 
   public openConfirmForDelete(rowindex, gridData: any) {
     this.dialogFor = "deleteRow";
-    this.dialogMsg =  this.translate.instant("DoYouWantToDelete")
+    this.dialogMsg =  this.translate.instant("DoYouWantToDelete");
+    this.yesButtonText = this.translate.instant("yes");
+    this.noButtonText = this.translate.instant("no");
     this.rowindexForDelete = rowindex;
     this.gridDataAfterDelete = gridData;
     this.showConfirmDialog = true;
@@ -423,9 +427,24 @@ export class InboundGRPOComponent implements OnInit {
           this.DeleteRowClick(this.rowindexForDelete, this.gridDataAfterDelete);
           break;
         case ("recCurrentOrAll"):
-          //do something. //yes mean all click
-          this.prepareAllData();  
+          // show pdf dialog
+          this.yesButtonText = this.translate.instant("yes");
+          this.noButtonText = this.translate.instant("no");
+          this.dialogFor = "receiveMultiplePDFDialog";
+          this.dialogMsg =  this.translate.instant("PrintAllLabelsAfterSubmit");
+          this.showConfirmDialog = true; // show dialog
+          this.showPDF = true;
           break;
+        case ("receiveSinglePDFDialog"):
+          //do something. //yes mean all click
+          this.submitCurrentGRPO();  
+          this.showPDF = true;
+          break;
+          case("receiveMultiplePDFDialog"):
+          // if pdf dialog yes click for multiple recevie.
+          this.prepareAllData();
+          break;
+          
       }
     } else {
       if ($event.Status == "cancel") {
@@ -433,9 +452,21 @@ export class InboundGRPOComponent implements OnInit {
       } else { 
         //means user click on negative button
         if ($event.From == "recCurrentOrAll") {
-
-          this.submitCurrentGRPO();
-        } 
+          //this.submitCurrentGRPO();
+          this.yesButtonText = this.translate.instant("yes");
+          this.noButtonText = this.translate.instant("no");
+          this.dialogFor = "receiveSinglePDFDialog";
+          this.dialogMsg =  this.translate.instant("PrintAllLabelsAfterSubmit");
+          this.showConfirmDialog = true; // show dialog
+        }
+        else if ($event.From == "receiveSinglePDFDialog") {
+            this.submitCurrentGRPO();
+            this.showPDF = false;
+        }
+        else if ($event.From == "receiveMultiplePDFDialog"){
+          this.prepareAllData();
+          this.showPDF = false;
+        }
       }
     }
   }
@@ -584,7 +615,14 @@ submitCurrentGRPO(){
 
     var dataModel = localStorage.getItem("GRPOReceieveData");
     if(dataModel == null|| dataModel == undefined || dataModel == ""){
-      this.submitCurrentGRPO();
+      //this.submitCurrentGRPO();
+      // show print dialog here and onclick its handling.  
+      this.yesButtonText = this.translate.instant("yes");
+      this.noButtonText = this.translate.instant("no");
+      this.dialogFor = "receiveSinglePDFDialog";
+      this.dialogMsg =  this.translate.instant("PrintAllLabelsAfterSubmit");
+      this.showConfirmDialog = true; // show dialog
+
     }else{
       dataModel = this.manageRecords(dataModel);
       if(dataModel == null|| dataModel == undefined || dataModel == ""){
@@ -704,7 +742,14 @@ submitCurrentGRPO(){
           this.toastr.success('', this.translate.instant("GRPOSuccessMessage") + data[0].DocEntry);
           localStorage.setItem("Line", "0");
           localStorage.setItem("GRPOReceieveData", "");
-          this.inboundMasterComponent.inboundComponent = 1;
+          if(this.showPDF){
+            //show pdf
+        //  this.inboundService.printingServiceForSubmitGRPO(data[0].DocEntry);
+            this.showPDF = false;
+          }else{
+               // no need to display pdf
+          }
+          this.inboundMasterComponent.inboundComponent = 1; 
         } else if (data[0].ErrorMsg == "7001") {
           this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
             this.translate.instant("CommonSessionExpireMsg"));
@@ -735,12 +780,12 @@ submitCurrentGRPO(){
     }
     if (this.recvingQuantityBinArray.length > 0) {
       var qtyForRemove = this.recvingQuantityBinArray[rowindex].LotQty;
-      if (this.openPOLineModel[0].RPTQTY > qtyForRemove) {
+      if (this.openPOLineModel[0].RPTQTY >= qtyForRemove) {
         this.openPOLineModel[0].RPTQTY = this.openPOLineModel[0].RPTQTY - qtyForRemove;
       } 
     } 
     this.recvingQuantityBinArray.splice(rowindex, 1);
-    gridData.data = this.recvingQuantityBinArray;
+    gridData.data = this.recvingQuantityBinArray; 
   }
 
 
@@ -983,4 +1028,42 @@ submitCurrentGRPO(){
 
   }
 
+  displayPDF: boolean = false;
+  base64String: string = "";
+  fileName: string = "";
+  // base64String:string = "";
+  // fileName:string = "";
+  // public displayPDF(){
+  //   this.printServiceSubs = this.labelPrintRepor this.inboundService.printingServiceForSubmitGRPO(data[0].DocEntry);tsService.printingServiceForItemLabel(this.itemCode, this.binNo, this.noOfCopies).subscribe(
+  //     (data: any) => {
+        
+  //       if (data != undefined) {
+  //         console.log("" + data);
+  //         if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+  //           this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+  //             this.translate.instant("CommonSessionExpireMsg"));
+  //           return; 
+  //         }
+  //         this.fileName = data.Detail[0].FileName;
+  //         this.base64String = data.Detail[0].Base64String;
+         
+  //         if (this.base64String != null && this.base64String != "") {
+  //           // this.showPdf(); // this function is used to display pdf in new tab.
+  //           this.base64String = 'data:application/pdf;base64,' + this.base64String;
+    
+  //           this.commonservice.refreshDisplyPDF(true); 
+ 
+  //          }
+  //         console.log("filename:" + this.fileName);
+  //         console.log("filename:" + this.base64String);
+  //       } else {
+  //         this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+  //       }
+  //     },
+  //     error => {
+  //       this.toastr.error('', error);
+  //     }
+  //   );
+  // }
+  // } 
 }

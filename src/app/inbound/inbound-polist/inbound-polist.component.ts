@@ -36,7 +36,7 @@ export class InboundPolistComponent implements OnInit {
   public addToGRPOArray: any = {};
   addToGRPOPONumbers: any = {};
   showGRPOButton: boolean = false;
-
+  selectedVendor: string= "";
 
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent) {
@@ -53,6 +53,7 @@ export class InboundPolistComponent implements OnInit {
       this.poCode = ponumber;
       this.openPOLines();
     }
+    this.selectedVendor = this.inboundMasterComponent.selectedVernder;
   }
 
   onPOlookupClick() {

@@ -354,8 +354,11 @@ export class ItemLabelComponent implements OnInit {
               this.translate.instant("CommonSessionExpireMsg"));
             return; 
           }
-          this.fileName = data.Detail[0].FileName;
-          this.base64String = data.Detail[0].Base64String;
+          if(data.Detail != null && data.Detail != undefined && data.Detail[0]!=null &&  data.Detail[0] != undefined){
+            this.fileName = data.Detail[0].FileName;
+            this.base64String = data.Detail[0].Base64String;
+          }
+          
           // if(this.base64String !=null && this.base64String != ""){
             
           // this.showPdf();
@@ -366,7 +369,10 @@ export class ItemLabelComponent implements OnInit {
             this.displayPDF = true;
             this.commonservice.refreshDisplyPDF(true); 
  
+           }else{
+            this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
            }
+           
           console.log("filename:" + this.fileName);
           console.log("filename:" + this.base64String);
         } else {

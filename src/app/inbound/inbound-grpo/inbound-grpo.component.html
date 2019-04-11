@@ -64,7 +64,7 @@
                                     placeholder="MM/dd/yy"></kendo-datepicker>
                             </div>
                         </div>
-                        <div class="form-group row" *ngIf="showScanInput">
+                        <div class="form-group row align-items-center" *ngIf="showScanInput">
                             <label for="inputPassword" class="col-sm-3 col-form-label">{{'ScanInputs'|translate}}</label>
                             <div class="col-sm-9">
                                 <fieldset [disabled]=isDisabledScanInput class="d-block w-100">
@@ -83,11 +83,16 @@
                                 </fieldset>
                             </div>
                         </div>
-                        <div class="form-group row" *ngIf="showScanInput">
-                            <label for="inputPassword" class="col-xs-3 col-sm-3 col-1 col-form-label py-0 text-right"><i class="opti-icon-qr-code fs-28"></i></label>
-                            <div class="col-xs-9 col-11 col-sm-9">
-                                <input type="text" class="form-control form-control-sm" name="ScanInputs" [(ngModel)]=ScanInputs
+                        <div class="form-group row mt-1 mt-md-0" *ngIf="showScanInput">
+                            <label class="col-sm-3 col-form-label"></label>
+                            <div class="col-sm-9">
+                                <div class="d-flex">
+                                    <input type="text" class="form-control form-control-sm" name="ScanInputs" [(ngModel)]=ScanInputs
                                 (blur)="onScanCodeChange()" placeholder="{{scanInputPlaceholder}}">
+                                    <div class="ml-1 d-flex">
+                                        <i class="opti-icon-qr-code fs-28"></i>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -219,11 +224,14 @@
             </div>
         </form>
     </div>
-    
-    <span *ngIf="showLookupLoader">
+    <!-- <div>
+        <app-display-pdf *ngIf="displayPDF" [base64String]='base64String' [fileName]='fileName' (redirectTo)="getValueOfRedirect($event)"></app-display-pdf>
+    </div> -->
+     
+    <span *ngIf="showLookupLoader == false">
         <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
     </span>
     <span *ngIf="showConfirmDialog">
     <app-comon-confirm-dialog [titleMessage]="dialogMsg" 
     [yesButtonText]="yesButtonText" [fromWhere] ="dialogFor"  [noButtonText]="noButtonText" (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
-    </span>
+    </span> 

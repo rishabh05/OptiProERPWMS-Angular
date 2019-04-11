@@ -98,6 +98,9 @@ body {
         .k-grid-toolbar {
             border-top-left-radius: 5px;
             border-top-right-radius: 5px;
+            @media screen and (max-width:479px){
+                display: none;
+            }
         }
         border-radius: 5px;
         border: none;
@@ -274,4 +277,17 @@ body {
 }
 .k-header.text-center > .k-link{
     text-align: center;
+}
+.k-dialog-wrapper .k-dialog {
+    max-width: calc(100% - 20px);
+}
+
+body .k-grid td{
+    .form-control.k-widget.k-dropdown{
+        height: 22px;
+        .k-input{
+            padding: 0 5px;
+            height: auto;
+        }
+    }
 }

@@ -356,15 +356,15 @@ export class LookupComponent implements OnInit {
 
     this.table_head = [
       {
+        title:  this.translate.instant("CustomerCode"),
         field: 'CUSTOMER CODE',
-        title: 'CUSTOMER CODE',
         type: 'text',
         width: '100'
       },
 
       {
+        title:  this.translate.instant("Name"),
         field: 'CUSTOMER NAME',
-        title: 'CUSTOMER NAME',
         type: 'text',
         width: '100'
       }
@@ -383,7 +383,7 @@ export class LookupComponent implements OnInit {
     this.table_head = [
       {
         field: 'CARDCODE',
-        title: this.translate.instant("VenderCode"),
+        title: this.translate.instant("VendCode"),
         type: 'text',
         width: '100'
       },
