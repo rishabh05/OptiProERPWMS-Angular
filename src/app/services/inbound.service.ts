@@ -178,7 +178,7 @@ export class InboundService {
    printingServiceForSubmitGRPO(psReceiptNo:string){
     var jObject = { PrintingObject: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"),
     USERID: localStorage.getItem("UserId"), RPTID: 6, DOCNO: psReceiptNo, 
-   GUID: localStorage.getItem("GUID"), UsernameForLic: localStorage.getItem("UserId") }]) };
+    GUID: localStorage.getItem("GUID"), UsernameForLic: localStorage.getItem("UserId") }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/Printing/WMSPrintingService", jObject, this.httpOptions);
    }
  

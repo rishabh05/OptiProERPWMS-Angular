@@ -751,7 +751,7 @@ submitCurrentGRPO(){
           localStorage.setItem("GRPOReceieveData", "");
           if(this.showPDF){
             //show pdf
-     //       this.inboundService.printingServiceForSubmitGRPO(data[0].DocEntry);
+        //  this.inboundService.printingServiceForSubmitGRPO(data[0].DocEntry);
             this.showPDF = false;
           }else{
                // no need to display pdf
@@ -1035,6 +1035,9 @@ submitCurrentGRPO(){
 
   }
 
+  displayPDF: boolean = false;
+  base64String: string = "";
+  fileName: string = "";
   // base64String:string = "";
   // fileName:string = "";
   // public displayPDF(){

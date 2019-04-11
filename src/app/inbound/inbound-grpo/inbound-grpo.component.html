@@ -224,9 +224,9 @@
             </div>
         </form>
     </div>
-    <!-- <div>
+    <div>
         <app-display-pdf *ngIf="displayPDF" [base64String]='base64String' [fileName]='fileName' (redirectTo)="getValueOfRedirect($event)"></app-display-pdf>
-    </div> -->
+    </div>
     
     <span *ngIf="showLookupLoader == false">
         <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
