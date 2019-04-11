@@ -227,8 +227,12 @@ export class BinLabelComponent implements OnInit {
               this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
-          this.fileName = data.Detail[0].FileName;
-          this.base64String = data.Detail[0].Base64String;
+
+          if(data.Detail != null && data.Detail != undefined &&  data.Detail[0]!=null &&  data.Detail[0] != undefined){
+            this.fileName = data.Detail[0].FileName;
+            this.base64String = data.Detail[0].Base64String;
+          }
+         
           if(this.fileName == "1"){
             this.toastr.error('', this.base64String);
             return;
@@ -239,9 +243,11 @@ export class BinLabelComponent implements OnInit {
            this.displayPDF = true;
            this.commonservice.refreshDisplyPDF(true);
 
-          }
+          }else{
+            this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
+           }
           console.log("filename:" + this.fileName);
-          console.log("filename:" + this.base64String);
+          console.log("filename:" + this.base64String);  
         } else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         }
