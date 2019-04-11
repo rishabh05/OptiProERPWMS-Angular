@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { opticonstants } from '../../constants';
 import { CurrentSidebarInfo } from '../../models/sidebar/current-sidebar-info';
 import { MenuService } from '../../services/menu.service';
+import { UIHelper } from 'src/app/helpers/ui.helpers';
 
 @Component({
   selector: 'app-portal-left',
@@ -13,7 +14,13 @@ import { MenuService } from '../../services/menu.service';
 export class PortalLeftComponent implements OnInit {
 
   
-  constructor(private commonService: Commonservice, private router: Router, private menuService: MenuService) { }
+  constructor(private commonService: Commonservice, private router: Router, private menuService: MenuService) {
+    router.events.subscribe((val) => {
+       // get current url with last word
+      let partsOfUrl = this.router.url.split('/');
+      this.selectedItem = partsOfUrl[partsOfUrl.length - 1];
+    });
+   }
   selectedThemeColor: string = 'opticonstants.DEFAULTTHEMECOLOR';
   selectedItem: string;
 
@@ -30,7 +37,7 @@ export class PortalLeftComponent implements OnInit {
       }
     );
     this.getAllMenus();
-    
+    UIHelper.manageNavigationPanel(document.getElementById('sidebarCollapse-alt'));
   }
 
 

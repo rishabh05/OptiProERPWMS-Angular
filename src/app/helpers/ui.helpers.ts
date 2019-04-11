@@ -8,11 +8,12 @@ import * as $ from "jquery";
 import { CurrentSidebarInfo } from "../models/sidebar/current-sidebar-info";
 
 export  class UIHelper{
+    static onclick: () => void;
 
     // start sidebar and right panel manage
     // this function will call only for desktop and ipad
-    public static  manageNavigationPanel():void{
-        document.getElementById('sidebarCollapse').onclick = function() {
+    public static  manageNavigationPanel(e):void{
+        e.onclick = function() {
         if(UIHelper.isMobile()==false){ 
             document.getElementById('opti_LeftPanelID').classList.toggle('opti_sidebar-minimize');  
             document.getElementById('opti_RightPanelID').classList.toggle('opti_sidebar-minimize');

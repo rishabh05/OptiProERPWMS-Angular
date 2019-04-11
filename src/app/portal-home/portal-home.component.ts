@@ -33,14 +33,14 @@ export class PortalHomeComponent implements OnInit {
 
     // UI operations
     this.isMobile =UIHelper.isMobile();
-    UIHelper.manageNavigationPanel();
+    
+    UIHelper.manageNavigationPanel(document.getElementById('sidebarCollapse'));
   }
   
   @HostListener('window:resize', ['$event'])
   onResize(event) { 
     // UI operations   
     this.isMobile =UIHelper.isMobile();
-    UIHelper.manageNavigationPanel();
+    UIHelper.manageNavigationPanel(document.getElementById('sidebarCollapse'));
   }
-
 }

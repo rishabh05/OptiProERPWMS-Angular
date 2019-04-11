@@ -204,6 +204,24 @@
     max-height: $top-bar-height;
     overflow: hidden;
     height: $top-bar-height;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    .opti_logo.opti_device-logo{
+        flex:1;
+    }
+    #sidebarCollapse-alt{
+        display: none;
+        @media screen and (max-width:767px){
+            display: block;
+        }
+        i{
+            font-size: 24px;
+        }
+    }
+    @media screen and (max-width:479px){
+        //height: $top-bar-height - 15px;
+    }
 }
 
 .opti_device-logo {
@@ -221,6 +239,9 @@
         max-width: 100%;
         max-height: 100%;
         margin: 0 auto;
+        @media screen and (max-width:479px){
+            padding:0
+        }
     }
 }
 
@@ -235,5 +256,9 @@
     justify-content: center;
     img {
         width: 60%;
+        @media screen and (max-width:479px){
+            width:auto;
+            height:50px;
+        }
     }
 }
