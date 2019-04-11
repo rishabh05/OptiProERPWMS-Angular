@@ -76,6 +76,10 @@ export class InboundGRPOComponent implements OnInit {
 
   showPDF: boolean = false;
 
+  displayPDF1: boolean = false;
+  base64String: string = ""; 
+  fileName: string = "";
+
 
   @ViewChild('Quantity') QuantityField;
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
@@ -623,10 +627,16 @@ submitCurrentGRPO(){
       this.dialogMsg =  this.translate.instant("PrintAllLabelsAfterSubmit");
       this.showConfirmDialog = true; // show dialog
 
-    }else{
+    }else{  
       dataModel = this.manageRecords(dataModel);
       if(dataModel == null|| dataModel == undefined || dataModel == ""){
-        this.submitCurrentGRPO();
+        this.yesButtonText = this.translate.instant("yes");
+        this.noButtonText = this.translate.instant("no");
+        this.dialogFor = "receiveSinglePDFDialog";
+        this.dialogMsg =  this.translate.instant("PrintAllLabelsAfterSubmit");
+        this.showConfirmDialog = true; // show dialog
+        //this.submitCurrentGRPO();
+  
         return;
       }
       this.yesButtonText = this.translate.instant("All");
@@ -744,12 +754,12 @@ submitCurrentGRPO(){
           localStorage.setItem("GRPOReceieveData", "");
           if(this.showPDF){
             //show pdf
-        //  this.inboundService.printingServiceForSubmitGRPO(data[0].DocEntry);
-            this.showPDF = false;
+            this.displayPDF(data[0].DocEntry);
+            this.showPDF = false; 
           }else{
                // no need to display pdf
           }
-          this.inboundMasterComponent.inboundComponent = 1; 
+          //this.inboundMasterComponent.inboundComponent = 1; 
         } else if (data[0].ErrorMsg == "7001") {
           this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
             this.translate.instant("CommonSessionExpireMsg"));
@@ -1028,42 +1038,42 @@ submitCurrentGRPO(){
 
   }
 
-  displayPDF: boolean = false;
-  base64String: string = "";
-  fileName: string = "";
-  // base64String:string = "";
-  // fileName:string = "";
-  // public displayPDF(){
-  //   this.printServiceSubs = this.labelPrintRepor this.inboundService.printingServiceForSubmitGRPO(data[0].DocEntry);tsService.printingServiceForItemLabel(this.itemCode, this.binNo, this.noOfCopies).subscribe(
-  //     (data: any) => {
+  
+
+  public displayPDF(dNo:string){
+   this.inboundService.printingServiceForSubmitGRPO(dNo).subscribe(
+      (data: any) => {
         
-  //       if (data != undefined) {
-  //         console.log("" + data);
-  //         if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
-  //           this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
-  //             this.translate.instant("CommonSessionExpireMsg"));
-  //           return; 
-  //         }
-  //         this.fileName = data.Detail[0].FileName;
-  //         this.base64String = data.Detail[0].Base64String;
+        if (data != undefined) {
+          console.log("" + data);
+          if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return; 
+          }
+
+          if(data.Detail != null && data.Detail != undefined && data.Detail[0]!=null &&  data.Detail[0] != undefined){
+            this.fileName = data.Detail[0].FileName;
+            this.base64String = data.Detail[0].Base64String;
+          }
+          
          
-  //         if (this.base64String != null && this.base64String != "") {
-  //           // this.showPdf(); // this function is used to display pdf in new tab.
-  //           this.base64String = 'data:application/pdf;base64,' + this.base64String;
-    
-  //           this.commonservice.refreshDisplyPDF(true); 
+          if (this.base64String != null && this.base64String != "") {
+            // this.showPdf(); // this function is used to display pdf in new tab.
+            this.base64String = 'data:application/pdf;base64,' + this.base64String;
+            this.displayPDF1 = true; 
+            //this.commonservice.refreshDisplyPDF(true); 
  
-  //          }
-  //         console.log("filename:" + this.fileName);
-  //         console.log("filename:" + this.base64String);
-  //       } else {
-  //         this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
-  //       }
-  //     },
-  //     error => {
-  //       this.toastr.error('', error);
-  //     }
-  //   );
-  // }
-  // } 
+           }
+        //  console.log("filename:" + this.fileName);
+          console.log("filename:" + this.base64String);
+        } else {
+          this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+        }
+      },
+      error => {
+        this.toastr.error('', error);
+      }
+    );
+  }
 }

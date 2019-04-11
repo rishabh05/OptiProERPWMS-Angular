@@ -7,15 +7,16 @@ import { DialogsModule } from '@progress/kendo-angular-dialog';
 import { FormsModule } from '@angular/forms';
 import {ConfirmDialogComponent} from '../common/confirm-dialog/confirm-dialog/confirm-dialog.component';
 import {ConfirmdialogService} from '../common/confirm-dialog/confirmdialog.service';
-
+import {DisplayPdfComponent} from '../printing-label/display-pdf/display-pdf.component';
+import {PdfpipePipe} from '../printing-label/pdfpipe.pipe';
 @NgModule({  
   imports: [ CommonModule, 
     GridModule, 
     FormsModule,
     DialogsModule],
     providers:[ ConfirmdialogService],
-  declarations: [ LookupComponent,ConfirmDialogComponent,ComonConfirmDialogComponent ],
-  entryComponents: [ ConfirmDialogComponent ],
-  exports:      [ LookupComponent,ConfirmDialogComponent,ComonConfirmDialogComponent ]
+  declarations: [ LookupComponent,ConfirmDialogComponent,ComonConfirmDialogComponent,DisplayPdfComponent,PdfpipePipe ],
+  entryComponents: [ ConfirmDialogComponent,DisplayPdfComponent ],
+  exports:      [ LookupComponent,ConfirmDialogComponent,ComonConfirmDialogComponent,DisplayPdfComponent,PdfpipePipe ]
 })
 export class SharedModule { }

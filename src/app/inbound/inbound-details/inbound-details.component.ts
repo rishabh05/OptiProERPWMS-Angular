@@ -21,10 +21,11 @@ export class InboundDetailsComponent implements OnInit {
   showGRPOGridAndBtn: boolean = false;
   public Polist: any[] = [];
   dialogFor: string = "";
-  dialogMsg:string="Do you want to delete?"
-  showConfirmDialog:boolean;
-  rowindexForDelete:any;
-  gridDataAfterDelete:any[];
+  dialogMsg: string = "Do you want to delete?"
+  showConfirmDialog: boolean;
+  rowindexForDelete: any;
+  gridDataAfterDelete: any[];
+  showNext: boolean = false;
 
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent) {
@@ -36,6 +37,11 @@ export class InboundDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
+    if(this.VendCode != ""){
+      this.showNext = true;
+    }else{
+      this.showNext = false;
+    }
     this.dateAvailableToReceieve();
   }
 
@@ -46,13 +52,13 @@ export class InboundDetailsComponent implements OnInit {
     } else {
       var inboundData = JSON.parse(dataModel);
       this.Polist = inboundData.PONumbers;
-      this.showGRPOGridAndBtn = true; 
+      this.showGRPOGridAndBtn = true;
     }
   }
 
   receive() {
     var dataModel = localStorage.getItem("AddToGRPO");
-    if(dataModel != null && dataModel != undefined && dataModel != ""){
+    if (dataModel != null && dataModel != undefined && dataModel != "") {
       this.SubmitGoodsReceiptPO(JSON.parse(dataModel));
     }
   }
@@ -74,7 +80,7 @@ export class InboundDetailsComponent implements OnInit {
             this.translate.instant("CommonSessionExpireMsg"));
           return;
         }
-        else { 
+        else {
           // alert(data[0].ErrorMsg);
           this.toastr.error('', data[0].ErrorMsg);
         }
@@ -85,7 +91,7 @@ export class InboundDetailsComponent implements OnInit {
       }
     );
   }
-  
+
   onVendorLookupClick() {
     this.inboundService.getVendorList().subscribe(
       (data: any) => {
@@ -131,6 +137,7 @@ export class InboundDetailsComponent implements OnInit {
           } else {
             this.VendCode = data[0].ID;
             this.VendName = data[0].Name;
+            this.showNext = true;
           }
         } else {
           this.toastr.error('', this.translate.instant("VendorExistMessge"));
@@ -147,6 +154,7 @@ export class InboundDetailsComponent implements OnInit {
   getLookupValue($event) {
     this.VendCode = $event[0];
     this.VendName = $event[1];
+    this.showNext = true;
   }
 
   public onNextClick() {
@@ -163,13 +171,13 @@ export class InboundDetailsComponent implements OnInit {
     this.router.navigate(['home/dashboard']);
   }
 
-  onPOSelection(){
+  onPOSelection() {
     this.inboundMasterComponent.inboundComponent = 2;
   }
 
   public openConfirmForDelete(rowindex, gridData: any) {
     this.dialogFor = "deleteRow";
-    this.dialogMsg =  this.translate.instant("DoYouWantToDelete")
+    this.dialogMsg = this.translate.instant("DoYouWantToDelete")
     this.rowindexForDelete = rowindex;
     this.gridDataAfterDelete = gridData;
     this.showConfirmDialog = true;
@@ -186,7 +194,7 @@ export class InboundDetailsComponent implements OnInit {
     } else {
       if ($event.Status == "cancel") {
         // when user click on cross button nothing to do.
-      } 
+      }
     }
   }
 
@@ -207,9 +215,9 @@ export class InboundDetailsComponent implements OnInit {
     }
   }
 
-  removePODetailData(POReceiptLots: any, inboundData: any){
-    for(var i=0; i<inboundData.POReceiptLots.length; i++){
-      if(inboundData.POReceiptLots[i].POItemCode == POReceiptLots.PONumber+POReceiptLots.ItemCode){
+  removePODetailData(POReceiptLots: any, inboundData: any) {
+    for (var i = 0; i < inboundData.POReceiptLots.length; i++) {
+      if (inboundData.POReceiptLots[i].POItemCode == POReceiptLots.PONumber + POReceiptLots.ItemCode) {
 
       }
     }

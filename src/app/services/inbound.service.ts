@@ -175,7 +175,7 @@ export class InboundService {
     * @param binNo 
     * @param noOfCopies 
     */
-   printingServiceForSubmitGRPO(psReceiptNo:string){
+   printingServiceForSubmitGRPO(psReceiptNo:string) : Observable<any> {
     var jObject = { PrintingObject: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"),
     USERID: localStorage.getItem("UserId"), RPTID: 6, DOCNO: psReceiptNo, 
     GUID: localStorage.getItem("GUID"), UsernameForLic: localStorage.getItem("UserId") }]) };
