@@ -199,14 +199,15 @@ export class InboundDetailsComponent implements OnInit {
   }
 
   DeleteRowClick(rowindex, gridData: any) {
-    gridData.splice(rowindex, 1);
-    var dataModel = localStorage.getItem("GRPOReceieveData");
+    this.Polist.splice(rowindex, 1);
+    var dataModel = localStorage.getItem("addToGRPOPONumbers");
     if (dataModel == null || dataModel == undefined || dataModel == "") {
     } else {
       var inboundData = JSON.parse(dataModel);
-      this.removePODetailData(inboundData.POReceiptLots[rowindex], inboundData);
-      inboundData.POReceiptLots.splice(rowindex, 1);
+      this.removePODetailData(inboundData.PONumbers[rowindex]);
+      inboundData.PONumbers.splice(rowindex, 1);
     }
+    localStorage.setItem("addToGRPOPONumbers", JSON.stringify(inboundData));
     gridData.data = this.Polist;
     if (this.Polist.length > 0) {
       this.showGRPOGridAndBtn = true;
@@ -215,11 +216,43 @@ export class InboundDetailsComponent implements OnInit {
     }
   }
 
+<<<<<<< HEAD
   removePODetailData(POReceiptLots: any, inboundData: any) {
     for (var i = 0; i < inboundData.POReceiptLots.length; i++) {
       if (inboundData.POReceiptLots[i].POItemCode == POReceiptLots.PONumber + POReceiptLots.ItemCode) {
+=======
+  removePODetailData(PONumbers: any){
+    var inboundData = JSON.parse(localStorage.getItem("AddToGRPO"));
+    if (inboundData != undefined && inboundData != null && inboundData != "") {
+      for (var i = 0; i < inboundData.POReceiptLots.length; i++) {
+        if (inboundData.POReceiptLots[i].PONumber == PONumbers) {
 
+          inboundData.POReceiptLots[i].Line;
+         
+
+          for (var j = 0; j < inboundData.POReceiptLotDetails.length; j++) {
+            if (inboundData.POReceiptLotDetails[j].ParentLineNo == inboundData.POReceiptLots[i].Line) {
+              inboundData.POReceiptLotDetails[j].splice(j, 1);
+            }
+          }
+
+          for (var k = 0; k < inboundData.UDF.length; k++) {
+            if (inboundData.UDF[k].LineNo == inboundData.POReceiptLots[i].Line) {
+              inboundData.UDF[k].splice(k, 1);
+            }
+          }
+>>>>>>> f7173cc147b1f0c74ff30669408bed0a4a1acec5
+
+          for (var m = 0; m < inboundData.LastSerialNumber.length; m++) {
+            if (inboundData.LastSerialNumber[m].ItemCode == inboundData.POReceiptLots[i].ItemCode) {
+              inboundData.LastSerialNumber.splice(m, 1);
+            }
+          }
+        }
       }
+      localStorage.setItem("AddToGRPO", JSON.stringify(inboundData));
     }
   }
+
+
 }
