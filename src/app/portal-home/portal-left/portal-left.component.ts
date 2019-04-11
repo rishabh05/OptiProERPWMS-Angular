@@ -114,6 +114,7 @@ export class PortalLeftComponent implements OnInit {
 
   onInboundClick(){
     localStorage.setItem("GRPOReceieveData", "");
+    localStorage.setItem("Line", "0")
   }
 
   onOutboundClick(){

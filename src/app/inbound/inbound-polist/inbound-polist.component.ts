@@ -32,7 +32,7 @@ export class InboundPolistComponent implements OnInit {
   openPOLinesModel: any[];
   unmatchedPOLinesModel: any[];
   viewLines: any[];
-  public oSavedPOLotsArray: any[] = []; 
+  public oSavedPOLotsArray: any = {}; 
   showGRPOButton:boolean = false;
 
 
@@ -231,18 +231,18 @@ export class InboundPolistComponent implements OnInit {
       this.openPOLinesModel[k].RPTQTY = 0;
     }  
 
-    if (this.oSavedPOLotsArray != undefined && this.oSavedPOLotsArray != null &&
-      this.oSavedPOLotsArray.length > 0 && this.openPOLinesModel != undefined &&
-      this.openPOLinesModel != null && this.openPOLinesModel.length > 0) {
+    if (this.oSavedPOLotsArray != undefined && this.oSavedPOLotsArray != null && 
+      this.oSavedPOLotsArray.POReceiptLots != undefined && this.oSavedPOLotsArray.POReceiptLots != null &&
+      this.oSavedPOLotsArray.POReceiptLots.length>0 &&
+      this.openPOLinesModel != undefined && this.openPOLinesModel != null && 
+      this.openPOLinesModel.length > 0) {
       for (var i = 0; i < this.openPOLinesModel.length; i++) {
-        for (var j = 0; j < this.oSavedPOLotsArray.length; j++) {
-          if (this.oSavedPOLotsArray[j].POReceiptLots != undefined && this.oSavedPOLotsArray[j].POReceiptLots != undefined
-            && this.oSavedPOLotsArray[j].POReceiptLots.length > 0 &&
-            this.oSavedPOLotsArray[j].POReceiptLots[0].PONumber == this.poCode &&
-            this.oSavedPOLotsArray[j].POReceiptLots[0].ItemCode == this.openPOLinesModel[i].ITEMCODE) {
-            this.openPOLinesModel[i].RPTQTY = this.oSavedPOLotsArray[j].POReceiptLots[0].ShipQty;
-            this.showGRPOButton = true
-          }
+        for (var j = 0; j < this.oSavedPOLotsArray.POReceiptLots.length; j++) {
+          if (this.oSavedPOLotsArray.POReceiptLots[j].PONumber == this.poCode &&
+            this.oSavedPOLotsArray.POReceiptLots[j].ItemCode == this.openPOLinesModel[i].ITEMCODE) {
+            this.openPOLinesModel[i].RPTQTY = this.oSavedPOLotsArray.POReceiptLots[j].ShipQty;
+            this.showGRPOButton = true;
+          } 
         }  
       } 
 
