@@ -199,7 +199,9 @@
   "ReceiveCurrentOrAll" : "Receive current OR all saved lines",
   "DoYouWantToDeleteConf" : "Do you want to delete?",
   "All" : "All",
-  "Current" : "Current"
+  "Current" : "Current",
+  "yes" : "Yes",
+  "no" : "No"
 
 
    
