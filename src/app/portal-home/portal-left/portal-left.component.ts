@@ -21,6 +21,7 @@ export class PortalLeftComponent implements OnInit {
        // get current url with last word
       let partsOfUrl = this.router.url.split('/');
       this.selectedItem = partsOfUrl[partsOfUrl.length - 1];
+      document.getElementById('opti_RightPanelID').classList.remove('opti_menusidebar-mobile-open');
     });
    }
   selectedThemeColor: string = 'opticonstants.DEFAULTTHEMECOLOR';
@@ -39,6 +40,7 @@ export class PortalLeftComponent implements OnInit {
       }
     );
     this.getAllMenus();
+    
     UIHelper.manageNavigationPanel(document.getElementById('sidebarCollapse-alt'));
   }
 
