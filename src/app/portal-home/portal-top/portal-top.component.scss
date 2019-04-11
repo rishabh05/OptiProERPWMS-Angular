@@ -44,6 +44,9 @@
              font-size: 24px;
              color: #fff;
          }
+         @media screen and (max-width:767px){
+            height: $top-bar-height - 20px;
+         }
      }
      .opti_topbar-rightpanel {
          ul {
@@ -81,6 +84,9 @@
          img {
              border: 0;
          }
+         @media screen and (max-width:767px){
+            top:36px !important;
+        }
      }
      .opti_profile-box {
          height: 100%;
@@ -178,6 +184,7 @@
      height: auto;
      overflow-y: auto;
      max-height: 400px;
+     
  }
  
  .dropdown-menu.opti_notification-drop-down.show {

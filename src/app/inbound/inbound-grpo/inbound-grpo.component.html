@@ -227,11 +227,11 @@
     <!-- <div>
         <app-display-pdf *ngIf="displayPDF" [base64String]='base64String' [fileName]='fileName' (redirectTo)="getValueOfRedirect($event)"></app-display-pdf>
     </div> -->
-    
+     
     <span *ngIf="showLookupLoader == false">
         <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
     </span>
     <span *ngIf="showConfirmDialog">
     <app-comon-confirm-dialog [titleMessage]="dialogMsg" 
     [yesButtonText]="yesButtonText" [fromWhere] ="dialogFor"  [noButtonText]="noButtonText" (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
-    </span>
+    </span> 

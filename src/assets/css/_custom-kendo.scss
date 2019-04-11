@@ -290,4 +290,20 @@ body .k-grid td{
             height: auto;
         }
     }
+    .k-widget.form-control{
+        height:auto;
+    }
+    .k-numeric-wrap{
+        height:auto;
+    }
+    .k-widget.form-control-sm .k-input{
+        padding: 0 5px;
+        height: auto;
+    }
+    .k-numerictextbox.form-control-sm .k-link-increase > .k-icon{
+        bottom: -3px;
+    }
+    .k-numerictextbox.form-control-sm .k-link-decrease > .k-icon{
+        top: -3px;
+    }
 }

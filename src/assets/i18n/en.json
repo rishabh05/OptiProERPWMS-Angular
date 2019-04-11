@@ -112,7 +112,7 @@
   "DoYouWantToDeleteAllTheLines": "Do you want to delete all lines?",
   "GRPOSuccessMessage":"Goods Receipt PO generated successfully with Doc No: ",
   "GoodsReciptPO": "Goods Recipt PO",
-  "VendCode": "Vend. Code",
+  "VendCode": "Vendor",
   "VendorList": "Vendor List",
   "VendorExistMessge": "Vendor does not exist!",
   "Delivery": "Delivery",

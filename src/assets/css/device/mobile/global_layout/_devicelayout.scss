@@ -117,6 +117,9 @@
 
     #opti_MainContentID {
         padding-top: 65px;
+        @media screen and (max-width:767px){
+            padding-top: 45px; 
+        }
     }
 
 
