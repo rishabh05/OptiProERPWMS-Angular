@@ -36,7 +36,7 @@ export class OutProdissueComponent implements OnInit {
   public OrderType: string = '';
   public oldSelectedMeterials: any = Array<MeterialModel>();
   public OperationType: any[];
-
+  public scanInputPlaceholder="Scan"
 
   constructor(private ourboundService: OutboundService, private router: Router, private toastr: ToastrService, private translate: TranslateService) { }
 
@@ -246,6 +246,7 @@ export class OutProdissueComponent implements OnInit {
     this.ourboundService.getAvaliableMeterial(itemCode, docEntry).subscribe(
       (resp: any) => {
         this.lookupData = resp;
+        this.manageOldSelectedItems();
         this.showLookup = true;
       }
     )
@@ -408,6 +409,33 @@ export class OutProdissueComponent implements OnInit {
       }
       return m1;
 
+    }
+  }
+
+
+  private manageOldSelectedItems() {
+   // let outbound: OutboundData = JSON.parse(localStorage.getItem(CommonConstants.OutboundData));
+
+    if (this.selectedMeterials !== null && this.selectedMeterials !== undefined && this.selectedMeterials.length > 0) {
+
+      for (let index = 0; index < this.selectedMeterials.length; index++) {
+        const element =this.selectedMeterials[index];
+
+        for (let j = 0; j < this.lookupData.length; j++) {
+          const sd = this.lookupData[j];
+          if (sd.ITEMCODE === element.ITEMCODE 
+            && sd.LOTNO === element.LOTNO 
+            && sd.BINNO === element.BINNO) {
+            sd.OldData=true;
+            this.lookupData[j]=sd;
+          }
+          else
+          {
+            // sd.OldData=false;
+            // this.lookupData[j]=sd;
+          }
+        }
+      }
     }
   }
 

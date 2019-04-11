@@ -14,6 +14,7 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { GridComponent } from '@progress/kendo-angular-grid';
 import { UIHelper } from '../../helpers/ui.helpers';
 import { State } from '@progress/kendo-data-query';
+import { CommonConstants } from 'src/app/const/common-constants';
 // import { UIHelper } from '../../../helpers/ui.helpers';
 // import { Http, ResponseContentType } from '@angular/http';
 
@@ -88,9 +89,9 @@ export class LookupComponent implements OnInit {
   }
   ngOnInit() {
   }
- 
+
   async ngOnChanges(): Promise<void> {
-    
+
     if (this.lookupfor == "toWhsList") {
       this.showToWhsList();
     } else if (this.lookupfor == "ItemCodeList") {
@@ -107,13 +108,13 @@ export class LookupComponent implements OnInit {
     else if (this.lookupfor == "RecvBinList") {
       this.showRecvBinList();
     }
-    else if(this.lookupfor == "VendorList"){
+    else if (this.lookupfor == "VendorList") {
       this.showVendorList();
     }
-    else if(this.lookupfor == "POList"){
+    else if (this.lookupfor == "POList") {
       this.showPOList();
     }
-    else if(this.lookupfor == "POItemList"){
+    else if (this.lookupfor == "POItemList") {
       this.showPOItemList();
     }
     else if (this.lookupfor == "out-customer") {
@@ -126,16 +127,16 @@ export class LookupComponent implements OnInit {
     else if (this.lookupfor == 'out-order') {
       this.showOutSOList();
     }
-    else if(this.lookupfor == "LotsList"){
+    else if (this.lookupfor == "LotsList") {
       this.showLotsList();
     }
-    else if(this.lookupfor ==  "FromBinList"){
+    else if (this.lookupfor == "FromBinList") {
       this.showBinList();
     }
-    else if(this.lookupfor == "ToBinList"){
+    else if (this.lookupfor == "ToBinList") {
       this.showBinList();
     }
-    else if(this.lookupfor == "OrderList"){
+    else if (this.lookupfor == "OrderList") {
       this.orderList();
     }
     this.clearFilters();
@@ -169,8 +170,9 @@ export class LookupComponent implements OnInit {
     this.pagable = true;
     this.pagesize = 50;
     this.showSelection = true;
-    this.selectedValues=[];
+    this.selectedValues = [];
     this.table_head = [
+
       {
         field: 'LOTNO',
         title: 'Serial',
@@ -194,12 +196,11 @@ export class LookupComponent implements OnInit {
     this.lookupTitle = this.translate.instant("AvaliableMeterial");
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
-       // console.log('ServiceData', this.serviceData);
+        //  console.log('ServiceData', this.serviceData);
         this.dialogOpened = true;
       }
     }
   }
-
 
   showItemCodeList() {
     this.table_head = [
@@ -356,14 +357,14 @@ export class LookupComponent implements OnInit {
 
     this.table_head = [
       {
-        title:  this.translate.instant("CustomerCode"),
+        title: this.translate.instant("CustomerCode"),
         field: 'CUSTOMER CODE',
         type: 'text',
         width: '100'
       },
 
       {
-        title:  this.translate.instant("Name"),
+        title: this.translate.instant("Name"),
         field: 'CUSTOMER NAME',
         type: 'text',
         width: '100'
@@ -459,7 +460,7 @@ export class LookupComponent implements OnInit {
       }
     }
   }
-  
+
   showOutSOList() {
     this.table_head = [
       {
@@ -488,10 +489,10 @@ export class LookupComponent implements OnInit {
     if (!this.showSelection) {
       const lookup_key = selection.selectedRows[0].dataItem;
       //console.log("lookup_key - " + lookup_key);
-     // console.log(lookup_key);
+      // console.log(lookup_key);
       this.lookupkey.emit(lookup_key);
       this.lookupvalue.emit(Object.values(lookup_key));
-    //  console.log(selection);
+      //  console.log(selection);
       selection.selectedRows = [];
       selection.index = 0;
       selection.selected = false;
@@ -573,24 +574,24 @@ export class LookupComponent implements OnInit {
 
 
   onCheckboxClick(checked: any, index: number) {
-    
+
     let servivceItem: any = this.serviceData[index];
     if (checked) {
       this.selectedValues.push(servivceItem);
     }
     else {
-     // let rixd: number= this.selectedValues.findIndex(i => i.LOTNO == servivceItem.LOTNO && i.LOTNO == servivceItem.BINNO)
+      // let rixd: number= this.selectedValues.findIndex(i => i.LOTNO == servivceItem.LOTNO && i.LOTNO == servivceItem.BINNO)
       this.selectedValues.slice(index, 1);
     }
   }
 
-  
+
 
 
   Done() {
     this.lookupkey.emit(this.selectedValues);
-    this.dialogOpened=false;
+    this.dialogOpened = false;
   }
 
-  
+
 }
