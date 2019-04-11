@@ -15,10 +15,9 @@ import { DialogsModule } from '@progress/kendo-angular-dialog';
 import { GridModule } from '@progress/kendo-angular-grid';
 
 @NgModule({
-  declarations: [ItemLabelComponent, BinLabelComponent, InventoryEnquiryComponent, DisplayPdfComponent, PdfpipePipe],
+
   imports: [
     CommonModule,
-
     SharedModule,
     PerfectScrollbarModule,
     TrnaslateLazyModule,
@@ -26,7 +25,10 @@ import { GridModule } from '@progress/kendo-angular-grid';
     PrintingLabelRoutingModule,
     DialogsModule,
     GridModule
-    
-  ]
+  ],
+  declarations: [ItemLabelComponent, BinLabelComponent, InventoryEnquiryComponent, 
+    DisplayPdfComponent, PdfpipePipe],
+  entryComponents: [DisplayPdfComponent],
+  exports:   [DisplayPdfComponent, PdfpipePipe]
 })
 export class PrintingLabelModule { }
