@@ -94,13 +94,13 @@
                 <!-- grid for mobile end -->
 
 
-                <kendo-grid-column media="(min-width: 768px)" field="Invoice"  title="Invoice#" [width]="160"></kendo-grid-column>
-                <kendo-grid-column media="(min-width: 768px)" field="PORef" title="PO Ref.#" [width]="160"></kendo-grid-column>
-                <kendo-grid-column media="(min-width: 768px)" field="Vendor" title="Vendor" [width]="160" ></kendo-grid-column>
-                <kendo-grid-column media="(min-width: 768px)" field="InvoiceDate" title="Invoice Date" [width]="160" filter="date" type=date format="{0:dd MMM yy}" ></kendo-grid-column>
-                <kendo-grid-column media="(min-width: 768px)" field="InvoiceAmount" title="Invoice Amount" [width]="160"></kendo-grid-column>
-                <kendo-grid-column media="(min-width: 768px)" field="PaymentDueDate" title="Payment Due Date" [width]="160" filter="date" type=date format="{0:dd MMM yy}"></kendo-grid-column>
-                <kendo-grid-column media="(min-width: 768px)" field="Status" title="Status" [width]="160"></kendo-grid-column>
+                <kendo-grid-column media="(min-width: 768px)" field="Invoice"  title="{{'Invoice#'|translate}}" [width]="160"></kendo-grid-column>
+                <kendo-grid-column media="(min-width: 768px)" field="PORef" title="{{'PORef#'|translate}}" [width]="160"></kendo-grid-column>
+                <kendo-grid-column media="(min-width: 768px)" field="Vendor" title="{{'VendCode'|translate}}" [width]="160" ></kendo-grid-column>
+                <kendo-grid-column media="(min-width: 768px)" field="InvoiceDate" title="{{'InvoiceDate'|translate}}" [width]="160" filter="date" type=date format="{0:dd MMM yy}" ></kendo-grid-column>
+                <kendo-grid-column media="(min-width: 768px)" field="InvoiceAmount" title="{{'InvoiceAmount'|translate}}" [width]="160"></kendo-grid-column>
+                <kendo-grid-column media="(min-width: 768px)" field="PaymentDueDate" title="{{'PaymentDueDate'|translate}}" [width]="160" filter="date" type=date format="{0:dd MMM yy}"></kendo-grid-column>
+                <kendo-grid-column media="(min-width: 768px)" field="Status" title="{{'Status'|translate}}" [width]="160"></kendo-grid-column>
                 
                 <!-- xlsx template start -->
                 <kendo-grid-excel fileName="vendor-invoice-list.xlsx"></kendo-grid-excel>
