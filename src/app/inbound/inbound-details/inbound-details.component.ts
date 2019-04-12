@@ -204,7 +204,7 @@ export class InboundDetailsComponent implements OnInit {
     if (dataModel == null || dataModel == undefined || dataModel == "") {
     } else {
       var inboundData = JSON.parse(dataModel);
-      this.removePODetailData(inboundData.PONumbers[rowindex]);
+     // this.removePODetailData(inboundData.PONumbers[rowindex]);
       inboundData.PONumbers.splice(rowindex, 1);
     }
     localStorage.setItem("addToGRPOPONumbers", JSON.stringify(inboundData));
@@ -216,11 +216,7 @@ export class InboundDetailsComponent implements OnInit {
     }
   }
 
-<<<<<<< HEAD
-  removePODetailData(POReceiptLots: any, inboundData: any) {
-    for (var i = 0; i < inboundData.POReceiptLots.length; i++) {
-      if (inboundData.POReceiptLots[i].POItemCode == POReceiptLots.PONumber + POReceiptLots.ItemCode) {
-=======
+
   removePODetailData(PONumbers: any){
     var inboundData = JSON.parse(localStorage.getItem("AddToGRPO"));
     if (inboundData != undefined && inboundData != null && inboundData != "") {
@@ -238,10 +234,10 @@ export class InboundDetailsComponent implements OnInit {
 
           for (var k = 0; k < inboundData.UDF.length; k++) {
             if (inboundData.UDF[k].LineNo == inboundData.POReceiptLots[i].Line) {
-              inboundData.UDF[k].splice(k, 1);
+              inboundData.UDF[k].splice(k, 1); 
             }
           }
->>>>>>> f7173cc147b1f0c74ff30669408bed0a4a1acec5
+
 
           for (var m = 0; m < inboundData.LastSerialNumber.length; m++) {
             if (inboundData.LastSerialNumber[m].ItemCode == inboundData.POReceiptLots[i].ItemCode) {
