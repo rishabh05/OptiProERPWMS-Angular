@@ -24,9 +24,9 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'PO#'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" name="poCode" [(ngModel)]=poCode placeholder="{{'PO#'|translate}}" (blur)="OnPOChange()">
+                                <input type="text" class="form-control form-control-sm" name="poCode" [(ngModel)]=poCode placeholder="{{'PO#'|translate}}" (blur)="OnPOChange()" [disabled]=disablePO>
                                 <div class="input-group-append has-seprate-btn">
-                                    <button class="k-button k-primary btn" type="button" (click)="onPOlookupClick()">
+                                    <button class="k-button k-primary btn" type="button" (click)="onPOlookupClick()" [disabled]=disablePO>
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
                                     <button class="k-button k-primary btn separate-btn" (click)="openPOLines()" type="button">

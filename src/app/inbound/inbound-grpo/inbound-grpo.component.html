@@ -319,5 +319,5 @@
     </span> 
 
     <div>
-            <app-display-pdf *ngIf="displayPDF1" [base64String]='base64String' [fileName]='fileName' (redirectTo)="getValueOfRedirect($event)"></app-display-pdf>
+            <app-display-pdf *ngIf="displayPDF1" [base64String]='base64String' [fileName]='fileName' (pdfClose)="closePDF($event)"></app-display-pdf>
         </div>

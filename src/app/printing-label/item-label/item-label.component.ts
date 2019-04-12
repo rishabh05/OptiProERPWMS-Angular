@@ -442,6 +442,9 @@ export class ItemLabelComponent implements OnInit {
       this.printServiceSubs.unsubscribe();
   }
 
+  closePDF(){
+    console.log("PDF dialog is closed");
+  }
   OnCancelClick(){
     this.router.navigate(['home/dashboard']);
   }

@@ -27,6 +27,9 @@ export class InboundDetailsComponent implements OnInit {
   gridDataAfterDelete: any[];
   showNext: boolean = false;
 
+  yesButtonText: string = "Yes";
+  noButtonText: string = "No";
+
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent) {
     let userLang = navigator.language.split('-')[0];
@@ -37,6 +40,8 @@ export class InboundDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.VendCode = localStorage.getItem("VendCode");
+    this.VendName = localStorage.getItem("VendCode");
     if(this.VendCode != ""){
       this.showNext = true;
     }else{
@@ -133,15 +138,18 @@ export class InboundDetailsComponent implements OnInit {
           if (data[0].Result == "0") {
             this.toastr.error('', this.translate.instant("VendorExistMessge"));
             this.VendCode = "";
+            this.showNext = false;
             return;
           } else {
             this.VendCode = data[0].ID;
             this.VendName = data[0].Name;
             this.showNext = true;
+
           }
         } else {
           this.toastr.error('', this.translate.instant("VendorExistMessge"));
           this.VendCode = "";
+          this.showNext = false;
         }
       },
       error => {
@@ -161,6 +169,10 @@ export class InboundDetailsComponent implements OnInit {
     if (this.VendCode != undefined && this.VendCode != "") {
       this.inboundMasterComponent.selectedVernder = this.VendCode;
       this.inboundMasterComponent.inboundComponent = 2;
+      localStorage.setItem("VendCode", this.VendCode);
+      localStorage.setItem("VendName", this.VendName);
+      localStorage.setItem("selectedPO", "");
+      localStorage.setItem("PONumber", "");
     }
     else {
       this.toastr.error('', this.translate.instant("SelectVendorValidateMsg"));
@@ -171,13 +183,16 @@ export class InboundDetailsComponent implements OnInit {
     this.router.navigate(['home/dashboard']);
   }
 
-  onPOSelection() {
+  onPOSelection($event) {
+    localStorage.setItem("selectedPO", $event.selectedRows[0].dataItem.PONumber);
     this.inboundMasterComponent.inboundComponent = 2;
   }
-
+ 
   public openConfirmForDelete(rowindex, gridData: any) {
     this.dialogFor = "deleteRow";
     this.dialogMsg = this.translate.instant("DoYouWantToDelete")
+    this.yesButtonText = this.translate.instant("yes");
+    this.noButtonText = this.translate.instant("no");
     this.rowindexForDelete = rowindex;
     this.gridDataAfterDelete = gridData;
     this.showConfirmDialog = true;
@@ -204,7 +219,6 @@ export class InboundDetailsComponent implements OnInit {
     if (dataModel == null || dataModel == undefined || dataModel == "") {
     } else {
       var inboundData = JSON.parse(dataModel);
-     // this.removePODetailData(inboundData.PONumbers[rowindex]);
       inboundData.PONumbers.splice(rowindex, 1);
     }
     localStorage.setItem("addToGRPOPONumbers", JSON.stringify(inboundData));
@@ -216,15 +230,11 @@ export class InboundDetailsComponent implements OnInit {
     }
   }
 
-
   removePODetailData(PONumbers: any){
     var inboundData = JSON.parse(localStorage.getItem("AddToGRPO"));
     if (inboundData != undefined && inboundData != null && inboundData != "") {
       for (var i = 0; i < inboundData.POReceiptLots.length; i++) {
         if (inboundData.POReceiptLots[i].PONumber == PONumbers) {
-
-          inboundData.POReceiptLots[i].Line;
-         
 
           for (var j = 0; j < inboundData.POReceiptLotDetails.length; j++) {
             if (inboundData.POReceiptLotDetails[j].ParentLineNo == inboundData.POReceiptLots[i].Line) {
@@ -238,17 +248,16 @@ export class InboundDetailsComponent implements OnInit {
             }
           }
 
-
           for (var m = 0; m < inboundData.LastSerialNumber.length; m++) {
             if (inboundData.LastSerialNumber[m].ItemCode == inboundData.POReceiptLots[i].ItemCode) {
               inboundData.LastSerialNumber.splice(m, 1);
             }
           }
+
+          inboundData.POReceiptLots.splice(i, 1);
         }
       }
       localStorage.setItem("AddToGRPO", JSON.stringify(inboundData));
     }
   }
-
-
 }
