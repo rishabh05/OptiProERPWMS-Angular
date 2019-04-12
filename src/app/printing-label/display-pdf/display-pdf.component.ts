@@ -11,10 +11,10 @@ export class DisplayPdfComponent implements OnInit, OnDestroy {
 
   @Input() base64String: any;
   @Input() fileName;
-  @Output() redirectTo = new EventEmitter();
+  @Output() pdfClose = new EventEmitter();
   displayPDF: boolean = false;
   
-  fileNameLabel:string = "";
+  fileNameLabel:string = ""; 
   refreshEventForReopenPDFSubs: ISubscription;
   constructor(private commonService: Commonservice) { }
 
@@ -32,15 +32,16 @@ export class DisplayPdfComponent implements OnInit, OnDestroy {
   }
 
   OnCancelClick(){
-    this.redirectTo.emit("item");
+    this.pdfClose.emit("item");
   }
 
   public opened: boolean = true;
 
   public close() {
-   
+    console.log("PDF dialog  close called");
+    this.pdfClose.emit({close: true});
     this.opened = false;
-  }
+  } 
 
   public open() {
     this.opened = true;

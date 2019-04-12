@@ -1,4 +1,4 @@
-<kendo-dialog title="Please confirm" *ngIf="opened" (close)="close('cancel')" [minWidth]="250" [width]="420">
+<kendo-dialog title="Please confirm" (close)="close('cancel')" [minWidth]="250" [width]="420">
   <p style="margin: 30px; text-align: center;">{{titleMessage}}</p>
   <kendo-dialog-actions>
       <button kendoButton (click)="close('no')">{{noButtonText}}</button>         

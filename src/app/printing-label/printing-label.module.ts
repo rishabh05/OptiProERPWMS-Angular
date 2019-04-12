@@ -31,3 +31,4 @@ import { GridModule } from '@progress/kendo-angular-grid';
   exports:   []
 })
 export class PrintingLabelModule { }
+ 

@@ -215,9 +215,11 @@
                     <hr />
                 </div>
                 <div class="col-sm-12 col-12">
-     
-                    <button class="k-button k-primary" *ngIf="showButton" type="button" (click)="save($event)">Save</button>
-                    <button class="k-button k-primary" *ngIf="showButton" type="button" (click)="receive($event)">Receive</button>
+    
+                    <button type="button" *ngIf="showButton" (click)="save($event)" class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-save"
+                        role="presentation"></span> {{'Save'|translate}}</button>
+                    <button class="k-button k-primary k-button btn-sm btn-icon-with-text" *ngIf="showButton" type="button" (click)="receive($event)"><span class="k-icon k-i-download"
+                        role="presentation"></span> {{'Receive'|translate}}</button>
                     <!-- <button class="k-button k-primary" type="button" (click)="cancel($event)">Cancel</button> -->
                     <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="cancel($event)"><span class="k-icon k-i-close-outline" role="presentation" ></span> Cancel</button>
                 </div>
@@ -235,5 +237,5 @@
     </span> 
 
     <div>
-            <app-display-pdf *ngIf="displayPDF1" [base64String]='base64String' [fileName]='fileName' (redirectTo)="getValueOfRedirect($event)"></app-display-pdf>
+            <app-display-pdf *ngIf="displayPDF1" [base64String]='base64String' [fileName]='fileName' (pdfClose)="closePDF($event)"></app-display-pdf>
         </div>

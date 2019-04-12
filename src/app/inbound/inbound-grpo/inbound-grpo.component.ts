@@ -454,7 +454,7 @@ export class InboundGRPOComponent implements OnInit {
         // when user click on cross button nothing to do.
       } else {
         //means user click on negative button
-        if ($event.From == "recCurrentOrAll") {
+        if ($event.From == "recCurrentOrAll") { 
           //this.submitCurrentGRPO();
           this.yesButtonText = this.translate.instant("yes");
           this.noButtonText = this.translate.instant("no");
@@ -576,31 +576,31 @@ export class InboundGRPOComponent implements OnInit {
     } else {
       this.showButton = false;
     }
-  }
+  } 
 
-  manageRecords(oSubmitPOLotsObj: any): any {
-    var size = oSubmitPOLotsObj.POReceiptLots.length;
-    for (var i = 0; i < size; i++) {
-      if (oSubmitPOLotsObj.POReceiptLots[i].PONumber == this.Ponumber &&
-        oSubmitPOLotsObj.POReceiptLots[i].ItemCode == this.openPOLineModel[0].ITEMCODE &&
-        oSubmitPOLotsObj.POReceiptLots[i].LineNo == this.openPOLineModel[0].LINENUM) {
-        var s = oSubmitPOLotsObj.POReceiptLotDetails.length;
-        for (var j = 0; j < oSubmitPOLotsObj.POReceiptLotDetails.length; j++) {
-          if (oSubmitPOLotsObj.POReceiptLotDetails[j].ParentLineNo == oSubmitPOLotsObj.POReceiptLots[i].Line) {
-            oSubmitPOLotsObj.POReceiptLotDetails.splice(j, 1);
-            j = -1;
-          }
-        }
-        oSubmitPOLotsObj.POReceiptLots.splice(i, 1);
-        // oSubmitPOLotsObj.POReceiptLotDetails.forEach(element => {
-        //   if(oSubmitPOLotsObj.POReceiptLotDetails[i].POItemCode == this.Ponumber+this.ItemCode){
-        //     oSubmitPOLotsObj.POReceiptLotDetails.splice(i, 1);
-        //   }
-        // });
-        oSubmitPOLotsObj.UDF.splice(i, 1);
-        oSubmitPOLotsObj.LastSerialNumber.splice(i, 1);
-        // this.oSubmitPOLotsArray.splice(i, 1); 
-      }
+  manageRecords(oSubmitPOLotsObj: any): any{
+    var size = oSubmitPOLotsObj.POReceiptLots.length;  
+    for(var i=0; i<oSubmitPOLotsObj.POReceiptLots.length; i++){
+      if(oSubmitPOLotsObj.POReceiptLots[i].PONumber == this.Ponumber && 
+        oSubmitPOLotsObj.POReceiptLots[i].ItemCode == this.openPOLineModel[0].ITEMCODE && 
+        oSubmitPOLotsObj.POReceiptLots[i].LineNo == this.openPOLineModel[0].LINENUM){
+           var s = oSubmitPOLotsObj.POReceiptLotDetails.length;
+          for(var j=0; j<oSubmitPOLotsObj.POReceiptLotDetails.length; j++ ){
+            if(oSubmitPOLotsObj.POReceiptLotDetails[j].ParentLineNo == oSubmitPOLotsObj.POReceiptLots[i].Line){
+              oSubmitPOLotsObj.POReceiptLotDetails.splice(j, 1);
+              j = -1;
+            }
+          }    
+          oSubmitPOLotsObj.POReceiptLots.splice(i, 1);     
+          // oSubmitPOLotsObj.POReceiptLotDetails.forEach(element => {
+          //   if(oSubmitPOLotsObj.POReceiptLotDetails[i].POItemCode == this.Ponumber+this.ItemCode){
+          //     oSubmitPOLotsObj.POReceiptLotDetails.splice(i, 1);
+          //   }
+          // });
+          oSubmitPOLotsObj.UDF.splice(i, 1); 
+          oSubmitPOLotsObj.LastSerialNumber.splice(i, 1); 
+          // this.oSubmitPOLotsArray.splice(i, 1); 
+      } 
     }
     return oSubmitPOLotsObj;
   }
@@ -622,13 +622,13 @@ export class InboundGRPOComponent implements OnInit {
       // show print dialog here and onclick its handling.  
       this.yesButtonText = this.translate.instant("yes");
       this.noButtonText = this.translate.instant("no");
-      this.dialogFor = "receiveSinglePDFDialog";
-      this.dialogMsg = this.translate.instant("PrintAllLabelsAfterSubmit");
+      this.dialogFor = "receiveSinglePDFDialog"; 
+      this.dialogMsg =  this.translate.instant("PrintAllLabelsAfterSubmit");
       this.showConfirmDialog = true; // show dialog
 
-    } else {
-      dataModel = this.manageRecords(dataModel);
-      if (dataModel == null || dataModel == undefined || dataModel == "") {
+    }else{  
+      dataModel = this.manageRecords(JSON.parse(dataModel));
+      if(dataModel == null|| dataModel == undefined || dataModel == ""){
         this.yesButtonText = this.translate.instant("yes");
         this.noButtonText = this.translate.instant("no");
         this.dialogFor = "receiveSinglePDFDialog";
@@ -754,11 +754,12 @@ export class InboundGRPOComponent implements OnInit {
           if (this.showPDF) {
             //show pdf
             this.displayPDF(data[0].DocEntry);
-            this.showPDF = false;
-          } else {
-            // no need to display pdf
+            this.showPDF = false; 
+          }else{
+               // no need to display pdf
+               this.inboundMasterComponent.inboundComponent = 1; 
           }
-          //this.inboundMasterComponent.inboundComponent = 1; 
+          
         } else if (data[0].ErrorMsg == "7001") {
           this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
             this.translate.instant("CommonSessionExpireMsg"));
@@ -811,7 +812,7 @@ export class InboundGRPOComponent implements OnInit {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
-          this.showLookupLoader = true;
+          this.showLookupLoader = false;
           this.serviceData = data;
           this.lookupfor = "toWhsList";
 
@@ -841,7 +842,7 @@ export class InboundGRPOComponent implements OnInit {
 
           if (data.length > 0) {
             console.log(data);
-            this.showLookupLoader = true;
+            this.showLookupLoader = false;
             this.serviceData = data;
             this.lookupfor = "RecvBinList";
 
@@ -1062,9 +1063,12 @@ export class InboundGRPOComponent implements OnInit {
             this.base64String = 'data:application/pdf;base64,' + this.base64String;
             this.displayPDF1 = true;
             //this.commonservice.refreshDisplyPDF(true); 
-
-          }
-          //  console.log("filename:" + this.fileName);
+ 
+           }else{
+             // no data available then redirect to first screen.
+             this.inboundMasterComponent.inboundComponent = 1; 
+           }
+        //  console.log("filename:" + this.fileName);
           console.log("filename:" + this.base64String);
         } else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
@@ -1074,5 +1078,11 @@ export class InboundGRPOComponent implements OnInit {
         this.toastr.error('', error);
       }
     );
+  }
+
+  closePDF(){
+    //close current screen and redirect to first screen.
+    this.inboundMasterComponent.inboundComponent = 1; 
+    console.log("PDF dialog is closed");
   }
 }
