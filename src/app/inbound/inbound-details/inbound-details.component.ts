@@ -27,6 +27,9 @@ export class InboundDetailsComponent implements OnInit {
   gridDataAfterDelete: any[];
   showNext: boolean = false;
 
+  yesButtonText: string = "Yes";
+  noButtonText: string = "No";
+
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent) {
     let userLang = navigator.language.split('-')[0];
@@ -184,10 +187,12 @@ export class InboundDetailsComponent implements OnInit {
     localStorage.setItem("selectedPO", $event.selectedRows[0].dataItem.PONumber);
     this.inboundMasterComponent.inboundComponent = 2;
   }
-
+ 
   public openConfirmForDelete(rowindex, gridData: any) {
     this.dialogFor = "deleteRow";
     this.dialogMsg = this.translate.instant("DoYouWantToDelete")
+    this.yesButtonText = this.translate.instant("yes");
+    this.noButtonText = this.translate.instant("no");
     this.rowindexForDelete = rowindex;
     this.gridDataAfterDelete = gridData;
     this.showConfirmDialog = true;
