@@ -37,6 +37,7 @@ export class InboundPolistComponent implements OnInit {
   addToGRPOPONumbers: any = {};
   showGRPOButton: boolean = false;
   selectedVendor: string= "";
+  disablePO: boolean = false;
 
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent) {
@@ -48,6 +49,13 @@ export class InboundPolistComponent implements OnInit {
   }
 
   ngOnInit() {
+    var selectedPO = localStorage.getItem("selectedPO");
+    if (selectedPO != undefined && selectedPO != null && selectedPO != "") {
+      this.poCode = selectedPO;
+      this.disablePO = true;
+    }else{
+      this.disablePO = false;
+    }
     var ponumber = localStorage.getItem("PONumber");
     if (ponumber != undefined && ponumber != null && ponumber != "") {
       this.poCode = ponumber;
