@@ -455,7 +455,7 @@ export class InboundGRPOComponent implements OnInit {
         // when user click on cross button nothing to do.
       } else { 
         //means user click on negative button
-        if ($event.From == "recCurrentOrAll") {
+        if ($event.From == "recCurrentOrAll") { 
           //this.submitCurrentGRPO();
           this.yesButtonText = this.translate.instant("yes");
           this.noButtonText = this.translate.instant("no");
@@ -577,11 +577,11 @@ submitCurrentGRPO(){
     } else {
       this.showButton = false;
     }
-  }
+  } 
 
   manageRecords(oSubmitPOLotsObj: any): any{
     var size = oSubmitPOLotsObj.POReceiptLots.length;  
-    for(var i=0; i<size; i++){
+    for(var i=0; i<oSubmitPOLotsObj.POReceiptLots.length; i++){
       if(oSubmitPOLotsObj.POReceiptLots[i].PONumber == this.Ponumber && 
         oSubmitPOLotsObj.POReceiptLots[i].ItemCode == this.openPOLineModel[0].ITEMCODE && 
         oSubmitPOLotsObj.POReceiptLots[i].LineNo == this.openPOLineModel[0].LINENUM){
@@ -623,12 +623,12 @@ submitCurrentGRPO(){
       // show print dialog here and onclick its handling.  
       this.yesButtonText = this.translate.instant("yes");
       this.noButtonText = this.translate.instant("no");
-      this.dialogFor = "receiveSinglePDFDialog";
+      this.dialogFor = "receiveSinglePDFDialog"; 
       this.dialogMsg =  this.translate.instant("PrintAllLabelsAfterSubmit");
       this.showConfirmDialog = true; // show dialog
 
     }else{  
-      dataModel = this.manageRecords(dataModel);
+      dataModel = this.manageRecords(JSON.parse(dataModel));
       if(dataModel == null|| dataModel == undefined || dataModel == ""){
         this.yesButtonText = this.translate.instant("yes");
         this.noButtonText = this.translate.instant("no");
@@ -758,8 +758,9 @@ submitCurrentGRPO(){
             this.showPDF = false; 
           }else{
                // no need to display pdf
+               this.inboundMasterComponent.inboundComponent = 1; 
           }
-          //this.inboundMasterComponent.inboundComponent = 1; 
+          
         } else if (data[0].ErrorMsg == "7001") {
           this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
             this.translate.instant("CommonSessionExpireMsg"));
@@ -812,7 +813,7 @@ submitCurrentGRPO(){
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
-          this.showLookupLoader = true;
+          this.showLookupLoader = false;
           this.serviceData = data;
           this.lookupfor = "toWhsList";
 
@@ -842,7 +843,7 @@ submitCurrentGRPO(){
 
           if (data.length > 0) {
             console.log(data);
-            this.showLookupLoader = true;
+            this.showLookupLoader = false;
             this.serviceData = data;
             this.lookupfor = "RecvBinList";
 
@@ -1064,6 +1065,9 @@ submitCurrentGRPO(){
             this.displayPDF1 = true; 
             //this.commonservice.refreshDisplyPDF(true); 
  
+           }else{
+             // no data available then redirect to first screen.
+             this.inboundMasterComponent.inboundComponent = 1; 
            }
         //  console.log("filename:" + this.fileName);
           console.log("filename:" + this.base64String);
@@ -1075,5 +1079,11 @@ submitCurrentGRPO(){
         this.toastr.error('', error);
       }
     );
+  }
+
+  closePDF(){
+    //close current screen and redirect to first screen.
+    this.inboundMasterComponent.inboundComponent = 1; 
+    console.log("PDF dialog is closed");
   }
 }
