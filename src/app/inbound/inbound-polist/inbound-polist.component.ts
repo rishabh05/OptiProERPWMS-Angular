@@ -36,7 +36,7 @@ export class InboundPolistComponent implements OnInit {
   public addToGRPOArray: any = {};
   addToGRPOPONumbers: any = {};
   showGRPOButton: boolean = false;
-  selectedVendor: string= "";
+  selectedVendor: string = "";
   disablePO: boolean = false;
 
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
@@ -53,7 +53,8 @@ export class InboundPolistComponent implements OnInit {
     if (selectedPO != undefined && selectedPO != null && selectedPO != "") {
       this.poCode = selectedPO;
       this.disablePO = true;
-    }else{
+      this.openPOLines();
+    } else {
       this.disablePO = false;
     }
     var ponumber = localStorage.getItem("PONumber");
@@ -62,6 +63,7 @@ export class InboundPolistComponent implements OnInit {
       this.openPOLines();
     }
     this.selectedVendor = this.inboundMasterComponent.selectedVernder;
+    this.showGRPOButton = false;
   }
 
   onPOlookupClick() {
@@ -292,7 +294,8 @@ export class InboundPolistComponent implements OnInit {
     if (this.oSavedPOLotsArray != undefined && this.oSavedPOLotsArray != null && this.oSavedPOLotsArray != "") {
       if (localStorage.getItem("AddToGRPO") != "") {
         this.addToGRPOArray = JSON.parse(localStorage.getItem("AddToGRPO"));
-      }else{
+        this.manageGRPOData();
+      } else {
         this.addToGRPOArray.POReceiptLots = [];
         this.addToGRPOArray.POReceiptLotDetails = [];
         this.addToGRPOArray.UDF = [];
@@ -300,7 +303,8 @@ export class InboundPolistComponent implements OnInit {
       }
       if (localStorage.getItem("addToGRPOPONumbers") != "") {
         this.addToGRPOPONumbers = JSON.parse(localStorage.getItem("addToGRPOPONumbers"));
-      }else{
+        this.managePONumberListData();
+      } else {
         this.addToGRPOPONumbers.PONumbers = [];
       }
       var addpo = true;
@@ -371,14 +375,13 @@ export class InboundPolistComponent implements OnInit {
 
           for (var m = 0; m < this.oSavedPOLotsArray.LastSerialNumber.length; m++) {
             if (this.oSavedPOLotsArray.LastSerialNumber[m].ItemCode == this.oSavedPOLotsArray.POReceiptLots[i].ItemCode) {
-              this.addToGRPOArray.POReceiptLotDetails.push({
+              this.addToGRPOArray.LastSerialNumber.push({
                 LastSerialNumber: this.oSavedPOLotsArray.LastSerialNumber[m].LastSerialNumber,
                 LineId: this.oSavedPOLotsArray.LastSerialNumber[m].LineId,
                 ItemCode: this.oSavedPOLotsArray.LastSerialNumber[m].ItemCode
               });
             }
           }
-
         }
       }
       localStorage.setItem("AddToGRPO", JSON.stringify(this.addToGRPOArray));
@@ -386,5 +389,44 @@ export class InboundPolistComponent implements OnInit {
     }
     localStorage.setItem("PONumber", "");
     this.inboundMasterComponent.inboundComponent = 1;
+  }
+
+  managePONumberListData(){
+    for (var i = 0; i < this.addToGRPOPONumbers.PONumbers.length; i++) {
+      if (this.addToGRPOPONumbers.PONumbers[i].PONumber == this.poCode) {
+        this.addToGRPOPONumbers.PONumbers.splice(i, 1);
+      }
+    }
+  }
+
+  manageGRPOData() {
+    for (var i = 0; i < this.addToGRPOArray.POReceiptLots.length; i++) {
+      if (this.addToGRPOArray.POReceiptLots[i].PONumber == this.poCode) {
+        for (var j = 0; j < this.addToGRPOArray.POReceiptLotDetails.length; j++) {
+          if (this.addToGRPOArray.POReceiptLotDetails[j].ParentLineNo == this.addToGRPOArray.POReceiptLots[i].Line) {
+            this.addToGRPOArray.POReceiptLotDetails.splice(j, 1);
+          }
+        }
+
+        for (var k = 0; k < this.addToGRPOArray.UDF.length; k++) {
+          if (this.addToGRPOArray.UDF[k].Key == "OPTM_TARGETWHS" &&
+            this.addToGRPOArray.UDF[k].LineNo == this.addToGRPOArray.POReceiptLots[i].Line) {
+            this.addToGRPOArray.UDF.splice(k, 1);
+          }
+
+          if (this.addToGRPOArray.UDF[k].Key == "OPTM_TARGETBIN" &&
+            this.addToGRPOArray.UDF[k].LineNo == this.addToGRPOArray.POReceiptLots[i].Line) {
+            this.addToGRPOArray.UDF.splice(k, 1);
+          }
+        }
+
+        for (var m = 0; m < this.addToGRPOArray.LastSerialNumber.length; m++) {
+          if (this.addToGRPOArray.LastSerialNumber[m].ItemCode == this.addToGRPOArray.POReceiptLots[i].ItemCode) {
+            this.addToGRPOArray.LastSerialNumber.splice(m, 1);
+          }
+        }
+        this.addToGRPOArray.POReceiptLots.splice(i, 1);
+      }
+    }
   }
 }

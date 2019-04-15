@@ -75,7 +75,6 @@ export class InboundGRPOComponent implements OnInit {
   gridDataAfterDelete: any[];
 
   showPDF: boolean = false;
-
   displayPDF1: boolean = false;
   base64String: string = "";
   fileName: string = "";
@@ -84,11 +83,11 @@ export class InboundGRPOComponent implements OnInit {
   @ViewChild('Quantity') QuantityField;
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent) {
-    let userLang = navigator.language.split('-')[0];
-    userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
-    translate.use(userLang);
-    translate.onLangChange.subscribe((event: LangChangeEvent) => {
-    });
+    // let userLang = navigator.language.split('-')[0];
+    // userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
+    // translate.use(userLang);
+    // translate.onLangChange.subscribe((event: LangChangeEvent) => {
+    // });
   }
 
   ngOnInit() {
@@ -272,6 +271,22 @@ export class InboundGRPOComponent implements OnInit {
       return false;
     } else {
       return true;
+    }
+  }
+
+  updateVendorLot(value, rowindex) {
+    for (let i = 0; i < this.recvingQuantityBinArray.length; ++i) {
+      if (i === rowindex) {
+        this.recvingQuantityBinArray[i].VendorLot = value;
+      }
+    }
+  }
+
+  updateLotNumber(value, rowindex) {
+    for (let i = 0; i < this.recvingQuantityBinArray.length; ++i) {
+      if (i === rowindex) {
+        this.recvingQuantityBinArray[i].LotNumber = value;
+      }
     }
   }
 
@@ -1035,10 +1050,7 @@ export class InboundGRPOComponent implements OnInit {
         console.log("Error: ", error);
         this.targetWhse = "";
       });
-
   }
-
-
 
   public displayPDF(dNo: string) {
     this.inboundService.printingServiceForSubmitGRPO(dNo).subscribe(

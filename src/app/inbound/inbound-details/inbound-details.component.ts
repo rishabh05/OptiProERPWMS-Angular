@@ -38,7 +38,7 @@ export class InboundDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.VendCode = localStorage.getItem("VendCode");
-    this.VendName = localStorage.getItem("VendCode");
+    this.VendName = localStorage.getItem("VendName");
     if(this.VendCode != ""){
       this.showNext = true;
     }else{
