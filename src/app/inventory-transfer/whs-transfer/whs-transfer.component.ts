@@ -123,4 +123,7 @@ export class WhsTransferComponent implements OnInit {
     }
     localStorage.setItem("towhseId", this.toWhse);
   }
+  onCancelClick() {
+    this.router.navigate(['home/dashboard']);
+  }
 }
