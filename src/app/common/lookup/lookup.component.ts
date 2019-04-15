@@ -430,7 +430,7 @@ export class LookupComponent implements OnInit {
       {
         field: 'DocNum',
         title: this.translate.instant("PO#"),
-        type: 'text',
+        type: 'numeric',
         width: '100'
       },
       {

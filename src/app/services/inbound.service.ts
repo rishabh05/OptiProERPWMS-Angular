@@ -56,9 +56,9 @@ export class InboundService {
     console.log("get polist method :");
     let jObject = {
       GoodsReceiptToken: JSON.stringify([{
-        UserId: itemcode,
+        UserId: '',
         CompanyDBId: localStorage.getItem("CompID"), WhseCode: localStorage.getItem("whseId"),
-        ItemCode: '', VendorCode: vendercode,
+        ItemCode: itemcode, VendorCode: vendercode,
         FuturePO: futurepo, IsCustom: false, GUID: localStorage.getItem("GUID"),
         UsernameForLic: localStorage.getItem("UserId")
       }])

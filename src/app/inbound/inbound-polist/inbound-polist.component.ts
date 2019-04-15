@@ -6,6 +6,7 @@ import { LangChangeEvent, TranslateService } from '../../../../node_modules/@ngx
 import { ToastrService } from '../../../../node_modules/ngx-toastr';
 import { Router } from '../../../../node_modules/@angular/router';
 import { AutoLot } from 'src/app/models/Inbound/AutoLot';
+import { RowClassArgs } from '../../../../node_modules/@progress/kendo-angular-grid';
 
 @Component({
   selector: 'app-inbound-polist',
@@ -15,7 +16,7 @@ import { AutoLot } from 'src/app/models/Inbound/AutoLot';
 export class InboundPolistComponent implements OnInit {
 
   futurepo: boolean = false;
-  poCode: string;
+  poCode: string="";
   showLookupLoader: boolean = true;
   serviceData: any[];
   lookupfor: string;
@@ -135,20 +136,21 @@ export class InboundPolistComponent implements OnInit {
             this.openPOLinesModel = data.Table;
             // var  unmatchedPOLinesModel = data.Table;
             this.updateReceivedQtyForSavedItems();
-            this.openPOLinesModel.forEach(element => {
-              if (element.TRACKING == "N") {
-                this.NonItemsDetail.push(element);
-              } else if (element.TRACKING == "B") {
-                this.BatchItemsDetail.push(element);
-              } else if (element.TRACKING == "S") {
-                this.SerialItemsDetail.push(element);
-              }
-            });
-            if (this.NonItemsDetail.length > 0) {
-              this.showNonTrackItem = true;
-            } if (this.BatchItemsDetail.length > 0) {
-              this.showBatchTrackItem = true;
-            } if (this.SerialItemsDetail.length > 0) {
+            // this.openPOLinesModel.forEach(element => {
+            //   if (element.TRACKING == "N") {
+            //     this.NonItemsDetail.push(element);
+            //   } else if (element.TRACKING == "B") {
+            //     this.BatchItemsDetail.push(element);
+            //   } else if (element.TRACKING == "S") {
+            //     this.SerialItemsDetail.push(element);
+            //   }
+            // });
+            // if (this.NonItemsDetail.length > 0) {
+            //   this.showNonTrackItem = true;
+            // } if (this.BatchItemsDetail.length > 0) {
+            //   this.showBatchTrackItem = true;
+            // } 
+            if (this.openPOLinesModel.length > 0) {
               this.showSerialTrackItem = true;
             }
           } else if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
@@ -165,6 +167,19 @@ export class InboundPolistComponent implements OnInit {
 
   }
 
+  public rowCallback = (context: RowClassArgs) => {
+    switch (context.dataItem.TRACKING) {
+      case 'S':
+        return { serial: true };
+      case 'B':
+        return { batch: true };
+      case 'N':
+        return { none: false };
+      default:
+        return {};
+    }
+  }
+  
   OnPOChange() {
     if (this.poCode == "" || this.poCode == undefined) {
       return;
