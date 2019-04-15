@@ -24,17 +24,18 @@ $font-weight-bold:	700;
 /////////////////////2. Common css start///////////////////////////
 ////////////////////////////////////////////////////////////////
 body{
-    @include font($size: $font-size-regular,$weight: $font-weight-regular,  $lh: false);
+    @include font($size: $font-size-small,$weight: $font-weight-regular,  $lh: false);
 }
 p{
-    @include font($size: $font-size-regular,$weight: $font-weight-regular,  $lh: false);
+    @include font($size:$font-size-small,$weight: $font-weight-regular,  $lh: false);
 }
 a{
-    @include font($size: $font-size-regular,$weight: $font-weight-regular,  $lh: false);
+    @include font($size: $font-size-small,$weight: $font-weight-regular,  $lh: false);
     // &:hover{
        
     // }
 }
+
 h1{
     @include font($size: $font-size-xxx-large,$weight: $font-weight-regular,  $lh: false);
 }

@@ -196,8 +196,14 @@ file-drop .drop-zone.over {
     padding-bottom: calc(.24rem + 1px);
 }
 body .k-dateinput-wrap .k-input{
-    font-size: .875rem;
+    font-size: $font-size-small;
     line-height: 1.5;
+}
+.input-group-sm>.form-control, .input-group-sm>.input-group-append>.btn, .input-group-sm>.input-group-append>.input-group-text, .input-group-sm>.input-group-prepend>.btn, .input-group-sm>.input-group-prepend>.input-group-text{
+    font-size: $font-size-small;
+}
+.form-group {
+    margin-bottom: 10px;
 }
 /////////////////////////////////////////////////////////////////////
 ///////////////////////////// Custom Button Style /////////////////////
