@@ -144,8 +144,8 @@
                 #gridItem>
 
                 <!-- grid for mobile start -->
-                <kendo-grid-column media="(max-width: 767px)" title="Payment List" class="opti_mobile-grid-td">
-                  <ng-template kendoGridCellTemplate let-dataItem>
+                <kendo-grid-column media="(max-width: 767px)" title="List" class="opti_mobile-grid-td">
+                  <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                       <dl class="opti_mobile_grid_dl">
                           <dt>{{'Item'|translate}}</dt>
                           <dd>{{ dataItem.ItemCode }}</dd>
@@ -158,30 +158,27 @@
                       </dl>
 
                       <dl class="opti_mobile_grid_dl">
-                          <dt>{{'Qty'|translate}}</dt>
+                          <dt class="d-flex align-items-center">{{'Qty'|translate}}
+
+                                <button type="button" class="btn btn-danger k-button btn-sm btn-icon ml-auto" (click)="ViewLinesRowDeleteClick(rowIndex, gridItem)"><span class="k-icon k-i-delete" role="presentation"></span></button>
+                          </dt>
                           <dd>{{ dataItem.Qty }}</dd>
 
                           <dt>{{'FromBin'|translate}}</dt>
                           <dd>{{ dataItem.BinNo }}</dd>
-
-                          <dd>
-                            <button type="button" class="k-button-icon k-button">
-                              <span class="k-icon k-i-delete" role="presentation"></span>
-                            </button>
-                          </dd>
                       </dl>
                   </ng-template>
               </kendo-grid-column>
               <!-- grid for mobile end -->
 
-                <kendo-grid-column class="pl-1" media="(min-width: 768px)" field="ItemCode" title="Item" [width]="160"></kendo-grid-column>
-                <kendo-grid-column media="(min-width: 768px)" field="Qty" headerClass="text-right" class="text-right" title="Qty" [width]="60"></kendo-grid-column>
-                <kendo-grid-column media="(min-width: 768px)" field="LotNo" [width]="160" title="Batch"></kendo-grid-column>
-                <kendo-grid-column media="(min-width: 768px)" field="BinNo" [width]="160" title="From Bin" ></kendo-grid-column>
-                <kendo-grid-column media="(min-width: 768px)" field="ToBin" title="To Bin" [width]="160"></kendo-grid-column>
-                <kendo-grid-column media="(min-width: 768px)" field="Delete" title="Delete" width="60">
+                <kendo-grid-column class="pl-1" media="(min-width: 768px)" field="ItemCode" title="{{'Item'|translate}}" [width]="160"></kendo-grid-column>
+                <kendo-grid-column media="(min-width: 768px)" field="Qty" headerClass="text-right" class="text-right" title="{{'Qty'|translate}}" [width]="60"></kendo-grid-column>
+                <kendo-grid-column media="(min-width: 768px)" field="LotNo" [width]="160" title="{{'Batch'|translate}}"></kendo-grid-column>
+                <kendo-grid-column media="(min-width: 768px)" field="BinNo" [width]="160" title="{{'FromBin'|translate}}" ></kendo-grid-column>
+                <kendo-grid-column media="(min-width: 768px)" field="ToBin" title="{{'ToBin'|translate}}" [width]="160"></kendo-grid-column>
+                <kendo-grid-column media="(min-width: 768px)" field="Delete" title="{{'Delete'|translate}}" width="30">
                   <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                    <button type="button" class="k-button-icon k-button" (click)="ViewLinesRowDeleteClick(rowIndex, gridItem)"><span class="k-icon k-i-delete" role="presentation"></span></button>
+                    <button type="button" class="btn btn-danger k-button btn-sm btn-icon" (click)="ViewLinesRowDeleteClick(rowIndex, gridItem)"><span class="k-icon k-i-delete" role="presentation"></span></button>
                   </ng-template>
                 </kendo-grid-column>
               </kendo-grid>
@@ -240,5 +237,5 @@
 </div>
 
 <span [hidden]="showLookupLoader">
-    <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
-    </span>
+    <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>    
+</span>

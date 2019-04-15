@@ -44,15 +44,29 @@
                             [groupable]=isColumnGroup [columnMenu]="{ columnChooser: false }" [height]=gridHeight
                             [selectable]="true" #gridItem>
 
-                            <kendo-grid-column field="DOCNUM" title="Order No" ></kendo-grid-column>
-                            <kendo-grid-column field="DOCNUM"  [width]="80" title="{{'Delete'|translate}}"
-                            >
-                            <ng-template kendoGridCellTemplate let-idx="rowIndex">
-                                <button id="removeSelectedMeterial" (click)="removeSelectedMeterial(idx,gridSelectedMeterial)"
-                                    class="k-button-icon k-button"> 
-                                    <span class="k-icon k-i-delete" role="presentation"></span></button>
-                            </ng-template>
-                        </kendo-grid-column>
+                            <!-- grid for mobile start -->
+                            <kendo-grid-column media="(max-width: 767px)" title="List" class="opti_mobile-grid-td">
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <dl class="opti_mobile_grid_dl w-100">
+                                        <dt class="d-flex align-items-center">{{'OrderNo'|translate}}
+                                            <button id="removeSelectedMeterial" (click)="removeSelectedMeterial(idx,gridSelectedMeterial)"
+                                            class="btn btn-danger k-button btn-sm btn-icon ml-auto"> 
+                                            <span class="k-icon k-i-delete" role="presentation"></span></button>
+                                        </dt>
+                                        <dd>{{ dataItem.DOCNUM }}</dd>
+                                    </dl>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <!-- grid for mobile end -->
+
+                            <kendo-grid-column media="(min-width: 768px)" field="DOCNUM" title="{{'OrderNo'|translate}}" [width]="90"></kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" field="DOCNUM"  [width]="10" title="{{'Delete'|translate}}">
+                                <ng-template kendoGridCellTemplate let-idx="rowIndex">
+                                    <button id="removeSelectedMeterial" (click)="removeSelectedMeterial(idx,gridSelectedMeterial)"
+                                        class="btn btn-danger k-button btn-sm btn-icon"> 
+                                        <span class="k-icon k-i-delete" role="presentation"></span></button>
+                                </ng-template>
+                            </kendo-grid-column>
                         </kendo-grid>
 
                     </div>

@@ -384,14 +384,14 @@ export class InboundGRPOComponent implements OnInit {
           var finalString = this.getAutoLotStringOPR2(autoLots[i].STRING);
           autoLots[i].STRING = finalString;
           this.searlNo = this.searlNo + finalString;
-          this.LastSerialNumber.push(this.getAutoLotStringOPR2(finalString))
-          this.LineId.push(autoLots[i].LINEID);
+          this.LastSerialNumber[0] = (this.getAutoLotStringOPR2(finalString))
+          this.LineId[0] = (autoLots[i].LINEID);
 
         } else {
           var finalString = autoLots[i].STRING;
           this.searlNo = this.searlNo + finalString;
-          this.LastSerialNumber.push(this.getAutoLotStringOPR2(finalString));
-          this.LineId.push(autoLots[i].LINEID);
+          this.LastSerialNumber[0] = (this.getAutoLotStringOPR2(finalString));
+          this.LineId[0] = (autoLots[i].LINEID);
         }
       }
       if (autoLots[i].OPRTYPE == "2" && autoLots[i].OPERATION == "3") {
@@ -399,13 +399,13 @@ export class InboundGRPOComponent implements OnInit {
           var finalString = this.getAutoLotStringOPR3(autoLots[i].STRING);
           this.searlNo = this.searlNo + finalString;
           autoLots[i].STRING = finalString;
-          this.LastSerialNumber.push(this.getAutoLotStringOPR3(autoLots[i].STRING));
-          this.LineId.push(autoLots[i].LINEID);
+          this.LastSerialNumber[0] = (this.getAutoLotStringOPR3(autoLots[i].STRING));
+          this.LineId[0] = (autoLots[i].LINEID);
         } else {
           var finalString = autoLots[i].STRING;
           this.searlNo = this.searlNo + finalString;
-          this.LastSerialNumber.push(this.getAutoLotStringOPR3(autoLots[i].STRING));
-          this.LineId.push(autoLots[i].LINEID);
+          this.LastSerialNumber[0] = (this.getAutoLotStringOPR3(autoLots[i].STRING));
+          this.LineId[0] = (autoLots[i].LINEID);
         }
       }
     }
@@ -575,6 +575,7 @@ export class InboundGRPOComponent implements OnInit {
       }
       // this.updateReceiveQty();
       this.openPOLineModel[0].RPTQTY = this.previousReceivedQty;
+      
     }
     if (this.tracking == "S") {
       this.isNonTrack = false;

@@ -203,7 +203,15 @@
   "Current" : "Current",
   "yes" : "Yes",
   "no" : "No",
-  "DeleiveryForSO":"Delievery for SO#"
+  "DeleiveryForSO":"Delievery for SO#",
+  "OpenQuantity":"Open Quantity",
+  "ReceiveQuantity":"Receive Quantity",
+  "Status": "Status",
+  "PaymentDueDate":"Payment Due Date",
+  "InvoiceAmount": "Invoice Amount",
+  "InvoiceDate":"Invoice Date",
+  "PORef#":"PO Ref.#",
+  "Invoice#": "Invoice#"
 
 
    
