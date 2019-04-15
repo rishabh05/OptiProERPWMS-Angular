@@ -22,6 +22,7 @@ export class WhsTransferComponent implements OnInit {
   lookupfor: string;
   showLookupLoader=true;
   public whsView:boolean = true;
+  showNext: boolean = false;
   
   constructor(private commonservice: Commonservice, private router: Router, private inventoryTransferService: InventoryTransferService, private toastr: ToastrService, private translate: TranslateService) {
     let userLang = navigator.language.split('-')[0];
@@ -82,6 +83,7 @@ export class WhsTransferComponent implements OnInit {
 
   getLookupValue($event) {
     this.toWhse = $event[0];
+    this.showNext = true;
   }
 
   OnToWarehouseChange () {
@@ -100,9 +102,11 @@ export class WhsTransferComponent implements OnInit {
           if (data[0].Result == "0") {
             this.toastr.error('', this.translate.instant("InvalidWhsErrorMsg"));
             this.toWhse = "";
+            this.showNext = false;
           }
           else {
             this.toWhse = data[0].ID;
+            this.showNext = true;
           }
         }
       },
@@ -116,12 +120,12 @@ export class WhsTransferComponent implements OnInit {
   }  
 
   viewSwitch(){
-    this.whsView = !this.whsView;
     if (this.toWhse == "" || this.toWhse == undefined) {
       this.toastr.error('', this.translate.instant("ToWhsBlankErrMsg"));
       return;
     }
     localStorage.setItem("towhseId", this.toWhse);
+    this.whsView = !this.whsView;
   }
   onCancelClick() {
     this.router.navigate(['home/dashboard']);
