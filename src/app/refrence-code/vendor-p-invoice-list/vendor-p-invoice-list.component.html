@@ -66,28 +66,28 @@
                 <kendo-grid-column media="(max-width: 767px)" title="Payment List" class="opti_mobile-grid-td">
                     <ng-template kendoGridCellTemplate let-dataItem>
                         <dl class="opti_mobile_grid_dl">
-                            <dt>Invoice#</dt>
+                            <dt>{{'Invoice#'|translate}}</dt>
                             <dd>{{ dataItem.Invoice }}</dd>
 
-                            <dt>PO Ref.#</dt>
-                            <dd>{{ dataItem.PORef }}</dd>
-
-                            <dt>Vendor</dt>
+                            <dt>{{'VendCode'|translate}}</dt>
                             <dd>{{ dataItem.Vendor }}</dd>
 
-                            <dt>Invoice Date</dt>
-                            <dd>{{ dataItem.InvoiceDate }}</dd>
+                            <dt>{{'InvoiceAmount'|translate}}</dt>
+                            <dd>{{ dataItem.InvoiceAmount }}</dd>
+
+                            <dt>{{'Status'|translate}}</dt>
+                            <dd>{{ dataItem.Status }}</dd>
                         </dl>
 
                         <dl class="opti_mobile_grid_dl">
-                            <dt>Invoice Amount <span class="opti_arrow-grid-detail float-right text-center opti_vertical-align">&rsaquo;</span></dt>
-                            <dd>{{ dataItem.InvoiceAmount }}</dd>
+                            <dt class="d-flex align-items-center">{{'PORef#'|translate}} <span class="opti_arrow-grid-detail ml-auto text-center opti_vertical-align">&rsaquo;</span></dt>
+                            <dd>{{ dataItem.PORef }}</dd>
 
-                            <dt>Payment Due Date</dt>
+                            <dt>{{'InvoiceDate'|translate}}</dt>
+                            <dd>{{ dataItem.InvoiceDate }}</dd>
+
+                            <dt>{{'PaymentDueDate'|translate}}</dt>
                             <dd>{{ dataItem.PaymentDueDate }}</dd>
-
-                            <dt>Status</dt>
-                            <dd>{{ dataItem.Status }}</dd>
                         </dl>
                     </ng-template>
                 </kendo-grid-column>
