@@ -104,6 +104,7 @@ export class InboundService {
         ItemCode: itemCode
       }])
     };
+    console.log("getUOMs API's request:"+JSON.stringify(jObject));
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/getUOM", jObject, this.httpOptions);
   }
 

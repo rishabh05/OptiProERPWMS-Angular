@@ -236,7 +236,7 @@ export class InboundGRPOComponent implements OnInit {
   public getUOMList() {
     this.inboundService.getUOMs(this.openPOLineModel[0].ITEMCODE).subscribe(
       (data: any) => {
-        console.log(data);
+        console.log("UOM data response:",data);
         this.openPOLineModel[0].UOMList = data;
         if (this.openPOLineModel[0].UOMList.length > 0) {
           this.uomSelectedVal = this.openPOLineModel[0].UOMList[0];
@@ -594,8 +594,11 @@ export class InboundGRPOComponent implements OnInit {
       }
       // this.updateReceiveQty();
       this.openPOLineModel[0].RPTQTY = this.previousReceivedQty;
-
-    }
+      if(oSubmitPOLots.UDF != undefined && oSubmitPOLots.UDF !=null && oSubmitPOLots.UDF.length>0){
+        this.targetWhse = oSubmitPOLots.UDF[0].Value;
+        this.targetBin = oSubmitPOLots.UDF[1].Value;
+      }
+    } 
     if (this.tracking == "S") {
       this.isNonTrack = false;
     } else if (this.tracking == "N") {
@@ -1126,7 +1129,7 @@ export class InboundGRPOComponent implements OnInit {
             this.inboundMasterComponent.inboundComponent = 1;
           }
           //  console.log("filename:" + this.fileName);
-          console.log("filename:" + this.base64String);
+          console.log("filename:" + this.base64String); 
         } else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         }
