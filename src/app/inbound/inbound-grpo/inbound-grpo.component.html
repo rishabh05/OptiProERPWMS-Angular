@@ -146,7 +146,7 @@
                 <!-- Kendo Table Grid Row start -->
                 <div class="row mt-3">
                     <div class="col-md-12">
-                        <kendo-grid *ngIf="!isNonTrack" class="no-shadow" [kendoGridBinding]="recvingQuantityBinArray"
+                        <kendo-grid *ngIf="!isNonTrack" class="no-shadow" [kendoGridBinding]="recvingQuantityBinArray" [resizable]="true" 
                             [sortable]="true" [selectable]="true" #gridItem >
 
                             <!-- grid for mobile start -->
@@ -183,7 +183,7 @@
                             <!-- grid for mobile end -->
 
                             <kendo-grid-column media="(min-width: 768px)" field="VendorLot" [width]="18" title="{{mfrGridColumnText}}">
-                                <ng-template kendoGridCellTemplate let-dataItem>
+                                <ng-template kendoGridCellTemplate let-dataItem let-idx='rowIndex'>
                                     <input type="text" class="form-control form-control-sm"
                                     name="dataItem.VendorLot" value={{dataItem.VendorLot}}
                                     id="display_name" #display_name
@@ -224,7 +224,7 @@
                         
                         
 
-                        <kendo-grid *ngIf="isNonTrack" class="no-shadow" [kendoGridBinding]="recvingQuantityBinArray"
+                        <kendo-grid *ngIf="isNonTrack" class="no-shadow" [kendoGridBinding]="recvingQuantityBinArray" [resizable]="true" 
                             [sortable]="true" [selectable]="true" #gridItem>
                             <!-- grid for mobile start -->
                             <kendo-grid-column media="(max-width: 767px)" title="List" class="opti_mobile-grid-td">

@@ -79,7 +79,7 @@ export class InboundGRPOComponent implements OnInit {
   base64String: string = "";
   fileName: string = "";
   UOMentry: any = "";
-  
+
 
   @ViewChild('Quantity') QuantityField;
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
@@ -304,6 +304,8 @@ export class InboundGRPOComponent implements OnInit {
     if (!this.validateQuantity()) {
       return;
     }
+    this.LastSerialNumber = [];
+    this.LineId = [];
     if (this.isNonTrack) {
       this.addNonTrackQty(this.qty);
     } else {
@@ -316,6 +318,8 @@ export class InboundGRPOComponent implements OnInit {
       if (this.isSerial) {
         while (this.qty > 0 && this.qty != 0) {
           if (autoLots.length > 0 && autoLots[0].AUTOLOT == "Y") {
+            this.LastSerialNumber = [];
+            this.LineId = [];
             this.addBatchSerialQty(autoLots, this.qty);
           }
           let result = this.recvingQuantityBinArray.find(element => element.LotNumber == this.searlNo);
@@ -386,14 +390,14 @@ export class InboundGRPOComponent implements OnInit {
           var finalString = this.getAutoLotStringOPR2(autoLots[i].STRING);
           autoLots[i].STRING = finalString;
           this.searlNo = this.searlNo + finalString;
-          this.LastSerialNumber[0] = (this.getAutoLotStringOPR2(finalString))
-          this.LineId[0] = (autoLots[i].LINEID);
+          this.LastSerialNumber.push(this.getAutoLotStringOPR2(finalString))
+          this.LineId.push(autoLots[i].LINEID);
 
         } else {
           var finalString = autoLots[i].STRING;
           this.searlNo = this.searlNo + finalString;
-          this.LastSerialNumber[0] = (this.getAutoLotStringOPR2(finalString));
-          this.LineId[0] = (autoLots[i].LINEID);
+          this.LastSerialNumber.push(this.getAutoLotStringOPR2(finalString));
+          this.LineId.push(autoLots[i].LINEID);
         }
       }
       if (autoLots[i].OPRTYPE == "2" && autoLots[i].OPERATION == "3") {
@@ -401,13 +405,13 @@ export class InboundGRPOComponent implements OnInit {
           var finalString = this.getAutoLotStringOPR3(autoLots[i].STRING);
           this.searlNo = this.searlNo + finalString;
           autoLots[i].STRING = finalString;
-          this.LastSerialNumber[0] = (this.getAutoLotStringOPR3(autoLots[i].STRING));
-          this.LineId[0] = (autoLots[i].LINEID);
+          this.LastSerialNumber.push(this.getAutoLotStringOPR3(autoLots[i].STRING));
+          this.LineId.push(autoLots[i].LINEID);
         } else {
           var finalString = autoLots[i].STRING;
           this.searlNo = this.searlNo + finalString;
-          this.LastSerialNumber[0] = (this.getAutoLotStringOPR3(autoLots[i].STRING));
-          this.LineId[0] = (autoLots[i].LINEID);
+          this.LastSerialNumber.push(this.getAutoLotStringOPR3(autoLots[i].STRING));
+          this.LineId.push(autoLots[i].LINEID);
         }
       }
     }
@@ -503,8 +507,14 @@ export class InboundGRPOComponent implements OnInit {
 
   forwardZero(num: number, size: number): string {
     let s = num + "";
+    let sign = "";
+    if(s.length > 0 && s[0] == "-"){
+      s = s.substring(1, s.length);
+      sign = "-";
+    }
     size = size + s.length;
     while (s.length < size) s = "0" + s;
+    s = sign + s;
     return s;
   }
 
@@ -574,6 +584,12 @@ export class InboundGRPOComponent implements OnInit {
                 .POReceiptLotDetails[j].LotQty);
             }
           }
+          // this.LastSerialNumber = oSubmitPOLotsObj.LastSerialNumber;
+          // this.LineId = oSubmitPOLotsObj.LastSerialNumber;
+          for (var m = 0; m < oSubmitPOLots.LastSerialNumber.length; m++) {
+            this.LastSerialNumber.push(oSubmitPOLots.LastSerialNumber[m].LastSerialNumber);
+            this.LineId.push(oSubmitPOLots.LastSerialNumber[m].LineId);
+          }
         }
       }
       // this.updateReceiveQty();
@@ -622,15 +638,28 @@ export class InboundGRPOComponent implements OnInit {
             j = -1;
           }
         }
+
+        for (var k = 0; k < oSubmitPOLotsObj.UDF.length; k++) {
+          if (oSubmitPOLotsObj.UDF[k].Key == "OPTM_TARGETWHS" &&
+            oSubmitPOLotsObj.UDF[k].LineNo == oSubmitPOLotsObj.POReceiptLots[i].Line) {
+            oSubmitPOLotsObj.UDF.splice(k, 1);
+          }
+
+          if (oSubmitPOLotsObj.UDF[k].Key == "OPTM_TARGETBIN" &&
+            oSubmitPOLotsObj.UDF[k].LineNo == oSubmitPOLotsObj.POReceiptLots[i].Line) {
+            oSubmitPOLotsObj.UDF.splice(k, 1);
+          }
+        }
+        
+        // oSubmitPOLotsObj.UDF.splice(i, 1);
+        for (var m = 0; m < oSubmitPOLotsObj.LastSerialNumber.length; m++) {
+          if (oSubmitPOLotsObj.LastSerialNumber[m].ItemCode == oSubmitPOLotsObj.POReceiptLots[i].ItemCode) {
+            oSubmitPOLotsObj.LastSerialNumber.splice(m, 1);
+            m = -1;
+          }
+        }
+        // oSubmitPOLotsObj.LastSerialNumber.splice(i, 1);
         oSubmitPOLotsObj.POReceiptLots.splice(i, 1);
-        // oSubmitPOLotsObj.POReceiptLotDetails.forEach(element => {
-        //   if(oSubmitPOLotsObj.POReceiptLotDetails[i].POItemCode == this.Ponumber+this.ItemCode){
-        //     oSubmitPOLotsObj.POReceiptLotDetails.splice(i, 1);
-        //   }
-        // });
-        oSubmitPOLotsObj.UDF.splice(i, 1);
-        oSubmitPOLotsObj.LastSerialNumber.splice(i, 1);
-        // this.oSubmitPOLotsArray.splice(i, 1); 
       }
     }
     return oSubmitPOLotsObj;

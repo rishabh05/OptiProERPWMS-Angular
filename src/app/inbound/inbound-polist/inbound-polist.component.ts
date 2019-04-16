@@ -420,6 +420,7 @@ export class InboundPolistComponent implements OnInit {
         for (var j = 0; j < this.addToGRPOArray.POReceiptLotDetails.length; j++) {
           if (this.addToGRPOArray.POReceiptLotDetails[j].ParentLineNo == this.addToGRPOArray.POReceiptLots[i].Line) {
             this.addToGRPOArray.POReceiptLotDetails.splice(j, 1);
+            j = -1;
           }
         }
 
@@ -438,6 +439,7 @@ export class InboundPolistComponent implements OnInit {
         for (var m = 0; m < this.addToGRPOArray.LastSerialNumber.length; m++) {
           if (this.addToGRPOArray.LastSerialNumber[m].ItemCode == this.addToGRPOArray.POReceiptLots[i].ItemCode) {
             this.addToGRPOArray.LastSerialNumber.splice(m, 1);
+            m = -1;
           }
         }
         this.addToGRPOArray.POReceiptLots.splice(i, 1);
