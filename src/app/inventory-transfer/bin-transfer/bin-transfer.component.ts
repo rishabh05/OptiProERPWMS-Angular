@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, TemplateRef, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, HostListener, TemplateRef, ViewChild, ElementRef } from '@angular/core';
 import { viewLineContent } from '../../DemoData/sales-order';
 import { UIHelper } from '../../helpers/ui.helpers';
 import { BsModalService, BsModalRef, ModalDirective } from 'ngx-bootstrap/modal';
@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { InventoryTransferService } from '../../services/inventory-transfer.service';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { Template } from '@angular/compiler/src/render3/r3_ast';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-bin-transfer',
@@ -42,8 +43,13 @@ export class BinTransferComponent implements OnInit {
   PageTitle: string;
   ModalContent: string;
   TransferedItemsDetail: any[] = [];
+  @Input() fromScreen: any;
+  @Output() cancelevent = new EventEmitter();
 
-  constructor(private commonservice: Commonservice,private activatedRoute :ActivatedRoute, private router: Router, private inventoryTransferService: InventoryTransferService, private toastr: ToastrService, private translate: TranslateService, private modalService: BsModalService) {
+  constructor(private commonservice: Commonservice,private activatedRoute :ActivatedRoute, 
+    private router: Router, private inventoryTransferService: InventoryTransferService, 
+    private toastr: ToastrService, private translate: TranslateService, 
+    private modalService: BsModalService, private _location: Location) {
     let userLang = navigator.language.split('-')[0];
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
     translate.use(userLang);
@@ -81,6 +87,8 @@ export class BinTransferComponent implements OnInit {
     } else {
       this.PageTitle = this.translate.instant("WarehouseTransfer") + " From: " + localStorage.getItem("whseId") + " To: " + localStorage.getItem("towhseId");
     }
+
+    console.log("bin loaded")
   }
 
 
@@ -177,7 +185,6 @@ export class BinTransferComponent implements OnInit {
       }
     );
   }
-
 
   OnLotChange() {
     if (this.lotValue == "" || this.lotValue == undefined) {
@@ -724,7 +731,13 @@ export class BinTransferComponent implements OnInit {
   formatOnHandQty() {
     this.onHandQty = Number(this.onHandQty).toFixed(3);
   }
-  goback(){
-    console.log(this.activatedRoute)
+
+  goBack() {
+    if (localStorage.getItem("towhseId") == localStorage.getItem("whseId")) {
+      this.router.navigate(['home/dashboard']);
+    } else {
+      this.cancelevent.emit(true);
+    }
   }
+
 }

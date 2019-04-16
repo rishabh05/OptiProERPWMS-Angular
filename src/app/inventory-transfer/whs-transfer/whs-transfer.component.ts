@@ -23,6 +23,7 @@ export class WhsTransferComponent implements OnInit {
   showLookupLoader=true;
   public whsView:boolean = true;
   showNext: boolean = false;
+  fromScreen: any = "";
   
   constructor(private commonservice: Commonservice, private router: Router, private inventoryTransferService: InventoryTransferService, private toastr: ToastrService, private translate: TranslateService) {
     let userLang = navigator.language.split('-')[0];
@@ -126,8 +127,14 @@ export class WhsTransferComponent implements OnInit {
     }
     localStorage.setItem("towhseId", this.toWhse);
     this.whsView = !this.whsView;
+    this.fromScreen = "WhsTransfer";
   }
+
   onCancelClick() {
     this.router.navigate(['home/dashboard']);
+  }
+
+  binCancelEvent(){
+    this.whsView = !this.whsView;
   }
 }
