@@ -236,7 +236,7 @@ export class InboundGRPOComponent implements OnInit {
   public getUOMList() {
     this.inboundService.getUOMs(this.openPOLineModel[0].ITEMCODE).subscribe(
       (data: any) => {
-        console.log("UOM data response:",data);
+        console.log("UOM data response:", data);
         this.openPOLineModel[0].UOMList = data;
         if (this.openPOLineModel[0].UOMList.length > 0) {
           this.uomSelectedVal = this.openPOLineModel[0].UOMList[0];
@@ -508,7 +508,7 @@ export class InboundGRPOComponent implements OnInit {
   forwardZero(num: number, size: number): string {
     let s = num + "";
     let sign = "";
-    if(s.length > 0 && s[0] == "-"){
+    if (s.length > 0 && s[0] == "-") {
       s = s.substring(1, s.length);
       sign = "-";
     }
@@ -525,6 +525,18 @@ export class InboundGRPOComponent implements OnInit {
     } else if (this.IsQCRequired && (this.targetWhse == null || this.targetWhse == undefined || this.targetWhse == "")) {
       this.toastr.error('', "Target Bin cannot be blank");
       return;
+    }
+
+    if (this.openPOLineModel[0].TRACKING != "N") {
+      let result = this.recvingQuantityBinArray.find(element => element.LotNumber == "");
+      if (result != undefined) {
+        if (this.openPOLineModel[0].TRACKING == "S") {
+          this.toastr.error('', this.translate.instant("SerialNotBlank"));
+        } else {
+          this.toastr.error('', this.translate.instant("BatchNotBlank"));
+        }
+        return;
+      }
     }
 
     this.prepareCommonData();
@@ -594,11 +606,11 @@ export class InboundGRPOComponent implements OnInit {
       }
       // this.updateReceiveQty();
       this.openPOLineModel[0].RPTQTY = this.previousReceivedQty;
-      if(oSubmitPOLots.UDF != undefined && oSubmitPOLots.UDF !=null && oSubmitPOLots.UDF.length>0){
+      if (oSubmitPOLots.UDF != undefined && oSubmitPOLots.UDF != null && oSubmitPOLots.UDF.length > 0) {
         this.targetWhse = oSubmitPOLots.UDF[0].Value;
         this.targetBin = oSubmitPOLots.UDF[1].Value;
       }
-    } 
+    }
     if (this.tracking == "S") {
       this.isNonTrack = false;
     } else if (this.tracking == "N") {
@@ -653,7 +665,7 @@ export class InboundGRPOComponent implements OnInit {
             oSubmitPOLotsObj.UDF.splice(k, 1);
           }
         }
-        
+
         // oSubmitPOLotsObj.UDF.splice(i, 1);
         for (var m = 0; m < oSubmitPOLotsObj.LastSerialNumber.length; m++) {
           if (oSubmitPOLotsObj.LastSerialNumber[m].ItemCode == oSubmitPOLotsObj.POReceiptLots[i].ItemCode) {
@@ -678,6 +690,17 @@ export class InboundGRPOComponent implements OnInit {
       return;
     }
 
+    if (this.openPOLineModel[0].TRACKING != "N") {
+      let result = this.recvingQuantityBinArray.find(element => element.LotNumber == "");
+      if (result != undefined) {
+        if (this.openPOLineModel[0].TRACKING == "S") {
+          this.toastr.error('', this.translate.instant("SerialNotBlank"));
+        } else {
+          this.toastr.error('', this.translate.instant("BatchNotBlank"));
+        }
+        return;
+      }
+    }
 
     var dataModel = localStorage.getItem("GRPOReceieveData");
     if (dataModel == null || dataModel == undefined || dataModel == "") {
@@ -1129,7 +1152,7 @@ export class InboundGRPOComponent implements OnInit {
             this.inboundMasterComponent.inboundComponent = 1;
           }
           //  console.log("filename:" + this.fileName);
-          console.log("filename:" + this.base64String); 
+          console.log("filename:" + this.base64String);
         } else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         }
