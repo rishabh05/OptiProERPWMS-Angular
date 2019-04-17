@@ -1,9 +1,8 @@
 <div class="opti_container position-relative bg-white rounded">
     <form class="form-with-fix-btnBar">
         <div class="opti_container_inner" [perfectScrollbar]=" ">
-
+          
             <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
-                {{'itemLabelReport'|translate}}
             </h3>
             <div class="row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
@@ -71,6 +70,8 @@
     <app-display-pdf *ngIf="displayPDF" [base64String]='base64String' [fileName]='fileName' (pdfClose)="closePDF($event)"></app-display-pdf>
 </div>
 
-<div class="opti_loader full-section" *ngIf="showLookupLoader==true">
+<div class="opti_loader full-section"  *ngIf="showLoader" >
     <div class="opti_spinner"></div>
 </div>
+
+

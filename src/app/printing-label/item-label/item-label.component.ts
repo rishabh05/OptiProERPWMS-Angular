@@ -25,7 +25,7 @@ export class ItemLabelComponent implements OnInit {
   @ViewChild('noOfCopiesIp') noOfCopiesIp : ElementRef;
 
 
-  
+  showLoader: boolean = false;
   showLookupLoader: boolean = true;
   serviceData: any[];
   lookupfor: string;
@@ -73,7 +73,7 @@ export class ItemLabelComponent implements OnInit {
    */
   OnItemCodeLookupClick() {
     console.log('button click');
-    this.showLookupLoader = true;
+   // this.showLookupLoader = true;
     this.getItemList();
   }
 
@@ -89,7 +89,7 @@ export class ItemLabelComponent implements OnInit {
    * Method to get list of inquries from server.
    */
   public getItemList() {
-
+    this.showLoader = true;
     //this.showLoader = true; this.getPIlistSubs = 
     this.itemLabelSubs = this.labelPrintReportsService.getItemCode().subscribe(
       data => {
@@ -100,14 +100,16 @@ export class ItemLabelComponent implements OnInit {
           }
           this.showLookupLoader = false; 
           this.serviceData = data; 
-          this.lookupfor = "ItemCodeList"; 
+          this.lookupfor = "ItemCodeList";  
         }
         else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         }
+        this.showLoader = false;
       },
       error => {
         this.toastr.error('', error);
+        this.showLoader = false;
       },
     );
   }
@@ -121,10 +123,11 @@ export class ItemLabelComponent implements OnInit {
     if (this.itemCode == "" || this.itemCode == undefined) {
       this.itemTracking = "";
       return;
-    }
-  
+    } 
+    this.showLoader = true;
     this.isItemExistsSubs = this.labelPrintReportsService.isItemExists(this.itemCode).subscribe(
       data => {
+        this.showLoader = false;
         if (data != undefined && data.length > 0) {
           console.log("" + data);
           if (data[0].ErrorMsg == "7001") {
@@ -142,12 +145,15 @@ export class ItemLabelComponent implements OnInit {
              this.getItemTracking(this.itemCode);
           }
           
+        
         } else {
           this.toastr.error('', this.translate.instant("InvalidItemCode"));
           this.itemCode = "";
         }
+      
       },
       error => {
+        this.showLoader = false;
         this.toastr.error('', error);
       }
     );
@@ -226,8 +232,7 @@ export class ItemLabelComponent implements OnInit {
    * Method to get list of inquries from server.
    */
   public showLotsList() {
-
-    //this.showLoader = true; this.getPIlistSubs = 
+    this.showLoader = true;
     this.lotsListSubs = this.labelPrintReportsService.getLotsList(this.itemCode).subscribe(
       data => {
         if (data != undefined && data.length > 0) {
@@ -236,23 +241,27 @@ export class ItemLabelComponent implements OnInit {
             return;
           }
           this.showLookupLoader = false;
+          
           this.serviceData = data;
           this.lookupfor = "LotsList";
         }
         else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         }
+        this.showLoader = false;
       },
       error => {
         this.toastr.error('', error);
+        this.showLoader = false;
       },
     );
   }
 
   checkBinForNonTrackedItems() {
-    
+    this.showLoader = true;
     this.checkBinForItemSubs = this.labelPrintReportsService.checkBinForItemLabelReport(this.itemCode, this.binNo).subscribe(
       data => {
+        this.showLoader = false;
         if (data != undefined && data.length > 0) {
           console.log("" + data);
           if (data[0].ErrorMsg == "7001") {
@@ -274,13 +283,15 @@ export class ItemLabelComponent implements OnInit {
       error => {
         this.toastr.error('', error);
         this.binNo = "";
+        this.showLoader = false;
       }
     );
   }
   checkBinForOtherTrackedItems() {
-    
+    this.showLoader = true;
     this.lotScanListWithoutWhseBinSubs = this.labelPrintReportsService.getLotScanListWithoutWhseBinAndItemWise(this.itemCode, this.binNo).subscribe(
       (data: any) => {
+        this.showLoader = false; 
         if (data != undefined && data.length > 0) {
           console.log("" + data);
           if (data[0].ErrorMsg == "7001") {
@@ -302,6 +313,7 @@ export class ItemLabelComponent implements OnInit {
       error => {
         this.toastr.error('', error);
         this.binNo = "";
+        this.showLoader = false;
       }
     );
   }
@@ -344,9 +356,10 @@ export class ItemLabelComponent implements OnInit {
     if (!this.checkValidation()) {
       return;
     }
+    this.showLoader = true;
     this.printServiceSubs = this.labelPrintReportsService.printingServiceForItemLabel(this.itemCode, this.binNo, this.noOfCopies).subscribe(
       (data: any) => {
-        
+        this.showLoader = false;
         if (data != undefined) {
           console.log("" + data);
           if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
@@ -380,6 +393,7 @@ export class ItemLabelComponent implements OnInit {
         }
       },
       error => {
+        this.showLoader = false;
         this.toastr.error('', error);
       }
     );
@@ -439,7 +453,7 @@ export class ItemLabelComponent implements OnInit {
     if (this.lotsListSubs != undefined)
       this.lotsListSubs.unsubscribe();
     if (this.printServiceSubs != undefined)
-      this.printServiceSubs.unsubscribe();
+      this.printServiceSubs.unsubscribe();   
   }
 
   closePDF(){

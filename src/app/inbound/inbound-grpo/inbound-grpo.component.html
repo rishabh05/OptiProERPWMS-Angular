@@ -331,4 +331,8 @@
 
     <div>
             <app-display-pdf *ngIf="displayPDF1" [base64String]='base64String' [fileName]='fileName' (pdfClose)="closePDF($event)"></app-display-pdf>
-        </div>
+            </div>
+            
+            <div class="opti_loader full-section"  *ngIf="showLoader" >
+                <div class="opti_spinner"></div>
+            </div>

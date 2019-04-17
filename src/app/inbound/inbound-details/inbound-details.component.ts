@@ -18,6 +18,7 @@ export class InboundDetailsComponent implements OnInit {
   lookupfor: string;
   VendCode: string;
   VendName: string;
+  showLoader: boolean = false;
   showGRPOGridAndBtn: boolean = false;
   public Polist: any[] = [];
   dialogFor: string = "";
@@ -96,10 +97,12 @@ export class InboundDetailsComponent implements OnInit {
       }
     );
   }
-
+  
   onVendorLookupClick() {
+    this.showLoader = true;
     this.inboundService.getVendorList().subscribe(
       (data: any) => {
+        this.showLoader = false;
         console.log(data);
         if (data != undefined) {
           if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
@@ -115,6 +118,7 @@ export class InboundDetailsComponent implements OnInit {
         }
       },
       error => {
+        this.showLoader = false;
         console.log("Error: ", error);
         this.toastr.error('', error);
       }
@@ -126,8 +130,10 @@ export class InboundDetailsComponent implements OnInit {
     if (this.VendCode == "" || this.VendCode == undefined) {
       return;
     }
+    this.showLoader = true;
     this.inboundService.IsVendorExists(this.VendCode).subscribe(
       (data: any) => {
+        this.showLoader = false;
         console.log(data);
         if (data != null) {
           if (data != undefined && data[0].ErrorMsg == "7001") {
@@ -153,6 +159,7 @@ export class InboundDetailsComponent implements OnInit {
         }
       },
       error => {
+        this.showLoader = false;
         console.log("Error: ", error);
         this.toastr.error('', error);
       }

@@ -29,6 +29,7 @@ export class InventoryEnquiryComponent implements OnInit {
   isItemExistsSubs: ISubscription;
   itemTrackingSubs: ISubscription;
 
+  showLoader: boolean = false;
   showLookupLoader: boolean = true;
   serviceData: any[];
   lookupfor: string;
@@ -107,9 +108,10 @@ export class InventoryEnquiryComponent implements OnInit {
   * Method to get list of inquries from server.
   */
   public showLotsList() {
-
+    this.showLoader = true;
     this.lotsListSubs = this.labelPrintReportsService.getLotsList("").subscribe(
       data => {
+        this.showLoader = false;
         if (data != undefined && data.length > 0) {
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));
@@ -124,6 +126,7 @@ export class InventoryEnquiryComponent implements OnInit {
         }
       },
       error => {
+        this.showLoader = false;
         this.toastr.error('', error);
       },
     );
@@ -138,13 +141,15 @@ export class InventoryEnquiryComponent implements OnInit {
       return;
     }
     this.isFromLotChange = true;
+    
     this.checkBinForOtherTrackedItems();
   }
 
   checkBinForOtherTrackedItems() {
-    
+    this.showLoader = true;
     this.lotScanListWithoutWhseBinSubs = this.labelPrintReportsService.getLotScanListWithoutWhseBinAndItemWise(this.itemCode, this.lotNo).subscribe(
       (data: any) => {
+        this.showLoader = false;
         if (data != undefined && data.length > 0) {
           console.log("" + data);
           if (data[0].ErrorMsg == "7001") {
@@ -165,6 +170,7 @@ export class InventoryEnquiryComponent implements OnInit {
         }
       },
       error => {
+        this.showLoader = false;
         this.toastr.error('', error);
         this.lotNo = "";
       }
@@ -303,9 +309,10 @@ export class InventoryEnquiryComponent implements OnInit {
    */
   public getItemList() {
 
-    //this.showLoader = true; this.getPIlistSubs = 
+   this.showLoader = true; //this.getPIlistSubs = 
     this.itemLabelSubs = this.labelPrintReportsService.getItemCode().subscribe(
       data => {
+        this.showLoader = false;
         if (data != undefined && data.length > 0) {
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));
@@ -320,6 +327,7 @@ export class InventoryEnquiryComponent implements OnInit {
         }
       },
       error => {
+        this.showLoader = false;
         this.toastr.error('', error);
       },
     );
@@ -350,10 +358,11 @@ export class InventoryEnquiryComponent implements OnInit {
       //this.itemTracking = "";
       return;
     }
+    this.showLoader = true;
     this.isFromItemChange = true;
     this.isItemExistsSubs = this.labelPrintReportsService.isItemExists(this.itemCode).subscribe(
       data => {
-        
+        this.showLoader = false;
         if (data != undefined && data.length > 0) {
           console.log("" + data);
           if (data[0].ErrorMsg == "7001") {
@@ -375,6 +384,7 @@ export class InventoryEnquiryComponent implements OnInit {
         }
       },
       error => {
+        this.showLoader = false;
         this.toastr.error('', error);
       }
     );
@@ -422,7 +432,7 @@ export class InventoryEnquiryComponent implements OnInit {
       }
     );
   }
- 
+
  
   OnCancelClick(){
     this.router.navigate(['home/dashboard']);

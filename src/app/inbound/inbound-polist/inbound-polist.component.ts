@@ -7,6 +7,7 @@ import { ToastrService } from '../../../../node_modules/ngx-toastr';
 import { Router } from '../../../../node_modules/@angular/router';
 import { AutoLot } from 'src/app/models/Inbound/AutoLot';
 import { RowClassArgs } from '../../../../node_modules/@progress/kendo-angular-grid';
+import { bypassSanitizationTrustResourceUrl } from '@angular/core/src/sanitization/bypass';
 
 @Component({
   selector: 'app-inbound-polist',
@@ -40,6 +41,7 @@ export class InboundPolistComponent implements OnInit {
   selectedVendor: string = "";
   disablePO: boolean = false;
 
+  showLoader: boolean = false;
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent) {
     let userLang = navigator.language.split('-')[0];
@@ -50,14 +52,7 @@ export class InboundPolistComponent implements OnInit {
   }
 
   ngOnInit() {
-    var selectedPO = localStorage.getItem("selectedPO");
-    if (selectedPO != undefined && selectedPO != null && selectedPO != "") {
-      this.poCode = selectedPO;
-      this.disablePO = true;
-      this.openPOLines();
-    } else {
-      this.disablePO = false;
-    }
+    
     var ponumber = localStorage.getItem("PONumber");
     if (ponumber != undefined && ponumber != null && ponumber != "") {
       this.poCode = ponumber;
@@ -66,12 +61,27 @@ export class InboundPolistComponent implements OnInit {
     this.selectedVendor = this.inboundMasterComponent.selectedVernder;
     this.showGRPOButton = false;
   }
+  ngAfterViewInit(){
+    setTimeout(() => {
+      var selectedPO = localStorage.getItem("selectedPO");
+      if (selectedPO != undefined && selectedPO != null && selectedPO != "") {
+        this.poCode = selectedPO;
+        this.disablePO = true;
+        this.openPOLines();
+      } else {
+        this.disablePO = false;
+      } 
+    }, 100); 
+     
+  }
 
   onPOlookupClick() {
     console.log("item POlookup click :");
+    this.showLoader = true;
     this.inboundService.getPOList(this.futurepo,
       this.inboundMasterComponent.selectedVernder, this.itemCode).subscribe(
         (data: any) => {
+          this.showLoader = false;
           console.log("get polist response:");
           if (data != undefined) {
             if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
@@ -88,6 +98,7 @@ export class InboundPolistComponent implements OnInit {
           }
         },
         error => {
+          this.showLoader = false;
           console.log("Error: ", error);
         }
       );
@@ -95,9 +106,11 @@ export class InboundPolistComponent implements OnInit {
 
   onItemlookupClick() {
     console.log("item lookup click :");
+    this.showLoader = true;
     this.inboundService.getItemList(this.futurepo, this.inboundMasterComponent.selectedVernder,
       this.poCode).subscribe(
         (data: any) => {
+          this.showLoader = false;
           console.log(data);
           if (data != undefined) {
             if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
@@ -113,6 +126,7 @@ export class InboundPolistComponent implements OnInit {
           }
         },
         error => {
+          this.showLoader = false;
           console.log("Error: ", error);
         }
       );
@@ -120,9 +134,11 @@ export class InboundPolistComponent implements OnInit {
 
   openPOLines() {
     console.log("search click : in open poline method :openPOLines()");
+    this.showLoader = true;
     this.inboundService.GetOpenPOLines(this.futurepo, this.itemCode,
       this.poCode).subscribe(
         (data: any) => {
+          this.showLoader = false;
           console.log("api call resonse section :openPOLines()");
           console.log(data);
           this.showNonTrackItem = false;
@@ -161,6 +177,7 @@ export class InboundPolistComponent implements OnInit {
           console.log("api call resonse section end of if :openPOLines()");
         },
         error => {
+          this.showLoader = false;
           console.log("Error: ", error);
         }
       );
@@ -184,20 +201,26 @@ export class InboundPolistComponent implements OnInit {
     if (this.poCode == "" || this.poCode == undefined) {
       return;
     }
+    this.showLoader = true;
     this.inboundService.IsPOExists(this.poCode, "").subscribe(
       data => {
-
+        this.showLoader = false;
         if (data != null) {
           if (data.length > 0) {
             this.openPOLines();
           }
           else {
+            this.poCode = "";
             this.toastr.error('', this.translate.instant("POExistMessage"));
             return;
           }
+        }else{
+          this.poCode = "";
+          this.toastr.error('', this.translate.instant("POExistMessage"));
         }
       },
       error => {
+        this.showLoader = false;
         this.toastr.error('', error);
       }
     );

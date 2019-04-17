@@ -146,3 +146,7 @@
 <div *ngIf="showLookupLoader == false"> 
     <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
 </div>
+
+<div class="opti_loader full-section"  *ngIf="showLoader" >
+    <div class="opti_spinner"></div>
+</div>

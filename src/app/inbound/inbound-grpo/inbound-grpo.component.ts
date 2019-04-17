@@ -11,7 +11,8 @@ import { RecvingQuantityBin } from 'src/app/models/Inbound/RecvingQuantityBin';
 import { AutoLot } from 'src/app/models/Inbound/AutoLot';
 import { ISubscription } from 'rxjs/Subscription';
 
-@Component({
+
+@Component({   
   selector: 'app-inbound-grpo',
   templateUrl: './inbound-grpo.component.html',
   styleUrls: ['./inbound-grpo.component.scss']
@@ -29,6 +30,7 @@ export class InboundGRPOComponent implements OnInit {
   RecvbBinvalue: any = "";
   uomSelectedVal: UOM;
   UOMList: UOM[];
+  showLoader: boolean = false;
   qty: number;
   showButton: boolean = false;
   recvingQuantityBinArray: RecvingQuantityBin[] = [];
@@ -76,7 +78,7 @@ export class InboundGRPOComponent implements OnInit {
 
   showPDF: boolean = false;
   displayPDF1: boolean = false;
-  base64String: string = "";
+  base64String: string = ""; 
   fileName: string = "";
   UOMentry: any = "";
 
@@ -162,8 +164,10 @@ export class InboundGRPOComponent implements OnInit {
    */
   public ShowBins() {
     this.targetBinClick = false;
+    this.showLoader = true;
     this.inboundService.getRevBins(this.openPOLineModel[0].QCREQUIRED).subscribe(
       (data: any) => {
+        this.showLoader = false;
         console.log(data);
         if (data != null) {
           if (this.defaultRecvBin == true) {
@@ -185,6 +189,7 @@ export class InboundGRPOComponent implements OnInit {
         }
       },
       error => {
+        this.showLoader = false;
         console.log("Error: ", error);
       }
     );
@@ -195,8 +200,10 @@ export class InboundGRPOComponent implements OnInit {
     if (this.RecvbBinvalue == "") {
       return;
     }
+    this.showLoader = true;
     this.inboundService.binChange(this.RecvbBinvalue).subscribe(
       (data: any) => {
+        this.showLoader = false;
         console.log(data);
         if (data != null) {
           if (data.length > 0) {
@@ -218,6 +225,7 @@ export class InboundGRPOComponent implements OnInit {
         }
       },
       error => {
+        this.showLoader = false;
         console.log("Error: ", error);
         this.RecvbBinvalue = "";
       }
@@ -234,8 +242,10 @@ export class InboundGRPOComponent implements OnInit {
    * Method to get list of uoms from server.
   */
   public getUOMList() {
+    this.showLoader = true;
     this.inboundService.getUOMs(this.openPOLineModel[0].ITEMCODE).subscribe(
       (data: any) => {
+        this.showLoader = false;
         console.log("UOM data response:",data);
         this.openPOLineModel[0].UOMList = data;
         if (this.openPOLineModel[0].UOMList.length > 0) {
@@ -806,8 +816,10 @@ export class InboundGRPOComponent implements OnInit {
   }
 
   SubmitGoodsReceiptPO(oSubmitPOLotsObj: any) {
+    this.showLoader = true;
     this.inboundService.SubmitGoodsReceiptPO(oSubmitPOLotsObj).subscribe(
       (data: any) => {
+        this.showLoader = false;
         console.log(data);
         if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
           // alert("Goods Receipt PO generated successfully with Doc No: " + data.DocEntry);
@@ -834,8 +846,8 @@ export class InboundGRPOComponent implements OnInit {
         }
       },
       error => {
+        this.showLoader = false;
         console.log("Error: ", error);
-        // alert("fail");
       }
     );
   }
@@ -867,9 +879,10 @@ export class InboundGRPOComponent implements OnInit {
   * Method to get list of inquries from server.
   */
   public getTargetWhseList() {
-
+    this.showLoader = true;
     this.targetWhseSubs = this.inboundService.getQCTargetWhse().subscribe(
       data => {
+        this.showLoader = false;
         if (data != undefined && data.length > 0) {
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));
@@ -885,6 +898,7 @@ export class InboundGRPOComponent implements OnInit {
         }
       },
       error => {
+        this.showLoader = false;
         this.toastr.error('', error);
       },
     );
@@ -898,8 +912,10 @@ export class InboundGRPOComponent implements OnInit {
   public getTargetBinList() {
     this.targetBinClick = true;
     //this.showLoader = true; this.getPIlistSubs = 
+    this.showLoader = true;
     this.targetBinSubs = this.inboundService.getRevBins("N").subscribe(
       (data: any) => {
+        this.showLoader = false;
         console.log(data);
         if (data != null) {
 
@@ -917,6 +933,7 @@ export class InboundGRPOComponent implements OnInit {
         }
       },
       error => {
+        this.showLoader = false;
         console.log("Error: ", error);
       }
     );
@@ -950,8 +967,10 @@ export class InboundGRPOComponent implements OnInit {
     if (this.targetBin == "") {
       return;
     }
+    this.showLoader = true;
     this.inboundService.binChange(this.targetBin).subscribe(
       (data: any) => {
+        this.showLoader = false;
         console.log(data);
         if (data != null) {
           if (data.length > 0) {
@@ -973,6 +992,7 @@ export class InboundGRPOComponent implements OnInit {
         }
       },
       error => {
+        this.showLoader = false;
         console.log("Error: ", error);
         this.targetBin = "";
       }
@@ -983,8 +1003,10 @@ export class InboundGRPOComponent implements OnInit {
     if (this.targetWhse == "") {
       return;
     }
+    this.showLoader = true;
     this.inboundService.isWHSExists(this.targetWhse).subscribe(
       (data: any) => {
+        this.showLoader = false;
         console.log(data);
         if (data != null) {
           if (data.length > 0) {
@@ -1006,6 +1028,7 @@ export class InboundGRPOComponent implements OnInit {
         }
       },
       error => {
+        this.showLoader = false;
         console.log("Error: ", error);
         this.targetWhse = "";
       }
@@ -1101,9 +1124,10 @@ export class InboundGRPOComponent implements OnInit {
   }
 
   public displayPDF(dNo: string) {
+    this.showLoader = true;
     this.inboundService.printingServiceForSubmitGRPO(dNo).subscribe(
       (data: any) => {
-
+        this.showLoader = false;
         if (data != undefined) {
           console.log("" + data);
           if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
@@ -1135,6 +1159,7 @@ export class InboundGRPOComponent implements OnInit {
         }
       },
       error => {
+        this.showLoader = false;
         this.toastr.error('', error);
       }
     );
