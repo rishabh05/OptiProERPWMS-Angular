@@ -66,6 +66,17 @@ export class PortalTopComponent implements OnInit {
     this.modalService.open(content, { centered: true });
   }  
 
+  /**
+   * 
+   * @param event 
+   * @param module 
+   */
+  listClick(event, module) { 
+    this.selectedItem = module;
+    this.router.navigate(['home/' + module]);
+  }
+
+
   signOut(){
     // this.toastr.success('', message, this.toast_config);
 

@@ -13,6 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+
 import 'hammerjs';
 
 // import { FormModule } from '../form/form.module';
@@ -20,6 +21,9 @@ import { TrnaslateLazyModule } from '../../translate-lazy.module';
 import { InventoryTransferModule } from '../inventory-transfer/inventory-transfer.module';
 import { InboundModule } from '../inbound/inbound.module';
 import { OutboundModule } from '../outbound/outbound.module';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ChangeWarehouseComponent } from '../change-warehouse/change-warehouse.component';
+import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
 
 @NgModule({
   imports: [
@@ -31,15 +35,17 @@ import { OutboundModule } from '../outbound/outbound.module';
     BsDropdownModule.forRoot(),
     PerfectScrollbarModule,
     TrnaslateLazyModule,
+    DropDownsModule,
     // Angular
     HttpClientModule,         
     FormsModule,
+    NgbModule,
 
     InboundModule,
     OutboundModule,
     InventoryTransferModule
   ],
-  declarations: [PortalHomeComponent, PortalLeftComponent, PortalRightComponent, PortalTopComponent, DashboardComponent, ThemeManagerComponent],
-  providers:[DashboardComponent]
+  declarations: [PortalHomeComponent, PortalLeftComponent, PortalRightComponent, PortalTopComponent, DashboardComponent, ThemeManagerComponent, ChangeWarehouseComponent],
+  providers:[DashboardComponent ]
 })
 export class PortalHomeModule { }

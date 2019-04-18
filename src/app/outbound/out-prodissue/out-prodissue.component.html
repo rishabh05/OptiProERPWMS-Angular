@@ -7,7 +7,7 @@
             <div class="row">
                 <div class="col-12">
                         
-                    <kendo-grid class="no-shadow" [kendoGridBinding]="selectedItems" [resizable]="false" [pageSize]="50"
+                    <kendo-grid class="no-shadow" [kendoGridBinding]="selectedItems" [resizable]="true" [pageSize]="50"
                         [pageable]="false" [sortable]="true" [selectable]="true" #gridItem>
 
                         <!-- grid for mobile start -->
@@ -163,7 +163,7 @@
                             </ng-template>
                         </kendo-grid-column>
 
-                        <kendo-grid-column media="(min-width: 768px)" *ngIf="OrderType!='N'" field="LOTNO"  title="{{'Delete'|translate}}"
+                        <kendo-grid-column media="(min-width: 768px)" *ngIf="OrderType!='N'" field="LOTNO"  title=""
                             width="10">
                             <ng-template kendoGridCellTemplate let-idx="rowIndex">
                                 <button id="removeSelectedMeterial" (click)="removeSelectedMeterial(idx,gridSelectedMeterial)"
