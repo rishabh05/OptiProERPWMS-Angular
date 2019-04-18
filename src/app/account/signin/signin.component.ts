@@ -182,7 +182,7 @@ export class SigninComponent implements OnInit {
           localStorage.setItem("DecimalSeparator", this.licenseData[0].DefaultValues[4].DefaultValue);
           localStorage.setItem("ThousandSeparator", this.licenseData[0].DefaultValues[5].DefaultValue);
           localStorage.setItem("DATEFORMAT", this.licenseData[0].DefaultValues[6].DefaultValue);
-          // code for remember me
+          // code for remember me 
           if (this.isRemember == true) {
             this.setCookie('cookieEmail', this.userName, 365);
             this.setCookie('cookiePassword', this.password, 365);

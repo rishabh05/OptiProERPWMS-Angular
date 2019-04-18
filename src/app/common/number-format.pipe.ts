@@ -12,7 +12,7 @@ export class NumberFormatPipe implements PipeTransform {
     var thSeperator = localStorage.getItem("ThousandSeparator");
     var dateFormat = localStorage.getItem("DATEFORMAT");
     var arr = value.toString().split('.');
-    formattedNo =  this.addSingleSeperatorToNo(arr[0]);
+    formattedNo =  this.addDigitSeperatorToNo(arr[0]);
     //logic to add . and ifs after place digit manage.
     if(arr!=null && arr != undefined && arr[1]!= undefined && arr[1]!=null){
       var noOfDigitsAfterDesimal = arr[1].length
@@ -30,7 +30,7 @@ export class NumberFormatPipe implements PipeTransform {
     
     return formattedNo;
   }
-  addSingleSeperatorToNo(numberStringBeforeDesimal:string):string{
+  addDigitSeperatorToNo(numberStringBeforeDesimal:string):string{
     var newNo  = "";
     if(numberStringBeforeDesimal.length >3 && numberStringBeforeDesimal.length < 7){
       newNo = numberStringBeforeDesimal.substring(0,numberStringBeforeDesimal.length-3)+","+numberStringBeforeDesimal.substring(numberStringBeforeDesimal.length-3,numberStringBeforeDesimal.length);
