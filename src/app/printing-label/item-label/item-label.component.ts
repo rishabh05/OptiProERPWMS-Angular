@@ -54,6 +54,7 @@ export class ItemLabelComponent implements OnInit {
   printServiceSubs: ISubscription;
 
   displayPDF:boolean = false;
+  userName:string = "1000.22"; 
   constructor(private renderer: Renderer,private commonservice: Commonservice, private router: Router, private labelPrintReportsService: LabelPrintReportsService,
     private toastr: ToastrService, private translate: TranslateService) {
     let userLang = navigator.language.split('-')[0];
@@ -235,6 +236,7 @@ export class ItemLabelComponent implements OnInit {
     this.showLoader = true;
     this.lotsListSubs = this.labelPrintReportsService.getLotsList(this.itemCode).subscribe(
       data => {
+        this.showLoader = false;
         if (data != undefined && data.length > 0) {
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));
@@ -248,7 +250,7 @@ export class ItemLabelComponent implements OnInit {
         else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         }
-        this.showLoader = false;
+       
       },
       error => {
         this.toastr.error('', error);

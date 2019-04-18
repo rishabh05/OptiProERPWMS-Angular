@@ -52,7 +52,7 @@ export function createTranslateLoader(http: HttpClient) {
     InputsModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent] 
 })
 export class AppModule { }
 // export function HttpLoaderFactory(http: HttpClient) {

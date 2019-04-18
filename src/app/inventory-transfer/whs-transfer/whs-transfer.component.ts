@@ -24,7 +24,7 @@ export class WhsTransferComponent implements OnInit {
   public whsView:boolean = true;
   showNext: boolean = false;
   fromScreen: any = "";
-  
+  showLoader: boolean = false;
   constructor(private commonservice: Commonservice, private router: Router, private inventoryTransferService: InventoryTransferService, private toastr: ToastrService, private translate: TranslateService) {
     let userLang = navigator.language.split('-')[0];
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
@@ -39,8 +39,10 @@ export class WhsTransferComponent implements OnInit {
   }
 
   getToWhse(){
+    this.showLoader = true;
     this.inventoryTransferService.getToWHS().subscribe(
       data => {
+        this.showLoader = false;
         if(data != undefined && data.length > 0){
           if (data[0].ErrorMsg == "7001") {
               this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
@@ -55,6 +57,7 @@ export class WhsTransferComponent implements OnInit {
         }
       },
       error => {
+        this.showLoader = false;
         this.toastr.error('', error);
       }
     );
@@ -91,8 +94,10 @@ export class WhsTransferComponent implements OnInit {
     if (this.toWhse == "" || this.toWhse == undefined) {
       return;
     }
+    this.showLoader = true;
     this.inventoryTransferService.isWHsExists(this.toWhse).subscribe(
       data => {
+        this.showLoader = false;
         if(data != undefined && data.length > 0){
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, 
@@ -112,6 +117,7 @@ export class WhsTransferComponent implements OnInit {
         }
       },
       error => {
+        this.showLoader = false;
         this.toastr.error('', error);
       }
     );
