@@ -21,7 +21,7 @@ export class PortalTopComponent implements OnInit {
   selectedItem: any;
   defaultWHS: { OPTM_WHSE: any; BPLid: number; };
   selectedThemeColor: string = opticonstants.DEFAULTTHEMECOLOR;
-  DBName: string;
+  public DBName: string;
   loggedInUserName: string;
   loggedinWarehouse: string;
 
