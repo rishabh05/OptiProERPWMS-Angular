@@ -213,7 +213,8 @@
   "InvoiceAmount": "Invoice Amount",
   "InvoiceDate":"Invoice Date",
   "PORef#":"PO Ref.#",
-  "Invoice#": "Invoice#"
+  "Invoice#": "Invoice#",
+  "selectWarehouse":"Select Warehouse"
 
 
    

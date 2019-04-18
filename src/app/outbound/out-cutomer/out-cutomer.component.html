@@ -39,9 +39,9 @@
                     
                     <div>
                         <!-- (selectionChange)="openPOByUOM($event,soItemsDetail.ITEMCODE)" -->
-                        <kendo-grid class="no-shadow" [kendoGridBinding]="orderCollection" [resizable]="false"
+                        <kendo-grid class="no-shadow" [kendoGridBinding]="orderCollection" [resizable]="true"
                             [pageSize]="50" [pageable]="true" [sortable]="true" [filterable]=isColumnFilter
-                            [groupable]=isColumnGroup [columnMenu]="{ columnChooser: false }" [height]=gridHeight
+                            [groupable]=isColumnGroup [height]=gridHeight
                             [selectable]="true" #gridItem>
 
                             <!-- grid for mobile start -->
@@ -60,7 +60,7 @@
                             <!-- grid for mobile end -->
 
                             <kendo-grid-column media="(min-width: 768px)" field="DOCNUM" title="{{'OrderNo'|translate}}" [width]="90"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="DOCNUM"  [width]="10" title="{{'Delete'|translate}}">
+                            <kendo-grid-column media="(min-width: 768px)" field="DOCNUM"  [width]="10" title="">
                                 <ng-template kendoGridCellTemplate let-idx="rowIndex">
                                     <button id="removeSelectedMeterial" (click)="removeSelectedMeterial(idx,gridSelectedMeterial)"
                                         class="btn btn-danger k-button btn-sm btn-icon"> 

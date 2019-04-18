@@ -94,7 +94,11 @@ export class BinTransferComponent implements OnInit {
 
   /** Simple method to toggle element visibility */
   public ShowSavedData(): void {
-    this.viewLines = !this.viewLines;
+    if(this.TransferedItemsDetail.length > 0){
+      this.viewLines = !this.viewLines;
+    }else{
+      this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+    }
   }
 
   public getViewLineList() {
@@ -739,5 +743,4 @@ export class BinTransferComponent implements OnInit {
       this.cancelevent.emit(true);
     }
   }
-
 }

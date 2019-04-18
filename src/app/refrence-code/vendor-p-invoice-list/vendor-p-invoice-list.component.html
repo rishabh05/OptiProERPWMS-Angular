@@ -11,13 +11,12 @@
         <div>
             <kendo-grid 
             [kendoGridBinding]="gridData" 
-            [resizable]="false" 
+            [resizable]="true" 
             [pageSize]="50" 
             [pageable]="true" 
             [sortable]="true"  
             [filterable]=isColumnFilter
             [groupable]=isColumnGroup 
-            [columnMenu]="{ columnChooser: false }" 
             [height]=gridHeight 
             [selectable]="true" 
             (selectionChange)="openInvoiceDetailOnSelectInvoiceOrder($event)"

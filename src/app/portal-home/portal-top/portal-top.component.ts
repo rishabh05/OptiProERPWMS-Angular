@@ -21,7 +21,7 @@ export class PortalTopComponent implements OnInit {
   selectedItem: any;
   defaultWHS: { OPTM_WHSE: any; BPLid: number; };
   selectedThemeColor: string = opticonstants.DEFAULTTHEMECOLOR;
-  DBName: string;
+  public DBName: string;
   loggedInUserName: string;
   loggedinWarehouse: string;
 
@@ -65,6 +65,17 @@ export class PortalTopComponent implements OnInit {
   openVerticallyCentered(content) {
     this.modalService.open(content, { centered: true });
   }  
+
+  /**
+   * 
+   * @param event 
+   * @param module 
+   */
+  listClick(event, module) { 
+    this.selectedItem = module;
+    this.router.navigate(['home/' + module]);
+  }
+
 
   signOut(){
     // this.toastr.success('', message, this.toast_config);
