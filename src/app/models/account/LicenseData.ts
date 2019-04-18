@@ -7,7 +7,7 @@ export interface LicenseData{
     CompanyServer: string;
     ProductVersion: string;
     Language: string;
-    DefaultValues: string;
+    DefaultValues: any;
     VersionSuccess: string;
     VersionFlag: string;
     LicenceSuccess: string,

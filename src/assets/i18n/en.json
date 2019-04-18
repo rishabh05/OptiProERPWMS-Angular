@@ -88,6 +88,8 @@
   "ItemCode": "Item Code",
   "ItemName": "Item Name",
   "NonTrackedItems": "Non Tracked Items",
+  "BatchNotBlank": "Batch no. cannot be blank",
+  "SerialNotBlank": "Serial no. cannot be blank",
   "OpenQty": "Open Qty",
   "ReceiveQty": "Receive Qty",
   "ReceiveForPO:": "Receive for PO:",

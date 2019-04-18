@@ -214,13 +214,14 @@ export class InboundDetailsComponent implements OnInit {
   }
 
   DeleteRowClick(rowindex, gridData: any) {
-    this.Polist.splice(rowindex, 1);
     var dataModel = localStorage.getItem("addToGRPOPONumbers");
     if (dataModel == null || dataModel == undefined || dataModel == "") {
     } else {
       var inboundData = JSON.parse(dataModel);
       inboundData.PONumbers.splice(rowindex, 1);
+      this.removePODetailData(this.Polist[rowindex].PONumber);
     }
+    this.Polist.splice(rowindex, 1);
     localStorage.setItem("addToGRPOPONumbers", JSON.stringify(inboundData));
     gridData.data = this.Polist;
     if (this.Polist.length > 0) {
@@ -238,19 +239,27 @@ export class InboundDetailsComponent implements OnInit {
 
           for (var j = 0; j < inboundData.POReceiptLotDetails.length; j++) {
             if (inboundData.POReceiptLotDetails[j].ParentLineNo == inboundData.POReceiptLots[i].Line) {
-              inboundData.POReceiptLotDetails[j].splice(j, 1);
+              inboundData.POReceiptLotDetails.splice(j, 1);
+              j=-1;
             }
           }
 
           for (var k = 0; k < inboundData.UDF.length; k++) {
-            if (inboundData.UDF[k].LineNo == inboundData.POReceiptLots[i].Line) {
-              inboundData.UDF[k].splice(k, 1); 
+            if (inboundData.UDF[k].Key == "OPTM_TARGETWHS" &&
+              inboundData.UDF[k].LineNo == inboundData.POReceiptLots[i].Line) {
+              inboundData.UDF.splice(k, 1);
+            }
+  
+            if (inboundData.UDF[k].Key == "OPTM_TARGETBIN" &&
+              inboundData.UDF[k].LineNo == inboundData.POReceiptLots[i].Line) {
+              inboundData.UDF.splice(k, 1);
             }
           }
 
           for (var m = 0; m < inboundData.LastSerialNumber.length; m++) {
             if (inboundData.LastSerialNumber[m].ItemCode == inboundData.POReceiptLots[i].ItemCode) {
               inboundData.LastSerialNumber.splice(m, 1);
+              m=-1;
             }
           }
 
@@ -259,5 +268,45 @@ export class InboundDetailsComponent implements OnInit {
       }
       localStorage.setItem("AddToGRPO", JSON.stringify(inboundData));
     }
+
+
+
+    var GRPOReceieveData = JSON.parse(localStorage.getItem("GRPOReceieveData"));
+    if (GRPOReceieveData != undefined && GRPOReceieveData != null && GRPOReceieveData != "") {
+      for (var i = 0; i < GRPOReceieveData.POReceiptLots.length; i++) {
+        if (GRPOReceieveData.POReceiptLots[i].PONumber == PONumbers) {
+
+          for (var j = 0; j < GRPOReceieveData.POReceiptLotDetails.length; j++) {
+            if (GRPOReceieveData.POReceiptLotDetails[j].ParentLineNo == GRPOReceieveData.POReceiptLots[i].Line) {
+              GRPOReceieveData.POReceiptLotDetails.splice(j, 1);
+              j=-1;
+            }
+          }
+
+          for (var k = 0; k < GRPOReceieveData.UDF.length; k++) {
+            if (GRPOReceieveData.UDF[k].Key == "OPTM_TARGETWHS" &&
+              GRPOReceieveData.UDF[k].LineNo == GRPOReceieveData.POReceiptLots[i].Line) {
+              GRPOReceieveData.UDF.splice(k, 1);
+            }
+  
+            if (GRPOReceieveData.UDF[k].Key == "OPTM_TARGETBIN" &&
+              GRPOReceieveData.UDF[k].LineNo == GRPOReceieveData.POReceiptLots[i].Line) {
+              GRPOReceieveData.UDF.splice(k, 1);
+            }
+          }
+
+          for (var m = 0; m < GRPOReceieveData.LastSerialNumber.length; m++) {
+            if (GRPOReceieveData.LastSerialNumber[m].ItemCode == GRPOReceieveData.POReceiptLots[i].ItemCode) {
+              GRPOReceieveData.LastSerialNumber.splice(m, 1);
+              m=-1;
+            }
+          }
+
+          GRPOReceieveData.POReceiptLots.splice(i, 1);
+        }
+      }
+      localStorage.setItem("GRPOReceieveData", JSON.stringify(GRPOReceieveData));
+    }
+
   }
 }

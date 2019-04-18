@@ -40,7 +40,7 @@
       </div>
     </form>    
   </div> 
-  <app-bin-transfer *ngIf="!whsView"></app-bin-transfer>
+  <app-bin-transfer *ngIf="!whsView" [fromScreen]='fromScreen' (cancelevent)="binCancelEvent($event)"></app-bin-transfer>
   <span [hidden]="showLookupLoader">
     <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
   </span>

@@ -92,6 +92,10 @@ export class PortalLeftComponent implements OnInit {
   }
 
   onInboundClick(){
+    this.clearInboundData();
+  }
+
+  clearInboundData(){
     localStorage.setItem("GRPOReceieveData", "");
     localStorage.setItem("Line", "0")
     localStorage.setItem("addToGRPOPONumbers", "");
