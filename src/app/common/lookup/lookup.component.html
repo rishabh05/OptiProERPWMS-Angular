@@ -21,7 +21,7 @@
             <!-- checkbox -->
             <form class="k-form opti_show-hide-grid-column-filter float-left opti_hide-in-mobile pl-0 pt-0">
                 <div class="k-form-field d-flex">
-                    <input #chkFilter type="checkbox" (change)="onFilterChange(chkFilter,gridItem)" id="opti_SalesOrderListColumnFilterID"
+                    <input #chkFilter  type="checkbox" (change)="onFilterChange(chkFilter,gridItem)" id="opti_SalesOrderListColumnFilterID"
                         [(ngModel)]="isColumnFilter" class="k-checkbox" name="columnfilter" />
                     <label class="k-checkbox-label" for="opti_SalesOrderListColumnFilterID">Enable Filter</label>
                 </div>
@@ -29,10 +29,11 @@
 
         </ng-template>
         <kendo-grid-checkbox-column *ngIf="showSelection==true" title="Select" [width]="25">
-            <ng-template kendoGridCellTemplate let-idx='rowIndex'>
+            <ng-template  kendoGridCellTemplate let-idx='rowIndex' let-di='dataItem'>
                 <div class="k-form-field d-flex center-checkbox">
-                    <input #chkSelection type="checkbox" (change)="onCheckboxClick(chkSelection.checked,idx)" id="chkbox-{{idx}}" class="k-checkbox"
+                    <input #chkSelection type="checkbox" [disabled]='di.OldData' [checked]='di.OldData' (change)="onCheckboxClick(chkSelection.checked,idx)" id="chkbox-{{idx}}" class="k-checkbox"
                         name="columnfilter" />
+                        
                     <label class="k-checkbox-label" for="chkbox-{{idx}}"></label>
                 </div>
             </ng-template>

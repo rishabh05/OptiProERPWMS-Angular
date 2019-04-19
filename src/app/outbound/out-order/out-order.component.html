@@ -88,13 +88,24 @@
                 <button *ngIf='outbound.TempMeterials!==undefined && outbound.TempMeterials!==null && outbound.TempMeterials.length>0' type="button" (click)="addToDeleiver()" class="btn btn-primary k-button btn-sm btn-icon-with-text ml-1"><span class="k-icon k-i-plus-outline"
                         role="presentation"></span> {{'AddToDeleiver'|translate}}</button>
 
-                <button *ngIf='outbound.TempMeterials!==undefined && outbound.TempMeterials!==null && outbound.TempMeterials.length>0' type="button" (click)="deleiver()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-check"
+                <button *ngIf='outbound.TempMeterials!==undefined && outbound.TempMeterials!==null && outbound.TempMeterials.length>0' type="button" (click)="deliveryConfirmation()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-check"
                             role="presentation"></span> {{'Deleiver'|translate}}</button>
             </div>
         </div>
     </form>
 </div>
 
-<span *ngIf="showLookup==true">
+<span *ngIf="showLookup==true && showLookupLoader==false">
     <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupkey)="getLookupValue($event)"></app-lookup>
 </span>
+
+<!-- Loader -->
+<div class="opti_loader full-section" *ngIf="showLookupLoader==true">
+        <div class="opti_spinner"></div>
+    </div>
+    
+    <!-- Dialog -->
+    <span *ngIf="showConfirmDialog">
+        <app-comon-confirm-dialog [titleMessage]="dialogMsg" [fromWhere]="dialogFor" [noButtonText]="noButtonText"
+            [yesButtonText]="yesButtonText" (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
+    </span>

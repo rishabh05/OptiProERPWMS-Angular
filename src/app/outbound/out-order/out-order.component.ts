@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
 import { OutboundData } from 'src/app/models/outbound/outbound-data';
 import { RowClassArgs } from '@progress/kendo-angular-grid';
+import { SODETAIL, SOHEADER, DeliveryToken } from 'src/app/models/outbound/out-del-req';
 
 @Component({
   selector: 'app-out-order',
@@ -14,6 +15,9 @@ import { RowClassArgs } from '@progress/kendo-angular-grid';
   styleUrls: ['./out-order.component.scss']
 })
 export class OutOrderComponent implements OnInit {
+  dialogMsg: string = "Which order you want to deliver?"
+  yesButtonText: string = "All";
+  noButtonText: string = "Current";
   private customerName: string = "";
   public pageSize = 20;
   public serviceData: any;
@@ -28,6 +32,8 @@ export class OutOrderComponent implements OnInit {
   serialTrackedItems: any;
   batchTrackedItems: any;
   noneTrackedItems: any;
+  showLookupLoader: boolean = false;
+  showConfirmDialog: boolean;
   constructor(private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) { }
 
 
@@ -57,17 +63,26 @@ export class OutOrderComponent implements OnInit {
 
       this.outboundservice.getCustomerSOList(this.selectedCustomer.CustomerCode).subscribe(
         resp => {
+          if (resp[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
+            return;
+          }
 
-          this.showLookup = true;
           this.serviceData = resp;
+          this.showLookupLoader = false;
+          this.showLookup = true;
         },
         error => {
           this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
+          this.showLookupLoader = false;
+          this.showLookup = false;
         }
       );
     }
     else {
       this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+      this.showLookupLoader = false;
+      this.showLookup = false;
     }
   }
 
@@ -103,23 +118,38 @@ export class OutOrderComponent implements OnInit {
       this.outbound.OrderData.DOCNUM = tempOrderData.DOCNUM = this.orderNumber;
       //lsOutbound
       let whseId = localStorage.getItem("whseId");
+      this.showLookup = false;
+      this.showLookupLoader = true;
       this.outboundservice.getSOItemList(tempOrderData.CARDCODE, tempOrderData.DOCNUM, whseId).subscribe(
         resp => {
           if (resp != null && resp != undefined)
-            this.soItemsDetail = resp.RDR1;
-            this.calculatePickQty();
-          console.log("SOItem", this.soItemsDetail);
+            if (resp.ErrorMsg == "7001") {
+              this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
+              return;
+            }
+          this.soItemsDetail = resp.RDR1;
+
+          if (this.soItemsDetail.length === 0) {
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+            this.showLookupLoader = false;
+          }
+          this.calculatePickQty();
+
+
           localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
 
           this.showSOIetDetail = true;
+          this.showLookupLoader = false;
         },
         error => {
           this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
+          this.showLookupLoader = false;
         }
       );
     }
     else {
       this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+      this.showLookupLoader = false;
     }
   }
 
@@ -140,42 +170,75 @@ export class OutOrderComponent implements OnInit {
     this.router.navigateByUrl("home/outbound/outcustomer", { skipLocationChange: true })
   }
 
-  public addToDeleiver() {
+  public addToDeleiver(goToCustomer: boolean = true) {
+    this.showLookupLoader = true;
     //lsOutbound
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
 
     if (outboundData != undefined && outboundData != '') {
       this.outbound = JSON.parse(outboundData);
 
-      // this.outbound.DeleiveryCollection = this.outbound.DeleiveryCollection.filter(t => t.Item.DOCNUM !== this.outbound.OrderData.DOCNUM);
-      //this.outbound.DeleiveryCollection=this.outbound.DeleiveryCollection.
-      let deleivery: any[] = this.outbound.TempMeterials;
-
-      for (let index = 0; index < this.outbound.DeleiveryCollection.length; index++) {
-        const d = this.outbound.DeleiveryCollection[index];
-        for (let j = 0; j < deleivery.length; j++) {
-          const element = deleivery[j];
-          if (d.Item.DOCENTRY == element.Item.DOCENTRY && d.Order.DOCNUM == element.Order.DOCNUM) {
-            deleivery.slice(index, 1);
-          }
-        }
-      }
-
-
-      if (deleivery !== undefined && deleivery !== null && deleivery.length > 0) {
-        deleivery.forEach(d => this.outbound.DeleiveryCollection.push(d));
-      }
+      this.prepareDeleiveryTempCollection();
 
 
       localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
-      this.openOutboundCustomer();
+      if (goToCustomer == true)
+        this.openOutboundCustomer();
+
+      this.showLookupLoader = false;
     }
   }
 
-  public deleiver() { }
+  prepareDeleiveryTempCollection() {
+    let tempMeterialCollection: any[] = this.outbound.TempMeterials;
+
+    for (let index = 0; index < this.outbound.DeleiveryCollection.length; index++) {
+
+      const d = this.outbound.DeleiveryCollection[index];
+
+      for (let j = 0; j < tempMeterialCollection.length; j++) {
+
+        const element = tempMeterialCollection[j];
+
+        if (d.Item.DOCENTRY == element.Item.DOCENTRY && d.Order.DOCNUM == element.Order.DOCNUM) {
+
+          tempMeterialCollection.slice(index, 1);
+        }
+      }
+    }
 
 
-  calculatePickQty() {
+    if (tempMeterialCollection !== undefined &&
+      tempMeterialCollection !== null && tempMeterialCollection.length > 0) {
+      for (let index = 0; index < tempMeterialCollection.length; index++) {
+        const tm = tempMeterialCollection[index];
+
+        let hasitem = this.outbound.DeleiveryCollection.filter(d =>
+          d.Item.DOCENTRY === tm.Item.DOCENTRY &&
+          d.Item.TRACKING === tm.Item.TRACKING &&
+          d.Order.DOCNUM === tm.Order.DOCNUM &&
+          d.Meterial.LOTNO === tm.Meterial.LOTNO &&
+          d.Meterial.BINNO === tm.Meterial.BINNO
+        );
+
+        if (hasitem.length == 0) {
+          this.outbound.DeleiveryCollection.push(tm)
+        }
+
+      }
+
+    }
+  }
+
+  public deleiver(orderId: any = null) {
+    this.showLookupLoader = true;
+    this.addToDeleiver(false);
+    this.prepareDeleiveryCollectionAndDeliver(orderId);
+    this.showLookupLoader = false;
+  }
+
+
+  public calculatePickQty() {
 
     if (this.soItemsDetail != undefined && this.soItemsDetail !== null) {
 
@@ -189,7 +252,7 @@ export class OutOrderComponent implements OnInit {
 
             const element = this.outbound.TempMeterials[j];
 
-            if (soelement.ITEMCODE === element.Item.ITEMCODE && this.outbound.OrderData.DOCNUM===element.Order.DOCNUM) {
+            if (soelement.ITEMCODE === element.Item.ITEMCODE && this.outbound.OrderData.DOCNUM === element.Order.DOCNUM) {
               totalPickQty = totalPickQty + element.Meterial.MeterialPickQty;
             }
           }
@@ -205,6 +268,194 @@ export class OutOrderComponent implements OnInit {
     }
 
 
+  }
+
+  prepareDeleiveryCollectionAndDeliver(orderId: any) {
+
+    if (this.outbound != null && this.outbound != undefined
+      && this.outbound.DeleiveryCollection != null && this.outbound.DeleiveryCollection != undefined
+      && this.outbound.DeleiveryCollection.length > 0
+    ) {
+
+      if (orderId !== undefined && orderId !== null) {
+        this.outbound.DeleiveryCollection = this.outbound.DeleiveryCollection.filter(d => d.Order.DOCNUM === orderId);
+      }
+
+      let arrSOHEADER: SOHEADER[] = [];
+      let arrSODETAIL: SODETAIL[] = [];
+      let deliveryToken: DeliveryToken = new DeliveryToken();
+
+      // Hdr
+      let comDbId = localStorage.getItem('CompID');
+      let token = localStorage.getItem('Token');
+      let guid: string = localStorage.getItem('GUID');
+      let uid: string = localStorage.getItem('UserId');
+
+      let limit = 0;
+      // Loop through delivery collection 
+      for (let index = 0; index < this.outbound.DeleiveryCollection.length; index++) {
+        const element = this.outbound.DeleiveryCollection[index];
+
+        // let coll=Get all Item for Item.Lineno===i
+        let lineDeleiveryCollection = this.outbound.DeleiveryCollection.filter(d => d.Item.LINENUM === element.Item.LINENUM);
+
+        limit = limit + lineDeleiveryCollection.length;
+
+
+        for (let j = 0; j < lineDeleiveryCollection.length; j++) {
+
+          const o = lineDeleiveryCollection[j];
+
+          let hasItem = arrSOHEADER.filter(list => list.LineNo === o.Item.LINENUM);
+
+          if (hasItem.length == 0) {
+            // add header
+            let hdr: SOHEADER = new SOHEADER();
+
+            // "DiServerToken":"66F7E7A4-D2AE-4E37-91E8-8BE390F2D32F",
+            // "SONumber":165,
+            // "CompanyDBId":"BUILD128SRC12X",
+            // "LineNo":0,
+            // "ShipQty":"2",
+            // "DocNum":165,
+            // "OpenQty":" 12.000",
+            // "WhsCode":"01",
+            // "Tracking":"S",
+            // "ItemCode":"Serial",
+            // "UOM":-1,
+            // "Line":0
+            hdr.DiServerToken = token;
+            hdr.SONumber = o.Order.DOCNUM;
+            hdr.CompanyDBId = comDbId;
+            hdr.Line = o.Item.LINENUM;
+            hdr.ShipQty = lineDeleiveryCollection.map(i => i.Meterial.MeterialPickQty).reduce((sum, c) => sum + c);
+            hdr.ShipQty = hdr.ShipQty.toString();
+            hdr.DocNum = o.Order.DOCNUM;
+            hdr.OpenQty = o.Item.OPENQTY;
+            hdr.WhsCode = o.Item.WHSCODE;
+            hdr.Tracking = o.Item.TRACKING;
+            hdr.ItemCode = o.Item.ITEMCODE;
+            hdr.UOM = -1;// o.Item.UOM;
+            hdr.LineNo = hdr.Line;
+
+            arrSOHEADER.push(hdr);
+          }
+
+          let hasDtl = arrSODETAIL.filter(dtl => dtl.Bin === o.Meterial.BINNO && o.LotNumber === o.Meterial.LOTNO);
+          if (hasDtl.length == 0) {
+            //  
+            let dtl: SODETAIL = new SODETAIL();
+
+            // "Bin":"01-SYSTEM-BIN-LOCATION",
+            // "LotNumber":"08JANS000011",
+            // "LotQty":"1",
+            // "SysSerial":231,
+            // "parentLine":0,
+            // "GUID":"6d92d887-23bb-4390-85df-75e4caa7e328",
+            // "UsernameForLic":"Rishabh"
+
+            dtl.Bin = o.Meterial.BINNO;
+            dtl.LotNumber = o.Meterial.LOTNO;
+            dtl.LotQty = o.Meterial.MeterialPickQty;
+            dtl.SysSerial = o.Meterial.SYSNUMBER;
+            dtl.parentLine = index;
+            dtl.GUID = guid;
+            dtl.UsernameForLic = uid;
+
+            arrSODETAIL.push(dtl);
+          }
+        }
+
+
+        // get sum of all coll and loop 
+
+      }
+      console.log("Dtl", arrSODETAIL);
+      console.log("hdr", arrSOHEADER);
+      this.manageLineNo(arrSOHEADER, arrSODETAIL);
+
+      if (arrSOHEADER.length > 0 && arrSODETAIL.length > 0) {
+
+        deliveryToken.SOHEADER = arrSOHEADER;
+        deliveryToken.SODETAIL = arrSODETAIL;
+        deliveryToken.UDF = [];
+      }
+
+      this.outboundservice.addDeleivery(deliveryToken).subscribe(
+        data => {
+          if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
+            this.toastr.success('', this.translate.instant("DeleiverySuccess") + " : " + data[0].SuccessNo);
+            this.clearOutbound();
+          } else if (data[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
+          else {
+            this.toastr.error('', data[0].ErrorMsg);
+          }
+
+
+        },
+        error => {
+          console.log(error);
+        }
+
+      )
+    }
+
+  }
+
+
+  clearOutbound() {
+    // lsOutbound   
+    localStorage.setItem(CommonConstants.OutboundData, null);
+    this.router.navigateByUrl("home/outbound/outcustomer", { skipLocationChange: true })
+  }
+
+  manageLineNo(hdrList: SOHEADER[], dtlList: SODETAIL[]) {
+    let tmpHdr: SOHEADER[] = [];
+    let tmpDtlList: SODETAIL[] = [];
+    // Hdr
+    for (let index = 0; index < hdrList.length; index++) {
+
+      let hdr = hdrList[index];
+
+      let lineDetailList = dtlList.filter(d => d.parentLine === hdr.LineNo);
+
+      // Detail
+      for (let j = 0; j < lineDetailList.length; j++) {
+        let linedtl = lineDetailList[j];
+        linedtl.parentLine = index;
+        tmpDtlList.push(linedtl);
+      }
+
+      hdr.Line = index;
+      tmpHdr.push(hdr);
+
+    }
+  }
+
+  getConfirmDialogValue($event) {
+    this.showConfirmDialog = false;
+
+    // Yes
+    if ($event.Status === 'yes') {
+      this.deleiver();
+    }
+    // No
+    else if ($event.Status === 'no') {
+
+      this.deleiver(this.outbound.OrderData.DOCNUM);
+    }
+    // Cross
+    else {
+
+    }
+  }
+
+  deliveryConfirmation() {
+    this.showConfirmDialog = true;
   }
 }
 
