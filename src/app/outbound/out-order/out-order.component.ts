@@ -28,6 +28,7 @@ export class OutOrderComponent implements OnInit {
   serialTrackedItems: any;
   batchTrackedItems: any;
   noneTrackedItems: any;
+  showLookupLoader: boolean = false;
   constructor(private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) { }
 
 
@@ -57,17 +58,26 @@ export class OutOrderComponent implements OnInit {
 
       this.outboundservice.getCustomerSOList(this.selectedCustomer.CustomerCode).subscribe(
         resp => {
-
-          this.showLookup = true;
+          if (resp[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
+            return;
+          }
+          
           this.serviceData = resp;
+          this.showLookupLoader = false;
+          this.showLookup=true;
         },
         error => {
           this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
+          this.showLookupLoader = false;
+          this.showLookup=false;
         }
       );
     }
     else {
       this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+      this.showLookupLoader = false;
+      this.showLookup=false;
     }
   }
 
@@ -103,23 +113,37 @@ export class OutOrderComponent implements OnInit {
       this.outbound.OrderData.DOCNUM = tempOrderData.DOCNUM = this.orderNumber;
       //lsOutbound
       let whseId = localStorage.getItem("whseId");
+      this.showLookupLoader=true;
       this.outboundservice.getSOItemList(tempOrderData.CARDCODE, tempOrderData.DOCNUM, whseId).subscribe(
         resp => {
           if (resp != null && resp != undefined)
+          if (resp.ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
+            return;
+          }
             this.soItemsDetail = resp.RDR1;
+            
+            if(this.soItemsDetail.length===0){
+              this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+              this.showLookupLoader=false;
+            }
             this.calculatePickQty();
-          console.log("SOItem", this.soItemsDetail);
+            
+
           localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
 
           this.showSOIetDetail = true;
+          this.showLookupLoader=false;
         },
         error => {
           this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
+          this.showLookupLoader=false;
         }
       );
     }
     else {
       this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+      this.showLookupLoader=false;
     }
   }
 
@@ -141,41 +165,62 @@ export class OutOrderComponent implements OnInit {
   }
 
   public addToDeleiver() {
+    this.showLookupLoader=true;
     //lsOutbound
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
 
     if (outboundData != undefined && outboundData != '') {
       this.outbound = JSON.parse(outboundData);
 
-      // this.outbound.DeleiveryCollection = this.outbound.DeleiveryCollection.filter(t => t.Item.DOCNUM !== this.outbound.OrderData.DOCNUM);
-      //this.outbound.DeleiveryCollection=this.outbound.DeleiveryCollection.
-      let deleivery: any[] = this.outbound.TempMeterials;
+      let tempMeterialCollection: any[] = this.outbound.TempMeterials;
 
       for (let index = 0; index < this.outbound.DeleiveryCollection.length; index++) {
+
         const d = this.outbound.DeleiveryCollection[index];
-        for (let j = 0; j < deleivery.length; j++) {
-          const element = deleivery[j];
+
+        for (let j = 0; j < tempMeterialCollection.length; j++) {
+
+          const element = tempMeterialCollection[j];
+
           if (d.Item.DOCENTRY == element.Item.DOCENTRY && d.Order.DOCNUM == element.Order.DOCNUM) {
-            deleivery.slice(index, 1);
+
+            tempMeterialCollection.slice(index, 1);
           }
         }
       }
 
 
-      if (deleivery !== undefined && deleivery !== null && deleivery.length > 0) {
-        deleivery.forEach(d => this.outbound.DeleiveryCollection.push(d));
+      if (tempMeterialCollection !== undefined && tempMeterialCollection !== null && tempMeterialCollection.length > 0) {
+        for (let index = 0; index < tempMeterialCollection.length; index++) {
+          const tm = tempMeterialCollection[index];
+
+          let hasitem=this.outbound.DeleiveryCollection.filter(d=>
+             d.Item.DOCENTRY===tm.Item.DOCENTRY &&
+             d.Item.TRACKING===tm.Item.TRACKING &&
+             d.Order.DOCNUM===tm.Order.DOCNUM &&
+             d.Meterial.LOTNO===tm.Meterial.LOTNO &&
+             d.Meterial.BINNO===tm.Meterial.BINNO 
+             );
+
+             if(hasitem.length==0){
+              this.outbound.DeleiveryCollection.push(tm)
+             }
+          
+        }
+      
       }
 
 
       localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
       this.openOutboundCustomer();
+      this.showLookupLoader=false;
     }
   }
 
   public deleiver() { }
 
 
-  calculatePickQty() {
+  public calculatePickQty() {
 
     if (this.soItemsDetail != undefined && this.soItemsDetail !== null) {
 

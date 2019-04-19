@@ -184,8 +184,8 @@
   "Serial" : "Serial",
   "Batch" : "Batch",
   "DoYouWantToDelete": "Are you sure to delete ?",
-  "AddToDeleiver":"Add To Deleivery",
-  "Deleiver":"Deleiver",
+  "AddToDeleiver":"Add To Delivery",
+  "Deleiver":"Deliver",
   "NoOpenQuantity":"No open quantity available",
 
   "SysBatch" : "Sys Batch",
@@ -195,7 +195,7 @@
   "MfrBatchNo":"Mfr Batch No.",
   "InvalidScanCode": "Invalid scan code!",
   "PurchaseOrderNumber" :"Purchase Order Number",
-  "DeleiverySuccess":"Order deleivery successfully generated",
+  "DeleiverySuccess":"Delivery generated successfully",
   "PrintAllLabelsAfterSubmit" : "Do you want to print all labels after submit ?",
   "ReceiveCurrentOrAll" : "Receive current OR all saved lines",
   "DoYouWantToDeleteConf" : "Do you want to delete?",
@@ -203,7 +203,7 @@
   "Current" : "Current",
   "yes" : "Yes",
   "no" : "No",
-  "DeleiveryForSO":"Delievery for SO#"
+  "DeleiveryForSO":"Delivery for SO#"
 
 
    

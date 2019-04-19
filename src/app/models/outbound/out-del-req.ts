@@ -5,7 +5,7 @@ export class SOHEADER {
     SONumber: number;
     CompanyDBId: string;
     LineNo: number;
-    ShipQty: number;
+    ShipQty: string;
     DocNum: number;
     OpenQty: string;
     WhsCode: string;

@@ -10,6 +10,7 @@ import { forEach } from '@angular/router/src/utils/collection';
 import { anyChanged } from '@progress/kendo-angular-grid/dist/es2015/utils';
 
 
+
 @Component({
   selector: 'app-out-prodissue',
   templateUrl: './out-prodissue.component.html',
@@ -36,7 +37,8 @@ export class OutProdissueComponent implements OnInit {
   public OrderType: string = '';
   public oldSelectedMeterials: any = Array<MeterialModel>();
   public OperationType: any[];
-  public scanInputPlaceholder="Scan"
+  public scanInputPlaceholder = "Scan"
+  public SerialBatchHeaderTitle: string = "";
 
   constructor(private ourboundService: OutboundService, private router: Router, private toastr: ToastrService, private translate: TranslateService) { }
 
@@ -54,8 +56,13 @@ export class OutProdissueComponent implements OnInit {
 
 
       if (this.OrderType != 'N') {
+        if (this.OrderType === 'S') {
+          this.SerialBatchHeaderTitle = "Serial";
+        }
+        else if (this.OrderType === 'B') {
+          this.SerialBatchHeaderTitle = "Batch";
+        }
         this.manageOldCollection();
-
       }
 
       this._requiredMeterialQty = parseFloat(this.selected.OPENQTY);
@@ -339,19 +346,37 @@ export class OutProdissueComponent implements OnInit {
         this.outbound.TempMeterials = this.outbound.TempMeterials.filter((t: any) =>
           t.Item.ITEMCODE !== this.outbound.SelectedItem.ITEMCODE || t.Item.DOCNUM !== this.outbound.OrderData.DOCNUM);
 
-        this.selectedMeterials.forEach(m => {
-          let item = { Order: this.outbound.OrderData, Item: this.outbound.SelectedItem, Meterial: m }
-          this.outbound.TempMeterials.push(item)
+        // loop selected Items
+        for (let index = 0; index < this.selectedMeterials.length; index++) {
+          const m = this.selectedMeterials[index];
+          if (m.MeterialPickQty > 0) {
+            let item = { Order: this.outbound.OrderData, Item: this.outbound.SelectedItem, Meterial: m }
+            this.outbound.TempMeterials.push(item)
+          }
         }
-        );
+
+        // this.selectedMeterials.forEach(m => {
+
+        // }
+        // );
       }
       else {
 
         this.outbound.TempMeterials = [];
-        this.selectedMeterials.forEach(element => {
-          let item = { Order: this.outbound.OrderData, Item: this.outbound.SelectedItem, Meterial: element }
-          this.outbound.TempMeterials.push(item)
-        });
+
+        // loop selected Items
+        for (let index = 0; index < this.selectedMeterials.length; index++) {
+          const m = this.selectedMeterials[index];
+          if (m.MeterialPickQty > 0) {
+            let item = { Order: this.outbound.OrderData, Item: this.outbound.SelectedItem, Meterial: m }
+            this.outbound.TempMeterials.push(item)
+          }
+        }
+
+        // this.selectedMeterials.forEach(element => {
+        //   let item = { Order: this.outbound.OrderData, Item: this.outbound.SelectedItem, Meterial: element }
+        //   this.outbound.TempMeterials.push(item)
+        // });
 
 
       }
@@ -414,23 +439,22 @@ export class OutProdissueComponent implements OnInit {
 
 
   private manageOldSelectedItems() {
-   // let outbound: OutboundData = JSON.parse(localStorage.getItem(CommonConstants.OutboundData));
+    // let outbound: OutboundData = JSON.parse(localStorage.getItem(CommonConstants.OutboundData));
 
     if (this.selectedMeterials !== null && this.selectedMeterials !== undefined && this.selectedMeterials.length > 0) {
 
       for (let index = 0; index < this.selectedMeterials.length; index++) {
-        const element =this.selectedMeterials[index];
+        const element = this.selectedMeterials[index];
 
         for (let j = 0; j < this.lookupData.length; j++) {
           const sd = this.lookupData[j];
-          if (sd.ITEMCODE === element.ITEMCODE 
-            && sd.LOTNO === element.LOTNO 
+          if (sd.ITEMCODE === element.ITEMCODE
+            && sd.LOTNO === element.LOTNO
             && sd.BINNO === element.BINNO) {
-            sd.OldData=true;
-            this.lookupData[j]=sd;
+            sd.OldData = true;
+            this.lookupData[j] = sd;
           }
-          else
-          {
+          else {
             // sd.OldData=false;
             // this.lookupData[j]=sd;
           }

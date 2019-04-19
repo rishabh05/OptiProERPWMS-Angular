@@ -17,6 +17,9 @@ import { SOHEADER, SODETAIL, DeliveryToken } from 'src/app/models/outbound/out-d
 })
 export class OutCutomerComponent implements OnInit {
 
+  dialogMsg: string = "Do you want to delete?"
+  yesButtonText: string = "Yes";
+  noButtonText: string = "No";
   public serviceData: any;
   public lookupfor: any = 'out-customer';
   public showLookup: boolean = false;
@@ -27,13 +30,18 @@ export class OutCutomerComponent implements OnInit {
   public outbound: OutboundData;
   public orderCollection: any[];
   public unqueOrders: any[];
-
+  showConfirmDialog: boolean;
+  rowindexForDelete: any;
+  delIdx: any;
+  delGrd: any;
+  showLookupLoader: boolean = false;
 
   constructor(private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) { }
 
   ngOnInit() {
     this.customerName = '';
-
+    this.customerCode = '';
+    this.showLookup = false;
     // lsOutbound
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
 
@@ -110,7 +118,7 @@ export class OutCutomerComponent implements OnInit {
   }
 
   public openCustomerLookup() {
-
+    this.showLookupLoader = true;
     this.outboundservice.getCustomerList().subscribe(
       resp => {
         if (resp != undefined && resp != null) {
@@ -118,17 +126,28 @@ export class OutCutomerComponent implements OnInit {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
             return;
           }
-          this.showLookup = true;
+
+          //this.showLookup = true;
           this.serviceData = resp;
+          this.showLookupLoader = false;
+          this.showLookup=true;
         }
         else {
 
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          this.showLookupLoader = false;
+          this.showLookup=false;
         }
       },
       error => {
         console.log("Error:", error);
         this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
+        this.showLookupLoader = false;
+        this.showLookup=false;
+      },
+      ()=> {
+        this.showLookupLoader = false;
+     
       }
     )
   }
@@ -144,152 +163,218 @@ export class OutCutomerComponent implements OnInit {
     this.router.navigateByUrl('home/dashboard');
   }
 
-  public prepareDeleiveryCollection() {
-    let comDbId = localStorage.getItem('CompID');
-    let token = localStorage.getItem('Token');
-    let arrSOHEADER: SOHEADER[] = [];
-    let arrSODETAIL: SODETAIL[] = [];
-    let deliveryToken: DeliveryToken = new DeliveryToken();
+  getConfirmDialogValue($event) {
+    this.showConfirmDialog = false;
 
-    arrSOHEADER = this.prepareItemCollectionForHdr();
-    arrSODETAIL = this.prepareDetailCollection();
-
-    for (let index = 0; index < arrSOHEADER.length; index++) {
-      const element = arrSOHEADER[index];
-
-      let meterialList = this.outbound.TempMeterials.filter((t) => element.SONumber === t.Order.DOCNUM
-        && element.Tracking === t.Item.TRACKING && element.DocNum === t.Item.DOCNUM);
-
-      element.ShipQty = meterialList.map(i => i.Meterial.MeterialPickQty).reduce((sum, c) => sum + c);
-      arrSOHEADER[index] = element;
+    // Yes
+    if ($event.Status === 'yes') {
+      this.removeOrderMain(this.delIdx, this.delGrd);
     }
-    console.log("dtl", arrSODETAIL)
-    console.log("hdr", arrSOHEADER);
+    // No
+    else if ($event.Status === 'no') {
 
-    if (arrSOHEADER.length > 0 && arrSODETAIL.length > 0) {
-
-      deliveryToken.SOHEADER = arrSOHEADER;
-      deliveryToken.SODETAIL = arrSODETAIL;
-      deliveryToken.UDF = [];
     }
+    // Cross
+    else {
 
-    this.outboundservice.addDeleivery(deliveryToken).subscribe(
-      data => {
-        if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
-          this.toastr.success('', this.translate.instant("DeleiverySuccess"));
-          this.clearOutbound();
-        } else if (data[0].ErrorMsg == "7001") {
-          this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
-            this.translate.instant("CommonSessionExpireMsg"));
-          return;
-        }
-        else {
-          // alert(data[0].ErrorMsg);
-          this.toastr.error('', data[0].ErrorMsg);
-        }
-
-
-      },
-      error => {
-        console.log(error);
-      }
-
-    )
-
-
-
+    }
   }
+
   clearOutbound() {
     localStorage.setItem(CommonConstants.OutboundData, null);
     this.orderCollection = [];
+    this.customerName = '';
+    this.customerCode = '';
+    this.showLookup = false;
   }
 
-  public prepareDetailCollection() {
-    let arrSODETAIL: SODETAIL[] = [];
 
-    let guid: string = localStorage.getItem('GUID');
-    let uid: string = localStorage.getItem('UserId');
 
-    for (let index = 0; index < this.outbound.DeleiveryCollection.length; index++) {
-      const d = this.outbound.DeleiveryCollection[index];
-      if (arrSODETAIL.length > 0) {
+  prepareDeleiveryCollection() {
 
-        let data = arrSODETAIL.filter(
-          (h: any) =>
-            h.Bin === d.Meterial.BINNO &&
-            h.LotNumber === d.Meterial.LOTNO
-        )
-        if (data.length > 0) {
+    if (this.outbound != null && this.outbound != undefined
+      && this.outbound.DeleiveryCollection != null && this.outbound.DeleiveryCollection != undefined
+      && this.outbound.DeleiveryCollection.length > 0
+    ) {
 
-          continue;
+      let arrSOHEADER: SOHEADER[] = [];
+      let arrSODETAIL: SODETAIL[] = [];
+      let deliveryToken: DeliveryToken = new DeliveryToken();
+
+      // Hdr
+      let comDbId = localStorage.getItem('CompID');
+      let token = localStorage.getItem('Token');
+      let guid: string = localStorage.getItem('GUID');
+      let uid: string = localStorage.getItem('UserId');
+
+      let limit = 0;
+      // Loop through delivery collection 
+      for (let index = 0; index < this.outbound.DeleiveryCollection.length; index++) {
+        const element = this.outbound.DeleiveryCollection[index];
+
+        // let coll=Get all Item for Item.Lineno===i
+        let lineDeleiveryCollection = this.outbound.DeleiveryCollection.filter(d => d.Item.LINENUM === element.Item.LINENUM);
+
+        limit = limit + lineDeleiveryCollection.length;
+
+
+        for (let j = 0; j < lineDeleiveryCollection.length; j++) {
+
+          const o = lineDeleiveryCollection[j];
+
+          let hasItem = arrSOHEADER.filter(list => list.LineNo === o.Item.LINENUM);
+
+          if (hasItem.length == 0) {
+            // add header
+            let hdr: SOHEADER = new SOHEADER();
+
+            // "DiServerToken":"66F7E7A4-D2AE-4E37-91E8-8BE390F2D32F",
+            // "SONumber":165,
+            // "CompanyDBId":"BUILD128SRC12X",
+            // "LineNo":0,
+            // "ShipQty":"2",
+            // "DocNum":165,
+            // "OpenQty":" 12.000",
+            // "WhsCode":"01",
+            // "Tracking":"S",
+            // "ItemCode":"Serial",
+            // "UOM":-1,
+            // "Line":0
+            hdr.DiServerToken = token;
+            hdr.SONumber = o.Order.DOCNUM;
+            hdr.CompanyDBId = comDbId;
+            hdr.Line = o.Item.LINENUM;
+            hdr.ShipQty = lineDeleiveryCollection.map(i => i.Meterial.MeterialPickQty).reduce((sum, c) => sum + c);
+            hdr.ShipQty = hdr.ShipQty.toString();
+            hdr.DocNum = o.Order.DOCNUM;
+            hdr.OpenQty = o.Item.OPENQTY;
+            hdr.WhsCode = o.Item.WHSCODE;
+            hdr.Tracking = o.Item.TRACKING;
+            hdr.ItemCode = o.Item.ITEMCODE;
+            hdr.UOM = -1;// o.Item.UOM;
+            hdr.LineNo = hdr.Line;
+
+            arrSOHEADER.push(hdr);
+          }
+
+          let hasDtl = arrSODETAIL.filter(dtl => dtl.Bin === o.Meterial.BINNO && o.LotNumber === o.Meterial.LOTNO);
+          if (hasDtl.length == 0) {
+            //  
+            let dtl: SODETAIL = new SODETAIL();
+
+            // "Bin":"01-SYSTEM-BIN-LOCATION",
+            // "LotNumber":"08JANS000011",
+            // "LotQty":"1",
+            // "SysSerial":231,
+            // "parentLine":0,
+            // "GUID":"6d92d887-23bb-4390-85df-75e4caa7e328",
+            // "UsernameForLic":"Rishabh"
+
+            dtl.Bin = o.Meterial.BINNO;
+            dtl.LotNumber = o.Meterial.LOTNO;
+            dtl.LotQty = o.Meterial.MeterialPickQty;
+            dtl.SysSerial = o.Meterial.SYSNUMBER;
+            dtl.parentLine = index;
+            dtl.GUID = guid;
+            dtl.UsernameForLic = uid;
+
+            arrSODETAIL.push(dtl);
+          }
         }
+
+
+        // get sum of all coll and loop 
+
       }
-      let dtl: SODETAIL = new SODETAIL();
+      console.log("Dtl", arrSODETAIL);
+      console.log("hdr", arrSOHEADER);
+      this.manageLineNo(arrSOHEADER, arrSODETAIL);
 
-      dtl.Bin = d.Meterial.BINNO;
-      dtl.GUID = guid;
-      dtl.LotNumber = d.Meterial.LOTNO;
-      dtl.LotQty = d.Meterial.TOTALQTY;
-      dtl.SysSerial = d.Meterial.SYSNUMBER;
-      dtl.UsernameForLic = uid;
-      dtl.parentLine = d.Item.LINENUM;
+      if (arrSOHEADER.length > 0 && arrSODETAIL.length > 0) {
 
-      arrSODETAIL.push(dtl);
+        deliveryToken.SOHEADER = arrSOHEADER;
+        deliveryToken.SODETAIL = arrSODETAIL;
+        deliveryToken.UDF = [];
+      }
+
+      this.outboundservice.addDeleivery(deliveryToken).subscribe(
+        data => {
+          if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
+            this.toastr.success('', this.translate.instant("DeleiverySuccess") + " : " + data[0].SuccessNo);
+            this.clearOutbound();
+          } else if (data[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
+          else {
+            this.toastr.error('', data[0].ErrorMsg);
+          }
+
+
+        },
+        error => {
+          console.log(error);
+        }
+
+      )
     }
-
-    return arrSODETAIL;
 
   }
 
-  public prepareItemCollectionForHdr() {
+  manageLineNo(hdrList: SOHEADER[], dtlList: SODETAIL[]) {
+    let tmpHdr: SOHEADER[] = [];
+    let tmpDtlList: SODETAIL[] = [];
+    // Hdr
+    for (let index = 0; index < hdrList.length; index++) {
 
-    let comDbId = localStorage.getItem('CompID');
-    let token = localStorage.getItem('Token');
+      let hdr = hdrList[index];
 
-    let arrSOHEADER: SOHEADER[] = [];
+      let lineDetailList = dtlList.filter(d => d.parentLine === hdr.LineNo);
 
-    for (let index = 0; index < this.outbound.DeleiveryCollection.length; index++) {
-
-
-      let o = this.outbound.DeleiveryCollection[index];
-
-      if (arrSOHEADER.length > 0) {
-
-        let data = arrSOHEADER.filter(
-          (h: any) =>
-            h.DocNum === o.Item.DOCNUM &&
-            h.Tracking === o.Item.TRACKING &&
-            h.SONumber === o.Order.DOCNUM
-        )
-        if (data.length > 0) {
-
-          //   data[0].ShipQty=data[0].ShipQty+ o.Meterial.MeterialPickQty;
-          continue;
-        }
+      // Detail
+      for (let j = 0; j < lineDetailList.length; j++) {
+        let linedtl = lineDetailList[j];
+        linedtl.parentLine = index;
+        tmpDtlList.push(linedtl);
       }
 
-      let hdr: SOHEADER = new SOHEADER();
+      hdr.Line = index;
+      tmpHdr.push(hdr);
 
-      hdr.CompanyDBId = comDbId;
-      hdr.DiServerToken = token;
-      hdr.DocNum = o.Order.DOCNUM;
-      hdr.ItemCode = o.Item.ITEMCODE;
-      hdr.Line = o.Item.LINENUM;
-      hdr.LineNo = hdr.Line;
-      hdr.OpenQty = o.Item.OPENQTY;
-      hdr.SONumber = hdr.DocNum;
-      //Need to be check
-      hdr.ShipQty = 0;
-
-      hdr.Tracking = o.Item.TRACKING;
-      hdr.UOM = -1;// o.Item.UOM;
-      hdr.WhsCode = o.Item.WHSCODE;
-
-      arrSOHEADER.push(hdr);
     }
+  }
 
-    return arrSOHEADER;
+
+  removeOrder(idx: any, grd: any) {
+    this.delGrd = grd;
+    this.delIdx = idx;
+
+    this.showConfirmDialog = true;
+  }
+
+  removeOrderMain(idx: any, grd: any) {
+    this.filterData(idx);
+    this.orderCollection.splice(idx, 1);
+    grd.data = this.orderCollection;
+  }
+
+  filterData(idx: any) {
+    let order = this.orderCollection[idx];
+    this.outbound.DeleiveryCollection = this.outbound.DeleiveryCollection.filter(d => d.Order.DOCNUM !== order.DOCNUM);
+    this.outbound.TempMeterials = this.outbound.TempMeterials.filter(d => d.Order.DOCNUM !== order.DOCNUM);
+  }
+
+  openOrderScreen(selection: any) {
+    let selectedIinquiry = selection.selectedRows[0].dataItem;
+    let orderList = this.outbound.DeleiveryCollection.filter(d => d.Order.DOCNUM === selectedIinquiry.DOCNUM);
+    if (orderList.length > 0) {
+      this.outbound.OrderData = orderList[0].Order;
+      localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+      this.openCustSO();
+    }
   }
 
 }
+
 

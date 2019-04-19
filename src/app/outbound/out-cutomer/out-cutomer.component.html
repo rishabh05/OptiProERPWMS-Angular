@@ -10,12 +10,14 @@
 
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Customer'|translate}}</label>
-                        <div class="col-sm-9">                            
-                            <div class="input-group input-group-sm"  >
-                                <input [disabled]='orderCollection!=undefined && orderCollection!=null && orderCollection.length>0'  type="text" class="form-control form-control-sm" name='customerCode' [(ngModel)]="customerCode"
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input [disabled]='orderCollection!=undefined && orderCollection!=null && orderCollection.length>0'
+                                    type="text" class="form-control form-control-sm" name='customerCode' [(ngModel)]="customerCode"
                                     placeholder="{{'Customer'|translate}}">
                                 <div class="input-group-append">
-                                    <button [disabled]='orderCollection!=undefined && orderCollection!=null && orderCollection.length>0' class="k-button k-primary btn" (click)="openCustomerLookup()" type="button">
+                                    <button [disabled]='orderCollection!=undefined && orderCollection!=null && orderCollection.length>0'
+                                        class="k-button k-primary btn" (click)="openCustomerLookup()" type="button">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
                                 </div>
@@ -23,36 +25,35 @@
                         </div>
                     </div>
                     <!-- *ngIf="customerName!=undefined && customerName!=''" -->
-                    <div class="form-group row" >
+                    <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Name'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" name="customerName" value="{{customerName}}" [disabled]="true">
+                                <input type="text" class="form-control form-control-sm" name="customerName" value="{{customerName}}"
+                                    [disabled]="true">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="row"  *ngIf='(orderCollection!==undefined && orderCollection!==null && orderCollection.length>0)'>
+            <div class="row" *ngIf='(orderCollection!==undefined && orderCollection!==null && orderCollection.length>0)'>
                 <div class="col-12">
-                    
+
                     <div>
                         <!-- (selectionChange)="openPOByUOM($event,soItemsDetail.ITEMCODE)" -->
                         <kendo-grid class="no-shadow" [kendoGridBinding]="orderCollection" [resizable]="false"
-                            [pageSize]="50" [pageable]="true" [sortable]="true" [filterable]=isColumnFilter
-                            [groupable]=isColumnGroup [columnMenu]="{ columnChooser: false }" [height]=gridHeight
+                            [pageSize]="50" [pageable]="true" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
+                            [columnMenu]="{ columnChooser: false }" [height]=gridHeight (selectionChange)="openOrderScreen($event)"
                             [selectable]="true" #gridItem>
 
-                            <kendo-grid-column field="DOCNUM" title="Order No" ></kendo-grid-column>
-                            <kendo-grid-column field="DOCNUM"  [width]="80" title="{{'Delete'|translate}}"
-                            >
-                            <ng-template kendoGridCellTemplate let-idx="rowIndex">
-                                <button id="removeSelectedMeterial" (click)="removeSelectedMeterial(idx,gridSelectedMeterial)"
-                                    class="k-button-icon k-button"> 
-                                    <span class="k-icon k-i-delete" role="presentation"></span></button>
-                            </ng-template>
-                        </kendo-grid-column>
+                            <kendo-grid-column field="DOCNUM" title="Order No"></kendo-grid-column>
+                            <kendo-grid-column field="DOCNUM" [width]="80" title="{{'Delete'|translate}}">
+                                <ng-template kendoGridCellTemplate let-idx="rowIndex">
+                                    <button id="removeSelectedMeterial" (click)="removeOrder(idx,gridItem)" class="k-button-icon k-button">
+                                        <span class="k-icon k-i-delete" role="presentation"></span></button>
+                                </ng-template>
+                            </kendo-grid-column>
                         </kendo-grid>
 
                     </div>
@@ -66,7 +67,7 @@
             </div>
             <div class="col-sm-12 col-12">
                 <button type="button" [hidden]='!(orderCollection!==undefined && orderCollection!==null && orderCollection.length>0)'
-                     (click)="prepareDeleiveryCollection()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
+                    (click)="prepareDeleiveryCollection()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-check" role="presentation"></span> {{'Deleiver'|translate}}</button>
                 <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="cancel()"><span
                         class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
@@ -79,7 +80,17 @@
 
 
 </div>
-
-<span *ngIf="showLookup==true">
+<!-- Lookup -->
+<span *ngIf="showLookup==true && showLookupLoader==false">
     <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
+</span>
+<!-- Loader -->
+<div class="opti_loader full-section" *ngIf="showLookupLoader==true">
+    <div class="opti_spinner"></div>
+</div>
+
+<!-- Dialog -->
+<span *ngIf="showConfirmDialog">
+    <app-comon-confirm-dialog [titleMessage]="dialogMsg" [fromWhere]="dialogFor" [noButtonText]="noButtonText"
+        [yesButtonText]="yesButtonText" (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
 </span>
