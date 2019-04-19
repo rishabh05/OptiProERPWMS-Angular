@@ -88,7 +88,7 @@
                 <button *ngIf='outbound.TempMeterials!==undefined && outbound.TempMeterials!==null && outbound.TempMeterials.length>0' type="button" (click)="addToDeleiver()" class="btn btn-primary k-button btn-sm btn-icon-with-text ml-1"><span class="k-icon k-i-plus-outline"
                         role="presentation"></span> {{'AddToDeleiver'|translate}}</button>
 
-                <button *ngIf='outbound.TempMeterials!==undefined && outbound.TempMeterials!==null && outbound.TempMeterials.length>0' type="button" (click)="deleiver()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-check"
+                <button *ngIf='outbound.TempMeterials!==undefined && outbound.TempMeterials!==null && outbound.TempMeterials.length>0' type="button" (click)="deliveryConfirmation()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-check"
                             role="presentation"></span> {{'Deleiver'|translate}}</button>
             </div>
         </div>
