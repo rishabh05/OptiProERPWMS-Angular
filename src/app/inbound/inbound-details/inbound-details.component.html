@@ -39,10 +39,29 @@
                     <kendo-grid class="no-shadow" [kendoGridBinding]="Polist" [resizable]="true" [pageSize]="2" [sortable]="true"
                         [height]=gridHeight
                         [selectable]="true" (selectionChange)="onPOSelection($event)" #gridItem>
-                        <kendo-grid-column field="PONumber" headerClass="text-center" class="text-center" title="{{'PurchaseOrderNumber'|translate}}"></kendo-grid-column>
-                        <kendo-grid-column field="" title="" [width]="50">
+
+                        <!-- grid for mobile start -->
+                        <kendo-grid-column media="(max-width: 767px)" title="Payment List" class="opti_mobile-grid-td">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                <button class="k-button-icon k-button" type="button" (click)="openConfirmForDelete(rowIndex, gridItem)">
+                                <dl class="opti_mobile_grid_dl w-100">
+                                    <dt class="d-flex align-items-center">{{'PurchaseOrderNumber'|translate}} 
+                                        <div class="d-flex align-items-center  ml-auto">
+                                            <span class="opti_arrow-grid-detail text-center opti_vertical-align">›</span>
+                                            <button class="btn btn-danger k-button btn-sm btn-icon ml-2" type="button" (click)="openConfirmForDelete(rowIndex, gridItem)">
+                                                <span class="k-icon k-i-delete"></span>
+                                            </button>
+                                        </div>
+                                    </dt>
+                                    <dd>{{ dataItem.PONumber }}</dd>
+                                </dl>        
+                            </ng-template>
+                        </kendo-grid-column>
+                        <!-- grid for mobile end -->
+
+                        <kendo-grid-column media="(min-width: 768px)" field="PONumber" headerClass="text-center" class="text-center" title="{{'PurchaseOrderNumber'|translate}}" [width]="90"></kendo-grid-column>
+                        <kendo-grid-column media="(min-width: 768px)" field="" title="" [width]="10">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <button class="btn btn-danger k-button btn-sm btn-icon" type="button" (click)="openConfirmForDelete(rowIndex, gridItem)">
                                     <span class="k-icon k-i-delete"></span>
                                 </button>
                             </ng-template>
@@ -60,7 +79,7 @@
             <div class="col-sm-12 col-12">                      
                     <button  *ngIf = "showGRPOGridAndBtn" class="btn btn-success k-button btn-sm btn-icon-with-text" type="button" (click)="receive()"><span class="k-icon k-i-check" role="presentation"></span> {{'Receive'|translate}}</button>
                 <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="OnCancelClick()"><span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
-                <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" (click)="onNextClick()" roterLink="binTransfer" skipLocationChange><i class="opti-icon-arrow-next"></i></button>
+                <button type="button" *ngIf = "showNext" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" (click)="onNextClick()"  skipLocationChange><i class="opti-icon-arrow-next"></i></button>
             </div>
         </div>
   </form>
@@ -91,3 +110,15 @@
         <app-comon-confirm-dialog [titleMessage]="dialogMsg" 
         [yesButtonText]="yesButtonText" [fromWhere] ="dialogFor"  [noButtonText]="noButtonText" (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
         </span>
+        <div class="opti_loader full-section"  *ngIf="showLoader" >
+            <div class="opti_spinner"></div>
+        </div>
+
+        <span *ngIf="showConfirmDialog">
+            <app-comon-confirm-dialog [titleMessage]="dialogMsg" 
+            [yesButtonText]="yesButtonText" [fromWhere] ="dialogFor"  [noButtonText]="noButtonText" (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
+            </span> 
+
+            <div>
+                <app-display-pdf *ngIf="displayPDF1" [base64String]='base64String' [fileName]='fileName' (pdfClose)="closePDF($event)"></app-display-pdf>
+                </div>

@@ -73,7 +73,7 @@
                                     <span>{{DBName}}</span>
                                 </a>
                                 <ul class="dropdown-menu opti_user-profile-drop-down" *dropdownMenu>
-                                    <li>
+                                    <!-- <li>
                                         <div class="container-fluid">
                                             <div class="row">
                                                 <div class="col-md-12">
@@ -88,11 +88,22 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    </li> -->
+
+                                    <li class="opti_mouse-pointer opti_profile-box-setting cursor-normal">
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                <div class="col-md-12 pl-2">
+                                                    <img src="assets/images/common/user-avatar.png" class="opti_mouse-pointer opti_theme-setting mr-1" alt="User Profile" width="30" height="30" /> {{loggedInUserName}}
+                                                </div>
+                                            </div>
+                                        </div>
                                     </li>
 
                                     <li class="opti_seprator"></li>
 
-                                    <li class="opti_mouse-pointer opti_profile-box-setting" (click)="openCloseRightPanel();">
+                                    <!-- <li class="opti_mouse-pointer opti_profile-box-setting" (click)="openCloseRightPanel();"> -->
+                                    <li class="opti_mouse-pointer opti_profile-box-setting" (click)="listClick($event, 'changeWarehouse')">
                                         <div class="container-fluid">
                                             <div class="row">
                                                 <div class="col-md-12">

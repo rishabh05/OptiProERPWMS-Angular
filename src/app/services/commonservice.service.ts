@@ -183,4 +183,12 @@ export class Commonservice {
     this.router.navigateByUrl('/account'); 
 
   }
+
+   // Refresh List
+   private updateTopBarSub = new BehaviorSubject<any>(null);
+   refreshTopbarSubscriber = this.updateTopBarSub.asObservable();
+ 
+   public refreshTopBarValue(data: any) {
+     this.openPDFSub.next(data);
+   }
 }

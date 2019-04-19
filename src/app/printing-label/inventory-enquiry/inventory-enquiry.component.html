@@ -83,29 +83,32 @@
                     <div class="col-12 col-sm-12 col-md-12">
                         <kendo-grid class="no-shadow" [kendoGridBinding]="quantityGridData" [resizable]="true" [pageSize]="pageSize"
                             [pageable]="true" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
-                            [columnMenu]="{ columnChooser: false }" [height]=gridHeight [selectable]="true" #gridItem>
+                            [height]=gridHeight [selectable]="true" #gridItem>
 
                             <!-- grid for mobile start -->
-                            <!-- <kendo-grid-column media="(max-width: 767px)" title="Payment List" class="opti_mobile-grid-td">
-                      <ng-template kendoGridCellTemplate let-dataItem>
-                          <dl class="opti_mobile_grid_dl">
-                              <dt>Item Code</dt>
-                              <dd>{{ dataItem.QuotationNumber }}</dd>
+                            <kendo-grid-column media="(max-width: 767px)" title="Payment List" class="opti_mobile-grid-td">
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                    <dl class="opti_mobile_grid_dl">
+                                        <dt *ngIf="!nonTracked">{{'LotNo'|translate}}</dt>
+                                        <dd>{{ dataItem.LOTNO }}</dd>
 
-                              <dt>Open Qty.</dt>
-                              <dd>{{ dataItem.QuotationDate }}</dd>
-
-                              <dt>Pick Qty</dt>
-                              <dd>{{ dataItem.Remark }}</dd>
-                          </dl>
-                      </ng-template>
-                  </kendo-grid-column> -->
+                                        <dt>{{'BinNo'|translate}}</dt>
+                                        <dd>{{ dataItem.BINNO }}</dd>
+                                    </dl>
+                                    <dl class="opti_mobile_grid_dl">
+                                        <dt>{{'StockQty'|translate}}</dt>
+                                        <dd>{{ dataItem.TOTALQTY }}</dd>
+                                    </dl>
+                                </ng-template>
+                            </kendo-grid-column>
                             <!-- grid for mobile end -->
 
-                            <kendo-grid-column *ngIf="!nonTracked" field="LOTNO" title="{{'LotNo'|translate}}" [width]="6"></kendo-grid-column>
-                            <kendo-grid-column field="BINNO" [width]="6" title="{{'BinNo'|translate}}"></kendo-grid-column>
-                            <kendo-grid-column field="TOTALQTY" headerClass="text-right" title="{{'StockQty'|translate}}"  class="text-right" [width]="6"
-                                title="{{'ReceiveQty'|translate}}"></kendo-grid-column>
+                            <kendo-grid-column *ngIf="!nonTracked" media="(min-width: 768px)" field="LOTNO" title="{{'LotNo'|translate}}" [width]="6"></kendo-grid-column>
+                            <kendo-grid-column field="BINNO" media="(min-width: 768px)" [width]="6" title="{{'BinNo'|translate}}"></kendo-grid-column>
+                            <kendo-grid-column field="TOTALQTY" media="(min-width: 768px)" headerClass="text-right" title="{{'StockQty'|translate}}"  class="text-right" [width]="6">
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                    {{ dataItem.TOTALQTY | numberFormat }}
+                                </ng-template></kendo-grid-column>
 
 
                         </kendo-grid>
@@ -144,4 +147,8 @@
 </div>
 <div *ngIf="showLookupLoader == false"> 
     <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
+</div>
+
+<div class="opti_loader full-section"  *ngIf="showLoader" >
+    <div class="opti_spinner"></div>
 </div>

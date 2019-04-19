@@ -6,6 +6,8 @@ import { LangChangeEvent, TranslateService } from '../../../../node_modules/@ngx
 import { ToastrService } from '../../../../node_modules/ngx-toastr';
 import { Router } from '../../../../node_modules/@angular/router';
 import { AutoLot } from 'src/app/models/Inbound/AutoLot';
+import { RowClassArgs } from '../../../../node_modules/@progress/kendo-angular-grid';
+import { bypassSanitizationTrustResourceUrl } from '@angular/core/src/sanitization/bypass';
 
 @Component({
   selector: 'app-inbound-polist',
@@ -15,7 +17,7 @@ import { AutoLot } from 'src/app/models/Inbound/AutoLot';
 export class InboundPolistComponent implements OnInit {
 
   futurepo: boolean = false;
-  poCode: string;
+  poCode: string="";
   showLookupLoader: boolean = true;
   serviceData: any[];
   lookupfor: string;
@@ -36,8 +38,10 @@ export class InboundPolistComponent implements OnInit {
   public addToGRPOArray: any = {};
   addToGRPOPONumbers: any = {};
   showGRPOButton: boolean = false;
-  selectedVendor: string= "";
+  selectedVendor: string = "";
+  disablePO: boolean = false;
 
+  showLoader: boolean = false;
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent) {
     let userLang = navigator.language.split('-')[0];
@@ -48,19 +52,36 @@ export class InboundPolistComponent implements OnInit {
   }
 
   ngOnInit() {
+    
     var ponumber = localStorage.getItem("PONumber");
     if (ponumber != undefined && ponumber != null && ponumber != "") {
       this.poCode = ponumber;
       this.openPOLines();
     }
     this.selectedVendor = this.inboundMasterComponent.selectedVernder;
+    this.showGRPOButton = false;
+  }
+  ngAfterViewInit(){
+    setTimeout(() => {
+      var selectedPO = localStorage.getItem("selectedPO");
+      if (selectedPO != undefined && selectedPO != null && selectedPO != "") {
+        this.poCode = selectedPO;
+        this.disablePO = true;
+        this.openPOLines();
+      } else {
+        this.disablePO = false;
+      } 
+    }, 100); 
+     
   }
 
   onPOlookupClick() {
     console.log("item POlookup click :");
+    this.showLoader = true;
     this.inboundService.getPOList(this.futurepo,
       this.inboundMasterComponent.selectedVernder, this.itemCode).subscribe(
         (data: any) => {
+          this.showLoader = false;
           console.log("get polist response:");
           if (data != undefined) {
             if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
@@ -77,6 +98,7 @@ export class InboundPolistComponent implements OnInit {
           }
         },
         error => {
+          this.showLoader = false;
           console.log("Error: ", error);
         }
       );
@@ -84,9 +106,11 @@ export class InboundPolistComponent implements OnInit {
 
   onItemlookupClick() {
     console.log("item lookup click :");
+    this.showLoader = true;
     this.inboundService.getItemList(this.futurepo, this.inboundMasterComponent.selectedVernder,
       this.poCode).subscribe(
         (data: any) => {
+          this.showLoader = false;
           console.log(data);
           if (data != undefined) {
             if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
@@ -102,6 +126,7 @@ export class InboundPolistComponent implements OnInit {
           }
         },
         error => {
+          this.showLoader = false;
           console.log("Error: ", error);
         }
       );
@@ -109,36 +134,39 @@ export class InboundPolistComponent implements OnInit {
 
   openPOLines() {
     console.log("search click : in open poline method :openPOLines()");
+    this.showLoader = true;
     this.inboundService.GetOpenPOLines(this.futurepo, this.itemCode,
       this.poCode).subscribe(
         (data: any) => {
+          this.showLoader = false;
           console.log("api call resonse section :openPOLines()");
           console.log(data);
           this.showNonTrackItem = false;
           this.showBatchTrackItem = false;
           this.showSerialTrackItem = false;
-          if (data.Table != undefined) {
+          if (data.Table != undefined  && data.Table!=null && data.Table != "") {
             this.openPOLinesModel = [];
             this.BatchItemsDetail = [];
-            this.NonItemsDetail = [];
+            this.NonItemsDetail = [];                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
             this.SerialItemsDetail = [];
             this.openPOLinesModel = data.Table;
             // var  unmatchedPOLinesModel = data.Table;
             this.updateReceivedQtyForSavedItems();
-            this.openPOLinesModel.forEach(element => {
-              if (element.TRACKING == "N") {
-                this.NonItemsDetail.push(element);
-              } else if (element.TRACKING == "B") {
-                this.BatchItemsDetail.push(element);
-              } else if (element.TRACKING == "S") {
-                this.SerialItemsDetail.push(element);
-              }
-            });
-            if (this.NonItemsDetail.length > 0) {
-              this.showNonTrackItem = true;
-            } if (this.BatchItemsDetail.length > 0) {
-              this.showBatchTrackItem = true;
-            } if (this.SerialItemsDetail.length > 0) {
+            // this.openPOLinesModel.forEach(element => {
+            //   if (element.TRACKING == "N") {
+            //     this.NonItemsDetail.push(element);
+            //   } else if (element.TRACKING == "B") {
+            //     this.BatchItemsDetail.push(element);
+            //   } else if (element.TRACKING == "S") {
+            //     this.SerialItemsDetail.push(element);
+            //   }
+            // });
+            // if (this.NonItemsDetail.length > 0) {
+            //   this.showNonTrackItem = true;
+            // } if (this.BatchItemsDetail.length > 0) {
+            //   this.showBatchTrackItem = true;
+            // } 
+            if (this.openPOLinesModel.length > 0) {
               this.showSerialTrackItem = true;
             }
           } else if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
@@ -149,30 +177,50 @@ export class InboundPolistComponent implements OnInit {
           console.log("api call resonse section end of if :openPOLines()");
         },
         error => {
+          this.showLoader = false;
           console.log("Error: ", error);
         }
       );
 
   }
 
+  public rowCallback = (context: RowClassArgs) => {
+    switch (context.dataItem.TRACKING) {
+      case 'S':
+        return { serial: true };
+      case 'B':
+        return { batch: true };
+      case 'N':
+        return { none: false };
+      default:
+        return {};
+    }
+  }
+  
   OnPOChange() {
     if (this.poCode == "" || this.poCode == undefined) {
       return;
     }
+    this.showLoader = true;
     this.inboundService.IsPOExists(this.poCode, "").subscribe(
       data => {
-
+        this.showLoader = false;
         if (data != null) {
           if (data.length > 0) {
             this.openPOLines();
           }
           else {
+            this.poCode = "";
             this.toastr.error('', this.translate.instant("POExistMessage"));
             return;
           }
+        }else{
+          this.poCode = "";
+          this.toastr.error('', this.translate.instant("POExistMessage"));
         }
       },
       error => {
+        this.showLoader = false;
         this.toastr.error('', error);
       }
     );
@@ -284,7 +332,8 @@ export class InboundPolistComponent implements OnInit {
     if (this.oSavedPOLotsArray != undefined && this.oSavedPOLotsArray != null && this.oSavedPOLotsArray != "") {
       if (localStorage.getItem("AddToGRPO") != "") {
         this.addToGRPOArray = JSON.parse(localStorage.getItem("AddToGRPO"));
-      }else{
+        this.manageGRPOData();
+      } else {
         this.addToGRPOArray.POReceiptLots = [];
         this.addToGRPOArray.POReceiptLotDetails = [];
         this.addToGRPOArray.UDF = [];
@@ -292,7 +341,8 @@ export class InboundPolistComponent implements OnInit {
       }
       if (localStorage.getItem("addToGRPOPONumbers") != "") {
         this.addToGRPOPONumbers = JSON.parse(localStorage.getItem("addToGRPOPONumbers"));
-      }else{
+        this.managePONumberListData();
+      } else {
         this.addToGRPOPONumbers.PONumbers = [];
       }
       var addpo = true;
@@ -363,14 +413,13 @@ export class InboundPolistComponent implements OnInit {
 
           for (var m = 0; m < this.oSavedPOLotsArray.LastSerialNumber.length; m++) {
             if (this.oSavedPOLotsArray.LastSerialNumber[m].ItemCode == this.oSavedPOLotsArray.POReceiptLots[i].ItemCode) {
-              this.addToGRPOArray.POReceiptLotDetails.push({
+              this.addToGRPOArray.LastSerialNumber.push({
                 LastSerialNumber: this.oSavedPOLotsArray.LastSerialNumber[m].LastSerialNumber,
                 LineId: this.oSavedPOLotsArray.LastSerialNumber[m].LineId,
                 ItemCode: this.oSavedPOLotsArray.LastSerialNumber[m].ItemCode
               });
             }
           }
-
         }
       }
       localStorage.setItem("AddToGRPO", JSON.stringify(this.addToGRPOArray));
@@ -378,5 +427,46 @@ export class InboundPolistComponent implements OnInit {
     }
     localStorage.setItem("PONumber", "");
     this.inboundMasterComponent.inboundComponent = 1;
+  }
+
+  managePONumberListData(){
+    for (var i = 0; i < this.addToGRPOPONumbers.PONumbers.length; i++) {
+      if (this.addToGRPOPONumbers.PONumbers[i].PONumber == this.poCode) {
+        this.addToGRPOPONumbers.PONumbers.splice(i, 1);
+      }
+    }
+  }
+
+  manageGRPOData() {
+    for (var i = 0; i < this.addToGRPOArray.POReceiptLots.length; i++) {
+      if (this.addToGRPOArray.POReceiptLots[i].PONumber == this.poCode) {
+        for (var j = 0; j < this.addToGRPOArray.POReceiptLotDetails.length; j++) {
+          if (this.addToGRPOArray.POReceiptLotDetails[j].ParentLineNo == this.addToGRPOArray.POReceiptLots[i].Line) {
+            this.addToGRPOArray.POReceiptLotDetails.splice(j, 1);
+            j = -1;
+          }
+        }
+
+        for (var k = 0; k < this.addToGRPOArray.UDF.length; k++) {
+          if (this.addToGRPOArray.UDF[k].Key == "OPTM_TARGETWHS" &&
+            this.addToGRPOArray.UDF[k].LineNo == this.addToGRPOArray.POReceiptLots[i].Line) {
+            this.addToGRPOArray.UDF.splice(k, 1);
+          }
+
+          if (this.addToGRPOArray.UDF[k].Key == "OPTM_TARGETBIN" &&
+            this.addToGRPOArray.UDF[k].LineNo == this.addToGRPOArray.POReceiptLots[i].Line) {
+            this.addToGRPOArray.UDF.splice(k, 1);
+          }
+        }
+
+        for (var m = 0; m < this.addToGRPOArray.LastSerialNumber.length; m++) {
+          if (this.addToGRPOArray.LastSerialNumber[m].ItemCode == this.addToGRPOArray.POReceiptLots[i].ItemCode) {
+            this.addToGRPOArray.LastSerialNumber.splice(m, 1);
+            m = -1;
+          }
+        }
+        this.addToGRPOArray.POReceiptLots.splice(i, 1);
+      }
+    }
   }
 }

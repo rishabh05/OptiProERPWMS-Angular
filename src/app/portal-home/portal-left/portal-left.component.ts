@@ -20,9 +20,14 @@ export class PortalLeftComponent implements OnInit {
     router.events.subscribe((val) => {
        // get current url with last word
       let partsOfUrl = this.router.url.split('/');
-      this.selectedItem = partsOfUrl[partsOfUrl.length - 1];
-      document.getElementById('opti_RightPanelID').classList.remove('opti_menusidebar-mobile-open');
-      document.getElementById('opti_LeftPanelID').classList.remove('opti_menusidebar-mobile-open');      
+      this.selectedItem = partsOfUrl[partsOfUrl.length - 1];   
+      setTimeout(()=>{   
+        if (typeof(document.getElementById('opti_RightPanelID')) != 'undefined' && document.getElementById('opti_RightPanelID') != null){
+          document.getElementById('opti_RightPanelID').classList.remove('opti_menusidebar-mobile-open');
+          document.getElementById('opti_LeftPanelID').classList.remove('opti_menusidebar-mobile-open');
+        } 
+      }, 1000);   
+                 
     });
    }
   selectedThemeColor: string = 'opticonstants.DEFAULTTHEMECOLOR';
@@ -55,39 +60,6 @@ export class PortalLeftComponent implements OnInit {
         alert("get All Menus Failed");
       }
     );
-
-    // var jObject = { CompanyDBId: companyDBObject.CompanyDbName, UserId: companyDBObject.LoggedOnUserName }
-    // var url = this.WMSBaseURL();
-    // var oView = this.getView();
-    // oCtrl = this;
-    // //oCurrentController = this;
-    // oModelReq.loadData(url + "/api/Menu/AllModule", jObject, true, 'POST');
-    // oModelReq.attachRequestCompleted(function (oEvent) {
-    //     var model = oEvent.getSource();
-    //     if (model != null) {
-    //         if (model.oData.Modules.length > 0) {
-    //             sap.ui.getCore().setModel(model.oData, oCtrl.CommonProperties.UserMenus);
-    //             sessionStorage.setItem(oCtrl.SessionProperties.UserMenus, JSON.stringify(model.oData));
-    //             var userMenus = JSON.parse(sessionStorage.getItem(oCtrl.SessionProperties.UserMenus));
-    //             if (userMenus != null) {
-    //                 if (userMenus.Modules.length > 0) {
-    //                     for (var iIndex = 0; iIndex < userMenus.Modules.length; iIndex++) {
-
-    //                         $("." + userMenus.Modules[iIndex].id).css("display", "block");
-    //                         if (userMenus.Modules[iIndex].Screens.length > 0) {
-    //                             for (var sIndex = 0; sIndex < userMenus.Modules[iIndex].Screens.length; sIndex++) {
-    //                                 $("." + userMenus.Modules[iIndex].Screens[sIndex].id).css("display", "block");
-    //                             }
-
-    //                         }
-
-    //                     }
-    //                 }
-    //             }
-
-    //         }
-    //     }
-    // });
   }
 
   displayMenuOptions(menus: any[]){
@@ -118,15 +90,23 @@ export class PortalLeftComponent implements OnInit {
     this.commonService.setCurrentSideBar(currentSidebarInfo);
   }
 
-  onBinTransferClick(){
+  binClick(){
     localStorage.setItem("towhseId", localStorage.getItem("whseId"));
   }
 
   onInboundClick(){
+    this.clearInboundData();
+  }
+
+  clearInboundData(){
     localStorage.setItem("GRPOReceieveData", "");
     localStorage.setItem("Line", "0")
     localStorage.setItem("addToGRPOPONumbers", "");
     localStorage.setItem("AddToGRPO", "");
+    localStorage.setItem("VendCode", "");
+    localStorage.setItem("VendName", "");
+    localStorage.setItem("selectedPO", "");
+    localStorage.setItem("PONumber", "");
   }
 
   onOutboundClick(){

@@ -196,8 +196,14 @@ file-drop .drop-zone.over {
     padding-bottom: calc(.24rem + 1px);
 }
 body .k-dateinput-wrap .k-input{
-    font-size: .875rem;
+    font-size: $font-size-small;
     line-height: 1.5;
+}
+.input-group-sm>.form-control, .input-group-sm>.input-group-append>.btn, .input-group-sm>.input-group-append>.input-group-text, .input-group-sm>.input-group-prepend>.btn, .input-group-sm>.input-group-prepend>.input-group-text{
+    font-size: $font-size-small;
+}
+.form-group {
+    margin-bottom: 10px;
 }
 /////////////////////////////////////////////////////////////////////
 ///////////////////////////// Custom Button Style /////////////////////
@@ -285,16 +291,15 @@ body.modal-open app-root {
 ///////////////////////////// Page header custom Style /////////////////////
 ////////////////////////////////////////////////////////////////////
 body .opti_container .opti_container_inner{
-    h3.border-bottom.d-flex.pt-1.pb-3.mb-4{
-        font-size: 24px;
+    h3{
+        font-size: 20px;
         padding-bottom: 0.5rem !important;
         padding-top: 0 !important;
         margin-bottom: 10px !important;
     }
-    h4.mt-3.mb-0{
-        font-size: 18px;
+    h4{
+        font-size: 16px;
         padding-bottom: 0rem !important;
         padding-top: 0 !important;
-        margin-bottom: 0!important;
     }
 }

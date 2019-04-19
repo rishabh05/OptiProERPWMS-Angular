@@ -56,9 +56,9 @@ export class InboundService {
     console.log("get polist method :");
     let jObject = {
       GoodsReceiptToken: JSON.stringify([{
-        UserId: itemcode,
+        UserId: '',
         CompanyDBId: localStorage.getItem("CompID"), WhseCode: localStorage.getItem("whseId"),
-        ItemCode: '', VendorCode: vendercode,
+        ItemCode: itemcode, VendorCode: vendercode,
         FuturePO: futurepo, IsCustom: false, GUID: localStorage.getItem("GUID"),
         UsernameForLic: localStorage.getItem("UserId")
       }])
@@ -104,6 +104,7 @@ export class InboundService {
         ItemCode: itemCode
       }])
     };
+    console.log("getUOMs API's request:"+JSON.stringify(jObject));
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/getUOM", jObject, this.httpOptions);
   }
 
@@ -175,7 +176,7 @@ export class InboundService {
     * @param binNo 
     * @param noOfCopies 
     */
-   printingServiceForSubmitGRPO(psReceiptNo:string){
+   printingServiceForSubmitGRPO(psReceiptNo:string) : Observable<any> {
     var jObject = { PrintingObject: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"),
     USERID: localStorage.getItem("UserId"), RPTID: 6, DOCNO: psReceiptNo, 
     GUID: localStorage.getItem("GUID"), UsernameForLic: localStorage.getItem("UserId") }]) };

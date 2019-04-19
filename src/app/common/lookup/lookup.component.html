@@ -44,6 +44,6 @@
             format="{{column.format}}" width="{{column.width}}" minResizableWidth="{{column.width}}"></kendo-grid-column>
 
     </kendo-grid>
-
+    <div class="mt-3 clearfix" *ngIf="showSelection==true"></div>
     <button id="btnDone" *ngIf="showSelection==true" (click)="Done()">Done</button>
 </kendo-dialog>

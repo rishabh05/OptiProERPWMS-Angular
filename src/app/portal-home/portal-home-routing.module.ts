@@ -6,6 +6,7 @@ import { DashboardComponent } from '../dashboard/dashboard.component';
 // import { FormFieldComponent } from '../form/form-field/form-field.component';
 import { BinTransferComponent } from '../inventory-transfer/bin-transfer/bin-transfer.component';
 import { WhsTransferComponent } from '../inventory-transfer/whs-transfer/whs-transfer.component';
+import { ChangeWarehouseComponent } from '../change-warehouse/change-warehouse.component';
 // import { InboundDetailsComponent } from '../inbound/inbound-details/inbound-details.component';
 // import { OutCutomerComponent } from '../outbound/out-cutomer/out-cutomer.component';
 // import { OutOrderComponent } from '../outbound/out-order/out-order.component';
@@ -19,10 +20,12 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path:'dashboard', component:DashboardComponent },
+      
       // { path: 'salesorder', component:SalesOrderListComponent },
       //{ path: 'form', component:FormFieldComponent },
       { path:'binTransfer', component:BinTransferComponent },
       { path:'whsTransfer', component:WhsTransferComponent },
+      { path:'changeWarehouse', component:ChangeWarehouseComponent },
       { path:'inbound', loadChildren:"../inbound/inbound.module#InboundModule"},     
       { path: 'adjustment-counting', loadChildren: "../adjustments-counting/adjustments-counting.module#AdjustmentsCountingModule" }, 
       //{ path: 'inventory-transfer', loadChildren: "../inventory-transfer/inventory-transfer.module#InventoryTransferModule" },

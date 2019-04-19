@@ -19,7 +19,7 @@ export class BinLabelComponent implements OnInit {
   @ViewChild('fromBinIp') fromBinInput;
   @ViewChild('toBinIp') toBinInput;
   @ViewChild('numberOfCopiesIp') noOfCopiesInput;
-
+  showLoader: boolean = false;
   showLookupLoader: boolean = true;
   fromBin: string = "";
   toBin: string = "";
@@ -27,7 +27,7 @@ export class BinLabelComponent implements OnInit {
   serviceData: any[];
   lookupfor: string;
 
-  noOfCopies: string = "1";
+  noOfCopies: string = "1"; 
 
   showPDF = false;
   fileName: string = "";
@@ -76,9 +76,10 @@ export class BinLabelComponent implements OnInit {
    */
   public getFromBinsList() {
 
-    //this.showLoader = true; this.getPIlistSubs = 
+    this.showLoader = true; //this.getPIlistSubs = 
     this.fromBinListSubs = this.labelPrintReportsService.getFromBinsList().subscribe(
       data => {
+        this.showLoader = false;
         if (data != undefined && data.length > 0) {
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
@@ -93,6 +94,7 @@ export class BinLabelComponent implements OnInit {
         }
       },
       error => {
+        this.showLoader = false;
         this.toastr.error('', error);
       },
     );
@@ -104,15 +106,15 @@ export class BinLabelComponent implements OnInit {
    */
   public getToBinsList() {
 
-    //this.showLoader = true; this.getPIlistSubs = 
+    this.showLoader = true; //this.getPIlistSubs = 
     this.toBinListSubs = this.labelPrintReportsService.getToBinsList().subscribe(
       data => {
+        this.showLoader = false;
         if (data != undefined && data.length > 0) {
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
             return;
           }
-          this.showLookupLoader = false;
           this.serviceData = data;
           this.lookupfor = "ToBinList";
         }
@@ -121,6 +123,7 @@ export class BinLabelComponent implements OnInit {
         }
       },
       error => {
+        this.showLoader = false;
         this.toastr.error('', error);
       },
     );
@@ -217,9 +220,10 @@ export class BinLabelComponent implements OnInit {
     if (!this.checkValidation()) {
       return;
     }
+    this.showLoader = true;
     this.printServiceSubs = this.labelPrintReportsService.printingServiceForBinLabel(this.fromBin, this.toBin, this.noOfCopies).subscribe(
       (data: any) => {
-
+        this.showLoader = false;
         if (data != undefined) {
           console.log("" + data);
           if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
@@ -253,6 +257,7 @@ export class BinLabelComponent implements OnInit {
         }
       },
       error => {
+        this.showLoader = false;
         this.toastr.error('', error);
       }
     );
@@ -278,8 +283,10 @@ export class BinLabelComponent implements OnInit {
     if (this.fromBin == "" || this.fromBin == undefined) {
       return;
     }
+    this.showLoader = true;
     this.isBinExistsSubs = this.labelPrintReportsService.isBinExists(this.fromBin).subscribe(
       data => {
+        this.showLoader = false;
         if (data != undefined && data != null) {
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
@@ -298,6 +305,7 @@ export class BinLabelComponent implements OnInit {
         }
       },
       error => {
+        this.showLoader = false;
         this.toastr.error('', error);
       }
     );
@@ -312,8 +320,10 @@ export class BinLabelComponent implements OnInit {
     if (this.toBin == "" || this.toBin == undefined) {
       return;
     }
+    this.showLoader = true;
     this.isBinExistsSubs = this.labelPrintReportsService.isBinExists(this.toBin).subscribe(
       data => {
+        this.showLoader = false;
         if (data != undefined && data != null) {
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
@@ -332,6 +342,7 @@ export class BinLabelComponent implements OnInit {
         }
       },
       error => {
+        this.showLoader = false;
         this.toastr.error('', error);
       }
     );

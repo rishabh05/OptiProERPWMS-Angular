@@ -81,8 +81,12 @@ export class ProductionReceiptComponent implements OnInit {
     }
   }
 
-ngOnDestroy() {
+  ngOnDestroy() {
   if (this.orderNoListSubs != undefined)
     this.orderNoListSubs.unsubscribe();
+  }
+
+  onCancelClick() {
+    this.router.navigate(['home/dashboard']);
   }
 }
