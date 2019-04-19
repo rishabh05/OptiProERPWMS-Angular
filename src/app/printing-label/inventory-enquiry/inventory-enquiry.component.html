@@ -105,8 +105,10 @@
 
                             <kendo-grid-column *ngIf="!nonTracked" media="(min-width: 768px)" field="LOTNO" title="{{'LotNo'|translate}}" [width]="6"></kendo-grid-column>
                             <kendo-grid-column field="BINNO" media="(min-width: 768px)" [width]="6" title="{{'BinNo'|translate}}"></kendo-grid-column>
-                            <kendo-grid-column field="TOTALQTY" media="(min-width: 768px)" headerClass="text-right" title="{{'StockQty'|translate}}"  class="text-right" [width]="6"
-                                ></kendo-grid-column>
+                            <kendo-grid-column field="TOTALQTY" media="(min-width: 768px)" headerClass="text-right" title="{{'StockQty'|translate}}"  class="text-right" [width]="6">
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                    {{ dataItem.TOTALQTY | numberFormat }}
+                                </ng-template></kendo-grid-column>
 
 
                         </kendo-grid>

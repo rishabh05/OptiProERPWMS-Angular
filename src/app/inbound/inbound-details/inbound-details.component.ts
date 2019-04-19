@@ -30,7 +30,10 @@ export class InboundDetailsComponent implements OnInit {
 
   yesButtonText: string = "Yes";
   noButtonText: string = "No";
-
+  showPDF: boolean = false;
+  base64String: string = ""; 
+  fileName: string = "";
+  displayPDF1: boolean = false;
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent) {
     let userLang = navigator.language.split('-')[0];
@@ -65,10 +68,17 @@ export class InboundDetailsComponent implements OnInit {
   receive() {
     var dataModel = localStorage.getItem("AddToGRPO");
     if (dataModel != null && dataModel != undefined && dataModel != "") {
-      this.SubmitGoodsReceiptPO(JSON.parse(dataModel));
+      this.showPrintConfirmDialog();
+      
     }
   }
-
+  showPrintConfirmDialog(){
+    this.yesButtonText = this.translate.instant("yes");
+    this.noButtonText = this.translate.instant("no");
+    this.dialogFor = "receiveSinglePDFDialog";
+    this.dialogMsg = this.translate.instant("PrintAllLabelsAfterSubmit");
+    this.showConfirmDialog = true; // show dialog
+  }
   SubmitGoodsReceiptPO(oSubmitPOLotsObj: any) {
     this.inboundService.SubmitGoodsReceiptPO(oSubmitPOLotsObj).subscribe(
       (data: any) => {
@@ -81,6 +91,14 @@ export class InboundDetailsComponent implements OnInit {
           localStorage.setItem("AddToGRPO", "");
           localStorage.setItem("addToGRPOPONumbers", "");
           this.dateAvailableToReceieve();
+          if (this.showPDF) {
+            //show pdf
+            this.displayPDF(data[0].DocEntry);
+            this.showPDF = false;
+          } else {
+            // no need to display pdf
+            //this.inboundMasterComponent.inboundComponent = 1;
+          }
         } else if (data[0].ErrorMsg == "7001") {
           this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
             this.translate.instant("CommonSessionExpireMsg"));
@@ -212,10 +230,17 @@ export class InboundDetailsComponent implements OnInit {
         case ("deleteRow"):
           this.DeleteRowClick(this.rowindexForDelete, this.gridDataAfterDelete);
           break;
+        case ("receiveSinglePDFDialog"):
+          this.SubmitGoodsReceiptPO(JSON.parse(localStorage.getItem("AddToGRPO")));
+          this.showPDF = true;
+          break;
+          
       }
     } else {
       if ($event.Status == "cancel") {
         // when user click on cross button nothing to do.
+      }else if($event.From == "receiveSinglePDFDialog"){
+        this.SubmitGoodsReceiptPO(JSON.parse(localStorage.getItem("AddToGRPO")));
       }
     }
   }
@@ -315,5 +340,48 @@ export class InboundDetailsComponent implements OnInit {
       localStorage.setItem("GRPOReceieveData", JSON.stringify(GRPOReceieveData));
     }
 
+  }
+
+
+  public displayPDF(dNo: string) {
+    this.showLoader = true;
+    this.inboundService.printingServiceForSubmitGRPO(dNo).subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        if (data != undefined) { 
+          console.log("" + data);
+          if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
+
+          if (data.Detail != null && data.Detail != undefined && data.Detail[0] != null && data.Detail[0] != undefined) {
+            this.fileName = data.Detail[0].FileName;
+            this.base64String = data.Detail[0].Base64String;
+          }
+
+
+          if (this.base64String != null && this.base64String != "") {
+            // this.showPdf(); // this function is used to display pdf in new tab.
+            this.base64String = 'data:application/pdf;base64,' + this.base64String;
+            this.displayPDF1 = true;
+            //this.commonservice.refreshDisplyPDF(true); 
+
+          } else {
+            // no data available then redirect to first screen.
+            //this.inboundMasterComponent.inboundComponent = 1;
+          }
+          //  console.log("filename:" + this.fileName);
+          //console.log("filename:" + this.base64String);
+        } else {
+          this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+        }
+      },
+      error => {
+        this.showLoader = false;
+        this.toastr.error('', error);
+      }
+    );
   }
 }

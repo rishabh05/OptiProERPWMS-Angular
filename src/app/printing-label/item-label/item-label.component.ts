@@ -54,7 +54,7 @@ export class ItemLabelComponent implements OnInit {
   printServiceSubs: ISubscription;
 
   displayPDF:boolean = false;
-  userName:string = "1000.22"; 
+  userName:string = "341222"; 
   constructor(private renderer: Renderer,private commonservice: Commonservice, private router: Router, private labelPrintReportsService: LabelPrintReportsService,
     private toastr: ToastrService, private translate: TranslateService) {
     let userLang = navigator.language.split('-')[0];

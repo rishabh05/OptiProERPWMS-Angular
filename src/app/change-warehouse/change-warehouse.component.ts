@@ -30,7 +30,7 @@ export class ChangeWarehouseComponent implements OnInit {
         //     this.defaultWHS = this.whsList[i];
         //   }
         // }
-        this.defaultWHS = localStorage.getItem("whseId");
+       // this.defaultWHS = localStorage.getItem("whseId");
       },
       error => {
 
