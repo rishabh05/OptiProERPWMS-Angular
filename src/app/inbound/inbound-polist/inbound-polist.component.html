@@ -84,14 +84,14 @@
                                                 <dd>{{ dataItem.ITEMCODE }}</dd>
             
                                                 <dt>{{'ReceiveQuantity'|translate}}</dt>
-                                                <dd>{{dataItem.RPTQTY | number:'1.3-5'}}</dd>
+                                                <dd>{{dataItem.RPTQTY | numberFormat}}</dd>
                                             </dl>
             
                                             <dl class="opti_mobile_grid_dl">
                                                 <dt class="d-flex align-items-center">{{'OpenQuantity'|translate}}
                                                     <span class="opti_arrow-grid-detail ml-auto text-center opti_vertical-align">›</span>
                                                 </dt>
-                                                <dd>{{dataItem.OPENQTY | number:'1.3-5'}}</dd>
+                                                <dd>{{dataItem.OPENQTY | numberFormat}}</dd>
                                             </dl>
                                         </ng-template>
                                     </kendo-grid-column>
@@ -100,12 +100,12 @@
                                 <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE" title="{{'ItemCode'|translate}}"></kendo-grid-column>
                                 <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" title="{{'OpenQuantity'|translate}}" class="text-right">
                                     <ng-template kendoGridCellTemplate let-dataItem>
-                                        {{dataItem.OPENQTY | number:'1.3-5'}}
+                                        {{dataItem.OPENQTY | numberFormat}}
                                     </ng-template>
                                 </kendo-grid-column>
                                 <kendo-grid-column media="(min-width: 768px)" field="RPTQTY" title="{{'ReceiveQuantity'|translate}}" class="text-right">
                                     <ng-template kendoGridCellTemplate let-dataItem>
-                                        {{dataItem.RPTQTY | number:'1.3-5'}}
+                                        {{dataItem.RPTQTY |numberFormat}}
                                     </ng-template>
                                 </kendo-grid-column>    
     

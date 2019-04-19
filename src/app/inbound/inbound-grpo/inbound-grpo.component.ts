@@ -307,6 +307,11 @@ export class InboundGRPOComponent implements OnInit {
       this.toastr.error('', this.translate.instant("EnterQuantityErrMsg"));
       return;
     }
+    if(!Number.isInteger(this.qty)){
+      this.toastr.error('', this.translate.instant("DecimalQuantity"));
+      this.QuantityField.nativeElement.focus();
+      return;
+    }
     if (this.RecvbBinvalue == "" || this.RecvbBinvalue == undefined) {
       this.toastr.error('', this.translate.instant("INVALIDBIN"));
       return;
