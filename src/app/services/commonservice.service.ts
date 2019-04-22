@@ -185,10 +185,10 @@ export class Commonservice {
   }
 
    // Refresh List
-   private updateTopBarSub = new BehaviorSubject<any>(null);
-   refreshTopbarSubscriber = this.updateTopBarSub.asObservable();
+   private updateTopBarBSub = new BehaviorSubject<any>(null);
+   refreshTopbarSubscriber = this.updateTopBarBSub.asObservable();
  
    public refreshTopBarValue(data: any) {
-     this.openPDFSub.next(data);
+     this.updateTopBarBSub.next(data);
    }
 }

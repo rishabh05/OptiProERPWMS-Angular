@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SigninService } from 'src/app/services/signin.service';
 import { Router } from '../../../node_modules/@angular/router';
 import { WHS } from 'src/app/models/account/WHS';
+import { Commonservice } from '../services/commonservice.service';
 
 @Component({
   selector: 'app-change-warehouse',
@@ -13,7 +14,7 @@ export class ChangeWarehouseComponent implements OnInit {
   whsList: WHS[] = [];
   defaultWHS: any;
   
-  constructor(private signinService: SigninService, private router: Router) {
+  constructor( private commonService: Commonservice,private signinService: SigninService, private router: Router) {
     this.defaultWHS = { OPTM_WHSE: localStorage.getItem("whseId"), BPLid: 0 };
    }
 
@@ -45,6 +46,7 @@ export class ChangeWarehouseComponent implements OnInit {
 
   onSubmitClick(){
     localStorage.setItem("whseId", this.defaultWHS.OPTM_WHSE);
+    this.commonService.refreshTopBarValue(localStorage.getItem("whseId"));
     this.router.navigateByUrl('home/dashboard');
   }
 }

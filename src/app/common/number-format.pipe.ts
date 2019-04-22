@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class NumberFormatPipe implements PipeTransform {
 
   transform(value: number, args?: any): any {
-    let formattedNo = "";
+    let formattedNo = ""; 
     var precision = 4;//localStorage.getItem("DecimalPrecision");
     var decSeperator = ".";//localStorage.getItem("DecimalSeparator");
     var thSeperator = ",";//localStorage.getItem("ThousandSeparator");

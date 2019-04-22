@@ -214,8 +214,8 @@
   "InvoiceDate":"Invoice Date",
   "PORef#":"PO Ref.#",
   "Invoice#": "Invoice#",
-  "selectWarehouse":"Select Warehouse"
+  "selectWarehouse":"Select Warehouse",
 
-
+  "DecimalQuantity" : "Quantity cannot be decimal"
    
 }

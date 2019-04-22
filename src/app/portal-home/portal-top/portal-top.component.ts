@@ -7,6 +7,7 @@ import { opticonstants } from '../../constants';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
+import { ISubscription } from 'rxjs/Subscription';
 
 
 @Component({
@@ -24,6 +25,7 @@ export class PortalTopComponent implements OnInit {
   public DBName: string;
   loggedInUserName: string;
   loggedinWarehouse: string;
+  updatetopBarSubs: ISubscription;
 
 
   constructor(
@@ -41,6 +43,9 @@ export class PortalTopComponent implements OnInit {
     this.loggedInUserName = localStorage.getItem("UserId");
     this.DBName = localStorage.getItem("CompID");
     this.loggedinWarehouse = localStorage.getItem("whseId");
+    this.updatetopBarSubs = this.commonService.refreshTopbarSubscriber.subscribe(data => {
+      this.loggedinWarehouse = localStorage.getItem("whseId");
+    });
   }
 
   // open and close theme setting side panel
@@ -97,6 +102,11 @@ export class PortalTopComponent implements OnInit {
     this.commonService.RemoveLicenseAndSignout(this.toastr, this.router, 
     this.translate.instant("CommonSessionExpireMsg"))
 
+  }
+  
+  ngOnDestroy() {
+    if (this.updatetopBarSubs != undefined)
+      this.updatetopBarSubs.unsubscribe();
   }
 
 } 

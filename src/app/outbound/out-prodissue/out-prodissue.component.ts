@@ -17,6 +17,9 @@ import { anyChanged } from '@progress/kendo-angular-grid/dist/es2015/utils';
   styleUrls: ['./out-prodissue.component.scss']
 })
 export class OutProdissueComponent implements OnInit {
+  dialogMsg: string = "Do you want to delete?"
+  yesButtonText: string = "Yes";
+  noButtonText: string = "No";
   public outbound: OutboundData;
   public selected: any = null;
   public step: number = 0.001;
@@ -39,6 +42,11 @@ export class OutProdissueComponent implements OnInit {
   public OperationType: any[];
   public scanInputPlaceholder = "Scan"
   public SerialBatchHeaderTitle: string = "";
+  showConfirmDialog: boolean;
+  rowindexForDelete: any;
+  delIdx: any;
+  delGrd: any;
+  showLookupLoader: boolean = false;
 
   constructor(private ourboundService: OutboundService, private router: Router, private toastr: ToastrService, private translate: TranslateService) { }
 
@@ -250,10 +258,12 @@ export class OutProdissueComponent implements OnInit {
 
     let itemCode = this.selected.ITEMCODE;
     let docEntry = this.selected.DOCENTRY;
+    this.showLookupLoader=true;
     this.ourboundService.getAvaliableMeterial(itemCode, docEntry).subscribe(
       (resp: any) => {
         this.lookupData = resp;
         this.manageOldSelectedItems();
+        this.showLookupLoader=false;
         this.showLookup = true;
       }
     )
@@ -276,6 +286,30 @@ export class OutProdissueComponent implements OnInit {
     this.selectedMeterials.splice(idx, 1);
     grd.data = this.selectedMeterials;
     this.calculateTotalAndRemainingQty();
+  }
+
+  removeMeterial(idx: any, grd: any) {
+    this.delGrd = grd;
+    this.delIdx = idx;
+
+    this.showConfirmDialog = true;
+  }
+
+  getConfirmDialogValue($event) {
+    this.showConfirmDialog = false;
+
+    // Yes
+    if ($event.Status === 'yes') {
+      this.removeSelectedMeterial(this.delIdx, this.delGrd);
+    }
+    // No
+    else if ($event.Status === 'no') {
+
+    }
+    // Cross
+    else {
+
+    }
   }
 
 

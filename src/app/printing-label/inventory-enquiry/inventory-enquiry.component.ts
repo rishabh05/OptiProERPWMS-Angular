@@ -235,7 +235,7 @@ export class InventoryEnquiryComponent implements OnInit {
       (data: any) => {
         
         if (data != undefined && data.length > 0) {
-          console.log("Item Detail:" + data);
+          console.log("Item Detail:" +JSON.stringify(data));
 
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
