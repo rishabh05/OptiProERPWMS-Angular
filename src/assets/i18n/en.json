@@ -38,7 +38,7 @@
   "FromBin": "From Bin",
   "ToBin": "To Bin",
   "OnHandQty": "OnHand Qty.",
-  "SerialQty": "Serial Qty.",
+  "SerialQty": "Serial Qty",
   "SerialNo": "Serial No.",
   "TransferQty": "Transfer Qty",
   "Reason": "Reason",
@@ -216,6 +216,15 @@
   "Invoice#": "Invoice#",
   "selectWarehouse":"Select Warehouse",
 
-  "DecimalQuantity" : "Quantity cannot be decimal"
+  "DecimalQuantity" : "Quantity cannot be decimal",
+  "PostToInv":"Post To Inv",
+  "PostToReject":"Post To Reject",
+  "TransType":"Trans Type",
+  "OrderNoBlank": "Order no can not be blank",
+
+  "BatchQty": "Batch Qty",
+  "DefectQty": "Defect Qty",
+  "RejectQty": "Reject Qty",
+  "OrderNotExistMessge": "Order No. not exist!"
    
 }

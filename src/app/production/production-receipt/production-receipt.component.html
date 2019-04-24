@@ -12,12 +12,12 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'OrderNo'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" name='customerCode' placeholder="{{'OrderNo'|translate}}">
+                                <input type="text" class="form-control form-control-sm"  [(ngModel)]=orderNumber (blur)="OnOrderValueChange()" name='orderNo' placeholder="{{'OrderNo'|translate}}">
                                 <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" (click)="OnOrderLookupClick()" type="button">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
-                                    <button class="k-button k-primary btn separate-btn" type="button">
+                                    <button class="k-button k-primary btn separate-btn"  (click)="getProductionDetail()" type="button">
                                         <i class="opti-icon-search"></i>
                                     </button>
                                 </div>
@@ -38,23 +38,61 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
-                    <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'SerialQty'|translate}}</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control form-control-sm text-right" name='customerCode'
-                                placeholder="{{'SerialQty'|translate}}">
+            <div class="form-group row align-items-center"  *ngIf ="showRejectQtyField">
+                <label for="inputPassword" class="col-sm-3 col-form-label">{{'TransType'|translate}}</label>
+                <div class="col-sm-9">
+                    <fieldset class="d-block w-100">
+                        <div class="d-flex align-items-center w-100">
+                            <div class="d-flex align-items-center">
+                                <input type="radio" name="group" class="k-radio" checked />
+                                <label class="k-radio-label" for="InventoryEnquiryOptions1">{{'PostToInv'|translate}}</label>
+                            </div>
+                            <div class="d-flex align-items-center ml-3">
+                                <input type="radio" name="group" class="k-radio" />
+                                <label class="k-radio-label" for="InventoryEnquiryOptions2">{{'PostToReject'|translate}}</label>
+                            </div>
                         </div>
-                    </div>
+                    </fieldset>
                 </div>
             </div>
             <div class="row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
-                    <div class="form-group row">
+                    <div class="form-group row" *ngIf="type==S">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'SerialQty'|translate}}</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control form-control-sm text-right" name='SerialQty'
+                                placeholder="{{'SerialQty'|translate}}">
+                        </div>
+                    </div>
+                    <div class="form-group row" *ngIf="type==B">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'BatchQty'|translate}}</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control form-control-sm text-right" name='BatchQty'
+                                placeholder="{{'BatchQty'|translate}}">
+                        </div>
+                    </div>
+                    <div class="form-group row" *ngIf="type==N">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'Qty'|translate}}</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control form-control-sm text-right" name='Qty'
+                                placeholder="{{'Qty'|translate}}">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+                    <div class="form-group row" *ngIf="type==S">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Serial'|translate}}</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control form-control-sm" name='customerCode' placeholder="{{'Serial'|translate}}">
+                            <input type="text" class="form-control form-control-sm" name='Serial' placeholder="{{'Serial'|translate}}">
+                        </div>
+                    </div>
+                    <div class="form-group row" *ngIf="type==B">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'Batch'|translate}}</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control form-control-sm" name='Batch' placeholder="{{'Batch'|translate}}">
                         </div>
                     </div>
                 </div>
@@ -95,6 +133,13 @@
                                 placeholder="{{'OpenQty'|translate}}">
                         </div>
                     </div>
+                    <div class="form-group row"  *ngIf ="showRejectQtyField">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'DefectQty'|translate}}</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control form-control-sm text-right" name='defectQty'
+                                placeholder="{{'DefectQty'|translate}}">
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -102,10 +147,18 @@
             <div class="row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
                     <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'AssignedQty'|translate}}</label>
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'AcceptQty'|translate}}</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control form-control-sm text-right" name='customerCode'
-                                placeholder="{{'AssignedQty'|translate}}">
+                            <input type="text" class="form-control form-control-sm text-right" name='acceptQty'
+                                placeholder="{{'AcceptQty'|translate}}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row" *ngIf ="showRejectQtyField">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'RejectQty'|translate}}</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control form-control-sm text-right" name='rejectQty'
+                                placeholder="{{'RejectQty'|translate}}"> 
                         </div>
                     </div>
                 </div>

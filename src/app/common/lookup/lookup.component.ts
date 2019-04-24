@@ -139,6 +139,7 @@ export class LookupComponent implements OnInit {
     else if (this.lookupfor == "OrderList") {
       this.orderList();
     }
+    
     this.clearFilters();
     this.isColumnFilter = false
   }

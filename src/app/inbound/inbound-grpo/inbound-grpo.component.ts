@@ -177,7 +177,7 @@ export class InboundGRPOComponent implements OnInit {
           else {
             if (data.length > 0) {
               console.log(data);
-              this.showLookupLoader = true;
+              this.showLookupLoader = false;
               this.serviceData = data;
               this.lookupfor = "RecvBinList";
               return;

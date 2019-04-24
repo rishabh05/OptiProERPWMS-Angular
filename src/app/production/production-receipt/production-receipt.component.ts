@@ -16,6 +16,7 @@ export class ProductionReceiptComponent implements OnInit {
   
   //subscription variables.
   orderNoListSubs: ISubscription;
+  binListSubs: ISubscription;
   
   //for making disable the three fields.
   enableSearialQty:boolean = false;
@@ -27,12 +28,25 @@ export class ProductionReceiptComponent implements OnInit {
   
   // values related variables.
   public value: Date = new Date();
-  orderNumber:string= "";
-  item: string="";
+ 
   //lookup variables
   serviceData: any[];
   lookupfor: string;
-  
+  orderNumber:string= "";
+  item: string="";
+  itemCode:string = "";
+  itemName: string ="";
+  orderQty = "";
+  tracking: string="";
+  rejectQty: string = "";
+  postedFGQTY: string = "";
+  passedQty: string = "";
+  acctDefectQty: string = "";
+  binList: any[];
+  binNo: string = "";
+  whsCode: string = "";
+  showRejectQtyField = false;
+  type =""; //S for serial, B for Batch, N for non tracked.
   constructor(private renderer: Renderer, private commonservice: Commonservice, private router: Router, private productionService: ProductionService,
     private toastr: ToastrService, private translate: TranslateService) { }
 
@@ -40,7 +54,13 @@ export class ProductionReceiptComponent implements OnInit {
   }
 
   OnOrderLookupClick(){
-    //this.showOrderList();
+    this.showOrderList();
+  }
+  OnOrderValueChange(){
+    if (this.orderNumber == "" || this.orderNumber == undefined) {
+      return;
+    }
+    this.getProductionDetail();
   }
   /**
   * Method to get list of inquries from server.
@@ -49,19 +69,19 @@ export class ProductionReceiptComponent implements OnInit {
  
   this.orderNoListSubs = this.productionService.getOrderNumberList(this.orderNumber).subscribe(
     data => {
-      if (data != undefined && data.Table!=null && data.Table!= undefined 
-        && data.Table!="" && data.Table.length > 0) {//data[0].ErrorMsg == "7001"
-        if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
-          this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));
-          return;
-        }
+      if (data != undefined) { 
+      if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+        this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+          this.translate.instant("CommonSessionExpireMsg"));
+        return;
+      }
+      if (data.Table != undefined && data.Table != null && data.Table!="") {
         this.showLookupLoader = false;
-        this.serviceData = data.Table;
+         this.serviceData = data.Table;
         this.lookupfor = "OrderList";
+        return;
       }
-      else {
-        this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
-      }
+    } 
     },
     error => {
       this.toastr.error('', error);
@@ -81,6 +101,61 @@ export class ProductionReceiptComponent implements OnInit {
     }
   }
 
+
+  getProductionDetail(){
+    if(this.orderNumber == ""){
+      this.toastr.error('', this.translate.instant("OrderNoBlank"));
+      return;
+    }
+    this.orderNoListSubs = this.productionService.GetItemsDetailForProductionReceipt(this.orderNumber).subscribe(
+      data => {
+        if (data != undefined) { 
+        if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+          this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+            this.translate.instant("CommonSessionExpireMsg"));
+          return;
+        }
+        if (data.Table != undefined && data.Table != null && data.Table!="" ) {
+          this.showLookupLoader = false;
+          this.itemCode = data.Table[0].ItemCode;
+          this.itemName = data.Table[0].ItemName;
+          this.orderNumber = data.Table[0].OrderNo;
+          this.itemCode = data.Table[0].ItemCode;
+          this.itemCode = data.Table[0].ItemCode;
+          this.itemCode = data.Table[0].ItemCode;
+          this.itemCode = data.Table[0].ItemCode;
+          return;
+        } else{ 
+          this.toastr.error('', this.translate.instant("OrderNotExistMessge"));
+        }
+      } 
+      },
+      error => {
+        this.toastr.error('', error);
+      },
+    );
+
+    this.binListSubs = this.productionService.GetBinsList().subscribe(  
+      data => {
+      if (data != undefined) { 
+      if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+        this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+          this.translate.instant("CommonSessionExpireMsg"));
+        return;
+      }
+      if (data != undefined && data != null && data!="") {
+        this.binList = data;
+        this.binNo = this.binList[0].BINNO;
+        this.whsCode = this.binList[0].WHSCODE;
+        return;
+      } 
+    } 
+    },
+    error => {
+      this.toastr.error('', error);
+    },);
+    
+  }
   ngOnDestroy() {
   if (this.orderNoListSubs != undefined)
     this.orderNoListSubs.unsubscribe();
@@ -89,4 +164,6 @@ export class ProductionReceiptComponent implements OnInit {
   onCancelClick() {
     this.router.navigate(['home/dashboard']);
   }
+
 }
+ 

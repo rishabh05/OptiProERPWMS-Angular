@@ -133,7 +133,7 @@ export class InboundPolistComponent implements OnInit {
   }
 
   openPOLines() {
-    console.log("search click : in open poline method :openPOLines()");
+    //console.log("search click : in open poline method :openPOLines()");
     this.showLoader = true;
     this.inboundService.GetOpenPOLines(this.futurepo, this.itemCode,
       this.poCode).subscribe(
