@@ -225,6 +225,7 @@
   "BatchQty": "Batch Qty",
   "DefectQty": "Defect Qty",
   "RejectQty": "Reject Qty",
-  "OrderNotExistMessge": "Order No. not exist!"
+  "OrderNotExistMessge": "Order No. not exist!",
    
+  "POValidation": "Enter PO Number"
 }

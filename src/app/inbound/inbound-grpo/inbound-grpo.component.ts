@@ -348,6 +348,7 @@ export class InboundGRPOComponent implements OnInit {
       }
     }
     this.qty = undefined;
+    this.ScanInputs = "";
     if (this.recvingQuantityBinArray.length > 0) {
       this.showButton = true;
     } else {

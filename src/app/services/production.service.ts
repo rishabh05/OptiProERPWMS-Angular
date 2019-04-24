@@ -31,12 +31,12 @@ export class ProductionService {
   
   GetItemsDetailForProductionReceipt(batchNo:string,): Observable<any>{
     var  jObject = { BATCHNO: JSON.stringify([{ BATCHNO: batchNo, COMPANYDBNAME: localStorage.getItem("CompID") }]) };
-    return this.httpclient.post(this.config_params.service_url + "api/ProductionReceipt/GetItemsForProductionReceipt", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/ProductionReceipt/GetItemsForProductionReceipt", jObject, this.httpOptions);
   }
 
   GetBinsList(): Observable<any>{
     var jObject = { WhsCode: JSON.stringify([{ CompanyDBId:localStorage.getItem("CompID"), ItemCode: '', WhsCode: localStorage.getItem("whseId"), QCRequired: '', PageId: "FGRECEIPT" }]) };
-    return this.httpclient.post(this.config_params.service_url + "api/GoodReceiptPO/GetBinsForReceiptWithReceivingBin", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetBinsForReceiptWithReceivingBin", jObject, this.httpOptions);
   }
   
 }

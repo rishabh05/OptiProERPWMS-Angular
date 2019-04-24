@@ -33,7 +33,9 @@
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Item'|translate}}</label>
                         <div class="col-sm-9 d-flex align-items-center">
-                            <p class="mb-0">demotext</p>
+                            <p class="mb-0">{{itemCode}}</p>
+                            <p >:</p>
+                            <p class="mb-0">{{itemName}}</p>
                         </div>
                     </div>
                 </div>
@@ -102,7 +104,8 @@
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'ExpiryDate'|translate}}</label>
                         <div class="col-sm-9">
-                            <kendo-datepicker [value]="value"></kendo-datepicker>
+                            <kendo-datepicker [format]="'MM/dd/yy'" [value]="value" name="expiryDate" [(ngModel)]=expiryDate
+                            placeholder="MM/dd/yy"></kendo-datepicker>
                         </div>
                     </div>
                 </div>
@@ -113,7 +116,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Bin'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" name='customerCode' placeholder="{{'Bin'|translate}}">
+                                <input type="text" class="form-control form-control-sm" [(ngModel)]=binNo name='customerCode' placeholder="{{'Bin'|translate}}">
                                 <div class="input-group-append">
                                     <button class="k-button k-primary btn" type="button">
                                         <i class="opti-icon-hammenu"></i>
@@ -129,14 +132,14 @@
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'OpenQty'|translate}}</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control form-control-sm text-right" name='customerCode'
+                            <input type="text" class="form-control form-control-sm text-right" name='customerCode' [(ngModel)]=orignalActualQty
                                 placeholder="{{'OpenQty'|translate}}">
                         </div>
                     </div>
                     <div class="form-group row"  *ngIf ="showRejectQtyField">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'DefectQty'|translate}}</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control form-control-sm text-right" name='defectQty'
+                            <input type="text" class="form-control form-control-sm text-right" name='defectQty' [(ngModel)]=rejectQty
                                 placeholder="{{'DefectQty'|translate}}">
                         </div>
                     </div>

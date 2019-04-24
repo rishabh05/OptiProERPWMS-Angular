@@ -17,7 +17,7 @@ import { bypassSanitizationTrustResourceUrl } from '@angular/core/src/sanitizati
 export class InboundPolistComponent implements OnInit {
 
   futurepo: boolean = false;
-  poCode: string="";
+  poCode: string = "";
   showLookupLoader: boolean = true;
   serviceData: any[];
   lookupfor: string;
@@ -52,7 +52,7 @@ export class InboundPolistComponent implements OnInit {
   }
 
   ngOnInit() {
-    
+
     var ponumber = localStorage.getItem("PONumber");
     if (ponumber != undefined && ponumber != null && ponumber != "") {
       this.poCode = ponumber;
@@ -61,7 +61,7 @@ export class InboundPolistComponent implements OnInit {
     this.selectedVendor = this.inboundMasterComponent.selectedVernder;
     this.showGRPOButton = false;
   }
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     setTimeout(() => {
       var selectedPO = localStorage.getItem("selectedPO");
       if (selectedPO != undefined && selectedPO != null && selectedPO != "") {
@@ -70,9 +70,9 @@ export class InboundPolistComponent implements OnInit {
         this.openPOLines();
       } else {
         this.disablePO = false;
-      } 
-    }, 100); 
-     
+      }
+    }, 100);
+
   }
 
   onPOlookupClick() {
@@ -133,6 +133,10 @@ export class InboundPolistComponent implements OnInit {
   }
 
   openPOLines() {
+    if (this.poCode == "") {
+      this.toastr.error('', this.translate.instant("POValidation"));
+      return;
+    }
     //console.log("search click : in open poline method :openPOLines()");
     this.showLoader = true;
     this.inboundService.GetOpenPOLines(this.futurepo, this.itemCode,
@@ -144,10 +148,10 @@ export class InboundPolistComponent implements OnInit {
           this.showNonTrackItem = false;
           this.showBatchTrackItem = false;
           this.showSerialTrackItem = false;
-          if (data.Table != undefined  && data.Table!=null && data.Table != "") {
+          if (data.Table != undefined && data.Table != null && data.Table != "") {
             this.openPOLinesModel = [];
             this.BatchItemsDetail = [];
-            this.NonItemsDetail = [];                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+            this.NonItemsDetail = [];
             this.SerialItemsDetail = [];
             this.openPOLinesModel = data.Table;
             // var  unmatchedPOLinesModel = data.Table;
@@ -196,7 +200,7 @@ export class InboundPolistComponent implements OnInit {
         return {};
     }
   }
-  
+
   OnPOChange() {
     if (this.poCode == "" || this.poCode == undefined) {
       return;
@@ -212,9 +216,10 @@ export class InboundPolistComponent implements OnInit {
           else {
             this.poCode = "";
             this.toastr.error('', this.translate.instant("POExistMessage"));
+
             return;
           }
-        }else{
+        } else {
           this.poCode = "";
           this.toastr.error('', this.translate.instant("POExistMessage"));
         }
@@ -429,7 +434,7 @@ export class InboundPolistComponent implements OnInit {
     this.inboundMasterComponent.inboundComponent = 1;
   }
 
-  managePONumberListData(){
+  managePONumberListData() {
     for (var i = 0; i < this.addToGRPOPONumbers.PONumbers.length; i++) {
       if (this.addToGRPOPONumbers.PONumbers[i].PONumber == this.poCode) {
         this.addToGRPOPONumbers.PONumbers.splice(i, 1);
