@@ -151,23 +151,13 @@ export class Commonservice {
   RemoveLicenseAndSignout(toastr: ToastrService, router: Router, message: string) {
     var jObject = { GUID: localStorage.getItem("GUID"), LoginId: localStorage.getItem("UserId") };
     this.httpclient.post(this.config_params.service_url + "/Login/RemoveLoggedInUser", jObject, this.httpOptions);
+
     this.signOut(toastr, router, message);
+
   }
 
   signOut(toastr: ToastrService, router: Router, message: string){
     toastr.error('', message, this.toast_config);
-
-    // let login_page = this.common_params.application_path + '/index.html#login';
-        
-    // sessionStorage.removeItem('isLoggedIn');
-    // sessionStorage.removeItem('selectedComp');
-    // sessionStorage.removeItem('loggedInUser');
-    
-    // setTimeout(()=>{   
-    //   this.setisLoggedInData();
-    //   this.router.navigate('/account');
-    //   router.navigateByUrl('/account');
-    // }, 1000);
     sessionStorage.removeItem('isLoggedIn');
     sessionStorage.removeItem('selectedComp');
     sessionStorage.removeItem('loggedInUser');
@@ -178,8 +168,7 @@ export class Commonservice {
     localStorage.removeItem('UserId');
     localStorage.removeItem('whseId');
     localStorage.removeItem('Token');
-    localStorage.removeItem('GRPOReceieveData');
-    
+    this.clearInboundData()
     this.router.navigateByUrl('/account'); 
 
   }
@@ -191,4 +180,15 @@ export class Commonservice {
    public refreshTopBarValue(data: any) {
      this.updateTopBarBSub.next(data);
    }
+
+   clearInboundData(){
+    localStorage.setItem("GRPOReceieveData", "");
+    localStorage.setItem("Line", "0")
+    localStorage.setItem("addToGRPOPONumbers", "");
+    localStorage.setItem("AddToGRPO", "");
+    localStorage.setItem("VendCode", "");
+    localStorage.setItem("VendName", "");
+    localStorage.setItem("selectedPO", "");
+    localStorage.setItem("PONumber", "");
+  }
 }
