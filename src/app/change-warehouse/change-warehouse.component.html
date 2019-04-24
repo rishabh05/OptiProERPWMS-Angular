@@ -25,8 +25,16 @@
                             <span class="opti_form-label">{{'selectWarehouse'|translate}}</span>
                         </label>
                         <div class="col-sm-9">
-                            <kendo-dropdownlist class="form-control form-control-sm" [data]="whsList" (click)="setWarehouseList()" textField="OPTM_WHSE"
-                                valueField="BPLid" id="whseId" name="defaultWHS" [(ngModel)]="defaultWHS" ></kendo-dropdownlist>
+                            <!-- <kendo-dropdownlist class="form-control form-control-sm" [data]="whsList" [textField]="'OPTM_WHSE'"
+                             [valueField]="'BPLid'" id="whseId" name="defaultWHS" [(ngModel)]="defaultWHS" ></kendo-dropdownlist> -->
+                             <kendo-dropdownlist
+                                [data]="whsList"
+                                textField="OPTM_WHSE"
+                                valueField="BPLid"
+                                name="defaultWHS"
+                                [(ngModel)]="defaultWHS"
+                            >
+                            </kendo-dropdownlist>
                         </div>
                     </div>
                 </div>
