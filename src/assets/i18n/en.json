@@ -228,12 +228,8 @@
   "DefectQty": "Defect Qty",
   "RejectQty": "Reject Qty",
   "OrderNotExistMessge": "Order No. not exist!",
-<<<<<<< HEAD
   "From": " From: ",
   "To": " To: ",
-  "zero": "0.000"
-=======
-   
+  "zero": "0.000",   
   "POValidation": "Enter PO Number"
->>>>>>> ade7bc1a2276e5a2f485082bae3964d79036854d
 }
