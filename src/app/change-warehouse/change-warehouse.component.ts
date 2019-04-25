@@ -16,7 +16,7 @@ export class ChangeWarehouseComponent implements OnInit {
   
   constructor( private commonService: Commonservice,private signinService: SigninService, private router: Router) {
     this.defaultWHS = { OPTM_WHSE: localStorage.getItem("whseId"), BPLid: 0 };
-   }
+  }
 
   ngOnInit() {
     this.setWarehouseList();
@@ -38,11 +38,6 @@ export class ChangeWarehouseComponent implements OnInit {
       }
     );
   }
-
-  public listItems: Array<string> = [
-    'Baseball', 'Basketball', 'Cricket', 'Field Hockey',
-    'Football', 'Table Tennis', 'Tennis', 'Volleyball'
-  ];
 
   onSubmitClick(){
     localStorage.setItem("whseId", this.defaultWHS.OPTM_WHSE);

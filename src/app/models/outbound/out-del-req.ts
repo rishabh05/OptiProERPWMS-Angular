@@ -6,12 +6,14 @@ export class SOHEADER {
     CompanyDBId: string;
     LineNo: number;
     ShipQty: string;
+    tShipQty: string;
     DocNum: number;
     OpenQty: string;
     WhsCode: string;
     Tracking: string;
     ItemCode: string;
     UOM: number;
+    UOMName: string;
     Line: number;
 }
 

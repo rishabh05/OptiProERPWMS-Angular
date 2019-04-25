@@ -6,12 +6,16 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class NumberFormatPipe implements PipeTransform {
 
   transform(value: number, args?: any): any {
+    
     let formattedNo = ""; 
     var precision = 4;//localStorage.getItem("DecimalPrecision");
     var decSeperator = ".";//localStorage.getItem("DecimalSeparator");
     var thSeperator = ",";//localStorage.getItem("ThousandSeparator");
     var dateFormat = localStorage.getItem("DATEFORMAT");
-    var arr = value.toString().split(decSeperator);
+    if(value == null && value == undefined && value.toString() ==""){
+      return value;
+    }
+    var arr = value.toString().trim().split(decSeperator);
     formattedNo = this.addDigitSeperatorToNo(arr[0], thSeperator);
     //logic to add . and ifs after place digit manage.
     if (arr != null && arr != undefined && arr[1] != undefined && arr[1] != null) {

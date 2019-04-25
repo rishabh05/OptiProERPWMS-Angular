@@ -1,338 +1,327 @@
 <div class="opti_container position-relative bg-white rounded">
-        <form class="form-with-fix-btnBar" *ngIf="!viewLines">
-            <div class="opti_container_inner" [perfectScrollbar]=" ">
-    
-                <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
-                        Receive for PO: {{Ponumber}}
-                    
-                </h3>
-    
-    
-                <!-- Kendo Table Grid Row start -->
-                <div class="row">
-                    <div class="col-12 col-sm-12 col-md-12">
-                        <kendo-grid class="no-shadow" [kendoGridBinding]="openPOLineModel" [resizable]="true" [pageSize]="2"
-                            [pageable]="false" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
-                            [height]=gridHeight [selectable]="true"
-                            (selectionChange)="openPOByUOM($event,soItemsDetail.ITEMCODE)" #gridItem>
-    
-                            <!-- grid for mobile start -->
-                            <kendo-grid-column media="(max-width: 767px)" title="List" class="opti_mobile-grid-td">
-                                <ng-template kendoGridCellTemplate let-dataItem>
-                                    <dl class="opti_mobile_grid_dl">
-                                        <dt>{{'ItemCode'|translate}}</dt>
-                                        <dd>{{ dataItem.ITEMCODE }}</dd>
-            
-                                        <dt>{{'ReceiveQty'|translate}}</dt>
-                                        <dd>{{dataItem.RPTQTY | numberFormat}}</dd>
-        
-                                    </dl>
-            
-                                    <dl class="opti_mobile_grid_dl">
-                                        <dt>{{'OpenQty'|translate}}</dt>
-                                        <dd>{{dataItem.OPENQTY | numberFormat}}</dd>
-            
-                                        <dt>{{'UoM'|translate}}</dt>
-                                        <dd>
-                                            <kendo-dropdownlist class="form-control" name="uomSelectedVal" [(ngModel)]="uomSelectedVal"
-                                                [data]="dataItem.UOMList" textField="UomName" valueField="UomCode"></kendo-dropdownlist>
-                                        </dd>
-            
-                                    </dl>
-                                </ng-template>
-                            </kendo-grid-column>
-                            <!-- grid for mobile end -->
+    <form class="form-with-fix-btnBar" *ngIf="!viewLines">
+        <div class="opti_container_inner" [perfectScrollbar]=" ">
 
-                            <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE" title="{{'ItemCode'|translate}}"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" headerClass="text-right" class="text-right" title="{{'OpenQty'|translate}}" class="text-right">
-                                <ng-template kendoGridCellTemplate let-dataItem>
-                                    {{dataItem.OPENQTY | numberFormat}}
-                                </ng-template>
-                            </kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="RPTQTY" headerClass="text-right" title="{{'ReceiveQty'|translate}}" class="text-right">
-                                <ng-template kendoGridCellTemplate let-dataItem>
-                                    {{dataItem.RPTQTY | numberFormat}}
-                                </ng-template>
-                            </kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="UOM1" title="{{'UoM'|translate}}">
-                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                    <kendo-dropdownlist class="form-control" name="uomSelectedVal" [(ngModel)]="uomSelectedVal"
-                                        [data]="dataItem.UOMList" textField="UomName" valueField="UomCode"></kendo-dropdownlist>
-                                </ng-template>
-                            </kendo-grid-column>
-    
-                        </kendo-grid>
-                    </div>
+            <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
+                Receive for PO: {{Ponumber}}
+            </h3>
+
+
+            <!-- Kendo Table Grid Row start -->
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12">
+                    <kendo-grid class="no-shadow" [kendoGridBinding]="openPOLineModel" [resizable]="true" [pageSize]="2" [pageable]="false" [sortable]="true"
+                        [filterable]=isColumnFilter [groupable]=isColumnGroup [height]=gridHeight [selectable]="true" (selectionChange)="openPOByUOM($event,soItemsDetail.ITEMCODE)"
+                        #gridItem>
+
+                        <!-- grid for mobile start -->
+                        <kendo-grid-column media="(max-width: 767px)" title="List" class="opti_mobile-grid-td">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                <dl class="opti_mobile_grid_dl">
+                                    <dt>{{'ItemCode'|translate}}</dt>
+                                    <dd>{{ dataItem.ITEMCODE }}</dd>
+
+                                    <dt>{{'ReceiveQty'|translate}}</dt>
+                                    <dd>{{dataItem.RPTQTY | numberFormat}}</dd>
+
+                                </dl>
+
+                                <dl class="opti_mobile_grid_dl">
+                                    <dt>{{'OpenQty'|translate}}</dt>
+                                    <dd>{{dataItem.OPENQTY | numberFormat}}</dd>
+
+                                    <dt>{{'UoM'|translate}}</dt>
+                                    <dd>
+                                        <kendo-dropdownlist class="form-control" name="uomSelectedVal" [(ngModel)]="uomSelectedVal" [data]="dataItem.UOMList" textField="UomName"
+                                            valueField="UomCode"></kendo-dropdownlist>
+                                    </dd>
+
+                                </dl>
+                            </ng-template>
+                        </kendo-grid-column>
+                        <!-- grid for mobile end -->
+
+                        <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE" title="{{'ItemCode'|translate}}"></kendo-grid-column>
+                        <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" headerClass="text-right" class="text-right" title="{{'OpenQty'|translate}}"
+                            class="text-right">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                {{dataItem.OPENQTY | numberFormat}}
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column media="(min-width: 768px)" field="RPTQTY" headerClass="text-right" title="{{'ReceiveQty'|translate}}"
+                            class="text-right">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                {{dataItem.RPTQTY | numberFormat}}
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column media="(min-width: 768px)" field="UOM1" title="{{'UoM'|translate}}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <kendo-dropdownlist class="form-control" name="uomSelectedVal" [(ngModel)]="uomSelectedVal" [data]="dataItem.UOMList" textField="UomName"
+                                    valueField="UomCode"></kendo-dropdownlist>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                    </kendo-grid>
                 </div>
-                <!-- Kendo Table Grid Row end -->
-    
-                <div class="row row mt-4">
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
-    
-                        <div class="form-group row">
-                            <label for="inputPassword" class="col-sm-3 col-form-label">{{'ReceivingBin'|translate}}</label>
-                            <div class="col-sm-9">
-                                <div class="input-group input-group-sm">
-                                    <input type="text" class="form-control form-control-sm" name="RecvbBinvalue"
-                                        [(ngModel)]=RecvbBinvalue placeholder="{{'ReceivingBin'|translate}}" (blur)="OnBinChange()">
-                                    <div class="input-group-append has-seprate-btn">
-                                        <button class="k-button k-primary btn" type="button" (click)="ShowBins()">
-                                            <i class="opti-icon-hammenu"></i>
-                                        </button>
-    
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="inputPassword" class="col-sm-3 col-form-label">{{'ExpiryDate'|translate}}</label>
-                            <div class="col-sm-9">
-                                <kendo-datepicker [format]="'MM/dd/yy'" [value]="value" name="expiryDate" [(ngModel)]=expiryDate
-                                    placeholder="MM/dd/yy"></kendo-datepicker>
-                            </div>
-                        </div>
-                        <div class="form-group row align-items-center" *ngIf="showScanInput">
-                            <label for="inputPassword" class="col-sm-3 col-form-label">{{'ScanInputs'|translate}}</label>
-                            <div class="col-sm-9">
-                                <fieldset [disabled]=isDisabledScanInput class="d-block w-100">
-                                    <div class="d-flex align-items-center w-100">
-                                        <div class="d-flex align-items-center">
-                                            <input type="radio" name="group" (change)="handleCheckChange($event)" id="InventoryEnquiryOptions1"
-                                                class="k-radio" checked />
-                                            <label class="k-radio-label" for="InventoryEnquiryOptions1">{{mfrRadioText}}</label>
-                                        </div>
-                                        <div class="d-flex align-items-center ml-3">
-                                            <input type="radio" name="group" (change)="handleCheckChange($event)" id="InventoryEnquiryOptions2"
-                                                class="k-radio" />
-                                            <label class="k-radio-label" for="InventoryEnquiryOptions2">{{sysRadioText}}</label>
-                                        </div>
-                                    </div>
-                                </fieldset>
-                            </div>
-                        </div>
-                        <div class="form-group row mt-1 mt-md-0" *ngIf="showScanInput">
-                            <label class="col-sm-3 col-form-label"></label>
-                            <div class="col-sm-9">
-                                <div class="d-flex">
-                                    <input type="text" class="form-control form-control-sm" name="ScanInputs" [(ngModel)]=ScanInputs
-                                (blur)="onScanCodeChange()" placeholder="{{scanInputPlaceholder}}">
-                                    <div class="ml-1 d-flex">
-                                        <i class="opti-icon-qr-code fs-28"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="inputPassword" class="col-sm-3 col-form-label">{{'Quantity'|translate}}</label>
-                            <div class="col-sm-9">
-                                <div class="d-flex">
-                                    <input type="number" class="form-control form-control-sm" #Quantity name="qty" [(ngModel)]=qty
-                                        placeholder="{{'Quantity'|translate}}">
-                                    <div class="ml-1 d-flex">
-                                        <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
-                                            type="button" (click)="addQuantity(event)">
-                                            <i class="opti-icon-add1 fs-28"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-    
-    
-                    </div>
-                </div>
-    
-    
-                <!-- Kendo Table Grid Row start -->
-                <div class="row mt-3">
-                    <div class="col-md-12">
-                        <kendo-grid *ngIf="!isNonTrack" class="no-shadow" [kendoGridBinding]="recvingQuantityBinArray" [resizable]="true" 
-                            [sortable]="true" [selectable]="true" #gridItem >
+            </div>
+            <!-- Kendo Table Grid Row end -->
 
-                            <!-- grid for mobile start -->
-                            <kendo-grid-column media="(max-width: 767px)" title="List" class="opti_mobile-grid-td">
-                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                    <dl class="opti_mobile_grid_dl">
-                                        <dt>{{mfrGridColumnText}}</dt>
-                                        <dd>
-                                            <input type="text" class="form-control form-control-sm"
-                                                name="dataItem.VendorLot" [(ngModel)]=dataItem.VendorLot>
-                                        </dd>
-            
-                                        <dt>{{'Qty'|translate}}</dt>
-                                        <dd>{{dataItem.LotQty | numberFormat}}</dd>
+            <div class="row row mt-4">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
 
-                                        <dt>{{'ExpiryDate'|translate}}</dt>
-                                        <dd>{{dataItem.expiryDate | date:'MM/dd/yy'}}</dd>
-        
-                                    </dl>
-            
-                                    <dl class="opti_mobile_grid_dl">
-                                        <dt class="d-flex align-items-center">{{SRBatchColumnText}}
-                                            <button type="button" class="btn btn-danger k-button btn-sm btn-icon ml-auto" (click)="openConfirmForDelete(rowIndex, gridItem)">
-                                                <span class="k-icon k-i-delete" role="presentation"></span>
-                                            </button>
-                                        </dt>
-                                        <dd>{{dataItem.LotNumber}}</dd>
-            
-                                        <dt>{{'Bin'|translate}}</dt>
-                                        <dd>{{dataItem.Bin}}</dd>            
-                                    </dl>
-                                </ng-template>
-                            </kendo-grid-column>
-                            <!-- grid for mobile end -->
-
-                            <kendo-grid-column media="(min-width: 768px)" field="VendorLot" [width]="18" title="{{mfrGridColumnText}}">
-                                <ng-template kendoGridCellTemplate let-dataItem let-idx='rowIndex'>
-                                    <input type="text" class="form-control form-control-sm"
-                                    name="dataItem.VendorLot" value={{dataItem.VendorLot}}
-                                    id="display_name" #display_name
-                                    (change)="updateVendorLot(display_name.value, idx)"
-                                    >
-                                </ng-template>
-                            </kendo-grid-column>
-                            <kendo-grid-column  media="(min-width: 768px)" field="LotNumber" [width]="18" title="{{SRBatchColumnText}}">
-                                    <ng-template kendoGridCellTemplate let-dataItem let-idx='rowIndex'>
-                                            <input type="text" class="form-control form-control-sm"
-                                            name="dataItem.LotNumber" value={{dataItem.LotNumber}}  [disabled]=isDisabledScanInput id="display_name" #display_name
-                                            (change)="updateLotNumber(display_name.value, idx)"
-                                            >
-                                        </ng-template>
-                            </kendo-grid-column>                            
-                            <kendo-grid-column media="(min-width: 768px)" field="LotQty" headerClass="text-right" class="text-right" [width]="18"
-                                title="{{'Qty'|translate}}">
-                                <ng-template kendoGridCellTemplate let-dataItem>
-                                    {{dataItem.LotQty | numberFormat}}
-                                </ng-template>
-                            </kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="Bin" [width]="18" title="{{'Bin'|translate}}"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="expiryDate" [width]="18" title="{{'ExpiryDate'|translate}}">
-                                <ng-template kendoGridCellTemplate let-dataItem>
-                                    {{dataItem.expiryDate | date:'MM/dd/yy'}}
-                                </ng-template>
-                            </kendo-grid-column>
-
-                            <kendo-grid-column media="(min-width: 768px)" field="" [width]="10" title="">
-                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                    <button type="button" class="btn btn-danger k-button btn-sm btn-icon" (click)="openConfirmForDelete(rowIndex, gridItem)">
-                                        <span class="k-icon k-i-delete" role="presentation"></span>
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'ReceivingBin'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control form-control-sm" name="RecvbBinvalue" [(ngModel)]=RecvbBinvalue placeholder="{{'ReceivingBin'|translate}}"
+                                    (blur)="OnBinChange()">
+                                <div class="input-group-append has-seprate-btn">
+                                    <button class="k-button k-primary btn" type="button" (click)="ShowBins()">
+                                        <i class="opti-icon-hammenu"></i>
                                     </button>
-                                </ng-template>
-                            </kendo-grid-column>
-                        </kendo-grid>
-    
-                        
-                        
 
-                        <kendo-grid *ngIf="isNonTrack" class="no-shadow" [kendoGridBinding]="recvingQuantityBinArray" [resizable]="true" 
-                            [sortable]="true" [selectable]="true" #gridItem>
-                            <!-- grid for mobile start -->
-                            <kendo-grid-column media="(max-width: 767px)" title="List" class="opti_mobile-grid-td">
-                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                    <dl class="opti_mobile_grid_dl">
-                                        <dt>{{'Qty'|translate}}</dt>
-                                        <dd>{{dataItem.LotQty |numberFormat}}</dd>    
-                                    </dl>
-            
-                                    <dl class="opti_mobile_grid_dl">
-                                        <dt class="d-flex align-items-center">{{'Bin'|translate}}
-                                            <button type="button" class="btn btn-danger k-button btn-sm btn-icon ml-auto" (click)="openConfirmForDelete(rowIndex, gridItem)">
-                                                <span class="k-icon k-i-delete" role="presentation"></span>
-                                            </button>
-                                        </dt>
-                                        <dd>{{dataItem.Bin}}</dd>           
-                                    </dl>
-                                </ng-template>
-                            </kendo-grid-column>
-                            <!-- grid for mobile end -->
-
-                            <kendo-grid-column media="(min-width: 768px)" field="LotQty" headerClass="text-right" class="text-right" [width]="45"
-                                title="{{'Qty'|translate}}">
-                                <ng-template kendoGridCellTemplate let-dataItem>
-                                    {{dataItem.LotQty |numberFormat}}
-                                </ng-template>
-                            </kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="Bin" [width]="45" title="{{'Bin'|translate}}"></kendo-grid-column>
-    
-                            <kendo-grid-column media="(min-width: 768px)" field="" [width]="10" title="">
-                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                    <button type="button" class="btn btn-danger k-button btn-sm btn-icon" (click)="openConfirmForDelete(rowIndex, gridItem)">
-                                        <span class="k-icon k-i-delete" role="presentation"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row" *ngIf="!isNonTrack">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'ExpiryDate'|translate}}</label>
+                        <div class="col-sm-9">
+                            <kendo-datepicker [format]="'MM/dd/yy'" [value]="value" name="expiryDate" [(ngModel)]=expiryDate placeholder="MM/dd/yy"></kendo-datepicker>
+                        </div>
+                    </div>
+                    <div class="form-group row align-items-center" *ngIf="showScanInput">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'ScanInputs'|translate}}</label>
+                        <div class="col-sm-9">
+                            <fieldset [disabled]=isDisabledScanInput class="d-block w-100">
+                                <div class="d-flex align-items-center w-100">
+                                    <div class="d-flex align-items-center">
+                                        <input type="radio" name="group" (change)="handleCheckChange($event)" id="InventoryEnquiryOptions1" class="k-radio" checked
+                                        />
+                                        <label class="k-radio-label" for="InventoryEnquiryOptions1">{{mfrRadioText}}</label>
+                                    </div>
+                                    <div class="d-flex align-items-center ml-3">
+                                        <input type="radio" name="group" (change)="handleCheckChange($event)" id="InventoryEnquiryOptions2" class="k-radio" />
+                                        <label class="k-radio-label" for="InventoryEnquiryOptions2">{{sysRadioText}}</label>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div class="form-group row mt-1 mt-md-0" *ngIf="showScanInput">
+                        <label class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <div class="d-flex">
+                                <input type="text" class="form-control form-control-sm" name="ScanInputs" [(ngModel)]=ScanInputs (blur)="onScanCodeChange()"
+                                    placeholder="{{scanInputPlaceholder}}">
+                                <div class="ml-1 d-flex">
+                                    <i class="opti-icon-qr-code fs-28"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'Quantity'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="d-flex">
+                                <input type="number" class="form-control form-control-sm" #Quantity name="qty" [(ngModel)]=qty placeholder="{{'Quantity'|translate}}">
+                                <div class="ml-1 d-flex">
+                                    <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button" (click)="addQuantity(event)">
+                                        <i class="opti-icon-add1 fs-28"></i>
                                     </button>
-                                </ng-template>
-                            </kendo-grid-column>
-                        </kendo-grid>
-    
-                    </div>
-                </div>
-                <!-- Kendo Table Grid Row end -->
-    
-                <div class="row mt-3" *ngIf="IsQCRequired">
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
-                        <div class="form-group row">
-                            <label for="inputPassword" class="col-sm-3 col-form-label">{{'TargetWhse'|translate}}</label>
-                            <div class="col-sm-9">
-                                <div class="input-group input-group-sm">
-                                    <input type="text" class="form-control form-control-sm" name="targetWhse" [(ngModel)]=targetWhse
-                                        placeholder="{{'TargetWhse'|translate}}" (blur)="onQCWHSChange()">
-                                    <div class="input-group-append has-seprate-btn">
-                                        <button class="k-button k-primary btn" type="button" (click)="getTargetWhseList()">
-                                            <i class="opti-icon-hammenu"></i>
-                                        </button>
-    
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="inputPassword" class="col-sm-3 col-form-label">{{'TargetBin'|translate}}</label>
-                            <div class="col-sm-9">
-                                <div class="input-group input-group-sm">
-                                    <input type="text" class="form-control form-control-sm" name="targetBinValue"
-                                        [(ngModel)]=targetBin placeholder="{{'TargetBin'|translate}}" (blur)="OnTargetBinChange()">
-                                    <div class="input-group-append has-seprate-btn">
-                                        <button class="k-button k-primary btn" type="button" (click)="getTargetBinList()">
-                                            <i class="opti-icon-hammenu"></i>
-                                        </button>
-    
-                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-    
-            </div>
-            <div class="fix-footer-btnBar">
-                <div class="col-sm-12 col-12">
-                    <hr />
-                </div>
-                <div class="col-sm-12 col-12">
-    
-                    <button type="button" *ngIf="showButton" (click)="save($event)" class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-save"
-                        role="presentation"></span> {{'Save'|translate}}</button>
-                    <button class="k-button k-primary k-button btn-sm btn-icon-with-text" *ngIf="showButton" type="button" (click)="receive($event)"><span class="k-icon k-i-download"
-                        role="presentation"></span> {{'Receive'|translate}}</button>
-                    <!-- <button class="k-button k-primary" type="button" (click)="cancel($event)">Cancel</button> -->
-                    <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="cancel($event)"><span class="k-icon k-i-close-outline" role="presentation" ></span> Cancel</button>
-                </div>
-            </div>
-        </form>
-    </div>
-    
-     
-    <span *ngIf="showLookupLoader == false">
-        <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
-    </span>
-    <span *ngIf="showConfirmDialog">
-    <app-comon-confirm-dialog [titleMessage]="dialogMsg" 
-    [yesButtonText]="yesButtonText" [fromWhere] ="dialogFor"  [noButtonText]="noButtonText" (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
-    </span> 
 
-    <div>
-            <app-display-pdf *ngIf="displayPDF1" [base64String]='base64String' [fileName]='fileName' (pdfClose)="closePDF($event)"></app-display-pdf>
+
+                </div>
             </div>
-            
-            <div class="opti_loader full-section"  *ngIf="showLoader" >
-                <div class="opti_spinner"></div>
-            </div> 
+
+
+            <!-- Kendo Table Grid Row start -->
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <kendo-grid *ngIf="!isNonTrack" class="no-shadow" [kendoGridBinding]="recvingQuantityBinArray" [resizable]="true" [sortable]="true"
+                        [selectable]="true" #gridItem>
+
+                        <!-- grid for mobile start -->
+                        <kendo-grid-column media="(max-width: 767px)" title="List" class="opti_mobile-grid-td">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <dl class="opti_mobile_grid_dl">
+                                    <dt>{{mfrGridColumnText}}</dt>
+                                    <dd>
+                                        <input type="text" class="form-control form-control-sm" name="dataItem.VendorLot" [(ngModel)]=dataItem.VendorLot>
+                                    </dd>
+
+                                    <dt>{{'Qty'|translate}}</dt>
+                                    <dd>{{dataItem.LotQty | numberFormat}}</dd>
+
+                                    <dt>{{'ExpiryDate'|translate}}</dt>
+                                    <dd>{{dataItem.expiryDate | date:'MM/dd/yy'}}</dd>
+
+                                </dl>
+
+                                <dl class="opti_mobile_grid_dl">
+                                    <dt class="d-flex align-items-center">{{SRBatchColumnText}}
+                                        <button type="button" class="btn btn-danger k-button btn-sm btn-icon ml-auto" (click)="openConfirmForDelete(rowIndex, gridItem)">
+                                            <span class="k-icon k-i-delete" role="presentation"></span>
+                                        </button>
+                                    </dt>
+                                    <dd>{{dataItem.LotNumber}}</dd>
+
+                                    <dt>{{'Bin'|translate}}</dt>
+                                    <dd>{{dataItem.Bin}}</dd>
+                                </dl>
+                            </ng-template>
+                        </kendo-grid-column>
+                        <!-- grid for mobile end -->
+
+                        <kendo-grid-column media="(min-width: 768px)" field="VendorLot" [width]="18" title="{{mfrGridColumnText}}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-idx='rowIndex'>
+                                <input type="text" class="form-control form-control-sm" name="dataItem.VendorLot" value={{dataItem.VendorLot}} id="display_name"
+                                    #display_name (change)="updateVendorLot(display_name.value, idx)">
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column media="(min-width: 768px)" field="LotNumber" [width]="18" title="{{SRBatchColumnText}}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-idx='rowIndex'>
+                                <input type="text" class="form-control form-control-sm" name="dataItem.LotNumber" value={{dataItem.LotNumber}} [disabled]=isDisabledScanInput
+                                    id="display_name" #display_name (change)="updateLotNumber(display_name.value, idx)">
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column media="(min-width: 768px)" field="LotQty" headerClass="text-right" class="text-right" [width]="18" title="{{'Qty'|translate}}">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                {{dataItem.LotQty | numberFormat}}
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column media="(min-width: 768px)" field="Bin" [width]="18" title="{{'Bin'|translate}}"></kendo-grid-column>
+                        <kendo-grid-column media="(min-width: 768px)" field="expiryDate" [width]="18" title="{{'ExpiryDate'|translate}}">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                {{dataItem.expiryDate | date:'MM/dd/yy'}}
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-column media="(min-width: 768px)" field="" [width]="10" title="">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <button type="button" class="btn btn-danger k-button btn-sm btn-icon" (click)="openConfirmForDelete(rowIndex, gridItem)">
+                                    <span class="k-icon k-i-delete" role="presentation"></span>
+                                </button>
+                            </ng-template>
+                        </kendo-grid-column>
+                    </kendo-grid>
+
+
+
+
+                    <kendo-grid *ngIf="isNonTrack" class="no-shadow" [kendoGridBinding]="recvingQuantityBinArray" [resizable]="true" [sortable]="true"
+                        [selectable]="true" #gridItem>
+                        <!-- grid for mobile start -->
+                        <kendo-grid-column media="(max-width: 767px)" title="List" class="opti_mobile-grid-td">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <dl class="opti_mobile_grid_dl">
+                                    <dt>{{'Qty'|translate}}</dt>
+                                    <dd>{{dataItem.LotQty |numberFormat}}</dd>
+                                </dl>
+
+                                <dl class="opti_mobile_grid_dl">
+                                    <dt class="d-flex align-items-center">{{'Bin'|translate}}
+                                        <button type="button" class="btn btn-danger k-button btn-sm btn-icon ml-auto" (click)="openConfirmForDelete(rowIndex, gridItem)">
+                                            <span class="k-icon k-i-delete" role="presentation"></span>
+                                        </button>
+                                    </dt>
+                                    <dd>{{dataItem.Bin}}</dd>
+                                </dl>
+                            </ng-template>
+                        </kendo-grid-column>
+                        <!-- grid for mobile end -->
+
+                        <kendo-grid-column media="(min-width: 768px)" field="LotQty" headerClass="text-right" class="text-right" [width]="45" title="{{'Qty'|translate}}">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                {{dataItem.LotQty |numberFormat}}
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column media="(min-width: 768px)" field="Bin" [width]="45" title="{{'Bin'|translate}}"></kendo-grid-column>
+
+                        <kendo-grid-column media="(min-width: 768px)" field="" [width]="10" title="">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <button type="button" class="btn btn-danger k-button btn-sm btn-icon" (click)="openConfirmForDelete(rowIndex, gridItem)">
+                                    <span class="k-icon k-i-delete" role="presentation"></span>
+                                </button>
+                            </ng-template>
+                        </kendo-grid-column>
+                    </kendo-grid>
+
+                </div>
+            </div>
+            <!-- Kendo Table Grid Row end -->
+
+            <div class="row mt-3" *ngIf="IsQCRequired">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'TargetWhse'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control form-control-sm" name="targetWhse" [(ngModel)]=targetWhse placeholder="{{'TargetWhse'|translate}}"
+                                    (blur)="onQCWHSChange()">
+                                <div class="input-group-append has-seprate-btn">
+                                    <button class="k-button k-primary btn" type="button" (click)="getTargetWhseList()">
+                                        <i class="opti-icon-hammenu"></i>
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'TargetBin'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control form-control-sm" name="targetBinValue" [(ngModel)]=targetBin placeholder="{{'TargetBin'|translate}}"
+                                    (blur)="OnTargetBinChange()">
+                                <div class="input-group-append has-seprate-btn">
+                                    <button class="k-button k-primary btn" type="button" (click)="getTargetBinList()">
+                                        <i class="opti-icon-hammenu"></i>
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="fix-footer-btnBar">
+            <div class="col-sm-12 col-12">
+                <hr />
+            </div>
+            <div class="col-sm-12 col-12">
+
+                <button type="button" *ngIf="showButton" (click)="save($event)" class="btn btn-success k-button btn-sm btn-icon-with-text">
+                    <span class="k-icon k-i-save" role="presentation"></span> {{'Save'|translate}}</button>
+                <button class="k-button k-primary k-button btn-sm btn-icon-with-text" *ngIf="showButton" type="button" (click)="receive($event)">
+                    <span class="k-icon k-i-download" role="presentation"></span> {{'Receive'|translate}}</button>
+                <!-- <button class="k-button k-primary" type="button" (click)="cancel($event)">Cancel</button> -->
+                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="cancel($event)">
+                    <span class="k-icon k-i-close-outline" role="presentation"></span> Cancel</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<span *ngIf="showLookupLoader == false">
+    <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
+</span>
+<span *ngIf="showConfirmDialog">
+    <app-comon-confirm-dialog [titleMessage]="dialogMsg" [yesButtonText]="yesButtonText" [fromWhere]="dialogFor" [noButtonText]="noButtonText"
+        (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
+</span>
+
+<div>
+    <app-display-pdf *ngIf="displayPDF1" [base64String]='base64String' [fileName]='fileName' (pdfClose)="closePDF($event)"></app-display-pdf>
+</div>
+
+<div class="opti_loader full-section" *ngIf="showLoader">
+    <div class="opti_spinner"></div>
+</div>

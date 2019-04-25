@@ -47,6 +47,8 @@ export class OutProdissueComponent implements OnInit {
   delIdx: any;
   delGrd: any;
   showLookupLoader: boolean = false;
+  selectedUOM: any;
+  uomIdx: number = 0;
 
   constructor(private ourboundService: OutboundService, private router: Router, private toastr: ToastrService, private translate: TranslateService) { }
 
@@ -82,6 +84,7 @@ export class OutProdissueComponent implements OnInit {
           mdata => {
             let el: any = document.getElementById('gridSelectedMeterial');
             this.getLookupValue(mdata, el, true);
+            this.manageUOM();
           }
         );
       }
@@ -89,9 +92,21 @@ export class OutProdissueComponent implements OnInit {
       this.ourboundService.getUOMList(this.selected.ITEMCODE).subscribe(
         data => {
           this.uomList = data;
+
+
+          this.selectedUOM = this.uomList.filter(u => u.UomCode == this.selected.UOM);
+          this.selectedUOM = this.selectedUOM[0];
+
         }
       )
     }
+  }
+
+
+
+
+  manageUOM() {
+    // this._pickedMeterialQty=this.selectedUOM.AltQty*this._pickedMeterialQty;
   }
 
   manageOldCollection() {
@@ -258,12 +273,13 @@ export class OutProdissueComponent implements OnInit {
 
     let itemCode = this.selected.ITEMCODE;
     let docEntry = this.selected.DOCENTRY;
-    this.showLookupLoader=true;
+    this.showLookupLoader = true;
     this.ourboundService.getAvaliableMeterial(itemCode, docEntry).subscribe(
       (resp: any) => {
         this.lookupData = resp;
         this.manageOldSelectedItems();
-        this.showLookupLoader=false;
+        this.manageExistingItem();
+        this.showLookupLoader = false;
         this.showLookup = true;
       }
     )
@@ -280,6 +296,11 @@ export class OutProdissueComponent implements OnInit {
     this.outbound = JSON.parse(localStorage.getItem(CommonConstants.OutboundData));
     this.outbound.SelectedMeterials = lookupValue;
     localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+  }
+
+  valueChange(e: any) {
+    this.selectedUOM = e;
+    this.manageUOM();
   }
 
   removeSelectedMeterial(idx: any, grd: any) {
@@ -481,7 +502,15 @@ export class OutProdissueComponent implements OnInit {
         const element = this.selectedMeterials[index];
 
         for (let j = 0; j < this.lookupData.length; j++) {
+
+
+
           const sd = this.lookupData[j];
+          // Remove old selected metarial
+          // if (this.filterLookUpDta(sd)) {
+          //   continue;
+          // }
+
           if (sd.ITEMCODE === element.ITEMCODE
             && sd.LOTNO === element.LOTNO
             && sd.BINNO === element.BINNO) {
@@ -495,6 +524,49 @@ export class OutProdissueComponent implements OnInit {
         }
       }
     }
+    
+    
   }
 
+  private manageExistingItem() {
+    let tempLookup: any = this.lookupData;
+    for (let j = 0; j < this.lookupData.length; j++) {
+      const sd = this.lookupData[j];
+
+      // Remove old selected metarial
+      if (this.OrderType === 'S') {
+
+        if (this.outbound) {
+
+          let tempCollection = this.outbound.TempMeterials;
+          let currentOrder = this.outbound.OrderData;
+
+          for (let index = 0; index < tempCollection.length; index++) {
+            const element = tempCollection[index];
+
+            // If already selectde
+            if (element.Order.DOCNUM !== currentOrder.DOCNUM
+              && element.Meterial.BINNO === sd.BINNO &&
+              element.Meterial.LOTNO === sd.LOTNO &&
+              element.Meterial.ITEMCODE === sd.ITEMCODE) {
+              if (tempLookup.length - 1 > j) {
+                tempLookup.splice(j, 1);
+                break;
+              }
+            }
+
+
+
+          }
+        }
+      }
+    }
+
+    this.lookupData == tempLookup;
+  }
+
+
+
+
 }
+

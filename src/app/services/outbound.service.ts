@@ -49,7 +49,7 @@ export class OutboundService {
     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/SoCustomerWiseLookup", body, this.httpOptions);
   }
 
-  public getUOMList(itemCode:string){
+  public  getUOMList(itemCode:string){
     this.outRequest=new OutRequest();
     this.outRequest.ItemCode=itemCode;
     var body:any={ItemKey:this.prepareRequest()};
