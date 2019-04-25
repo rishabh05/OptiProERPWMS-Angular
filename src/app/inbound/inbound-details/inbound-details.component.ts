@@ -22,14 +22,14 @@ export class InboundDetailsComponent implements OnInit {
   showGRPOGridAndBtn: boolean = false;
   public Polist: any[] = [];
   dialogFor: string = "";
-  dialogMsg: string = "Do you want to delete?"
+  dialogMsg: string = ""
   showConfirmDialog: boolean;
   rowindexForDelete: any;
   gridDataAfterDelete: any[];
   showNext: boolean = false;
 
-  yesButtonText: string = "Yes";
-  noButtonText: string = "No";
+  yesButtonText: string = "";
+  noButtonText: string = "";
   showPDF: boolean = false;
   base64String: string = ""; 
   fileName: string = "";
@@ -77,11 +77,13 @@ export class InboundDetailsComponent implements OnInit {
     this.noButtonText = this.translate.instant("no");
     this.dialogFor = "receiveSinglePDFDialog";
     this.dialogMsg = this.translate.instant("PrintAllLabelsAfterSubmit");
-    this.showConfirmDialog = true; // show dialog
+    this.showConfirmDialog = true; // show dialog 
   }
   SubmitGoodsReceiptPO(oSubmitPOLotsObj: any) {
+    this.showLoader = true;
     this.inboundService.SubmitGoodsReceiptPO(oSubmitPOLotsObj).subscribe(
       (data: any) => {
+        this.showLoader = false;
         console.log(data);
         if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
           // alert("Goods Receipt PO generated successfully with Doc No: " + data.DocEntry);
