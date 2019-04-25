@@ -8,7 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { InventoryTransferService } from '../../services/inventory-transfer.service';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { Template } from '@angular/compiler/src/render3/r3_ast';
-import {Location} from '@angular/common';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-bin-transfer',
@@ -27,7 +27,7 @@ export class BinTransferComponent implements OnInit {
   fromBin: string = "";
   transferQty: string = "";
   itemName: string = "";
-  ItemTracking: string = ""; 
+  ItemTracking: string = "";
   serviceData: any[];
   lookupfor: string;
   showItemName: boolean = false;
@@ -46,9 +46,9 @@ export class BinTransferComponent implements OnInit {
   @Input() fromScreen: any;
   @Output() cancelevent = new EventEmitter();
 
-  constructor(private commonservice: Commonservice,private activatedRoute :ActivatedRoute, 
-    private router: Router, private inventoryTransferService: InventoryTransferService, 
-    private toastr: ToastrService, private translate: TranslateService, 
+  constructor(private commonservice: Commonservice, private activatedRoute: ActivatedRoute,
+    private router: Router, private inventoryTransferService: InventoryTransferService,
+    private toastr: ToastrService, private translate: TranslateService,
     private modalService: BsModalService, private _location: Location) {
     let userLang = navigator.language.split('-')[0];
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
@@ -85,7 +85,7 @@ export class BinTransferComponent implements OnInit {
     if (localStorage.getItem("towhseId") == localStorage.getItem("whseId")) {
       this.PageTitle = this.translate.instant("BinTransfer");
     } else {
-      this.PageTitle = this.translate.instant("WarehouseTransfer") + " From: " + localStorage.getItem("whseId") + " To: " + localStorage.getItem("towhseId");
+      this.PageTitle = this.translate.instant("WarehouseTransfer") + this.translate.instant("From") + localStorage.getItem("whseId") + this.translate.instant("To") + localStorage.getItem("towhseId");
     }
 
     console.log("bin loaded")
@@ -94,9 +94,9 @@ export class BinTransferComponent implements OnInit {
 
   /** Simple method to toggle element visibility */
   public ShowSavedData(): void {
-    if(this.TransferedItemsDetail.length > 0){
+    if (this.TransferedItemsDetail.length > 0) {
       this.viewLines = !this.viewLines;
-    }else{
+    } else {
       this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
     }
   }
@@ -608,14 +608,7 @@ export class BinTransferComponent implements OnInit {
         }
         return false;
       }
-      // if (oCurrentController.GetQuantity() <= 0 || oCurrentController.GetQuantity() > 1) {
-      //     Msg = oCurrentController.GetResourceString("DELIVERYLOTS.Enterquantitynotgreaterthanone");
-      //     oCurrentController.ShowMessageDialog(Msg, oCurrentController.MessageState.MessageStateError, "Error");
-      //     Error = "N";
 
-      //     oTxtTransferQty.focus();
-      //     return false;
-      // }
     }
     else {
       if (Number(this.transferQty) <= 0) {
@@ -651,7 +644,7 @@ export class BinTransferComponent implements OnInit {
       this.itemName = $event[1];
       this.ItemTracking = $event[2];
       this.showItemName = true;
-      this.transferQty = "0.000";
+      this.transferQty = this.translate.instant("zero");
       this.onHandQty = 0.000;
       if (localStorage.getItem("whseId") != localStorage.getItem("towhseId")) {
         this.getDefaultBin();
@@ -682,12 +675,14 @@ export class BinTransferComponent implements OnInit {
       this.isItemSerialTrack = false;
       this.showBatchNo = true;
       this.editTransferQty = false;
+      this.batchNoPlaceholder = this.translate.instant("BatchNo");
       // oTxtTransferQty.setEnabled(true);
     }
     else if (this.ItemTracking == "S") {
       this.isItemSerialTrack = true;
       this.showBatchNo = true;
       this.editTransferQty = true;
+      this.batchNoPlaceholder = this.translate.instant("SerialNo");
       // oTxtTransferQty.setEnabled(false);
       // var qty = olblQtyOnhand.getValue();
       // if (qty > 0) {
@@ -708,6 +703,7 @@ export class BinTransferComponent implements OnInit {
     this.toBin = "";
     this.lotValue = "";
   }
+  batchNoPlaceholder: string = "";
 
   ViewLinesRowDeleteClick(rowindex, gridData: any) {
 

@@ -19,9 +19,9 @@ import { ISubscription } from 'rxjs/Subscription';
 })
 export class InboundGRPOComponent implements OnInit {
 
-  dialogMsg: string = "Do you want to delete?"
-  yesButtonText: string = "Yes";
-  noButtonText: string = "No";
+  dialogMsg: string = ""
+  yesButtonText: string = "";
+  noButtonText: string = "";
   openPOLineModel: OpenPOLinesModel[] = [];
   Ponumber: any;
   ItemCode: any;
@@ -999,12 +999,6 @@ export class InboundGRPOComponent implements OnInit {
   }
 
   DeleteRowClick(rowindex, gridData: any) {
-
-    if (this.recvingQuantityBinArray.length > 0) {
-      this.showButton = true;
-    } else {
-      this.showButton = false;
-    }
     if (this.recvingQuantityBinArray.length > 0) {
       var qtyForRemove = this.recvingQuantityBinArray[rowindex].LotQty;
       if (this.openPOLineModel[0].RPTQTY >= qtyForRemove) {
@@ -1013,6 +1007,11 @@ export class InboundGRPOComponent implements OnInit {
     }
     this.recvingQuantityBinArray.splice(rowindex, 1);
     gridData.data = this.recvingQuantityBinArray;
+    if (this.recvingQuantityBinArray.length > 0) {
+      this.showButton = true;
+    } else {
+      this.showButton = false;
+    }
   }
 
 

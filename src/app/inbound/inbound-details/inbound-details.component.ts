@@ -22,14 +22,14 @@ export class InboundDetailsComponent implements OnInit {
   showGRPOGridAndBtn: boolean = false;
   public Polist: any[] = [];
   dialogFor: string = "";
-  dialogMsg: string = "Do you want to delete?"
+  dialogMsg: string = ""
   showConfirmDialog: boolean;
   rowindexForDelete: any;
   gridDataAfterDelete: any[];
   showNext: boolean = false;
 
-  yesButtonText: string = "Yes";
-  noButtonText: string = "No";
+  yesButtonText: string = "";
+  noButtonText: string = "";
   showPDF: boolean = false;
   base64String: string = ""; 
   fileName: string = "";

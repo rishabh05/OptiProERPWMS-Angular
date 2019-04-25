@@ -185,6 +185,8 @@
   "MfrSerial" : "Mfr Serial",
   "Serial" : "Serial",
   "Batch" : "Batch",
+  "None": "None",
+  "AddToGRPO": "Add To GRPO",
   "DoYouWantToDelete": "Are you sure to delete ?",
   "AddToDeleiver":"Add To Delivery",
   "Deleiver":"Deliver",
@@ -225,6 +227,8 @@
   "BatchQty": "Batch Qty",
   "DefectQty": "Defect Qty",
   "RejectQty": "Reject Qty",
-  "OrderNotExistMessge": "Order No. not exist!"
-   
+  "OrderNotExistMessge": "Order No. not exist!",
+  "From": " From: ",
+  "To": " To: ",
+  "zero": "0.000"
 }
