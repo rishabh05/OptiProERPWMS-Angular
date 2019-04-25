@@ -86,6 +86,7 @@ export class OutOrderComponent implements OnInit {
     }
   }
 
+
   getLookupValue(lookupValue: any) {
 
     this.outbound.OrderData = lookupValue;
@@ -292,26 +293,57 @@ export class OutOrderComponent implements OnInit {
       let uid: string = localStorage.getItem('UserId');
 
       let limit = 0;
+      let hdrLineVal = 0;
       // Loop through delivery collection 
       for (let index = 0; index < this.outbound.DeleiveryCollection.length; index++) {
+
+        // // break when item processed.
+        // if (limit >= this.outbound.DeleiveryCollection.length) {
+        //   break;
+        // }
+
+        //get first item from collection        
         const element = this.outbound.DeleiveryCollection[index];
 
+
         // let coll=Get all Item for Item.Lineno===i
-        let lineDeleiveryCollection = this.outbound.DeleiveryCollection.filter(d => d.Item.LINENUM === element.Item.LINENUM);
+        let lineDeleiveryCollection = this.outbound.DeleiveryCollection.filter(d =>
+          //d.Item.LINENUM === element.Item.LINENUM
+          element.Order.DOCNUM === d.Order.DOCNUM &&
+          element.Item.DOCENTRY === d.Item.DOCENTRY &&
+          element.Item.TRACKING === d.Item.TRACKING
+        );
 
-        limit = limit + lineDeleiveryCollection.length;
+        // Process Order Item and Tracking collection
+        for (let hIdx = 0; hIdx < lineDeleiveryCollection.length; hIdx++) {
+
+          const o = lineDeleiveryCollection[hIdx];
 
 
-        for (let j = 0; j < lineDeleiveryCollection.length; j++) {
+          // check hdr exists
+          // let existHdr = arrSOHEADER.filter(h =>
+          //   h.SONumber === o.DocNum
+          //   && h.ItemCode === o.ItemCode
+          //   && h.Tracking === o.Tracking);
 
-          const o = lineDeleiveryCollection[j];
+          let existHdr = false;
+          for (let index = 0; index < arrSOHEADER.length; index++) {
+            const h = arrSOHEADER[index];
+            if (h.SONumber === o.Order.DOCNUM
+              && h.ItemCode === o.Item.ITEMCODE
+              && h.Tracking === o.Item.TRACKING) {
+              existHdr = true;
+              break;
+            }
+          }
 
-          let hasItem = arrSOHEADER.filter(list => list.LineNo === o.Item.LINENUM);
+          if (existHdr == false) {
+            // Add Header here and then add 
+            hdrLineVal = hdrLineVal + 1;
 
-          if (hasItem.length == 0) {
-            // add header
+
+
             let hdr: SOHEADER = new SOHEADER();
-
             // "DiServerToken":"66F7E7A4-D2AE-4E37-91E8-8BE390F2D32F",
             // "SONumber":165,
             // "CompanyDBId":"BUILD128SRC12X",
@@ -327,23 +359,38 @@ export class OutOrderComponent implements OnInit {
             hdr.DiServerToken = token;
             hdr.SONumber = o.Order.DOCNUM;
             hdr.CompanyDBId = comDbId;
-            hdr.Line = o.Item.LINENUM;
-            hdr.ShipQty = lineDeleiveryCollection.map(i => i.Meterial.MeterialPickQty).reduce((sum, c) => sum + c);
-            hdr.ShipQty = hdr.ShipQty.toString();
+            hdr.LineNo = o.Item.LINENUM;
+            //hdr.tShipQty = lineDeleiveryCollection.map(i => i.Meterial.MeterialPickQty).reduce((sum, c) => sum + c);
+            //hdr.ShipQty = 
+            let metQty = lineDeleiveryCollection.map(i => i.Meterial.MeterialPickQty).reduce((sum, c) => sum + c);
+            hdr.ShipQty = metQty.toString();
             hdr.DocNum = o.Order.DOCNUM;
             hdr.OpenQty = o.Item.OPENQTY;
             hdr.WhsCode = o.Item.WHSCODE;
             hdr.Tracking = o.Item.TRACKING;
             hdr.ItemCode = o.Item.ITEMCODE;
-            hdr.UOM = -1;// o.Item.UOM;
-            hdr.LineNo = hdr.Line;
+            hdr.UOM = -1;
+            hdr.UOMName = o.Item.UOM;
+
+            hdr.Line = hdrLineVal;
+
 
             arrSOHEADER.push(hdr);
           }
 
-          let hasDtl = arrSODETAIL.filter(dtl => dtl.Bin === o.Meterial.BINNO && o.LotNumber === o.Meterial.LOTNO);
-          if (hasDtl.length == 0) {
-            //  
+          // check weather item existe or not 
+          let hasDetail = false;
+          for (let index = 0; index < arrSODETAIL.length; index++) {
+            const element = arrSODETAIL[index];
+            if (element.LotNumber === o.Meterial.LOTNO && element.Bin === o.Meterial.BINNO) {
+              hasDetail = true;
+              break;
+            }
+          }
+
+
+          if (hasDetail == false) {
+            // Add Detail here 
             let dtl: SODETAIL = new SODETAIL();
 
             // "Bin":"01-SYSTEM-BIN-LOCATION",
@@ -358,17 +405,19 @@ export class OutOrderComponent implements OnInit {
             dtl.LotNumber = o.Meterial.LOTNO;
             dtl.LotQty = o.Meterial.MeterialPickQty;
             dtl.SysSerial = o.Meterial.SYSNUMBER;
-            dtl.parentLine = index;
+            dtl.parentLine = hdrLineVal;
             dtl.GUID = guid;
             dtl.UsernameForLic = uid;
 
             arrSODETAIL.push(dtl);
+
+
           }
+
+          limit = limit + lineDeleiveryCollection.length;
+
+
         }
-
-
-        // get sum of all coll and loop 
-
       }
       console.log("Dtl", arrSODETAIL);
       console.log("hdr", arrSOHEADER);
