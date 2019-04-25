@@ -524,8 +524,8 @@ export class OutProdissueComponent implements OnInit {
         }
       }
     }
-    
-    
+
+
   }
 
   private manageExistingItem() {
@@ -534,13 +534,15 @@ export class OutProdissueComponent implements OnInit {
       const sd = this.lookupData[j];
 
       // Remove old selected metarial
-      if (this.OrderType === 'S') {
 
-        if (this.outbound) {
 
-          let tempCollection = this.outbound.TempMeterials;
-          let currentOrder = this.outbound.OrderData;
+      if (this.outbound) {
 
+        let tempCollection = this.outbound.TempMeterials;
+        let currentOrder = this.outbound.OrderData;
+
+        // Serial
+        if (this.OrderType === 'S') {
           for (let index = 0; index < tempCollection.length; index++) {
             const element = tempCollection[index];
 
@@ -549,20 +551,75 @@ export class OutProdissueComponent implements OnInit {
               && element.Meterial.BINNO === sd.BINNO &&
               element.Meterial.LOTNO === sd.LOTNO &&
               element.Meterial.ITEMCODE === sd.ITEMCODE) {
-              if (tempLookup.length - 1 > j) {
+              if (tempLookup.length  > j) {
                 tempLookup.splice(j, 1);
                 break;
               }
             }
 
-
-
           }
         }
+        else {
+
+          // Prepare collection of bin
+          let totalBinPickQtyCollection: any[] = this.getBinAndTotalMeterial(tempCollection);
+          for (let i = 0; i < totalBinPickQtyCollection.length; i++) {
+            const element = totalBinPickQtyCollection[i];
+
+            if (element.BINNO === sd.BINNO &&
+              element.LOTNO === sd.LOTNO &&
+              element.ITEMCODE === sd.ITEMCODE &&
+              element.TotalAllocatedMetQty >= sd.TOTALQTY) {
+              if (tempLookup.length  > j) {
+                tempLookup.splice(j, 1);
+                break;
+              }
+            }
+          }
+        }
+
       }
     }
 
     this.lookupData == tempLookup;
+  }
+
+  private getBinAndTotalMeterial(tempCollection: any[]): any[] {
+    let binAndQtyCollection: any = {};
+    let binAndQtyCollectionArray: any[] = [];
+    let ProcessedCount: number = 0;
+
+
+    for (let index = 0; index < tempCollection.length; index++) {
+      const element = tempCollection[index];
+
+      let tCollection: any = tempCollection.filter(t =>
+        element.Meterial.BINNO === t.Meterial.BINNO &&
+        element.Meterial.LOTNO === t.Meterial.LOTNO &&
+        element.Meterial.ITEMCODE === t.Meterial.ITEMCODE);
+
+      ProcessedCount = ProcessedCount + tCollection.length;
+
+      if (ProcessedCount <= tempCollection.length) {
+
+        let existCol = binAndQtyCollectionArray.filter(t =>
+          element.Meterial.BINNO === t.Meterial.BINNO &&
+          element.Meterial.LOTNO === t.Meterial.LOTNO &&
+          element.Meterial.ITEMCODE === t.Meterial.ITEMCODE);
+
+        if (existCol.length == 0) {
+          binAndQtyCollection.BINNO = element.Meterial.BINNO;
+          binAndQtyCollection.LOTNO = element.Meterial.LOTNO;
+          binAndQtyCollection.ITEMCODE = element.Meterial.ITEMCODE;
+          binAndQtyCollection.TotalAllocatedMetQty = tCollection.map(i => i.Meterial.MeterialPickQty).reduce((sum, c) => sum + c);
+
+
+          binAndQtyCollectionArray.push(binAndQtyCollection);
+        }
+      }
+
+    }
+    return binAndQtyCollectionArray;
   }
 
 
