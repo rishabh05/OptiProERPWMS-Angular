@@ -1241,6 +1241,7 @@ export class InboundGRPOComponent implements OnInit {
                 else {
                   this.qty = data[i].Value;
                 }
+                this.addQuantity();
               }
             }
           }
@@ -1257,7 +1258,7 @@ export class InboundGRPOComponent implements OnInit {
             //oAddserial.setValue("");
             this.QuantityField.nativeElement.disabled = false;
           }
-          this.addQuantity();
+          
         }
       },
       error => {

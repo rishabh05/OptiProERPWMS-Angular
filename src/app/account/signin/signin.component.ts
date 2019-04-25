@@ -70,7 +70,7 @@ export class SigninComponent implements OnInit {
       this.password = '';
       this.isRemember = false;
     }
-
+    alert('ng on init');
     // Apply classes on Body
     const element = document.getElementsByTagName("body")[0];
     element.className = "";
@@ -85,15 +85,19 @@ export class SigninComponent implements OnInit {
   }
 
   getPSURL() {
+    alert('getps url');
     this.signinService.getPSURL().subscribe(
       data => {
+        alert('ps url'+data);
         localStorage.setItem("PSURLFORADMIN", data);
       },
       error => {
+        alert('ps url'+error);
         this.toastr.error('', this.translate.instant("PsurlFailed"), 
         this.commonService.toast_config.iconClasses.error);
       }
     );
+    alert(' end getps url');
   }
 
   /**
@@ -129,11 +133,13 @@ export class SigninComponent implements OnInit {
   private validateUserLogin(){
     this.signinService.ValidateUserLogin(this.userName, this.password).subscribe(
       data => {
-        
+        alert("data:"+JSON.stringify(data));
         this.userDetails = data.Table;
         this.handleValidationUserSuccessResponse();
       },
       error => {
+        
+        alert("error:"+JSON.stringify(error));
         this.toastr.error('', this.translate.instant("InvalidUnPwdErrMsg"), 
         this.commonService.toast_config.iconClasses.error);
         this.showLoader = false;
