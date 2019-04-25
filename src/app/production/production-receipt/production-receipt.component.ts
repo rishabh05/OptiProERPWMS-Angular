@@ -41,7 +41,13 @@ export class ProductionReceiptComponent implements OnInit {
   rejectQty: string = "";
   postedFGQTY: string = "";
   passedQty: string = "";
+  printLbl: string = "";
+  recRejectQty: string = "";
   acctDefectQty: string = "";
+  orignalActualQty: string = "";
+  refDocEntry: string = "";
+  expDate:string = "";
+
   binList: any[];
   binNo: string = "";
   whsCode: string = "";
@@ -103,6 +109,7 @@ export class ProductionReceiptComponent implements OnInit {
 
 
   getProductionDetail(){
+    
     if(this.orderNumber == ""){
       this.toastr.error('', this.translate.instant("OrderNoBlank"));
       return;
@@ -115,15 +122,9 @@ export class ProductionReceiptComponent implements OnInit {
             this.translate.instant("CommonSessionExpireMsg"));
           return;
         }
-        if (data.Table != undefined && data.Table != null && data.Table!="" ) {
+        if (data.Table != undefined && data.Table != null && data.Table!="" && data.Table.length()>0) {
           this.showLookupLoader = false;
-          this.itemCode = data.Table[0].ItemCode;
-          this.itemName = data.Table[0].ItemName;
-          this.orderNumber = data.Table[0].OrderNo;
-          this.itemCode = data.Table[0].ItemCode;
-          this.itemCode = data.Table[0].ItemCode;
-          this.itemCode = data.Table[0].ItemCode;
-          this.itemCode = data.Table[0].ItemCode;
+           this.setFormData(data.Table[0])
           return;
         } else{ 
           this.toastr.error('', this.translate.instant("OrderNotExistMessge"));
@@ -155,6 +156,30 @@ export class ProductionReceiptComponent implements OnInit {
       this.toastr.error('', error);
     },);
     
+  }
+  setFormData(response:any){
+    this.itemCode = response.ItemCode;
+    this.itemName = response.ItemName;
+    this.acctDefectQty = response.ACCTDEFECTQTY;
+    this.orignalActualQty = response.ORIGINALACTUALQUANTITY;
+    this.orderNumber = response.OrderNo;
+    this.orderQty = response.OrderQty;
+    this.passedQty = response.PASSEDQTY;
+    this.postedFGQTY = response.POSTEDFGQTY;
+    this.printLbl = response.PRINTLBL;
+    this.recRejectQty = response.RecRjctedQty;
+    this.refDocEntry = response.RefDocEntry; 
+    this.rejectQty = response.RejectQTY;
+    this.tracking = response.TRACKING;
+    this.whsCode = response.WhsCode;
+    if(this.tracking == "S")
+    {
+
+    }else if(this.tracking == "B"){
+
+    }else if(this.tracking == "N"){
+
+    }
   }
   ngOnDestroy() {
   if (this.orderNoListSubs != undefined)
