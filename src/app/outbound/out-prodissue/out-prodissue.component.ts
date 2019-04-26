@@ -102,9 +102,6 @@ export class OutProdissueComponent implements OnInit {
     }
   }
 
-
-
-
   manageUOM() {
     // this._pickedMeterialQty=this.selectedUOM.AltQty*this._pickedMeterialQty;
   }
@@ -333,7 +330,6 @@ export class OutProdissueComponent implements OnInit {
     }
   }
 
-
   manageMeterial() {
 
     let requiredMeterialQty: number = this._requiredMeterialQty;
@@ -551,7 +547,7 @@ export class OutProdissueComponent implements OnInit {
               && element.Meterial.BINNO === sd.BINNO &&
               element.Meterial.LOTNO === sd.LOTNO &&
               element.Meterial.ITEMCODE === sd.ITEMCODE) {
-              if (tempLookup.length  > j) {
+              if (tempLookup.length > j) {
                 tempLookup.splice(j, 1);
                 break;
               }
@@ -568,11 +564,19 @@ export class OutProdissueComponent implements OnInit {
 
             if (element.BINNO === sd.BINNO &&
               element.LOTNO === sd.LOTNO &&
-              element.ITEMCODE === sd.ITEMCODE &&
-              element.TotalAllocatedMetQty >= sd.TOTALQTY) {
-              if (tempLookup.length  > j) {
-                tempLookup.splice(j, 1);
-                break;
+              element.ITEMCODE === sd.ITEMCODE
+            ) {
+
+              sd.TOTALQTY = sd.TOTALQTY - element.TotalAllocatedMetQty;
+
+              if (element.TotalAllocatedMetQty >= sd.TOTALQTY) {
+                if (tempLookup.length > j) {
+                  tempLookup.splice(j, 1);
+                  break;
+                }
+                else{
+                  tempLookup[j].TOTALQTY=sd.TOTALQTY;
+                }
               }
             }
           }
@@ -603,9 +607,9 @@ export class OutProdissueComponent implements OnInit {
       if (ProcessedCount <= tempCollection.length) {
 
         let existCol = binAndQtyCollectionArray.filter(t =>
-          element.Meterial.BINNO === t.Meterial.BINNO &&
-          element.Meterial.LOTNO === t.Meterial.LOTNO &&
-          element.Meterial.ITEMCODE === t.Meterial.ITEMCODE);
+          element.Meterial.BINNO === t.BINNO &&
+          element.Meterial.LOTNO === t.LOTNO &&
+          element.Meterial.ITEMCODE === t.ITEMCODE);
 
         if (existCol.length == 0) {
           binAndQtyCollection.BINNO = element.Meterial.BINNO;

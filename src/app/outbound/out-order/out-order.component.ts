@@ -57,6 +57,12 @@ export class OutOrderComponent implements OnInit {
 
   }
 
+
+  onOrderNoBlur() {
+    if (this.orderNumber)
+      this.openSOOrderList(this.orderNumber);
+  }
+
   public openOrderLookup() {
     if (this.selectedCustomer != null && this.selectedCustomer != undefined
       && this.selectedCustomer.CustomerCode != '' && this.selectedCustomer.CustomerCode != null) {
@@ -110,13 +116,33 @@ export class OutOrderComponent implements OnInit {
     }
 
   }
-
-  public openSOOrderList() {
-    if (this.outbound.OrderData != null && this.outbound != undefined
-      && this.outbound.OrderData != '' && this.outbound.OrderData != null) {
-
+  public openSOOrderList(orderNumber: any = null) {
+    if ((this.outbound.OrderData && this.outbound.OrderData != '' && this.outbound.OrderData != null) || orderNumber) {
       let tempOrderData: any = this.outbound.OrderData;
-      this.outbound.OrderData.DOCNUM = tempOrderData.DOCNUM = this.orderNumber;
+      if (orderNumber) {
+        //         CARDCODE: "SP Contact"
+        // CARDNAME: "Test SP"
+        // CUSTREFNO: ""
+        // DOCDUEDATE: "04/24/2019"
+        // DOCNUM: 203
+        // SHIPPINGTYPE: ""
+        // SHIPTOCODE: ""
+        tempOrderData = {
+          CARDCODE: this.outbound.CustomerData.CustomerCode,
+          CARDNAME: this.outbound.CustomerData.customerName,
+          CUSTREFNO: "",
+          DOCDUEDATE: "04/24/2019",
+          DOCNUM: orderNumber.toString(),
+          SHIPPINGTYPE: "",
+          SHIPTOCODE: ""
+        };
+        //this.outbound.OrderData = tempOrderData;
+      }
+      else {
+        this.outbound.OrderData.DOCNUM = tempOrderData.DOCNUM = this.orderNumber;
+      }
+
+
       //lsOutbound
       let whseId = localStorage.getItem("whseId");
       this.showLookup = false;
@@ -128,6 +154,9 @@ export class OutOrderComponent implements OnInit {
               this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
               return;
             }
+
+          // When order num from text box.
+          this.outbound.OrderData = tempOrderData;
           this.soItemsDetail = resp.RDR1;
 
           if (this.soItemsDetail.length === 0) {
@@ -191,43 +220,45 @@ export class OutOrderComponent implements OnInit {
   }
 
   prepareDeleiveryTempCollection() {
-    let tempMeterialCollection: any[] = this.outbound.TempMeterials;
+    if (this.outbound) {
+      let tempMeterialCollection: any[] = this.outbound.TempMeterials;
 
-    for (let index = 0; index < this.outbound.DeleiveryCollection.length; index++) {
+      for (let index = 0; index < this.outbound.DeleiveryCollection.length; index++) {
 
-      const d = this.outbound.DeleiveryCollection[index];
+        const d = this.outbound.DeleiveryCollection[index];
 
-      for (let j = 0; j < tempMeterialCollection.length; j++) {
+        for (let j = 0; j < tempMeterialCollection.length; j++) {
 
-        const element = tempMeterialCollection[j];
+          const element = tempMeterialCollection[j];
 
-        if (d.Item.DOCENTRY == element.Item.DOCENTRY && d.Order.DOCNUM == element.Order.DOCNUM) {
+          if (d.Item.DOCENTRY == element.Item.DOCENTRY && d.Order.DOCNUM == element.Order.DOCNUM) {
 
-          tempMeterialCollection.slice(index, 1);
+            tempMeterialCollection.slice(index, 1);
+          }
         }
       }
-    }
 
 
-    if (tempMeterialCollection !== undefined &&
-      tempMeterialCollection !== null && tempMeterialCollection.length > 0) {
-      for (let index = 0; index < tempMeterialCollection.length; index++) {
-        const tm = tempMeterialCollection[index];
+      if (tempMeterialCollection !== undefined &&
+        tempMeterialCollection !== null && tempMeterialCollection.length > 0) {
+        for (let index = 0; index < tempMeterialCollection.length; index++) {
+          const tm = tempMeterialCollection[index];
 
-        let hasitem = this.outbound.DeleiveryCollection.filter(d =>
-          d.Item.DOCENTRY === tm.Item.DOCENTRY &&
-          d.Item.TRACKING === tm.Item.TRACKING &&
-          d.Order.DOCNUM === tm.Order.DOCNUM &&
-          d.Meterial.LOTNO === tm.Meterial.LOTNO &&
-          d.Meterial.BINNO === tm.Meterial.BINNO
-        );
+          let hasitem = this.outbound.DeleiveryCollection.filter(d =>
+            d.Item.DOCENTRY === tm.Item.DOCENTRY &&
+            d.Item.TRACKING === tm.Item.TRACKING &&
+            d.Order.DOCNUM === tm.Order.DOCNUM &&
+            d.Meterial.LOTNO === tm.Meterial.LOTNO &&
+            d.Meterial.BINNO === tm.Meterial.BINNO
+          );
 
-        if (hasitem.length == 0) {
-          this.outbound.DeleiveryCollection.push(tm)
+          if (hasitem.length == 0) {
+            this.outbound.DeleiveryCollection.push(tm)
+          }
+
         }
 
       }
-
     }
   }
 

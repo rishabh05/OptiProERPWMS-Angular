@@ -12,9 +12,9 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Customer'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input [disabled]='orderCollection!=undefined && orderCollection!=null && orderCollection.length>0'
+                                <input (blur)="onCustomerCodeBlur()" [disabled]='orderCollection!=undefined && orderCollection!=null && orderCollection.length>0'
                                     type="text" class="form-control form-control-sm" name='customerCode' [(ngModel)]="customerCode"
-                                    placeholder="{{'Customer'|translate}}">
+                                    placeholder="{{'Customer'|translate}}" >
                                 <div class="input-group-append">
                                     <button [disabled]='orderCollection!=undefined && orderCollection!=null && orderCollection.length>0'
                                         class="k-button k-primary btn" (click)="openCustomerLookup()" type="button">

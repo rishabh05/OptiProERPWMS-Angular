@@ -106,6 +106,29 @@ export class OutCutomerComponent implements OnInit {
     return items;
   }
 
+  onCustomerCodeBlur() {
+    
+
+    this.outboundservice.getCustomer(this.customerCode).subscribe(
+      resp => {
+        if (resp.length == 0) {
+          this.customerCode = null
+          this.customerName = ''
+        }
+        else {
+          let outbound: OutboundData = new OutboundData();
+          this.customerCode = resp[0].CUSTCODE;
+          this.customerName = resp[0].CUSTNAME;
+
+          outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
+          // lsOutbound
+          localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
+          CurrentOutBoundData.CustomerData = outbound.CustomerData;
+        }
+      }
+    );
+  }
+
   getLookupValue(lookupValue: any) {
     this.selectedCustomerElement = lookupValue;
     let outbound: OutboundData = new OutboundData();
@@ -191,7 +214,7 @@ export class OutCutomerComponent implements OnInit {
 
 
 
-   prepareDeleiveryCollection() {
+  prepareDeleiveryCollection() {
 
     if (this.outbound != null && this.outbound != undefined
       && this.outbound.DeleiveryCollection != null && this.outbound.DeleiveryCollection != undefined
@@ -300,13 +323,13 @@ export class OutCutomerComponent implements OnInit {
 
           // check weather item existe or not 
           let hasDetail = false;
-          for (let index = 0; index < arrSODETAIL.length; index++) {
-            const element = arrSODETAIL[index];
-            if (element.LotNumber === o.Meterial.LOTNO && element.Bin === o.Meterial.BINNO) {
-              hasDetail = true;
-              break;
-            }
-          }
+          // for (let index = 0; index < arrSODETAIL.length; index++) {
+          //   const element = arrSODETAIL[index];
+          //   if (element.LotNumber === o.Meterial.LOTNO && element.Bin === o.Meterial.BINNO) {
+          //     hasDetail = true;
+          //     break;
+          //   }
+          // }
 
 
           if (hasDetail == false) {
@@ -344,7 +367,7 @@ export class OutCutomerComponent implements OnInit {
       console.log("hdr", arrSOHEADER);
 
       // this.manageLineNo(arrSOHEADER, arrSODETAIL);
-     // arrSOHEADER=await this.manageShipQty(arrSOHEADER);
+      // arrSOHEADER=await this.manageShipQty(arrSOHEADER);
 
 
       if (arrSOHEADER.length > 0 && arrSODETAIL.length > 0) {
@@ -354,29 +377,29 @@ export class OutCutomerComponent implements OnInit {
         deliveryToken.UDF = [];
       }
 
-      this.showLookupLoader=true;
+      this.showLookupLoader = true;
       this.outboundservice.addDeleivery(deliveryToken).subscribe(
         data => {
           if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
-            this.showLookupLoader=false;
+            this.showLookupLoader = false;
             this.toastr.success('', this.translate.instant("DeleiverySuccess") + " : " + data[0].SuccessNo);
             this.clearOutbound();
           } else if (data[0].ErrorMsg == "7001") {
-            this.showLookupLoader=false;
+            this.showLookupLoader = false;
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
 
             return;
           }
           else {
-            this.showLookupLoader=false;
+            this.showLookupLoader = false;
             this.toastr.error('', data[0].ErrorMsg);
           }
 
 
         },
         error => {
-          this.showLookupLoader=false;
+          this.showLookupLoader = false;
           console.log(
             error);
         }
