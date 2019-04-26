@@ -70,7 +70,7 @@ export class SigninComponent implements OnInit {
       this.password = '';
       this.isRemember = false;
     }
-    alert('ng on init');
+    //alert('ng on init');
     // Apply classes on Body
     const element = document.getElementsByTagName("body")[0];
     element.className = "";
@@ -85,25 +85,28 @@ export class SigninComponent implements OnInit {
   }
 
   getPSURL() {
-    alert('getps url');
+    //alert('getps url');
+    //localStorage.setItem("PSURLFORADMIN", "http://139.144.10.220/OptiAdmin/");
+    //alert('getps url'+localStorage.getItem("PSURLFORADMIN"));
     this.signinService.getPSURL().subscribe(
       data => {
-        alert('ps url'+data);
-        localStorage.setItem("PSURLFORADMIN", data);
+       // alert('ps url'+data);
+        localStorage.setItem("PSURLFORADMIN",data);
       },
       error => {
-        alert('ps url'+error);
+        //alert('ps url'+error);
         this.toastr.error('', this.translate.instant("PsurlFailed"), 
         this.commonService.toast_config.iconClasses.error);
       }
     );
-    alert(' end getps url');
+    //alert(' end getps url');
   }
 
   /**
    * Function for login
    */
   public async login() {
+    
     // this.isCompleteLoginVisible = true;
     if (this.userName == "" || this.password == "") {
       this.toastr.error('', this.translate.instant("UnPwdBlankErrorMsg"), this.commonService.toast_config.iconClasses.error);
@@ -131,15 +134,16 @@ export class SigninComponent implements OnInit {
   }
 
   private validateUserLogin(){
+   // alert('ps url'+localStorage.getItem("PSURLFORADMIN"));
     this.signinService.ValidateUserLogin(this.userName, this.password).subscribe(
       data => {
-        alert("data:"+JSON.stringify(data));
+      //  alert("data:"+JSON.stringify(data));
         this.userDetails = data.Table;
         this.handleValidationUserSuccessResponse();
       },
       error => {
         
-        alert("error:"+JSON.stringify(error));
+     //   alert("error:"+JSON.stringify(error));
         this.toastr.error('', this.translate.instant("InvalidUnPwdErrMsg"), 
         this.commonService.toast_config.iconClasses.error);
         this.showLoader = false;
