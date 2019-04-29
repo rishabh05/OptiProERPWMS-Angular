@@ -168,13 +168,14 @@ export class OutOrderComponent implements OnInit {
           if (resp != null && resp != undefined)
             if (resp.ErrorMsg == "7001") {
               this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
+              this.showLookupLoader=false;
               return;
             }
 
           // When order num from text box.
           this.outbound.OrderData = tempOrderData;
           this.soItemsDetail = resp.RDR1;
-
+          this.showLookupLoader=false;
           if (this.soItemsDetail.length === 0) {
             this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
             this.showLookupLoader = false;
@@ -288,13 +289,13 @@ export class OutOrderComponent implements OnInit {
 
   public calculatePickQty() {
 
-    if (this.soItemsDetail != undefined && this.soItemsDetail !== null) {
+    if (this.soItemsDetail) {
 
       for (let i = 0; i < this.soItemsDetail.length; i++) {
         const soelement = this.soItemsDetail[i];
         let totalPickQty: number = 0;
 
-        if (this.outbound !== null && this.outbound != undefined && this.outbound.SelectedMeterials != null && this.outbound.SelectedMeterials != undefined && this.outbound.SelectedMeterials.length > 0) {
+        if (this.outbound  && this.outbound.TempMeterials && this.outbound.TempMeterials.length > 0) {
 
           for (let j = 0; j < this.outbound.TempMeterials.length; j++) {
 
@@ -318,6 +319,194 @@ export class OutOrderComponent implements OnInit {
 
   }
 
+  // prepareDeleiveryCollectionAndDeliver(orderId: any) {
+
+  //   if (this.outbound != null && this.outbound != undefined
+  //     && this.outbound.DeleiveryCollection != null && this.outbound.DeleiveryCollection != undefined
+  //     && this.outbound.DeleiveryCollection.length > 0
+  //   ) {
+  //     this.showLookupLoader=true;
+  //     if (orderId !== undefined && orderId !== null) {
+  //       this.outbound.DeleiveryCollection = this.outbound.DeleiveryCollection.filter(d => d.Order.DOCNUM === orderId);
+  //     }
+
+  //     let arrSOHEADER: SOHEADER[] = [];
+  //     let arrSODETAIL: SODETAIL[] = [];
+  //     let deliveryToken: DeliveryToken = new DeliveryToken();
+
+  //     // Hdr
+  //     let comDbId = localStorage.getItem('CompID');
+  //     let token = localStorage.getItem('Token');
+  //     let guid: string = localStorage.getItem('GUID');
+  //     let uid: string = localStorage.getItem('UserId');
+
+  //     let limit = 0;
+  //     let hdrLineVal = 0;
+  //     // Loop through delivery collection 
+  //     for (let index = 0; index < this.outbound.DeleiveryCollection.length; index++) {
+
+  //       // // break when item processed.
+  //       // if (limit >= this.outbound.DeleiveryCollection.length) {
+  //       //   break;
+  //       // }
+
+  //       //get first item from collection        
+  //       const element = this.outbound.DeleiveryCollection[index];
+
+
+  //       // let coll=Get all Item for Item.Lineno===i
+  //       let lineDeleiveryCollection = this.outbound.DeleiveryCollection.filter(d =>
+  //         //d.Item.LINENUM === element.Item.LINENUM
+  //         element.Order.DOCNUM === d.Order.DOCNUM &&
+  //         element.Item.DOCENTRY === d.Item.DOCENTRY &&
+  //         element.Item.TRACKING === d.Item.TRACKING
+  //       );
+
+  //       // Process Order Item and Tracking collection
+  //       for (let hIdx = 0; hIdx < lineDeleiveryCollection.length; hIdx++) {
+
+  //         const o = lineDeleiveryCollection[hIdx];
+
+
+  //         // check hdr exists
+  //         // let existHdr = arrSOHEADER.filter(h =>
+  //         //   h.SONumber === o.DocNum
+  //         //   && h.ItemCode === o.ItemCode
+  //         //   && h.Tracking === o.Tracking);
+
+  //         let existHdr = false;
+  //         for (let index = 0; index < arrSOHEADER.length; index++) {
+  //           const h = arrSOHEADER[index];
+  //           if (h.SONumber === o.Order.DOCNUM
+  //             && h.ItemCode === o.Item.ITEMCODE
+  //             && h.Tracking === o.Item.TRACKING) {
+  //             existHdr = true;
+  //             break;
+  //           }
+  //         }
+
+  //         if (existHdr == false) {
+  //           // Add Header here and then add 
+  //           hdrLineVal = hdrLineVal + 1;
+
+
+
+  //           let hdr: SOHEADER = new SOHEADER();
+  //           // "DiServerToken":"66F7E7A4-D2AE-4E37-91E8-8BE390F2D32F",
+  //           // "SONumber":165,
+  //           // "CompanyDBId":"BUILD128SRC12X",
+  //           // "LineNo":0,
+  //           // "ShipQty":"2",
+  //           // "DocNum":165,
+  //           // "OpenQty":" 12.000",
+  //           // "WhsCode":"01",
+  //           // "Tracking":"S",
+  //           // "ItemCode":"Serial",
+  //           // "UOM":-1,
+  //           // "Line":0
+  //           hdr.DiServerToken = token;
+  //           hdr.SONumber = o.Order.DOCNUM;
+  //           hdr.CompanyDBId = comDbId;
+  //           hdr.LineNo = o.Item.LINENUM;
+  //           //hdr.tShipQty = lineDeleiveryCollection.map(i => i.Meterial.MeterialPickQty).reduce((sum, c) => sum + c);
+  //           //hdr.ShipQty = 
+  //           let metQty = lineDeleiveryCollection.map(i => i.Meterial.MeterialPickQty).reduce((sum, c) => sum + c);
+  //           hdr.ShipQty = metQty.toString();
+  //           hdr.DocNum = o.Order.DOCNUM;
+  //           hdr.OpenQty = o.Item.OPENQTY;
+  //           hdr.WhsCode = o.Item.WHSCODE;
+  //           hdr.Tracking = o.Item.TRACKING;
+  //           hdr.ItemCode = o.Item.ITEMCODE;
+  //           hdr.UOM = -1;
+  //           hdr.UOMName = o.Item.UOM;
+
+  //           hdr.Line = hdrLineVal;
+
+
+  //           arrSOHEADER.push(hdr);
+  //         }
+
+  //         // check weather item existe or not 
+  //         let hasDetail = false;
+  //         for (let index = 0; index < arrSODETAIL.length; index++) {
+  //           const element = arrSODETAIL[index];
+  //           if (element.LotNumber === o.Meterial.LOTNO && element.Bin === o.Meterial.BINNO) {
+  //             hasDetail = true;
+  //             break;
+  //           }
+  //         }
+
+
+  //         if (hasDetail == false) {
+  //           // Add Detail here 
+  //           let dtl: SODETAIL = new SODETAIL();
+
+  //           // "Bin":"01-SYSTEM-BIN-LOCATION",
+  //           // "LotNumber":"08JANS000011",
+  //           // "LotQty":"1",
+  //           // "SysSerial":231,
+  //           // "parentLine":0,
+  //           // "GUID":"6d92d887-23bb-4390-85df-75e4caa7e328",
+  //           // "UsernameForLic":"Rishabh"
+
+  //           dtl.Bin = o.Meterial.BINNO;
+  //           dtl.LotNumber = o.Meterial.LOTNO;
+  //           dtl.LotQty = o.Meterial.MeterialPickQty;
+  //           dtl.SysSerial = o.Meterial.SYSNUMBER;
+  //           dtl.parentLine = hdrLineVal;
+  //           dtl.GUID = guid;
+  //           dtl.UsernameForLic = uid;
+
+  //           arrSODETAIL.push(dtl);
+
+
+  //         }
+
+  //         limit = limit + lineDeleiveryCollection.length;
+
+
+  //       }
+  //     }
+  //     console.log("Dtl", arrSODETAIL);
+  //     console.log("hdr", arrSOHEADER);
+  //     this.manageLineNo(arrSOHEADER, arrSODETAIL);
+
+  //     if (arrSOHEADER.length > 0 && arrSODETAIL.length > 0) {
+
+  //       deliveryToken.SOHEADER = arrSOHEADER;
+  //       deliveryToken.SODETAIL = arrSODETAIL;
+  //       deliveryToken.UDF = [];
+  //     }
+
+  //     this.outboundservice.addDeleivery(deliveryToken).subscribe(
+  //       data => {
+  //         if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
+  //           this.toastr.success('', this.translate.instant("DeleiverySuccess") + " : " + data[0].SuccessNo);            
+  //           this.clearOutbound();
+  //           this.showLookupLoader=false;
+  //         } else if (data[0].ErrorMsg == "7001") {
+  //           this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+  //             this.translate.instant("CommonSessionExpireMsg"));
+  //             this.showLookupLoader=false;
+  //           return;
+  //         }
+  //         else {
+  //           this.toastr.error('', data[0].ErrorMsg);
+  //           this.showLookupLoader=false;
+  //         }
+
+
+  //       },
+  //       error => {
+  //         console.log(error);
+  //       }
+
+  //     )
+  //   }
+
+  // }
+
+
   prepareDeleiveryCollectionAndDeliver(orderId: any) {
 
     if (this.outbound != null && this.outbound != undefined
@@ -328,7 +517,7 @@ export class OutOrderComponent implements OnInit {
       if (orderId !== undefined && orderId !== null) {
         this.outbound.DeleiveryCollection = this.outbound.DeleiveryCollection.filter(d => d.Order.DOCNUM === orderId);
       }
-
+      //let tempDeleiveryCollection: any[] = this.outbound.DeleiveryCollection;
       let arrSOHEADER: SOHEADER[] = [];
       let arrSODETAIL: SODETAIL[] = [];
       let deliveryToken: DeliveryToken = new DeliveryToken();
@@ -338,9 +527,11 @@ export class OutOrderComponent implements OnInit {
       let token = localStorage.getItem('Token');
       let guid: string = localStorage.getItem('GUID');
       let uid: string = localStorage.getItem('UserId');
-
-      let limit = 0;
+      let hdrLine: number = 0;
+      let limit = -1;
       let hdrLineVal = 0;
+
+      this.showLookupLoader = true;
       // Loop through delivery collection 
       for (let index = 0; index < this.outbound.DeleiveryCollection.length; index++) {
 
@@ -409,8 +600,10 @@ export class OutOrderComponent implements OnInit {
             hdr.LineNo = o.Item.LINENUM;
             //hdr.tShipQty = lineDeleiveryCollection.map(i => i.Meterial.MeterialPickQty).reduce((sum, c) => sum + c);
             //hdr.ShipQty = 
+            //let metQty = 
             let metQty = lineDeleiveryCollection.map(i => i.Meterial.MeterialPickQty).reduce((sum, c) => sum + c);
             hdr.ShipQty = metQty.toString();
+            // hdr.ShipQty = hdr.ShipQty.toString();
             hdr.DocNum = o.Order.DOCNUM;
             hdr.OpenQty = o.Item.OPENQTY;
             hdr.WhsCode = o.Item.WHSCODE;
@@ -466,9 +659,13 @@ export class OutOrderComponent implements OnInit {
 
         }
       }
+
       console.log("Dtl", arrSODETAIL);
       console.log("hdr", arrSOHEADER);
-      this.manageLineNo(arrSOHEADER, arrSODETAIL);
+
+      // this.manageLineNo(arrSOHEADER, arrSODETAIL);
+      // arrSOHEADER=await this.manageShipQty(arrSOHEADER);
+
 
       if (arrSOHEADER.length > 0 && arrSODETAIL.length > 0) {
 
@@ -477,31 +674,44 @@ export class OutOrderComponent implements OnInit {
         deliveryToken.UDF = [];
       }
 
+      
       this.outboundservice.addDeleivery(deliveryToken).subscribe(
         data => {
           if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
+            this.showLookupLoader = false;
             this.toastr.success('', this.translate.instant("DeleiverySuccess") + " : " + data[0].SuccessNo);
             this.clearOutbound();
           } else if (data[0].ErrorMsg == "7001") {
+            this.showLookupLoader = false;
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
+
             return;
           }
           else {
+            this.showLookupLoader = false;
             this.toastr.error('', data[0].ErrorMsg);
           }
 
 
         },
         error => {
-          console.log(error);
+          this.showLookupLoader = false;
+          console.log(
+            error);
         }
 
-      )
+      );
+
+
+
+      console.log("shdr", arrSOHEADER);
+
+
     }
 
-  }
 
+  }
 
   clearOutbound() {
     // lsOutbound   
