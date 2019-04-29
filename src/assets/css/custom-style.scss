@@ -15,6 +15,7 @@ body.opti_account-module {
     float: left;
     padding: 50px;
     width: 100%;
+    min-height: 100vh;
     &:before {
         background-image: url('/assets/images/signup/nouse/shutter/background2.jpg');
         background-position: center center;
@@ -194,6 +195,7 @@ file-drop .drop-zone.over {
 .col-form-label{
     padding-top: calc(.24rem + 1px);
     padding-bottom: calc(.24rem + 1px);
+    line-height: 1;
 }
 body .k-dateinput-wrap .k-input{
     font-size: $font-size-small;
@@ -201,6 +203,7 @@ body .k-dateinput-wrap .k-input{
 }
 .input-group-sm>.form-control, .input-group-sm>.input-group-append>.btn, .input-group-sm>.input-group-append>.input-group-text, .input-group-sm>.input-group-prepend>.btn, .input-group-sm>.input-group-prepend>.input-group-text{
     font-size: $font-size-small;
+    height: 26px;
 }
 .form-group {
     margin-bottom: 10px;
@@ -209,6 +212,9 @@ kendo-numerictextbox.text-right{
     & input{
         text-align: right;
     }
+}
+.form-control-sm{
+    height:26px;
 }
 /////////////////////////////////////////////////////////////////////
 ///////////////////////////// Custom Button Style /////////////////////
@@ -291,7 +297,9 @@ body.modal-open app-root {
 // .k-grid.no-shadow{
 //     border-color: #bbb;
 // }
-
+dd {
+    margin-bottom: 0 !important;
+}
 /////////////////////////////////////////////////////////////////////
 ///////////////////////////// Page header custom Style /////////////////////
 ////////////////////////////////////////////////////////////////////

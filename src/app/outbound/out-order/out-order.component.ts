@@ -34,6 +34,7 @@ export class OutOrderComponent implements OnInit {
   noneTrackedItems: any;
   showLookupLoader: boolean = false;
   showConfirmDialog: boolean;
+  showDeleiveryAndAdd: boolean;
   constructor(private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) { }
 
 
@@ -50,11 +51,25 @@ export class OutOrderComponent implements OnInit {
       if (this.outbound.OrderData !== undefined && this.outbound.OrderData !== null && this.outbound.OrderData.DOCNUM !== undefined && this.outbound.OrderData.DOCNUM !== null) {
         this.orderNumber = this.outbound.OrderData.DOCNUM;
         this.openSOOrderList();
+        this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
       }
 
       this.calculatePickQty();
     }
 
+  }
+
+  showAddToMeterialAndDelevery() {
+    let dBit: boolean = false;
+
+    if (this.outbound && this.outbound.TempMeterials) {
+      let data = this.outbound.TempMeterials.filter(tm => tm.Order.DOCNUM === this.orderNumber);
+      dBit = data.length > 0
+    }
+    else {
+      dBit = false;
+    }
+    return dBit;
   }
 
 
@@ -99,6 +114,7 @@ export class OutOrderComponent implements OnInit {
     this.orderNumber = this.outbound.OrderData.DOCNUM;
     // lsOutbound
     localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+    this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
   }
 
 
@@ -141,7 +157,7 @@ export class OutOrderComponent implements OnInit {
       else {
         this.outbound.OrderData.DOCNUM = tempOrderData.DOCNUM = this.orderNumber;
       }
-
+      this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
 
       //lsOutbound
       let whseId = localStorage.getItem("whseId");

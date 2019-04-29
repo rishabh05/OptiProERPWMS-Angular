@@ -12,7 +12,7 @@ body {
     }
 
     .k-dateinput-wrap .k-input {
-        height: calc(1.8125rem + 2px);
+        height: 26px;
         padding: .25rem .5rem;
         font-size: $font-size-small;
         line-height: 1.5;
@@ -139,6 +139,9 @@ body {
     }
     .k-grid td {
         padding: 3px;
+        @media screen and (max-width: 991px){
+            padding: 0 3px !important;
+        }
     }
     // make header text bold
     .k-grid-header {
@@ -328,5 +331,13 @@ body .k-grid td{
         & > .k-icon{
             margin-left: 0;
         }
+    }
+}
+
+.k-datepicker .k-picker-wrap{
+    height: 26px;
+    & > .k-select{
+        height: 26px;
+        line-height: 1;
     }
 }
