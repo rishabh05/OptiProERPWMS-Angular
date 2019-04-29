@@ -127,7 +127,7 @@
                                 <input type="number" class="form-control form-control-sm" #Quantity name="qty" [(ngModel)]=qty placeholder="{{'Quantity'|translate}}">
                                 <div class="ml-1 d-flex">
                                     <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button" (click)="addQuantity(event)">
-                                        <i class="opti-icon-add1 4"></i>
+                                        <i class="opti-icon-add1 fs-24"></i>
                                     </button>
                                 </div>
                             </div>
@@ -140,7 +140,7 @@
 
 
             <!-- Kendo Table Grid Row start -->
-            <div class="row mt-2">
+            <div class="row">
                 <div class="col-md-12">
                     <kendo-grid *ngIf="!isNonTrack" class="no-shadow" [kendoGridBinding]="recvingQuantityBinArray" [resizable]="true" [sortable]="true"
                         [selectable]="true" #gridItem>
@@ -149,7 +149,7 @@
                         <kendo-grid-column media="(max-width: 767px)" title="List" class="opti_mobile-grid-td">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                 <dl class="opti_mobile_grid_dl">
-                                    <dt>{{mfrGridColumnText}}</dt>
+                                    <dt style="margin-top:4px;">{{mfrGridColumnText}}</dt>
                                     <dd>
                                         <input type="text" class="form-control form-control-sm" name="dataItem.VendorLot" [(ngModel)]=dataItem.VendorLot>
                                     </dd>
@@ -164,11 +164,14 @@
 
                                 <dl class="opti_mobile_grid_dl">
                                     <dt class="d-flex align-items-center">{{SRBatchColumnText}}
-                                        <button type="button" class="btn btn-danger k-button btn-sm btn-icon ml-auto" (click)="openConfirmForDelete(rowIndex, gridItem)">
+                                        <button type="button" class="btn btn-danger k-button btn-sm btn-icon ml-auto" style="margin-bottom: 2px;" (click)="openConfirmForDelete(rowIndex, gridItem)">
                                             <span class="k-icon k-i-delete" role="presentation"></span>
                                         </button>
                                     </dt>
-                                    <dd>{{dataItem.LotNumber}}</dd>
+                                    <dd>
+                                        <input type="text" class="form-control form-control-sm" name="dataItem.LotNumber" value={{dataItem.LotNumber}} [disabled]=isDisabledScanInput
+                                        id="display_name" #display_name (change)="updateLotNumber(display_name.value, idx)">
+                                    </dd>
 
                                     <dt>{{'Bin'|translate}}</dt>
                                     <dd>{{dataItem.Bin}}</dd>
