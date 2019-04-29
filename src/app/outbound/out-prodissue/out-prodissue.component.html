@@ -141,7 +141,7 @@
                                             class="btn btn-danger k-button btn-sm btn-icon ml-auto">
                                             <span class="k-icon k-i-delete" role="presentation"></span></button>
                                     </dt>
-                                    <dd>{{ dataItem.TOTALQTY|numberFormat }}</dd>
+                                    <dd>{{ dataItem.TOTALQTY | numberFormat }}</dd>
 
                                 </dl>
                             </ng-template>
@@ -152,12 +152,15 @@
                             title="{{SerialBatchHeaderTitle}}" [width]="30"></kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="BINNO" title="{{'BINNO'|translate}}"
                             [width]="30"></kendo-grid-column>
-                        <kendo-grid-column media="(min-width: 768px)" field="TOTALQTY" format="{0:n3}" headerClass="text-right"
-                            class=" text-right" title="{{'TOTALQTY'|translate}}" [width]="10"></kendo-grid-column>
+                        <kendo-grid-column media="(min-width: 768px)" field="TOTALQTY"  headerClass="text-right"
+                            class=" text-right" title="{{'TOTALQTY'|translate}}" [width]="10">
+
+                            <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.TOTALQTY | numberFormat}}</ng-template>
+                        </kendo-grid-column>
 
 
                         <kendo-grid-column media="(min-width: 768px)" *ngIf="OrderType!='S'" headerClass="text-right"
-                            class="text-right" format="{0:n3}" field="MeterialPickQty" width="50" editor="numeric"
+                            class="text-right" field="MeterialPickQty" width="50" editor="numeric"
                             title="{{'PickQty'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem="dataItem" class="text-right" let-idx="rowIndex">
 <!-- 
