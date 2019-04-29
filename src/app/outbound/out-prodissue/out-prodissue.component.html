@@ -57,7 +57,7 @@
                 </div>
             </div>
 
-            <div class="row mt-3">
+            <div class="row mt-2">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
                     <div class="form-group row">
                         <!-- <label for="inputPassword" class="col-sm-3 col-form-label"></label> -->
@@ -168,7 +168,7 @@
                                     (ngModelChange)="dataItem.MeterialPickQty=$event" name="inputField" type="number" /> -->
 
                                 <kendo-numerictextbox #txtMet name="data" (blur)="onIssueMeterialQtyChange(idx,txtMet,e)"
-                                    class="form-control form-control-sm text-right!important" [format]="'n3'" [(value)]="dataItem.MeterialPickQty"
+                                    class="form-control text-right form-control-sm text-right!important" [format]="'n3'" [(value)]="dataItem.MeterialPickQty"
                                     [step]="step"></kendo-numerictextbox>
                             </ng-template>
                         </kendo-grid-column>

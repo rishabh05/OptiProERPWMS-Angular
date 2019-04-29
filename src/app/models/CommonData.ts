@@ -7,6 +7,8 @@ export interface ColumnSetting {
     format?: string;
     type: 'text' | 'numeric' | 'boolean' | 'date';
     width?: string;
+    headerClass?: string;
+    class?: string;
   }
 
 // Example of Data as model, can be used for non updating data (exaple - names, task type and etc)
