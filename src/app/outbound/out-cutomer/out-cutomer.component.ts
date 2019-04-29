@@ -325,7 +325,7 @@ export class OutCutomerComponent implements OnInit {
           let hasDetail = false;
           for (let index = 0; index < arrSODETAIL.length; index++) {
             const element = arrSODETAIL[index];
-            if (element.LotNumber === o.Meterial.LOTNO && element.Bin === o.Meterial.BINNO) {
+            if (element.LotNumber === o.Meterial.LOTNO && element.Bin === o.Meterial.BINNO && element.parentLine===hdrLineVal) {
               hasDetail = true;
               break;
             }

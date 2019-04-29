@@ -280,10 +280,10 @@ export class OutOrderComponent implements OnInit {
   }
 
   public deleiver(orderId: any = null) {
-    this.showLookupLoader = true;
+    //this.showLookupLoader = true;
     this.addToDeleiver(false);
     this.prepareDeleiveryCollectionAndDeliver(orderId);
-    this.showLookupLoader = false;
+    //this.showLookupLoader = false;
   }
 
 
@@ -622,7 +622,7 @@ export class OutOrderComponent implements OnInit {
           let hasDetail = false;
           for (let index = 0; index < arrSODETAIL.length; index++) {
             const element = arrSODETAIL[index];
-            if (element.LotNumber === o.Meterial.LOTNO && element.Bin === o.Meterial.BINNO) {
+            if (element.LotNumber === o.Meterial.LOTNO && element.Bin === o.Meterial.BINNO && element.parentLine===hdrLineVal) {
               hasDetail = true;
               break;
             }
