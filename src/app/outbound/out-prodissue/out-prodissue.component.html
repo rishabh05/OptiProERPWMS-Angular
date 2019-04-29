@@ -38,7 +38,8 @@
                             [width]="160"></kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" headerClass="text-right" class=" text-right"
                             title="{{'OpenQty'|translate}}" [width]="160">
-                            <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.OPENQTY|numberFormat}}</ng-template></kendo-grid-column>
+                            <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.OPENQTY|numberFormat}}</ng-template>
+                        </kendo-grid-column>
 
                         <kendo-grid-column media="(min-width: 768px)" field="RPTQTY" headerClass="text-right" class="text-right"
                             [width]="160" title="{{'PickQty'|translate}}">
@@ -105,7 +106,7 @@
 
                 </div>
             </div>
-            
+
             <div class="row">
                 <div class="col-12">
 
@@ -129,8 +130,8 @@
                                             class="form-control form-control-sm text-right!important" [format]="'n3'"
                                             [(value)]="dataItem.MeterialPickQty" [step]="step"></kendo-numerictextbox> -->
 
-                                            <input [ngModel]="dataItem.MeterialPickQty | numberFormat" 
-                                            (ngModelChange)="dataItem.MeterialPickQty=$event" name="inputField" type="text" />
+                                        <input [ngModel]="dataItem.MeterialPickQty | numberFormat" (ngModelChange)="dataItem.MeterialPickQty=$event"
+                                            name="inputField" type="text" />
                                     </dd>
                                 </dl>
 
@@ -152,18 +153,17 @@
                             title="{{SerialBatchHeaderTitle}}" [width]="30"></kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="BINNO" title="{{'BINNO'|translate}}"
                             [width]="30"></kendo-grid-column>
-                        <kendo-grid-column media="(min-width: 768px)" field="TOTALQTY"  headerClass="text-right"
-                            class=" text-right" title="{{'TOTALQTY'|translate}}" [width]="10">
+                        <kendo-grid-column media="(min-width: 768px)" field="TOTALQTY" headerClass="text-right" class=" text-right"
+                            title="{{'TOTALQTY'|translate}}" [width]="10">
 
                             <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.TOTALQTY | numberFormat}}</ng-template>
                         </kendo-grid-column>
 
 
                         <kendo-grid-column media="(min-width: 768px)" *ngIf="OrderType!='S'" headerClass="text-right"
-                            class="text-right" field="MeterialPickQty" width="50" editor="numeric"
-                            title="{{'PickQty'|translate}}">
+                            class="text-right" field="MeterialPickQty" width="50" editor="numeric" title="{{'PickQty'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem="dataItem" class="text-right" let-idx="rowIndex">
-<!-- 
+                                <!-- 
                                     <input [ngModel]="dataItem.MeterialPickQty | numberFormat"  (blur)="onIssueMeterialQtyChange(idx,txtMet,e)"
                                     (ngModelChange)="dataItem.MeterialPickQty=$event" name="inputField" type="number" /> -->
 
@@ -192,8 +192,8 @@
                 <hr />
             </div>
             <div class="col-sm-12 col-12">
-                    <!-- *ngIf="selectedMeterials && selectedMeterials.length>0" -->
-                <button type="button"  (click)="addMetToCollection()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
+                <!-- *ngIf="selectedMeterials && selectedMeterials.length>0" -->
+                <button type="button" (click)="addMetToCollection()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-save" role="presentation"></span> {{'Save'|translate}}</button>
                 <!-- <div class="clearfix mt-1 d-block d-sm-none"></div> -->
                 <button type="button" (click)="back()" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
