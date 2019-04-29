@@ -131,8 +131,10 @@ export class BinTransferComponent implements OnInit {
   }
 
   OnItemCodeLookupClick() {
+    this.showLoader = true;
     this.inventoryTransferService.getItemCodeList().subscribe(
       data => {
+        this.showLoader = false;
         if (data != undefined && data.length > 0) {
           // console.log("ItemList - " + data.toString());
           if (data[0].ErrorMsg == "7001") {
@@ -157,8 +159,10 @@ export class BinTransferComponent implements OnInit {
     if (this.itemCode == "" || this.itemCode == undefined) {
       return;
     }
+    this.showLoader = true;
     this.inventoryTransferService.getItemInfo(this.itemCode).subscribe(
       data => {
+        this.showLoader = false;
         if (data != undefined && data.length > 0) {
           console.log("" + data);
           if (data[0].ErrorMsg == "7001") {
@@ -194,8 +198,10 @@ export class BinTransferComponent implements OnInit {
     if (this.lotValue == "" || this.lotValue == undefined) {
       return;
     }
+    this.showLoader = true;
     this.inventoryTransferService.getLotInfo(this.fromBin, this.itemCode, this.lotValue).subscribe(
       data => {
+        this.showLoader = false;
         if (data != null) {
           if (data.length == 0) {
             if (this.ItemTracking == "S") {
@@ -251,8 +257,10 @@ export class BinTransferComponent implements OnInit {
 
 
   ShowLOTList() {
+    this.showLoader = true;
     this.inventoryTransferService.getLotList(localStorage.getItem("whseId"), this.fromBin, this.itemCode, this.lotValue).subscribe(
       data => {
+        this.showLoader = false;
         if (data != undefined && data.length > 0) {
           console.log("ItemList - " + data);
           if (data[0].ErrorMsg == "7001") {
@@ -278,8 +286,10 @@ export class BinTransferComponent implements OnInit {
 
 
   ShowFromBins() {
+    this.showLoader = true;
     this.inventoryTransferService.getFromBins(this.ItemTracking, "", this.itemCode, this.lotValue).subscribe(
       data => {
+        this.showLoader = false;
         if (data != null) {
           if (data.length > 0) {
             this.showLookupLoader = false;
@@ -310,8 +320,10 @@ export class BinTransferComponent implements OnInit {
     if (this.fromBin == "" || this.fromBin == undefined) {
       return;
     }
+    this.showLoader = true;
     this.inventoryTransferService.isFromBinExists(this.ItemTracking, this.fromBin, this.itemCode, this.lotValue).subscribe(
       data => {
+        this.showLoader = false;
         if (data != null) {
           if (data.length > 0) {
             if (this.ItemTracking == "N") {
@@ -355,8 +367,10 @@ export class BinTransferComponent implements OnInit {
     if (this.toBin == "" || this.toBin == undefined) {
       return;
     }
+    this.showLoader = true;
     this.inventoryTransferService.isToBinExist(this.toBin, localStorage.getItem("towhseId")).subscribe(
       data => {
+        this.showLoader = false;
         if (data != null) {
           if (data.length > 0) {
             if (data[0].Result == "0") {
@@ -386,8 +400,10 @@ export class BinTransferComponent implements OnInit {
   }
 
   ShowToBins() {
+    this.showLoader = true;
     this.inventoryTransferService.getToBin(this.fromBin, localStorage.getItem("towhseId")).subscribe(
       data => {
+        this.showLoader = false;
         if (data != null) {
           if (data.length > 0) {
 
