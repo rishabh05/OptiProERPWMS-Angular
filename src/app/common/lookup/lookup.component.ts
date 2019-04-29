@@ -189,6 +189,8 @@ export class LookupComponent implements OnInit {
       },
       {
         field: 'TOTALQTY',
+        headerClass:'text-right',
+        class:'text-right',
         title: this.translate.instant("AvailableQty"),
         type: 'numeric',
         width: '100'
@@ -242,6 +244,8 @@ export class LookupComponent implements OnInit {
       },
       {
         field: 'TOTALQTY',
+        headerClass:'text-right',
+        class:'text-right',
         title: this.translate.instant("TOTALQTY"),
         type: 'text',
         width: '100'
@@ -273,19 +277,25 @@ export class LookupComponent implements OnInit {
         field: 'BINNO',
         title: this.translate.instant("BinNo"),
         type: 'text',
-        width: '100'
+        width: '100',
+        headerClass:'',
+        class:'',
       },
       {
         field: 'TOTALQTY',
+        headerClass:'text-right',
+        class:'text-right',
         title: this.translate.instant("TOTALQTY"),
         type: 'text',
-        width: '100'
+        width: '100',
       },
       {
         field: 'WHSCODE',
         title: this.translate.instant("WhseCode"),
         type: 'text',
-        width: '100'
+        width: '100',
+        headerClass:'',
+        class:'',
       }
     ];
     this.lookupTitle = this.translate.instant("BinNoList");
