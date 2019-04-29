@@ -189,7 +189,8 @@
                 <hr />
             </div>
             <div class="col-sm-12 col-12">
-                <button type="button" *ngIf="selectedMeterials && selectedMeterials.length>0" (click)="addMetToCollection()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
+                    <!-- *ngIf="selectedMeterials && selectedMeterials.length>0" -->
+                <button type="button"  (click)="addMetToCollection()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-save" role="presentation"></span> {{'Save'|translate}}</button>
                 <!-- <div class="clearfix mt-1 d-block d-sm-none"></div> -->
                 <button type="button" (click)="back()" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
