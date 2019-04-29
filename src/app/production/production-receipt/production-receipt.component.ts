@@ -62,38 +62,39 @@ export class ProductionReceiptComponent implements OnInit {
   OnOrderLookupClick(){
     this.showOrderList();
   }
+
   OnOrderValueChange(){
     if (this.orderNumber == "" || this.orderNumber == undefined) {
       return;
     }
     this.getProductionDetail();
   }
+
   /**
   * Method to get list of inquries from server.
   */
- public showOrderList() {
- 
-  this.orderNoListSubs = this.productionService.getOrderNumberList(this.orderNumber).subscribe(
-    data => {
-      if (data != undefined) { 
-      if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
-        this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
-          this.translate.instant("CommonSessionExpireMsg"));
-        return;
-      }
-      if (data.Table != undefined && data.Table != null && data.Table!="") {
-        this.showLookupLoader = false;
-         this.serviceData = data.Table;
-        this.lookupfor = "OrderList";
-        return;
-      }
-    } 
-    },
-    error => {
-      this.toastr.error('', error);
-    },
-  );
-}
+  public showOrderList() {
+    this.orderNoListSubs = this.productionService.getOrderNumberList(this.orderNumber).subscribe(
+      data => {
+        if (data != undefined) {
+          if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
+          if (data.Table != undefined && data.Table != null && data.Table != "") {
+            this.showLookupLoader = false;
+            this.serviceData = data.Table;
+            this.lookupfor = "OrderList";
+            return;
+          }
+        }
+      },
+      error => {
+        this.toastr.error('', error);
+      },
+    );
+  }
 
  /**
    * @param $event this will return the value on row click of lookup grid.
@@ -109,7 +110,6 @@ export class ProductionReceiptComponent implements OnInit {
 
 
   getProductionDetail(){
-    
     if(this.orderNumber == ""){
       this.toastr.error('', this.translate.instant("OrderNoBlank"));
       return;
@@ -174,13 +174,15 @@ export class ProductionReceiptComponent implements OnInit {
     this.whsCode = response.WhsCode;
     if(this.tracking == "S")
     {
-
+       //set serial form data and hide other fields
+       //serial qty, openqty and 
     }else if(this.tracking == "B"){
-
+      //set batch form data and hide other fields    
     }else if(this.tracking == "N"){
-
+      //set non form data and hide other fields    
     }
   }
+
   ngOnDestroy() {
   if (this.orderNoListSubs != undefined)
     this.orderNoListSubs.unsubscribe();

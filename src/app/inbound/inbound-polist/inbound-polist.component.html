@@ -104,12 +104,12 @@
                             <!-- grid for mobile end -->
 
                             <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE" title="{{'ItemCode'|translate}}"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" title="{{'OpenQuantity'|translate}}" class="text-right">
+                            <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" title="{{'OpenQuantity'|translate}}" headerClass="text-right" class="text-right">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     {{dataItem.OPENQTY | numberFormat}}
                                 </ng-template>
                             </kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="RPTQTY" title="{{'ReceiveQuantity'|translate}}" class="text-right">
+                            <kendo-grid-column media="(min-width: 768px)" field="RPTQTY" title="{{'ReceiveQuantity'|translate}}" headerClass="text-right" class="text-right">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     {{dataItem.RPTQTY |numberFormat}}
                                 </ng-template>

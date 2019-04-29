@@ -11,4 +11,8 @@
     background: url('/assets/images/signup/nouse/shutter/background-wms.jpg');
     background-size: cover;
     background-position: center;
+    @media screen and (max-width:767px) {
+        background: url('/assets/images/signup/nouse/shutter/background-wms-m.jpg');
+        background-position: center;
+    }
 }

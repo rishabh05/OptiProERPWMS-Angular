@@ -65,7 +65,7 @@
                             <kendo-grid-column media="(min-width: 768px)"  field="DOCNUM" title="Order No"></kendo-grid-column>
                             <kendo-grid-column media="(min-width: 768px)"  field="DOCNUM" [width]="80" title="{{'Delete'|translate}}">
                                 <ng-template kendoGridCellTemplate let-idx="rowIndex">
-                                    <button id="removeSelectedMeterial" (click)="removeOrder(idx,gridItem)" class="k-button-icon k-button">
+                                    <button id="removeSelectedMeterial" (click)="removeOrder(idx,gridItem)" class="btn btn-danger k-button btn-sm btn-icon">
                                         <span class="k-icon k-i-delete" role="presentation"></span></button>
                                 </ng-template>
                             </kendo-grid-column>
