@@ -62,21 +62,21 @@
                     <div class="form-group row" *ngIf="type==S">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'SerialQty'|translate}}</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control form-control-sm text-right" name='SerialQty'
+                            <input type="text" class="form-control form-control-sm text-right" [(ngModel)]=serialQty name='SerialQty'
                                 placeholder="{{'SerialQty'|translate}}">
                         </div>
                     </div>
                     <div class="form-group row" *ngIf="type==B">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'BatchQty'|translate}}</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control form-control-sm text-right" name='BatchQty'
-                                placeholder="{{'BatchQty'|translate}}">
+                            <input type="text" class="form-control form-control-sm text-right" name='BatchQty' [(ngModel)]=batchQty
+                                placeholder="{{'BatchQty'|translate}}"> 
                         </div>
                     </div>
                     <div class="form-group row" *ngIf="type==N">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Qty'|translate}}</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control form-control-sm text-right" name='Qty'
+                            <input type="text" class="form-control form-control-sm text-right" name='Qty'  [(ngModel)]=qty
                                 placeholder="{{'Qty'|translate}}">
                         </div>
                     </div>
@@ -88,13 +88,13 @@
                     <div class="form-group row" *ngIf="type==S">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Serial'|translate}}</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control form-control-sm" name='Serial' placeholder="{{'Serial'|translate}}">
+                            <input type="text" class="form-control form-control-sm" [(ngModel)]=serialNo name='Serial' placeholder="{{'Serial'|translate}}">
                         </div>
                     </div>
                     <div class="form-group row" *ngIf="type==B">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Batch'|translate}}</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control form-control-sm" name='Batch' placeholder="{{'Batch'|translate}}">
+                            <input type="text" class="form-control form-control-sm" name='Batch'  [(ngModel)]=batchNo  placeholder="{{'Batch'|translate}}">
                         </div>
                     </div>
                 </div>
@@ -104,7 +104,7 @@
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'ExpiryDate'|translate}}</label>
                         <div class="col-sm-9">
-                            <kendo-datepicker [format]="'MM/dd/yy'" [value]="value" name="expiryDate" [(ngModel)]=expiryDate
+                            <kendo-datepicker [format]="'MM/dd/yy'" [value]="value" name="expiryDate" [(ngModel)]=expDate
                             placeholder="MM/dd/yy"></kendo-datepicker>
                         </div>
                     </div>

@@ -18,6 +18,7 @@ import { FormsModule } from '@angular/forms';
 import { OutboundModule } from './outbound/outbound.module';
 import { InputsModule } from '@progress/kendo-angular-inputs';
 import { UniquePipe } from './unique.pipe';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 
 
@@ -33,6 +34,7 @@ export function createTranslateLoader(http: HttpClient) {
   imports: [
     BrowserModule,
     AppRoutingModule,
+    PdfViewerModule,
     BrowserAnimationsModule,
     HttpClientModule, 
     ToastrModule.forRoot(),

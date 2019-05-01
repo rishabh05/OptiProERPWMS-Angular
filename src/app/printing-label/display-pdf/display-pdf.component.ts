@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Commonservice } from 'src/app/services/commonservice.service';
 import { ISubscription } from 'rxjs/Subscription';
+import { UIHelper } from 'src/app/helpers/ui.helpers';
 
 @Component({
   selector: 'app-display-pdf',
@@ -11,24 +12,31 @@ export class DisplayPdfComponent implements OnInit, OnDestroy {
 
   @Input() base64String: any;
   @Input() fileName;
-  @Output() pdfClose = new EventEmitter();
+  @Output() pdfClose = new EventEmitter(); 
   displayPDF: boolean = false;
-  
-  fileNameLabel:string = ""; 
+  isMobile:boolean = false;
+  fileNameLabel:string = "";  
   refreshEventForReopenPDFSubs: ISubscription;
+  //npm install ng2-pdf-viewer --save
   constructor(private commonService: Commonservice) { }
 
   ngOnInit() {
     
     this.fileNameLabel = this.fileName.substr( this.fileName.lastIndexOf("\\")+ 1);
     //console.log("File name: "+this.fileNameLabel);
-   this.base64String= encodeURI(this.base64String);
+    this.fileNameLabel = this.fileName;//"http://www.pdf995.com/samples/pdf.pdf";
+       this.base64String= encodeURI(this.base64String);
    if(this.base64String!=null && this.base64String != "")  this.displayPDF = true;
    this.refreshEventForReopenPDFSubs = this.commonService.refreshPDFSubscriber.subscribe(data => {
     //for event to destroy item here.
     this.opened = true;
-     
+      
   });
+  if (UIHelper.isMobile()) {
+    this.isMobile = true;
+  } else {
+    this.isMobile = false; 
+  }
   }
 
   OnCancelClick(){

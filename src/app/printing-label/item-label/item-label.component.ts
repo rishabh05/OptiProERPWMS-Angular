@@ -369,7 +369,8 @@ export class ItemLabelComponent implements OnInit {
               this.translate.instant("CommonSessionExpireMsg"));
             return; 
           }
-          if(data.Detail != null && data.Detail != undefined && data.Detail[0]!=null &&  data.Detail[0] != undefined){
+          if(data.Detail != null && data.Detail != undefined && data.Detail[0]!=null 
+            &&  data.Detail[0] != undefined){
             this.fileName = data.Detail[0].FileName;
             this.base64String = data.Detail[0].Base64String;
           }
