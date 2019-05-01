@@ -71,7 +71,7 @@ export class InboundGRPOComponent implements OnInit {
   LastSerialNumber: any[];
   LineId: any[];
   previousReceivedQty: number = 0;
-
+  dateFormat: string;
   showConfirmDialog: boolean;
   rowindexForDelete: any;
   gridDataAfterDelete: any[];
@@ -80,7 +80,7 @@ export class InboundGRPOComponent implements OnInit {
   displayPDF1: boolean = false;
   base64String: string = ""; 
   fileName: string = "";
-  UOMentry: any = "";
+  UOMentry: any = ""; 
 
 
   @ViewChild('Quantity') QuantityField;
@@ -94,7 +94,7 @@ export class InboundGRPOComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    this.dateFormat = localStorage.getItem("DATEFORMAT");
     this.openPOLineModel[0] = this.inboundMasterComponent.openPOmodel;
     //update below variable with local storage data
     this.operationType = "";

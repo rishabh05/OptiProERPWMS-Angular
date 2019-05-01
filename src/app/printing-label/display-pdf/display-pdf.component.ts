@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { Commonservice } from 'src/app/services/commonservice.service';
+import { Commonservice } from '../../services/commonservice.service';
 import { ISubscription } from 'rxjs/Subscription';
 import { UIHelper } from 'src/app/helpers/ui.helpers';
 

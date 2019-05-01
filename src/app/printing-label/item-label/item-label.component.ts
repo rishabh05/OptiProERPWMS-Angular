@@ -5,11 +5,11 @@
 //==============================================================================
 
 import { Component, OnInit, ViewChild, ElementRef, Renderer } from '@angular/core';
-import { LabelPrintReportsService } from 'src/app/services/label-print-reports.service';
+import { LabelPrintReportsService } from '../../services/label-print-reports.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
-import { Commonservice } from 'src/app/services/commonservice.service';
+import { Commonservice } from '../../services/commonservice.service';
 import { ISubscription } from 'rxjs/Subscription';
 
 @Component({

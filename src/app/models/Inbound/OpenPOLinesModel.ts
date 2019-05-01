@@ -1,4 +1,4 @@
-import { UOM } from 'src/app/models/Inbound/UOM';
+import { UOM } from './UOM';
 
 export interface OpenPOLinesModel{
     CardCode: string;

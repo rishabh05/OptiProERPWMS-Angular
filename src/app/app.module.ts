@@ -17,8 +17,11 @@ import { DialogsModule } from '@progress/kendo-angular-dialog';
 import { FormsModule } from '@angular/forms';
 import { OutboundModule } from './outbound/outbound.module';
 import { InputsModule } from '@progress/kendo-angular-inputs';
+<<<<<<< HEAD
 import { UniquePipe } from './unique.pipe';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
+=======
+>>>>>>> 423400e34d1ab10d8706b2bb2217963b32744c5f
 
 
 

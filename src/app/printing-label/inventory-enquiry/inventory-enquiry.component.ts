@@ -1,9 +1,9 @@
 import { Component, OnInit, Renderer } from '@angular/core';
-import { Commonservice } from 'src/app/services/commonservice.service';
+import { Commonservice } from '../../services/commonservice.service';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { Router } from '@angular/router';
-import { LabelPrintReportsService } from 'src/app/services/label-print-reports.service';
+import { LabelPrintReportsService } from '../../services/label-print-reports.service';
 import { ISubscription } from 'rxjs/Subscription';
 
 

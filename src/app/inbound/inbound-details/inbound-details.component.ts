@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { InboundService } from 'src/app/services/inbound.service';
-import { Commonservice } from 'src/app/services/commonservice.service';
-import { ToastrService } from '../../../../node_modules/ngx-toastr';
-import { TranslateService, LangChangeEvent } from '../../../../node_modules/@ngx-translate/core';
-import { Router } from '../../../../node_modules/@angular/router';
+import { InboundService } from '../../services/inbound.service';
+import { Commonservice } from '../../services/commonservice.service';
+import { ToastrService } from 'ngx-toastr';
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
+import { Router } from '@angular/router';
 import { InboundMasterComponent } from '../inbound-master.component';
 
 @Component({

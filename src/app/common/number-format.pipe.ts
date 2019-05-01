@@ -8,9 +8,9 @@ export class NumberFormatPipe implements PipeTransform {
   transform(value: number, args?: any): any {
     
     let formattedNo = ""; 
-    var precision = 4;//localStorage.getItem("DecimalPrecision");
-    var decSeperator = ".";//localStorage.getItem("DecimalSeparator");
-    var thSeperator = ",";//localStorage.getItem("ThousandSeparator");
+    var precision = localStorage.getItem("DecimalPrecision");
+    var decSeperator = localStorage.getItem("DecimalSeparator");
+    var thSeperator = localStorage.getItem("ThousandSeparator");
     var dateFormat = localStorage.getItem("DATEFORMAT");
     if(value == null && value == undefined && value.toString() ==""){
       return value;
@@ -31,6 +31,7 @@ export class NumberFormatPipe implements PipeTransform {
     console.log("case when no. not has desimal:", formattedNo);
     return formattedNo;
   }
+
   addDigitSeperatorToNo(numberStringBeforeDesimal: string, seperator: string): string {
     var newNo = "";
     if (numberStringBeforeDesimal.length > 3 && numberStringBeforeDesimal.length < 7) {
