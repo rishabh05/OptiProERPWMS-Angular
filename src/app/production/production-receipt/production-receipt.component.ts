@@ -1,7 +1,7 @@
 import { Component, OnInit, Renderer } from '@angular/core';
-import { Commonservice } from 'src/app/services/commonservice.service';
+import { Commonservice } from '../../services/commonservice.service';
 import { Router } from '@angular/router';
-import { ProductionService } from 'src/app/services/production.service';
+import { ProductionService } from '../../services/production.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { ISubscription } from 'rxjs/Subscription';
@@ -52,7 +52,7 @@ export class ProductionReceiptComponent implements OnInit {
   binNo: string = "";
   whsCode: string = "";
   showRejectQtyField = false;
-  type =""; //S for serial, B for Batch, N for non tracked.
+  type ="N"; //S for serial, B for Batch, N for non tracked.
   constructor(private renderer: Renderer, private commonservice: Commonservice, private router: Router, private productionService: ProductionService,
     private toastr: ToastrService, private translate: TranslateService) { }
 

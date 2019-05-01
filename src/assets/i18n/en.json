@@ -231,5 +231,9 @@
   "From": " From: ",
   "To": " To: ",
   "zero": "0.000",   
-  "POValidation": "Enter PO Number"
+  "POValidation": "Enter PO Number",
+
+  "DocNum": "DocNum",
+  "InWhsQty": "InWhsQty",
+  "IsTeamCount": "IsTeamCount"
 }

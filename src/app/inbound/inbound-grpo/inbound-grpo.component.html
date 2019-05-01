@@ -87,7 +87,7 @@
                     <div class="form-group row" *ngIf="!isNonTrack">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'ExpiryDate'|translate}}</label>
                         <div class="col-sm-9">
-                            <kendo-datepicker [format]="'MM/dd/yy'" [value]="value" name="expiryDate" [(ngModel)]=expiryDate placeholder="MM/dd/yy"></kendo-datepicker>
+                            <kendo-datepicker [format]=dateFormat [value]="value" name="expiryDate" [(ngModel)]=expiryDate placeholder={{dateFormat}}></kendo-datepicker>
                         </div>
                     </div>
                     <div class="form-group row align-items-center" *ngIf="showScanInput">
@@ -158,7 +158,7 @@
                                     <dd>{{dataItem.LotQty | numberFormat}}</dd>
 
                                     <dt>{{'ExpiryDate'|translate}}</dt>
-                                    <dd>{{dataItem.expiryDate | date:'MM/dd/yy'}}</dd>
+                                    <dd>{{dataItem.expiryDate | date:dateFormat}}</dd>
 
                                 </dl>
 
@@ -200,7 +200,7 @@
                         <kendo-grid-column media="(min-width: 768px)" field="Bin" [width]="18" title="{{'Bin'|translate}}"></kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="expiryDate" [width]="18" title="{{'ExpiryDate'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem>
-                                {{dataItem.expiryDate | date:'MM/dd/yy'}}
+                                {{dataItem.expiryDate | date:dateFormat}}
                             </ng-template>
                         </kendo-grid-column>
 

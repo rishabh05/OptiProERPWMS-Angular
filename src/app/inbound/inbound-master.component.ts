@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AutoLot } from 'src/app/models/Inbound/AutoLot';
-import { OpenPOLinesModel } from 'src/app/models/Inbound/OpenPOLinesModel';
+import { AutoLot } from '../models/Inbound/AutoLot';
+import { OpenPOLinesModel } from '../models/Inbound/OpenPOLinesModel';
 
 @Component({
   selector: 'app-inbound-master',

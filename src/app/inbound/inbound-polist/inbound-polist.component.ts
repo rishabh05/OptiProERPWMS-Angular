@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { InboundService } from '../../services/inbound.service';
-import { Commonservice } from 'src/app/services/commonservice.service';
+import { Commonservice } from '../../services/commonservice.service';
 import { InboundMasterComponent } from '../inbound-master.component';
-import { LangChangeEvent, TranslateService } from '../../../../node_modules/@ngx-translate/core';
-import { ToastrService } from '../../../../node_modules/ngx-toastr';
-import { Router } from '../../../../node_modules/@angular/router';
-import { AutoLot } from 'src/app/models/Inbound/AutoLot';
-import { RowClassArgs } from '../../../../node_modules/@progress/kendo-angular-grid';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
+import { AutoLot } from '../../models/Inbound/AutoLot';
+import { RowClassArgs } from '@progress/kendo-angular-grid';
 import { bypassSanitizationTrustResourceUrl } from '@angular/core/src/sanitization/bypass';
 
 @Component({

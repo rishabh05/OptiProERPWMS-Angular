@@ -5,7 +5,7 @@ import { ProductionRoutingModule } from './production-routing.module';
 import { ProductionIssueComponent } from './production-issue/production-issue.component';
 import { ProductionReceiptComponent } from './production-receipt/production-receipt.component';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { TrnaslateLazyModule } from 'src/translate-lazy.module';
+import { TrnaslateLazyModule } from '../../translate-lazy.module';
 import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
 import { SharedModule } from '../shared-module/shared-module.module';
 

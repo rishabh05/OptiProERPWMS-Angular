@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { SigninService } from 'src/app/services/signin.service';
-import { Router } from '../../../node_modules/@angular/router';
-import { WHS } from 'src/app/models/account/WHS';
+import { SigninService } from '../services/signin.service';
+import { Router } from '@angular/router';
+import { WHS } from '../models/account/WHS';
 import { Commonservice } from '../services/commonservice.service';
 
 @Component({

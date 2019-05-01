@@ -4,9 +4,9 @@ import { Router } from '@angular/router';
 import { opticonstants } from '../../constants';
 import { CurrentSidebarInfo } from '../../models/sidebar/current-sidebar-info';
 import { MenuService } from '../../services/menu.service';
-import { UIHelper } from 'src/app/helpers/ui.helpers';
+import { UIHelper } from '../../helpers/ui.helpers';
 import { CommandName } from 'selenium-webdriver';
-import { CommonConstants } from 'src/app/const/common-constants';
+import { CommonConstants } from '../../const/common-constants';
 
 @Component({
   selector: 'app-portal-left',

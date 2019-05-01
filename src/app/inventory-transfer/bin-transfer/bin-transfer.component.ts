@@ -25,7 +25,7 @@ export class BinTransferComponent implements OnInit {
   itemCode: string = "";
   lotValue: string = "";
   fromBin: string = "";
-  transferQty: string = "";
+  transferQty: string = "0";
   itemName: string = "";
   ItemTracking: string = "";
   serviceData: any[];
@@ -33,7 +33,7 @@ export class BinTransferComponent implements OnInit {
   showItemName: boolean = false;
   showBatchNo: boolean = false;
   Remarks: string = "";
-  onHandQty: any;
+  onHandQty: any="0";
   SysNumber: any;
   LotWhsCode: any;
   toBin: string = "";
@@ -45,6 +45,8 @@ export class BinTransferComponent implements OnInit {
   TransferedItemsDetail: any[] = [];
   @Input() fromScreen: any;
   @Output() cancelevent = new EventEmitter();
+  batchNoPlaceholder: string = "";
+  zero: string;
 
   constructor(private commonservice: Commonservice, private activatedRoute: ActivatedRoute,
     private router: Router, private inventoryTransferService: InventoryTransferService,
@@ -87,7 +89,9 @@ export class BinTransferComponent implements OnInit {
     } else {
       this.PageTitle = this.translate.instant("WarehouseTransfer") + this.translate.instant("From") + localStorage.getItem("whseId") + this.translate.instant("To") + localStorage.getItem("towhseId");
     }
-
+    this.formatTransferNumbers();
+    this.formatOnHandQty();
+    this.zero = this.onHandQty;
     console.log("bin loaded")
   }
 
@@ -270,7 +274,7 @@ export class BinTransferComponent implements OnInit {
           }
           this.showLookupLoader = false;
           for (var i = 0; i < data.length; i++) {
-            data[i].TOTALQTY = data[i].TOTALQTY.toFixed(3);
+            data[i].TOTALQTY = data[i].TOTALQTY.toFixed(Number(localStorage.getItem("DecimalPrecision")));
           }
           this.serviceData = data;
           this.lookupfor = "BatchNoList";
@@ -299,7 +303,7 @@ export class BinTransferComponent implements OnInit {
             else {
               this.lookupfor = "NTrackFromBin";
               for (var i = 0; i < data.length; i++) {
-                data[i].TOTALQTY = data[i].TOTALQTY.toFixed(3);
+                data[i].TOTALQTY = data[i].TOTALQTY.toFixed(Number(localStorage.getItem("DecimalPrecision")));
               }
             }
             this.serviceData = data;
@@ -719,7 +723,6 @@ export class BinTransferComponent implements OnInit {
     this.toBin = "";
     this.lotValue = "";
   }
-  batchNoPlaceholder: string = "";
 
   ViewLinesRowDeleteClick(rowindex, gridData: any) {
 
@@ -741,11 +744,11 @@ export class BinTransferComponent implements OnInit {
   }
 
   formatTransferNumbers() {
-    this.transferQty = Number(this.transferQty).toFixed(3);
+    this.transferQty = Number(this.transferQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));
   }
 
   formatOnHandQty() {
-    this.onHandQty = Number(this.onHandQty).toFixed(3);
+    this.onHandQty = Number(this.onHandQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));
   }
 
   goBack() {
