@@ -235,5 +235,6 @@
 
   "DocNum": "DocNum",
   "InWhsQty": "InWhsQty",
-  "IsTeamCount": "IsTeamCount"
+  "IsTeamCount": "IsTeamCount",
+  "BinCode": "BinCode"
 }

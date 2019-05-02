@@ -21,7 +21,6 @@ export class PhysicalCountComponent implements OnInit {
   ItemName: string;
   BinNo: string;
   SerialNo: string;
-  onHandQty: string;
   CountedQty: string;
   UOM: string;
   ItemTracking: string="";
@@ -33,6 +32,8 @@ export class PhysicalCountComponent implements OnInit {
   QtyOnHand:string = "";
   showItemName:string = "";
   showConfirmDialog:boolean = false;
+  SavedDocNoDetailArray: any[] = [];
+
   constructor(private phycountService: PhysicalcountService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService) {
     let userLang = navigator.language.split('-')[0];
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
@@ -98,6 +99,15 @@ export class PhysicalCountComponent implements OnInit {
     );
   }
 
+  ShowBatachSerList() {
+    
+    if(this.SavedDocNoDetailArray.length > 0){
+      this.showLookupLoader = true;
+      this.serviceData = this.SavedDocNoDetailArray;
+      this.lookupfor = "ShowBatachSerList";
+    }
+  }
+
   GetSavedDocNoDetails() {
     this.showLoader = true;
     this.phycountService.GetSavedDocNoDetails(this.DocNo, this.ItemCode, this.BinNo, this.IsteamCount).subscribe(
@@ -110,9 +120,14 @@ export class PhysicalCountComponent implements OnInit {
               this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
-          this.showLookupLoader = true;
-          this.serviceData = data;
-          this.lookupfor = "showPhyCntLotNos";
+          this.SavedDocNoDetailArray = data;
+          if(this.SavedDocNoDetailArray.length > 0){
+            this.ItemTracking = this.SavedDocNoDetailArray[0].Tracking;
+            this.UOM = this.SavedDocNoDetailArray[0].UomCode;
+            this.CountedQty = this.SavedDocNoDetailArray[0].Qty;
+            this.QtyOnHand = this.SavedDocNoDetailArray[0].Qty;
+            this.CheckTrackingandVisiblity();
+          }
         } else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         }
@@ -124,27 +139,27 @@ export class PhysicalCountComponent implements OnInit {
     );
   }
 
-  showSavedDocNoDetails() {
-    this.showLoader = true;
-    this.phycountService.GetSavedDocNoDetails(this.DocNo, this.ItemCode, this.BinNo, this.IsteamCount).subscribe(
-      (data: any) => {
-        this.showLoader = false;
+  // showSavedDocNoDetails() {
+  //   this.showLoader = true;
+  //   this.phycountService.GetSavedDocNoDetails(this.DocNo, this.ItemCode, this.BinNo, this.IsteamCount).subscribe(
+  //     (data: any) => {
+  //       this.showLoader = false;
 
-        if (data != undefined) {
+  //       if (data != undefined) {
 
-          this.showLookupLoader = true;
-          this.serviceData = data;
-          this.lookupfor = "showPhyCntLotNos";
-        } else {
-          this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
-        }
-      },
-      error => {
-        this.showLoader = false;
-        console.log("Error: ", error);
-      }
-    );
-  }
+  //         this.showLookupLoader = true;
+  //         this.serviceData = data;
+  //         this.lookupfor = "showPhyCntLotNos";
+  //       } else {
+  //         this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+  //       }
+  //     },
+  //     error => {
+  //       this.showLoader = false;
+  //       console.log("Error: ", error);
+  //     }
+  //   );
+  // }
 
   getLookupValue($event) {
     if (this.lookupfor == "PhyCntItemList") {
@@ -152,35 +167,39 @@ export class PhysicalCountComponent implements OnInit {
       this.CountDate = $event[4];
       this.ItemCode = $event[2];
       this.BinNo = $event[3];
-      this.onHandQty = $event[5];
+      this.QtyOnHand = $event[5];
       this.IsteamCount = $event[6];
       this.GetSavedDocNoDetails();
-      this.CheckTrackingandVisiblity();
+
     } else if (this.lookupfor == "showPhyCntItemsList") {
       this.ItemCode = $event[0];
       this.BinNo = $event[3];
       this.ItemTracking = $event[2];
+      this.UOM = $event[4];
       this.CheckTrackingandVisiblity();
-    }else if(this.lookupfor == "showPhyCntLotNos"){
+    }else if(this.lookupfor == "ShowBatachSerList"){
       this.batchserno = $event[7];
       this.ItemCode = $event[3];
       this.ItemTracking = $event[31];
+      this.UOM = $event[19];
+      this.CountedQty = $event[20];
+      this.CheckTrackingandVisiblity();
     }
   }
 
   CheckTrackingandVisiblity() {
     if (this.ItemTracking == "B") {
-      this.isNonTrack = true;
+      this.isNonTrack = false;
       this.batchNoPlaceholder = this.translate.instant("BatchNo");
       this.batchSrBtn = this.translate.instant("Batch");
     }
     else if (this.ItemTracking == "S") {
-      this.isNonTrack = true;
+      this.isNonTrack = false;
       this.batchNoPlaceholder = this.translate.instant("SerialNo");
       this.batchSrBtn = this.translate.instant("Serial");
     }
     else if (this.ItemTracking == "N") {
-      this.isNonTrack = false;
+      this.isNonTrack = true;
     }
 
     // this.fromBin = "";

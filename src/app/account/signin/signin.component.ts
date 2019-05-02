@@ -99,7 +99,7 @@ export class SigninComponent implements OnInit {
           },
           error => {
           //  alert("getPSURL error:"+error);
-            this.toastr.error('', 'There was some error', error);
+            this.toastr.error('', 'There is some error to connect with server', error);
             this.showLoader = false;
           }
         )
