@@ -52,7 +52,7 @@ export class LookupComponent implements OnInit {
 
 
 
-  constructor(private toastr: ToastrService, private translate: TranslateService) {
+  constructor(private toastr: ToastrService, private translate: TranslateService, private router: Router) {
     let userLang = navigator.language.split('-')[0];
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
     translate.use(userLang);
@@ -62,7 +62,7 @@ export class LookupComponent implements OnInit {
 
   close_kendo_dialog() {
     if (this.lookupfor == "PhyCntItemList") {
-
+      this.router.navigate(['home/dashboard']);
     } else {
       this.dialogOpened = false;
     }
@@ -554,7 +554,7 @@ export class LookupComponent implements OnInit {
         type: 'text'
       }
     ];
-    this.lookupTitle = this.translate.instant("ItemCodeList");
+    this.lookupTitle = this.translate.instant("Palletmessage.Lot");
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
         this.dialogOpened = true;

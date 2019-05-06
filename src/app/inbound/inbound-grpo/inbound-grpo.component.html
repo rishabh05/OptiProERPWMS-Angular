@@ -147,11 +147,12 @@
 
                         <!-- grid for mobile start -->
                         <kendo-grid-column media="(max-width: 767px)" title="List" class="opti_mobile-grid-td">
-                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex='rowIndex'>
                                 <dl class="opti_mobile_grid_dl">
                                     <dt style="margin-top:4px;">{{mfrGridColumnText}}</dt>
                                     <dd>
-                                        <input type="text" class="form-control form-control-sm" name="dataItem.VendorLot" [(ngModel)]=dataItem.VendorLot>
+                                        <input type="text" class="form-control form-control-sm" name="dataItem.VendorLot" [(ngModel)]=dataItem.VendorLot id="VendorLot"
+                                        #VendorLot (change)="updateVendorLot(VendorLot.value, rowIndex)">
                                     </dd>
 
                                     <dt>{{'Qty'|translate}}</dt>
@@ -170,7 +171,7 @@
                                     </dt>
                                     <dd>
                                         <input type="text" class="form-control form-control-sm" name="dataItem.LotNumber" value={{dataItem.LotNumber}} [disabled]=isDisabledScanInput
-                                        id="display_name" #display_name (change)="updateLotNumber(display_name.value, idx)">
+                                        id="display_name" #display_name (change)="updateLotNumber(display_name.value, rowIndex)">
                                     </dd>
 
                                     <dt>{{'Bin'|translate}}</dt>

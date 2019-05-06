@@ -94,7 +94,8 @@ export class SigninComponent implements OnInit {
            // alert("getPSURL data:"+data);
             if (data != null) {
              // alert('success data ps url:'+data);
-              localStorage.setItem("PSURLFORADMIN", "http://139.144.10.220/OptiAdmin/");
+              // localStorage.setItem("PSURLFORADMIN", "http://139.144.10.220/OptiAdmin/");
+              localStorage.setItem("PSURLFORADMIN", data);
             } 
           },
           error => {

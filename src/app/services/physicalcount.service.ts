@@ -44,45 +44,50 @@ export class PhysicalcountService {
     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetSavedDocNoDetails", jObject, this.httpOptions);
   }
 
-  IsPOExists(poCode: string, cardCode: string): Observable<any> {
-    var jObject = { POCode: JSON.stringify([{ UserId: '', CompanyDBId: localStorage.getItem("CompID"), POCode: poCode, CardCode: cardCode }]) };
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsPOExists", jObject, this.httpOptions);
+  ShowBILOTList(itemCode: string, Bin: string): Observable<any> {
+    var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), WHSCODE: localStorage.getItem("whseId"), BINNO: Bin, ITEMCODE: itemCode, DOCNUM: '' }]) };
+
+    if (itemCode == "" && Bin == "") {
+      return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetLotListWithoutBinNItemCode", jObject, this.httpOptions);
+    }
+    else if (itemCode != "" && Bin != "") {
+      return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetLotListBinForPallet", jObject, this.httpOptions);
+
+    }
+    else if (itemCode != "" && Bin == "") {
+      return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetLotListWithoutBinForPallet", jObject, this.httpOptions);
+    }
+    else if (itemCode == "" && Bin != "") {
+      return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetLotListBinWithoutItemCode", jObject, this.httpOptions);
+    }
   }
 
-  GetOpenPOLines(futurepo: boolean, itemCode: string, po: string): Observable<any> {
-    let jObject = {
-      GoodsReceiptToken: JSON.stringify([{
-        UserId: '',
-        CompanyDBId: localStorage.getItem("CompID"),
-        DOCNUM: po,
-        ItemCode: itemCode,
-        WhsCode: localStorage.getItem("whseId"),
-        FuturePO: futurepo
-      }])
-    };
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetOpenPOLines", jObject, this.httpOptions);
+  IslotExist(bin: string, itemCode: string, lot: string): Observable<any> {
+    var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), WHSCODE: localStorage.getItem("whseId"), BINNO: bin, ITEMCODE: itemCode, LOTNO: lot, DOCNUM: '' }]) };
+
+    if (itemCode == "" && bin == "") {
+      return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetLotWithoutBinNItemCode", jObject, this.httpOptions);
+    }
+    else if (itemCode != "" && bin != "") {
+      return this.httpclient.post(this.config_params.service_url + "/api/Delivery/CheckLotValid", jObject, this.httpOptions);
+
+    }
+    else if (itemCode != "" && bin == "") {
+      return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetLotWithoutBinForPallet", jObject, this.httpOptions);
+    }
+    else if (itemCode == "" && bin != "") {
+      return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetLotBinWithoutItemCode", jObject, this.httpOptions);
+    }
   }
 
-  getAutoLot(itemCode: string): Observable<any> {
-    let jObject = {
-      GoodsReceiptToken: JSON.stringify([{
-        UserId: '',
-        CompanyDBId: localStorage.getItem("CompID"),
-        ItemCode: itemCode
-      }])
-    };
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetAutoLot", jObject, this.httpOptions);
+  getItemInfo(itemCode: string, docNo: string, docEntry: string): Observable<any> {
+    var jObject = { DeliveryToken: JSON.stringify([{ CompanyDbName: localStorage.getItem("CompID"), ITEMCODE: itemCode, WHSCODE: localStorage.getItem("whseId"), DocNo: docNo, DocEntry: docEntry}]) };
+    return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetItemValidate", jObject, this.httpOptions);
   }
 
-  getUOMs(itemCode: string): Observable<any> {
-    let jObject = {
-      ItemKey: JSON.stringify([{
-        CompanyDBId: localStorage.getItem("CompID"),
-        ItemCode: itemCode
-      }])
-    };
-    console.log("getUOMs API's request:" + JSON.stringify(jObject));
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/getUOM", jObject, this.httpOptions);
+  SavePhysicalCountData(oAddPhysicalCountData: any): Observable<any> {
+    var jObject = { DeliveryToken: JSON.stringify(oAddPhysicalCountData) };
+    return this.httpclient.post(this.config_params.service_url + "/api/Delivery/SavePhysicalCountData", jObject, this.httpOptions);
   }
 
   getRevBins(QCrequired: string): Observable<any> {
