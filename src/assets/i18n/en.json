@@ -236,5 +236,6 @@
   "LotvalidSerial": "This serial does not exists, do you want to add?",
   "PhysicalCount.DataSavedSuccessfully": "Data saved successfully",
   "PhysicalCount.NoDataSaved": "No data saved",
-  "ServerConnectionError": "There is some error to connect with server"
+  "ServerConnectionError": "There is some error to connect with server",
+  "DocUpdatedSucessfullyMsg": "Document is Updated Successfully with DocNo"
 }

@@ -271,7 +271,6 @@ export class InboundGRPOComponent implements OnInit {
   }
 
   validateQuantity(): boolean {
-
     let quantitySum: number = 0;
     for (var i = 0; i < this.recvingQuantityBinArray.length; i++) {
       quantitySum += Number(this.recvingQuantityBinArray[i].LotQty);
@@ -383,6 +382,7 @@ export class InboundGRPOComponent implements OnInit {
       this.batchCalculation(autoLots, this.qty);
     }
   }
+
   addNonTrackQty(qty: any) {
     let result = this.recvingQuantityBinArray.find(element => element.Bin == this.RecvbBinvalue);
     if (result == undefined) {
@@ -999,6 +999,7 @@ export class InboundGRPOComponent implements OnInit {
   }
 
   cancel() {
+    localStorage.setItem("PONumber", this.Ponumber);
     this.inboundMasterComponent.inboundComponent = 2;
   }
 

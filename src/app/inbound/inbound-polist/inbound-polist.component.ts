@@ -156,20 +156,7 @@ export class InboundPolistComponent implements OnInit {
             this.openPOLinesModel = data.Table;
             // var  unmatchedPOLinesModel = data.Table;
             this.updateReceivedQtyForSavedItems();
-            // this.openPOLinesModel.forEach(element => {
-            //   if (element.TRACKING == "N") {
-            //     this.NonItemsDetail.push(element);
-            //   } else if (element.TRACKING == "B") {
-            //     this.BatchItemsDetail.push(element);
-            //   } else if (element.TRACKING == "S") {
-            //     this.SerialItemsDetail.push(element);
-            //   }
-            // });
-            // if (this.NonItemsDetail.length > 0) {
-            //   this.showNonTrackItem = true;
-            // } if (this.BatchItemsDetail.length > 0) {
-            //   this.showBatchTrackItem = true;
-            // } 
+           
             if (this.openPOLinesModel.length > 0) {
               this.showSerialTrackItem = true;
             }

@@ -41,7 +41,6 @@ export class Commonservice {
         this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
       },
       (err: HttpErrorResponse) => {
-        alert("getPSURL httperrorsection");
         console.log(err.message);
       }
     );

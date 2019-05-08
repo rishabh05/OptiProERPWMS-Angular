@@ -44,7 +44,6 @@ export class SigninService {
   getPSURL(url:string): Observable<any> {
     //this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
     let jObject = {};
-    alert("get ps url method in url :");
     return this.httpclient.post(url+"/api/Login/GetPSURL", jObject, this.httpOptions);
   } 
 

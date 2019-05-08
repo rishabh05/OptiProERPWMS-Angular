@@ -81,7 +81,7 @@ export class PhysicalcountService {
   }
 
   getItemInfo(itemCode: string, docNo: string, docEntry: string): Observable<any> {
-    var jObject = { DeliveryToken: JSON.stringify([{ CompanyDbName: localStorage.getItem("CompID"), ITEMCODE: itemCode, WHSCODE: localStorage.getItem("whseId"), DocNo: docNo, DocEntry: docEntry}]) };
+    var jObject = { DeliveryToken: JSON.stringify([{ CompanyDbName: localStorage.getItem("CompID"), ITEMCODE: itemCode, WHSCODE: localStorage.getItem("whseId"), DocNo: docNo, DocEntry: docEntry }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetItemValidate", jObject, this.httpOptions);
   }
 
@@ -90,49 +90,14 @@ export class PhysicalcountService {
     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/SavePhysicalCountData", jObject, this.httpOptions);
   }
 
-  getRevBins(QCrequired: string): Observable<any> {
-    var jObject = {
-      WhsCode: JSON.stringify([{
-        CompanyDBId: localStorage.getItem("CompID"), ItemCode: '',
-        WhsCode: localStorage.getItem("whseId"), QCRequired: QCrequired,
-        PageId: "GRPO"
-      }])
-    };
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetBinsForReceiptWithReceivingBin", jObject, this.httpOptions);
+  SubmitPhysicalCount(oAddPhysicalCountData: any): Observable<any> {
+    var jObject = { DeliveryToken: JSON.stringify(oAddPhysicalCountData) };
+    return this.httpclient.post(this.config_params.service_url + "/api/Delivery/SubmitPhysicalCount", jObject, this.httpOptions);
   }
 
-  binChange(binCode: string): Observable<any> {
-    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), BinCode: binCode, ItemCode: '', WhsCode: localStorage.getItem("whseId") }]) };
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsBinExist", jObject, this.httpOptions);
-  }
-
-  SubmitGoodsReceiptPO(oSubmitPOLots: any): Observable<any> {
-    var jObject = { GoodsReceiptToken: JSON.stringify(oSubmitPOLots) };
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/SubmitGoodsReceiptPO", jObject, this.httpOptions);
-  }
-
-  // getTargetBins(QCrequired: string): Observable<any> {
-  //   var jObject = {
-  //     WhsCode: JSON.stringify([{
-  //       CompanyDBId: localStorage.getItem("CompID"), ItemCode: '',
-  //       WhsCode: localStorage.getItem("whseId"), QCRequired: QCrequired,ageId: "GRPO"}])
-  //   };
-  //   return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetBinsForReceiptWithReceivingBin", jObject, this.httpOptions);
-  // }
-
-  /**
-   * get whs list for target whs.
-   */
-  getQCTargetWhse(): Observable<any> {
-    var jObject = {
-      WhsCode: JSON.stringify([{
-        CompanyDBId: localStorage.getItem("CompID"),
-        //Need to pass Username as Warehouses are filled Accordind to the Permission from Admin Portal 
-        //Chane dt 2-July-2018
-        UserId: localStorage.getItem("UserId")
-      }])
-    };
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetWHS", jObject, this.httpOptions);
+  GetDocNoDetails(DocNum: string, CountType: string, IsTeamCount: string): Observable<any> {
+    var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: localStorage.getItem("whseId"), DocNum: DocNum, CountType: CountType, User: localStorage.getItem("UserId"), IsTeamCount: IsTeamCount }]) };
+    return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetDocNoDetails", jObject, this.httpOptions);
   }
 
   /**
