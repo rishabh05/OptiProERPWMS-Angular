@@ -10,11 +10,13 @@ import {ConfirmdialogService} from '../common/confirm-dialog/confirmdialog.servi
 import {DisplayPdfComponent} from '../printing-label/display-pdf/display-pdf.component';
 import {PdfpipePipe} from '../printing-label/pdfpipe.pipe';
 import {NumberFormatPipe} from '../common/number-format.pipe';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+
 @NgModule({  
   imports: [ CommonModule, 
     GridModule, 
     FormsModule,
-    DialogsModule],
+    DialogsModule,PdfViewerModule],
     providers:[ ConfirmdialogService],
   declarations: [ LookupComponent,ConfirmDialogComponent,ComonConfirmDialogComponent,DisplayPdfComponent,
     PdfpipePipe,NumberFormatPipe ],

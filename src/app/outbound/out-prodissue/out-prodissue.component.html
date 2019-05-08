@@ -168,7 +168,7 @@
                                     (ngModelChange)="dataItem.MeterialPickQty=$event" name="inputField" type="number" /> -->
 
                                 <kendo-numerictextbox #txtMet name="data" (blur)="onIssueMeterialQtyChange(idx,txtMet,e)"
-                                    class="form-control text-right form-control-sm text-right!important" [format]="'n3'" [(value)]="dataItem.MeterialPickQty"
+                                    class="form-control text-right form-control-sm text-right!important" [format]="'n4'" [(value)]="dataItem.MeterialPickQty"
                                     [step]="step"></kendo-numerictextbox>
                             </ng-template>
                         </kendo-grid-column>

@@ -323,13 +323,13 @@ export class OutCutomerComponent implements OnInit {
 
           // check weather item existe or not 
           let hasDetail = false;
-          // for (let index = 0; index < arrSODETAIL.length; index++) {
-          //   const element = arrSODETAIL[index];
-          //   if (element.LotNumber === o.Meterial.LOTNO && element.Bin === o.Meterial.BINNO) {
-          //     hasDetail = true;
-          //     break;
-          //   }
-          // }
+          for (let index = 0; index < arrSODETAIL.length; index++) {
+            const element = arrSODETAIL[index];
+            if (element.LotNumber === o.Meterial.LOTNO && element.Bin === o.Meterial.BINNO && element.parentLine===hdrLineVal) {
+              hasDetail = true;
+              break;
+            }
+          }
 
 
           if (hasDetail == false) {

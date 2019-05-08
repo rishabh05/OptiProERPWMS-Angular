@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { InboundService } from '../../services/inbound.service';
-import { Commonservice } from 'src/app/services/commonservice.service';
+import { Commonservice } from '../../services/commonservice.service';
 import { InboundMasterComponent } from '../inbound-master.component';
-import { LangChangeEvent, TranslateService } from '../../../../node_modules/@ngx-translate/core';
-import { ToastrService } from '../../../../node_modules/ngx-toastr';
-import { Router } from '../../../../node_modules/@angular/router';
-import { AutoLot } from 'src/app/models/Inbound/AutoLot';
-import { RowClassArgs } from '../../../../node_modules/@progress/kendo-angular-grid';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
+import { AutoLot } from '../../models/Inbound/AutoLot';
+import { RowClassArgs } from '@progress/kendo-angular-grid';
 import { bypassSanitizationTrustResourceUrl } from '@angular/core/src/sanitization/bypass';
 
 @Component({
@@ -156,20 +156,7 @@ export class InboundPolistComponent implements OnInit {
             this.openPOLinesModel = data.Table;
             // var  unmatchedPOLinesModel = data.Table;
             this.updateReceivedQtyForSavedItems();
-            // this.openPOLinesModel.forEach(element => {
-            //   if (element.TRACKING == "N") {
-            //     this.NonItemsDetail.push(element);
-            //   } else if (element.TRACKING == "B") {
-            //     this.BatchItemsDetail.push(element);
-            //   } else if (element.TRACKING == "S") {
-            //     this.SerialItemsDetail.push(element);
-            //   }
-            // });
-            // if (this.NonItemsDetail.length > 0) {
-            //   this.showNonTrackItem = true;
-            // } if (this.BatchItemsDetail.length > 0) {
-            //   this.showBatchTrackItem = true;
-            // } 
+           
             if (this.openPOLinesModel.length > 0) {
               this.showSerialTrackItem = true;
             }

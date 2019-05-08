@@ -8,6 +8,7 @@ import { LicenseData } from '../../models/account/LicenseData';
 import { WHS } from '../../models/account/WHS';
 
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 
 @Component({
@@ -43,8 +44,11 @@ export class SigninComponent implements OnInit {
   defaultWHS: any;
   public companyName: Array<string> = [];
   readonlyFlag: boolean = false;
-
-  constructor(private router: Router, private signinService: SigninService, private commonService: Commonservice, private toastr: ToastrService, private translate: TranslateService) {
+  public arrConfigData: any[];
+  public config_params: any;
+  constructor(private router: Router, private signinService: SigninService, 
+    private commonService: Commonservice, private toastr: ToastrService,
+     private translate: TranslateService,private httpClientSer: HttpClient) {
     let userLang = navigator.language.split('-')[0];
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
     translate.use(userLang);
@@ -70,13 +74,45 @@ export class SigninComponent implements OnInit {
       this.password = '';
       this.isRemember = false;
     }
-    //alert('ng on init');
+   // alert('ng on init');
     // Apply classes on Body
     const element = document.getElementsByTagName("body")[0];
     element.className = "";
     element.classList.add("opti_body-login");
     element.classList.add("opti_account-module");
-    this.getPSURL();
+    //this.getPSURL();
+
+
+   // alert("ngoninit config.json subs get data");
+    this.httpClientSer.get('./assets/config.json').subscribe( 
+      data => {
+        sessionStorage.setItem('ConfigData', JSON.stringify(data));
+        this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
+        //alert("config param service url:"+this.config_params.service_url);
+        this.signinService.getPSURL(this.config_params.service_url).subscribe(
+          data => {
+           // alert("getPSURL data:"+data);
+            if (data != null) {
+             // alert('success data ps url:'+data);
+              // localStorage.setItem("PSURLFORADMIN", "http://139.144.10.220/OptiAdmin/");
+              localStorage.setItem("PSURLFORADMIN", data);
+            } 
+          },
+          error => {
+          //  alert("getPSURL error:"+error);
+            this.toastr.error('', 'There is some error to connect with server', error);
+            this.showLoader = false;
+          }
+        )
+      },
+      (err: HttpErrorResponse) => {
+      //  alert("getPSURL httperrorsection");
+        console.log(err.message);
+      }
+    );
+
+
+
   }
 
   async ngOnChanges(): Promise<void> { 
@@ -84,29 +120,29 @@ export class SigninComponent implements OnInit {
     this.signinService.loadConfig();
   }
 
-  getPSURL() {
-    //alert('getps url');
-    //localStorage.setItem("PSURLFORADMIN", "http://139.144.10.220/OptiAdmin/");
-    //alert('getps url'+localStorage.getItem("PSURLFORADMIN"));
-    this.signinService.getPSURL().subscribe(
-      data => {
-       // alert('ps url'+data);
-        localStorage.setItem("PSURLFORADMIN",data);
-      },
-      error => {
-        //alert('ps url'+error);
-        this.toastr.error('', this.translate.instant("PsurlFailed"), 
-        this.commonService.toast_config.iconClasses.error);
-      }
-    );
-    //alert(' end getps url');
-  }
+  // getPSURL() {
+  //   alert('getPs:: getps url');
+  //  // localStorage.setItem("PSURLFORADMIN", "http://139.144.10.220/OptiAdmin/");
+  //   //alert('getps url'+localStorage.getItem("PSURLFORADMIN"));
+  //   this.signinService.getPSURL().subscribe(
+  //     data => {
+  //       alert('success data ps url:'+data);
+  //      localStorage.setItem("PSURLFORADMIN", "http://139.144.10.220/OptiAdmin/");
+  //     },
+  //     error => {
+  //       alert('failure ps url'+error);
+  //       this.toastr.error('', this.translate.instant("PsurlFailed"), 
+  //       this.commonService.toast_config.iconClasses.error);
+  //     }
+  //   );
+  //   alert(' at last getps url');
+  // }
 
   /**
    * Function for login
    */
   public async login() {
-    
+   // alert('login:: at login method top');
     // this.isCompleteLoginVisible = true;
     if (this.userName == "" || this.password == "") {
       this.toastr.error('', this.translate.instant("UnPwdBlankErrorMsg"), this.commonService.toast_config.iconClasses.error);
@@ -123,6 +159,7 @@ export class SigninComponent implements OnInit {
         
         return;
       }
+      //alert("call getlicence data");
       this.getLicenseData();
     //  this.showLoader = false;
     //   // localStorage.setItem("GUID", this.licenseData[1].GUID);
@@ -134,16 +171,16 @@ export class SigninComponent implements OnInit {
   }
 
   private validateUserLogin(){
-   // alert('ps url'+localStorage.getItem("PSURLFORADMIN"));
+    //alert('validateUserLogin: ');
     this.signinService.ValidateUserLogin(this.userName, this.password).subscribe(
       data => {
-      //  alert("data:"+JSON.stringify(data));
+       // alert("data:"+JSON.stringify(data));
         this.userDetails = data.Table;
         this.handleValidationUserSuccessResponse();
       },
       error => {
         
-     //   alert("error:"+JSON.stringify(error));
+      //  alert("error:"+JSON.stringify(error));
         this.toastr.error('', this.translate.instant("InvalidUnPwdErrMsg"), 
         this.commonService.toast_config.iconClasses.error);
         this.showLoader = false;
@@ -152,9 +189,11 @@ export class SigninComponent implements OnInit {
   }
 
   private getLicenseData(){
+  //  alert("in getLicenseData()")
     this.showFullPageLoader = true;
     this.signinService.getLicenseData(this.selectedItem).subscribe(
       data => {
+       // alert("in getLicenseData() subs result data"+data)
         this.licenseData = data;
         if(this.licenseData!=null && this.licenseData!=undefined){
           this.handleLicenseDataSuccessResponse();
@@ -165,7 +204,7 @@ export class SigninComponent implements OnInit {
         
       },
       error => {
-        
+       // alert("in getLicenseData() subs result error"+error)
         this.showLoader = false;
         this.showFullPageLoader = false;
         this.toastr.error('', this.translate.instant("license Failed"), 
@@ -175,7 +214,7 @@ export class SigninComponent implements OnInit {
   }
 
   private handleLicenseDataSuccessResponse() {
-   
+  // alert("in handle license data success response");
     this.selectedWhse = document.getElementById("whseId").innerText.trim();
     this.showLoader = false;    
     if (this.licenseData.length > 1) {

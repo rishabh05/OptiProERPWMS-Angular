@@ -1,7 +1,7 @@
 import { Component, OnInit, Renderer } from '@angular/core';
-import { Commonservice } from 'src/app/services/commonservice.service';
+import { Commonservice } from '../../services/commonservice.service';
 import { Router } from '@angular/router';
-import { ProductionService } from 'src/app/services/production.service';
+import { ProductionService } from '../../services/production.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { ISubscription } from 'rxjs/Subscription';
@@ -19,9 +19,9 @@ export class ProductionReceiptComponent implements OnInit {
   binListSubs: ISubscription;
   
   //for making disable the three fields.
-  enableSearialQty:boolean = false;
-  enableOpenQty:boolean = false;
-  enableAcceptQty:boolean = false;
+  disableSearialQty:boolean = false;
+  disableOpenQty:boolean = false;
+  disableAcceptQty:boolean = false;
   
   //showing loader for data loading purpose.
   showLookupLoader: boolean = true;
@@ -48,11 +48,17 @@ export class ProductionReceiptComponent implements OnInit {
   refDocEntry: string = "";
   expDate:string = "";
 
+  serialQty:string ="";
+  batchQty:string ="";
+  qty:string = "";
+  serialNo:string = "";
+  batchNo: string = "";
+
   binList: any[];
   binNo: string = "";
   whsCode: string = "";
   showRejectQtyField = false;
-  type =""; //S for serial, B for Batch, N for non tracked.
+  type ="N"; //S for serial, B for Batch, N for non tracked.
   constructor(private renderer: Renderer, private commonservice: Commonservice, private router: Router, private productionService: ProductionService,
     private toastr: ToastrService, private translate: TranslateService) { }
 
@@ -174,6 +180,8 @@ export class ProductionReceiptComponent implements OnInit {
     this.whsCode = response.WhsCode;
     if(this.tracking == "S")
     {
+       this.serialQty = "1.0000";
+       this.disableSearialQty = true;
        //set serial form data and hide other fields
        //serial qty, openqty and 
     }else if(this.tracking == "B"){
@@ -181,6 +189,9 @@ export class ProductionReceiptComponent implements OnInit {
     }else if(this.tracking == "N"){
       //set non form data and hide other fields    
     }
+    //this two fields will be disable in all three cases.
+    this.disableOpenQty = true;
+    this.disableAcceptQty = true;
   }
 
   ngOnDestroy() {

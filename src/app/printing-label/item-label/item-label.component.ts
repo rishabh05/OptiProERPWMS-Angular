@@ -5,11 +5,11 @@
 //==============================================================================
 
 import { Component, OnInit, ViewChild, ElementRef, Renderer } from '@angular/core';
-import { LabelPrintReportsService } from 'src/app/services/label-print-reports.service';
+import { LabelPrintReportsService } from '../../services/label-print-reports.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
-import { Commonservice } from 'src/app/services/commonservice.service';
+import { Commonservice } from '../../services/commonservice.service';
 import { ISubscription } from 'rxjs/Subscription';
 
 @Component({
@@ -369,7 +369,8 @@ export class ItemLabelComponent implements OnInit {
               this.translate.instant("CommonSessionExpireMsg"));
             return; 
           }
-          if(data.Detail != null && data.Detail != undefined && data.Detail[0]!=null &&  data.Detail[0] != undefined){
+          if(data.Detail != null && data.Detail != undefined && data.Detail[0]!=null 
+            &&  data.Detail[0] != undefined){
             this.fileName = data.Detail[0].FileName;
             this.base64String = data.Detail[0].Base64String;
           }

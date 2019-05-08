@@ -41,11 +41,10 @@ export class SigninService {
     this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
   }
 
-  getPSURL(): Observable<any> {
-    this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
+  getPSURL(url:string): Observable<any> {
+    //this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
     let jObject = {};
-    //alert("get ps url method url :"+this.config_params.service_url+"/api/Login/GetPSURL");
-    return this.httpclient.post(this.config_params.service_url + "/api/Login/GetPSURL", jObject, this.httpOptions);
+    return this.httpclient.post(url+"/api/Login/GetPSURL", jObject, this.httpOptions);
   } 
 
   getWHS(compId: string): Observable<any> {
@@ -79,7 +78,11 @@ export class SigninService {
     };
     if(this.config_params == null){
       this.loadConfig();
-    }
+     }
+    //alert("in getLicenceData method of service :");
+   
+    //alert("in getLicenceData configparam S :"+this.config_params.service_url);
+    //alert("in getLicenceData  :"+this.lisenceDataUrl);
     return this.httpclient.post(this.config_params.service_url + this.lisenceDataUrl, jObject, this.httpOptions);
   }
 }

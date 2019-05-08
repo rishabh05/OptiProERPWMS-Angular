@@ -1,141 +1,157 @@
 <div class="opti_container position-relative bg-white rounded">
-  <form class="form-with-fix-btnBar" >
-      <div class="opti_container_inner" [perfectScrollbar]=" ">
+    <form class="form-with-fix-btnBar">
+        <div class="opti_container_inner" [perfectScrollbar]=" ">
 
-          <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
-            {{'PhysicalCount'|translate}}
-          </h3>
-          <div class="row">
-            <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+            <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
+                {{'PhysicalCount'|translate}}
+            </h3>
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
 
-                <div class="form-group row">
-                    <label for="inputPassword" class="col-sm-3 col-form-label">{{'DocNo'|translate}}</label>
-                    <div class="col-sm-9">
-                        <div class="input-group input-group-sm">
-                            <input type="text" class="form-control form-control-sm" name ='customerCode' placeholder="{{'DocNo'|translate}}">
-                            <div class="input-group-append">
-                                <button class="k-button k-primary btn" type="button">
-                                    <i class="opti-icon-hammenu"></i>
-                                </button>
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'DocNo'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control form-control-sm" placeholder="{{'DocNo'|translate}}" name="DocNo" [(ngModel)]="DocNo"
+                                    [disabled]=true>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'CountDate'|translate}}</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control form-control-sm" placeholder="{{'CountDate'|translate}}" name="CountDate" [(ngModel)]="CountDate"
+                                [disabled]=true>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'Scan'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="d-flex">
+                                <input class="form-control form-control-sm" name="customerCode" type="text" placeholder="{{'Scan'|translate}}">
+                                <div class="ml-1 d-flex">
+                                    <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button">
+                                        <i class="opti-icon-qr-code fs-24"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'ItemCode'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control form-control-sm" name="ItemCode" [(ngModel)]="ItemCode" placeholder="{{'ItemCode'|translate}}" (blur)="OnItemChange()">
+                                <div class="input-group-append">
+                                    <button class="k-button k-primary btn" type="button" (click)="onItemlookupClick()">
+                                        <i class="opti-icon-hammenu"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'Name'|translate}}</label>
+                        <div class="col-sm-9">
+                            <span></span>
+                        </div>
+                    </div> -->
+                    <div class="form-group row" *ngIf="showItemName">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'Name'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control form-control-sm" name="itemName" [(ngModel)]="itemName" [disabled]=true>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'BinNo'|translate}}</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control form-control-sm" name="BinNo" [(ngModel)]="BinNo" placeholder="{{'BinNo'|translate}}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{batchNoPlaceholder}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control form-control-sm" name="batchserno" [(ngModel)]="batchserno" placeholder="{{batchNoPlaceholder}}" (blur)="OnLotChange()">
+                                <div class="input-group-append">
+                                    <button class="k-button k-primary btn" type="button" (click)="ShowBatachSerList()">
+                                        <i class="opti-icon-hammenu"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'QtyOnHand'|translate}}</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control form-control-sm" name="QtyOnHand" [(ngModel)]="QtyOnHand" placeholder="{{'QtyOnHand'|translate}}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'CountedQty'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control form-control-sm" name='CountedQty' [(ngModel)]="CountedQty" placeholder="{{'CountedQty'|translate}}">
+                                <div class="input-group-append">
+                                    <button class="k-button k-primary btn" type="button" *ngIf="!isNonTrack" (click)="AddLotSerBtnClick()">
+                                        <span class="k-icon k-i-plus-outline mr-1"></span>{{batchSrBtn}}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'UoM'|translate}}</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control form-control-sm" name='UOM' [(ngModel)]="UOM" placeholder="{{'UoM'|translate}}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'Counted'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="opti_input-group-checkbox">
+                                <input type="checkbox" id="ch7" name='isCounted' [(ngModel)]="isCounted" class="k-checkbox" checked  />
+                                <label class="k-checkbox-label" for="ch7"></label>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="form-group row">
-                  <label for="inputPassword" class="col-sm-3 col-form-label">{{'CountDate'|translate}}</label>
-                  <div class="col-sm-9">
-                    <input type="text" class="form-control form-control-sm" name ='customerCode' placeholder="{{'CountDate'|translate}}">
-                  </div>
-                </div>
-
-                <div class="form-group row">
-                  <label for="inputPassword" class="col-sm-3 col-form-label">{{'Scan'|translate}}</label>
-                  <div class="col-sm-9">
-                    <div class="d-flex">
-                      <input class="form-control form-control-sm" name="customerCode" type="text" placeholder="{{'Scan'|translate}}">
-                      <div class="ml-1 d-flex">
-                        <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button">
-                          <i class="opti-icon-qr-code fs-24"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <label for="inputPassword" class="col-sm-3 col-form-label">{{'ItemCode'|translate}}</label>
-                  <div class="col-sm-9">
-                      <div class="input-group input-group-sm">
-                          <input type="text" class="form-control form-control-sm" name ='customerCode' placeholder="{{'ItemCode'|translate}}">
-                          <div class="input-group-append">
-                              <button class="k-button k-primary btn" type="button">
-                                  <i class="opti-icon-hammenu"></i>
-                              </button>
-                          </div>
-                      </div>
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <label for="inputPassword" class="col-sm-3 col-form-label">{{'Name'|translate}}</label>
-                  <div class="col-sm-9">
-                      <span></span>
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <label for="inputPassword" class="col-sm-3 col-form-label">{{'BinNo'|translate}}</label>
-                  <div class="col-sm-9">
-                      <input type="text" class="form-control form-control-sm" name ='customerCode' placeholder="{{'BinNo'|translate}}">
-                  </div>
-                </div>
-
-                <div class="form-group row">
-                  <label for="inputPassword" class="col-sm-3 col-form-label">{{'BatchNo'|translate}}</label>
-                  <div class="col-sm-9">
-                      <div class="input-group input-group-sm">
-                          <input type="text" class="form-control form-control-sm" name ='customerCode' placeholder="{{'BatchNo'|translate}}">
-                          <div class="input-group-append">
-                              <button class="k-button k-primary btn" type="button">
-                                  <i class="opti-icon-hammenu"></i>
-                              </button>
-                          </div>
-                      </div>
-                  </div>
-                </div>
-
-                <div class="form-group row">
-                  <label for="inputPassword" class="col-sm-3 col-form-label">{{'QtyOnHand'|translate}}</label>
-                  <div class="col-sm-9">
-                      <input type="text" class="form-control form-control-sm" name ='customerCode' placeholder="{{'QtyOnHand'|translate}}">
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <label for="inputPassword" class="col-sm-3 col-form-label">{{'CountedQty'|translate}}</label>
-                  <div class="col-sm-9">
-                      <div class="input-group input-group-sm">
-                          <input type="text" class="form-control form-control-sm" name ='customerCode' placeholder="{{'CountedQty'|translate}}">
-                          <div class="input-group-append">
-                              <button class="k-button k-primary btn" type="button">
-                                  <span class="k-icon k-i-plus-outline mr-1"></span> {{'AddLot'|translate}}
-                              </button>
-                          </div>
-                      </div>
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <label for="inputPassword" class="col-sm-3 col-form-label">{{'UoM'|translate}}</label>
-                  <div class="col-sm-9">
-                      <input type="text" class="form-control form-control-sm" name ='customerCode' placeholder="{{'UoM'|translate}}">
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <label for="inputPassword" class="col-sm-3 col-form-label">{{'Counted'|translate}}</label>
-                  <div class="col-sm-9">
-                    <div class="opti_input-group-checkbox">
-                      <input type="checkbox" id="ch7" class="k-checkbox" checked />
-                      <label class="k-checkbox-label" for="ch7"></label>
-                    </div>
-                  </div>
-                </div>
-                
-
             </div>
         </div>
-    </div>
-    <div class="fix-footer-btnBar">
-        <div class="col-sm-12 col-12">
-            <hr />
+        <div class="fix-footer-btnBar">
+            <div class="col-sm-12 col-12">
+                <hr />
+            </div>
+            <div class="col-sm-12 col-12">
+                <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text">
+                    <span class="k-icon k-i-check" role="presentation"></span> {{'Submit'|translate}}</button>
+                <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text">
+                    <span class="k-icon k-i-plus-outline" role="presentation"></span> {{'Item'|translate}}</button>
+                <button type="button" class="btn btn-Primary k-button btn-sm btn-icon-with-text"
+                (click)="SavePhysicalCountData()">
+                    <span class="k-icon k-i-save" role="presentation"></span> {{'Save&Next'|translate}}</button>
+                <div class="clearfix mt-1 d-block d-sm-none"></div>
+                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="onCancelClick()">
+                    <span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
+            </div>
         </div>
-        <div class="col-sm-12 col-12">
-            <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-check"
-              role="presentation"></span> {{'Submit'|translate}}</button>
-            <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-plus-outline"
-                role="presentation"></span> {{'Item'|translate}}</button>
-            <button type="button" class="btn btn-Primary k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-save"
-                  role="presentation"></span> {{'Save&Next'|translate}}</button>
-            <div class="clearfix mt-1 d-block d-sm-none"></div>
-            <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="onCancelClick()"><span class="k-icon k-i-close-outline"
-              role="presentation"></span> {{'Cancel'|translate}}</button>
-        </div>
-    </div>
-  </form>
+    </form>
+</div>
+
+<span *ngIf="showLookupLoader">
+    <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
+</span>
+
+<span *ngIf="showConfirmDialog">
+    <app-comon-confirm-dialog [titleMessage]="dialogMsg" [yesButtonText]="yesButtonText" [fromWhere]="dialogFor" [noButtonText]="noButtonText"
+        (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
+</span>
+<div class="opti_loader full-section" *ngIf="showLoader">
+    <div class="opti_spinner"></div>
 </div>
