@@ -6218,7 +6218,7 @@ div.k-grid-footer {
     text-overflow: ellipsis; }
 
 .k-dialog-buttongroup {
-  padding: 1rem 1rem;
+  padding: 0.5rem 1rem;
   justify-content: flex-end; }
   .k-dialog-buttongroup .k-button {
     border-radius: 0.25rem;
