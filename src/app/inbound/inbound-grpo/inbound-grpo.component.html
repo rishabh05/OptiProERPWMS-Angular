@@ -112,14 +112,18 @@
                         <label class="col-sm-3 col-form-label"></label>
                         <div class="col-sm-9">
                             <div class="d-flex">
-                                <input type="text" class="form-control form-control-sm" name="ScanInputs" [(ngModel)]=ScanInputs (blur)="onScanCodeChange()"
+                                <input type="text" class="form-control form-control-sm" id="inboundScanInputField" name="ScanInputs" 
+                                [(ngModel)]=ScanInputs (blur)="onScanCodeChange()" 
                                     placeholder="{{scanInputPlaceholder}}">
                                 <div class="ml-1 d-flex">
+                                   <button type="button" id="inboundscanButton"  (click)="onInboundScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                     <i class="opti-icon-qr-code fs-24"></i>
-                                </div>
+                                    </button>
+                                    
+                                </div> 
                             </div>
                         </div>
-                    </div>
+                    </div> 
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Quantity'|translate}}</label>
                         <div class="col-sm-9">
@@ -142,7 +146,8 @@
             <!-- Kendo Table Grid Row start -->
             <div class="row">
                 <div class="col-md-12">
-                    <kendo-grid *ngIf="!isNonTrack" class="no-shadow" [kendoGridBinding]="recvingQuantityBinArray" [resizable]="true" [sortable]="true"
+                    <kendo-grid *ngIf="!isNonTrack" class="no-shadow" [kendoGridBinding]="recvingQuantityBinArray"
+                     [resizable]="true" [sortable]="true"
                         [selectable]="true" #gridItem>
 
                         <!-- grid for mobile start -->
@@ -170,7 +175,7 @@
                                     </dt>
                                     <dd>
                                         <input type="text" class="form-control form-control-sm" name="dataItem.LotNumber" value={{dataItem.LotNumber}} [disabled]=isDisabledScanInput
-                                        id="display_name" #display_name (change)="updateLotNumber(display_name.value, idx)">
+                                        id="display_name" #display_name (change)="updateLotNumber(display_name.value, idx, gridItem)">
                                     </dd>
 
                                     <dt>{{'Bin'|translate}}</dt>
@@ -189,7 +194,7 @@
                         <kendo-grid-column media="(min-width: 768px)" field="LotNumber" [width]="18" title="{{SRBatchColumnText}}">
                             <ng-template kendoGridCellTemplate let-dataItem let-idx='rowIndex'>
                                 <input type="text" class="form-control form-control-sm" name="dataItem.LotNumber" value={{dataItem.LotNumber}} [disabled]=isDisabledScanInput
-                                    id="display_name" #display_name (change)="updateLotNumber(display_name.value, idx)">
+                                    id="display_name" #display_name (change)="updateLotNumber(display_name.value, idx, gridItem)">
                             </ng-template>
                         </kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="LotQty" headerClass="text-right" class="text-right" [width]="18" title="{{'Qty'|translate}}">
@@ -216,7 +221,8 @@
 
 
 
-                    <kendo-grid *ngIf="isNonTrack" class="no-shadow" [kendoGridBinding]="recvingQuantityBinArray" [resizable]="true" [sortable]="true"
+                    <kendo-grid *ngIf="isNonTrack" class="no-shadow" [kendoGridBinding]="recvingQuantityBinArray" 
+                    [resizable]="true" [sortable]="true"
                         [selectable]="true" #gridItem>
                         <!-- grid for mobile start -->
                         <kendo-grid-column media="(max-width: 767px)" title="List" class="opti_mobile-grid-td">
@@ -307,6 +313,8 @@
                 <!-- <button class="k-button k-primary" type="button" (click)="cancel($event)">Cancel</button> -->
                 <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="cancel($event)">
                     <span class="k-icon k-i-close-outline" role="presentation"></span> Cancel</button>
+                    <button type="button" id="hiddenScanButton" style="visibility:hidden" (click)="onHiddenScanClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                            SB </button>
             </div>
         </div>
     </form>

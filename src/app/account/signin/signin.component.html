@@ -30,11 +30,11 @@
                            !emailId.errors?.valid " class="float-right opti_error-msg">
                            User does not exists.</span> -->
                           </span> 
-                          <input type="text"  name = "email" required [(ngModel)]="userName"
+                          <input type="text" id="emailID"  name = "email" required [(ngModel)]="userName"
                             #emailId = ngModel class="k-textbox" value="" placeholder="{{ 'EnterUsername'|translate}}"
                             [readonly]=readonlyFlag
                             />  
-                        </label>
+                        </label> 
 
                         <label class="k-form-field">
                           <span class="opti_form-label">{{ 'Password'|translate}}
