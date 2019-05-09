@@ -90,5 +90,23 @@ export class OutboundService {
     this.outRequest.UsernameForLic = localStorage.getItem("UserId");
     return JSON.stringify([this.outRequest]);
   }
+
+  /**
+   * check and scan code.
+   * @param whsCode 
+   */
+  checkAndScanCode(vendCode:string,scanInputString){
+    var jObject = {Gs1Token: JSON.stringify([{Vsvendorid:vendCode,StrScan:scanInputString,CompanyDBId:localStorage.getItem("CompID")}])};
+    return this.httpclient.post(this.config_params.service_url + "/api/Gs1/GS1SETUP", jObject, this.httpOptions);
+  }
+
+
+
+  getAllPickPackAndOtherSerialBatchWithoutBin(itemCode:string,scanBin:string,
+    scannedSerialValue,docEntry:string): Observable<any> {
+    var jObject = { DeliveryToken: JSON.stringify([{ COMPANYDBNAME: localStorage.getItem("CompID"), WHSCODE:  localStorage.getItem("whseId"), ITEMCODE: itemCode, BINNO: scanBin, SCANSERIAL: scannedSerialValue, 
+      DocEntry: docEntry }]) };
+      return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetAllPickPackAndOtherSerialBatchWithoutBin", jObject, this.httpOptions);
+  }
 }
 

@@ -74,7 +74,8 @@
                             </ul>
                         </div>
                         <div class="col-12 mb-2 border-bottom"></div>
-                        <kendo-grid class="no-shadow" [kendoGridBinding]="openPOLinesModel" [resizable]="true" [pageSize]="7" [pageable]="true" [sortable]="true"
+                        <kendo-grid class="no-shadow" [kendoGridBinding]="openPOLinesModel" [resizable]="true" 
+                          [pageSize]="pageSize" [pageable]="pagable" [sortable]="true"
                             [filterable]=isColumnFilter [groupable]=isColumnGroup [height]=gridHeight [selectable]="true" [rowClass]="rowCallback"
                             (selectionChange)="onClickOpenPOLineRowOpenAutoLot($event)" #gridItem>
 

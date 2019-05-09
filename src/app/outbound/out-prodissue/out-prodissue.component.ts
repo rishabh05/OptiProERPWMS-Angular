@@ -39,7 +39,7 @@ export class OutProdissueComponent implements OnInit {
   public _pickedMeterialQty: number = 0;
   public OrderType: string = '';
   public oldSelectedMeterials: any = Array<MeterialModel>();
-  public OperationType: any[];
+  public OperationType: any;
   public scanInputPlaceholder = "Scan"
   public SerialBatchHeaderTitle: string = "";
   showConfirmDialog: boolean;
@@ -129,6 +129,130 @@ export class OutProdissueComponent implements OnInit {
 
   }
 
+  onScanInputChange(){
+    //this.onGS1ScanItem(); 
+  }
+
+  prodIssueScan(){
+   
+  }
+
+  onHiddenScanClick(){
+   // alert("outbound hidden scan click")
+    this.onGS1ScanItem(); 
+  }
+  ScanInputs:string = "";
+  onGS1ScanItem(){
+   
+    var inputValue = (<HTMLInputElement>document.getElementById('outboundOrderNoScanInput')).value;
+    if(inputValue.length>0){
+     this.ScanInputs = inputValue;
+   }
+    if (this.ScanInputs != null && this.ScanInputs != undefined &&
+      this.ScanInputs != "" && this.ScanInputs != "error decoding QR Code") {
+
+    } else {
+      // if any message is required to show then show.
+      this.ScanInputs = "";
+      return;
+    }
+    let this1=this;
+    this.ourboundService.checkAndScanCode(this.outbound.CustomerData.CustomerCode, this.ScanInputs).subscribe(
+      (data: any) => {
+      //  alert("check and scan code api call response data:"+JSON.stringify(data));
+      let openQty:number;
+      let tracking:string;
+      let oepxpdt:string;
+      var piManualOrSingleDimentionBarcode = 0
+      var serialNo= "";
+      if (data != null) {
+
+          if (data[0].Error != null) {
+            if (data[0].Error == "Invalidcodescan") {
+              piManualOrSingleDimentionBarcode = 1
+              this.toastr.error('', this.translate.instant("InvalidScanCode"));
+              this.ScanInputs = "";
+              // nothing is done in old code.
+            } else {
+              // some message is handle in else section in old code
+              //return;
+            }
+            return;
+          }
+       
+          // now check if the  code is for avilable item or not other wise invalid item error.
+          var itemCode = this.outbound.SelectedItem.ITEMCODE;
+
+          if (piManualOrSingleDimentionBarcode == 0) {
+            if (data[0] != null && data[0].Value != null && (data[0].Value.toUpperCase() != itemCode.toUpperCase())) {
+              this.toastr.error('', this.translate.instant("InvalidItemCode"));
+              this.ScanInputs = "";
+              return;
+            }
+ 
+            var piExpDateExist = 0;
+            tracking = this1.OperationType;
+
+            for (var i = 0; i < data.length; i++) {
+              if (data[i].Key == '10' || data[i].Key == '21' || data[i].Key == '23') {
+                this.ScanInputs = data[i].Value;
+                serialNo = data[i].Value;
+                //scan input value me set karna hai
+                // make sure ScanInputs variable me puri string aati hai.. to uski value change karne
+                // se kuch affect na kare.
+                //scan input field par set karna hai.. ye value 10,21,23 k case me.
+              }
+              if (data[i].Key == '15' || data[i].Key == '17') {
+                var d = data[i].Value.split('/');
+                 oepxpdt = d[0] + '/' + d[1] + '/' + d[2];
+                // set value to date field 
+              ///  this.expiryDate = oepxpdt; 
+                piExpDateExist = 1; //taken this variable for date purpose check if later used.
+              }
+
+              if (data[i].Key == '30' || data[i].Key == '310' ||
+                data[i].Key == '315' || data[i].Key == '316' || data[i].Key == '320') {
+                  openQty = data[i].Value;
+              // ye dekhna hai kaise use hoga  this.addQuantity();
+              }
+            }
+          }
+
+          
+          // create array 
+          //let lookupArray:any=[{ITEMCODE:itemCode,OPENQTY:openQty}]
+         // BINNO TOTALQTY LOTNO PickQty
+          //this.getLookupValue(lookupArray,null,false); 
+          this.ourboundService.getAllPickPackAndOtherSerialBatchWithoutBin(itemCode,"",serialNo,
+          this.outbound.SelectedItem.DOCENTRY).subscribe(
+            (data: any) => {
+              console.log("data:"+data)
+              if(data!=null && data != undefined && data.length>0){
+                var binno = data[0].BINNO;
+                var totalQty = data[0].TOTALQTY;
+                var lotNo = data[0].LOTNO;
+                var PickQty = 0;
+                let lookupArray:any=[{ITEMCODE:itemCode,OPENQTY:openQty,BINNO:binno,
+                  TOTALQTY:totalQty,LOTNO:lotNo,PickQty:PickQty}];
+                  let el: any = document.getElementById('gridSelectedMeterial');
+                this.getLookupValue(lookupArray,el,true); 
+              }
+           
+            },
+            error => {
+              console.log("Error when checking availability: ", error);
+            });
+          } 
+      },
+      error => {
+        console.log("Error: ", error);
+      });
+
+
+
+               
+    
+}
   calculateRequeiredMeterial(): boolean {
     let needMeterial: boolean = false;
     let localTotalPickQty: number = this.totalPickQty;

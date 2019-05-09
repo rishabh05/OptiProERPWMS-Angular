@@ -91,6 +91,13 @@ export class InventoryEnquiryComponent implements OnInit {
     }
   }
 
+  onBatchSerialScan(){
+
+  }
+
+  onItemScan(){
+    
+  }
   /**
    * item code lookup click.
    */
@@ -331,6 +338,34 @@ export class InventoryEnquiryComponent implements OnInit {
         this.toastr.error('', error);
       },
     );
+  }
+
+  /**
+   * This method will be invoked when scan from mobile version of app device.
+   */
+  onHiddenScanBatchClick(){
+    var inputValue = (<HTMLInputElement>document.getElementById('invEnqBatchNoScanInput')).value;
+    if(inputValue.length>0){
+     this.lotNo = inputValue;
+   }
+  // alert("scan lotNo result:"+this.lotNo)
+   console.log("onLostsChange:");
+    if (this.lotNo == undefined || this.lotNo == "") {
+      return;
+    }
+    this.isFromLotChange = true;
+    this.checkBinForOtherTrackedItems();
+  }
+  /**
+   * This method will be invoked when scan from mobile version of app device.
+   */
+  onHiddenScanItemClick(){
+    var inputValue = (<HTMLInputElement>document.getElementById('invEnqItemNoScanInput2')).value;
+    if(inputValue.length>0){
+     this.itemCode = inputValue;
+   }
+  // alert("scan item result:"+this.itemCode)
+   this.OnItemCodeChange();
   }
 
   ngOnDestroy() {

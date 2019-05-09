@@ -228,6 +228,8 @@
   "DocNum": "DocNum",
   "InWhsQty": "InWhsQty",
   "IsTeamCount": "IsTeamCount",
+  "SerialCanNotbeSame": "Serial no. cannot be Same",
+  "BatchCanNotbeSame": "Batch no. cannot be Same",
   "BinCode": "BinCode",
   "Palletmessage.Lot": "Batch Details",
   "BinTransfer.NoData": "No Data Available from Selected Items",
