@@ -146,7 +146,7 @@
   "CountDate": "Count Date",
   "CountedQty": "Counted Qty",
   "Scan": "Scan",
-  "QtyOnHand": "Qty OnHand",
+  "QtyOnHand": "Qty On Hand",
   "UoM": "UoM",
   "Counted": "Counted",
   "Save&Next": "Save & Next",
@@ -237,5 +237,6 @@
   "PhysicalCount.DataSavedSuccessfully": "Data saved successfully",
   "PhysicalCount.NoDataSaved": "No data saved",
   "ServerConnectionError": "There is some error to connect with server",
-  "DocUpdatedSucessfullyMsg": "Document is Updated Successfully with DocNo"
+  "DocUpdatedSucessfullyMsg": "Document is Updated Successfully with DocNo",
+  "ViewBatchSerial": "View Batch/Serial"
 }

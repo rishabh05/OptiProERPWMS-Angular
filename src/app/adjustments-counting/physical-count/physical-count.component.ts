@@ -4,6 +4,7 @@ import { PhysicalcountService } from 'src/app/services/physicalcount.service';
 import { Commonservice } from 'src/app/services/commonservice.service';
 import { TranslateService, LangChangeEvent } from '../../../../node_modules/@ngx-translate/core';
 import { ToastrService } from '../../../../node_modules/ngx-toastr';
+import { salesOrderList } from 'src/app/DemoData/sales-order';
 
 @Component({
   selector: 'app-physical-count',
@@ -41,6 +42,8 @@ export class PhysicalCountComponent implements OnInit {
   isCounted: boolean = false;
   CountType: string;
   DocNoDetails: any;
+  // Kendo Dialog box
+  public dialogOpened = false;
 
   constructor(private phycountService: PhysicalcountService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService) {
     let userLang = navigator.language.split('-')[0];
@@ -634,4 +637,18 @@ export class PhysicalCountComponent implements OnInit {
       }
     );
   }
+
+  public close(component) {
+    this[component + 'Opened'] = false;
+  }
+
+  public open(component) {
+    this[component + 'Opened'] = true;
+  }
+
+  public action(status) {
+    this.dialogOpened = false;
+  }
+
+  public gridData: any[] = salesOrderList;
 }
