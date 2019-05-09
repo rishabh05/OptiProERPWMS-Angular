@@ -12,7 +12,7 @@ import { AutoLot } from 'src/app/models/Inbound/AutoLot';
 import { ISubscription } from 'rxjs/Subscription';
 
 
-@Component({   
+@Component({
   selector: 'app-inbound-grpo',
   templateUrl: './inbound-grpo.component.html',
   styleUrls: ['./inbound-grpo.component.scss']
@@ -39,7 +39,7 @@ export class InboundGRPOComponent implements OnInit {
   lookupfor: string;
   showLookupLoader = true;
   viewLines: any[];
-  operationType: string="";
+  operationType: string = "";
   public value: Date = new Date();
   searlNo: any = "";
   MfrSerial: any = "";
@@ -78,9 +78,9 @@ export class InboundGRPOComponent implements OnInit {
 
   showPDF: boolean = false;
   displayPDF1: boolean = false;
-  base64String: string = ""; 
+  base64String: string = "";
   fileName: string = "";
-  UOMentry: any = ""; 
+  UOMentry: any = "";
 
 
   @ViewChild('Quantity') QuantityField;
@@ -253,7 +253,7 @@ export class InboundGRPOComponent implements OnInit {
     this.inboundService.getUOMs(this.openPOLineModel[0].ITEMCODE).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log("UOM data response:",data);
+        console.log("UOM data response:", data);
         this.openPOLineModel[0].UOMList = data;
         if (this.openPOLineModel[0].UOMList.length > 0) {
           this.uomSelectedVal = this.openPOLineModel[0].UOMList[0];
@@ -278,7 +278,6 @@ export class InboundGRPOComponent implements OnInit {
   }
 
   validateQuantity(): boolean {
-
     let quantitySum: number = 0;
     for (var i = 0; i < this.recvingQuantityBinArray.length; i++) {
       quantitySum += Number(this.recvingQuantityBinArray[i].LotQty);
@@ -333,7 +332,7 @@ export class InboundGRPOComponent implements OnInit {
       this.toastr.error('', this.translate.instant("EnterQuantityErrMsg"));
       return;
     }
-    if(!Number.isInteger(this.qty)){
+    if (!Number.isInteger(this.qty)) {
       this.toastr.error('', this.translate.instant("DecimalQuantity"));
       this.QuantityField.nativeElement.focus();
       return;
@@ -362,9 +361,12 @@ export class InboundGRPOComponent implements OnInit {
             this.LastSerialNumber = [];
             this.LineId = [];
             this.addBatchSerialQty(autoLots, this.qty);
-          }
-          let result = this.recvingQuantityBinArray.find(element => element.LotNumber == this.searlNo);
-          if (result == undefined) {
+            let result = this.recvingQuantityBinArray.find(element => element.LotNumber == this.searlNo);
+            if (result == undefined) {
+              this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, 1, this.RecvbBinvalue, this.expiryDate));
+              this.qty = this.qty - 1;
+            }
+          } else {
             this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, 1, this.RecvbBinvalue, this.expiryDate));
             this.qty = this.qty - 1;
           }
@@ -407,6 +409,7 @@ export class InboundGRPOComponent implements OnInit {
       this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, qty, this.RecvbBinvalue, this.expiryDate));
     }
   }
+
   addNonTrackQty(qty: any) {
     let result = this.recvingQuantityBinArray.find(element => element.Bin == this.RecvbBinvalue);
     if (result == undefined) {
@@ -899,7 +902,7 @@ export class InboundGRPOComponent implements OnInit {
   }
 
 
-  removePODetailData(){
+  removePODetailData() {
     var inboundData = JSON.parse(localStorage.getItem("AddToGRPO"));
     if (inboundData != undefined && inboundData != null && inboundData != "") {
       for (var i = 0; i < inboundData.POReceiptLots.length; i++) {
@@ -910,7 +913,7 @@ export class InboundGRPOComponent implements OnInit {
           for (var j = 0; j < inboundData.POReceiptLotDetails.length; j++) {
             if (inboundData.POReceiptLotDetails[j].ParentLineNo == inboundData.POReceiptLots[i].Line) {
               inboundData.POReceiptLotDetails.splice(j, 1);
-              j=-1;
+              j = -1;
             }
           }
 
@@ -919,7 +922,7 @@ export class InboundGRPOComponent implements OnInit {
               inboundData.UDF[k].LineNo == inboundData.POReceiptLots[i].Line) {
               inboundData.UDF.splice(k, 1);
             }
-  
+
             if (inboundData.UDF[k].Key == "OPTM_TARGETBIN" &&
               inboundData.UDF[k].LineNo == inboundData.POReceiptLots[i].Line) {
               inboundData.UDF.splice(k, 1);
@@ -929,7 +932,7 @@ export class InboundGRPOComponent implements OnInit {
           for (var m = 0; m < inboundData.LastSerialNumber.length; m++) {
             if (inboundData.LastSerialNumber[m].ItemCode == inboundData.POReceiptLots[i].ItemCode) {
               inboundData.LastSerialNumber.splice(m, 1);
-              m=-1;
+              m = -1;
             }
           }
 
@@ -951,7 +954,7 @@ export class InboundGRPOComponent implements OnInit {
           for (var j = 0; j < GRPOReceieveData.POReceiptLotDetails.length; j++) {
             if (GRPOReceieveData.POReceiptLotDetails[j].ParentLineNo == GRPOReceieveData.POReceiptLots[i].Line) {
               GRPOReceieveData.POReceiptLotDetails.splice(j, 1);
-              j=-1;
+              j = -1;
             }
           }
 
@@ -960,7 +963,7 @@ export class InboundGRPOComponent implements OnInit {
               GRPOReceieveData.UDF[k].LineNo == GRPOReceieveData.POReceiptLots[i].Line) {
               GRPOReceieveData.UDF.splice(k, 1);
             }
-  
+
             if (GRPOReceieveData.UDF[k].Key == "OPTM_TARGETBIN" &&
               GRPOReceieveData.UDF[k].LineNo == GRPOReceieveData.POReceiptLots[i].Line) {
               GRPOReceieveData.UDF.splice(k, 1);
@@ -970,7 +973,7 @@ export class InboundGRPOComponent implements OnInit {
           for (var m = 0; m < GRPOReceieveData.LastSerialNumber.length; m++) {
             if (GRPOReceieveData.LastSerialNumber[m].ItemCode == GRPOReceieveData.POReceiptLots[i].ItemCode) {
               GRPOReceieveData.LastSerialNumber.splice(m, 1);
-              m=-1;
+              m = -1;
             }
           }
 
@@ -992,14 +995,14 @@ export class InboundGRPOComponent implements OnInit {
         console.log(data);
         if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
 
-          if(this.operationType == "All"){
+          if (this.operationType == "All") {
             localStorage.setItem("Line", "0");
             localStorage.setItem("GRPOReceieveData", "");
             localStorage.setItem("AddToGRPO", "");
             localStorage.setItem("addToGRPOPONumbers", "");
-          }else if(this.operationType ==  "Current"){
+          } else if (this.operationType == "Current") {
             this.removePODetailData();
-          }else{
+          } else {
             localStorage.setItem("Line", "0");
             localStorage.setItem("GRPOReceieveData", "");
             localStorage.setItem("AddToGRPO", "");
@@ -1036,6 +1039,7 @@ export class InboundGRPOComponent implements OnInit {
   }
 
   cancel() {
+    localStorage.setItem("PONumber", this.Ponumber);
     this.inboundMasterComponent.inboundComponent = 2;
   }
 
@@ -1310,7 +1314,7 @@ export class InboundGRPOComponent implements OnInit {
             //oAddserial.setValue("");
             this.QuantityField.nativeElement.disabled = false;
           }
-          
+
         }
       },
       error => {

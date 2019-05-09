@@ -52,7 +52,7 @@ export class LookupComponent implements OnInit {
 
 
 
-  constructor(private toastr: ToastrService, private translate: TranslateService) {
+  constructor(private toastr: ToastrService, private translate: TranslateService, private router: Router) {
     let userLang = navigator.language.split('-')[0];
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
     translate.use(userLang);
@@ -61,7 +61,11 @@ export class LookupComponent implements OnInit {
   }
 
   close_kendo_dialog() {
-    this.dialogOpened = false;
+    if (this.lookupfor == "PhyCntItemList") {
+      this.router.navigate(['home/dashboard']);
+    } else {
+      this.dialogOpened = false;
+    }
   }
   public state: State = {
     skip: 0,
@@ -138,8 +142,14 @@ export class LookupComponent implements OnInit {
     }
     else if (this.lookupfor == "OrderList") {
       this.orderList();
+    } else if (this.lookupfor == "PhyCntItemList") {
+      this.ShowPhyCntItemList();
+    } else if (this.lookupfor == "showPhyCntItemsList") {
+      this.ShowPhyCntInnerItemList();
+    } else if (this.lookupfor == "ShowBatachSerList") {
+      this.ShowBatachSerList();
     }
-    
+
     this.clearFilters();
     this.isColumnFilter = false
   }
@@ -189,8 +199,8 @@ export class LookupComponent implements OnInit {
       },
       {
         field: 'TOTALQTY',
-        headerClass:'text-right',
-        class:'text-right',
+        headerClass: 'text-right',
+        class: 'text-right',
         title: this.translate.instant("AvailableQty"),
         type: 'numeric',
         width: '100'
@@ -244,8 +254,8 @@ export class LookupComponent implements OnInit {
       },
       {
         field: 'TOTALQTY',
-        headerClass:'text-right',
-        class:'text-right',
+        headerClass: 'text-right',
+        class: 'text-right',
         title: this.translate.instant("TOTALQTY"),
         type: 'text',
         width: '100'
@@ -278,13 +288,13 @@ export class LookupComponent implements OnInit {
         title: this.translate.instant("BinNo"),
         type: 'text',
         width: '100',
-        headerClass:'',
-        class:'',
+        headerClass: '',
+        class: '',
       },
       {
         field: 'TOTALQTY',
-        headerClass:'text-right',
-        class:'text-right',
+        headerClass: 'text-right',
+        class: 'text-right',
         title: this.translate.instant("TOTALQTY"),
         type: 'text',
         width: '100',
@@ -294,8 +304,8 @@ export class LookupComponent implements OnInit {
         title: this.translate.instant("WhseCode"),
         type: 'text',
         width: '100',
-        headerClass:'',
-        class:'',
+        headerClass: '',
+        class: '',
       }
     ];
     this.lookupTitle = this.translate.instant("BinNoList");
@@ -465,6 +475,107 @@ export class LookupComponent implements OnInit {
       }
     ];
     this.lookupTitle = this.translate.instant("POList");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
+
+  ShowPhyCntItemList() {
+    this.table_head = [
+      {
+        field: 'DocNum',
+        title: this.translate.instant("DocNum"),
+        headerClass: 'text-right',
+        class: 'text-right',
+        type: 'numeric',
+        width: '80'
+      },
+      {
+        field: 'ItemCode',
+        title: this.translate.instant("ItemCode"),
+        type: 'text'
+      },
+      {
+        field: 'Bin',
+        title: this.translate.instant("Bin"),
+        type: 'text'
+      },
+      {
+        field: 'InWhsQty',
+        title: this.translate.instant("InWhsQty"),
+        headerClass: 'text-right',
+        class: 'text-right',
+        type: 'numeric'
+      },
+      {
+        field: 'CountDate',
+        title: this.translate.instant("CountDate"),
+        type: 'text'
+      },
+      {
+        field: 'IsTeamCount',
+        title: this.translate.instant("IsTeamCount"),
+        type: 'text',
+        width: '80'
+      }
+    ];
+    this.lookupTitle = this.translate.instant("ItemCodeList");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
+
+  ShowBatachSerList() {
+    this.table_head = [
+      {
+        field: 'OPTM_LOTSER',
+        title: this.translate.instant("LotNo"),
+        type: 'text'
+      },
+      {
+        field: 'ItemCode',
+        title: this.translate.instant("ItemCode"),
+        type: 'text'
+      },
+      {
+        field: 'OPTM_LOTSERQTY',
+        title: this.translate.instant("TOTALQTY"),
+        headerClass: 'text-right',
+        class: 'text-right',
+        type: 'numeric',
+      },
+      {
+        field: 'BinCode',
+        title: this.translate.instant("BinCode"),
+        type: 'text'
+      }
+    ];
+    this.lookupTitle = this.translate.instant("Palletmessage.Lot");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
+
+  ShowPhyCntInnerItemList() {
+    this.table_head = [
+      {
+        field: 'ItemCode',
+        title: this.translate.instant("ItemCode"),
+        type: 'text'
+      },
+      {
+        field: 'BinCode',
+        title: this.translate.instant("BinCode"),
+        type: 'text'
+      }
+    ];
+    this.lookupTitle = this.translate.instant("ItemCodeList");
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
         this.dialogOpened = true;

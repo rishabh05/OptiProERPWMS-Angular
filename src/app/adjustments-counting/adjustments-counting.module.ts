@@ -8,6 +8,7 @@ import { TrnaslateLazyModule } from '../../translate-lazy.module';
 import { GridModule } from '../../../node_modules/@progress/kendo-angular-grid';
 import { SharedModule } from 'src/app/shared-module/shared-module.module';
 import { FormsModule } from '../../../node_modules/@angular/forms';
+import { DialogsModule } from '@progress/kendo-angular-dialog';
 
 @NgModule({
   declarations: [PhysicalCountComponent],
@@ -18,6 +19,7 @@ import { FormsModule } from '../../../node_modules/@angular/forms';
     PerfectScrollbarModule,
     TrnaslateLazyModule,
     FormsModule,
+    DialogsModule,
     AdjustmentsCountingRoutingModule
   ]
 })

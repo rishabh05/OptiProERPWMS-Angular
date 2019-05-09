@@ -30,8 +30,8 @@ export function createTranslateLoader(http: HttpClient) {
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
-    PdfViewerModule,
+    AppRoutingModule, 
+   
     BrowserAnimationsModule,
     HttpClientModule, 
     ToastrModule.forRoot(),
