@@ -231,6 +231,9 @@ export class InboundPolistComponent implements OnInit {
 
   onClickOpenPOLineRowOpenAutoLot(selection) {
     const poline = selection.selectedRows[0].dataItem;
+    this.openPOLineModel = poline;
+    this.openPOLineModel.RPTQTY = 0;
+    this.inboundMasterComponent.setClickedItemDetail(this.openPOLineModel);
     this.getAutoLot(poline.ITEMCODE);
   }
 
@@ -254,10 +257,9 @@ export class InboundPolistComponent implements OnInit {
 
         //this.inboundMasterComponent.setAutoLots(this.autoLot);
         localStorage.setItem("primaryAutoLots", JSON.stringify(this.autoLot));
-        this.openPOLineModel = this.openPOLinesModel.find(e => e.ITEMCODE == itemCode);
+       // this.openPOLineModel = this.openPOLinesModel.find(e => e.ITEMCODE == itemCode);
         if (this.openPOLineModel != null) {
-          this.openPOLineModel.RPTQTY = 0;
-          this.inboundMasterComponent.setClickedItemDetail(this.openPOLineModel);
+
           this.inboundMasterComponent.inboundComponent = 3;
         }
       },
@@ -333,7 +335,7 @@ export class InboundPolistComponent implements OnInit {
       }
       if (localStorage.getItem("addToGRPOPONumbers") != "") {
         this.addToGRPOPONumbers = JSON.parse(localStorage.getItem("addToGRPOPONumbers"));
-        this.managePONumberListData();
+        // this.managePONumberListData();
       } else {
         this.addToGRPOPONumbers.PONumbers = [];
       }
@@ -341,9 +343,22 @@ export class InboundPolistComponent implements OnInit {
       for (var i = 0; i < this.oSavedPOLotsArray.POReceiptLots.length; i++) {
         if (this.oSavedPOLotsArray.POReceiptLots[i].PONumber == this.poCode) {
           if (addpo) {
-            this.addToGRPOPONumbers.PONumbers.push({
-              PONumber: this.oSavedPOLotsArray.POReceiptLots[i].PONumber
-            });
+
+            let isExist = false;
+            for (var c = 0; c < this.addToGRPOPONumbers.PONumbers.length; c++) {
+              if (this.addToGRPOPONumbers.PONumbers[c].PONumber == this.poCode) {
+                // this.addToGRPOPONumbers.PONumbers.splice(c, 1);
+                this.addToGRPOPONumbers.PONumbers[c].PONumber = this.oSavedPOLotsArray.POReceiptLots[i].PONumber;
+                isExist = true;
+              }
+            }
+
+            if(!isExist){
+              this.addToGRPOPONumbers.PONumbers.push({
+                PONumber: this.oSavedPOLotsArray.POReceiptLots[i].PONumber
+              });
+            }
+
             addpo = false;
           }
 
@@ -458,6 +473,7 @@ export class InboundPolistComponent implements OnInit {
           }
         }
         this.addToGRPOArray.POReceiptLots.splice(i, 1);
+        i = -1;
       }
     }
   }

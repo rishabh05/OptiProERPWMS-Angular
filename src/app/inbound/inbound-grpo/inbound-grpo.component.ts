@@ -619,6 +619,7 @@ export class InboundGRPOComponent implements OnInit {
       for (var i = 0; i < oSubmitPOLots.POReceiptLots.length; i++) {
         if (oSubmitPOLots.POReceiptLots[i].PONumber == this.Ponumber &&
           oSubmitPOLots.POReceiptLots[i].ItemCode == this.ItemCode &&
+          oSubmitPOLots.POReceiptLots[i].LineNo == this.openPOLineModel[0].LINENUM &&
           oSubmitPOLots.POReceiptLots[i].Tracking == this.tracking) {
           this.UOMentry = oSubmitPOLots.POReceiptLots[i].UOM;
           this.getUOMVal(this.UOMentry)
@@ -831,7 +832,7 @@ export class InboundGRPOComponent implements OnInit {
         ItemCode: this.openPOLineModel[0].ITEMCODE
       });
     }
-    localStorage.setItem("Line", "" + Number(localStorage.getItem("Line")) + 1);
+    localStorage.setItem("Line", "" + (Number(localStorage.getItem("Line")) + 1));
     return oSubmitPOLotsObj;
   }
 

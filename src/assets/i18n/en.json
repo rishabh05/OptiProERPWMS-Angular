@@ -237,5 +237,8 @@
   "PhysicalCount.DataSavedSuccessfully": "Data saved successfully",
   "PhysicalCount.NoDataSaved": "No data saved",
   "ServerConnectionError": "There is some error to connect with server",
-  "DocUpdatedSucessfullyMsg": "Document is Updated Successfully with DocNo"
+  "DocUpdatedSucessfullyMsg": "Document is Updated Successfully with DocNo",
+  "PhysicalCount.SerialLotcannotbeblank": "Serial cannot be blank",
+  "PhysicalCount.BatchLotcannotbeblank": "Batch cannot be blank",
+  "PhysicalCount.Operation": "Operation completed successfully"
 }

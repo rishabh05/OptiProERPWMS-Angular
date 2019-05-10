@@ -22,7 +22,7 @@ export class PhysicalCountComponent implements OnInit {
   ItemName: string;
   BinNo: string = "";
   SerialNo: string = "";
-  CountedQty: string="0";
+  CountedQty: string = "0";
   UOM: string;
   ItemTracking: string = "";
   batchNoPlaceholder: string;
@@ -41,6 +41,9 @@ export class PhysicalCountComponent implements OnInit {
   isCounted: boolean = false;
   CountType: string;
   DocNoDetails: any;
+  isLotAdded: boolean = false;
+  LotSerialQtycheck: Number = 0;
+  
 
   constructor(private phycountService: PhysicalcountService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService) {
     let userLang = navigator.language.split('-')[0];
@@ -111,7 +114,7 @@ export class PhysicalCountComponent implements OnInit {
   }
 
   ShowBatachSerList() {
-    var LotLookup = 0;
+    // var LotLookup = 0;
     // if (isSaved == "N" && this.SavedDocNoDetailArray.length == 0) {
     //     LotLookup = 1;
     // }
@@ -125,42 +128,43 @@ export class PhysicalCountComponent implements OnInit {
     //     LotLookup = 0;
     // }
 
-    if (LotLookup == 1) {
-      this.phycountService.ShowBILOTList(this.ItemCode, this.BinNo).subscribe(
-        (data: any) => {
-          this.showLoader = false;
-          console.log(data);
-          if (data != undefined) {
-            if (data.ErrorMsg == "7001") {
-              this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
-                this.translate.instant("CommonSessionExpireMsg"));
-              return;
-            }
-            if (data.length > 0) {
-              this.showLookupLoader = true;
-              this.serviceData = data;
-              this.lookupfor = "showPhyCntItemsList";
-            } else {
-              this.toastr.error('', this.translate.instant("BinTransfer.NoData"));
-            }
+    // if (LotLookup == 1) {
+    this.phycountService.ShowBILOTList(this.ItemCode, this.BinNo).subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        console.log(data);
+        if (data != undefined) {
+          if (data.ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
+          if (data.length > 0) {
+            this.showLookupLoader = true;
+            this.serviceData = data;
+            this.lookupfor = "showPhyCntItemsList";
           } else {
             this.toastr.error('', this.translate.instant("BinTransfer.NoData"));
           }
-        },
-        error => {
-          this.showLoader = false;
-          console.log("Error: ", error);
+        } else {
+          this.toastr.error('', this.translate.instant("BinTransfer.NoData"));
         }
-      );
-    } else {
-      setTimeout(() => {
-        if (this.SavedDocNoDetailArray.length > 0) {
-          this.showLookupLoader = true;
-          this.serviceData = this.SavedDocNoDetailArray;
-          this.lookupfor = "ShowBatachSerList";
-        }
-      }, 500);
-    }
+      },
+      error => {
+        this.showLoader = false;
+        console.log("Error: ", error);
+      }
+    );
+    // } 
+    // else {
+    //   setTimeout(() => {
+    //     if (this.SavedDocNoDetailArray.length > 0) {
+    //       this.showLookupLoader = true;
+    //       this.serviceData = this.SavedDocNoDetailArray;
+    //       this.lookupfor = "ShowBatachSerList";
+    //     }
+    //   }, 500);
+    // }
   }
 
   OnItemChange() {
@@ -206,11 +210,13 @@ export class PhysicalCountComponent implements OnInit {
     );
   }
 
+
   getConfirmDialogValue($event) {
     this.showConfirmDialog = false;
     if ($event.Status == "yes") {
       switch ($event.From) {
         case ("addBatchSer"):
+          this.isLotAdded = true;
           // this.DeleteRowClick(this.rowindexForDelete, this.gridDataAfterDelete);
           break;
 
@@ -219,6 +225,7 @@ export class PhysicalCountComponent implements OnInit {
     } else {
       if ($event.Status == "no") {
         // when user click on cross button nothing to do.
+        this.isLotAdded = false;
       }
     }
   }
@@ -516,11 +523,11 @@ export class PhysicalCountComponent implements OnInit {
       ItemName: this.ItemName,
       QtyCounted: this.CountedQty,
       BinNo: this.BinNo,
-      CountType: this.CountType,
+      CountType: this.DocNoDetails[index].CountType,
       InWhsQty: this.QtyOnHand,
       UOM: this.UOM,
       Counted: this.isCounted,
-      CountDate: this.CountDate,
+      CountDate: this.DocNoDetails[index].CountDate,
       LineStatus: this.DocNoDetails[index].LineStatus,
       LineNum: this.DocNoDetails[index].LineNum,
       RowOrder: this.DocNoDetails[index].RowOrder,
@@ -634,4 +641,148 @@ export class PhysicalCountComponent implements OnInit {
       }
     );
   }
+
+
+  PreparePhysicalCountData1(oAddPhysicalCountData: any):any {
+
+    var index = 0;
+    for (var i = 0; i < this.DocNoDetails.length; i++) {
+      if (this.DocNoDetails[i].ItemCode == this.ItemCode) {
+        index = i;
+      }
+    }
+
+    let isDetailExist = false;
+    for (var iAdd = 0; iAdd < oAddPhysicalCountData.Detail.length; iAdd++) {
+      if (oAddPhysicalCountData.Detail[iAdd].ItemCode == this.ItemCode && oAddPhysicalCountData.Detail[iAdd].DocNo == this.DocNo && oAddPhysicalCountData.Detail[iAdd].BinNo == this.BinNo) {
+        oAddPhysicalCountData.Detail[iAdd].QtyCounted = this.CountedQty;
+        isDetailExist = true;
+      }
+    }
+
+    if (!isDetailExist) {
+      oAddPhysicalCountData.Detail.push({
+        DocEntry: this.DocEntry,
+        DiServerToken: localStorage.getItem("Token"),
+        DocNo: this.DocNo,
+        CompanyUsername: localStorage.getItem("UserId"),
+        CompanyPassword: "",
+        CompanyDBId: localStorage.getItem("CompID"),
+        LotNo: this.batchserno,
+        ItemCode: this.ItemCode,
+        ItemName: this.ItemName,
+        QtyCounted: this.CountedQty,
+        BinNo: this.BinNo,
+        CountType: this.DocNoDetails[index].CountType,
+        InWhsQty: this.QtyOnHand,
+        UOM: this.UOM,
+        Counted: this.isCounted,
+        CountDate: this.DocNoDetails[index].CountDate,
+        LineStatus: this.DocNoDetails[index].LineStatus,
+        LineNum: this.DocNoDetails[index].LineNum,
+        RowOrder: this.DocNoDetails[index].RowOrder,
+        Time: this.DocNoDetails[index].Time,
+        BinEntry: this.DocNoDetails[index].BinEntry,
+        CounterId: this.DocNoDetails[index].CounterId,
+        CounteName: this.DocNoDetails[index].CounteName,
+        CounterNum: this.DocNoDetails[index].CounterNum,
+        VisOrder: this.DocNoDetails[index].VisOrder,
+        Taker1Type: this.DocNoDetails[index].Taker1Type,
+        Tracking: this.ItemTracking,
+        WhsCode: localStorage.getItem("whseId"),
+        isSaved: "N",
+        TeamCount: this.DocNoDetails[index].TeamCount,
+        IsTeamCount: this.IsteamCount,
+        IndvCount: this.DocNoDetails[index].IndvCount,
+        Username: localStorage.getItem("UserId"),
+        //--------------------Adding Parameters for the Licence--------------------------------------------
+        GUID: localStorage.getItem("GUID"),
+        UsernameForLic: localStorage.getItem("UserId"),
+        //------------------End for the Licence Parameter-------------------------------------------------------
+      });
+    }
+
+    let isLotSerExist = false;
+    for (var iAddLot = 0; iAddLot < oAddPhysicalCountData.LotSerial.length; iAddLot++) {
+      if (oAddPhysicalCountData.LotSerial[iAddLot].LotNo.toUpperCase == this.batchserno.toUpperCase() && oAddPhysicalCountData.LotSerial[iAddLot].ItemCode == this.ItemCode &&
+        oAddPhysicalCountData.LotSerial[iAddLot].DocNo == this.DocNo) {
+        isLotSerExist = true;
+        if (this.LotSerialQtycheck == 1) {
+          oAddPhysicalCountData.LotSerial[iAddLot].QtyCounted = this.CountedQty + oAddPhysicalCountData.LotSerial[iAddLot].QtyCounted;
+          this.LotSerialQtycheck = 0;
+        }
+        if (this.LotSerialQtycheck == 2) {
+          oAddPhysicalCountData.LotSerial[iAddLot].QtyCounted = this.CountedQty;
+          this.LotSerialQtycheck = 0;
+        }
+      }
+    }
+
+    if (!isLotSerExist) {
+      oAddPhysicalCountData.LotSerial.push({
+        DocEntry: this.DocEntry,
+        DocNo: this.DocNo,
+        CompanyUsername: localStorage.getItem("UserId"),
+        CompanyPassword: "",
+        CompanyDBId: localStorage.getItem("CompID"),
+        LotNo: this.batchserno,
+        InWhsQty: this.QtyOnHand,
+        ItemCode: this.ItemCode,
+        ItemName: this.ItemName,
+        QtyCounted: this.CountedQty,
+        BinNo: this.BinNo,
+        CountType: this.CountType,
+        Tracking: this.ItemTracking,
+        WhsCode: localStorage.getItem("whseId"),
+        Username: localStorage.getItem("UserId"),
+        //--------------------Adding Parameters for the Licence--------------------------------------------
+        GUID: localStorage.getItem("GUID"),
+        UsernameForLic: localStorage.getItem("UserId")
+        //------------------End for the Licence Parameter-------------------------------------------------------
+      });
+    }
+
+
+    if (oAddPhysicalCountData.Detail.length > 0) {
+      for (var iDetail = 0; iDetail < oAddPhysicalCountData.Detail.length; iDetail++) {
+        var totalQuantity = 0;
+        for (var iLotSerial = 0; iLotSerial < oAddPhysicalCountData.LotSerial.length; iLotSerial++) {
+          if (oAddPhysicalCountData.Detail[iDetail].ItemCode == oAddPhysicalCountData.LotSerial[iLotSerial].ItemCode && oAddPhysicalCountData.Detail[iDetail].DocNo == oAddPhysicalCountData.LotSerial[iLotSerial].DocNo && oAddPhysicalCountData.Detail[iDetail].BinNo == oAddPhysicalCountData.LotSerial[iLotSerial].BinNo) {
+            if (oAddPhysicalCountData.Detail[iDetail].Tracking == "B" || oAddPhysicalCountData.Detail[iDetail].Tracking == "S") {
+              totalQuantity = totalQuantity + parseFloat(oAddPhysicalCountData.LotSerial[iLotSerial].QtyCounted)
+              oAddPhysicalCountData.Detail[iDetail].QtyCounted = totalQuantity
+            }
+          }
+        }
+      }
+    }
+    return oAddPhysicalCountData;
+  }
+
+
+  onAddItemClick() {
+    if (this.batchserno == undefined || this.batchserno == "" || this.batchserno == null) {
+      if (this.ItemTracking == "S") {
+        this.toastr.error('', this.translate.instant("PhysicalCount.SerialLotcannotbeblank"));
+      } else {
+        this.toastr.error('', this.translate.instant("PhysicalCount.BatchLotcannotbeblank"));
+      }
+      return;
+    }
+
+    var oAddPhysicalCountData: any = {};
+    var dataModel = localStorage.getItem("PhysicalCountData");
+    if (dataModel == null || dataModel == undefined || dataModel == "") {
+      oAddPhysicalCountData.Detail = [];
+      oAddPhysicalCountData.LotSerial = [];
+      oAddPhysicalCountData.ItemList = [];
+    } else {
+      oAddPhysicalCountData = JSON.parse(dataModel);
+    }
+    oAddPhysicalCountData = this.PreparePhysicalCountData1(oAddPhysicalCountData);
+    localStorage.setItem("PhysicalCountData", JSON.stringify(oAddPhysicalCountData));
+    this.toastr.success('', this.translate.instant("PhysicalCount.Operation"));
+  }
+
+
 }
