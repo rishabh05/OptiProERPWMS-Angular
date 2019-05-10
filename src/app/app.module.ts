@@ -17,9 +17,8 @@ import { DialogsModule } from '@progress/kendo-angular-dialog';
 import { FormsModule } from '@angular/forms';
 import { OutboundModule } from './outbound/outbound.module';
 import { InputsModule } from '@progress/kendo-angular-inputs';
-//import { PdfViewerModule } from 'ng2-pdf-viewer';
 
-
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -31,7 +30,7 @@ export function createTranslateLoader(http: HttpClient) {
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
+    AppRoutingModule, 
    
     BrowserAnimationsModule,
     HttpClientModule, 

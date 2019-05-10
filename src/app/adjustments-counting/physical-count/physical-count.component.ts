@@ -4,6 +4,7 @@ import { PhysicalcountService } from 'src/app/services/physicalcount.service';
 import { Commonservice } from 'src/app/services/commonservice.service';
 import { TranslateService, LangChangeEvent } from '../../../../node_modules/@ngx-translate/core';
 import { ToastrService } from '../../../../node_modules/ngx-toastr';
+import { salesOrderList } from 'src/app/DemoData/sales-order';
 
 @Component({
   selector: 'app-physical-count',
@@ -43,7 +44,10 @@ export class PhysicalCountComponent implements OnInit {
   DocNoDetails: any;
   isLotAdded: boolean = false;
   LotSerialQtycheck: Number = 0;
-  
+  showSavedItems = false;
+  showbatchser = false;
+  // Kendo Dialog box
+  public dialogOpened = false;
 
   constructor(private phycountService: PhysicalcountService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService) {
     let userLang = navigator.language.split('-')[0];
@@ -458,18 +462,6 @@ export class PhysicalCountComponent implements OnInit {
     this.router.navigate(['home/dashboard']);
   }
 
-  AddLotSerBtnClick() {
-    if (this.batchserno == "" || this.batchserno == undefined) {
-      if (this.ItemTracking == "B") {
-        this.toastr.error('', this.translate.instant("BatchNotBlank"));
-      } else if (this.ItemTracking == "S") {
-        this.toastr.error('', this.translate.instant("SerialNotBlank"));
-      }
-      return;
-    }
-    this.LotExistCheck();
-  }
-
   SavePhysicalCountData() {
     this.showLoader = true;
     this.phycountService.SavePhysicalCountData("").subscribe(
@@ -781,8 +773,33 @@ export class PhysicalCountComponent implements OnInit {
     }
     oAddPhysicalCountData = this.PreparePhysicalCountData1(oAddPhysicalCountData);
     localStorage.setItem("PhysicalCountData", JSON.stringify(oAddPhysicalCountData));
+    if(oAddPhysicalCountData.LotSerial.length > 0){
+      this.showbatchser = true;
+    }else{
+      this.showbatchser = false;
+    }
     this.toastr.success('', this.translate.instant("PhysicalCount.Operation"));
   }
 
 
+  public close(component) {
+    this[component + 'Opened'] = false;
+  }
+
+  public open(component) {
+    this[component + 'Opened'] = true;
+  }
+
+  public action(status) {
+    this.dialogOpened = false;
+  }
+
+  public gridData: any[] = salesOrderList;
+  showLotSerList(){
+    this.dialogOpened = true;
+  }
+
+  viewSavedItems(){
+    this.showSavedItems = true;
+  }
 }

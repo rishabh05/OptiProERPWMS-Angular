@@ -77,7 +77,8 @@
                         <div *ngIf="OrderType!='N'" class="col-sm-9">
                             <div class="d-flex">
                                 <div class="input-group input-group-sm">
-                                    <input type="text" name="orderNumber" value='' class="form-control form-control-sm"
+                                    <input type="text" [(ngModel)]=ScanInputs id="outboundOrderNoScanInput" 
+                                    name="orderNumber" value='' class="form-control form-control-sm" (blur)="onScanInputChange()" 
                                         placeholder="{{scanInputPlaceholder}}">
                                     <div class="input-group-append">
                                         <button class="k-button k-primary btn " type="button" [disabled]="selected==null || selected==''"
@@ -87,8 +88,12 @@
                                     </div>
                                 </div>
                                 <div class="ml-1 d-flex">
-                                    <i class="opti-icon-qr-code fs-24"></i>
+                                        <button id="outBoundDeliverForSOScan" (click)="prodIssueScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
+                                        type="button">
+                                        <i class="opti-icon-qr-code fs-24"></i>
+                                    </button>
                                 </div>
+                               
                             </div>
                         </div>
                     </div>
@@ -198,6 +203,8 @@
                 <!-- <div class="clearfix mt-1 d-block d-sm-none"></div> -->
                 <button type="button" (click)="back()" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
+                <button type="button" id="outBoundHiddenScanButton" style="visibility:hidden" (click)="onHiddenScanClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                SB </button>
             </div>
         </div>
     </form>

@@ -1,14 +1,5 @@
-{       
-	"company_name":"Optipro ERP",
-	"app_title":"OptiProERP WMS",
-	"locale":"en",
-	"service_url":"http://localhost:57915",
-	"admin_db_name":"OPTIPROADMIN",
-	"product_code":"WMS",
-	"system_version":"1.10.1",
-    "firstHomePage": "/home/dashboard",
-    "firstHomePageVendor":"/home/vendor/vpinquery",
-    "dateFormat": "DD MMM YY",
-    "displayDateFormat":"dd MMM yy",
-    "assetsRootpath": "assets"   
-} 
+{
+    "service_url": "http://139.144.10.220/OptiProWMS",
+    "deployedFor": "handheld",
+    "clientName": "EllyzaLondon"
+}

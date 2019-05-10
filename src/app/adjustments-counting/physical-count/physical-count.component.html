@@ -5,7 +5,7 @@
             <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
                 {{'PhysicalCount'|translate}}
             </h3>
-            <div class="row">
+            <div class="row" *ngIf="!showSavedItems">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
 
                     <div class="form-group row">
@@ -44,10 +44,13 @@
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
                                 <input type="text" class="form-control form-control-sm" name="ItemCode" [(ngModel)]="ItemCode" placeholder="{{'ItemCode'|translate}}" (blur)="OnItemChange()">
-                                <div class="input-group-append">
+                                <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" type="button" (click)="onItemlookupClick()">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
+                                    <button style="padding: 0 6px;font-size:16px" class="k-button k-primary btn separate-btn" type="button" (click)="viewSavedItems()" *ngIf="showbatchser">
+                                        <i class="opti-icon-detail-view"></i>
+                                    </button>                                    
                                 </div>
                             </div>
                         </div>
@@ -78,10 +81,14 @@
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
                                 <input type="text" class="form-control form-control-sm" name="batchserno" [(ngModel)]="batchserno" placeholder="{{batchNoPlaceholder}}" (blur)="OnLotChange()">
-                                <div class="input-group-append">
+       
+                                <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" type="button" (click)="ShowBatachSerList()">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
+                                    <button class="k-button k-primary btn separate-btn" type="button" (click)="showLotSerList()" *ngIf="showbatchser">
+                                        <i class="opti-icon-view-batch mr-1"></i>{{batchSrBtn}}
+                                    </button>                                    
                                 </div>
                             </div>
                         </div>
@@ -99,7 +106,7 @@
                             <div class="input-group input-group-sm">
                                 <input type="text" class="form-control form-control-sm" name='CountedQty' [(ngModel)]="CountedQty" placeholder="{{'CountedQty'|translate}}">
                                 <div class="input-group-append">
-                                    <button class="k-button k-primary btn" type="button" *ngIf="!isNonTrack" (click)="AddLotSerBtnClick()">
+                                    <button class="k-button k-primary btn" type="button" *ngIf="!isNonTrack" (click)="onAddItemClick()">
                                         <span class="k-icon k-i-plus-outline mr-1"></span>{{batchSrBtn}}
                                     </button>
                                 </div>
@@ -123,8 +130,42 @@
                     </div>
                 </div>
             </div>
+
+            <!-- static table added 09-05-2018 -->
+            <div class="row" *ngIf="showSavedItems">
+                <div class="col-12">
+                    <div class="d-flex align-items-center">
+                        <h4 class="mt-2 mb-2  mt-md-0">{{'Item'|translate}}</h4>
+                    </div>
+                    <div class="col-12 mb-2 border-bottom"></div>
+                    <kendo-grid [data]="gridData" style="max-height:400px" class="no-shadow">
+                        <kendo-grid-column field="QuotationNumber" title="{{'DocNo'|translate}}">
+                        </kendo-grid-column>
+                        <kendo-grid-column field="QuotationDate" title="{{'ItemCode'|translate}}">
+                        </kendo-grid-column>
+                        <kendo-grid-column field="Remark" title="{{'BinNo'|translate}}">
+                        </kendo-grid-column>
+                        <kendo-grid-column field="Discontinued" width="120" title="{{'ViewBatchSerial'|translate}}">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                    <button class="k-button k-primary simple-btn" type="button">
+                                        <i class="opti-icon-detail-view"></i>
+                                    </button>   
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column field="" width="60">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                    <button class="btn btn-danger k-button btn-sm btn-icon" type="button">
+                                        <span class="k-icon k-i-delete"></span>
+                                    </button>
+                            </ng-template>
+                        </kendo-grid-column>
+                    </kendo-grid>
+                </div>
+            </div>
+            <!-- static table added 09-05-2018 -->
+
         </div>
-        <div class="fix-footer-btnBar">
+        <div class="fix-footer-btnBar" *ngIf="!showSavedItems">
             <div class="col-sm-12 col-12">
                 <hr />
             </div>
@@ -155,3 +196,33 @@
 <div class="opti_loader full-section" *ngIf="showLoader">
     <div class="opti_spinner"></div>
 </div>
+
+
+<kendo-dialog [width]="750" *ngIf="dialogOpened" (close)="close('dialog')" [minWidth]="250" [width]="450">
+    <kendo-dialog-titlebar>
+        Reported Quantities
+    </kendo-dialog-titlebar>
+    <p>81001-BatchTrack</p>
+    <kendo-grid [data]="gridData" style="max-height:370px" class="no-shadow">
+        <kendo-grid-column field="QuotationNumber" title="{{'Batch'|translate}}" width="60">
+        </kendo-grid-column>
+        <kendo-grid-column field="QuotationDate" title="{{'BinNo'|translate}}" width="250">
+        </kendo-grid-column>
+        <kendo-grid-column field="Remark" title="{{'CountedQty'|translate}}">
+        </kendo-grid-column>
+        <kendo-grid-column field="DeliveryDate" title="{{'QtyOnHand'|translate}}" width="80">
+        </kendo-grid-column>
+        <kendo-grid-column field="Discontinued" width="60">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                    <button class="btn btn-danger k-button btn-sm btn-icon" type="button">
+                        <span class="k-icon k-i-delete"></span>
+                    </button>
+            </ng-template>
+        </kendo-grid-column>
+    </kendo-grid>
+    <kendo-dialog-actions class="text-right">
+        <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (close)="close('dialog')"><span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
+    </kendo-dialog-actions>
+</kendo-dialog>
+
+

@@ -28,6 +28,26 @@
   align-items: center;
 }
 
+.opti-icon-detail-view {
+  &:before {
+    content: $opti-icon-detail-view; 
+  }
+}
+.opti-icon-view-batch {
+  &:before {
+    content: $opti-icon-view-batch; 
+  }
+}
+.opti-icon-wms-logo {
+  &:before {
+    content: $opti-icon-wms-logo; 
+  }
+}
+.opti-icon-wms-logo-with-text {
+  &:before {
+    content: $opti-icon-wms-logo-with-text; 
+  }
+}
 .opti-icon-qr-code {
   &:before {
     content: $opti-icon-qr-code; 

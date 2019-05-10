@@ -103,7 +103,7 @@ export class SigninComponent implements OnInit {
             this.toastr.error('', 'There is some error to connect with server', error);
             this.showLoader = false;
           }
-        )
+        )  
       },
       (err: HttpErrorResponse) => {
       //  alert("getPSURL httperrorsection");
@@ -120,6 +120,10 @@ export class SigninComponent implements OnInit {
     this.signinService.loadConfig();
   }
 
+
+  onScanClick(){
+    
+  }
   // getPSURL() {
   //   alert('getPs:: getps url');
   //  // localStorage.setItem("PSURLFORADMIN", "http://139.144.10.220/OptiAdmin/");
@@ -138,6 +142,7 @@ export class SigninComponent implements OnInit {
   //   alert(' at last getps url');
   // }
 
+  
   /**
    * Function for login
    */

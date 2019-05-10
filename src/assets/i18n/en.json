@@ -146,7 +146,7 @@
   "CountDate": "Count Date",
   "CountedQty": "Counted Qty",
   "Scan": "Scan",
-  "QtyOnHand": "Qty OnHand",
+  "QtyOnHand": "Qty On Hand",
   "UoM": "UoM",
   "Counted": "Counted",
   "Save&Next": "Save & Next",
@@ -228,6 +228,8 @@
   "DocNum": "DocNum",
   "InWhsQty": "InWhsQty",
   "IsTeamCount": "IsTeamCount",
+  "SerialCanNotbeSame": "Serial no. cannot be Same",
+  "BatchCanNotbeSame": "Batch no. cannot be Same",
   "BinCode": "BinCode",
   "Palletmessage.Lot": "Batch Details",
   "BinTransfer.NoData": "No Data Available from Selected Items",
@@ -240,5 +242,6 @@
   "DocUpdatedSucessfullyMsg": "Document is Updated Successfully with DocNo",
   "PhysicalCount.SerialLotcannotbeblank": "Serial cannot be blank",
   "PhysicalCount.BatchLotcannotbeblank": "Batch cannot be blank",
-  "PhysicalCount.Operation": "Operation completed successfully"
+  "PhysicalCount.Operation": "Operation completed successfully",
+  "ViewBatchSerial": "View Batch/Serial"
 }

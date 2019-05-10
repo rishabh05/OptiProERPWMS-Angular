@@ -42,6 +42,8 @@ export class InboundPolistComponent implements OnInit {
   disablePO: boolean = false;
 
   showLoader: boolean = false;
+  pagable: boolean = false;
+  pageSize: Number = 10;
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent) {
     let userLang = navigator.language.split('-')[0];
@@ -154,11 +156,17 @@ export class InboundPolistComponent implements OnInit {
             this.NonItemsDetail = [];
             this.SerialItemsDetail = [];
             this.openPOLinesModel = data.Table;
+          
             // var  unmatchedPOLinesModel = data.Table;
             this.updateReceivedQtyForSavedItems();
            
             if (this.openPOLinesModel.length > 0) {
               this.showSerialTrackItem = true;
+             // this.pagable = true;
+            }
+            if (this.openPOLinesModel.length > this.pageSize) {
+              
+              this.pagable = true;
             }
           } else if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
