@@ -1,5 +1,5 @@
 {
-    "service_url": "http://139.144.10.220/OptiProWMS",
+    "service_url": "http://localhost:57915/",
     "deployedFor": "handheld",
     "clientName": "EllyzaLondon"
 }

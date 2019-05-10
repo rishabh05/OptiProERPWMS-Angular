@@ -48,6 +48,8 @@ export class PhysicalCountComponent implements OnInit {
   showbatchser = false;
   // Kendo Dialog box
   public dialogOpened = false;
+  BatchSerialArray: any = [];
+  ItemArray: any = [];
 
   constructor(private phycountService: PhysicalcountService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService) {
     let userLang = navigator.language.split('-')[0];
@@ -58,6 +60,7 @@ export class PhysicalCountComponent implements OnInit {
   }
 
   ngOnInit() {
+    localStorage.setItem("PhysicalCountData", "");
     this.getPhysicalCountData();
   }
 
@@ -374,8 +377,8 @@ export class PhysicalCountComponent implements OnInit {
             this.formatCountedQty();
             this.formatOnHandQty();
             this.CheckTrackingandVisiblity();
-            this.GetDocNoDetails();
           }
+          this.GetDocNoDetails();
         } else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         }
@@ -392,6 +395,23 @@ export class PhysicalCountComponent implements OnInit {
       (data: any) => {
         if (data != undefined) {
           this.DocNoDetails = data;
+          var index = 0;
+          for (var i = 0; i < this.DocNoDetails.length; i++) {
+            if (this.DocNoDetails[i].ItemCode == this.ItemCode) {
+              index = i;
+            }
+          }
+          this.ItemTracking = this.DocNoDetails[index].Tracking;
+          this.CountType = this.DocNoDetails[index].CountType;
+          // this.CountDate = this.DocNoDetails[index].CountDate;
+          this.UOM = this.DocNoDetails[index].UomCode;
+          // this.CountedQty = this.DocNoDetails[index].Qty;
+          // if (this.DocNoDetails.length == 1) {
+          //   this.QtyOnHand = this.DocNoDetails[index].Qty;
+          // }
+          // this.formatCountedQty();
+          // this.formatOnHandQty();
+          this.CheckTrackingandVisiblity();          
         }
       },
       error => {
@@ -794,12 +814,68 @@ export class PhysicalCountComponent implements OnInit {
     this.dialogOpened = false;
   }
 
-  public gridData: any[] = salesOrderList;
   showLotSerList(){
+    var oAddPhysicalCountData: any = {};
+    var dataModel = localStorage.getItem("PhysicalCountData");
+    if (dataModel == null || dataModel == undefined || dataModel == "") {
+    } else {
+      oAddPhysicalCountData = JSON.parse(dataModel);
+    }
     this.dialogOpened = true;
+    this.BatchSerialArray = [];
+
+    for(var iLotSerial=0; iLotSerial<oAddPhysicalCountData.LotSerial.length; iLotSerial++){
+      if (this.ItemCode == oAddPhysicalCountData.LotSerial[iLotSerial].ItemCode && this.DocNo == oAddPhysicalCountData.LotSerial[iLotSerial].DocNo && this.BinNo == oAddPhysicalCountData.LotSerial[iLotSerial].BinNo) {
+        this.BatchSerialArray.push(oAddPhysicalCountData.LotSerial[iLotSerial])
+      }
+    }
   }
 
   viewSavedItems(){
     this.showSavedItems = true;
+    var oAddPhysicalCountData: any = {};
+    var dataModel = localStorage.getItem("PhysicalCountData");
+    if (dataModel == null || dataModel == undefined || dataModel == "") {
+    } else {
+      oAddPhysicalCountData = JSON.parse(dataModel);
+    }
+    // this.dialogOpened = true;
+    this.ItemArray = oAddPhysicalCountData.Detail;
+
+    // for(var iLotSerial=0; iLotSerial<oAddPhysicalCountData.LotSerial.length; iLotSerial++){
+    //   if (this.ItemCode == oAddPhysicalCountData.LotSerial[iLotSerial].ItemCode && this.DocNo == oAddPhysicalCountData.LotSerial[iLotSerial].DocNo && this.BinNo == oAddPhysicalCountData.LotSerial[iLotSerial].BinNo) {
+    //     this.BatchSerialArray.push(oAddPhysicalCountData.LotSerial[iLotSerial])
+    //   }
+    // }
+  }
+
+  loadFistPage(){
+    this.showSavedItems = false;
+  }
+
+  // ViewLinesRowDeleteClick(rowindex, gridData: any) {
+  //   this.TransferedItemsDetail.splice(rowindex, 1);
+  //   gridData.data = this.TransferedItemsDetail;
+  //   console.log(this.TransferedItemsDetail.length);
+  //   // const itemDetails = selection.selectedRows[0].dataItem;
+  //   // this.TransferedItemsDetail.splice(index, 1);
+
+  // }
+
+  ShowBatachSerListForClickRow(rowindex, gridData: any){
+    var oAddPhysicalCountData: any = {};
+    var dataModel = localStorage.getItem("PhysicalCountData");
+    if (dataModel == null || dataModel == undefined || dataModel == "") {
+    } else {
+      oAddPhysicalCountData = JSON.parse(dataModel);
+    }
+    this.dialogOpened = true;
+    this.BatchSerialArray = [];
+
+    for(var iLotSerial=0; iLotSerial<oAddPhysicalCountData.LotSerial.length; iLotSerial++){
+      if (oAddPhysicalCountData.Detail[rowindex].ItemCode == oAddPhysicalCountData.LotSerial[iLotSerial].ItemCode && oAddPhysicalCountData.Detail[rowindex].DocNo == oAddPhysicalCountData.LotSerial[iLotSerial].DocNo && oAddPhysicalCountData.Detail[rowindex].BinNo == oAddPhysicalCountData.LotSerial[iLotSerial].BinNo) {
+        this.BatchSerialArray.push(oAddPhysicalCountData.LotSerial[iLotSerial])
+      }
+    }
   }
 }

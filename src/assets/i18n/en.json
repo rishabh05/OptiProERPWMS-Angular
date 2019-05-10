@@ -243,5 +243,6 @@
   "PhysicalCount.SerialLotcannotbeblank": "Serial cannot be blank",
   "PhysicalCount.BatchLotcannotbeblank": "Batch cannot be blank",
   "PhysicalCount.Operation": "Operation completed successfully",
-  "ViewBatchSerial": "View Batch/Serial"
+  "ViewBatchSerial": "View Batch/Serial",
+  "DeleteRecordsMsg": "Do you want to remove the record?"
 }
