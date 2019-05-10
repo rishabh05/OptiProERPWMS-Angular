@@ -138,23 +138,56 @@
             <!-- static table added 09-05-2018 -->
             <div class="row" *ngIf="showSavedItems">
                 <div class="col-12">
-                    <kendo-grid [data]="ItemArray" style="max-height:400px" class="no-shadow">
-                        <kendo-grid-column field="DocNo" title="{{'DocNo'|translate}}">
+                    <kendo-grid [resizable]="true" [pageSize]="pageSize"
+                    [pageable]="true" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
+                    [height]=gridHeight [selectable]="true" [data]="ItemArray" style="max-height:400px" class="no-shadow">
+
+                        <!-- grid for mobile start -->
+                        <kendo-grid-column media="(max-width: 767px)" title="{{'Items'|translate}}" class="opti_mobile-grid-td">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                <dl class="opti_mobile_grid_dl">
+                                    <dt>{{'DocNo'|translate}}</dt>
+                                    <dd>{{ dataItem.DocNo }}</dd>
+
+                                    <dt>{{'BinNo'|translate}}</dt>
+                                    <dd>{{ dataItem.BinNo }}</dd>
+                                </dl>
+                                <dl class="opti_mobile_grid_dl">
+                                    <dt class="d-flex align-items-center">{{'ItemCode'|translate}} 
+                                        <button class="btn btn-danger k-button btn-sm btn-icon ml-auto" type="button"
+                                        (click)="ViewLinesRowDeleteClick(rowIndex, gridItem)">
+                                            <span class="k-icon k-i-delete"></span>
+                                        </button>
+                                    </dt>
+                                    <dd>{{ dataItem.ItemCode }}</dd>
+
+                                    <dt>{{'ViewBatchSerial'|translate}}</dt>
+                                    <dd>
+                                        <button class="k-button k-primary simple-btn" type="button" (click)="ShowBatachSerListForClickRow(rowIndex, gridItem)">
+                                            <i class="opti-icon-detail-view"></i>
+                                        </button> 
+                                    </dd>
+                                </dl>
+                            </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column field="ItemCode" title="{{'ItemCode'|translate}}">
+                        <!-- grid for mobile end -->
+
+                        <kendo-grid-column media="(min-width: 768px)" field="DocNo" title="{{'DocNo'|translate}}">
                         </kendo-grid-column>
-                        <kendo-grid-column field="BinNo" title="{{'BinNo'|translate}}">
+                        <kendo-grid-column media="(min-width: 768px)" field="ItemCode" title="{{'ItemCode'|translate}}">
                         </kendo-grid-column>
-                        <kendo-grid-column field="Discontinued" width="120" title="{{'ViewBatchSerial'|translate}}">
+                        <kendo-grid-column media="(min-width: 768px)" field="BinNo" title="{{'BinNo'|translate}}">
+                        </kendo-grid-column>
+                        <kendo-grid-column media="(min-width: 768px)" field="Discontinued" width="120" title="{{'ViewBatchSerial'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                     <button class="k-button k-primary simple-btn" type="button" (click)="ShowBatachSerListForClickRow(rowIndex, gridItem)">
                                         <i class="opti-icon-detail-view"></i>
                                     </button>   
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column field="" width="60">
+                        <kendo-grid-column media="(min-width: 768px)" field="" width="60">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                    <button class="btn btn-danger k-button btn-sm btn-icon" type="button"
+                                    <button class="btn btn-danger k-button btn-sm btn-icon " type="button"
                                     (click)="ViewLinesRowDeleteClick(rowIndex, gridItem)">
                                         <span class="k-icon k-i-delete"></span>
                                     </button>
@@ -214,16 +247,44 @@
         Reported Quantities
     </kendo-dialog-titlebar>
     <p>{{ItemCode}}</p>
-    <kendo-grid [data]="BatchSerialArray" style="max-height:370px" class="no-shadow">
-        <kendo-grid-column field="LotNo" title="{{'Batch'|translate}}" width="60">
+    <kendo-grid [resizable]="true" [pageSize]="pageSize"
+    [pageable]="true" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
+    [height]=gridHeight [selectable]="true" [data]="BatchSerialArray" style="max-height:370px" class="no-shadow">
+    
+        <!-- grid for mobile start -->
+        <kendo-grid-column media="(max-width: 767px)" title="{{'Items'|translate}}" class="opti_mobile-grid-td">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <dl class="opti_mobile_grid_dl">
+                    <dt>{{'Batch'|translate}}</dt>
+                    <dd>{{ dataItem.LotNo }}</dd>
+
+                    <dt>{{'CountedQty'|translate}}</dt>
+                    <dd>{{ dataItem.QtyCounted }}</dd>
+                </dl>
+                <dl class="opti_mobile_grid_dl">
+                    <dt class="d-flex align-items-center">{{batchSrBtn}} 
+                        <button class="btn btn-danger k-button btn-sm btn-icon ml-auto" type="button" (click)="ViewLinesRowDeleteClick(rowIndex, gridItem)">
+                            <span class="k-icon k-i-delete"></span>
+                        </button>
+                    </dt>
+                    <dd>{{ dataItem.BinNo }}</dd>
+
+                    <dt>{{'QtyOnHand'|translate}}</dt>
+                    <dd>{{ dataItem.InWhsQty }}</dd>
+                </dl>
+            </ng-template>
         </kendo-grid-column>
-        <kendo-grid-column field="BinNo" title="{{batchSrBtn}}" width="250">
+        <!-- grid for mobile end -->
+
+        <kendo-grid-column media="(min-width: 768px)" field="LotNo" title="{{'Batch'|translate}}" width="60">
         </kendo-grid-column>
-        <kendo-grid-column field="QtyCounted" title="{{'CountedQty'|translate}}">
+        <kendo-grid-column media="(min-width: 768px)" field="BinNo" title="{{batchSrBtn}}" width="250">
         </kendo-grid-column>
-        <kendo-grid-column field="InWhsQty" title="{{'QtyOnHand'|translate}}" width="80">
+        <kendo-grid-column media="(min-width: 768px)" field="QtyCounted" title="{{'CountedQty'|translate}}">
         </kendo-grid-column>
-        <kendo-grid-column field="Discontinued" width="60">
+        <kendo-grid-column media="(min-width: 768px)" field="InWhsQty" title="{{'QtyOnHand'|translate}}" width="110">
+        </kendo-grid-column>
+        <kendo-grid-column media="(min-width: 768px)" field="Discontinued" width="80">
             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                     <button class="btn btn-danger k-button btn-sm btn-icon" type="button" 
                     (click)="ViewLinesRowDeleteClick(rowIndex, gridItem)">
