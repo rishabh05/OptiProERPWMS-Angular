@@ -114,7 +114,8 @@ export class OutProdissueComponent implements OnInit {
 
       itemMeterials = this.outbound.TempMeterials.filter(
         (m: any) => m.Item.ITEMCODE
-          === this.outbound.SelectedItem.ITEMCODE && this.outbound.OrderData.DOCNUM === m.Item.DOCNUM);
+          === this.outbound.SelectedItem.ITEMCODE &&  m.Item.ROWNUM
+          === this.outbound.SelectedItem.ROWNUM && this.outbound.OrderData.DOCNUM === m.Item.DOCNUM);
     }
     if (itemMeterials !== undefined && itemMeterials !== null
       && itemMeterials.length > 0) {
@@ -519,7 +520,7 @@ export class OutProdissueComponent implements OnInit {
 
 
         this.outbound.TempMeterials = this.outbound.TempMeterials.filter((t: any) =>
-          t.Item.ITEMCODE !== this.outbound.SelectedItem.ITEMCODE || t.Item.DOCNUM !== this.outbound.OrderData.DOCNUM);
+        t.Item.ROWNUM !== this.outbound.SelectedItem.ROWNUM && t.Item.ITEMCODE !== this.outbound.SelectedItem.ITEMCODE || t.Item.DOCNUM !== this.outbound.OrderData.DOCNUM);
 
         // loop selected Items
         for (let index = 0; index < this.selectedMeterials.length; index++) {
