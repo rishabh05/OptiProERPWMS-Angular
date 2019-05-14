@@ -130,25 +130,30 @@ export class OutProdissueComponent implements OnInit {
 
   }
 
-  onScanInputChange(){
-    //this.onGS1ScanItem(); 
+  onScanInputChange() {
+    if (this.needMeterial() == false) {
+      this.toastr.error('', this.translate.instant("PickedAllRequiredItems"));
+      //alert('You picked all requerde items.');
+      return;
+    }
+    this.onGS1ScanItem();
   }
 
-  prodIssueScan(){
-   
+  prodIssueScan() {
+
   }
 
-  onHiddenScanClick(){
-   // alert("outbound hidden scan click")
-    this.onGS1ScanItem(); 
+  onHiddenScanClick() {
+    // alert("outbound hidden scan click")
+    this.onGS1ScanItem();
   }
-  ScanInputs:string = "";
-  onGS1ScanItem(){
-   
+  ScanInputs: string = "";
+  onGS1ScanItem() {
+
     var inputValue = (<HTMLInputElement>document.getElementById('outboundOrderNoScanInput')).value;
-    if(inputValue.length>0){
-     this.ScanInputs = inputValue;
-   }
+    if (inputValue.length > 0) {
+      this.ScanInputs = inputValue;
+    }
     if (this.ScanInputs != null && this.ScanInputs != undefined &&
       this.ScanInputs != "" && this.ScanInputs != "error decoding QR Code") {
 
@@ -157,16 +162,16 @@ export class OutProdissueComponent implements OnInit {
       this.ScanInputs = "";
       return;
     }
-    let this1=this;
+    let this1 = this;
     this.ourboundService.checkAndScanCode(this.outbound.CustomerData.CustomerCode, this.ScanInputs).subscribe(
       (data: any) => {
-      //  alert("check and scan code api call response data:"+JSON.stringify(data));
-      let openQty:number;
-      let tracking:string;
-      let oepxpdt:string;
-      var piManualOrSingleDimentionBarcode = 0
-      var serialNo= "";
-      if (data != null) {
+        //  alert("check and scan code api call response data:"+JSON.stringify(data));
+        let openQty: number;
+        let tracking: string;
+        let oepxpdt: string;
+        var piManualOrSingleDimentionBarcode = 0
+        var serialNo = "";
+        if (data != null) {
 
           if (data[0].Error != null) {
             if (data[0].Error == "Invalidcodescan") {
@@ -180,7 +185,7 @@ export class OutProdissueComponent implements OnInit {
             }
             return;
           }
-       
+
           // now check if the  code is for avilable item or not other wise invalid item error.
           var itemCode = this.outbound.SelectedItem.ITEMCODE;
 
@@ -190,7 +195,7 @@ export class OutProdissueComponent implements OnInit {
               this.ScanInputs = "";
               return;
             }
- 
+
             var piExpDateExist = 0;
             tracking = this1.OperationType;
 
@@ -205,45 +210,47 @@ export class OutProdissueComponent implements OnInit {
               }
               if (data[i].Key == '15' || data[i].Key == '17') {
                 var d = data[i].Value.split('/');
-                 oepxpdt = d[0] + '/' + d[1] + '/' + d[2];
+                oepxpdt = d[0] + '/' + d[1] + '/' + d[2];
                 // set value to date field 
-              ///  this.expiryDate = oepxpdt; 
+                ///  this.expiryDate = oepxpdt; 
                 piExpDateExist = 1; //taken this variable for date purpose check if later used.
               }
 
               if (data[i].Key == '30' || data[i].Key == '310' ||
                 data[i].Key == '315' || data[i].Key == '316' || data[i].Key == '320') {
-                  openQty = data[i].Value;
-              // ye dekhna hai kaise use hoga  this.addQuantity();
+                openQty = data[i].Value;
+                // ye dekhna hai kaise use hoga  this.addQuantity();
               }
             }
           }
 
-          
+
           // create array 
           //let lookupArray:any=[{ITEMCODE:itemCode,OPENQTY:openQty}]
-         // BINNO TOTALQTY LOTNO PickQty
+          // BINNO TOTALQTY LOTNO PickQty
           //this.getLookupValue(lookupArray,null,false); 
-          this.ourboundService.getAllPickPackAndOtherSerialBatchWithoutBin(itemCode,"",serialNo,
-          this.outbound.SelectedItem.DOCENTRY).subscribe(
-            (data: any) => {
-              console.log("data:"+data)
-              if(data!=null && data != undefined && data.length>0){
-                var binno = data[0].BINNO;
-                var totalQty = data[0].TOTALQTY;
-                var lotNo = data[0].LOTNO;
-                var PickQty = 0;
-                let lookupArray:any=[{ITEMCODE:itemCode,OPENQTY:openQty,BINNO:binno,
-                  TOTALQTY:totalQty,LOTNO:lotNo,PickQty:PickQty}];
+          this.ourboundService.getAllPickPackAndOtherSerialBatchWithoutBin(itemCode, "", serialNo,
+            this.outbound.SelectedItem.DOCENTRY).subscribe(
+              (data: any) => {
+                console.log("data:" + data)
+                if (data != null && data != undefined && data.length > 0) {
+                  var binno = data[0].BINNO;
+                  var totalQty = data[0].TOTALQTY;
+                  var lotNo = data[0].LOTNO;
+                  var PickQty = openQty;
+                  let lookupArray: any = [{
+                    ITEMCODE: itemCode, OPENQTY: openQty, BINNO: binno,
+                    TOTALQTY: totalQty, LOTNO: lotNo, PickQty: PickQty
+                  }];
                   let el: any = document.getElementById('gridSelectedMeterial');
-                this.getLookupValue(lookupArray,el,true); 
-              }
-           
-            },
-            error => {
-              console.log("Error when checking availability: ", error);
-            });
-          } 
+                  this.getLookupValue(lookupArray, el, true,false);
+                }
+                this.ScanInputs = "";
+              },
+              error => {
+                console.log("Error when checking availability: ", error);
+              }); 
+        }
       },
       error => {
         console.log("Error: ", error);
@@ -251,9 +258,9 @@ export class OutProdissueComponent implements OnInit {
 
 
 
-               
-    
-}
+
+
+  }
   calculateRequeiredMeterial(): boolean {
     let needMeterial: boolean = false;
     let localTotalPickQty: number = this.totalPickQty;
@@ -407,10 +414,10 @@ export class OutProdissueComponent implements OnInit {
     )
   }
 
-  getLookupValue(lookupValue: any, gridSelectedMeterial: any, updateGrid: boolean = true) {
+  getLookupValue(lookupValue: any, gridSelectedMeterial: any, updateGrid: boolean = true,scan:boolean=false) {
 
     this.comingSelectedMeterials = lookupValue;
-    this.manageMeterial();
+    this.manageMeterial(scan);
     console.log("SelectedMeterial", this.selectedMeterials);
     if (updateGrid == true)
       gridSelectedMeterial.data = this.selectedMeterials;
@@ -419,6 +426,8 @@ export class OutProdissueComponent implements OnInit {
     this.outbound.SelectedMeterials = lookupValue;
     localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
   }
+
+ 
 
   valueChange(e: any) {
     this.selectedUOM = e;
@@ -455,42 +464,73 @@ export class OutProdissueComponent implements OnInit {
     }
   }
 
-  manageMeterial() {
+  manageMeterial(scan: boolean = false) {
 
     let requiredMeterialQty: number = this._requiredMeterialQty;
     let pickedMeterialQty: number = this._pickedMeterialQty;
     let remailingMeterialQty: number = requiredMeterialQty - pickedMeterialQty;
 
     if (pickedMeterialQty < requiredMeterialQty) {
+      // if scan
+      if (scan) { 
+        let meterial = this.comingSelectedMeterials[0];
 
-      for (let i = 0; i < this.comingSelectedMeterials.length; i++) {
-
-        let meterial = this.comingSelectedMeterials[i];
-        let avaliableMeterialQty = parseFloat(meterial.TOTALQTY);
-
-        if (avaliableMeterialQty >= remailingMeterialQty) {
-          meterial.MeterialPickQty = remailingMeterialQty;
+        if(meterial.PickQty>requiredMeterialQty){
+            if(meterial.totalPickQty>remailingMeterialQty){
+              meterial.MeterialPickQty= remailingMeterialQty
+            }
+            else{
+              meterial.MeterialPickQty= meterial.totalPickQty
+            }          
         }
-        else {
-          meterial.MeterialPickQty = avaliableMeterialQty;
+        else{
+
+          if(meterial.totalPickQty>remailingMeterialQty){
+            meterial.MeterialPickQty= remailingMeterialQty
+          }
+          else{
+            meterial.MeterialPickQty= meterial.totalPickQty
+          }  
+          meterial.MeterialPickQty= meterial.TOTALQTY-meterial.PickQty
         }
 
-        // meterial.MeterialPickQty = avaliableMeterialQty - remailingMeterialQty;
-
-        // if (meterial.MeterialPickQty < 0) {
-        //   meterial.MeterialPickQty = 0.000;
-        // }
-        // else {
-        //   meterial.MeterialPickQty = remailingMeterialQty;
-        // }
-
+        
         this.selectedMeterials.push(meterial);
 
 
         pickedMeterialQty = pickedMeterialQty + meterial.MeterialPickQty;
         remailingMeterialQty = requiredMeterialQty - pickedMeterialQty;
       }
+      else {
 
+        for (let i = 0; i < this.comingSelectedMeterials.length; i++) {
+
+          let meterial = this.comingSelectedMeterials[i];
+          let avaliableMeterialQty = parseFloat(meterial.TOTALQTY);
+
+          if (avaliableMeterialQty >= remailingMeterialQty) {
+            meterial.MeterialPickQty = remailingMeterialQty;
+          }
+          else {
+            meterial.MeterialPickQty = avaliableMeterialQty;
+          }
+
+          // meterial.MeterialPickQty = avaliableMeterialQty - remailingMeterialQty;
+
+          // if (meterial.MeterialPickQty < 0) {
+          //   meterial.MeterialPickQty = 0.000;
+          // }
+          // else {
+          //   meterial.MeterialPickQty = remailingMeterialQty;
+          // }
+
+          this.selectedMeterials.push(meterial);
+
+
+          pickedMeterialQty = pickedMeterialQty + meterial.MeterialPickQty;
+          remailingMeterialQty = requiredMeterialQty - pickedMeterialQty;
+        }
+      }
       // Selected meterial
       if (this.selectedMeterials != undefined && this.selectedMeterials != undefined && this.selectedMeterials.length > 0) {
         this._pickedMeterialQty = this.selectedMeterials.map(i => i.MeterialPickQty).reduce((sum, c) => sum + c);
@@ -699,8 +739,8 @@ export class OutProdissueComponent implements OnInit {
                   tempLookup.splice(j, 1);
                   break;
                 }
-                else{
-                  tempLookup[j].TOTALQTY=sd.TOTALQTY;
+                else {
+                  tempLookup[j].TOTALQTY = sd.TOTALQTY;
                 }
               }
             }
@@ -750,8 +790,6 @@ export class OutProdissueComponent implements OnInit {
     }
     return binAndQtyCollectionArray;
   }
-
-
 
 
 }
