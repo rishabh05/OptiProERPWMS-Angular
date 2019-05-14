@@ -703,7 +703,7 @@ export class LookupComponent implements OnInit {
     }
     else {
       // let rixd: number= this.selectedValues.findIndex(i => i.LOTNO == servivceItem.LOTNO && i.LOTNO == servivceItem.BINNO)
-      this.selectedValues.slice(index, 1);
+      this.selectedValues = this.selectedValues.splice(index, 1);
     }
   }
 
