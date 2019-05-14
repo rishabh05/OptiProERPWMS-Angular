@@ -39,7 +39,7 @@ export class LookupComponent implements OnInit {
   dialogOpened: boolean = true;
   lookupTitle: string;
   pagable: boolean = false;
-  pagesize: number = 50;
+  pagesize: number;
   isMobile: boolean;
   isColumnFilter: boolean = false;
   isColumnGroup: boolean = false;
@@ -532,24 +532,24 @@ export class LookupComponent implements OnInit {
   ShowBatachSerList() {
     this.table_head = [
       {
-        field: 'OPTM_LOTSER',
+        field: 'LOTNO',
         title: this.translate.instant("LotNo"),
         type: 'text'
       },
       {
-        field: 'ItemCode',
+        field: 'ITEMCODE',
         title: this.translate.instant("ItemCode"),
         type: 'text'
       },
       {
-        field: 'OPTM_LOTSERQTY',
+        field: 'TOTALQTY',
         title: this.translate.instant("TOTALQTY"),
         headerClass: 'text-right',
         class: 'text-right',
         type: 'numeric',
       },
       {
-        field: 'BinCode',
+        field: 'BINNO',
         title: this.translate.instant("BinCode"),
         type: 'text'
       }
