@@ -22,7 +22,7 @@ export class ProductionReceiptComponent implements OnInit {
   disableSearialQty:boolean = false;
   disableOpenQty:boolean = false;
   disableAcceptQty:boolean = false;
-  
+  disableDefRejQty: boolean = false;
   //showing loader for data loading purpose.
   showLookupLoader: boolean = true;
   
@@ -63,9 +63,10 @@ export class ProductionReceiptComponent implements OnInit {
   defaultQty:any = "0";
   enteredQty:any = "0";
   enterQtyPlaceholder:any;
-  displayForm: boolean= false;
+  displayFormAndSubmit: boolean= false;
 
   acceptQty:string = "";
+  rjQty:string = "";
   showAddMoreButton: boolean = false;
 
   @ViewChild('SerialQty') SerialQtyField: ElementRef;
@@ -78,6 +79,7 @@ export class ProductionReceiptComponent implements OnInit {
     this.enterQtyPlaceholder = Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));
     this.enteredQty = Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));
     this.acceptQty =  Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));
+    this.rjQty =  Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));
     console.log("entered qty"+this.enteredQty);
     console.log("acceptQty qty"+this.acceptQty);
   }
@@ -91,6 +93,108 @@ export class ProductionReceiptComponent implements OnInit {
       return;
     }
     this.getProductionDetail();
+  }
+
+  OnBinValueChange() {
+    if (this.binNo == "") {
+      return;
+    }
+    this.productionService.isBinExists(this.binNo).subscribe(
+      (data: any) => {
+        console.log(data);
+        if (data != null) {
+          if (data.length > 0) {
+            if (data[0].Result == "0") {
+              this.toastr.error('', this.translate.instant("INVALIDBIN"));
+              this.binNo = "";
+              return;
+            }
+            else {
+              this.binNo = data[0].ID;
+              // oCurrentController.isReCeivingBinExist();
+            }
+          }
+        }
+        else {
+          this.toastr.error('', this.translate.instant("INVALIDBIN"));
+          this.binNo = "";
+          return;
+        }
+      },
+      error => {
+        console.log("Error: ", error);
+        this.binNo = "";
+      }
+    );
+  }
+
+  public submitRecord(){
+    this.validateForm();
+
+  }
+
+  prepareSubmitData(){
+   var submitRecProdData: any ={};
+   var itemsData: any =[];
+  }
+  public validateForm() {
+    if (this.tracking === "S") {
+      this.validateSerialForm();
+    }
+    if (this.tracking === "B") {
+      this.validateBatchForm();
+    }
+    if (this.tracking === "N") {
+      this.validateNonTrackedForm();
+    }
+  }
+  validateBatchForm() {
+    if (this.orderNumber == null || this.orderNumber == undefined || this.orderNumber == "") {
+      this.toastr.error('', this.translate.instant("OrderNoBlank"));
+      return;
+    }
+    if (this.enteredQty == null || this.enteredQty == undefined || this.enteredQty == "" ||
+      parseFloat(this.enteredQty).toFixed(4) == parseFloat("0").toFixed(4)) {
+      this.toastr.error('', this.translate.instant("EnterLotQuantity"));
+      return;
+    }
+    if (this.serialBatchNo == null || this.serialBatchNo == undefined || this.serialBatchNo == "") {
+      this.toastr.error('', this.translate.instant("EnterBatchNo"));
+      return;
+    }
+    if (this.binNo == null || this.binNo == undefined || this.binNo == "") {
+      this.toastr.error('', this.translate.instant("EnterBinNo"));
+      return;
+    }
+  }
+  validateSerialForm() {
+    if(this.orderNumber== null || this.orderNumber==undefined || this.orderNumber == ""){
+      this.toastr.error('', this.translate.instant("OrderNoBlank"));
+      return ;
+     }
+    if(this.serialBatchNo== null || this.serialBatchNo==undefined || this.serialBatchNo == ""){
+      this.toastr.error('', this.translate.instant("EnterSerialNo"));
+      return;
+     }
+     if(this.binNo== null || this.binNo==undefined || this.binNo == ""){
+      this.toastr.error('', this.translate.instant("EnterBinNo"));
+      return;
+     }
+  }
+  validateNonTrackedForm(){
+    if (this.orderNumber == null || this.orderNumber == undefined || this.orderNumber == "") {
+      this.toastr.error('', this.translate.instant("OrderNoBlank"));
+      return;
+    }
+    if (this.enteredQty == null || this.enteredQty == undefined || this.enteredQty == "" ||
+      parseFloat(this.enteredQty).toFixed(4) == parseFloat("0").toFixed(4)) {
+      this.toastr.error('', this.translate.instant("EnterQty"));
+      return;
+    }
+    if (this.binNo == null || this.binNo == undefined || this.binNo == "") {
+      this.toastr.error('', this.translate.instant("EnterBinNo"));
+      return;
+    }
   }
 
   /**
@@ -143,7 +247,7 @@ export class ProductionReceiptComponent implements OnInit {
     }
     this.orderNoListSubs = this.productionService.GetItemsDetailForProductionReceipt(this.orderNumber).subscribe(
       data => {
-        this.displayForm = true; 
+        this.displayFormAndSubmit = true; 
         if (data != undefined) { 
         if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
           this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
@@ -155,6 +259,7 @@ export class ProductionReceiptComponent implements OnInit {
           return;
         } else{ 
           this.toastr.error('', this.translate.instant("OrderNotExistMessge"));
+          this.orderNumber = "";
         }
       } 
       },
@@ -237,11 +342,11 @@ export class ProductionReceiptComponent implements OnInit {
        this.disableSearialQty = true; 
        //set serial form data and hide other fields
        //serial qty, openqty and 
-       this.showAddMoreButton = false;
+       this.showAddMoreButton = true;
      //  this.SerialQtyField.nativeElement.focus(); //set focus on serial qty field.
     }else if(this.tracking == "B"){
       //set batch form data and hide other fields    
-      this.showAddMoreButton = false;
+      this.showAddMoreButton = true;
     //  this.BatchQtyField.nativeElement.focus(); //set focus on batch qty field.
     }else if(this.tracking == "N"){
       //set non form data and hide other fields 
@@ -255,11 +360,14 @@ export class ProductionReceiptComponent implements OnInit {
     this.disableOpenQty = true;
     this.disableAcceptQty = true;
     
+    
     // manage reject qty fields.
-    if (this.recRejectQty == "Y") {
-      this.showRejectQtyField = true;
-    } else if (this.recRejectQty == "N" || parseFloat(this.rejectQty).toFixed(4) == parseFloat("0").toFixed(4)) {
+     if (this.recRejectQty == "N" || parseFloat(this.rejectQty).toFixed(4) == parseFloat("0").toFixed(4)) {
       this.showRejectQtyField = false;
+    }else{
+      if(parseFloat(this.rejectQty).toFixed(4)> parseFloat("0").toFixed(4)){
+        this.showRejectQtyField = true;
+      }
     }
 
   }

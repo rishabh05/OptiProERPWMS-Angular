@@ -38,5 +38,15 @@ export class ProductionService {
     var jObject = { WhsCode: JSON.stringify([{ CompanyDBId:localStorage.getItem("CompID"), ItemCode: '', WhsCode: localStorage.getItem("whseId"), QCRequired: '', PageId: "FGRECEIPT" }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetBinsForReceiptWithReceivingBin", jObject, this.httpOptions);
   }
+
+  /**
+   * check bin is exists or not.
+   * @param item 
+   */
+  isBinExists( bin:string): Observable<any> {
+    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), BinCode: bin, 
+      ItemCode: '', WhsCode: localStorage.getItem("whseId"), ALLBINS: true }]) };
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsBinExist", jObject, this.httpOptions);
+  }
   
 }
