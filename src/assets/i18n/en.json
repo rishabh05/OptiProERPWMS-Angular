@@ -251,5 +251,9 @@
   "PhysicalCount.BatchQtyChangeMsg": "Do you want to add quantity to existing batch?",
   "PhysicalCount.AddQuantity": "Add",
   "PhysicalCount.BatchLotisnotadded": "Batch is not added",
-  "PhysicalCount.SerialLotisnotadded": "Serial is not added"
+  "PhysicalCount.SerialLotisnotadded": "Serial is not added",
+  "EnterBinNo": "Enter Bin No.",
+  "EnterBatchNo": "Enter Batch No.",
+  "EnterSerialNo": "Enter Serial No.",
+  "EnterQty": "Enter Quantity."
 }

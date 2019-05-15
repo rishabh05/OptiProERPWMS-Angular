@@ -28,7 +28,7 @@
             </div>
 
             <!-- container row -->
-            <div *ngIf="displayForm"> 
+            <div *ngIf="displayFormAndSubmit"> 
                 <div class="row">
                     <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
                         <div class="form-group row">
@@ -49,11 +49,13 @@
                                 <fieldset class="d-block w-100">
                                     <div class="d-flex align-items-center w-100">
                                         <div class="d-flex align-items-center">
-                                                <label class="k-radio-label" for="InventoryEnquiryOptions1"><input type="radio" name="group" class="k-radio" />
+                                            <input id="InventoryEnquiryOptions1" type="radio" name="group" class="k-radio" />
+                                            <label class="k-radio-label" for="InventoryEnquiryOptions1">
                                             {{'PostToInv'|translate}}</label>
                                         </div>
                                         <div class="d-flex align-items-center ml-3">
-                                                <label class="k-radio-label" for="InventoryEnquiryOptions2"><input type="radio" name="group" class="k-radio" />
+                                            <input id="InventoryEnquiryOptions2" type="radio" name="group" class="k-radio" />
+                                            <label class="k-radio-label" for="InventoryEnquiryOptions2">
                                             {{'PostToReject'|translate}}</label>
                                         </div>
                                     </div>
@@ -74,8 +76,8 @@
                         <div class="form-group row" *ngIf="tracking=='B'">
                             <label for="inputPassword" class="col-sm-3 col-form-label">{{'BatchQty'|translate}}</label>
                             <div class="col-sm-9">
-                                <input type="text" #BatchQty class="form-control form-control-sm text-right" name='BatchQty' [(ngModel)]=enteredQty
-                                    placeholder="{{'BatchQty'|translate}}"> 
+                                <input type="number" #BatchQty class="form-control form-control-sm text-right"
+                                name='BatchQty' [(ngModel)]=enteredQty  placeholder="{{'BatchQty'|translate}}"> 
                             </div>
                         </div> 
                         <div class="form-group row"  *ngIf="tracking=='N'"  >
@@ -121,7 +123,8 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">{{'Bin'|translate}}</label>
                             <div class="col-sm-9">
                                 <div class="input-group input-group-sm">
-                                    <input type="text" class="form-control form-control-sm" [(ngModel)]=binNo name='binNo' placeholder="{{'Bin'|translate}}">
+                                    <input type="text" class="form-control form-control-sm"   (blur)="OnBinValueChange()"
+                                    [(ngModel)]=binNo name='binNo' placeholder="{{'Bin'|translate}}">
                                     <div class="input-group-append">
                                         <button class="k-button k-primary btn" type="button" (click)="getBinList()"  >
                                             <i class="opti-icon-hammenu"></i>
@@ -144,7 +147,7 @@
                         <div class="form-group row"  *ngIf ="showRejectQtyField">
                             <label for="inputPassword" class="col-sm-3 col-form-label">{{'DefectQty'|translate}}</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control form-control-sm text-right" name='defectQty'  [attr.disabled]="disableAcceptQty" [(ngModel)]=rejectQty
+                                <input type="text" class="form-control form-control-sm text-right" name='defectQty'  [attr.disabled]="disableDefRejQty" [(ngModel)]=rejectQty
                                     placeholder="{{'DefectQty'|translate}}">
                             </div>
                         </div>
@@ -165,8 +168,8 @@
                         <div class="form-group row" *ngIf ="showRejectQtyField">
                             <label for="inputPassword" class="col-sm-3 col-form-label">{{'RejectQty'|translate}}</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control form-control-sm text-right" name='rejectQty'
-                                    placeholder="{{'RejectQty'|translate}}"> 
+                                <input type="text" class="form-control form-control-sm text-right" name='rejectQty' 
+                                [(ngModel)]="rjQty" [attr.disabled]="disableDefRejQty" placeholder="{{'RejectQty'|translate}}"> 
                             </div>
                         </div>
                     </div>
@@ -179,9 +182,9 @@
         <div class="fix-footer-btnBar">
             <div class="col-sm-12 col-12">
                 <hr />
-            </div>
-            <div class="col-sm-12 col-12">
-                    <button type="button" *ngIf="showAddMoreButton" (click)="save($event)" class="btn btn-success k-button btn-sm btn-icon-with-text">
+            </div> 
+            <div class="col-sm-12 col-12">  
+                    <button type="button" *ngIf="displayFormAndSubmit" (click)="submitRecord($event)" class="btn btn-success k-button btn-sm btn-icon-with-text">
                             <span class="k-icon k-i-save" role="presentation"></span> {{'Submit'|translate}}</button>
                             <button class="k-button k-primary k-button btn-sm btn-icon-with-text" *ngIf="showAddMoreButton" type="button" (click)="receive($event)">
                                     <span class="k-icon k-i-download" role="presentation"></span> {{'AddMore'|translate}}</button>
