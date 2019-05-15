@@ -245,5 +245,11 @@
   "PhysicalCount.Operation": "Operation completed successfully",
   "ViewBatchSerial": "View Batch/Serial",
   "DeleteRecordsMsg": "Do you want to remove the record?",
-  "ReloadPageMsg":"Something went wrong try to reload webpage."
-} 
+  "ReloadPageMsg":"Something went wrong try to reload webpage.",
+  "PhysicalCount.Overwrite": "Overwrite",
+  "PhysicalCount.SerialQtyChangeMsg": "Do you want to overwrite quantity to existing serial?",
+  "PhysicalCount.BatchQtyChangeMsg": "Do you want to add quantity to existing batch?",
+  "PhysicalCount.AddQuantity": "Add",
+  "PhysicalCount.BatchLotisnotadded": "Batch is not added",
+  "PhysicalCount.SerialLotisnotadded": "Serial is not added"
+}

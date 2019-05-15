@@ -300,8 +300,8 @@ export class OutOrderComponent implements OnInit {
           for (let j = 0; j < this.outbound.TempMeterials.length; j++) {
 
             const element = this.outbound.TempMeterials[j];
-
-            if (soelement.ITEMCODE === element.Item.ITEMCODE && this.outbound.OrderData.DOCNUM === element.Order.DOCNUM) {
+            console.log("My Element",element);
+            if (soelement.ROWNUM=== element.Item.ROWNUM && soelement.ITEMCODE === element.Item.ITEMCODE && this.outbound.OrderData.DOCNUM === element.Order.DOCNUM) {
               totalPickQty = totalPickQty + element.Meterial.MeterialPickQty;
             }
           }
