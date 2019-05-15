@@ -7,6 +7,7 @@ import { MenuService } from '../../services/menu.service';
 import { UIHelper } from '../../helpers/ui.helpers';
 import { CommandName } from 'selenium-webdriver';
 import { CommonConstants } from '../../const/common-constants';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-portal-left',
@@ -16,7 +17,7 @@ import { CommonConstants } from '../../const/common-constants';
 export class PortalLeftComponent implements OnInit {
 
   
-  constructor(private commonService: Commonservice, private router: Router, private menuService: MenuService) {
+  constructor(private commonService: Commonservice, private router: Router, private menuService: MenuService,private translate: TranslateService) {
     router.events.subscribe((val) => {
        // get current url with last word
       let partsOfUrl = this.router.url.split('/');
@@ -57,7 +58,7 @@ export class PortalLeftComponent implements OnInit {
         this.displayMenuOptions(data.Modules);
       },
       error => {
-        alert("get All Menus Failed");
+        alert( this.translate.instant("ReloadPageMsg"));
       }
     );
   }

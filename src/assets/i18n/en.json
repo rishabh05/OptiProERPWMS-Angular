@@ -244,5 +244,6 @@
   "PhysicalCount.BatchLotcannotbeblank": "Batch cannot be blank",
   "PhysicalCount.Operation": "Operation completed successfully",
   "ViewBatchSerial": "View Batch/Serial",
-  "DeleteRecordsMsg": "Do you want to remove the record?"
-}
+  "DeleteRecordsMsg": "Do you want to remove the record?",
+  "ReloadPageMsg":"Something went wrong try to reload webpage."
+} 

@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer } from '@angular/core';
+import { Component, OnInit, Renderer, ViewChild, ElementRef } from '@angular/core';
 import { Commonservice } from '../../services/commonservice.service';
 import { Router } from '@angular/router';
 import { ProductionService } from '../../services/production.service';
@@ -37,7 +37,7 @@ export class ProductionReceiptComponent implements OnInit {
   itemCode:string = "";
   itemName: string ="";
   orderQty = "";
-  tracking: string="";
+  tracking: string="N"; 
   rejectQty: string = "";
   postedFGQTY: string = "";
   passedQty: string = "";
@@ -53,16 +53,33 @@ export class ProductionReceiptComponent implements OnInit {
   qty:string = "";
   serialNo:string = "";
   batchNo: string = "";
-
+  serialBatchNo: string = "";
   binList: any[];
   binNo: string = "";
   whsCode: string = "";
   showRejectQtyField = false;
   type ="N"; //S for serial, B for Batch, N for non tracked.
+  showColon: boolean = false;
+  defaultQty:any = "0";
+  enteredQty:any = "0";
+  enterQtyPlaceholder:any;
+  displayForm: boolean= false;
+
+  acceptQty:string = "";
+  showAddMoreButton: boolean = false;
+
+  @ViewChild('SerialQty') SerialQtyField: ElementRef;
+  @ViewChild('BatchQty') BatchQtyField: ElementRef;
+  @ViewChild('Qty') QtyField: ElementRef;
   constructor(private renderer: Renderer, private commonservice: Commonservice, private router: Router, private productionService: ProductionService,
     private toastr: ToastrService, private translate: TranslateService) { }
 
   ngOnInit() {
+    this.enterQtyPlaceholder = Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));
+    this.enteredQty = Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));
+    this.acceptQty =  Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));
+    console.log("entered qty"+this.enteredQty);
+    console.log("acceptQty qty"+this.acceptQty);
   }
 
   OnOrderLookupClick(){
@@ -87,7 +104,7 @@ export class ProductionReceiptComponent implements OnInit {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
             return;
-          }
+          } 
           if (data.Table != undefined && data.Table != null && data.Table != "") {
             this.showLookupLoader = false;
             this.serviceData = data.Table;
@@ -111,7 +128,11 @@ export class ProductionReceiptComponent implements OnInit {
       //this.lotNo = $event[0];
       this.orderNumber = $event[0];
       this.item = $event[1];
+    } else if (this.lookupfor == "ToBinList") {
+      this.binNo = $event[0];
+      this.whsCode = $event[1];
     }
+
   }
 
 
@@ -122,14 +143,14 @@ export class ProductionReceiptComponent implements OnInit {
     }
     this.orderNoListSubs = this.productionService.GetItemsDetailForProductionReceipt(this.orderNumber).subscribe(
       data => {
+        this.displayForm = true; 
         if (data != undefined) { 
         if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
           this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
             this.translate.instant("CommonSessionExpireMsg"));
           return;
         }
-        if (data.Table != undefined && data.Table != null && data.Table!="" && data.Table.length()>0) {
-          this.showLookupLoader = false;
+        if (data.Table != undefined && data.Table != null && data.Table!="" && data.Table.length>0) {          this.showLookupLoader = false;
            this.setFormData(data.Table[0])
           return;
         } else{ 
@@ -163,7 +184,32 @@ export class ProductionReceiptComponent implements OnInit {
     },);
     
   }
-  setFormData(response:any){
+
+  
+  getBinList(){
+    this.binListSubs = this.productionService.GetBinsList().subscribe(  
+      data => {
+      if (data != undefined) { 
+      if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+        this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+          this.translate.instant("CommonSessionExpireMsg"));
+        return;
+      }
+      if (data != undefined && data != null && data!="") {
+
+        this.showLookupLoader = false;
+        this.serviceData = data;
+        this.lookupfor = "ToBinList";
+        return;
+      } 
+    } 
+    },
+    error => {
+      this.toastr.error('', error);
+    },);
+  }
+
+  setFormData(response:any){ 
     this.itemCode = response.ItemCode;
     this.itemName = response.ItemName;
     this.acctDefectQty = response.ACCTDEFECTQTY;
@@ -178,23 +224,47 @@ export class ProductionReceiptComponent implements OnInit {
     this.rejectQty = response.RejectQTY;
     this.tracking = response.TRACKING;
     this.whsCode = response.WhsCode;
+    
+    if(this.itemCode !=null && this.itemCode!=undefined && this.itemCode !=""
+     && this.itemName!=null && this.itemName!=undefined && this.itemName!= ""){
+      this.showColon = true;
+     }
     if(this.tracking == "S")
     {
-       this.serialQty = "1.0000";
-       this.disableSearialQty = true;
+       //this.serialQty = "1.0000";
+       this.serialQty = Number(1)+  Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));
+       this.enteredQty = this.serialQty;
+       this.disableSearialQty = true; 
        //set serial form data and hide other fields
        //serial qty, openqty and 
+       this.showAddMoreButton = false;
+     //  this.SerialQtyField.nativeElement.focus(); //set focus on serial qty field.
     }else if(this.tracking == "B"){
       //set batch form data and hide other fields    
+      this.showAddMoreButton = false;
+    //  this.BatchQtyField.nativeElement.focus(); //set focus on batch qty field.
     }else if(this.tracking == "N"){
-      //set non form data and hide other fields    
+      //set non form data and hide other fields 
+      
+      this.showAddMoreButton = false;   
+    //  console.log('--this.SerialQtyField.nativeElement---',this.QtyField.nativeElement);
+      // this.QtyField.nativeElement.focus(); //set focus on non qty field.
+      
     }
     //this two fields will be disable in all three cases.
     this.disableOpenQty = true;
     this.disableAcceptQty = true;
+    
+    // manage reject qty fields.
+    if (this.recRejectQty == "Y") {
+      this.showRejectQtyField = true;
+    } else if (this.recRejectQty == "N" || parseFloat(this.rejectQty).toFixed(4) == parseFloat("0").toFixed(4)) {
+      this.showRejectQtyField = false;
+    }
+
   }
 
-  ngOnDestroy() {
+  ngOnDestroy() { 
   if (this.orderNoListSubs != undefined)
     this.orderNoListSubs.unsubscribe();
   }
