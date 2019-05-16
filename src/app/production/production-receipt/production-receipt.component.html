@@ -93,7 +93,7 @@
                         <div class="form-group row" *ngIf="tracking=='S'">
                             <label for="inputPassword" class="col-sm-3 col-form-label">{{'Serial'|translate}}</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control form-control-sm" [(ngModel)]=serialBatchNo name='Serial' placeholder="{{'Serial'|translate}}">
+                                <input type="text" class="form-control form-control-sm" (blur)="checkAndValidateSerial()" [(ngModel)]=serialBatchNo name='Serial' placeholder="{{'Serial'|translate}}">
                             </div>
                         </div>
                         <div class="form-group row" *ngIf="tracking=='B'">
@@ -184,8 +184,12 @@
             <div class="col-sm-12 col-12">  
                     <button type="button" *ngIf="displayFormAndSubmit" (click)="submitRecord($event)" class="btn btn-success k-button btn-sm btn-icon-with-text">
                             <span class="k-icon k-i-save" role="presentation"></span> {{'Submit'|translate}}</button>
-                            <button class="k-button k-primary k-button btn-sm btn-icon-with-text" *ngIf="showAddMoreButton" type="button" (click)="receive($event)">
+                            <button class="k-button k-primary k-button btn-sm btn-icon-with-text" *ngIf="showAddMoreButton" type="button" (click)="addMoreClick($event)">
                                     <span class="k-icon k-i-download" role="presentation"></span> {{'AddMore'|translate}}</button>
+                                    <button class="k-button k-primary k-button btn-sm btn-icon-with-text" *ngIf="showViewAcceptButton" type="button" (click)="showViewAcceptItems($event)">
+                                            <span class="k-icon k-i-download" role="presentation"></span> {{'ViewAccept'|translate}}</button>
+                                   <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="onCancelClick()"><span class="k-icon k-i-close-outline"
+                                                role="presentation"></span> {{'Cancel'|translate}}</button>
                 <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="onCancelClick()"><span class="k-icon k-i-close-outline"
                         role="presentation"></span> {{'Cancel'|translate}}</button>
                 <!-- <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" 
@@ -200,5 +204,12 @@
 </div>
  <!-- loader start -->
  <div class="opti_loader" *ngIf="showLookupLoader==true">
-    <div class="opti_spinner"></div>
+    <div class="opti_spinner"></div> 
 </div>
+
+<!--delete dialog start-->
+<span *ngIf="showConfirmDialog">
+        <app-comon-confirm-dialog [titleMessage]="dialogMsg" [yesButtonText]="yesButtonText" [fromWhere]="dialogFor" [noButtonText]="noButtonText"
+            (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
+</span>
+<!--delete dialog end-->

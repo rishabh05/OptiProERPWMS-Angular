@@ -17,7 +17,7 @@ export class ProductionReceiptComponent implements OnInit {
   //subscription variables.
   orderNoListSubs: ISubscription;
   binListSubs: ISubscription;
-  
+  checkValidateSerialSubs: ISubscription;
   //for making disable the three fields.
   disableSearialQty:boolean = false;
   disableOpenQty:boolean = false;
@@ -43,14 +43,14 @@ export class ProductionReceiptComponent implements OnInit {
   passedQty: string = "";
   printLbl: string = "";
   recRejectQty: string = "";
-  acctDefectQty: string = "";
+  ACCTDEFECTQTY: string = "";
   orignalActualQty: string = "";
   refDocEntry: string = "";
   expDate:string = "";
 
   serialQty:string ="";
   batchQty:string ="";
-  qty:string = "";
+
   serialNo:string = "";
   batchNo: string = "";
   serialBatchNo: string = "";
@@ -68,7 +68,10 @@ export class ProductionReceiptComponent implements OnInit {
   acceptQty:string = "";
   rjQty:string = "";
   showAddMoreButton: boolean = false;
-
+  showViewAcceptButton: boolean = false;
+  Transaction: string = "ProductionReceipt";
+  ONLINEPOSTING: string = null;
+  IsPalletExist:boolean = false;
   @ViewChild('SerialQty') SerialQtyField: ElementRef;
   @ViewChild('BatchQty') BatchQtyField: ElementRef;
   @ViewChild('Qty') QtyField: ElementRef;
@@ -130,12 +133,54 @@ export class ProductionReceiptComponent implements OnInit {
 
   public submitRecord(){
     this.validateForm();
+    this.prepareSubmitData();
 
+  }
+  public addMoreClick(){
+    // validate the form data and then add in local storage if already there then add item in item 
+    //array or lot in lot array
   }
 
   prepareSubmitData(){
    var submitRecProdData: any ={};
    var itemsData: any =[];
+   var UDF: any = [];
+   var RejectItems: any = [];
+   var RejectLots: any = [];
+   var Lots: any = [];
+   itemsData.push({
+    DiServerToken: localStorage.getItem("Token"),
+    CompanyDBId: localStorage.getItem("CompID"),
+    Transaction:this.Transaction,
+    RECUSERID: localStorage.getItem("UserId"),
+    ONLINEPOSTING:this.ONLINEPOSTING,
+    BATCHNO: this.orderNumber,
+    LineNo:0,
+    RefDocEntry:this.refDocEntry,
+    RejectQTY:this.rejectQty,
+    RecRjctedQty:this.recRejectQty,
+    DOCENTRY:this.refDocEntry,
+    Quantity: this.enteredQty,
+    ItemCode: this.itemCode,
+    POSTEDFGQTY: this.postedFGQTY,
+    PASSEDQTY: this.passedQty,
+    AcctDefectQty: this.ACCTDEFECTQTY,
+    FGQTYTOPOST: this.orignalActualQty,//abhi k lea need to check
+    WhsCode:this.whsCode,
+    Tracking:this.tracking,
+    IsPalletExist:this.IsPalletExist,
+    LoginId:localStorage.getItem("UserId"),
+    GUID: localStorage.getItem("GUID"),
+    UsernameForLic: localStorage.getItem("UserId")
+   });
+   Lots.push({
+    Bin: this.binNo,
+    LineNo: 0,
+    LotNumber:this.serialBatchNo,
+    LotQty:this.enteredQty,//need to check
+    ExpiryDate: this.expDate
+   })
+   submitRecProdData={Items:itemsData,Lots:Lots,UDF:UDF,RejectItems:RejectItems,RejectLots:RejectLots}
   }
   public validateForm() {
     if (this.tracking === "S") {
@@ -164,6 +209,10 @@ export class ProductionReceiptComponent implements OnInit {
     }
     if (this.binNo == null || this.binNo == undefined || this.binNo == "") {
       this.toastr.error('', this.translate.instant("EnterBinNo"));
+      return;
+    }
+    if(parseFloat(this.enteredQty).toFixed(4) < parseFloat("0").toFixed(4)){
+      this.toastr.error('', this.translate.instant("QtyGraterThenZero"));
       return;
     }
   }
@@ -195,6 +244,31 @@ export class ProductionReceiptComponent implements OnInit {
       this.toastr.error('', this.translate.instant("EnterBinNo"));
       return;
     }
+    if(parseFloat(this.enteredQty).toFixed(4) < parseFloat("0").toFixed(4)){
+      this.toastr.error('', this.translate.instant("QtyGraterThenZero"));
+      return;
+    }
+  }
+  checkAndValidateSerial(){
+    this.checkValidateSerialSubs = this.productionService.isSerialExists(this.serialBatchNo,this.itemCode).subscribe(
+      data => {
+        if (data != undefined) {
+          if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          } 
+          //check and update response for entered serial no.
+          if (data.Table != undefined && data.Table != null && data.Table != "") {
+           
+            return;
+          }
+        }
+      },
+      error => {
+        this.toastr.error('', error);
+      },
+    );
   }
 
   /**
@@ -317,7 +391,7 @@ export class ProductionReceiptComponent implements OnInit {
   setFormData(response:any){ 
     this.itemCode = response.ItemCode;
     this.itemName = response.ItemName;
-    this.acctDefectQty = response.ACCTDEFECTQTY;
+    this.ACCTDEFECTQTY = response.ACCTDEFECTQTY;
     this.orignalActualQty = response.ORIGINALACTUALQUANTITY;
     this.orderNumber = response.OrderNo;
     this.orderQty = response.OrderQty;
@@ -371,10 +445,62 @@ export class ProductionReceiptComponent implements OnInit {
     }
 
   }
+  showViewAcceptItems(){
+    //manage variables for showing grid and ok delete button seperate div section of View accept items.
+  }
+  showViewRejetItems(){
+    //show view reject items.
+  }
 
+  viewAcceptOkClick(){
+    //set variable to hide grid and show the form.
+
+  }
+  deleteAllClick(){
+    // clear all items from array after alert.
+    // ckeck if after delete
+  }
+
+  deleteSingleItem(){
+    //splice item from Array. and update grid.
+  }
   ngOnDestroy() { 
   if (this.orderNoListSubs != undefined)
     this.orderNoListSubs.unsubscribe();
+  }
+  dialogFor: string = "";
+  dialogMsg: string = ""
+  yesButtonText: string = "";
+  noButtonText: string = "";
+  showConfirmDialog: boolean;
+  public confirmDialogForDeleteAll(gridData: any) {
+    this.dialogFor = "deleteAll";
+    this.dialogMsg = this.translate.instant("DoYouWantToDelete");
+    this.yesButtonText = this.translate.instant("yes");
+    this.noButtonText = this.translate.instant("no");
+    this.showConfirmDialog = true;
+  }
+
+  
+  getConfirmDialogValue($event) {
+    this.showConfirmDialog = false;
+    if ($event.Status == "yes") {
+      switch ($event.From) {
+        case ("deleteAll"):
+          this.deleteAllClick();
+          break;
+        case ("delete"):
+          //call method to delete item or remove its data from array
+          break;
+      
+      }
+    } else {
+      if ($event.Status == "cancel") {
+        // when user click on cross button nothing to do.
+      } else{
+        // nothing to do.
+      }
+    }
   }
 
   onCancelClick() {

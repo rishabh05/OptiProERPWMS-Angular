@@ -255,5 +255,9 @@
   "EnterBinNo": "Enter Bin No.",
   "EnterBatchNo": "Enter Batch No.",
   "EnterSerialNo": "Enter Serial No.",
-  "EnterQty": "Enter Quantity."
+  "EnterQty": "Enter Quantity.",
+  "QtyGraterThenZero": "Quantity should be greater than zero(0).",
+  "ViewAccept":"View Accept",
+  "ViewReject": "View Reject"
+  
 }

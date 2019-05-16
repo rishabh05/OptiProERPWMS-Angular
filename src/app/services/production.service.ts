@@ -48,5 +48,18 @@ export class ProductionService {
       ItemCode: '', WhsCode: localStorage.getItem("whseId"), ALLBINS: true }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsBinExist", jObject, this.httpOptions);
   }
-  
+
+  submitProductionRecepit(submitReceiptProdData:any): Observable<any>{
+    var jObject = { GoodsReceiptModel: JSON.stringify(submitReceiptProdData) };
+    return this.httpclient.post(this.config_params.service_url + "/api/ProductionReceipt/SubmitProductionReceipt", jObject, this.httpOptions);
+  }
+  /**
+   * check bin is exists or not.
+   * @param item 
+   */
+  isSerialExists( serialNo:string,itemCode:string): Observable<any> {
+   
+    var jObject = { SerialNo: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), ItemCode: itemCode, SerialNo: serialNo }]) };
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/CheckSerialNo", jObject, this.httpOptions);
+  }
 }
