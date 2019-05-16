@@ -1,8 +1,8 @@
-<div class="opti_container position-relative bg-white rounded">
+<div class="opti_container position-relative bg-white rounded" *ngIf="true">
     <form class="form-with-fix-btnBar">
         <div class="opti_container_inner" [perfectScrollbar]=" ">
 
-            <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
+            <h3 class="border-bottom d-flex pt-1 pb-3 mb-4" >
                 {{'receiptFromProduction'|translate}}
             </h3>
             <div class="row"> 
@@ -193,9 +193,84 @@
                 <!-- <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" 
                   roterLink="binTransfer" skipLocationChange><i class="opti-icon-arrow-next"></i></button> -->
             </div>
-    </div>
+        </div>
     </form>
 </div>
+
+<!-- Accept Item Grid Start -->
+<div class="opti_container position-relative bg-white rounded" *ngIf="false">
+    <form class="form-with-fix-btnBar">
+        <div class="opti_container_inner" [perfectScrollbar]=" ">
+
+            <h3 class="border-bottom d-flex pt-1 pb-3 mb-4" >
+                {{'AcceptedSerials'|translate}}
+            </h3>
+
+            <div class="row">
+                <div class="col-12">
+
+                    <kendo-grid [resizable]="true" [pageSize]="pageSize" [pageable]="false" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
+                        [height]=gridHeight [selectable]="true" [data]="ItemArray" style="max-height:400px" class="no-shadow"
+                        #gridItem>
+
+                        <!-- grid for mobile start -->
+                        <kendo-grid-column media="(max-width: 767px)" title="{{'AcceptedSerials '|translate}}" class="opti_mobile-grid-td">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                <dl class="opti_mobile_grid_dl">
+                                    <dt>{{'Serial'|translate}}</dt>
+                                    <dd>{{ dataItem.DocNo }}</dd>
+
+                                    <dt>{{'Quantity'|translate}}</dt>
+                                    <dd>{{ dataItem.BinNo }}</dd>
+                                </dl>
+                                <dl class="opti_mobile_grid_dl">
+                                    <dt class="d-flex align-items-center">{{'BinNo'|translate}}
+                                        <button class="btn btn-danger k-button btn-sm btn-icon ml-auto" type="button">
+                                            <span class="k-icon k-i-delete"></span>
+                                        </button>
+                                    </dt>
+                                    <dd>{{ dataItem.ItemCode }}</dd>
+                                </dl>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <!-- grid for mobile end -->
+
+                        <kendo-grid-column media="(min-width: 768px)" field="DocNo" title="{{'Serial'|translate}}">
+                        </kendo-grid-column>
+                        <kendo-grid-column media="(min-width: 768px)" field="ItemCode" title="{{'BinNo'|translate}}">
+                        </kendo-grid-column>
+                        <kendo-grid-column media="(min-width: 768px)" field="BinNo" title="{{'Quantity'|translate}}">
+                        </kendo-grid-column>
+                        <kendo-grid-column media="(min-width: 768px)" field="" width="60">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <button class="btn btn-danger k-button btn-sm btn-icon" type="button">
+                                    <span class="k-icon k-i-delete"></span>
+                                </button>
+                            </ng-template>
+                        </kendo-grid-column>
+                    </kendo-grid>
+                </div>
+            </div>
+        </div>
+
+        <div class="fix-footer-btnBar">
+            <div class="col-sm-12 col-12">
+                <hr />
+            </div> 
+            <div class="col-sm-12 col-12">  
+                <button type="button" (click)="submitRecord($event)" class="btn btn-success k-button btn-sm btn-icon-with-text">
+                    <span class="k-icon k-i-check" role="presentation"></span> {{'Ok'|translate}}
+                </button>
+                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="onCancelClick()">
+                    <span class="k-icon k-i-delete" role="presentation"></span> {{'DeleteAll'|translate}}
+                </button>
+                
+            </div>
+        </div>
+    </form>
+</div>
+<!-- Accept Item Grid End -->
 
 <div *ngIf="showLookupLoader==false">
     <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
