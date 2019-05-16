@@ -258,6 +258,6 @@
   "EnterQty": "Enter Quantity.",
   "QtyGraterThenZero": "Quantity should be greater than zero(0).",
   "ViewAccept":"View Accept",
-  "ViewReject": "View Reject"
-  
+  "ViewReject": "View Reject",
+  "AcceptedSerials":"Accepted Serials"
 }
