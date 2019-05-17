@@ -8,6 +8,7 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { TrnaslateLazyModule } from '../../translate-lazy.module';
 import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
 import { SharedModule } from '../shared-module/shared-module.module';
+import { GridModule } from '@progress/kendo-angular-grid';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { SharedModule } from '../shared-module/shared-module.module';
     ProductionRoutingModule,
     TrnaslateLazyModule,
     PerfectScrollbarModule,
-    DateInputsModule
+    DateInputsModule,
+    GridModule
   ]
 })
 export class ProductionModule { }

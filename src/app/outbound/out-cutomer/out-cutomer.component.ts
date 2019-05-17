@@ -107,7 +107,7 @@ export class OutCutomerComponent implements OnInit {
   }
 
   onCustomerCodeBlur() {
-    
+
 
     this.outboundservice.getCustomer(this.customerCode).subscribe(
       resp => {
@@ -238,11 +238,6 @@ export class OutCutomerComponent implements OnInit {
       // Loop through delivery collection 
       for (let index = 0; index < this.outbound.DeleiveryCollection.length; index++) {
 
-        // // break when item processed.
-        // if (limit >= this.outbound.DeleiveryCollection.length) {
-        //   break;
-        // }
-
         //get first item from collection        
         const element = this.outbound.DeleiveryCollection[index];
 
@@ -262,11 +257,6 @@ export class OutCutomerComponent implements OnInit {
 
 
           // check hdr exists
-          // let existHdr = arrSOHEADER.filter(h =>
-          //   h.SONumber === o.DocNum
-          //   && h.ItemCode === o.ItemCode
-          //   && h.Tracking === o.Tracking);
-
           let existHdr = false;
           for (let index = 0; index < arrSOHEADER.length; index++) {
             const h = arrSOHEADER[index];
@@ -285,6 +275,7 @@ export class OutCutomerComponent implements OnInit {
 
 
             let hdr: SOHEADER = new SOHEADER();
+            
             // "DiServerToken":"66F7E7A4-D2AE-4E37-91E8-8BE390F2D32F",
             // "SONumber":165,
             // "CompanyDBId":"BUILD128SRC12X",
@@ -297,16 +288,13 @@ export class OutCutomerComponent implements OnInit {
             // "ItemCode":"Serial",
             // "UOM":-1,
             // "Line":0
+
             hdr.DiServerToken = token;
             hdr.SONumber = o.Order.DOCNUM;
             hdr.CompanyDBId = comDbId;
-            hdr.LineNo = o.Item.LINENUM;
-            //hdr.tShipQty = lineDeleiveryCollection.map(i => i.Meterial.MeterialPickQty).reduce((sum, c) => sum + c);
-            //hdr.ShipQty = 
-            //let metQty = 
+            hdr.LineNo = o.Item.LINENUM;           
             let metQty = lineDeleiveryCollection.map(i => i.Meterial.MeterialPickQty).reduce((sum, c) => sum + c);
-            hdr.ShipQty = metQty.toString();
-            // hdr.ShipQty = hdr.ShipQty.toString();
+            hdr.ShipQty = metQty.toString();            
             hdr.DocNum = o.Order.DOCNUM;
             hdr.OpenQty = o.Item.OPENQTY;
             hdr.WhsCode = o.Item.WHSCODE;
@@ -314,10 +302,7 @@ export class OutCutomerComponent implements OnInit {
             hdr.ItemCode = o.Item.ITEMCODE;
             hdr.UOM = -1;
             hdr.UOMName = o.Item.UOM;
-
             hdr.Line = hdrLineVal;
-
-
             arrSOHEADER.push(hdr);
           }
 
@@ -325,7 +310,7 @@ export class OutCutomerComponent implements OnInit {
           let hasDetail = false;
           for (let index = 0; index < arrSODETAIL.length; index++) {
             const element = arrSODETAIL[index];
-            if (element.LotNumber === o.Meterial.LOTNO && element.Bin === o.Meterial.BINNO && element.parentLine===hdrLineVal) {
+            if (element.LotNumber === o.Meterial.LOTNO && element.Bin === o.Meterial.BINNO && element.parentLine === hdrLineVal) {
               hasDetail = true;
               break;
             }
@@ -362,14 +347,7 @@ export class OutCutomerComponent implements OnInit {
 
         }
       }
-
-      console.log("Dtl", arrSODETAIL);
-      console.log("hdr", arrSOHEADER);
-
-      // this.manageLineNo(arrSOHEADER, arrSODETAIL);
-      // arrSOHEADER=await this.manageShipQty(arrSOHEADER);
-
-
+     
       if (arrSOHEADER.length > 0 && arrSODETAIL.length > 0) {
 
         deliveryToken.SOHEADER = arrSOHEADER;
@@ -405,15 +383,7 @@ export class OutCutomerComponent implements OnInit {
         }
 
       );
-
-
-
-      console.log("shdr", arrSOHEADER);
-
-
     }
-
-
   }
 
   async manageShipQty(arrSOHEADER: SOHEADER[]): Promise<SOHEADER[]> {
@@ -438,154 +408,6 @@ export class OutCutomerComponent implements OnInit {
     }
     return tarrSOHEADER;
   }
-
-  // prepareDeleiveryCollection() {
-
-  //   if (this.outbound != null && this.outbound != undefined
-  //     && this.outbound.DeleiveryCollection != null && this.outbound.DeleiveryCollection != undefined
-  //     && this.outbound.DeleiveryCollection.length > 0
-  //   ) {
-
-  //     let arrSOHEADER: SOHEADER[] = [];
-  //     let arrSODETAIL: SODETAIL[] = [];
-  //     let deliveryToken: DeliveryToken = new DeliveryToken();
-
-  //     // Hdr
-  //     let comDbId = localStorage.getItem('CompID');
-  //     let token = localStorage.getItem('Token');
-  //     let guid: string = localStorage.getItem('GUID');
-  //     let uid: string = localStorage.getItem('UserId');
-  //     let hdrLine: number = 0;
-  //     let limit = -1;
-  //     // Loop through delivery collection 
-  //     for (let index = 0; index < this.outbound.DeleiveryCollection.length; index++) {
-  //       const element = this.outbound.DeleiveryCollection[index];
-
-  //       // let coll=Get all Item for Item.Lineno===i
-  //       let lineDeleiveryCollection = this.outbound.DeleiveryCollection.filter(d => d.Item.LINENUM === element.Item.LINENUM);
-
-  //       limit = limit + lineDeleiveryCollection.length;
-
-  //       let hdr: SOHEADER = new SOHEADER();
-  //       for (let j = 0; j < lineDeleiveryCollection.length; j++) {
-
-  //         const o = lineDeleiveryCollection[j];
-
-  //         let hasItem = arrSOHEADER.filter(list => list.LineNo === o.Item.LINENUM);
-
-  //         if (hasItem.length == 0) {
-  //           // add header
-
-
-  //           // "DiServerToken":"66F7E7A4-D2AE-4E37-91E8-8BE390F2D32F",
-  //           // "SONumber":165,
-  //           // "CompanyDBId":"BUILD128SRC12X",
-  //           // "LineNo":0,
-  //           // "ShipQty":"2",
-  //           // "DocNum":165,
-  //           // "OpenQty":" 12.000",
-  //           // "WhsCode":"01",
-  //           // "Tracking":"S",
-  //           // "ItemCode":"Serial",
-  //           // "UOM":-1,
-  //           // "Line":0
-  //           hdr.DiServerToken = token;
-  //           hdr.SONumber = o.Order.DOCNUM;
-  //           hdr.CompanyDBId = comDbId;
-  //           hdr.LineNo = o.Item.LINENUM;
-  //           hdr.ShipQty = lineDeleiveryCollection.map(i => i.Meterial.MeterialPickQty).reduce((sum, c) => sum + c);
-  //           hdr.ShipQty = hdr.ShipQty.toString();
-  //           hdr.DocNum = o.Order.DOCNUM;
-  //           hdr.OpenQty = o.Item.OPENQTY;
-  //           hdr.WhsCode = o.Item.WHSCODE;
-  //           hdr.Tracking = o.Item.TRACKING;
-  //           hdr.ItemCode = o.Item.ITEMCODE;
-  //           hdr.UOM = -1;// o.Item.UOM;
-  //           //hdrLine=index;
-  //           hdrLine = hdrLine + 1;
-  //           hdr.Line = hdrLine;
-
-  //           arrSOHEADER.push(hdr);
-
-
-  //         }
-
-
-  //         // check weather item existe or not 
-  //         let hasElement = false;
-  //         for (let index = 0; index < arrSODETAIL.length; index++) {
-  //           const element = arrSODETAIL[index];
-  //           if (element.LotNumber === o.Meterial.LOTNO && element.Bin === o.Meterial.BINNO) {
-  //             hasElement = true;
-  //             break;
-  //           }
-  //         }
-
-
-  //         if (hasElement==false) {
-  //           //  
-  //           let dtl: SODETAIL = new SODETAIL();
-
-  //           // "Bin":"01-SYSTEM-BIN-LOCATION",
-  //           // "LotNumber":"08JANS000011",
-  //           // "LotQty":"1",
-  //           // "SysSerial":231,
-  //           // "parentLine":0,
-  //           // "GUID":"6d92d887-23bb-4390-85df-75e4caa7e328",
-  //           // "UsernameForLic":"Rishabh"
-
-  //           dtl.Bin = o.Meterial.BINNO;
-  //           dtl.LotNumber = o.Meterial.LOTNO;
-  //           dtl.LotQty = o.Meterial.MeterialPickQty;
-  //           dtl.SysSerial = o.Meterial.SYSNUMBER;
-  //           dtl.parentLine = hdrLine;
-  //           dtl.GUID = guid;
-  //           dtl.UsernameForLic = uid;
-
-  //           arrSODETAIL.push(dtl);
-  //         }
-  //       }
-
-
-  //       // get sum of all coll and loop 
-
-  //     }
-  //     console.log("Dtl", arrSODETAIL);
-  //     console.log("hdr", arrSOHEADER);
-  //     // this.manageLineNo(arrSOHEADER, arrSODETAIL);
-
-  //     if (arrSOHEADER.length > 0 && arrSODETAIL.length > 0) {
-
-  //       deliveryToken.SOHEADER = arrSOHEADER;
-  //       deliveryToken.SODETAIL = arrSODETAIL;
-  //       deliveryToken.UDF = [];
-  //     }
-
-  //     this.outboundservice.addDeleivery(deliveryToken).subscribe(
-  //       data => {
-  //         if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
-  //           this.toastr.success('', this.translate.instant("DeleiverySuccess") + " : " + data[0].SuccessNo);
-  //           this.clearOutbound();
-  //         } else if (data[0].ErrorMsg == "7001") {
-  //           this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
-  //             this.translate.instant("CommonSessionExpireMsg"));
-  //           return;
-  //         }
-  //         else {
-  //           this.toastr.error('', data[0].ErrorMsg);
-  //         }
-
-
-  //       },
-  //       error => {
-  //         console.log(error);
-  //       }
-
-  //     )
-  //   }
-
-  // }
-
 
   manageLineNo(hdrList: SOHEADER[], dtlList: SODETAIL[]) {
     let tmpHdr: SOHEADER[] = [];
