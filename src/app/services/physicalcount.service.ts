@@ -45,7 +45,7 @@ export class PhysicalcountService {
   }
 
   ShowBILOTList(itemCode: string, Bin: string): Observable<any> {
-    var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), WHSCODE: localStorage.getItem("whseId"), BINNO: Bin, ITEMCODE: itemCode, DOCNUM: '' }]) };
+    var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), WHSCODE: localStorage.getItem("whseId"), BINNO: Bin, ITEMCODE: itemCode, DOCNUM: '', User: localStorage.getItem("UserId") }]) };
 
     if (itemCode == "" && Bin == "") {
       return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetLotListWithoutBinNItemCode", jObject, this.httpOptions);

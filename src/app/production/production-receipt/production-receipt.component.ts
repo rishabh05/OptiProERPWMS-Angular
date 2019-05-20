@@ -72,6 +72,17 @@ export class ProductionReceiptComponent implements OnInit {
   Transaction: string = "ProductionReceipt";
   ONLINEPOSTING: string = null;
   IsPalletExist:boolean = false;
+
+  acceptItemsGrid:boolean = false;
+  rejectItemsGrid:boolean = false;
+
+  // data variables for submit request
+  Lots: any =[];
+  Items: any=[];
+  UDF: any=[];
+  RejectItems: any=[];
+  RejectLots: any=[];
+  selectedRadio: any;
   @ViewChild('SerialQty') SerialQtyField: ElementRef;
   @ViewChild('BatchQty') BatchQtyField: ElementRef;
   @ViewChild('Qty') QtyField: ElementRef;
@@ -86,6 +97,7 @@ export class ProductionReceiptComponent implements OnInit {
     console.log("entered qty"+this.enteredQty);
     console.log("acceptQty qty"+this.acceptQty);
   }
+
 
   OnOrderLookupClick(){
     this.showOrderList();
@@ -137,6 +149,11 @@ export class ProductionReceiptComponent implements OnInit {
 
   }
   public addMoreClick(){
+    if(this.tracking =="S" || this.tracking=="B"){
+        
+    }else{
+
+    }
     // validate the form data and then add in local storage if already there then add item in item 
     //array or lot in lot array
   }
@@ -182,6 +199,63 @@ export class ProductionReceiptComponent implements OnInit {
    })
    submitRecProdData={Items:itemsData,Lots:Lots,UDF:UDF,RejectItems:RejectItems,RejectLots:RejectLots}
   }
+  prepareCommonItemData(rejQty:string,quantity: string):any{
+    var itemsData: any =[];
+    itemsData.push({
+    DiServerToken: localStorage.getItem("Token"),
+    CompanyDBId: localStorage.getItem("CompID"),
+    Transaction:this.Transaction,
+    RECUSERID: localStorage.getItem("UserId"),
+    ONLINEPOSTING:this.ONLINEPOSTING,
+    BATCHNO: this.orderNumber,
+    LineNo:0,
+    RefDocEntry:this.refDocEntry,
+    RejectQTY:rejQty,
+    RecRjctedQty:this.recRejectQty,
+    DOCENTRY:this.refDocEntry,
+    Quantity: quantity,
+    ItemCode: this.itemCode,
+    POSTEDFGQTY: this.postedFGQTY,
+    PASSEDQTY: this.passedQty,
+    AcctDefectQty: this.ACCTDEFECTQTY,
+    FGQTYTOPOST: this.orignalActualQty,//abhi k lea need to check
+    WhsCode:this.whsCode,
+    Tracking:this.tracking,
+    IsPalletExist:this.IsPalletExist,
+    LoginId:localStorage.getItem("UserId"),
+    GUID: localStorage.getItem("GUID"),
+    UsernameForLic: localStorage.getItem("UserId")
+    });
+    return itemsData;
+  }
+
+  public prepareRejectItemData(rejQty:string,quantity: string): any{
+    var rejectItemsData: any =[];
+    rejectItemsData.push({
+      DiServerToken: localStorage.getItem("Token"),
+      CompanyDBId: localStorage.getItem("CompID"),
+      Transaction:this.Transaction,
+      RECUSERID: localStorage.getItem("UserId"),
+      ONLINEPOSTING:this.ONLINEPOSTING,
+      BATCHNO: this.orderNumber,
+      LineNo:0,
+      RefDocEntry:this.refDocEntry,
+      DOCENTRY:this.refDocEntry,
+      ItemCode: this.itemCode,
+      WhsCode:this.whsCode,
+      POSTEDFGQTY: this.postedFGQTY,
+      PASSEDQTY: this.passedQty,
+      AcctDefectQty: this.ACCTDEFECTQTY,
+      FGQTYTOPOST: this.orignalActualQty,//abhi k lea need to check
+      Tracking:this.tracking,
+      IsPalletExist:this.IsPalletExist,
+      LoginId:localStorage.getItem("UserId"),
+      RejectQTY:rejQty,
+      RecRjctedQty:this.recRejectQty,
+      Quantity: quantity,
+      });
+      return rejectItemsData;
+  }
   public validateForm() {
     if (this.tracking === "S") {
       this.validateSerialForm();
@@ -194,8 +268,8 @@ export class ProductionReceiptComponent implements OnInit {
     }
   }
   validateBatchForm() {
-    if (this.orderNumber == null || this.orderNumber == undefined || this.orderNumber == "") {
-      this.toastr.error('', this.translate.instant("OrderNoBlank"));
+    this.toastr.error('', this.translate.instant("OrderNoBlank"));
+      if (this.orderNumber == null || this.orderNumber == undefined || this.orderNumber == "") {
       return;
     }
     if (this.enteredQty == null || this.enteredQty == undefined || this.enteredQty == "" ||
@@ -456,12 +530,26 @@ export class ProductionReceiptComponent implements OnInit {
     //set variable to hide grid and show the form.
 
   }
-  deleteAllClick(){
+  viewAcceptDeleteAll(){
     // clear all items from array after alert.
     // ckeck if after delete
   }
 
-  deleteSingleItem(){
+  viewAcceptDeleteItem(){
+    //splice item from Array. and update grid.
+  }
+
+  
+  viewRejectOkClick(){
+    //set variable to hide grid and show the form.
+
+  }
+  viewRejectDeleteAll(){
+    // clear all items from array after alert.
+    // ckeck if after delete
+  }
+
+  viewRejectDeleteItem(){
     //splice item from Array. and update grid.
   }
   ngOnDestroy() { 
@@ -487,7 +575,7 @@ export class ProductionReceiptComponent implements OnInit {
     if ($event.Status == "yes") {
       switch ($event.From) {
         case ("deleteAll"):
-          this.deleteAllClick();
+        //  this.deleteAllClick();
           break;
         case ("delete"):
           //call method to delete item or remove its data from array

@@ -12,9 +12,14 @@ export class ComonConfirmDialogComponent implements OnInit {
   @Input() noButtonText: any;
   @Input() fromWhere: any;
   @Output() isYesClick = new EventEmitter();
+  showNoButton:boolean = true;
   constructor() { }
 
   ngOnInit() {
+    this.showNoButton = true;
+    if(this.noButtonText == undefined || this.noButtonText == ""){
+      this.showNoButton = false;
+    }
   }
 
   public opened: boolean = true;
