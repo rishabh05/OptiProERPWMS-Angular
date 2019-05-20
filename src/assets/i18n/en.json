@@ -259,5 +259,6 @@
   "QtyGraterThenZero": "Quantity should be greater than zero(0).",
   "ViewAccept":"View Accept",
   "ViewReject": "View Reject",
-  "AcceptedSerials":"Accepted Serials"
+  "AcceptedSerials":"Accepted Serials",
+  "PhysicalCount.SubmitSaveLines": "Do you want to submit all saved data?"
 }
