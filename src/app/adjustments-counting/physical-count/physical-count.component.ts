@@ -51,6 +51,7 @@ export class PhysicalCountComponent implements OnInit {
   ItemArray: any = [];
   rowindex: any;
   gridData: any;
+  ScanInputs: any = "";
 
   constructor(private phycountService: PhysicalcountService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService) {
     let userLang = navigator.language.split('-')[0];
@@ -309,7 +310,9 @@ export class PhysicalCountComponent implements OnInit {
             return;
           }
           for (var i = 0; i < data.length; i++) {
-            data[i].OPTM_LOTSERQTY = data[i].OPTM_LOTSERQTY.toFixed(Number(localStorage.getItem("DecimalPrecision")));
+            if (data[i].OPTM_LOTSERQTY != null) {
+              data[i].OPTM_LOTSERQTY = data[i].OPTM_LOTSERQTY.toFixed(Number(localStorage.getItem("DecimalPrecision")));
+            }
           }
           this.SavedDocNoDetailArray = data;
           if (this.SavedDocNoDetailArray.length > 0) {
@@ -445,7 +448,7 @@ export class PhysicalCountComponent implements OnInit {
         }
         // oPhysicalCountModel.Detail.sort(function (a, b) { return a.RowOrder - b.RowOrder });
         for (var iCountindex = 0; iCountindex < this.DocNoDetails.length; iCountindex++) {
-          if (this.DocNo == this.DocNoDetails[iCountindex].DocNo) {
+          if (this.DocNo == this.DocNoDetails[iCountindex].DocNum) {
             DocDataLength++;
           }
         }
@@ -453,7 +456,7 @@ export class PhysicalCountComponent implements OnInit {
         for (var index = 0; index < oAddPhysicalCountData.Detail.length; index++) {
           for (var iPhyindex = 0; iPhyindex < this.DocNoDetails.length; iPhyindex++) {
 
-            if (oAddPhysicalCountData.Detail[index].ItemCode == this.DocNoDetails[iPhyindex].ItemCode && oAddPhysicalCountData.Detail[index].DocNo == this.DocNoDetails[iPhyindex].DocNo && oAddPhysicalCountData.Detail[index].BinNo == this.DocNoDetails[iPhyindex].BinNo) {
+            if (oAddPhysicalCountData.Detail[index].ItemCode == this.DocNoDetails[iPhyindex].ItemCode && oAddPhysicalCountData.Detail[index].DocNo == this.DocNoDetails[iPhyindex].DocNum && oAddPhysicalCountData.Detail[index].BinNo == this.DocNoDetails[iPhyindex].BinCode) {
               TotalSave++;
               nextIndex = iPhyindex + 1;
               if (nextIndex == this.DocNoDetails.length) {
@@ -466,40 +469,17 @@ export class PhysicalCountComponent implements OnInit {
         if (TotalSave == DocDataLength) {
           this.showDialog("SubmitAll", this.translate.instant("yes"), this.translate.instant("no"),
             this.translate.instant("PhysicalCount.SubmitSaveLines"));
-          // var dialog = new Dialog({
-          //     title: psDialogConfirm,
-          //     type: 'Message',
-          //     content: new Text({ text: psSubmitLines }),
-          //     beginButton: new Button({
-          //         text: psMsgOk,
-          //         press: function () {
-          //             oCurrentController.OnSubmitPhysicalCount();
-          //             dialog.close();
-          //         }
-          //     }),
-          //     endButton: new Button({
-          //         text: psMsgCancel,
-          //         press: function () {
-          //             oCurrentController.PhysicalCountDataView();
-          //             dialog.close();
-          //         }
-          //     }),
-          //     afterClose: function () {
-          //         dialog.destroy();
-          //     }
-          // });
-
-          // dialog.open();
-
         }
         else {
           this.ItemCode = this.DocNoDetails[nextIndex].ItemCode;
           this.ItemName = this.DocNoDetails[nextIndex].ItemName;
-          this.BinNo = this.DocNoDetails[nextIndex].BinNo;
-          this.UOM = this.DocNoDetails[nextIndex].ItemName;
-          this.QtyOnHand = this.DocNoDetails[nextIndex].ItemName;
-          this.CountedQty = this.DocNoDetails[nextIndex].ItemName;
-          this.ItemTracking = this.DocNoDetails[nextIndex].ItemName;
+          this.BinNo = this.DocNoDetails[nextIndex].BinCode;
+          this.UOM = this.DocNoDetails[nextIndex].UomCode;
+          this.QtyOnHand = this.DocNoDetails[nextIndex].InWhsQty;
+          this.CountedQty = "0"
+          this.ItemTracking = this.DocNoDetails[nextIndex].Tracking;
+          this.formatCountedQty();
+          this.formatOnHandQty();
           this.CheckTrackingandVisiblity();
         }
       }
@@ -724,15 +704,17 @@ export class PhysicalCountComponent implements OnInit {
   }
 
   onSaveClick() {
-    if (this.batchserno == undefined || this.batchserno == "" || this.batchserno == null) {
-      if (this.ItemTracking == "S") {
-        this.toastr.error('', this.translate.instant("PhysicalCount.SerialLotcannotbeblank"));
-      } else {
-        this.toastr.error('', this.translate.instant("PhysicalCount.BatchLotcannotbeblank"));
+    if (this.ItemTracking != "N") {
+      if (this.batchserno == undefined || this.batchserno == "" || this.batchserno == null) {
+        if (this.ItemTracking == "S") {
+          this.toastr.error('', this.translate.instant("PhysicalCount.SerialLotcannotbeblank"));
+        } else {
+          this.toastr.error('', this.translate.instant("PhysicalCount.BatchLotcannotbeblank"));
+        }
+        return;
       }
-      return;
     }
-    if (!this.isLotAdded) {
+    if (!this.isLotAdded && this.ItemTracking != "N") {
       if (this.ItemTracking == "S") {
         this.toastr.error('', this.translate.instant("PhysicalCount.SerialLotisnotadded"));
       } else {
@@ -756,15 +738,17 @@ export class PhysicalCountComponent implements OnInit {
   }
 
   onAddItemClick() {
-    if (this.batchserno == undefined || this.batchserno == "" || this.batchserno == null) {
-      if (this.ItemTracking == "S") {
-        this.toastr.error('', this.translate.instant("PhysicalCount.SerialLotcannotbeblank"));
-      } else {
-        this.toastr.error('', this.translate.instant("PhysicalCount.BatchLotcannotbeblank"));
+    if (this.ItemTracking != "N") {
+      if (this.batchserno == undefined || this.batchserno == "" || this.batchserno == null) {
+        if (this.ItemTracking == "S") {
+          this.toastr.error('', this.translate.instant("PhysicalCount.SerialLotcannotbeblank"));
+        } else {
+          this.toastr.error('', this.translate.instant("PhysicalCount.BatchLotcannotbeblank"));
+        }
+        return;
       }
-      return;
     }
-    if (!this.isLotAdded) {
+    if (!this.isLotAdded && this.ItemTracking != "N") {
       if (this.ItemTracking == "S") {
         this.toastr.error('', this.translate.instant("PhysicalCount.SerialLotisnotadded"));
       } else {
@@ -995,5 +979,104 @@ export class PhysicalCountComponent implements OnInit {
     // public dialogOpened = false;
     // BatchSerialArray: any = [];
     // ItemArray: any = [];
+  }
+
+
+  //   SetQRDataInGrid (result) {
+  //     oCurrentController.OnGS1ScanItem(result);
+  //     otxtScan.focus();
+  // }
+
+  // onScanQRCode () {
+  //     qrcode.callback = oCurrentController.SetQRDataInGrid;
+  //     piQRCodeUsed = 1;
+  //     $("input[type=file]").click();
+  //     $("input[type=file]").val("");
+  // }
+
+  onInboundScan() {
+    // alert("scan click");
+  }
+
+  onScanCodeChange() {
+    this.onGS1ItemScan()
+  }
+
+  onGS1ItemScan() {
+
+    var inputValue = (<HTMLInputElement>document.getElementById('inboundScanInputField')).value;
+    if (inputValue.length > 0) {
+      this.ScanInputs = inputValue;
+    }
+    // alert("at onGS1ItemScan value:: "+this.ScanInputs);
+
+    if (this.ScanInputs != null && this.ScanInputs != undefined &&
+      this.ScanInputs != "" && this.ScanInputs != "error decoding QR Code") {
+
+    } else {
+      // if any message is required to show then show.
+      this.ScanInputs = "";
+      return;
+    }
+    let piManualOrSingleDimentionBarcode = 0;
+
+    this.commonservice.checkAndScanCode("", this.ScanInputs).subscribe(
+      (data: any) => {
+
+        if (data != null) {
+          if (data.length > 0) {
+            if (data[0].Error != null) {
+              piManualOrSingleDimentionBarcode = 1
+              this.toastr.error('', data[0].Error);//this.translate.instant("InvalidItemCode"));
+              this.ScanInputs = "";
+              return;
+            }
+            else {
+              this.ScanInputs = data[0].Value;
+            }
+
+            if (piManualOrSingleDimentionBarcode == 0) {
+              for (var i = 0; i < data.length; i++) {
+                if (data[i].Key == '10' || data[i].Key == '21' || data[i].Key == '23') {
+                  this.batchserno = data[i].Value;
+                }
+                if (data[i].Key == '30' || data[i].Key == '310' ||
+                  data[i].Key == '315' || data[i].Key == '316' || data[i].Key == '320') {
+                  if (this.ItemTracking == "S") {
+                    this.CountedQty = "1";
+                  }
+                  else {
+                    this.CountedQty = data[i].Value;
+                  }
+                  this.formatCountedQty();
+                }
+              }
+            }
+          }
+
+          if (this.ScanInputs != "error decoding QR Code") {
+            this.OnItemChange();
+            //if (oFCModel.Tracking != "N") {
+            //    oCurrentController.OnLotChange();
+            //}
+            // ScanLotChange = 1;
+          }
+          else {
+            var psMsg
+            if (this.ScanInputs == "error decoding QR Code") {
+              psMsg = "Cannot read QC Code, please scan again";
+            } else {
+              psMsg = this.ScanInputs + ", Please scan again.";
+            }
+            this.ScanInputs = "";
+            this.toastr.error('', psMsg);
+          }
+          // $("input[type=file]").val("");
+          // otxtScan.setValue();
+        }
+      },
+      error => {
+        console.log("Error: ", error);
+      });
   }
 }

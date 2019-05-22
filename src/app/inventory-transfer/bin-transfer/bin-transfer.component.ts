@@ -33,7 +33,7 @@ export class BinTransferComponent implements OnInit {
   showItemName: boolean = false;
   showBatchNo: boolean = false;
   Remarks: string = "";
-  onHandQty: any="0";
+  onHandQty: any = "0";
   SysNumber: any;
   LotWhsCode: any;
   toBin: string = "";
@@ -758,4 +758,86 @@ export class BinTransferComponent implements OnInit {
       this.cancelevent.emit(true);
     }
   }
+
+
+  OnScanItem() {
+    // oCurrentController.ClearModel();
+    // oModelWhsTranEditLines.refresh();
+    // if (oWhsTransEditLot.LotScan.trim() == "") {
+    //   return;
+    // }
+    // var oModelReq = new JSONModel();
+    // var oScan = {};
+    // oScan.Vsvendorid = "";
+    // oScan.StrScan = oWhsTransEditLot.LotScan;
+    // oScan.CompanyDBId = companyDBObject.CompanyDbName;
+    // var oScanArr = [];
+    // oScanArr.push(oScan)
+    // var jObject = { Gs1Token: JSON.stringify(oScanArr) };
+    // var psURL = this.WMSBaseURL();
+    // oModelReq.loadData(psURL + '/api/Gs1/GS1SETUP', jObject, true, 'POST');
+
+    // oModelReq.attachRequestCompleted(function (oEvent) {
+    //   var data = oEvent.getSource();
+
+    //   oTxtScan.focus();
+    //   oModelWhsTranEditLines.refresh();
+
+    //   if (data != null) {
+    //     if (data.oData != null) {
+    //       if (data.oData[0].Error != null) {
+    //         oCurrentController.ShowMessageDialog(data.oData[0].Error, oCurrentController.MessageState.MessageStateError, "Error");
+
+
+    //         oWhsTransEditLot.Item = "";
+
+    //         oWhsTransEditLot.ITEMNAME = "";
+    //         oWhsTransEditLot.Qty = oCurrentController.getFormatedValue(0);
+    //         oWhsTransEditLot.Lot = "";
+    //         olblQtyOnhand.setValue("");
+    //         oWhsTransEditLot.UOM = "";
+    //         oWhsTransEditLot.FromBin = "";
+    //         oWhsTransEditLot.ToBin = "";
+
+
+    //         oWhsTransEditLot.refresh();
+    //         oTxtScan.focus();
+    //         return;
+    //       }
+
+
+
+
+    //       for (var i = 0; i < data.oData.length; i++) {
+
+    //         if (data.oData[i].Key == 'ItemCode') {
+    //           oWhsTransEditLot.ItemCode = data.oData[i].Value;
+    //           oCurrentController.OnItemChange();
+
+    //           oTxtScan.focus();
+    //           oModelWhsTranEditLines.refresh();
+
+    //         }
+
+    //         if (data.oData[i].Key == '10' || data.oData[i].Key == '21' || data.oData[i].Key == '23') {
+    //           oWhsTransEditLot.Lot = data.oData[i].Value;
+    //           oModelWhsTranEditLines.refresh();
+    //           oCurrentController.OnLotChange();
+
+    //           oTxtScan.focus();
+    //           oModelWhsTranEditLines.refresh();
+    //         }
+
+
+
+
+    //       }
+    //     }
+
+    //   }
+    //   oWhsTransEditLot.LotScan = ""
+    //   oModelWhsTranEditLines.refresh();
+    // });
+  }
+
 }

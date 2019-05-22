@@ -489,8 +489,7 @@ export class LookupComponent implements OnInit {
         title: this.translate.instant("DocNum"),
         headerClass: 'text-right',
         class: 'text-right',
-        type: 'numeric',
-        width: '80'
+        type: 'numeric'
       },
       {
         field: 'ItemCode',
@@ -517,8 +516,7 @@ export class LookupComponent implements OnInit {
       {
         field: 'IsTeamCount',
         title: this.translate.instant("IsTeamCount"),
-        type: 'text',
-        width: '80'
+        type: 'text'
       }
     ];
     this.lookupTitle = this.translate.instant("ItemCodeList");

@@ -152,6 +152,11 @@ export class Commonservice {
     this.customerUserDataSub.next(data);
   }
 
+  checkAndScanCode(vendCode:string, scanInputString){
+    var jObject = {Gs1Token: JSON.stringify([{Vsvendorid:vendCode, StrScan:scanInputString, CompanyDBId:localStorage.getItem("CompID")}])};
+    return this.httpclient.post(this.config_params.service_url + "/api/Gs1/GS1SETUP", jObject, this.httpOptions);
+  }
+
   RemoveLicenseAndSignout(toastr: ToastrService, router: Router, message: string) {
     var jObject = { GUID: localStorage.getItem("GUID"), LoginId: localStorage.getItem("UserId") };
     this.httpclient.post(this.config_params.service_url + "/Login/RemoveLoggedInUser", jObject, this.httpOptions);
