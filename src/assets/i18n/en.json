@@ -261,5 +261,7 @@
   "ViewReject": "View Reject",
   "AcceptedSerials":"Accepted Serials",
   "PhysicalCount.SubmitSaveLines": "Do you want to submit all saved data?",
-  "RejectedSerials":"Rejected Serials"
+  "RejectedSerials":"Rejected Serials",
+  "BalanceQty": "Balance Qty",
+  "IssuedQty": "Issue Qty"
 }

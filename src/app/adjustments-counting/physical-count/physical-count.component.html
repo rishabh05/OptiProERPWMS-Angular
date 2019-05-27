@@ -56,7 +56,7 @@
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
                                     <button style="padding: 0 6px;font-size:16px" class="k-button k-primary btn separate-btn" type="button" (click)="viewSavedItems()"
-                                        *ngIf="showbatchser">
+                                        *ngIf="showitemlist">
                                         <i class="opti-icon-detail-view"></i>
                                     </button>
                                 </div>
@@ -89,6 +89,7 @@
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
                                 <input type="text" class="form-control form-control-sm" name="batchserno" [(ngModel)]="batchserno" placeholder="{{batchNoPlaceholder}}"
+                                autocomplete="off"
                                     (blur)="OnLotChange()">
 
                                 <div class="input-group-append has-seprate-btn">
@@ -212,9 +213,9 @@
             <div class="col-sm-12 col-12">
                 <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text" (click)="onSubmitClick()">
                     <span class="k-icon k-i-check" role="presentation"></span> {{'Submit'|translate}}</button>
-                <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text" (click)="onAddItemClick1()">
+                <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text" (click)="onAddItemClick()">
                     <span class="k-icon k-i-plus-outline" role="presentation"></span> {{'Item'|translate}}</button>
-                <button type="button" class="btn btn-Primary k-button btn-sm btn-icon-with-text" (click)="onSaveClick1()">
+                <button type="button" class="btn btn-Primary k-button btn-sm btn-icon-with-text" (click)="onSaveClick()">
                     <span class="k-icon k-i-save" role="presentation"></span> {{'Save&Next'|translate}}</button>
                 <div class="clearfix mt-1 d-block d-sm-none"></div>
                 <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="onCancelClick()">
