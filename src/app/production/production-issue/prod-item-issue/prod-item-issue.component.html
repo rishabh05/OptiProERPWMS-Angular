@@ -2,7 +2,7 @@
     <form class="form-with-fix-btnBar ">
         <div class="opti_container_inner" [perfectScrollbar]=" ">
             <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
-                {{'DeleiveryForSO'|translate}}: {{outbound.OrderData.DOCNUM}}
+                {{'DeleiveryForSO'|translate}}: 54
             </h3>
             <div class="row">
                 <div class="col-12">
@@ -78,18 +78,16 @@
                             <div class="d-flex">
                                 <div class="input-group input-group-sm">
                                     <input type="text" [(ngModel)]=ScanInputs id="outboundOrderNoScanInput" 
-                                    name="orderNumber" value='' class="form-control form-control-sm" (blur)="onScanInputChange()" 
-                                        placeholder="{{scanInputPlaceholder}}">
+                                    name="orderNumber" value='' class="form-control form-control-sm" 
+                                        placeholder="">
                                     <div class="input-group-append">
-                                        <button class="k-button k-primary btn " type="button" [disabled]="selected==null || selected==''"
-                                            (click)="openAvaliableMeterials()">
+                                        <button class="k-button k-primary btn " type="button" [disabled]="">
                                             <i class="opti-icon-hammenu"></i>
                                         </button>
                                     </div>
                                 </div>
                                 <div class="ml-1 d-flex">
-                                        <button id="outBoundDeliverForSOScan" (click)="prodIssueScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
-                                        type="button">
+                                        <button id="outBoundDeliverForSOScan" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
                                 </div>

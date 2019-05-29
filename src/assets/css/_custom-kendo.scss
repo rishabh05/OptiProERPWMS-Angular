@@ -289,6 +289,9 @@ body {
 body .k-grid td{
     .form-control.k-widget.k-dropdown{
         height: 22px;
+        .k-dropdown-wrap{
+            height:22px !important
+        }
         .k-input{
             padding: 0 5px;
             height: auto;
@@ -361,3 +364,4 @@ body .k-grid td{
         line-height: 1;
     }
 }
+
