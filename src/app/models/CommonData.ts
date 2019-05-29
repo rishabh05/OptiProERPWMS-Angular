@@ -1,5 +1,5 @@
 import { HttpHeaders } from '@angular/common/http';
-
+// ng build --prod --base-href=/OptiProWMS/web/
 
 export interface ColumnSetting {
     field: string;

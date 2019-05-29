@@ -45,6 +45,7 @@ export class PhysicalCountComponent implements OnInit {
   LotSerialQtycheck: Number = 0;
   showSavedItems = false;
   showbatchser = false;
+  showitemlist = false;
   // Kendo Dialog box
   public dialogOpened = false;
   BatchSerialArray: any = [];
@@ -318,7 +319,7 @@ export class PhysicalCountComponent implements OnInit {
           if (this.SavedDocNoDetailArray.length > 0) {
             this.ItemTracking = this.SavedDocNoDetailArray[this.SavedDocNoDetailArray.length - 1].Tracking;
             this.CountType = this.SavedDocNoDetailArray[this.SavedDocNoDetailArray.length - 1].CountType;
-            this.CountDate = this.SavedDocNoDetailArray[this.SavedDocNoDetailArray.length - 1].CountDate;
+      //      this.CountDate = this.SavedDocNoDetailArray[this.SavedDocNoDetailArray.length - 1].CountDate;
             this.UOM = this.SavedDocNoDetailArray[this.SavedDocNoDetailArray.length - 1].UomCode;
             this.CountedQty = this.SavedDocNoDetailArray[this.SavedDocNoDetailArray.length - 1].Qty;
             if (this.SavedDocNoDetailArray.length == 1) {
@@ -421,6 +422,21 @@ export class PhysicalCountComponent implements OnInit {
     }
     else if (this.ItemTracking == "N") {
       this.isNonTrack = true;
+    }
+    var oAddPhysicalCountData: any = {};
+    var dataModel = localStorage.getItem("PhysicalCountData");
+    if (dataModel == null || dataModel == undefined || dataModel == "") {
+      oAddPhysicalCountData.Detail = [];
+      oAddPhysicalCountData.LotSerial = [];
+      oAddPhysicalCountData.ItemList = [];
+    } else {
+      oAddPhysicalCountData = JSON.parse(dataModel);
+    }
+    let result = oAddPhysicalCountData.LotSerial.find(element => element.ItemCode == this.ItemCode);
+    if (result != undefined) {
+      this.showbatchser = true;
+    } else {
+      this.showbatchser = false;
     }
   }
 
@@ -714,6 +730,10 @@ export class PhysicalCountComponent implements OnInit {
         return;
       }
     }
+    if(!this.isLotAdded){
+      this.LotExistCheck();
+      return;
+    }
     if (!this.isLotAdded && this.ItemTracking != "N") {
       if (this.ItemTracking == "S") {
         this.toastr.error('', this.translate.instant("PhysicalCount.SerialLotisnotadded"));
@@ -721,6 +741,11 @@ export class PhysicalCountComponent implements OnInit {
         this.toastr.error('', this.translate.instant("PhysicalCount.BatchLotisnotadded"));
       }
       return;
+    }
+
+    if (this.ItemTracking == "S") {
+      this.CountedQty = "1";
+      this.formatCountedQty();
     }
 
     var oAddPhysicalCountData: any = {};
@@ -748,6 +773,12 @@ export class PhysicalCountComponent implements OnInit {
         return;
       }
     }
+
+    if(!this.isLotAdded){
+      this.LotExistCheck();
+      return;
+    }
+
     if (!this.isLotAdded && this.ItemTracking != "N") {
       if (this.ItemTracking == "S") {
         this.toastr.error('', this.translate.instant("PhysicalCount.SerialLotisnotadded"));
@@ -756,7 +787,10 @@ export class PhysicalCountComponent implements OnInit {
       }
       return;
     }
-
+    if (this.ItemTracking == "S") {
+      this.CountedQty = "1";
+      this.formatCountedQty();
+    }
     var oAddPhysicalCountData: any = {};
     var dataModel = localStorage.getItem("PhysicalCountData");
     if (dataModel == null || dataModel == undefined || dataModel == "") {
@@ -770,8 +804,10 @@ export class PhysicalCountComponent implements OnInit {
     localStorage.setItem("PhysicalCountData", JSON.stringify(oAddPhysicalCountData));
     if (oAddPhysicalCountData.LotSerial.length > 0) {
       this.showbatchser = true;
+      this.showitemlist = true;
     } else {
       this.showbatchser = false;
+      this.showitemlist = false;
     }
     this.toastr.success('', this.translate.instant("PhysicalCount.Operation"));
     this.batchserno = "";
@@ -851,6 +887,10 @@ export class PhysicalCountComponent implements OnInit {
         return;
       }
     }
+    if(!this.isLotAdded){
+      this.LotExistCheck();
+      return;
+    }
     if (!this.isLotAdded && this.ItemTracking != "N") {
       if (this.ItemTracking == "S") {
         this.toastr.error('', this.translate.instant("PhysicalCount.SerialLotisnotadded"));
@@ -858,6 +898,10 @@ export class PhysicalCountComponent implements OnInit {
         this.toastr.error('', this.translate.instant("PhysicalCount.BatchLotisnotadded"));
       }
       return;
+    }
+    if (this.ItemTracking == "S") {
+      this.CountedQty = "1";
+      this.formatCountedQty();
     }
     var oAddPhysicalCountData: any = {};
     var dataModel = localStorage.getItem("PhysicalCountData");
@@ -975,6 +1019,7 @@ export class PhysicalCountComponent implements OnInit {
     // LotSerialQtycheck: Number = 0;
     // showSavedItems = false;
     this.showbatchser = false;
+    this.showitemlist = false;
     // // Kendo Dialog box
     // public dialogOpened = false;
     // BatchSerialArray: any = [];

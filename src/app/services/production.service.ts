@@ -62,4 +62,18 @@ export class ProductionService {
     var jObject = { SerialNo: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), ItemCode: itemCode, SerialNo: serialNo }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/CheckSerialNo", jObject, this.httpOptions);
   }
+
+   /**
+   * check bin is exists or not.
+   * @param item 
+   */
+  GetBatchesForProductionIssueWithProcessCell(): Observable<any> {
+    var jObject = { BATCHNO: JSON.stringify([{COMPANYDBNAME: localStorage.getItem("CompID"), WHSCODE: localStorage.getItem("whseId"), GUID: localStorage.getItem("GUID"), UsernameForLic: localStorage.getItem("UserId")}]) };
+    return this.httpclient.post(this.config_params.service_url + "/api/ProductionIssue/GetBatchesForProductionIssueWithProcessCell", jObject, this.httpOptions);
+  }
+
+  GetBOMItemForProductionIssue(orderNo: string){
+    var jObject = { BATCHNO: JSON.stringify([{ COMPANYDBNAME: localStorage.getItem("CompID"), ORDERNO: orderNo, WHSCODE:localStorage.getItem("whseId")}]) };
+    return this.httpclient.post(this.config_params.service_url + "/api/ProductionIssue/GetBOMItemForProductionIssue", jObject, this.httpOptions);
+  }
 }

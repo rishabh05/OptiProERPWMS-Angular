@@ -38,18 +38,18 @@ export class ProductionReceiptComponent implements OnInit {
   itemName: string ="";
   orderQty = "";
   tracking: string="N"; 
-  rejectQty: string = "";
-  postedFGQTY: string = "";
-  passedQty: string = "";
+  rejectQty: any ;
+  postedFGQTY: any;
+  passedQty: any;
   printLbl: string = "";
-  recRejectQty: string = "";
-  ACCTDEFECTQTY: string = "";
-  orignalActualQty: string = "";
+  recRejectQty: any;
+  ACCTDEFECTQTY: any;
+  orignalActualQty: any ;
   refDocEntry: string = "";
   expDate:string = "";
 
-  serialQty:string ="";
-  batchQty:string ="";
+  serialQty:any ="1";
+  batchQty:any ="";
 
   serialNo:string = "";
   batchNo: string = "";
@@ -65,10 +65,11 @@ export class ProductionReceiptComponent implements OnInit {
   enterQtyPlaceholder:any;
   displayFormAndSubmit: boolean= false;
 
-  acceptQty:string = "";
-  rjQty:string = "";
+  acceptQty:any ;
+  rjQty:any ;
   showAddMoreButton: boolean = false;
   showViewAcceptButton: boolean = false;
+  showViewRejectButton: boolean = false;
   Transaction: string = "ProductionReceipt";
   ONLINEPOSTING: string = null;
   IsPalletExist:boolean = false;
@@ -76,13 +77,26 @@ export class ProductionReceiptComponent implements OnInit {
   acceptItemsGrid:boolean = false;
   rejectItemsGrid:boolean = false;
 
+  finalAcceptQty: any= 0;
+  finalRejectQty: any= 0;
+
   // data variables for submit request
   Lots: any =[];
   Items: any=[];
   UDF: any=[];
   RejectItems: any=[];
   RejectLots: any=[];
-  selectedRadio: any;
+  submitRecProdData: any ={};
+  selectedRadio: string  = "PostToInv";
+  model: any = { options: '1' };
+  itemDataResponse:any ;
+
+  dialogFor: string = "";
+  dialogMsg: string = ""
+  yesButtonText: string = "";
+  noButtonText: string = "";
+  showConfirmDialog: boolean;
+  showLoader: boolean = false;
   @ViewChild('SerialQty') SerialQtyField: ElementRef;
   @ViewChild('BatchQty') BatchQtyField: ElementRef;
   @ViewChild('Qty') QtyField: ElementRef;
@@ -92,8 +106,8 @@ export class ProductionReceiptComponent implements OnInit {
   ngOnInit() {
     this.enterQtyPlaceholder = Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));
     this.enteredQty = Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));
-    this.acceptQty =  Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));
-    this.rjQty =  Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));
+    this.acceptQty =  Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));//ye niche vali field jo calculation se dikhate hai.
+    this.rjQty =  Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));//ye niche vali field jo calculation se dikhate hai.
     console.log("entered qty"+this.enteredQty);
     console.log("acceptQty qty"+this.acceptQty);
   }
@@ -137,88 +151,353 @@ export class ProductionReceiptComponent implements OnInit {
         }
       },
       error => {
-        console.log("Error: ", error);
+        console.log("Error: ", error);  
         this.binNo = "";
       }
     );
   }
 
   public submitRecord(){
-    this.validateForm();
-    this.prepareSubmitData();
 
-  }
-  public addMoreClick(){
-    if(this.tracking =="S" || this.tracking=="B"){
-        
-    }else{
+     // case when only single item is going to submit.
+    if (this.Lots.length == 0 && this.RejectLots.length == 0) {
+      // object is empty.
+      console.log("object is empty");
+      //means user comming first time and directly clicking on submit
+      if (this.validateForm() == false) {
+        return;
+      } 
+
+      if (this.showRejectQtyField == true && this.model.options == '2') { // if user entered rejected qty.
+        if (this.enteredQty > this.rejectQty) {
+          this.toastr.error('', this.translate.instant("SelectedQtyGrater"));
+          return false;
+        }
+        //add rejected lot.
+        if (this.tracking == "N") { this.serialBatchNo = ""; }
+        this.RejectLots.push({
+          Bin: this.binNo,
+          LineNo: 1, //for reject lot item. (crosscheck)
+          LotNumber: this.serialBatchNo,
+          LotQty: this.enteredQty,//need to check
+          ExpiryDate: this.GetSubmitDateFormat(this.expDate)
+        })
+        this.RejectItems = this.prepareRejectItemData(this.enteredQty);
+        this.UDF = [];
+        this.Items = [];
+        this.Lots = [];
+        this.submitRecProdData = {
+          Items: this.Items, Lots: this.Lots, UDF: this.UDF,
+          RejectItems: this.RejectItems, RejectLots: this.RejectLots
+        }
+        // add rejected item.
+        this.submitProductionReport(this.submitRecProdData);
+
+      } else {
+        if (this.enteredQty > this.orignalActualQty) {
+          this.toastr.error('', this.translate.instant("SelectedQtyGrater"));
+          return false;
+        }
+        // if not rejected item.
+        if (this.tracking == "N") { this.serialBatchNo = ""; }
+        this.Lots.push({
+          Bin: this.binNo,
+          LineNo: 0, //abhi k lea kea h need to check
+          LotNumber: this.serialBatchNo,
+          LotQty: this.enteredQty,//need to check
+          ExpiryDate:this.GetSubmitDateFormat(this.expDate)
+        })
+        this.Items = this.prepareCommonItemData(this.enteredQty);
+        this.UDF = [];
+        this.RejectItems = [];
+        this.RejectLots = [];
+        this.submitRecProdData = { Items: this.Items, Lots: this.Lots, UDF: this.UDF, RejectItems: this.RejectItems, RejectLots: this.RejectLots }
+        this.submitProductionReport(this.submitRecProdData);
+      }
+    } else {
+
+      // if multiple items are submitted.
+      console.log("object is not empty");
+      if (this.Lots.length > 0) {
+        this.Items = this.prepareCommonItemData(this.acceptQty);
+      }
+      if (this.RejectLots.length > 0) {
+        this.RejectItems = this.prepareRejectItemData(this.rjQty);
+      }
+      this.UDF = [];
+      this.submitRecProdData = { Items: this.Items, Lots: this.Lots, UDF: this.UDF, RejectItems: this.RejectItems, RejectLots: this.RejectLots }
+      this.submitProductionReport(this.submitRecProdData);
+      //case when multiple items will be submitted then two cases if user adding new item with old items or
+
+      // if user only submitting previous items which are stored in array.
+      //then no need to validate we can submit directly using updated qty.
+
+
 
     }
-    // validate the form data and then add in local storage if already there then add item in item 
-    //array or lot in lot array
+  }
+  submitProductionReport(requestData:any){
+    this.showLoader = true;
+    this.productionService.submitProductionRecepit(requestData).subscribe(
+      data => {
+        this.showLoader = false;
+        if (data != undefined) {
+          if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          } 
+          //check and update response for entered serial no.
+          if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
+            this.toastr.success( this.translate.instant("FGRSuccessMessage")+data[0].DocEntry);
+            this.resetAfterSubmit(); 
+          }else{
+            if (data[0].ErrorMsg != ""){
+                   // show errro.
+                   this.toastr.error('', data[0].ErrorMsg);
+            }
+          }
+        }
+      },
+      error => {
+        this.toastr.error('', error);
+      },
+    );
+  }
+  resetAfterSubmit() {
+    this.displayFormAndSubmit = false;
+    this.Lots = [];
+    this.Items = [];
+    this.UDF = [];
+    this.RejectItems = [];
+    this.RejectLots = [];
+    this.submitRecProdData = {};
+    this.orderNumber = "";
+    this.expDate = "";
+    this.enteredQty = "";
+    this.serialBatchNo = "";
+    this.model = { options: '1' };
+    this.acceptQty =  Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));//ye niche vali field jo calculation se dikhate hai.
+    this.rjQty =  Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));//ye niche vali field jo calculation se dikhate hai.
+  }
+  resetOnSerchClick(){
+    this.Lots = [];
+    this.Items = [];
+    this.UDF = [];
+    this.RejectItems = [];
+    this.RejectLots = [];
+    this.submitRecProdData = {};
+    this.expDate = "";
+    this.enteredQty = "";
+    this.serialBatchNo = "";
+    this.model = { options: '1' };
+    this.acceptQty =  Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));
+    this.rjQty =  Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));
   }
 
+  public addMoreClick() { //case when serial or batch item.
+    if (this.showRejectQtyField == true && this.model.options == '2') { // reject qty
+      //means add in accept qty
+      if (this.validateForm() == false) { return; }
+      if (this.checkIfSerialBatchAlreadyExists(this.serialBatchNo) == true) {
+        if (this.tracking == "B") { this.toastr.error('', this.translate.instant("BatchAlreadyExists")); }
+        if (this.tracking == "S") { this.toastr.error('', this.translate.instant("SerialAlreadyExist")); }
+        return;
+      } else { }
+      this.calculateRejectQtyOnAddMore();
+    } else {
+
+      if (this.validateForm() == false) { return; }
+      if (this.checkIfSerialBatchAlreadyExists(this.serialBatchNo) == true) {
+        if (this.tracking == "B") { this.toastr.error('', this.translate.instant("BatchAlreadyExists")); }
+        if (this.tracking == "S") { this.toastr.error('', this.translate.instant("SerialAlreadyExist")); }
+        return;
+      }
+      this.calculateAcceptQtyOnAddMore();
+    }
+    //reset form variables.
+    this.serialBatchNo = ""
+    if (this.tracking == "S") {
+      this.serialQty = Number(this.serialQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));
+      this.enteredQty = this.serialQty;
+    } else {
+      this.enteredQty = Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));
+    }
+    //enable disable accept list and reject list buttons.
+    this.showViewAcceptViewRejectButtons();
+  } 
+ 
+  checkIfSerialBatchAlreadyExists(serialBatch: string): any {
+    var isExists: boolean = false;
+    if (this.tracking == "S" || this.tracking == "B") {
+      if (this.showRejectQtyField == true) {
+        if (this.model.options == '2') {
+          if (this.RejectLots.length > 0) {
+            for (var i = 0; i < this.RejectLots.length; i++) {
+              if (serialBatch == this.RejectLots[i].LotNumber) {
+                isExists = true;
+              }
+            }
+          }
+        } else {
+          if (this.Lots.length > 0) {
+            for (var i = 0; i < this.Lots.length; i++) {
+              if (serialBatch == this.Lots[i].LotNumber) {
+                isExists = true;
+              }
+            }
+          }
+        }
+      } else {
+        if (this.Lots.length > 0) {
+          for (var i = 0; i < this.Lots.length; i++) {
+            if (serialBatch == this.Lots[i].LotNumber) {
+              isExists = true;
+            }
+          }
+        }
+      }
+    }
+    return isExists;
+  }
+  showViewAcceptViewRejectButtons(){
+    if(this.showRejectQtyField == true && this.model.options == '2'){
+      if(this.RejectLots.length>0){
+        this.showViewRejectButton = true;
+      }
+    }else{
+      if(this.Lots.length>0){
+        this.showViewAcceptButton = true;
+      }
+    }
+
+  }
+  calculateAcceptQtyOnAddMore() {
+    //added in accept qty and open qty.
+    let tempQty = 0; // logic to manage qty.
+    for (var i = 0; i < this.Lots.length; i++) {
+      tempQty = tempQty + this.Lots[i].LotQty;
+    }
+    tempQty = tempQty + Number(this.enteredQty);
+    var orignalRejectQty = this.itemDataResponse.RejectQTY;// taken in a local variable for compairsion.
+    var orignalActualQty = this.itemDataResponse.ORIGINALACTUALQUANTITY;
+    if (tempQty > parseFloat(orignalActualQty)) {
+      this.toastr.error('', this.translate.instant("SelectedQtyGrater"));
+      this.enteredQty = Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));
+    } else {
+      // add qty to Reject Lot list and update rejectQty and rjQty
+      this.Lots.push({
+        Bin: this.binNo,
+        LineNo: 0, //for reject lot item. (crosscheck)
+        LotNumber: this.serialBatchNo,
+        LotQty: Number(this.enteredQty),//need to check 
+        ExpiryDate: this.GetSubmitDateFormat(this.expDate)
+      })
+      //this.totalQtyToSubmit = tempQty; // at the end update totalQty with calculated qty.
+      this.acceptQty = tempQty;
+      var initialOrignalActualQty = this.itemDataResponse.ORIGINALACTUALQUANTITY;
+      this.orignalActualQty = initialOrignalActualQty - tempQty;
+    }
+  }  
+ 
+
+  calculateRejectQtyOnAddMore() {
+    let tempQty = 0; // logic to manage qty.
+    for (var i = 0; i < this.RejectLots.length; i++) {
+      tempQty = tempQty + this.RejectLots[i].LotQty;
+    }
+    tempQty = tempQty + Number(this.enteredQty);
+
+    var orignalRejectQty = this.itemDataResponse.RejectQTY;// taken in a local variable for compairsion.
+    if (tempQty > parseFloat(orignalRejectQty)) {
+      this.toastr.error('', this.translate.instant("SelectedQtyGrater"));
+      this.enteredQty = Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));
+    } else {
+      // add qty to Reject Lot list and update rejectQty and rjQty
+      this.RejectLots.push({
+        Bin: this.binNo,
+        LineNo: 1, //for reject lot item. (crosscheck)
+        LotNumber: this.serialBatchNo,
+        LotQty: Number(this.enteredQty),//need to check 
+        ExpiryDate: this.GetSubmitDateFormat(this.expDate)
+      })
+     
+      //this.totalQtyToSubmit = tempQty; // at the end update totalQty with calculated qty.
+      this.rjQty = tempQty;
+      var orignalRejectQty = this.itemDataResponse.RejectQTY;
+      this.rejectQty = orignalRejectQty - tempQty;
+     // console.log("total qty to submit:" + this.totalQtyToSubmit);
+    }
+  }
+
+
+  GetSubmitDateFormat(EXPDATE) {
+    if (EXPDATE == "" || EXPDATE == null)
+      return "";
+    else {
+      var d = new Date(EXPDATE);
+      var day;
+
+      if (d.getDate().toString().length < 2) {
+        day = "0" + d.getDate();
+      }
+      else {
+        day = d.getDate();
+      }
+      var mth;
+      if ((d.getMonth() + 1).toString().length < 2) {
+        mth = "0" + (d.getMonth() + 1).toString();
+      }
+      else {
+        mth = d.getMonth() + 1;
+      }
+      // return day + ":" + mth + ":" + d.getFullYear();
+      return mth + "/" + day + "/" + d.getFullYear();
+    }
+  }
+  objectIsEmpty(obj) {
+    for (var key in obj) {
+      if (obj.hasOwnProperty(key))
+        return false;
+    }
+    return true;
+  }
+  isEmptyObject(obj) {
+    return (obj && (Object.keys(obj).length === 0));
+  }
   prepareSubmitData(){
-   var submitRecProdData: any ={};
-   var itemsData: any =[];
-   var UDF: any = [];
-   var RejectItems: any = [];
-   var RejectLots: any = [];
-   var Lots: any = [];
-   itemsData.push({
-    DiServerToken: localStorage.getItem("Token"),
-    CompanyDBId: localStorage.getItem("CompID"),
-    Transaction:this.Transaction,
-    RECUSERID: localStorage.getItem("UserId"),
-    ONLINEPOSTING:this.ONLINEPOSTING,
-    BATCHNO: this.orderNumber,
-    LineNo:0,
-    RefDocEntry:this.refDocEntry,
-    RejectQTY:this.rejectQty,
-    RecRjctedQty:this.recRejectQty,
-    DOCENTRY:this.refDocEntry,
-    Quantity: this.enteredQty,
-    ItemCode: this.itemCode,
-    POSTEDFGQTY: this.postedFGQTY,
-    PASSEDQTY: this.passedQty,
-    AcctDefectQty: this.ACCTDEFECTQTY,
-    FGQTYTOPOST: this.orignalActualQty,//abhi k lea need to check
-    WhsCode:this.whsCode,
-    Tracking:this.tracking,
-    IsPalletExist:this.IsPalletExist,
-    LoginId:localStorage.getItem("UserId"),
-    GUID: localStorage.getItem("GUID"),
-    UsernameForLic: localStorage.getItem("UserId")
-   });
-   Lots.push({
+   this.Items = this.prepareCommonItemData(this.enteredQty);
+   this.RejectItems =  this.prepareRejectItemData(this.enteredQty);
+   this.Lots.push({
     Bin: this.binNo,
-    LineNo: 0,
+    LineNo: 0, //abhi k lea kea h need to check
     LotNumber:this.serialBatchNo,
     LotQty:this.enteredQty,//need to check
-    ExpiryDate: this.expDate
+    ExpiryDate: this.GetSubmitDateFormat(this.expDate)
    })
-   submitRecProdData={Items:itemsData,Lots:Lots,UDF:UDF,RejectItems:RejectItems,RejectLots:RejectLots}
+   this.submitRecProdData = {Items:this.Items,Lots:this.Lots,UDF:this.UDF,RejectItems:this.RejectItems,RejectLots:this.RejectLots}
   }
-  prepareCommonItemData(rejQty:string,quantity: string):any{
+ 
+  prepareCommonItemData(totalAcceptedRejectedQty: any):any{
     var itemsData: any =[];
-    itemsData.push({
+    itemsData.push({ 
     DiServerToken: localStorage.getItem("Token"),
     CompanyDBId: localStorage.getItem("CompID"),
     Transaction:this.Transaction,
     RECUSERID: localStorage.getItem("UserId"),
     ONLINEPOSTING:this.ONLINEPOSTING,
     BATCHNO: this.orderNumber,
-    LineNo:0,
+    LineNo:0,//abhi k lea kea h need to check
     RefDocEntry:this.refDocEntry,
-    RejectQTY:rejQty,
+    RejectQTY:this.itemDataResponse.RejectQTY,
     RecRjctedQty:this.recRejectQty,
     DOCENTRY:this.refDocEntry,
-    Quantity: quantity,
+    Quantity: totalAcceptedRejectedQty,
     ItemCode: this.itemCode,
     POSTEDFGQTY: this.postedFGQTY,
-    PASSEDQTY: this.passedQty,
+    PASSEDQTY: this.passedQty, 
     AcctDefectQty: this.ACCTDEFECTQTY,
-    FGQTYTOPOST: this.orignalActualQty,//abhi k lea need to check
+    FGQTYTOPOST: this.itemDataResponse.ORIGINALACTUALQUANTITY,//abhi k lea need to check
     WhsCode:this.whsCode,
     Tracking:this.tracking,
     IsPalletExist:this.IsPalletExist,
@@ -229,16 +508,16 @@ export class ProductionReceiptComponent implements OnInit {
     return itemsData;
   }
 
-  public prepareRejectItemData(rejQty:string,quantity: string): any{
+  public prepareRejectItemData(totalAcceptedRejectedQty: any): any{
     var rejectItemsData: any =[];
-    rejectItemsData.push({
+      rejectItemsData.push({
       DiServerToken: localStorage.getItem("Token"),
       CompanyDBId: localStorage.getItem("CompID"),
       Transaction:this.Transaction,
       RECUSERID: localStorage.getItem("UserId"),
       ONLINEPOSTING:this.ONLINEPOSTING,
       BATCHNO: this.orderNumber,
-      LineNo:0,
+      LineNo:0,//abhi k lea kea h need to check
       RefDocEntry:this.refDocEntry,
       DOCENTRY:this.refDocEntry,
       ItemCode: this.itemCode,
@@ -246,82 +525,97 @@ export class ProductionReceiptComponent implements OnInit {
       POSTEDFGQTY: this.postedFGQTY,
       PASSEDQTY: this.passedQty,
       AcctDefectQty: this.ACCTDEFECTQTY,
-      FGQTYTOPOST: this.orignalActualQty,//abhi k lea need to check
+      FGQTYTOPOST: this.itemDataResponse.ORIGINALACTUALQUANTITY,//abhi k lea need to check
       Tracking:this.tracking,
-      IsPalletExist:this.IsPalletExist,
+      IsPalletExist:this.IsPalletExist, 
       LoginId:localStorage.getItem("UserId"),
-      RejectQTY:rejQty,
+      RejectQTY:this.itemDataResponse.RejectQTY,
       RecRjctedQty:this.recRejectQty,
-      Quantity: quantity,
+      Quantity: totalAcceptedRejectedQty,
       });
       return rejectItemsData;
   }
-  public validateForm() {
+  public validateForm(): boolean {
     if (this.tracking === "S") {
-      this.validateSerialForm();
+     return this.validateSerialForm();
     }
     if (this.tracking === "B") {
-      this.validateBatchForm();
+      return this.validateBatchForm();
     }
     if (this.tracking === "N") {
-      this.validateNonTrackedForm();
+      return this.validateNonTrackedForm();
     }
   }
-  validateBatchForm() {
-    this.toastr.error('', this.translate.instant("OrderNoBlank"));
-      if (this.orderNumber == null || this.orderNumber == undefined || this.orderNumber == "") {
-      return;
+  validateBatchForm() : boolean {
+    if (this.orderNumber == null || this.orderNumber == undefined || this.orderNumber == "") {
+      this.toastr.error('', this.translate.instant("OrderNoBlank"));
+      return false ;
     }
     if (this.enteredQty == null || this.enteredQty == undefined || this.enteredQty == "" ||
       parseFloat(this.enteredQty).toFixed(4) == parseFloat("0").toFixed(4)) {
       this.toastr.error('', this.translate.instant("EnterLotQuantity"));
-      return;
+      return false ;
     }
     if (this.serialBatchNo == null || this.serialBatchNo == undefined || this.serialBatchNo == "") {
       this.toastr.error('', this.translate.instant("EnterBatchNo"));
-      return;
+      return false ;
     }
     if (this.binNo == null || this.binNo == undefined || this.binNo == "") {
       this.toastr.error('', this.translate.instant("EnterBinNo"));
-      return;
+      return false ;
     }
     if(parseFloat(this.enteredQty).toFixed(4) < parseFloat("0").toFixed(4)){
       this.toastr.error('', this.translate.instant("QtyGraterThenZero"));
-      return;
+      return false ;
     }
+    // if(this.enteredQty>this.orignalActualQty){
+    //   this.toastr.error('', this.translate.instant("SelectedQtyGrater"));
+    //   return false;
+    // }
+    return true ;
   }
-  validateSerialForm() {
+  validateSerialForm() : boolean{
     if(this.orderNumber== null || this.orderNumber==undefined || this.orderNumber == ""){
       this.toastr.error('', this.translate.instant("OrderNoBlank"));
-      return ;
+      return false ;
      }
     if(this.serialBatchNo== null || this.serialBatchNo==undefined || this.serialBatchNo == ""){
       this.toastr.error('', this.translate.instant("EnterSerialNo"));
-      return;
+      return false ;
      }
      if(this.binNo== null || this.binNo==undefined || this.binNo == ""){
       this.toastr.error('', this.translate.instant("EnterBinNo"));
-      return;
+      return false ;
      }
+    //  if(this.enteredQty>this.orignalActualQty){
+    //   this.toastr.error('', this.translate.instant("SelectedQtyGrater"));
+    //   return false;
+    // }
+     return true ;
   }
-  validateNonTrackedForm(){
+  validateNonTrackedForm(): boolean{
     if (this.orderNumber == null || this.orderNumber == undefined || this.orderNumber == "") {
       this.toastr.error('', this.translate.instant("OrderNoBlank"));
-      return;
+      return false ;
     }
     if (this.enteredQty == null || this.enteredQty == undefined || this.enteredQty == "" ||
       parseFloat(this.enteredQty).toFixed(4) == parseFloat("0").toFixed(4)) {
       this.toastr.error('', this.translate.instant("EnterQty"));
-      return;
+      return false ;
     }
     if (this.binNo == null || this.binNo == undefined || this.binNo == "") {
       this.toastr.error('', this.translate.instant("EnterBinNo"));
-      return;
+      return false ;
     }
     if(parseFloat(this.enteredQty).toFixed(4) < parseFloat("0").toFixed(4)){
       this.toastr.error('', this.translate.instant("QtyGraterThenZero"));
-      return;
+      return false ;
     }
+    // if(this.enteredQty>this.orignalActualQty){
+    //   this.toastr.error('', this.translate.instant("SelectedQtyGrater"));
+    //   return false;
+    // }
+    return true ;
   }
   checkAndValidateSerial(){
     this.checkValidateSerialSubs = this.productionService.isSerialExists(this.serialBatchNo,this.itemCode).subscribe(
@@ -333,9 +627,13 @@ export class ProductionReceiptComponent implements OnInit {
             return;
           } 
           //check and update response for entered serial no.
-          if (data.Table != undefined && data.Table != null && data.Table != "") {
-           
+          if (data== "1") { 
+           //error message
+           this.toastr.error('', this.translate.instant("SerialNoAlreadyUsed"));
+           this.serialBatchNo = "";
             return;
+          }else{
+            // allow data
           }
         }
       },
@@ -393,6 +691,7 @@ export class ProductionReceiptComponent implements OnInit {
       this.toastr.error('', this.translate.instant("OrderNoBlank"));
       return;
     }
+    this.resetOnSerchClick();
     this.orderNoListSubs = this.productionService.GetItemsDetailForProductionReceipt(this.orderNumber).subscribe(
       data => {
         this.displayFormAndSubmit = true; 
@@ -402,7 +701,9 @@ export class ProductionReceiptComponent implements OnInit {
             this.translate.instant("CommonSessionExpireMsg"));
           return;
         }
-        if (data.Table != undefined && data.Table != null && data.Table!="" && data.Table.length>0) {          this.showLookupLoader = false;
+        if (data.Table != undefined && data.Table != null && data.Table!="" && data.Table.length>0) { 
+           this.showLookupLoader = false;
+           this.itemDataResponse =  data.Table[0];
            this.setFormData(data.Table[0])
           return;
         } else{ 
@@ -484,8 +785,7 @@ export class ProductionReceiptComponent implements OnInit {
      }
     if(this.tracking == "S")
     {
-       //this.serialQty = "1.0000";
-       this.serialQty = Number(1)+  Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));
+       this.serialQty =  Number(this.serialQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));
        this.enteredQty = this.serialQty;
        this.disableSearialQty = true; 
        //set serial form data and hide other fields
@@ -495,14 +795,16 @@ export class ProductionReceiptComponent implements OnInit {
     }else if(this.tracking == "B"){
       //set batch form data and hide other fields    
       this.showAddMoreButton = true;
+      this.enteredQty = Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));
     //  this.BatchQtyField.nativeElement.focus(); //set focus on batch qty field.
     }else if(this.tracking == "N"){
       //set non form data and hide other fields 
       
       this.showAddMoreButton = false;   
+      this.enteredQty = Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));
     //  console.log('--this.SerialQtyField.nativeElement---',this.QtyField.nativeElement);
       // this.QtyField.nativeElement.focus(); //set focus on non qty field.
-      
+       
     }
     //this two fields will be disable in all three cases.
     this.disableOpenQty = true;
@@ -519,75 +821,150 @@ export class ProductionReceiptComponent implements OnInit {
     }
 
   }
-  showViewAcceptItems(){
-    //manage variables for showing grid and ok delete button seperate div section of View accept items.
+  showMainLayoutItems: boolean = true;
+  lotSerialHeading: any = this.translate.instant("LotNoHeading");
+
+  showViewAcceptItems($event){
+    this.showMainLayoutItems = false;
+    this.acceptItemsGrid = true;
+    this.rejectItemsGrid = false;
+    if(this.tracking=="S"){
+      this.lotSerialHeading = this.translate.instant("Serial");
+    }else{
+      this.lotSerialHeading = this.translate.instant("LotNoHeading");
+    } 
+
   }
-  showViewRejetItems(){
+ 
+  
+  showViewRejectItems($event){
     //show view reject items.
+    this.showMainLayoutItems = false;
+    this.acceptItemsGrid = false;
+    this.rejectItemsGrid = true;
+    if(this.tracking=="S"){
+      this.lotSerialHeading = this.translate.instant("Serial");
+    }else{
+      this.lotSerialHeading = this.translate.instant("LotNoHeading");
+    }
   }
 
-  viewAcceptOkClick(){
+  viewAcceptOkClick($event){
     //set variable to hide grid and show the form.
+    this.showMainLayoutItems = true;
+    this.acceptItemsGrid = false;
+    this.rejectItemsGrid = false;
 
   }
   viewAcceptDeleteAll(){
     // clear all items from array after alert.
     // ckeck if after delete
-  }
+    this.Lots = [];
+    this.orignalActualQty = this.itemDataResponse.ORIGINALACTUALQUANTITY;
+    this.acceptQty =  Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));//ye niche vali field jo calculation se dikhate hai.
+    if(this.tracking=="S"){
+      this.serialQty =  Number(this.serialQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));
+    }
+  } 
 
-  viewAcceptDeleteItem(){
+  viewAcceptDeleteItem($event,rowIndex){
     //splice item from Array. and update grid.
+    console.log("event at delete click:"+JSON.stringify($event));
+    var itemToDelete = this.Lots[rowIndex];
+    this.acceptQty = this.acceptQty - itemToDelete.LotQty;
+    if(this.acceptQty==0){ // if after substracting accpet qty become 0 then show 0.0000
+      this.acceptQty =  Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));//ye niche vali field jo calculation se dikhate hai.
+    }
+    this.orignalActualQty = this.orignalActualQty +  itemToDelete.LotQty;
+    this.Lots.splice(rowIndex,1); 
   }
 
   
   viewRejectOkClick(){
     //set variable to hide grid and show the form.
-
+   this.showMainLayoutItems = true;
+   this.acceptItemsGrid = false;
+   this.rejectItemsGrid = false;
   }
   viewRejectDeleteAll(){
     // clear all items from array after alert.
     // ckeck if after delete
+    // ckeck if after delete
+    this.RejectLots = [];
+    this.rejectQty = this.itemDataResponse.RejectQTY;
+    this.rjQty =  Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));//ye niche vali field jo calculation se dikhate hai.
+
   }
 
-  viewRejectDeleteItem(){
+  viewRejectDeleteItem($event,rowIndex){
     //splice item from Array. and update grid.
+    console.log("event at delete click:"+JSON.stringify($event));
+    var itemToDelete = this.RejectLots[rowIndex];
+    this.rjQty = this.rjQty - itemToDelete.LotQty;
+    if(this.rjQty==0){ // if after substracting accpet qty become 0 then show 0.0000
+      this.rjQty =  Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));//ye niche vali field jo calculation se dikhate hai.
+    }
+    this.rejectQty = this.rejectQty +  itemToDelete.LotQty;
+    this.RejectLots.splice(rowIndex,1); 
   }
   ngOnDestroy() { 
   if (this.orderNoListSubs != undefined)
     this.orderNoListSubs.unsubscribe();
   }
-  dialogFor: string = "";
-  dialogMsg: string = ""
-  yesButtonText: string = "";
-  noButtonText: string = "";
-  showConfirmDialog: boolean;
-  public confirmDialogForDeleteAll(gridData: any) {
-    this.dialogFor = "deleteAll";
-    this.dialogMsg = this.translate.instant("DoYouWantToDelete");
+
+  public confirmDialogForDeleteAllRejectItems() {
+    this.dialogFor = "deleteAllRejectItems";
+    this.dialogMsg = this.translate.instant("DeleteAllLines");
+    this.yesButtonText = this.translate.instant("yes");
+    this.noButtonText = this.translate.instant("no");
+    this.showConfirmDialog = true;
+  }
+  public confirmDialogForDeleteAllAcceptItems() {
+    this.dialogFor = "deleteAllAcceptItems";
+    this.dialogMsg = this.translate.instant("DeleteAllLines");
     this.yesButtonText = this.translate.instant("yes");
     this.noButtonText = this.translate.instant("no");
     this.showConfirmDialog = true;
   }
 
+  public confirmDialogForDeleteAcceptItem($event,rowIndex) {
+    this.rowIndexForDelete = rowIndex;
+    this.dialogFor = "deleteAcceptItem";
+    this.dialogMsg = this.translate.instant("DeleteRecordsMsg");
+    this.yesButtonText = this.translate.instant("yes");
+    this.noButtonText = this.translate.instant("no");
+    this.showConfirmDialog = true;
+  }
+  public confirmDialogForDeleteRejectItem($event,rowIndex) {
+    this.rowIndexForDelete = rowIndex;
+    this.dialogFor = "deleteRejectItem";
+    this.dialogMsg = this.translate.instant("DeleteRecordsMsg");
+    this.yesButtonText = this.translate.instant("yes");
+    this.noButtonText = this.translate.instant("no");
+    this.showConfirmDialog = true;
+  }
   
-  getConfirmDialogValue($event) {
+
+  rowIndexForDelete:any;
+  getConfirmDialogValue($event, ) {
     this.showConfirmDialog = false;
     if ($event.Status == "yes") {
       switch ($event.From) {
-        case ("deleteAll"):
-        //  this.deleteAllClick();
+        case ("deleteAcceptItem"):
+          this.viewAcceptDeleteItem($event, this.rowIndexForDelete);
           break;
-        case ("delete"):
-          //call method to delete item or remove its data from array
+        case ("deleteRejectItem"):
+          this.viewRejectDeleteItem($event, this.rowIndexForDelete);
           break;
-      
+        case ("deleteAllAcceptItems"):
+          this.viewAcceptDeleteAll();
+          break;
+        case ("deleteAllRejectItems"):
+          this.viewRejectDeleteAll();
+          break;
       }
-    } else {
-      if ($event.Status == "cancel") {
-        // when user click on cross button nothing to do.
-      } else{
-        // nothing to do.
-      }
+    }else{
+      //nothing to do.
     }
   }
 

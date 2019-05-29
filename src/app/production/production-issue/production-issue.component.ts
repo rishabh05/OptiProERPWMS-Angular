@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-production-issue',
@@ -7,12 +6,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./production-issue.component.scss']
 })
 export class ProductionIssueComponent implements OnInit {
-
-  constructor( private router: Router) { }
+  public prodissueComponent = 1;
+  constructor() { }
 
   ngOnInit() {
-  }
-  onCancelClick() {
-    this.router.navigate(['home/dashboard']);
   }
 }
