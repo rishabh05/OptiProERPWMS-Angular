@@ -46,6 +46,7 @@ export class SigninComponent implements OnInit {
   readonlyFlag: boolean = false;
   public arrConfigData: any[];
   public config_params: any;
+
   constructor(private router: Router, private signinService: SigninService, 
     private commonService: Commonservice, private toastr: ToastrService,
      private translate: TranslateService,private httpClientSer: HttpClient) {
@@ -193,13 +194,22 @@ export class SigninComponent implements OnInit {
     );
   }
 
+  onResetClick(){
+    this.isCompleteLoginVisible = false;
+    this.setCookie('cookieEmail', "", 365);
+    this.setCookie('cookiePassword', "", 365);
+    this.setCookie('CompID', "", 365);
+    this.setCookie('whseId', "", 365);
+    this.userName = "";
+    this.password = "";
+    this.selectedItem = "";
+    this.selectedWhse = "";
+  }
+
   private getLicenseData(){
-    
-  //  alert("in getLicenseData()")
     this.showFullPageLoader = true;
     this.signinService.getLicenseData(this.selectedItem).subscribe(
       data => {
-       // alert("in getLicenseData() subs result data"+data)
         this.licenseData = data;
         if(this.licenseData!=null && this.licenseData!=undefined){
           this.handleLicenseDataSuccessResponse();
@@ -207,7 +217,6 @@ export class SigninComponent implements OnInit {
           this.showLoader = false;  
           this.toastr.error('', this.translate.instant("license Failed"));
         }
-        
       },
       error => {
        // alert("in getLicenseData() subs result error"+error)
