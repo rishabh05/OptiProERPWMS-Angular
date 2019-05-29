@@ -263,5 +263,17 @@
   "PhysicalCount.SubmitSaveLines": "Do you want to submit all saved data?",
   "RejectedSerials":"Rejected Serials",
   "BalanceQty": "Balance Qty",
-  "IssuedQty": "Issue Qty"
+  "IssuedQty": "Issue Qty",
+  "SerialNoAlreadyUsed": "This serial no is already in use.",
+  "FGRSuccessMessage": " Production Receipt generated successfully with Document No:", 
+  "SelectedQtyGrater":"Selected qty greater than required qty",
+  "LotNoHeading": "LOTNO",
+  "BinNoHeading": "Bin No",
+  "DeleteAllLines": "Do you want to delete All Lines ?",
+  "AcceptedLot":"Accepted Lot",
+  "RejectedLot": "Rejected Lot",
+  "BatchAlreadyExists": "Batch already exists"
+
+
+
 }

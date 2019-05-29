@@ -52,7 +52,7 @@ export class NumberFormatPipe implements PipeTransform {
   }
   addDecimalDigitsToNo(formattedString: string, no: string, DecimalSeparator: string): string {
     var noOfDigitsAfterDesimal = no.toString().split(DecimalSeparator)[1].length;
-    var precision = 4;//localStorage.getItem("DecimalPrecision");
+    var precision = localStorage.getItem("DecimalPrecision");
     if (noOfDigitsAfterDesimal == 0) {
       formattedString = formattedString + DecimalSeparator;
       for (var i = 0; i < Number(precision); i++) {
