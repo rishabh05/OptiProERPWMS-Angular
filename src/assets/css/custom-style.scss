@@ -217,6 +217,7 @@ kendo-numerictextbox.text-right{
     height:26px;
     font-size:12px;
 }
+
 /////////////////////////////////////////////////////////////////////
 ///////////////////////////// Custom Button Style /////////////////////
 ////////////////////////////////////////////////////////////////////
@@ -266,6 +267,17 @@ kendo-numerictextbox.text-right{
     font-size: 1rem;
     display: inline-flex;
 }
+body .k-dropdown .k-dropdown-wrap {
+    height: 26px !important;
+}
+body kendo-grid-filter-cell-operators kendo-dropdownlist.k-dropdown-operator .k-select{
+    height: auto;
+    padding: 0;
+    background: transparent !important;
+    border: none !important;
+    color: #fff !important;
+    width: auto;    
+}
 
 /////////////////////////////////////////////////////////////////////
 ///////////////////////////// Modal Style /////////////////////
@@ -289,7 +301,13 @@ body.modal-open app-root {
     color:#fff;
     font-size: 18px;
 }
-
+.k-widget.form-control-sm .k-input{
+    height: 26px !important;
+}
+.k-form .k-form-field > input {
+    height: 26px !important;
+    line-height: 26px !important;
+}
 /////////////////////////////////////////////////////////////////////
 ///////////////////////////// Kendo Grid custom Style /////////////////////
 ////////////////////////////////////////////////////////////////////
@@ -315,5 +333,52 @@ body .opti_container .opti_container_inner{
         font-size: 16px;
         padding-bottom: 0rem !important;
         padding-top: 0 !important;
+    }
+}
+/////////////////////////////////////////////////////////////////////
+///////////////////////////// Kendo grid /////////////////////
+////////////////////////////////////////////////////////////////////
+.k-filtercell .k-filtercell-wrapper > .k-textbox {
+    height: 26px;
+    padding: .25rem .5rem;
+    font-size: 12px;
+}
+.k-filtercell .k-filtercell-operator > .k-button:not(.k-clear-button-visible){
+    display: none;
+}
+.k-filtercell .k-autocomplete .k-input, .k-filtercell .k-dropdown-wrap .k-input, .k-filtercell .k-numeric-wrap .k-input, .k-filtercell .k-picker-wrap .k-input, .k-filtercell .k-selectbox .k-input, .k-filtercell .k-textbox > input{
+    padding: .25rem .5rem;
+    text-indent: 0;
+    line-height: 26px;
+}
+.k-grid-toolbar + .k-grid-aria-root .k-grid-header .k-header{
+    width: auto !important;
+}
+body .k-grid-toolbar + .k-grid-aria-root .k-grid-header .k-header .k-dropdown-wrap{
+    background: transparent !important;
+    border: none;
+}
+.k-filtercell {
+    width: auto;
+    display: flex;
+    padding: 3px 2px;
+}
+.k-filtercell .k-filtercell-operator > .k-button.k-clear-button-visible {
+    height: 26px;
+    background: transparent;
+}
+.k-filtercell .k-filtercell-operator > .k-button .k-icon,
+body .k-grid-toolbar + .k-grid-aria-root .k-grid-header .k-header .k-dropdown-wrap .k-icon {
+    color:#fff !important;
+}
+.k-filtercell .k-filtercell-operator {
+    margin-left: 0.375rem;
+    height: 26px;
+    display: flex;
+    align-items: center;
+}
+body .k-dialog-wrapper kendo-grid.no-shadow{
+    @media screen and (max-height:767px) {
+        max-height: 250px !important;
     }
 }

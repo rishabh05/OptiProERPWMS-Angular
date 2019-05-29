@@ -66,7 +66,7 @@ export class Commonservice {
     progressBar: false,
     opacity: 1,
     timeOut: 5000,
-    positionClass: 'toast-bottom-right',
+    positionClass: 'toast-top-right',
     iconClasses: {
       error: 'alert alert-danger',
       info: 'alert alert-info ',
@@ -166,7 +166,7 @@ export class Commonservice {
   }
 
   signOut(toastr: ToastrService, router: Router, message: string){
-    toastr.error('', message, this.toast_config);
+    toastr.error('', message);
     sessionStorage.removeItem('isLoggedIn');
     sessionStorage.removeItem('selectedComp');
     sessionStorage.removeItem('loggedInUser');

@@ -194,6 +194,7 @@ export class SigninComponent implements OnInit {
   }
 
   private getLicenseData(){
+    
   //  alert("in getLicenseData()")
     this.showFullPageLoader = true;
     this.signinService.getLicenseData(this.selectedItem).subscribe(
@@ -231,11 +232,11 @@ export class SigninComponent implements OnInit {
           localStorage.setItem("whseId", this.selectedWhse);
           localStorage.setItem("Token", this.licenseData[0].Token);
 
-          localStorage.setItem("DefaultValues", JSON.stringify(this.licenseData[0].DefaultValues));
-          localStorage.setItem("DecimalPrecision", this.licenseData[0].DefaultValues[3].DefaultValue);
-          localStorage.setItem("DecimalSeparator", this.licenseData[0].DefaultValues[4].DefaultValue);
-          localStorage.setItem("ThousandSeparator", this.licenseData[0].DefaultValues[5].DefaultValue);
-          localStorage.setItem("DATEFORMAT", this.licenseData[0].DefaultValues[6].DefaultValue);
+          // localStorage.setItem("DefaultValues", JSON.stringify(this.licenseData[0].DefaultValues));
+          // localStorage.setItem("DecimalPrecision", this.licenseData[0].DefaultValues[3].DefaultValue);
+          // localStorage.setItem("DecimalSeparator", this.licenseData[0].DefaultValues[4].DefaultValue);
+          // localStorage.setItem("ThousandSeparator", this.licenseData[0].DefaultValues[5].DefaultValue);
+          // localStorage.setItem("DATEFORMAT", this.licenseData[0].DefaultValues[6].DefaultValue);
           // code for remember me 
           if (this.isRemember == true) {
             this.setCookie('cookieEmail', this.userName, 365);
@@ -248,9 +249,7 @@ export class SigninComponent implements OnInit {
             this.setCookie('CompID', "", 365);
             this.setCookie('whseId', "", 365);
           }
-         setTimeout(()=> {
           this.router.navigateByUrl('home/dashboard');
-         }, 10)
         } else {
           alert(this.licenseData[0].Message + " " + this.licenseData[0].Token);
         }

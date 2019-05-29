@@ -225,7 +225,12 @@
         //height: $top-bar-height - 15px;
     }
 }
-
+.opti_sidebar-minimize{
+    & .opti_logo.opti_device-logo{
+        font-size: 25px;
+        line-height: 22px;
+    }
+}
 .opti_device-logo {
     // display: block;   
     max-height: 100%;
