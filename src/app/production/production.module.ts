@@ -9,6 +9,8 @@ import { TrnaslateLazyModule } from '../../translate-lazy.module';
 import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
 import { SharedModule } from '../shared-module/shared-module.module';
 import { GridModule } from '@progress/kendo-angular-grid';
+import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
+import { InputsModule } from '@progress/kendo-angular-inputs';
 import { ProdOrderlistComponent } from './production-issue/prod-orderlist/prod-orderlist.component';
 import { ProdItemIssueComponent } from './production-issue/prod-item-issue/prod-item-issue.component';
 
@@ -23,6 +25,8 @@ import { ProdItemIssueComponent } from './production-issue/prod-item-issue/prod-
     TrnaslateLazyModule,
     PerfectScrollbarModule,
     DateInputsModule,
+    DropDownsModule,
+    InputsModule,
     GridModule
   ]
 })

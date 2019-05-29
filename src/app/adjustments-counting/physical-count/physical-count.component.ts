@@ -87,6 +87,7 @@ export class PhysicalCountComponent implements OnInit {
           this.lookupfor = "PhyCntItemList";
         } else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          this.onCancelClick();
         }
       },
       error => {
