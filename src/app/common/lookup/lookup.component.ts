@@ -657,7 +657,7 @@ export class LookupComponent implements OnInit {
       {
         field: 'DOCNUM',
         title: 'SO#',
-        type: 'text',
+        type: 'numeric',
         width: '100'
       },
       {

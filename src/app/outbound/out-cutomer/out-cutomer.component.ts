@@ -176,8 +176,13 @@ export class OutCutomerComponent implements OnInit {
     )
   }
 
-  public openCustSO() {
+  public openCustSO(clearOrder:boolean=false) {
     this.router.navigateByUrl('home/outbound/outorder', { skipLocationChange: true });
+    // Clear otred data
+    this.outbound.OrderData=null;
+    if(clearOrder==true)
+    localStorage.setItem(CommonConstants.OutboundData,JSON.stringify( this.outbound));
+
   }
 
   public cancel() {
