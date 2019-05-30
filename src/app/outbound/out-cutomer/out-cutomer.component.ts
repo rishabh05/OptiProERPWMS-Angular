@@ -450,6 +450,7 @@ export class OutCutomerComponent implements OnInit {
     let order = this.orderCollection[idx];
     this.outbound.DeleiveryCollection = this.outbound.DeleiveryCollection.filter(d => d.Order.DOCNUM !== order.DOCNUM);
     this.outbound.TempMeterials = this.outbound.TempMeterials.filter(d => d.Order.DOCNUM !== order.DOCNUM);
+    localStorage.setItem(CommonConstants.OutboundData,JSON.stringify(this.outbound));
   }
 
   openOrderScreen(selection: any) {
