@@ -89,7 +89,7 @@
                         </label>
                         <div class="text-right">
                             <button type="submit" id=connectbtn class="k-button k-primary opti_fullwidth mt-4" *ngIf="!isCompleteLoginVisible" (click)="login()">{{'Connect'|translate}}</button>
-                            <button type="button" id=connectbtn *ngIf="isCompleteLoginVisible" class="k-button k-primary opti_fullwidth" (click)="onResetClick()">{{'Reset'|translate}}</button>
+                            <button *ngIf ="false" type="button" id=connectbtn class="k-button k-primary opti_fullwidth" (click)="onResetClick()">{{'Reset'|translate}}</button>
                             <button type="submit" id=connectbtn *ngIf="isCompleteLoginVisible" class="k-button k-primary opti_fullwidth" (click)="login()">{{'Login'|translate}}</button>                            
                         </div>
                     </form>
