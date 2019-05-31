@@ -30,8 +30,8 @@
                            !emailId.errors?.valid " class="float-right opti_error-msg">
                            User does not exists.</span> -->
                           </span> 
-                          <input type="text" id="emailID"  name = "email" required [(ngModel)]="userName"
-                            #emailId = ngModel class="k-textbox" value="" placeholder="{{ 'EnterUsername'|translate}}"
+                          <input type="text" id="emailID"  name ="email" required [(ngModel)]="userName"
+                            #emailId = ngModel class="k-textbox"  value="" placeholder="{{ 'EnterUsername'|translate}}"
                             [readonly]=readonlyFlag
                             />  
                         </label> 
@@ -89,7 +89,7 @@
                         </label>
                         <div class="text-right">
                             <button type="submit" id=connectbtn class="k-button k-primary opti_fullwidth mt-4" *ngIf="!isCompleteLoginVisible" (click)="login()">{{'Connect'|translate}}</button>
-                            <button type="button" id=connectbtn *ngIf="isCompleteLoginVisible" class="k-button k-primary opti_fullwidth" (click)="onResetClick()">{{'Reset'|translate}}</button>
+                            <button type="button" id=connectbtn *ngIf="isCompleteLoginVisible" class="k-button k-primary opti_fullwidth" (click)="onResetClick(signInForm)">{{'Reset'|translate}}</button>
                             <button type="submit" id=connectbtn *ngIf="isCompleteLoginVisible" class="k-button k-primary opti_fullwidth" (click)="login()">{{'Login'|translate}}</button>                            
                         </div>
                     </form>

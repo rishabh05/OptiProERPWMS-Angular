@@ -194,16 +194,15 @@ export class SigninComponent implements OnInit {
     );
   }
 
-  onResetClick(){
+  onResetClick(frm:any){
     this.isCompleteLoginVisible = false;
-    this.setCookie('cookieEmail', "", 365);
-    this.setCookie('cookiePassword', "", 365);
-    this.setCookie('CompID', "", 365);
-    this.setCookie('whseId', "", 365);
-    this.userName = "";
-    this.password = "";
-    this.selectedItem = "";
-    this.selectedWhse = "";
+    frm.resetForm();
+    this.readonlyFlag=false;
+     this.setCookie('cookieEmail', "", 365);
+     this.setCookie('cookiePassword', "", 365);
+     this.setCookie('CompID', "", 365);
+     this.setCookie('whseId', "", 365);
+
   }
 
   private getLicenseData(){
