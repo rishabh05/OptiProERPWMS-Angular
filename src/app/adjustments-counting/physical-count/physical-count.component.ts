@@ -1039,9 +1039,11 @@ export class PhysicalCountComponent implements OnInit {
   //     $("input[type=file]").click();
   //     $("input[type=file]").val("");
   // }
-
-  onInboundScan() {
-    // alert("scan click");
+  onHiddenScanClick(){
+    this.onScanCodeChange();
+  }
+  onScanPC() {
+     alert("scan click");
   }
 
   onScanCodeChange() {
@@ -1050,7 +1052,7 @@ export class PhysicalCountComponent implements OnInit {
 
   onGS1ItemScan() {
 
-    var inputValue = (<HTMLInputElement>document.getElementById('inboundScanInputField')).value;
+    var inputValue = (<HTMLInputElement>document.getElementById('scanInputFieldPC')).value;
     if (inputValue.length > 0) {
       this.ScanInputs = inputValue;
     }
