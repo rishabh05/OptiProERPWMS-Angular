@@ -1043,7 +1043,7 @@ export class PhysicalCountComponent implements OnInit {
     this.onScanCodeChange();
   }
   onScanPC() {
-     alert("scan click");
+    // alert("scan click");
   }
 
   onScanCodeChange() {
