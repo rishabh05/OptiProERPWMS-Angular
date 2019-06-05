@@ -202,7 +202,7 @@ export class SigninComponent implements OnInit {
      this.setCookie('cookiePassword', "", 365);
      this.setCookie('CompID', "", 365);
      this.setCookie('whseId', "", 365);
-
+     this.companyName = [];
   }
 
   private getLicenseData(){
