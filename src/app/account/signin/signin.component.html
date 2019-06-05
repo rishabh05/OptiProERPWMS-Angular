@@ -15,7 +15,9 @@
                     <!-- loader end --> 
 
                     <div class="opti_fullwidth text-center opti_signin-logo">
-                        <img src="assets/images/logo/large-logo.png" alt="brandlogo" class="opti_account-logo">
+                        <!-- <img src="assets/images/logo/large-logo.png" alt="brandlogo" class="opti_account-logo"> -->
+                        <img src="assets/images/signin/large-logo-alt.png" alt="brandlogo" class="opti_account-logo" style="max-width: 100%;">
+                        
                     </div>
 
                     <form class="k-form" #signInForm="ngForm">
@@ -88,7 +90,7 @@
                             </div>
                         </label>
                         <div class="text-right">
-                            <button type="submit" id=connectbtn class="k-button k-primary opti_fullwidth mt-4" *ngIf="!isCompleteLoginVisible" (click)="login()">{{'Connect'|translate}}</button>
+                            <button type="submit" id=connectbtn class="k-button k-primary opti_fullwidth mt-2" *ngIf="!isCompleteLoginVisible" (click)="login()">{{'Connect'|translate}}</button>
                             <button type="button" id=connectbtn *ngIf="isCompleteLoginVisible" class="k-button k-primary opti_fullwidth" (click)="onResetClick(signInForm)">{{'Reset'|translate}}</button>
                             <button type="submit" id=connectbtn *ngIf="isCompleteLoginVisible" class="k-button k-primary opti_fullwidth" (click)="login()">{{'Login'|translate}}</button>                            
                         </div>
