@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
 import { forEach } from '@angular/router/src/utils/collection';
 import { anyChanged } from '@progress/kendo-angular-grid/dist/es2015/utils';
+import { Commonservice } from 'src/app/services/commonservice.service';
 
 
 
@@ -50,6 +51,8 @@ export class OutProdissueComponent implements OnInit {
   selectedUOM: any;
   uomIdx: number = 0;
 
+  public pagable: boolean = false;
+  public pageSize:number = Commonservice.pageSize;
   constructor(private ourboundService: OutboundService, private router: Router, private toastr: ToastrService, private translate: TranslateService) { }
 
   ngOnInit() {
@@ -78,6 +81,12 @@ export class OutProdissueComponent implements OnInit {
       this._requiredMeterialQty = parseFloat(this.selected.OPENQTY);
       this._remainingMeterial = this._requiredMeterialQty - this._pickedMeterialQty;
       this.selectedItems = [this.selected];
+      
+      if(this.selectedItems.length>this.pageSize){
+        this.pagable = true;
+      }else{
+        this.pagable = false;
+      }
 
       if (this.OrderType == 'N') {
         this.ourboundService.getAvaliableMeterialForNoneTracked(this.selected.ITEMCODE).subscribe(
@@ -123,11 +132,16 @@ export class OutProdissueComponent implements OnInit {
       itemMeterials.forEach(element => {
         this.selectedMeterials.push(element.Meterial)
       });;
+      if(this.selectedMeterials.length > this.pageSize){
+        this.pagable = true;
+      }else{
+         this.pagable = false;
+      }
       this.manageMeterial();
       this.calculateTotalAndRemainingQty();
 
     }
-
+   
   }
 
   onScanInputChange() {
@@ -305,6 +319,12 @@ export class OutProdissueComponent implements OnInit {
         localTotalPickQty = localTotalPickQty + meterial.MeterialPickQty;
 
         this.selectedMeterials.push(meterial);
+        //apply paging..
+        if(this.selectedMeterials.length > this.pageSize){
+          this.pagable = true;
+        }else{
+           this.pagable = false;
+        }
       }
 
       this.totalPickQty = this.totalPickQty + this.selectedMeterials.map(i => i.MeterialPickQty).reduce((sum, c) => sum + c);
@@ -316,7 +336,7 @@ export class OutProdissueComponent implements OnInit {
   }
 
   QtyFilled() {
-    if (this.selectedMeterials != undefined && this.selectedMeterials != undefined && this.selectedMeterials.length > 0) {
+    if (this.selectedMeterials !=undefined && this.selectedMeterials != null && this.selectedMeterials.length > 0) {
       this.totalPickQty = this.totalPickQty + this.selectedMeterials.map(i => i.MeterialPickQty).reduce((sum, c) => sum + c);
     }
     else {
@@ -364,7 +384,12 @@ export class OutProdissueComponent implements OnInit {
 
       txt.value = oldValue;
       this.selectedMeterials[idx].MeterialPickQty = oldValue;
-
+      //apply paging..
+      if(this.selectedMeterials.length>this.pageSize){
+        this.pagable = true;
+      }else{
+        this.pagable = false;
+      }
       this.calculateTotalAndRemainingQty();
       return;
     }
@@ -382,7 +407,7 @@ export class OutProdissueComponent implements OnInit {
   }
 
   calculateTotalAndRemainingQty() {
-    if (this.selectedMeterials != null && this.selectedMeterials != undefined && this.selectedMeterials.length > 0) {
+    if (this.selectedMeterials && this.selectedMeterials.length > 0) {
       this._pickedMeterialQty = this.selectedMeterials.map(i => i.MeterialPickQty).reduce((sum, c) => parseFloat(sum) + parseFloat(c));
       this._remainingMeterial = this._requiredMeterialQty - this._pickedMeterialQty;
     }
@@ -424,7 +449,7 @@ export class OutProdissueComponent implements OnInit {
     //lsOutbound
     this.outbound = JSON.parse(localStorage.getItem(CommonConstants.OutboundData));
     this.outbound.SelectedMeterials = lookupValue;
-    localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+    localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound)); 
   }
 
  
@@ -496,8 +521,14 @@ export class OutProdissueComponent implements OnInit {
 
         
         this.selectedMeterials.push(meterial);
+        //apply paging..
+        if(this.selectedMeterials.length > this.pageSize){
+          this.pagable = true;
+        }else{ 
+           this.pagable = false;
+        }
 
-
+       
         pickedMeterialQty = pickedMeterialQty + meterial.MeterialPickQty;
         remailingMeterialQty = requiredMeterialQty - pickedMeterialQty;
       }
@@ -525,14 +556,19 @@ export class OutProdissueComponent implements OnInit {
           // }
 
           this.selectedMeterials.push(meterial);
-
-
+          //apply paging..
+          if(this.selectedMeterials.length > this.pageSize){
+            this.pagable = true;
+          }else{
+            this.pagable = false;
+          }
+         
           pickedMeterialQty = pickedMeterialQty + meterial.MeterialPickQty;
           remailingMeterialQty = requiredMeterialQty - pickedMeterialQty;
         }
       }
       // Selected meterial
-      if (this.selectedMeterials != undefined && this.selectedMeterials != undefined && this.selectedMeterials.length > 0) {
+      if (this.selectedMeterials  && this.selectedMeterials.length > 0) {
         this._pickedMeterialQty = this.selectedMeterials.map(i => i.MeterialPickQty).reduce((sum, c) => sum + c);
         this._remainingMeterial = this._requiredMeterialQty - this._pickedMeterialQty;
       }
@@ -544,7 +580,12 @@ export class OutProdissueComponent implements OnInit {
     }
 
     this.oldSelectedMeterials = JSON.parse(JSON.stringify(this.selectedMeterials));
-
+    if(this.selectedMeterials.length>this.pageSize){
+      this.pagable = true;
+    }else{
+       this.pagable = false;
+    }
+   
   }
 
   addMetToCollection() {

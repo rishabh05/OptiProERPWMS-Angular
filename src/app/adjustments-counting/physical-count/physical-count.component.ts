@@ -54,6 +54,8 @@ export class PhysicalCountComponent implements OnInit {
   gridData: any;
   ScanInputs: any = "";
 
+  pagable: boolean = false;
+  pageSize:number = Commonservice.pageSize;
   constructor(private phycountService: PhysicalcountService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService) {
     let userLang = navigator.language.split('-')[0];
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
@@ -843,6 +845,11 @@ export class PhysicalCountComponent implements OnInit {
         this.BatchSerialArray.push(oAddPhysicalCountData.LotSerial[iLotSerial])
       }
     }
+    if(this.BatchSerialArray.length>this.pageSize){
+      this.pagable = true;
+    }else{
+      this.pagable = false;
+    }
   }
 
   viewSavedItems() {
@@ -854,6 +861,12 @@ export class PhysicalCountComponent implements OnInit {
       oAddPhysicalCountData = JSON.parse(dataModel);
     }
     this.ItemArray = oAddPhysicalCountData.Detail;
+    // apply paging..
+    if(this.ItemArray.length>this.pageSize){
+      this.pagable = true;
+    }else{
+      this.pagable = false;
+    }
   }
 
   loadFistPage() {
@@ -874,6 +887,11 @@ export class PhysicalCountComponent implements OnInit {
       if (oAddPhysicalCountData.Detail[rowindex].ItemCode == oAddPhysicalCountData.LotSerial[iLotSerial].ItemCode && oAddPhysicalCountData.Detail[rowindex].DocNo == oAddPhysicalCountData.LotSerial[iLotSerial].DocNo && oAddPhysicalCountData.Detail[rowindex].BinNo == oAddPhysicalCountData.LotSerial[iLotSerial].BinNo) {
         this.BatchSerialArray.push(oAddPhysicalCountData.LotSerial[iLotSerial])
       }
+    }
+    if(this.BatchSerialArray.length>this.pageSize){
+      this.pagable = true;
+    }else{
+      this.pagable = false;
     }
   }
 
@@ -1043,7 +1061,7 @@ export class PhysicalCountComponent implements OnInit {
     this.onScanCodeChange();
   }
   onScanPC() {
-    // alert("scan click");
+     //alert("scan click");
   }
 
   onScanCodeChange() {
@@ -1103,7 +1121,7 @@ export class PhysicalCountComponent implements OnInit {
           }
 
           if (this.ScanInputs != "error decoding QR Code") {
-            this.OnItemChange();
+           // this.OnItemChange();
             //if (oFCModel.Tracking != "N") {
             //    oCurrentController.OnLotChange();
             //}

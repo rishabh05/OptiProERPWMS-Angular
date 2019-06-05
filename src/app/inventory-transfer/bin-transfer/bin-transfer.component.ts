@@ -49,6 +49,8 @@ export class BinTransferComponent implements OnInit {
   zero: string;
   showValidation: boolean = true;
 
+  pagable: boolean = false;
+  pageSize:number = Commonservice.pageSize;
   constructor(private commonservice: Commonservice, private activatedRoute: ActivatedRoute,
     private router: Router, private inventoryTransferService: InventoryTransferService,
     private toastr: ToastrService, private translate: TranslateService,
@@ -482,6 +484,11 @@ export class BinTransferComponent implements OnInit {
           }
         }, 1000);
       }
+    }
+    if(this.TransferedItemsDetail.length>this.pageSize){
+      this.pagable = true;
+    }else{
+      this.pagable = false;
     }
   }
 

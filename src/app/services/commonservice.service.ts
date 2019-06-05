@@ -11,19 +11,21 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class Commonservice {
+
+  public static pageSize: number = 10;   
   static RemoveLicenseAndSignout(): any {
     throw new Error("Method not implemented.");
   }
-
+ 
   public href: any = window.location.href;
   public config_params: any;
 
   public httpOptions = {
-    headers: new HttpHeaders({
+    headers: new HttpHeaders({ 
       'Content-Type': 'application/json',
       'Accept': 'application/json'
     })
-  }
+  } 
 
   constructor(private httpclient: HttpClient, private toastr: ToastrService, private router: Router) {
     this.loadConfig();
