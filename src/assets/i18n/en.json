@@ -274,7 +274,8 @@
   "AcceptedLot":"Accepted Lot",
   "RejectedLot": "Rejected Lot",
   "BatchAlreadyExists": "Batch already exists",
-  "Reset":"Reset"
+  "Reset":"Reset",
+  "LogoutSuccess":"You have successfully logged out"
 
 
 }

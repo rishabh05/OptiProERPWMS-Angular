@@ -203,6 +203,8 @@ export class SigninComponent implements OnInit {
      this.setCookie('CompID', "", 365);
      this.setCookie('whseId', "", 365);
      this.companyName = [];
+     this.selectedItem = this.translate.instant("SelectCompany");
+     this.defaultWHS = { OPTM_WHSE: this.translate.instant("SelectWarehouse"), BPLid: 0 };
   }
 
   private getLicenseData(){
