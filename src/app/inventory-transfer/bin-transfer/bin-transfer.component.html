@@ -139,7 +139,7 @@
 
                     <!-- grid start -->
                     <ng-container *ngIf="showLoader==false">
-                        <kendo-grid class="no-shadow" [kendoGridBinding]="TransferedItemsDetail" [resizable]="true" [pageSize]="50" [pageable]="true"
+                        <kendo-grid class="no-shadow" [kendoGridBinding]="TransferedItemsDetail" [resizable]="true" [pageSize]="pageSize" [pageable]="pagable"
                             [sortable]="true" [selectable]="true" #gridItem>
 
                             <!-- grid for mobile start -->

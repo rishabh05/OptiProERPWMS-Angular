@@ -100,6 +100,10 @@ export class ProductionReceiptComponent implements OnInit {
   @ViewChild('SerialQty') SerialQtyField: ElementRef;
   @ViewChild('BatchQty') BatchQtyField: ElementRef;
   @ViewChild('Qty') QtyField: ElementRef;
+
+  pagable: boolean = false;
+  pageSize:number = Commonservice.pageSize;
+
   constructor(private renderer: Renderer, private commonservice: Commonservice, private router: Router, private productionService: ProductionService,
     private toastr: ToastrService, private translate: TranslateService) { }
 
@@ -236,6 +240,7 @@ export class ProductionReceiptComponent implements OnInit {
 
     }
   }
+
   submitProductionReport(requestData:any){
     this.showLoader = true;
     this.productionService.submitProductionRecepit(requestData).subscribe(
@@ -398,6 +403,11 @@ export class ProductionReceiptComponent implements OnInit {
       var initialOrignalActualQty = this.itemDataResponse.ORIGINALACTUALQUANTITY;
       this.orignalActualQty = initialOrignalActualQty - tempQty;
     }
+    if(this.Lots.length>this.pageSize){
+      this.pagable = true;
+    }else{
+      this.pagable = false;
+    }
   }  
  
 
@@ -427,6 +437,11 @@ export class ProductionReceiptComponent implements OnInit {
       var orignalRejectQty = this.itemDataResponse.RejectQTY;
       this.rejectQty = orignalRejectQty - tempQty;
      // console.log("total qty to submit:" + this.totalQtyToSubmit);
+    }
+    if(this.RejectLots.length>this.pageSize){
+      this.pagable = true;
+    }else{
+      this.pagable = false;
     }
   }
 

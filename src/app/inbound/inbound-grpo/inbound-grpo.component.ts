@@ -82,7 +82,7 @@ export class InboundGRPOComponent implements OnInit {
   fileName: string = "";
   UOMentry: any = "";
 
-
+  pageSize: number = Commonservice.pageSize;
   @ViewChild('Quantity') QuantityField;
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent) {
@@ -417,6 +417,7 @@ export class InboundGRPOComponent implements OnInit {
       this.toastr.error('', this.translate.instant("BinValidation"));
       return;
     }
+    
   }
   /**
    * method to create logic for autolot for serial batch qty.

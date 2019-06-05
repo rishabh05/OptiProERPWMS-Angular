@@ -146,7 +146,7 @@
             <div class="row" *ngIf="showSavedItems">
                 <div class="col-12">
 
-                    <kendo-grid [resizable]="true" [pageSize]="10" [pageable]="true" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
+                    <kendo-grid [resizable]="true" [pageSize]="pageSize" [pageable]="pagable" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
                         [height]=gridHeight [selectable]="true" [data]="ItemArray" style="max-height:400px" class="no-shadow"
                         #gridItem>
 
@@ -243,7 +243,7 @@
         Reported Quantities
     </kendo-dialog-titlebar>
     <p>{{ItemCode}}</p>
-    <kendo-grid [resizable]="true" [pageSize]="10" [pageable]="true" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
+    <kendo-grid [resizable]="true" [pageSize]="pageSize" [pageable]="pagable" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
         [height]=gridHeight [selectable]="true" [data]="BatchSerialArray" style="max-height:370px" class="no-shadow" #gridItem>
 
         <!-- grid for mobile start -->
