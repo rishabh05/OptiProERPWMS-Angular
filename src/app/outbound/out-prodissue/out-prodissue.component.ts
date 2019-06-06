@@ -81,12 +81,6 @@ export class OutProdissueComponent implements OnInit {
       this._requiredMeterialQty = parseFloat(this.selected.OPENQTY);
       this._remainingMeterial = this._requiredMeterialQty - this._pickedMeterialQty;
       this.selectedItems = [this.selected];
-      
-      if(this.selectedItems.length>this.pageSize){
-        this.pagable = true;
-      }else{
-        this.pagable = false;
-      }
 
       if (this.OrderType == 'N') {
         this.ourboundService.getAvaliableMeterialForNoneTracked(this.selected.ITEMCODE).subscribe(
@@ -101,8 +95,6 @@ export class OutProdissueComponent implements OnInit {
       this.ourboundService.getUOMList(this.selected.ITEMCODE).subscribe(
         data => {
           this.uomList = data;
-
-
           this.selectedUOM = this.uomList.filter(u => u.UomCode == this.selected.UOM);
           this.selectedUOM = this.selectedUOM[0];
 
@@ -132,11 +124,8 @@ export class OutProdissueComponent implements OnInit {
       itemMeterials.forEach(element => {
         this.selectedMeterials.push(element.Meterial)
       });;
-      if(this.selectedMeterials.length > this.pageSize){
-        this.pagable = true;
-      }else{
-         this.pagable = false;
-      }
+      //applying paging..
+      this.pagable = this.selectedMeterials.length>this.pageSize;    
       this.manageMeterial();
       this.calculateTotalAndRemainingQty();
 
@@ -320,11 +309,7 @@ export class OutProdissueComponent implements OnInit {
 
         this.selectedMeterials.push(meterial);
         //apply paging..
-        if(this.selectedMeterials.length > this.pageSize){
-          this.pagable = true;
-        }else{
-           this.pagable = false;
-        }
+        this.pagable = this.selectedMeterials.length>this.pageSize;    
       }
 
       this.totalPickQty = this.totalPickQty + this.selectedMeterials.map(i => i.MeterialPickQty).reduce((sum, c) => sum + c);
@@ -385,11 +370,8 @@ export class OutProdissueComponent implements OnInit {
       txt.value = oldValue;
       this.selectedMeterials[idx].MeterialPickQty = oldValue;
       //apply paging..
-      if(this.selectedMeterials.length>this.pageSize){
-        this.pagable = true;
-      }else{
-        this.pagable = false;
-      }
+      this.pagable = this.selectedMeterials.length>this.pageSize;    
+      
       this.calculateTotalAndRemainingQty();
       return;
     }
@@ -463,6 +445,8 @@ export class OutProdissueComponent implements OnInit {
     this.selectedMeterials.splice(idx, 1);
     grd.data = this.selectedMeterials;
     this.calculateTotalAndRemainingQty();
+    //setting paging..
+    this.pagable = this.selectedMeterials.length>this.pageSize;    
   }
 
   removeMeterial(idx: any, grd: any) {
@@ -522,11 +506,7 @@ export class OutProdissueComponent implements OnInit {
         
         this.selectedMeterials.push(meterial);
         //apply paging..
-        if(this.selectedMeterials.length > this.pageSize){
-          this.pagable = true;
-        }else{ 
-           this.pagable = false;
-        }
+        this.pagable = this.selectedMeterials.length>this.pageSize;    
 
        
         pickedMeterialQty = pickedMeterialQty + meterial.MeterialPickQty;
@@ -557,11 +537,7 @@ export class OutProdissueComponent implements OnInit {
 
           this.selectedMeterials.push(meterial);
           //apply paging..
-          if(this.selectedMeterials.length > this.pageSize){
-            this.pagable = true;
-          }else{
-            this.pagable = false;
-          }
+          this.pagable = this.selectedMeterials.length>this.pageSize;    
          
           pickedMeterialQty = pickedMeterialQty + meterial.MeterialPickQty;
           remailingMeterialQty = requiredMeterialQty - pickedMeterialQty;
@@ -580,11 +556,7 @@ export class OutProdissueComponent implements OnInit {
     }
 
     this.oldSelectedMeterials = JSON.parse(JSON.stringify(this.selectedMeterials));
-    if(this.selectedMeterials.length>this.pageSize){
-      this.pagable = true;
-    }else{
-       this.pagable = false;
-    }
+    this.pagable = this.selectedMeterials.length>this.pageSize;    
    
   }
 

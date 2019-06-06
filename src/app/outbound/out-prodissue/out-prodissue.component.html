@@ -7,8 +7,8 @@
             <div class="row">
                 <div class="col-12">
 
-                    <kendo-grid class="no-shadow" [kendoGridBinding]="selectedItems" [resizable]="true" [pageSize]="pageSize"
-                        [pageable]="pagable" [sortable]="true" [selectable]="true" #gridItem>
+                    <kendo-grid class="no-shadow" [kendoGridBinding]="selectedItems" [resizable]="true" [pageSize]="10"
+                        [pageable]="false" [sortable]="true" [selectable]="true" #gridItem>
 
                         <!-- grid for mobile start -->
                         <kendo-grid-column media="(max-width: 767px)" title="List" class="opti_mobile-grid-td">
@@ -114,7 +114,7 @@
 
             <div class="row">
                 <div class="col-12">
-
+                    {{this.selectedMeterials.length}}{{this.pagable}}
                     <kendo-grid class="no-shadow" [data]="selectedMeterials" [resizable]="true" [pageSize]="pageSize"
                     [pageable]="pagable" [sortable]="true" [selectable]="true" id="gridSelectedMeterial"
                         #gridSelectedMeterial>

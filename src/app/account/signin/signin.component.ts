@@ -64,6 +64,10 @@ export class SigninComponent implements OnInit {
   @ViewChild('myCanvas') myCanvas;
 
   ngOnInit() {
+    
+    this.selectedItem = this.translate.instant("SelectCompany");
+    this.defaultWHS = { OPTM_WHSE: this.translate.instant("SelectWarehouse"), BPLid: 0 }
+
     this.showFullPageLoader = false;
     // Get cookie start
     if (this.getCookie('cookieEmail') != '' && this.getCookie('cookiePassword') != '') {
@@ -82,7 +86,7 @@ export class SigninComponent implements OnInit {
     element.classList.add("opti_body-login");
     element.classList.add("opti_account-module");
     //this.getPSURL();
-
+   console.log("init","init");
 
    // alert("ngoninit config.json subs get data");
     this.httpClientSer.get('./assets/config.json').subscribe( 
