@@ -46,8 +46,8 @@ export class OutOrderComponent implements OnInit {
 
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
 
-
-    if (outboundData != undefined && outboundData != '') {
+    console.log("Order:data",outboundData);
+    if (outboundData!=null  && outboundData!=undefined && outboundData!='' && outboundData!='null') {
       this.outbound = JSON.parse(outboundData);
       this.selectedCustomer = this.outbound.CustomerData;
 

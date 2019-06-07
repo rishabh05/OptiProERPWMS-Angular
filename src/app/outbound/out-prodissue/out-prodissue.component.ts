@@ -675,8 +675,7 @@ export class OutProdissueComponent implements OnInit {
   }
 
 
-  private manageOldSelectedItems() {
-    // let outbound: OutboundData = JSON.parse(localStorage.getItem(CommonConstants.OutboundData));
+  private manageOldSelectedItems() {    
 
     if (this.selectedMeterials !== null && this.selectedMeterials !== undefined && this.selectedMeterials.length > 0) {
 
@@ -687,16 +686,17 @@ export class OutProdissueComponent implements OnInit {
 
 
 
-          const sd = this.lookupData[j];
-          // Remove old selected metarial
-          // if (this.filterLookUpDta(sd)) {
-          //   continue;
-          // }
+          const sd = this.lookupData[j];       
 
           if (sd.ITEMCODE === element.ITEMCODE
             && sd.LOTNO === element.LOTNO
             && sd.BINNO === element.BINNO) {
             sd.OldData = true;
+              
+            // if(sd.TOTALQTY>=element.MeterialPickQty  ){
+            // sd.TOTALQTY = sd.TOTALQTY-element.MeterialPickQty;
+            // }
+
             this.lookupData[j] = sd;
           }
           else {
@@ -756,7 +756,7 @@ export class OutProdissueComponent implements OnInit {
               sd.TOTALQTY = sd.TOTALQTY - element.TotalAllocatedMetQty;
 
               if (element.TotalAllocatedMetQty >= sd.TOTALQTY) {
-                if (tempLookup.length > j) {
+                if (tempLookup.length > j   && this.OrderType != 'B') {
                   tempLookup.splice(j, 1);
                   break;
                 }
@@ -775,7 +775,7 @@ export class OutProdissueComponent implements OnInit {
   }
 
   private getBinAndTotalMeterial(tempCollection: any[]): any[] {
-    let binAndQtyCollection: any = {};
+    
     let binAndQtyCollectionArray: any[] = [];
     let ProcessedCount: number = 0;
 
@@ -786,7 +786,7 @@ export class OutProdissueComponent implements OnInit {
       let tCollection: any = tempCollection.filter(t =>
         element.Meterial.BINNO === t.Meterial.BINNO &&
         element.Meterial.LOTNO === t.Meterial.LOTNO &&
-        element.Meterial.ITEMCODE === t.Meterial.ITEMCODE);
+        element.Meterial.ITEMCODE === t.Meterial.ITEMCODE )
 
       ProcessedCount = ProcessedCount + tCollection.length;
 
@@ -795,14 +795,16 @@ export class OutProdissueComponent implements OnInit {
         let existCol = binAndQtyCollectionArray.filter(t =>
           element.Meterial.BINNO === t.BINNO &&
           element.Meterial.LOTNO === t.LOTNO &&
-          element.Meterial.ITEMCODE === t.ITEMCODE);
+          element.Meterial.ITEMCODE === t.ITEMCODE 
+          
+          );
 
         if (existCol.length == 0) {
+          let binAndQtyCollection: any = {};
           binAndQtyCollection.BINNO = element.Meterial.BINNO;
           binAndQtyCollection.LOTNO = element.Meterial.LOTNO;
-          binAndQtyCollection.ITEMCODE = element.Meterial.ITEMCODE;
+          binAndQtyCollection.ITEMCODE = element.Meterial.ITEMCODE;          
           binAndQtyCollection.TotalAllocatedMetQty = tCollection.map(i => i.Meterial.MeterialPickQty).reduce((sum, c) => sum + c);
-
 
           binAndQtyCollectionArray.push(binAndQtyCollection);
         }
