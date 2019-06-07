@@ -26,6 +26,8 @@ export class ProdOrderlistComponent implements OnInit {
   prodOrderlist: boolean = true;
   public outbound: OutboundData = new OutboundData();
 
+  pagable: boolean = false;
+  pageSize:number = Commonservice.pageSize;
   constructor(private router: Router, private productionService: ProductionService, public productionIssueComponent: ProductionIssueComponent,
     private toastr: ToastrService, private translate: TranslateService, private commonservice: Commonservice) { }
 
@@ -102,10 +104,15 @@ export class ProdOrderlistComponent implements OnInit {
               this.soItemsDetail[i].OPENQTY = data[i].BalQty;
               this.soItemsDetail[i].DOCENTRY = data[i].DocEntry;
             }
-          }
-          else {
+            if(this.soItemsDetail.length>this.pageSize){
+              this.pagable = true;
+            }else{
+              this.pagable = false;
+            }
+          } 
+          else { 
             this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
-          }
+          } 
         }
       },
       error => {

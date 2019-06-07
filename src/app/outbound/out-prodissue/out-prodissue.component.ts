@@ -676,18 +676,14 @@ export class OutProdissueComponent implements OnInit {
 
 
   private manageOldSelectedItems() {    
-
+ 
     if (this.selectedMeterials !== null && this.selectedMeterials !== undefined && this.selectedMeterials.length > 0) {
 
       for (let index = 0; index < this.selectedMeterials.length; index++) {
         const element = this.selectedMeterials[index];
 
         for (let j = 0; j < this.lookupData.length; j++) {
-
-
-
           const sd = this.lookupData[j];       
-
           if (sd.ITEMCODE === element.ITEMCODE
             && sd.LOTNO === element.LOTNO
             && sd.BINNO === element.BINNO) {
