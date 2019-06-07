@@ -139,6 +139,8 @@ export class OutCutomerComponent implements OnInit {
     // lsOutbound
     localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
     CurrentOutBoundData.CustomerData = outbound.CustomerData;
+    this.outbound=outbound;
+    
   }
 
   public openCustomerLookup() {
@@ -177,12 +179,13 @@ export class OutCutomerComponent implements OnInit {
   }
 
   public openCustSO(clearOrder:boolean=false) {
-    this.router.navigateByUrl('home/outbound/outorder', { skipLocationChange: true });
+   
     // Clear otred data
+    if(this.outbound)
     this.outbound.OrderData=null;
     if(clearOrder==true)
     localStorage.setItem(CommonConstants.OutboundData,JSON.stringify( this.outbound));
-
+    this.router.navigateByUrl('home/outbound/outorder', { skipLocationChange: true });
   }
 
   public cancel() {

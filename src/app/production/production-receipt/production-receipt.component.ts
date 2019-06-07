@@ -121,7 +121,7 @@ export class ProductionReceiptComponent implements OnInit {
     this.showOrderList();
   }
 
-  OnOrderValueChange(){
+  OnOrderValueChange(){ 
     if (this.orderNumber == "" || this.orderNumber == undefined) {
       return;
     }
@@ -662,8 +662,10 @@ export class ProductionReceiptComponent implements OnInit {
   * Method to get list of inquries from server.
   */
   public showOrderList() {
+    this.showLoader = true;
     this.orderNoListSubs = this.productionService.getOrderNumberList(this.orderNumber).subscribe(
       data => {
+        this.showLoader = false;
         if (data != undefined) {
           if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
@@ -751,13 +753,14 @@ export class ProductionReceiptComponent implements OnInit {
     error => {
       this.toastr.error('', error);
     },);
-    
   }
 
   
   getBinList(){
+    this.showLoader = true;
     this.binListSubs = this.productionService.GetBinsList().subscribe(  
       data => {
+        this.showLoader = false;
       if (data != undefined) { 
       if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
         this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
