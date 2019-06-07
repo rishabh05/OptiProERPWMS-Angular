@@ -271,7 +271,6 @@ export class PhysicalCountComponent implements OnInit {
         this.showLoader = false;
         if (data != null) {
           if (data.length == "0") {
-            // isLotValid = false;
             if (this.ItemTracking != "N") {
               this.LotExistCheck();
             }
@@ -279,18 +278,14 @@ export class PhysicalCountComponent implements OnInit {
           else {
             this.batchserno = data[0].LOTNO;
             this.BinNo = data[0].BINNO;
-            // this.w = data[0].WHSCODE;
             this.ItemCode = data[0].ITEMCODE;
             this.ItemName = data[0].ITEMNAME;
             this.QtyOnHand = data[0].TOTALQTY;
             this.CountedQty = data[0].TOTALQTY;
             this.ItemTracking = data[0].TRACKING;
-            // EnableContainer = data[0].ENABLECONTAINER;
-            // SysNumber = data[0].SYSNUMBER;
-            // otxtUnitPrice.setValue(data[0].UnitPrice);
-            // otxtUnitPrice.setTextAlign(sap.ui.core.TextAlign.Right);
             this.CheckTrackingandVisiblity();
-            // isLotValid = true;
+            this.formatCountedQty();
+            this.formatOnHandQty();
           }
         }
 
@@ -732,11 +727,12 @@ export class PhysicalCountComponent implements OnInit {
         }
         return;
       }
+      if(!this.isLotAdded){
+        this.OnLotChange();
+        return;
+      }
     }
-    if(!this.isLotAdded){
-      this.LotExistCheck();
-      return;
-    }
+
     if (!this.isLotAdded && this.ItemTracking != "N") {
       if (this.ItemTracking == "S") {
         this.toastr.error('', this.translate.instant("PhysicalCount.SerialLotisnotadded"));
@@ -775,11 +771,10 @@ export class PhysicalCountComponent implements OnInit {
         }
         return;
       }
-    }
-
-    if(!this.isLotAdded){
-      this.LotExistCheck();
-      return;
+      if(!this.isLotAdded){
+        this.LotExistCheck();
+        return;
+      }
     }
 
     if (!this.isLotAdded && this.ItemTracking != "N") {
@@ -907,7 +902,7 @@ export class PhysicalCountComponent implements OnInit {
       }
     }
     if(!this.isLotAdded){
-      this.LotExistCheck();
+      this.OnLotChange();
       return;
     }
     if (!this.isLotAdded && this.ItemTracking != "N") {

@@ -30,7 +30,7 @@ export class PortalHomeComponent implements OnInit {
       }
     );
     
-    this.getSettingOnSAP();
+  //  this.getSettingOnSAP();
     // UI operations
     this.isMobile =UIHelper.isMobile();
     

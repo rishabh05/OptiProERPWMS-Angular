@@ -6,6 +6,8 @@ import { RowClassArgs } from '@progress/kendo-angular-grid';
 import { TranslateService } from '../../../../../node_modules/@ngx-translate/core';
 import { ToastrService } from '../../../../../node_modules/ngx-toastr';
 import { ProductionIssueComponent } from 'src/app/production/production-issue/production-issue.component';
+import { OutboundData } from 'src/app/models/outbound/outbound-data';
+import { CommonConstants } from 'src/app/const/common-constants';
 
 @Component({
   selector: 'app-prod-orderlist',
@@ -21,11 +23,25 @@ export class ProdOrderlistComponent implements OnInit {
   soItemsDetail: any;
   showLoader: boolean = false;
   public orderNumber: string;
+  prodOrderlist: boolean = true;
+  public outbound: OutboundData = new OutboundData();
 
   constructor(private router: Router, private productionService: ProductionService, public productionIssueComponent: ProductionIssueComponent,
     private toastr: ToastrService, private translate: TranslateService, private commonservice: Commonservice) { }
 
   ngOnInit() {
+    let outboundData: string = localStorage.getItem("OutboundData");
+    if (outboundData != undefined && outboundData != '') {
+      this.outbound = JSON.parse(outboundData);
+      // this.selectedCustomer = this.outbound.CustomerData;
+
+      if (this.outbound != null && this.outbound.OrderData !== undefined && this.outbound.OrderData !== null && this.outbound.OrderData.DOCNUM !== undefined && this.outbound.OrderData.DOCNUM !== null) {
+        this.orderNumber = this.outbound.OrderData.DOCNUM;
+        // this.openSOOrderList();
+        // this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
+      }
+      // this.calculatePickQty();
+    }
   }
 
   onCancelClick() {
@@ -80,6 +96,11 @@ export class ProdOrderlistComponent implements OnInit {
             }
             this.showSOIetDetail = true;
             this.soItemsDetail = data;
+            for(var i=0; i<data.length; i++){
+              this.soItemsDetail[i].ITEMCODE = data[i].ItemCode;
+              this.soItemsDetail[i].RPTQTY = data[i].IssuedQty;
+              this.soItemsDetail[i].OPENQTY = data[i].BalQty;
+            }
           }
           else {
             this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
@@ -94,23 +115,29 @@ export class ProdOrderlistComponent implements OnInit {
   }
 
   public openPOByUOM(selection: any) {
+
     let selectdeData = selection.selectedRows[0].dataItem;
-    localStorage.setItem("ProductionIssueData", JSON.stringify(selectdeData));
-    this.productionIssueComponent.prodissueComponent = 2;
-    // let outboundData: string = localStorage.getItem("ProductionIssueData");
+    let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
 
-    // if (outboundData != undefined && outboundData != '') {
-    //   this.outbound = JSON.parse(outboundData);
-    //   this.outbound.SelectedItem = selectdeData;
-    //   //lsOutbound
-    //   localStorage.setItem("ProductionIssueData", JSON.stringify(selectdeData));
-    //   this.router.navigateByUrl('home/outbound/outprodissue', { skipLocationChange: true });
-    // }
-
+    if (outboundData != undefined && outboundData != '') {
+      this.outbound = JSON.parse(outboundData);
+      this.outbound.SelectedItem = selectdeData;
+      //lsOutbound
+      localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+      this.prodOrderlist = false;
+    }
   }
 
-  getLookupValue($event) {
-    this.orderNo = $event[0];
+  getLookupValue(lookupValue: any) {
+    this.orderNo = lookupValue[0];
+    if(this.outbound == null){
+      this.outbound = new OutboundData();
+    }
+    this.outbound.OrderData = lookupValue;
+    this.orderNumber = this.outbound.OrderData.DOCNUM;
+    localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+    localStorage.setItem("ComingFrom", "ProductionIssue");
+    // this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
   }
 
   public rowCallback = (context: RowClassArgs) => {
@@ -124,5 +151,9 @@ export class ProdOrderlistComponent implements OnInit {
       default:
         return {};
     }
+  }
+
+  CancelEvent(){
+    this.prodOrderlist = !this.prodOrderlist;
   }
 }

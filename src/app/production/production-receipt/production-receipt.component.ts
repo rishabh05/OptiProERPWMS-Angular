@@ -633,7 +633,10 @@ export class ProductionReceiptComponent implements OnInit {
     return true ;
   }
   checkAndValidateSerial(){
-    this.checkValidateSerialSubs = this.productionService.isSerialExists(this.serialBatchNo,this.itemCode).subscribe(
+    var type;
+    if(this.model.options=='1') type = 0;
+    if(this.model.options=='2') type = 1;
+    this.checkValidateSerialSubs = this.productionService.isSerialExists(this.serialBatchNo,this.itemCode,type,this.tracking,this.orderNumber).subscribe(
       data => {
         if (data != undefined) {
           if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {

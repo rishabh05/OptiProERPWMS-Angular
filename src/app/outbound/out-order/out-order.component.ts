@@ -123,7 +123,6 @@ export class OutOrderComponent implements OnInit {
 
   public openPOByUOM(selection: any) {
     let selectdeData = selection.selectedRows[0].dataItem;
-    CommonConstants.OutboundData
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
 
     if (outboundData != undefined && outboundData != '') {
