@@ -100,6 +100,7 @@ export class ProdOrderlistComponent implements OnInit {
               this.soItemsDetail[i].ITEMCODE = data[i].ItemCode;
               this.soItemsDetail[i].RPTQTY = data[i].IssuedQty;
               this.soItemsDetail[i].OPENQTY = data[i].BalQty;
+              this.soItemsDetail[i].DOCENTRY = data[i].DocEntry;
             }
           }
           else {

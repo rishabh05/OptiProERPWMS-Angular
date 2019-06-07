@@ -24,8 +24,8 @@
                                     <dt>{{OpenQtylbl}}</dt>
                                     <dd>{{ dataItem.OPENQTY|numberFormat }}</dd>
 
-                                    <dt *ngIf="false">{{'UoM'|translate}}</dt>
-                                    <dd *ngIf="false">
+                                    <dt *ngIf="!fromProduction">{{'UoM'|translate}}</dt>
+                                    <dd *ngIf="!fromProduction">
                                         <kendo-dropdownlist class="form-control input-sm" (valueChange)="valueChange($event)"
                                             [data]="uomList" [textField]="'UomName'" [valueField]="'UomCode'" [value]="uomList[0]"></kendo-dropdownlist>
                                     </dd>

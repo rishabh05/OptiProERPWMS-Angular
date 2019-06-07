@@ -88,7 +88,6 @@ export class OutProdissueComponent implements OnInit {
             this.uomList = data;
             this.selectedUOM = this.uomList.filter(u => u.UomCode == this.selected.UOM);
             this.selectedUOM = this.selectedUOM[0];
-  
           }
         )
       }
