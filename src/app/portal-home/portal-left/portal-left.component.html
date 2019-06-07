@@ -82,7 +82,7 @@
                 </a>
                 <ul *dropdownMenu class="dropdown-menu" role="menu">                    
                     <li id="15109" role="menuitem" (click)="listClick($event, 'production/production-issue')">
-                        <a class="dropdown-item" roterLink="issue">
+                        <a class="dropdown-item" roterLink="issue" (click)="onOutboundClick()">
                             <i class="opti-icon-issue" [style.color]="selectedThemeColor"></i>
                             <span class="text">{{'IssueForProduction'|translate}}</span>
                         </a>

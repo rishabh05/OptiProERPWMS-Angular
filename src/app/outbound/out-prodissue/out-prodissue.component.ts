@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { CommonConstants } from 'src/app/const/common-constants';
 import { OutboundService } from 'src/app/services/outbound.service';
 import { OutboundData } from 'src/app/models/outbound/outbound-data';
@@ -34,7 +34,7 @@ export class OutProdissueComponent implements OnInit {
   public selectedMeterials: any = Array<MeterialModel>();
   public comingSelectedMeterials: any = Array<MeterialModel>();
   public indivisualPickQty: number = 0.000;
-
+  @Output() cancelevent = new EventEmitter();
   public _requiredMeterialQty: number = 0;
   public _remainingMeterial: number = 0;
   public _pickedMeterialQty: number = 0;
@@ -50,23 +50,20 @@ export class OutProdissueComponent implements OnInit {
   showLookupLoader: boolean = false;
   selectedUOM: any;
   uomIdx: number = 0;
-
+  PickQtylbl: string;
+  OpenQtylbl: string;
   public pagable: boolean = false;
   public pageSize:number = Commonservice.pageSize;
   constructor(private ourboundService: OutboundService, private router: Router, private toastr: ToastrService, private translate: TranslateService) { }
+  fromProduction = true;
 
   ngOnInit() {
     //lsOutbound
     let outboundData = localStorage.getItem(CommonConstants.OutboundData);
-
     if (outboundData != undefined && outboundData != '') {
-
       this.outbound = JSON.parse(outboundData);
-
       this.selected = this.outbound.SelectedItem;
       this.OrderType = this.selected.TRACKING;
-
-
 
       if (this.OrderType != 'N') {
         if (this.OrderType === 'S') {
@@ -76,6 +73,24 @@ export class OutProdissueComponent implements OnInit {
           this.SerialBatchHeaderTitle = "Batch";
         }
         this.manageOldCollection();
+      }
+
+      if(localStorage.getItem("ComingFrom") == "ProductionIssue"){
+        this.fromProduction = true;
+        this.OpenQtylbl = this.translate.instant("BalanceQty");
+        this.PickQtylbl = this.translate.instant("IssuedQty");
+      }else{
+        this.fromProduction = false;
+        this.PickQtylbl = this.translate.instant("PickQty");
+        this.OpenQtylbl = this.translate.instant("OpenQty");
+        this.ourboundService.getUOMList(this.selected.ITEMCODE).subscribe(
+          data => {
+            this.uomList = data;
+            this.selectedUOM = this.uomList.filter(u => u.UomCode == this.selected.UOM);
+            this.selectedUOM = this.selectedUOM[0];
+  
+          }
+        )
       }
 
       this._requiredMeterialQty = parseFloat(this.selected.OPENQTY);
@@ -91,15 +106,6 @@ export class OutProdissueComponent implements OnInit {
           }
         );
       }
-
-      this.ourboundService.getUOMList(this.selected.ITEMCODE).subscribe(
-        data => {
-          this.uomList = data;
-          this.selectedUOM = this.uomList.filter(u => u.UomCode == this.selected.UOM);
-          this.selectedUOM = this.selectedUOM[0];
-
-        }
-      )
     }
   }
 
@@ -332,7 +338,6 @@ export class OutProdissueComponent implements OnInit {
 
   needMeterial() {
     this.calculateTotalAndRemainingQty();
-
     return this._pickedMeterialQty < this._requiredMeterialQty;
   }
 
@@ -618,7 +623,11 @@ export class OutProdissueComponent implements OnInit {
   }
 
   back() {
-    this.router.navigateByUrl('home/outbound/outorder', { skipLocationChange: true });
+    if(localStorage.getItem("ComingFrom") == "ProductionIssue"){
+      this.cancelevent.emit(true);
+    }else{
+      this.router.navigateByUrl('home/outbound/outorder', { skipLocationChange: true });
+    }
   }
 
   intersection(array1: any[], array2: any[]): any[] {

@@ -250,14 +250,14 @@
         <kendo-grid-column media="(max-width: 767px)" title="{{'Items'|translate}}" class="opti_mobile-grid-td">
             <ng-template kendoGridCellTemplate let-dataItem>
                 <dl class="opti_mobile_grid_dl">
-                    <dt>{{'Batch'|translate}}</dt>
+                    <dt>{{'BatchSerial'|translate}}</dt>
                     <dd>{{ dataItem.LotNo }}</dd>
 
                     <dt>{{'CountedQty'|translate}}</dt>
                     <dd>{{ dataItem.QtyCounted }}</dd>
                 </dl>
                 <dl class="opti_mobile_grid_dl">
-                    <dt class="d-flex align-items-center">{{batchSrBtn}}
+                    <dt class="d-flex align-items-center">{{'BinNo'|translate}}
                         <button class="btn btn-danger k-button btn-sm btn-icon ml-auto" type="button" (click)="ViewLinesRowDeleteClick(rowIndex, gridItem)">
                             <span class="k-icon k-i-delete"></span>
                         </button>
@@ -271,15 +271,16 @@
         </kendo-grid-column>
         <!-- grid for mobile end -->
 
-        <kendo-grid-column media="(min-width: 768px)" field="LotNo" title="{{'Batch'|translate}}" width="60">
+        <kendo-grid-column *ngIf="ItemTracking != 'N'" media="(min-width: 768px)" field="LotNo" title="{{'BatchSerial'|translate}}" width="130">
         </kendo-grid-column>
-        <kendo-grid-column media="(min-width: 768px)" field="BinNo" title="{{batchSrBtn}}" width="250">
+        <kendo-grid-column media="(min-width: 768px)" field="BinNo" title="{{'BinNo'|translate}}" width="230">
         </kendo-grid-column>
-        <kendo-grid-column media="(min-width: 768px)" field="QtyCounted" title="{{'CountedQty'|translate}}">
+        <kendo-grid-column media="(min-width: 768px)" field="QtyCounted" title="{{'CountedQty'|translate}}"
+        class="text-right" headerClass="text-right">
         </kendo-grid-column>
-        <kendo-grid-column media="(min-width: 768px)" field="InWhsQty" title="{{'QtyOnHand'|translate}}" width="110">
+        <kendo-grid-column media="(min-width: 768px)" field="InWhsQty" title="{{'QtyOnHand'|translate}}" width="100" class="text-right" headerClass="text-right">
         </kendo-grid-column>
-        <kendo-grid-column media="(min-width: 768px)" field="Discontinued" width="80">
+        <kendo-grid-column media="(min-width: 768px)" field="" width="80">
             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                 <button class="btn btn-danger k-button btn-sm btn-icon" type="button" (click)="LotSerialDeleteClick(rowIndex, gridItem)">
                     <span class="k-icon k-i-delete"></span>
