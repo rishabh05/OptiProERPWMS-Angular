@@ -82,7 +82,7 @@ export class InboundGRPOComponent implements OnInit {
   fileName: string = "";
   UOMentry: any = "";
 
-
+  pageSize: number = Commonservice.pageSize;
   @ViewChild('Quantity') QuantityField;
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent) {
@@ -140,9 +140,8 @@ export class InboundGRPOComponent implements OnInit {
     this.showSavedDataToGrid()
   }
 
-  onInboundScan()
-  {
-   // alert("scan click");
+  onInboundScan() {
+    // alert("scan click");
   }
 
   setLocalStringForBatch() {
@@ -173,21 +172,20 @@ export class InboundGRPOComponent implements OnInit {
         this.showLoader = false;
         console.log(data);
         if (data != null) {
-          if (this.defaultRecvBin == true) {
-            this.RecvbBinvalue = data[0].BINNO;
-            this.defaultRecvBin = false
-          }
-          else {
-            if (data.length > 0) {
+          if (data.length > 0) {
+            if (this.defaultRecvBin == true) {
+              this.RecvbBinvalue = data[0].BINNO;
+              this.defaultRecvBin = false
+            }
+            else {
               console.log(data);
               this.showLookupLoader = false;
               this.serviceData = data;
               this.lookupfor = "RecvBinList";
               return;
             }
-            else {
-              this.toastr.error('', this.translate.instant("NoBinsAvailableMsg"));
-            }
+          } else {
+            this.toastr.error('', this.translate.instant("NoBinsAvailableMsg"));
           }
         }
       },
@@ -235,14 +233,14 @@ export class InboundGRPOComponent implements OnInit {
     );
   }
 
-  onScanInputChange(){
-  //  alert("scan change event")
+  onScanInputChange() {
+    //  alert("scan change event")
   }
   /**
    * Method to validate entered scan code .
   */
   onScanCodeChange() {
-   
+
     this.onGS1ItemScan()
   }
   /**
@@ -302,14 +300,14 @@ export class InboundGRPOComponent implements OnInit {
 
   updateLotNumber(value, rowindex, gridData: any) {
     let result = this.recvingQuantityBinArray.find(element => element.LotNumber == value);
-      if (result != undefined) {
-        if (this.openPOLineModel[0].TRACKING != "N") {
-            if (this.openPOLineModel[0].TRACKING == "S") {
-              this.toastr.error('', this.translate.instant("SerialCanNotbeSame"));
-            } else {
-              this.toastr.error('', this.translate.instant("BatchCanNotbeSame"));
-          }
-      }  
+    if (result != undefined) {
+      if (this.openPOLineModel[0].TRACKING != "N") {
+        if (this.openPOLineModel[0].TRACKING == "S") {
+          this.toastr.error('', this.translate.instant("SerialCanNotbeSame"));
+        } else {
+          this.toastr.error('', this.translate.instant("BatchCanNotbeSame"));
+        }
+      }
       //this.recvingQuantityBinArray[rowindex].LotNumber = "";
       for (let i = 0; i < this.recvingQuantityBinArray.length; ++i) {
         if (i === rowindex) {
@@ -317,14 +315,14 @@ export class InboundGRPOComponent implements OnInit {
         }
       }
       //gridData.data = this.recvingQuantityBinArray;
-    //  return;
-    }else{
-    for (let i = 0; i < this.recvingQuantityBinArray.length; ++i) {
-      if (i === rowindex) {
-        this.recvingQuantityBinArray[i].LotNumber = value;
+      //  return;
+    } else {
+      for (let i = 0; i < this.recvingQuantityBinArray.length; ++i) {
+        if (i === rowindex) {
+          this.recvingQuantityBinArray[i].LotNumber = value;
+        }
       }
     }
-  }
   }
 
   addQuantity() {
@@ -405,7 +403,7 @@ export class InboundGRPOComponent implements OnInit {
       } else {
         this.batchCalculation(autoLots, this.qty);
       }
-    }else{ 
+    } else {
       this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, qty, this.RecvbBinvalue, this.expiryDate));
     }
   }
@@ -419,6 +417,7 @@ export class InboundGRPOComponent implements OnInit {
       this.toastr.error('', this.translate.instant("BinValidation"));
       return;
     }
+    
   }
   /**
    * method to create logic for autolot for serial batch qty.
@@ -586,7 +585,7 @@ export class InboundGRPOComponent implements OnInit {
         }
         return;
       }
-      
+
       // for(var i =0; i<this.recvingQuantityBinArray.length;i++){
       //   let result = this.recvingQuantityBinArray.find(element => element.LotNumber == );
       //   if (result != undefined) {
@@ -598,7 +597,7 @@ export class InboundGRPOComponent implements OnInit {
       //     return;
       //   }
       // }
-     
+
     }
 
     this.prepareCommonData();
@@ -1221,17 +1220,17 @@ export class InboundGRPOComponent implements OnInit {
       }
     );
   }
-  
-  onHiddenScanClick(){
+
+  onHiddenScanClick() {
     this.onGS1ItemScan();
   }
   onGS1ItemScan() {
-   // alert("at onGS1ItemScan ");
+    // alert("at onGS1ItemScan ");
     var inputValue = (<HTMLInputElement>document.getElementById('inboundScanInputField')).value;
-     if(inputValue.length>0){
+    if (inputValue.length > 0) {
       this.ScanInputs = inputValue;
     }
-   // alert("at onGS1ItemScan value:: "+this.ScanInputs);
+    // alert("at onGS1ItemScan value:: "+this.ScanInputs);
 
     if (this.ScanInputs != null && this.ScanInputs != undefined &&
       this.ScanInputs != "" && this.ScanInputs != "error decoding QR Code") {
@@ -1243,12 +1242,12 @@ export class InboundGRPOComponent implements OnInit {
     }
     this.openPOLineModel;
     let piManualOrSingleDimentionBarcode = 0;
-   // alert("check and scan code api call")
+    // alert("check and scan code api call")
     this.inboundService.checkAndScanCode(this.openPOLineModel[0].CardCode, this.ScanInputs).subscribe(
       (data: any) => {
-      //  alert("check and scan code api call response data:"+JSON.stringify(data));
-         
-        console.log("responseData: "+JSON.stringify(data));
+        //  alert("check and scan code api call response data:"+JSON.stringify(data));
+
+        console.log("responseData: " + JSON.stringify(data));
         if (data != null) {
           if (data[0].Error != null) {
             if (data[0].Error == "Invalidcodescan") {
@@ -1270,7 +1269,7 @@ export class InboundGRPOComponent implements OnInit {
               this.ScanInputs = "";
               return;
             }
- 
+
             var piExpDateExist = 0;
             //var oGetExpDate = oTextExpiryDate.getValue();
             var tracking = this.openPOLineModel[0].TRACKING;
@@ -1285,7 +1284,7 @@ export class InboundGRPOComponent implements OnInit {
                 var d = data[i].Value.split('/');
                 var oepxpdt = d[0] + '/' + d[1] + '/' + d[2];
                 // set value to date field 
-                this.expiryDate = oepxpdt; 
+                this.expiryDate = oepxpdt;
                 piExpDateExist = 1; //taken this variable for date purpose check if later used.
               }
 

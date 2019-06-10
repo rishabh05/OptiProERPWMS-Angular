@@ -139,6 +139,8 @@ export class OutCutomerComponent implements OnInit {
     // lsOutbound
     localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
     CurrentOutBoundData.CustomerData = outbound.CustomerData;
+    this.outbound=outbound;
+    
   }
 
   public openCustomerLookup() {
@@ -176,7 +178,13 @@ export class OutCutomerComponent implements OnInit {
     )
   }
 
-  public openCustSO() {
+  public openCustSO(clearOrder:boolean=false) {
+   
+    // Clear otred data
+    if(this.outbound)
+    this.outbound.OrderData=null;
+    if(clearOrder==true)
+    localStorage.setItem(CommonConstants.OutboundData,JSON.stringify( this.outbound));
     this.router.navigateByUrl('home/outbound/outorder', { skipLocationChange: true });
   }
 
@@ -450,6 +458,7 @@ export class OutCutomerComponent implements OnInit {
     let order = this.orderCollection[idx];
     this.outbound.DeleiveryCollection = this.outbound.DeleiveryCollection.filter(d => d.Order.DOCNUM !== order.DOCNUM);
     this.outbound.TempMeterials = this.outbound.TempMeterials.filter(d => d.Order.DOCNUM !== order.DOCNUM);
+    localStorage.setItem(CommonConstants.OutboundData,JSON.stringify(this.outbound));
   }
 
   openOrderScreen(selection: any) {

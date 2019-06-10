@@ -7,25 +7,25 @@
             <div class="row">
                 <div class="col-12">
 
-                    <kendo-grid class="no-shadow" [kendoGridBinding]="selectedItems" [resizable]="true" [pageSize]="50"
+                    <kendo-grid class="no-shadow" [kendoGridBinding]="selectedItems" [resizable]="true" [pageSize]="10"
                         [pageable]="false" [sortable]="true" [selectable]="true" #gridItem>
 
                         <!-- grid for mobile start -->
                         <kendo-grid-column media="(max-width: 767px)" title="List" class="opti_mobile-grid-td">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                <dl class="opti_mobile_grid_dl w-100">
+                                <dl class="opti_mobile_grid_dl">
                                     <dt>{{'ItemCode'|translate}}</dt>
                                     <dd>{{ dataItem.ITEMCODE }}</dd>
 
-                                    <dt>{{'PickQty'|translate}}</dt>
+                                    <dt>{{PickQtylbl}}</dt>
                                     <dd>{{ dataItem.RPTQTY|numberFormat }}</dd>
                                 </dl>
-                                <dl class="opti_mobile_grid_dl w-100">
-                                    <dt>{{'OpenQty'|translate}}</dt>
+                                <dl class="opti_mobile_grid_dl">
+                                    <dt>{{OpenQtylbl}}</dt>
                                     <dd>{{ dataItem.OPENQTY|numberFormat }}</dd>
 
-                                    <dt>{{'UoM'|translate}}</dt>
-                                    <dd>
+                                    <dt *ngIf="!fromProduction">{{'UoM'|translate}}</dt>
+                                    <dd *ngIf="!fromProduction">
                                         <kendo-dropdownlist class="form-control input-sm" (valueChange)="valueChange($event)"
                                             [data]="uomList" [textField]="'UomName'" [valueField]="'UomCode'" [value]="uomList[0]"></kendo-dropdownlist>
                                     </dd>
@@ -37,16 +37,16 @@
                         <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE" title="{{'ItemCode'|translate}}"
                             [width]="160"></kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" headerClass="text-right" class=" text-right"
-                            title="{{'OpenQty'|translate}}" [width]="160">
+                            title="{{OpenQtylbl}}" [width]="160">
                             <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.OPENQTY|numberFormat}}</ng-template>
                         </kendo-grid-column>
 
                         <kendo-grid-column media="(min-width: 768px)" field="RPTQTY" headerClass="text-right" class="text-right"
-                            [width]="160" title="{{'PickQty'|translate}}">
+                            [width]="160" title="{{PickQtylbl}}">
                             <ng-template kendoGridCellTemplate let-dataItem>{{_pickedMeterialQty|numberFormat}}</ng-template>
                             <!-- <ng-template kendoGridCellTemplate format="{0:n3}">{{_pickedMeterialQty|number:'1.3-3'}}</ng-template> -->
                         </kendo-grid-column>
-                        <kendo-grid-column media="(min-width: 768px)" field="Delete" title="{{'UoM'|translate}}" width="120">
+                        <kendo-grid-column *ngIf="!fromProduction" media="(min-width: 768px)" field="Delete" title="{{'UoM'|translate}}" width="120">
                             <ng-template kendoGridCellTemplate let-dataItem>
                                 <kendo-dropdownlist class="form-control input-sm" (valueChange)="valueChange($event)"
                                     [data]="uomList" [textField]="'UomName'" [valueField]="'UomCode'" [value]="selectedUOM"></kendo-dropdownlist>
@@ -114,9 +114,9 @@
 
             <div class="row">
                 <div class="col-12">
-
-                    <kendo-grid class="no-shadow" [data]="selectedMeterials" [resizable]="true" [pageSize]="50"
-                        [pageable]="false" [sortable]="true" [selectable]="true" id="gridSelectedMeterial"
+                    
+                    <kendo-grid class="no-shadow" [data]="selectedMeterials" [resizable]="true" [pageSize]="pageSize"
+                    [pageable]="pagable" [sortable]="true" [selectable]="true" id="gridSelectedMeterial"
                         #gridSelectedMeterial>
 
                         <!-- grid for mobile start -->

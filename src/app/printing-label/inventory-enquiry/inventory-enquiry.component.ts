@@ -13,7 +13,7 @@ import { ISubscription } from 'rxjs/Subscription';
   styleUrls: ['./inventory-enquiry.component.scss']
 })
 export class InventoryEnquiryComponent implements OnInit {
-  pageSize: number = 5;
+  
   itemCode: string = "";
   lotNo: string = "";
   itemName: string = "";
@@ -21,6 +21,7 @@ export class InventoryEnquiryComponent implements OnInit {
   binNo: string = "";
   type: string = "";
   nonTracked: boolean = false;
+  pagable: boolean = false;
 
   lotsListSubs: ISubscription;
   lotScanListWithoutWhseBinSubs: ISubscription;
@@ -47,6 +48,8 @@ export class InventoryEnquiryComponent implements OnInit {
   isFromLotChange:boolean = false;
   isFromItemChange:boolean = false;
   totalSum: number = 0;
+  pageSize: number = Commonservice.pageSize;
+
   constructor(private renderer: Renderer, private commonservice: Commonservice, private router: Router, private labelPrintReportsService: LabelPrintReportsService,
     private toastr: ToastrService, private translate: TranslateService) {
     let userLang = navigator.language.split('-')[0];
@@ -127,6 +130,7 @@ export class InventoryEnquiryComponent implements OnInit {
           this.showLookupLoader = false;
           this.serviceData = data;
           this.lookupfor = "LotsList";
+         
         }
         else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
@@ -242,7 +246,7 @@ export class InventoryEnquiryComponent implements OnInit {
       (data: any) => {
         
         if (data != undefined && data.length > 0) {
-          console.log("Item Detail:" +JSON.stringify(data));
+     
 
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
@@ -251,7 +255,11 @@ export class InventoryEnquiryComponent implements OnInit {
           }
           this.showQuantityGrid = true;
           this.quantityGridData = data;
-          
+          if(this.quantityGridData.length>this.pageSize){
+            this.pagable =true;
+          }else{
+            this.pagable =false;
+          }
           this.getTotalSum(data);
           //case when value comes from on input text change then set value to desable input labels
           if(this.isFromLotChange == true){

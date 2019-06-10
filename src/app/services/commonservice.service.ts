@@ -11,21 +11,23 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class Commonservice {
+
+  public static pageSize: number = 10;   
   static RemoveLicenseAndSignout(): any {
     throw new Error("Method not implemented.");
   }
-
+ 
   public href: any = window.location.href;
   public config_params: any;
 
   public httpOptions = {
-    headers: new HttpHeaders({
+    headers: new HttpHeaders({ 
       'Content-Type': 'application/json',
       'Accept': 'application/json'
     })
-  }
+  } 
 
-  constructor(private httpclient: HttpClient, private toastr: ToastrService, private router: Router ) {
+  constructor(private httpclient: HttpClient, private toastr: ToastrService, private router: Router) {
     this.loadConfig();
     this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
   }
@@ -35,7 +37,7 @@ export class Commonservice {
 
   public async loadConfig() {
 
-    this.httpclient.get('./assets/config.json').subscribe( 
+    this.httpclient.get('./assets/config.json').subscribe(
       data => {
         sessionStorage.setItem('ConfigData', JSON.stringify(data));
         this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
@@ -46,9 +48,9 @@ export class Commonservice {
     );
   }
 
-  public loadJsonData(){
-      this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
-}
+  public loadJsonData() {
+    this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
+  }
 
   public get_current_url() {
     let temp: any = this.href.substring(0, this.href.lastIndexOf('/'));
@@ -152,8 +154,8 @@ export class Commonservice {
     this.customerUserDataSub.next(data);
   }
 
-  checkAndScanCode(vendCode:string, scanInputString){
-    var jObject = {Gs1Token: JSON.stringify([{Vsvendorid:vendCode, StrScan:scanInputString, CompanyDBId:localStorage.getItem("CompID")}])};
+  checkAndScanCode(vendCode: string, scanInputString) {
+    var jObject = { Gs1Token: JSON.stringify([{ Vsvendorid: vendCode, StrScan: scanInputString, CompanyDBId: localStorage.getItem("CompID") }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/Gs1/GS1SETUP", jObject, this.httpOptions);
   }
 
@@ -165,7 +167,20 @@ export class Commonservice {
 
   }
 
-  signOut(toastr: ToastrService, router: Router, message: string){
+  //Get Setting from DB
+  getSettingOnSAP(): Observable<any> {
+    //JSON Obeject Prepared to be send as a param to API
+    let jObject: any = {
+      MoveOrder: JSON.stringify([{
+        CompanyDBID: localStorage.getItem("CompID") ,
+        UserID: localStorage.getItem("UserId") 
+      }])
+    };
+    //Return the response form the API  
+    return this.httpclient.post(this.config_params.service_url + "/MoveOrder/GetSettingOnSAP", jObject, this.httpOptions);
+  }
+
+  signOut(toastr: ToastrService, router: Router, message: string) {
     toastr.error('', message);
     sessionStorage.removeItem('isLoggedIn');
     sessionStorage.removeItem('selectedComp');
@@ -178,19 +193,19 @@ export class Commonservice {
     localStorage.removeItem('whseId');
     localStorage.removeItem('Token');
     this.clearInboundData()
-    this.router.navigateByUrl('/account'); 
+    this.router.navigateByUrl('/account');
 
   }
 
-   // Refresh List
-   private updateTopBarBSub = new BehaviorSubject<any>(null);
-   refreshTopbarSubscriber = this.updateTopBarBSub.asObservable();
- 
-   public refreshTopBarValue(data: any) {
-     this.updateTopBarBSub.next(data);
-   }
+  // Refresh List
+  private updateTopBarBSub = new BehaviorSubject<any>(null);
+  refreshTopbarSubscriber = this.updateTopBarBSub.asObservable();
 
-   clearInboundData(){
+  public refreshTopBarValue(data: any) {
+    this.updateTopBarBSub.next(data);
+  }
+
+  clearInboundData() {
     localStorage.setItem("GRPOReceieveData", "");
     localStorage.setItem("Line", "0")
     localStorage.setItem("addToGRPOPONumbers", "");

@@ -1,4 +1,4 @@
-<div class="opti_container position-relative bg-white rounded">
+<div class="opti_container position-relative bg-white rounded" *ngIf="prodOrderlist == true">
     <form class="form-with-fix-btnBar" >
         <div class="opti_container_inner" [perfectScrollbar]=" ">
   
@@ -41,8 +41,8 @@
                           </ul>
                       </div>
                       <div class="col-12 mb-2 border-bottom"></div>
-                      <kendo-grid class="no-shadow" [kendoGridBinding]="soItemsDetail" [resizable]="true" [pageSize]="pageSize"
-                          [pageable]="true" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
+                      <kendo-grid class="no-shadow" [kendoGridBinding]="soItemsDetail" [resizable]="true" [pageSize]="pageSize" [pageable]="pagable"
+                       [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
                           [height]=gridHeight [selectable]="true" [rowClass]="rowCallback" (selectionChange)="openPOByUOM($event, soItemsDetail.ItemCode)"
                           #gridItem>
   
@@ -51,7 +51,7 @@
                               <ng-template kendoGridCellTemplate let-dataItem>
                                   <dl class="opti_mobile_grid_dl">
                                       <dt>{{'ItemCode'|translate}}</dt>
-                                      <dd>{{ dataItem.ItemCode }}</dd>
+                                      <dd>{{ dataItem.ITEMCODE }}</dd>
   
                                       <dt>{{'IssuedQty'|translate}}</dt>
                                       <dd>{{ dataItem.IssuedQty|numberFormat }}</dd>
@@ -93,8 +93,10 @@
             </div>
         </div>
     </form>
-  </div>
+</div>
   
+
+<app-out-prodissue *ngIf="prodOrderlist == false" (cancelevent)="CancelEvent($event)"></app-out-prodissue>
   <span *ngIf="showLookupLoader == false">
       <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
   </span>

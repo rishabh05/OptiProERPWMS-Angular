@@ -220,7 +220,7 @@
             <div class="row">
                 <div class="col-12">
 
-                    <kendo-grid [kendoGridBinding]="Lots" [resizable]="true" [pageSize]="pageSize" [pageable]="false" [sortable]="true" 
+                    <kendo-grid [kendoGridBinding]="Lots" [resizable]="true" [pageSize]="pageSize" [pageable]="pagable" [sortable]="true" 
                     [filterable]=isColumnFilter [groupable]=isColumnGroup
                         [height]=gridHeight [selectable]="true" [data]="ItemArray" style="max-height:400px" class="no-shadow"
                         #gridItem>
@@ -297,7 +297,7 @@
                 <div class="row">
                     <div class="col-12">
     
-                        <kendo-grid [kendoGridBinding]="RejectLots" [resizable]="true" [pageSize]="pageSize" [pageable]="false" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
+                        <kendo-grid [kendoGridBinding]="RejectLots" [resizable]="true" [pageSize]="pageSize" [pageable]="pagable" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
                             [height]=gridHeight [selectable]="true" [data]="ItemArray" style="max-height:400px" class="no-shadow"
                             #gridItem>
     

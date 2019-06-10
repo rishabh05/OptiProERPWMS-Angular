@@ -19,7 +19,6 @@ export class OutOrderComponent implements OnInit {
   yesButtonText: string = "All";
   noButtonText: string = "Current";
   private customerName: string = "";
-  public pageSize = 20;
   public serviceData: any;
   public lookupfor: any = 'out-order';
   public showLookup: boolean = false;
@@ -35,6 +34,10 @@ export class OutOrderComponent implements OnInit {
   showLookupLoader: boolean = false;
   showConfirmDialog: boolean;
   showDeleiveryAndAdd: boolean;
+
+
+  public pagable: boolean = false;
+  public pageSize:number = Commonservice.pageSize;
   constructor(private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) { }
 
 
@@ -43,8 +46,8 @@ export class OutOrderComponent implements OnInit {
 
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
 
-
-    if (outboundData != undefined && outboundData != '') {
+    console.log("Order:data",outboundData);
+    if (outboundData!=null  && outboundData!=undefined && outboundData!='' && outboundData!='null') {
       this.outbound = JSON.parse(outboundData);
       this.selectedCustomer = this.outbound.CustomerData;
 
@@ -120,7 +123,6 @@ export class OutOrderComponent implements OnInit {
 
   public openPOByUOM(selection: any) {
     let selectdeData = selection.selectedRows[0].dataItem;
-    CommonConstants.OutboundData
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
 
     if (outboundData != undefined && outboundData != '') {
@@ -175,6 +177,9 @@ export class OutOrderComponent implements OnInit {
           // When order num from text box.
           this.outbound.OrderData = tempOrderData;
           this.soItemsDetail = resp.RDR1;
+          if(this.soItemsDetail.length>this.pageSize){
+            this.pagable = true;
+          }
           this.showLookupLoader=false;
           if (this.soItemsDetail.length === 0) {
             this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));

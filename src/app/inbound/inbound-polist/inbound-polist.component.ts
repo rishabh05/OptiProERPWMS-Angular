@@ -43,7 +43,7 @@ export class InboundPolistComponent implements OnInit {
 
   showLoader: boolean = false;
   pagable: boolean = false;
-  pageSize: Number = 10;
+  pageSize:number = Commonservice.pageSize;
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent) {
     let userLang = navigator.language.split('-')[0];

@@ -560,34 +560,40 @@ export class LookupComponent implements OnInit {
         title: this.translate.instant("DocNum"),
         headerClass: 'text-right',
         class: 'text-right',
-        type: 'numeric'
+        type: 'numeric',
+        width: '50'
       },
       {
         field: 'ItemCode',
         title: this.translate.instant("ItemCode"),
-        type: 'text'
+        type: 'text',
+        width: '100'
       },
       {
         field: 'Bin',
         title: this.translate.instant("Bin"),
-        type: 'text'
+        type: 'text',
+        width: '180'
       },
       {
         field: 'InWhsQty',
         title: this.translate.instant("InWhsQty"),
         headerClass: 'text-right',
         class: 'text-right',
-        type: 'numeric'
+        type: 'numeric',
+        width: '50'
       },
       {
         field: 'CountDate',
         title: this.translate.instant("CountDate"),
-        type: 'text'
+        type: 'text',
+        width: '80'
       },
       {
         field: 'IsTeamCount',
         title: this.translate.instant("IsTeamCount"),
-        type: 'text'
+        type: 'text',
+        width: '70'
       }
     ];
     this.lookupTitle = this.translate.instant("ItemCodeList");
@@ -657,7 +663,7 @@ export class LookupComponent implements OnInit {
       {
         field: 'DOCNUM',
         title: 'SO#',
-        type: 'text',
+        type: 'numeric',
         width: '100'
       },
       {

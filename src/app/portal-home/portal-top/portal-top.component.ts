@@ -100,7 +100,7 @@ export class PortalTopComponent implements OnInit {
     
     // this.router.navigateByUrl('/account');    
     this.commonService.RemoveLicenseAndSignout(this.toastr, this.router, 
-    this.translate.instant("CommonSessionExpireMsg"))
+    this.translate.instant("LogoutSuccess"))
 
   }
   

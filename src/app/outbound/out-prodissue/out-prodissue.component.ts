@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { CommonConstants } from 'src/app/const/common-constants';
 import { OutboundService } from 'src/app/services/outbound.service';
 import { OutboundData } from 'src/app/models/outbound/outbound-data';
@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
 import { forEach } from '@angular/router/src/utils/collection';
 import { anyChanged } from '@progress/kendo-angular-grid/dist/es2015/utils';
+import { Commonservice } from 'src/app/services/commonservice.service';
 
 
 
@@ -33,7 +34,7 @@ export class OutProdissueComponent implements OnInit {
   public selectedMeterials: any = Array<MeterialModel>();
   public comingSelectedMeterials: any = Array<MeterialModel>();
   public indivisualPickQty: number = 0.000;
-
+  @Output() cancelevent = new EventEmitter();
   public _requiredMeterialQty: number = 0;
   public _remainingMeterial: number = 0;
   public _pickedMeterialQty: number = 0;
@@ -49,21 +50,20 @@ export class OutProdissueComponent implements OnInit {
   showLookupLoader: boolean = false;
   selectedUOM: any;
   uomIdx: number = 0;
-
+  PickQtylbl: string;
+  OpenQtylbl: string;
+  public pagable: boolean = false;
+  public pageSize:number = Commonservice.pageSize;
   constructor(private ourboundService: OutboundService, private router: Router, private toastr: ToastrService, private translate: TranslateService) { }
+  fromProduction = true;
 
   ngOnInit() {
     //lsOutbound
     let outboundData = localStorage.getItem(CommonConstants.OutboundData);
-
     if (outboundData != undefined && outboundData != '') {
-
       this.outbound = JSON.parse(outboundData);
-
       this.selected = this.outbound.SelectedItem;
       this.OrderType = this.selected.TRACKING;
-
-
 
       if (this.OrderType != 'N') {
         if (this.OrderType === 'S') {
@@ -73,6 +73,23 @@ export class OutProdissueComponent implements OnInit {
           this.SerialBatchHeaderTitle = "Batch";
         }
         this.manageOldCollection();
+      }
+
+      if(localStorage.getItem("ComingFrom") == "ProductionIssue"){
+        this.fromProduction = true;
+        this.OpenQtylbl = this.translate.instant("BalanceQty");
+        this.PickQtylbl = this.translate.instant("IssuedQty");
+      }else{
+        this.fromProduction = false;
+        this.PickQtylbl = this.translate.instant("PickQty");
+        this.OpenQtylbl = this.translate.instant("OpenQty");
+        this.ourboundService.getUOMList(this.selected.ITEMCODE).subscribe(
+          data => {
+            this.uomList = data;
+            this.selectedUOM = this.uomList.filter(u => u.UomCode == this.selected.UOM);
+            this.selectedUOM = this.selectedUOM[0];
+          }
+        )
       }
 
       this._requiredMeterialQty = parseFloat(this.selected.OPENQTY);
@@ -88,17 +105,6 @@ export class OutProdissueComponent implements OnInit {
           }
         );
       }
-
-      this.ourboundService.getUOMList(this.selected.ITEMCODE).subscribe(
-        data => {
-          this.uomList = data;
-
-
-          this.selectedUOM = this.uomList.filter(u => u.UomCode == this.selected.UOM);
-          this.selectedUOM = this.selectedUOM[0];
-
-        }
-      )
     }
   }
 
@@ -123,11 +129,13 @@ export class OutProdissueComponent implements OnInit {
       itemMeterials.forEach(element => {
         this.selectedMeterials.push(element.Meterial)
       });;
+      //applying paging..
+      this.pagable = this.selectedMeterials.length>this.pageSize;    
       this.manageMeterial();
       this.calculateTotalAndRemainingQty();
 
     }
-
+   
   }
 
   onScanInputChange() {
@@ -305,6 +313,8 @@ export class OutProdissueComponent implements OnInit {
         localTotalPickQty = localTotalPickQty + meterial.MeterialPickQty;
 
         this.selectedMeterials.push(meterial);
+        //apply paging..
+        this.pagable = this.selectedMeterials.length>this.pageSize;    
       }
 
       this.totalPickQty = this.totalPickQty + this.selectedMeterials.map(i => i.MeterialPickQty).reduce((sum, c) => sum + c);
@@ -316,7 +326,7 @@ export class OutProdissueComponent implements OnInit {
   }
 
   QtyFilled() {
-    if (this.selectedMeterials != undefined && this.selectedMeterials != undefined && this.selectedMeterials.length > 0) {
+    if (this.selectedMeterials !=undefined && this.selectedMeterials != null && this.selectedMeterials.length > 0) {
       this.totalPickQty = this.totalPickQty + this.selectedMeterials.map(i => i.MeterialPickQty).reduce((sum, c) => sum + c);
     }
     else {
@@ -327,7 +337,6 @@ export class OutProdissueComponent implements OnInit {
 
   needMeterial() {
     this.calculateTotalAndRemainingQty();
-
     return this._pickedMeterialQty < this._requiredMeterialQty;
   }
 
@@ -364,7 +373,9 @@ export class OutProdissueComponent implements OnInit {
 
       txt.value = oldValue;
       this.selectedMeterials[idx].MeterialPickQty = oldValue;
-
+      //apply paging..
+      this.pagable = this.selectedMeterials.length>this.pageSize;    
+      
       this.calculateTotalAndRemainingQty();
       return;
     }
@@ -382,7 +393,7 @@ export class OutProdissueComponent implements OnInit {
   }
 
   calculateTotalAndRemainingQty() {
-    if (this.selectedMeterials != null && this.selectedMeterials != undefined && this.selectedMeterials.length > 0) {
+    if (this.selectedMeterials && this.selectedMeterials.length > 0) {
       this._pickedMeterialQty = this.selectedMeterials.map(i => i.MeterialPickQty).reduce((sum, c) => parseFloat(sum) + parseFloat(c));
       this._remainingMeterial = this._requiredMeterialQty - this._pickedMeterialQty;
     }
@@ -424,7 +435,7 @@ export class OutProdissueComponent implements OnInit {
     //lsOutbound
     this.outbound = JSON.parse(localStorage.getItem(CommonConstants.OutboundData));
     this.outbound.SelectedMeterials = lookupValue;
-    localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+    localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound)); 
   }
 
  
@@ -438,6 +449,8 @@ export class OutProdissueComponent implements OnInit {
     this.selectedMeterials.splice(idx, 1);
     grd.data = this.selectedMeterials;
     this.calculateTotalAndRemainingQty();
+    //setting paging..
+    this.pagable = this.selectedMeterials.length>this.pageSize;    
   }
 
   removeMeterial(idx: any, grd: any) {
@@ -496,8 +509,10 @@ export class OutProdissueComponent implements OnInit {
 
         
         this.selectedMeterials.push(meterial);
+        //apply paging..
+        this.pagable = this.selectedMeterials.length>this.pageSize;    
 
-
+       
         pickedMeterialQty = pickedMeterialQty + meterial.MeterialPickQty;
         remailingMeterialQty = requiredMeterialQty - pickedMeterialQty;
       }
@@ -525,14 +540,15 @@ export class OutProdissueComponent implements OnInit {
           // }
 
           this.selectedMeterials.push(meterial);
-
-
+          //apply paging..
+          this.pagable = this.selectedMeterials.length>this.pageSize;    
+         
           pickedMeterialQty = pickedMeterialQty + meterial.MeterialPickQty;
           remailingMeterialQty = requiredMeterialQty - pickedMeterialQty;
         }
       }
       // Selected meterial
-      if (this.selectedMeterials != undefined && this.selectedMeterials != undefined && this.selectedMeterials.length > 0) {
+      if (this.selectedMeterials  && this.selectedMeterials.length > 0) {
         this._pickedMeterialQty = this.selectedMeterials.map(i => i.MeterialPickQty).reduce((sum, c) => sum + c);
         this._remainingMeterial = this._requiredMeterialQty - this._pickedMeterialQty;
       }
@@ -544,7 +560,8 @@ export class OutProdissueComponent implements OnInit {
     }
 
     this.oldSelectedMeterials = JSON.parse(JSON.stringify(this.selectedMeterials));
-
+    this.pagable = this.selectedMeterials.length>this.pageSize;    
+   
   }
 
   addMetToCollection() {
@@ -605,7 +622,11 @@ export class OutProdissueComponent implements OnInit {
   }
 
   back() {
-    this.router.navigateByUrl('home/outbound/outorder', { skipLocationChange: true });
+    if(localStorage.getItem("ComingFrom") == "ProductionIssue"){
+      this.cancelevent.emit(true);
+    }else{
+      this.router.navigateByUrl('home/outbound/outorder', { skipLocationChange: true });
+    }
   }
 
   intersection(array1: any[], array2: any[]): any[] {
@@ -654,28 +675,24 @@ export class OutProdissueComponent implements OnInit {
   }
 
 
-  private manageOldSelectedItems() {
-    // let outbound: OutboundData = JSON.parse(localStorage.getItem(CommonConstants.OutboundData));
-
+  private manageOldSelectedItems() {    
+ 
     if (this.selectedMeterials !== null && this.selectedMeterials !== undefined && this.selectedMeterials.length > 0) {
 
       for (let index = 0; index < this.selectedMeterials.length; index++) {
         const element = this.selectedMeterials[index];
 
         for (let j = 0; j < this.lookupData.length; j++) {
-
-
-
-          const sd = this.lookupData[j];
-          // Remove old selected metarial
-          // if (this.filterLookUpDta(sd)) {
-          //   continue;
-          // }
-
+          const sd = this.lookupData[j];       
           if (sd.ITEMCODE === element.ITEMCODE
             && sd.LOTNO === element.LOTNO
             && sd.BINNO === element.BINNO) {
             sd.OldData = true;
+              
+            // if(sd.TOTALQTY>=element.MeterialPickQty  ){
+            // sd.TOTALQTY = sd.TOTALQTY-element.MeterialPickQty;
+            // }
+
             this.lookupData[j] = sd;
           }
           else {
@@ -735,7 +752,7 @@ export class OutProdissueComponent implements OnInit {
               sd.TOTALQTY = sd.TOTALQTY - element.TotalAllocatedMetQty;
 
               if (element.TotalAllocatedMetQty >= sd.TOTALQTY) {
-                if (tempLookup.length > j) {
+                if (tempLookup.length > j   && this.OrderType != 'B') {
                   tempLookup.splice(j, 1);
                   break;
                 }
@@ -754,7 +771,7 @@ export class OutProdissueComponent implements OnInit {
   }
 
   private getBinAndTotalMeterial(tempCollection: any[]): any[] {
-    let binAndQtyCollection: any = {};
+    
     let binAndQtyCollectionArray: any[] = [];
     let ProcessedCount: number = 0;
 
@@ -765,7 +782,7 @@ export class OutProdissueComponent implements OnInit {
       let tCollection: any = tempCollection.filter(t =>
         element.Meterial.BINNO === t.Meterial.BINNO &&
         element.Meterial.LOTNO === t.Meterial.LOTNO &&
-        element.Meterial.ITEMCODE === t.Meterial.ITEMCODE);
+        element.Meterial.ITEMCODE === t.Meterial.ITEMCODE )
 
       ProcessedCount = ProcessedCount + tCollection.length;
 
@@ -774,14 +791,16 @@ export class OutProdissueComponent implements OnInit {
         let existCol = binAndQtyCollectionArray.filter(t =>
           element.Meterial.BINNO === t.BINNO &&
           element.Meterial.LOTNO === t.LOTNO &&
-          element.Meterial.ITEMCODE === t.ITEMCODE);
+          element.Meterial.ITEMCODE === t.ITEMCODE 
+          
+          );
 
         if (existCol.length == 0) {
+          let binAndQtyCollection: any = {};
           binAndQtyCollection.BINNO = element.Meterial.BINNO;
           binAndQtyCollection.LOTNO = element.Meterial.LOTNO;
-          binAndQtyCollection.ITEMCODE = element.Meterial.ITEMCODE;
+          binAndQtyCollection.ITEMCODE = element.Meterial.ITEMCODE;          
           binAndQtyCollection.TotalAllocatedMetQty = tCollection.map(i => i.Meterial.MeterialPickQty).reduce((sum, c) => sum + c);
-
 
           binAndQtyCollectionArray.push(binAndQtyCollection);
         }

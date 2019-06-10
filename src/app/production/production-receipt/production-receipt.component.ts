@@ -100,6 +100,10 @@ export class ProductionReceiptComponent implements OnInit {
   @ViewChild('SerialQty') SerialQtyField: ElementRef;
   @ViewChild('BatchQty') BatchQtyField: ElementRef;
   @ViewChild('Qty') QtyField: ElementRef;
+
+  pagable: boolean = false;
+  pageSize:number = Commonservice.pageSize;
+
   constructor(private renderer: Renderer, private commonservice: Commonservice, private router: Router, private productionService: ProductionService,
     private toastr: ToastrService, private translate: TranslateService) { }
 
@@ -117,7 +121,7 @@ export class ProductionReceiptComponent implements OnInit {
     this.showOrderList();
   }
 
-  OnOrderValueChange(){
+  OnOrderValueChange(){ 
     if (this.orderNumber == "" || this.orderNumber == undefined) {
       return;
     }
@@ -236,6 +240,7 @@ export class ProductionReceiptComponent implements OnInit {
 
     }
   }
+
   submitProductionReport(requestData:any){
     this.showLoader = true;
     this.productionService.submitProductionRecepit(requestData).subscribe(
@@ -398,6 +403,11 @@ export class ProductionReceiptComponent implements OnInit {
       var initialOrignalActualQty = this.itemDataResponse.ORIGINALACTUALQUANTITY;
       this.orignalActualQty = initialOrignalActualQty - tempQty;
     }
+    if(this.Lots.length>this.pageSize){
+      this.pagable = true;
+    }else{
+      this.pagable = false;
+    }
   }  
  
 
@@ -427,6 +437,11 @@ export class ProductionReceiptComponent implements OnInit {
       var orignalRejectQty = this.itemDataResponse.RejectQTY;
       this.rejectQty = orignalRejectQty - tempQty;
      // console.log("total qty to submit:" + this.totalQtyToSubmit);
+    }
+    if(this.RejectLots.length>this.pageSize){
+      this.pagable = true;
+    }else{
+      this.pagable = false;
     }
   }
 
@@ -618,7 +633,10 @@ export class ProductionReceiptComponent implements OnInit {
     return true ;
   }
   checkAndValidateSerial(){
-    this.checkValidateSerialSubs = this.productionService.isSerialExists(this.serialBatchNo,this.itemCode).subscribe(
+    var type;
+    if(this.model.options=='1') type = 0;
+    if(this.model.options=='2') type = 1;
+    this.checkValidateSerialSubs = this.productionService.isSerialExists(this.serialBatchNo,this.itemCode,type,this.tracking,this.orderNumber).subscribe(
       data => {
         if (data != undefined) {
           if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
@@ -647,8 +665,10 @@ export class ProductionReceiptComponent implements OnInit {
   * Method to get list of inquries from server.
   */
   public showOrderList() {
+    this.showLoader = true;
     this.orderNoListSubs = this.productionService.getOrderNumberList(this.orderNumber).subscribe(
       data => {
+        this.showLoader = false;
         if (data != undefined) {
           if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
@@ -736,13 +756,14 @@ export class ProductionReceiptComponent implements OnInit {
     error => {
       this.toastr.error('', error);
     },);
-    
   }
 
   
   getBinList(){
+    this.showLoader = true;
     this.binListSubs = this.productionService.GetBinsList().subscribe(  
       data => {
+        this.showLoader = false;
       if (data != undefined) { 
       if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
         this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
