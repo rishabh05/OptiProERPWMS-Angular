@@ -424,4 +424,5 @@ body .k-dialog-wrapper kendo-grid.no-shadow{
 .k-checkbox:not(:disabled):not(:checked) + .k-checkbox-label::before,
 .k-radio:not(:disabled):not(:checked) + .k-radio-label::before {
     background-color: #fff !important;
+    border-color: rgb(203, 209, 222) !important;
 }

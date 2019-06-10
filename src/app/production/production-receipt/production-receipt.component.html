@@ -2,22 +2,24 @@
     <form class="form-with-fix-btnBar">
         <div class="opti_container_inner" [perfectScrollbar]=" ">
 
-            <h3 class="border-bottom d-flex pt-1 pb-3 mb-4" >
+            <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
                 {{'receiptFromProduction'|translate}}
             </h3>
-            <div class="row"> 
+            <div class="row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
 
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'OrderNo'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm"  [(ngModel)]=orderNumber (blur)="OnOrderValueChange()" name='orderNo' placeholder="{{'OrderNo'|translate}}">
+                                <input type="text" class="form-control form-control-sm" [(ngModel)]=orderNumber
+                                    (blur)="OnOrderValueChange()" name='orderNo' placeholder="{{'OrderNo'|translate}}">
                                 <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" (click)="OnOrderLookupClick()" type="button">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
-                                    <button class="k-button k-primary btn separate-btn"  (click)="getProductionDetail()" type="button">
+                                    <button class="k-button k-primary btn separate-btn" (click)="getProductionDetail()"
+                                        type="button">
                                         <i class="opti-icon-search"></i>
                                     </button>
                                 </div>
@@ -28,7 +30,7 @@
             </div>
 
             <!-- container row -->
-            <div *ngIf="displayFormAndSubmit"> 
+            <div *ngIf="displayFormAndSubmit">
                 <div class="row">
                     <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
                         <div class="form-group row">
@@ -41,19 +43,23 @@
                         </div>
                     </div>
                 </div>
-                <div class="row" *ngIf ="showRejectQtyField">
+                <div class="row" *ngIf="showRejectQtyField">
                     <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
-                        <div class="form-group row align-items-center"  >
+                        <div class="form-group row align-items-center">
                             <label for="inputPassword" class="col-sm-3 col-form-label">{{'TransType'|translate}}</label>
                             <div class="col-sm-9">
                                 <fieldset class="d-block w-100">
                                     <div class="d-flex align-items-center w-100">
                                         <div class="d-flex align-items-center">
-                                            
-                                             <input type="radio" id="radio1" name="group" class="k-radio" [(ngModel)]="model.options" value="1">
-                                             <label class="k-radio-label mr-3" for="radio1">{{'PostToInv'|translate}}</label>
-                                           <input type="radio"  id="radio2" name="group" class="k-radio" [(ngModel)]="model.options" value="2">
-                                           <label class="k-radio-label mr-3" for="radio2">{{'PostToReject'|translate}}</label>
+
+                                            <input type="radio" id="radio1" name="group" class="k-radio"
+                                                [(ngModel)]="model.options" value="1">
+                                            <label class="k-radio-label mr-3"
+                                                for="radio1">{{'PostToInv'|translate}}</label>
+                                            <input type="radio" id="radio2" name="group" class="k-radio"
+                                                [(ngModel)]="model.options" value="2">
+                                            <label class="k-radio-label mr-3"
+                                                for="radio2">{{'PostToReject'|translate}}</label>
                                         </div>
                                     </div>
                                 </fieldset>
@@ -63,26 +69,27 @@
                 </div>
                 <div class="row">
                     <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
-                        <div class="form-group row" *ngIf="tracking=='S'" >
+                        <div class="form-group row" *ngIf="tracking=='S'">
                             <label for="inputPassword" class="col-sm-3 col-form-label">{{'SerialQty'|translate}}</label>
                             <div class="col-sm-9">
-                                <input type="text" #SerialQty class="form-control form-control-sm text-right" [(ngModel)]=enteredQty name='SerialQty'
-                                    placeholder="{{'SerialQty'|translate}}"  [disabled]="disableSearialQty">
+                                <input type="text" #SerialQty class="form-control form-control-sm text-right"
+                                    [(ngModel)]=enteredQty name='SerialQty' placeholder="{{'SerialQty'|translate}}"
+                                    [disabled]="disableSearialQty">
                             </div>
                         </div>
                         <div class="form-group row" *ngIf="tracking=='B'">
                             <label for="inputPassword" class="col-sm-3 col-form-label">{{'BatchQty'|translate}}</label>
                             <div class="col-sm-9">
                                 <input type="number" #BatchQty class="form-control form-control-sm text-right"
-                                name='BatchQty' [(ngModel)]=enteredQty  placeholder="{{'BatchQty'|translate}}"> 
+                                    name='BatchQty' [(ngModel)]=enteredQty placeholder="{{'BatchQty'|translate}}">
                             </div>
-                        </div> 
-                        <div class="form-group row"  *ngIf="tracking=='N'"  >
+                        </div>
+                        <div class="form-group row" *ngIf="tracking=='N'">
                             <label for="inputPassword" class="col-sm-3 col-form-label">{{'Qty'|translate}}</label>
                             <div class="col-sm-9">
-                                <input type="text" #Qty class="form-control form-control-sm text-right" name='Qty'  [(ngModel)]=enteredQty
-                                    placeholder="{{'Qty'|translate}}">
-                            </div> 
+                                <input type="text" #Qty class="form-control form-control-sm text-right" name='Qty'
+                                    [(ngModel)]=enteredQty placeholder="{{'Qty'|translate}}">
+                            </div>
                         </div>
 
                     </div>
@@ -92,13 +99,16 @@
                         <div class="form-group row" *ngIf="tracking=='S'">
                             <label for="inputPassword" class="col-sm-3 col-form-label">{{'Serial'|translate}}</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control form-control-sm" (blur)="checkAndValidateSerial()" [(ngModel)]=serialBatchNo name='Serial' placeholder="{{'Serial'|translate}}">
+                                <input type="text" class="form-control form-control-sm"
+                                    (blur)="checkAndValidateSerial()" [(ngModel)]=serialBatchNo name='Serial'
+                                    placeholder="{{'Serial'|translate}}">
                             </div>
                         </div>
                         <div class="form-group row" *ngIf="tracking=='B'">
                             <label for="inputPassword" class="col-sm-3 col-form-label">{{'Batch'|translate}}</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control form-control-sm" name='Batch'  [(ngModel)]=serialBatchNo  placeholder="{{'Batch'|translate}}">
+                                <input type="text" class="form-control form-control-sm" name='Batch'
+                                    [(ngModel)]=serialBatchNo placeholder="{{'Batch'|translate}}">
                             </div>
                         </div>
                     </div>
@@ -106,10 +116,11 @@
                 <div class="row">
                     <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
                         <div class="form-group row">
-                            <label for="inputPassword" class="col-sm-3 col-form-label">{{'ExpiryDate'|translate}}</label>
+                            <label for="inputPassword"
+                                class="col-sm-3 col-form-label">{{'ExpiryDate'|translate}}</label>
                             <div class="col-sm-9">
-                                <kendo-datepicker [format]="'MM/dd/yy'" [value]="value" name="expiryDate" [(ngModel)]=expDate
-                                placeholder="MM/dd/yy"></kendo-datepicker>
+                                <kendo-datepicker [format]="'MM/dd/yy'" [value]="value" name="expiryDate"
+                                    [(ngModel)]=expDate placeholder="MM/dd/yy"></kendo-datepicker>
                             </div>
                         </div>
                     </div>
@@ -120,10 +131,10 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">{{'Bin'|translate}}</label>
                             <div class="col-sm-9">
                                 <div class="input-group input-group-sm">
-                                    <input type="text" class="form-control form-control-sm"   (blur)="OnBinValueChange()"
-                                    [(ngModel)]=binNo name='binNo' placeholder="{{'Bin'|translate}}">
+                                    <input type="text" class="form-control form-control-sm" (blur)="OnBinValueChange()"
+                                        [(ngModel)]=binNo name='binNo' placeholder="{{'Bin'|translate}}">
                                     <div class="input-group-append">
-                                        <button class="k-button k-primary btn" type="button" (click)="getBinList()"  >
+                                        <button class="k-button k-primary btn" type="button" (click)="getBinList()">
                                             <i class="opti-icon-hammenu"></i>
                                         </button>
                                     </div>
@@ -137,20 +148,17 @@
                         <div class="form-group row">
                             <label for="inputPassword" class="col-sm-3 col-form-label">{{'OpenQty'|translate}}</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control form-control-sm text-right" name='openQty' [attr.disabled]="disableOpenQty"
-                                [ngModel]="orignalActualQty | numberFormat" 
-                                (ngModelChange)="orignalActualQty=$event" 
-                                    placeholder="{{'OpenQty'|translate}}">
+                                <input type="text" class="form-control form-control-sm text-right" name='openQty'
+                                    [attr.disabled]="disableOpenQty" [ngModel]="orignalActualQty | numberFormat"
+                                    (ngModelChange)="orignalActualQty=$event" placeholder="{{'OpenQty'|translate}}">
                             </div>
                         </div>
-                        <div class="form-group row"  *ngIf ="showRejectQtyField">
+                        <div class="form-group row" *ngIf="showRejectQtyField">
                             <label for="inputPassword" class="col-sm-3 col-form-label">{{'DefectQty'|translate}}</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control form-control-sm text-right" 
-                                name='defectQty'  [attr.disabled]="disableDefRejQty" 
-                                [ngModel]="rejectQty | numberFormat" 
-                                (ngModelChange)="rejectQty=$event" 
-                                    placeholder="{{'DefectQty'|translate}}">
+                                <input type="text" class="form-control form-control-sm text-right" name='defectQty'
+                                    [attr.disabled]="disableDefRejQty" [ngModel]="rejectQty | numberFormat"
+                                    (ngModelChange)="rejectQty=$event" placeholder="{{'DefectQty'|translate}}">
                             </div>
                         </div>
                     </div>
@@ -163,20 +171,17 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">{{'AcceptQty'|translate}}</label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control form-control-sm text-right" name='acceptQty'
-                                    placeholder="{{'AcceptQty'|translate}}"
-                                     [attr.disabled]="disableAcceptQty" 
-                                     [ngModel]="acceptQty | numberFormat" 
-                                (ngModelChange)="acceptQty=$event" >
+                                    placeholder="{{'AcceptQty'|translate}}" [attr.disabled]="disableAcceptQty"
+                                    [ngModel]="acceptQty | numberFormat" (ngModelChange)="acceptQty=$event">
                             </div>
                         </div>
 
-                        <div class="form-group row" *ngIf ="showRejectQtyField">
+                        <div class="form-group row" *ngIf="showRejectQtyField">
                             <label for="inputPassword" class="col-sm-3 col-form-label">{{'RejectQty'|translate}}</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control form-control-sm text-right" name='rejectQty' 
-                                 [ngModel]="rjQty | numberFormat" 
-                                (ngModelChange)="rjQty=$event"
-                                 [attr.disabled]="disableDefRejQty" placeholder="{{'RejectQty'|translate}}"> 
+                                <input type="text" class="form-control form-control-sm text-right" name='rejectQty'
+                                    [ngModel]="rjQty | numberFormat" (ngModelChange)="rjQty=$event"
+                                    [attr.disabled]="disableDefRejQty" placeholder="{{'RejectQty'|translate}}">
                             </div>
                         </div>
                     </div>
@@ -189,18 +194,23 @@
         <div class="fix-footer-btnBar">
             <div class="col-sm-12 col-12">
                 <hr />
-            </div> 
-            <div class="col-sm-12 col-12">  
-                    <button type="button" *ngIf="displayFormAndSubmit" (click)="submitRecord($event)" class="btn btn-success k-button btn-sm btn-icon-with-text">
-                            <span class="k-icon k-i-save" role="presentation"></span> {{'Submit'|translate}}</button>
-                            <button class="k-button k-primary k-button btn-sm btn-icon-with-text" *ngIf="showAddMoreButton" type="button" (click)="addMoreClick($event)">
-                                    <span class="k-icon k-i-download" role="presentation"></span> {{'AddMore'|translate}}</button>
-                                    <button class="k-button k-primary k-button btn-sm btn-icon-with-text" *ngIf="showViewAcceptButton" type="button" (click)="showViewAcceptItems($event)">
-                                            <span class="k-icon k-i-download" role="presentation"></span> {{'ViewAccept'|translate}}</button>
-                                   <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text"  *ngIf="showViewRejectButton" (click)="showViewRejectItems($event)"><span class="k-icon k-i-close-outline"
-                                                role="presentation"></span> {{'ViewReject'|translate}}</button>
-                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="onCancelClick()"><span class="k-icon k-i-close-outline"
-                        role="presentation"></span> {{'Cancel'|translate}}</button>
+            </div>
+            <div class="col-sm-12 col-12">
+                <button type="button" *ngIf="displayFormAndSubmit" (click)="submitRecord($event)"
+                    class="btn btn-success k-button btn-sm btn-icon-with-text">
+                    <span class="k-icon k-i-check" role="presentation"></span> {{'Submit'|translate}}</button>
+                <button class="btn btn-primary k-button btn-sm btn-icon-with-text" *ngIf="showAddMoreButton"
+                    type="button" (click)="addMoreClick($event)">
+                    <span class="k-icon k-i-plus" role="presentation"></span> {{'AddMore'|translate}}</button>
+                <button class="btn btn-primary k-button btn-sm btn-icon-with-text mr-1" *ngIf="showViewAcceptButton"
+                    type="button" (click)="showViewAcceptItems($event)">
+                    <span class="k-icon k-i-preview" role="presentation"></span> {{'ViewAccept'|translate}}</button>
+                <button type="button" class="btn btn-primary k-button btn-sm btn-icon-with-text"
+                    *ngIf="showViewRejectButton" (click)="showViewRejectItems($event)"><span
+                        class="k-icon k-i-preview" role="presentation"></span> {{'ViewReject'|translate}}</button>
+                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text"
+                    (click)="onCancelClick()"><span class="k-icon k-i-close-outline" role="presentation"></span>
+                    {{'Cancel'|translate}}</button>
                 <!-- <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" 
                   roterLink="binTransfer" skipLocationChange><i class="opti-icon-arrow-next"></i></button> -->
             </div>
@@ -213,20 +223,20 @@
     <form class="form-with-fix-btnBar">
         <div class="opti_container_inner" [perfectScrollbar]=" ">
 
-            <h3 class="border-bottom d-flex pt-1 pb-3 mb-4" >
+            <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
                 {{'AcceptedLot'|translate}}
             </h3>
 
             <div class="row">
                 <div class="col-12">
 
-                    <kendo-grid [kendoGridBinding]="Lots" [resizable]="true" [pageSize]="pageSize" [pageable]="pagable" [sortable]="true" 
-                    [filterable]=isColumnFilter [groupable]=isColumnGroup
-                        [height]=gridHeight [selectable]="true" [data]="ItemArray" style="max-height:400px" class="no-shadow"
-                        #gridItem>
+                    <kendo-grid [kendoGridBinding]="Lots" [resizable]="true" [pageSize]="pageSize" [pageable]="pagable"
+                        [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup [height]=gridHeight
+                        [selectable]="true" [data]="ItemArray" style="max-height:400px" class="no-shadow" #gridItem>
 
                         <!-- grid for mobile start -->
-                        <kendo-grid-column media="(max-width: 767px)" title="{{'AcceptedSerials '|translate}}" class="opti_mobile-grid-td">
+                        <kendo-grid-column media="(max-width: 767px)" title="{{'AcceptedSerials '|translate}}"
+                            class="opti_mobile-grid-td">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex='rowIndex'>
                                 <dl class="opti_mobile_grid_dl">
                                     <dt>{{lotSerialHeading}}</dt>
@@ -254,9 +264,10 @@
                         </kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="LotQty" title="{{'Quantity'|translate}}">
                         </kendo-grid-column>
-                        <kendo-grid-column media="(min-width: 768px)" field="" headerClass="text-center" width="60">
+                        <kendo-grid-column media="(min-width: 768px)" field="" class="text-center" headerClass="text-center" width="60">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                <button (click)="confirmDialogForDeleteAcceptItem($event,rowIndex)" class="btn btn-danger k-button btn-sm btn-icon" type="button">
+                                <button (click)="confirmDialogForDeleteAcceptItem($event,rowIndex)"
+                                    class="btn btn-danger k-button btn-sm btn-icon" type="button">
                                     <span class="k-icon k-i-delete"></span>
                                 </button>
                             </ng-template>
@@ -269,16 +280,17 @@
         <div class="fix-footer-btnBar">
             <div class="col-sm-12 col-12">
                 <hr />
-            </div> 
-            <div class="col-sm-12 col-12">  
-                <button type="button" (click)="viewAcceptOkClick($event)" class="btn btn-success k-button btn-sm btn-icon-with-text">
+            </div>
+            <div class="col-sm-12 col-12">
+                <button type="button" (click)="viewAcceptOkClick($event)"
+                    class="btn btn-success k-button btn-sm btn-icon-with-text">
                     <span class="k-icon k-i-check" role="presentation"></span> {{'Ok'|translate}}
                 </button>
-                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" 
-                (click)="confirmDialogForDeleteAllAcceptItems()">
+                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text"
+                    (click)="confirmDialogForDeleteAllAcceptItems()">
                     <span class="k-icon k-i-delete" role="presentation"></span> {{'DeleteAll'|translate}}
                 </button>
-                
+
             </div>
         </div>
     </form>
@@ -287,95 +299,99 @@
 
 <!-- Reject Item Grid Start -->
 <div class="opti_container position-relative bg-white rounded" *ngIf="rejectItemsGrid">
-        <form class="form-with-fix-btnBar">
-            <div class="opti_container_inner" [perfectScrollbar]=" ">
-    
-                <h3 class="border-bottom d-flex pt-1 pb-3 mb-4" >
-                    {{'RejectedLot'|translate}}
-                </h3>
-    
-                <div class="row">
-                    <div class="col-12">
-    
-                        <kendo-grid [kendoGridBinding]="RejectLots" [resizable]="true" [pageSize]="pageSize" [pageable]="pagable" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
-                            [height]=gridHeight [selectable]="true" [data]="ItemArray" style="max-height:400px" class="no-shadow"
-                            #gridItem>
-    
-                            <!-- grid for mobile start -->
-                            <kendo-grid-column media="(max-width: 767px)" title="{{'RejectedSerials '|translate}}" class="opti_mobile-grid-td">
-                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex='rowIndex'>
-                                        <dl class="opti_mobile_grid_dl">
-                                                <dt>{{lotSerialHeading}}</dt>
-                                                <dd>{{ dataItem.LotNumber }}</dd>
-            
-                                                <dt>{{'Quantity'|translate}}</dt>
-                                                <dd>{{ dataItem.LotQty }}</dd>
-                                            </dl>
-                                            <dl class="opti_mobile_grid_dl">
-                                                <dt class="d-flex align-items-center">{{'BinNoHeading'|translate}}
-                                                    <button class="btn btn-danger k-button btn-sm btn-icon ml-auto" type="button">
-                                                        <span class="k-icon k-i-delete"></span>
-                                                    </button>
-                                                </dt>
-                                                <dd>{{ dataItem.Bin }}</dd>
-                                            </dl>
-                                </ng-template>
-                            </kendo-grid-column>
-    
-                            <!-- grid for mobile end -->
-    
-                            <kendo-grid-column media="(min-width: 768px)" field="LotNumber" title="{{lotSerialHeading}}">
-                            </kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="LotQty" title="{{'Quantity'|translate}}">
-                            </kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="Bin" title="{{'BinNoHeading'|translate}}">
-                                </kendo-grid-column>
-                            <kendo-grid-column headerClass="text-center" media="(min-width: 768px)" field="" width="60">
-                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                    <button (click)="confirmDialogForDeleteRejectItem($event,rowIndex)" class="btn btn-danger k-button btn-sm btn-icon" type="button">
-                                        <span class="k-icon k-i-delete"></span>
-                                    </button>
-                                </ng-template>
-                            </kendo-grid-column>
-                        </kendo-grid>
-                    </div>
+    <form class="form-with-fix-btnBar">
+        <div class="opti_container_inner" [perfectScrollbar]=" ">
+
+            <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
+                {{'RejectedLot'|translate}}
+            </h3>
+
+            <div class="row">
+                <div class="col-12">
+
+                    <kendo-grid [kendoGridBinding]="RejectLots" [resizable]="true" [pageSize]="pageSize"
+                        [pageable]="pagable" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
+                        [height]=gridHeight [selectable]="true" [data]="ItemArray" style="max-height:400px"
+                        class="no-shadow" #gridItem>
+
+                        <!-- grid for mobile start -->
+                        <kendo-grid-column media="(max-width: 767px)" title="{{'RejectedSerials '|translate}}"
+                            class="opti_mobile-grid-td">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex='rowIndex'>
+                                <dl class="opti_mobile_grid_dl">
+                                    <dt>{{lotSerialHeading}}</dt>
+                                    <dd>{{ dataItem.LotNumber }}</dd>
+
+                                    <dt>{{'Quantity'|translate}}</dt>
+                                    <dd>{{ dataItem.LotQty }}</dd>
+                                </dl>
+                                <dl class="opti_mobile_grid_dl">
+                                    <dt class="d-flex align-items-center">{{'BinNoHeading'|translate}}
+                                        <button class="btn btn-danger k-button btn-sm btn-icon ml-auto" type="button">
+                                            <span class="k-icon k-i-delete"></span>
+                                        </button>
+                                    </dt>
+                                    <dd>{{ dataItem.Bin }}</dd>
+                                </dl>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <!-- grid for mobile end -->
+
+                        <kendo-grid-column media="(min-width: 768px)" field="LotNumber" title="{{lotSerialHeading}}">
+                        </kendo-grid-column>
+                        <kendo-grid-column media="(min-width: 768px)" field="LotQty" title="{{'Quantity'|translate}}">
+                        </kendo-grid-column>
+                        <kendo-grid-column media="(min-width: 768px)" field="Bin" title="{{'BinNoHeading'|translate}}">
+                        </kendo-grid-column>
+                        <kendo-grid-column headerClass="text-center" class="text-center" media="(min-width: 768px)" field="" width="60">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <button (click)="confirmDialogForDeleteRejectItem($event,rowIndex)"
+                                    class="btn btn-danger k-button btn-sm btn-icon" type="button">
+                                    <span class="k-icon k-i-delete"></span>
+                                </button>
+                            </ng-template>
+                        </kendo-grid-column>
+                    </kendo-grid>
                 </div>
             </div>
-    
-            <div class="fix-footer-btnBar">
-                <div class="col-sm-12 col-12">
-                    <hr />
-                </div> 
-                <div class="col-sm-12 col-12">  
-                    <button type="button" (click)="viewRejectOkClick($event)" class="btn btn-success k-button btn-sm btn-icon-with-text">
-                        <span class="k-icon k-i-check" role="presentation"></span> {{'Ok'|translate}}
-                    </button>
-                    <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text"
-                     (click)="confirmDialogForDeleteAllRejectItems()">
-                        <span class="k-icon k-i-delete" role="presentation"></span> {{'DeleteAll'|translate}}
-                    </button>
-                    
-                </div>
+        </div>
+
+        <div class="fix-footer-btnBar">
+            <div class="col-sm-12 col-12">
+                <hr />
             </div>
-        </form>
-    </div>
-    <!-- Reject Item Grid End -->
+            <div class="col-sm-12 col-12">
+                <button type="button" (click)="viewRejectOkClick($event)"
+                    class="btn btn-success k-button btn-sm btn-icon-with-text">
+                    <span class="k-icon k-i-check" role="presentation"></span> {{'Ok'|translate}}
+                </button>
+                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text"
+                    (click)="confirmDialogForDeleteAllRejectItems()">
+                    <span class="k-icon k-i-delete" role="presentation"></span> {{'DeleteAll'|translate}}
+                </button>
+
+            </div>
+        </div>
+    </form>
+</div>
+<!-- Reject Item Grid End -->
 
 <div *ngIf="showLookupLoader==false">
     <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
 </div>
- <!-- loader start -->
- <div class="opti_loader" *ngIf="showLookupLoader==true">
-    <div class="opti_spinner"></div> 
+<!-- loader start -->
+<div class="opti_loader" *ngIf="showLookupLoader==true">
+    <div class="opti_spinner"></div>
 </div>
 
 <!--delete dialog start-->
 <span *ngIf="showConfirmDialog">
-        <app-comon-confirm-dialog [titleMessage]="dialogMsg" [yesButtonText]="yesButtonText" [fromWhere]="dialogFor" [noButtonText]="noButtonText"
-            (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
+    <app-comon-confirm-dialog [titleMessage]="dialogMsg" [yesButtonText]="yesButtonText" [fromWhere]="dialogFor"
+        [noButtonText]="noButtonText" (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
 </span>
 <!--delete dialog end-->
 
-<div class="opti_loader full-section"  *ngIf="showLoader" >
-        <div class="opti_spinner"></div>
-    </div>
+<div class="opti_loader full-section" *ngIf="showLoader">
+    <div class="opti_spinner"></div>
+</div>
