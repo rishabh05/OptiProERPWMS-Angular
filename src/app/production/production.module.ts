@@ -12,12 +12,11 @@ import { GridModule } from '@progress/kendo-angular-grid';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
 import { InputsModule } from '@progress/kendo-angular-inputs';
 import { ProdOrderlistComponent } from './production-issue/prod-orderlist/prod-orderlist.component';
-import { ProdItemIssueComponent } from './production-issue/prod-item-issue/prod-item-issue.component';
 import { OutboundModule } from '../outbound/outbound.module';
 
 
 @NgModule({
-  declarations: [ProductionIssueComponent, ProductionReceiptComponent, ProdOrderlistComponent, ProdItemIssueComponent],
+  declarations: [ProductionIssueComponent, ProductionReceiptComponent, ProdOrderlistComponent],
   imports: [
     SharedModule,
     CommonModule,

@@ -128,7 +128,7 @@ body {
             font-size: $font-size-small;
         }
         .k-grid-pager {
-            padding: 0;
+            padding: 2px 3px;
             border-bottom-left-radius: 5px;
             border-bottom-right-radius: 5px;
         }
@@ -139,8 +139,10 @@ body {
     }
     .k-grid td {
         padding: 3px;
-        @media screen and (max-width: 991px){
-            padding: 0 3px !important;
+        @media screen and (max-width: 991px){            
+            &.opti_mobile-grid-td{
+                padding: 0 3px !important;
+            }
         }
     }
     // make header text bold
@@ -285,7 +287,30 @@ body {
 .k-dialog-wrapper .k-dialog {
     max-width: calc(100% - 20px);
 }
-
+.k-pager-wrap .k-link{
+    height: 22px !important;
+}
+kendo-pager-numeric-buttons {
+    align-items: flex-start;
+    justify-content: flex-start;
+    height: 24px;
+    display: flex;
+    align-self: flex-start;
+}
+.k-pager-wrap .k-pager-numbers {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 24px;
+    & li {
+        display: flex !important;
+        height: 24px;
+        vertical-align: top;
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+}
 body .k-grid td{
     .form-control.k-widget.k-dropdown{
         height: 22px;

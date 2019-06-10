@@ -28,6 +28,8 @@ export class ProdOrderlistComponent implements OnInit {
 
   pagable: boolean = false;
   pageSize:number = Commonservice.pageSize;
+
+  showConfirmDialog: boolean = false;
   constructor(private router: Router, private productionService: ProductionService, public productionIssueComponent: ProductionIssueComponent,
     private toastr: ToastrService, private translate: TranslateService, private commonservice: Commonservice) { }
 

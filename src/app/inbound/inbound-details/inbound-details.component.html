@@ -59,7 +59,7 @@
 
                         <kendo-grid-column media="(min-width: 768px)" field="PONumber" headerClass="text-center" class="text-center" title="{{'PurchaseOrderNumber'|translate}}"
                             [width]="90"></kendo-grid-column>
-                        <kendo-grid-column media="(min-width: 768px)" field="" title="" [width]="10">
+                        <kendo-grid-column media="(min-width: 768px)" field="" headerClass="text-center" title="" [width]="10">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                 <button class="btn btn-danger k-button btn-sm btn-icon" type="button" (click)="openConfirmForDelete(rowIndex, gridItem)">
                                     <span class="k-icon k-i-delete"></span>

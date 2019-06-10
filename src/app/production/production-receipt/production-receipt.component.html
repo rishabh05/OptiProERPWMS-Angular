@@ -254,7 +254,7 @@
                         </kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="LotQty" title="{{'Quantity'|translate}}">
                         </kendo-grid-column>
-                        <kendo-grid-column media="(min-width: 768px)" field="" width="60">
+                        <kendo-grid-column media="(min-width: 768px)" field="" headerClass="text-center" width="60">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                 <button (click)="confirmDialogForDeleteAcceptItem($event,rowIndex)" class="btn btn-danger k-button btn-sm btn-icon" type="button">
                                     <span class="k-icon k-i-delete"></span>
@@ -330,7 +330,7 @@
                             </kendo-grid-column>
                             <kendo-grid-column media="(min-width: 768px)" field="Bin" title="{{'BinNoHeading'|translate}}">
                                 </kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="" width="60">
+                            <kendo-grid-column headerClass="text-center" media="(min-width: 768px)" field="" width="60">
                                 <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                     <button (click)="confirmDialogForDeleteRejectItem($event,rowIndex)" class="btn btn-danger k-button btn-sm btn-icon" type="button">
                                         <span class="k-icon k-i-delete"></span>

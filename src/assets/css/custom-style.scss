@@ -420,3 +420,8 @@ body .k-dialog-wrapper kendo-grid.no-shadow{
 .color-label li span.green{
     background-color: #b6f9c4
 }
+
+.k-checkbox:not(:disabled):not(:checked) + .k-checkbox-label::before,
+.k-radio:not(:disabled):not(:checked) + .k-radio-label::before {
+    background-color: #fff !important;
+}
