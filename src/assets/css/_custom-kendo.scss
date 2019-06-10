@@ -126,11 +126,21 @@ body {
         }
         .k-pager-wrap .k-pager-info {
             font-size: $font-size-small;
+            @media screen and (max-width:460px){
+                width: 100%;
+                justify-content: flex-start !important;
+                margin: 3px 0 0 0 !important;
+                min-width: 100%;
+            }
         }
         .k-grid-pager {
             padding: 2px 3px;
             border-bottom-left-radius: 5px;
             border-bottom-right-radius: 5px;
+            @media screen and (max-width:460px){
+                flex-wrap: wrap;
+                width: 100%;
+            }            
         }
         .k-grouping-header {
             border-top-left-radius: 5px;
