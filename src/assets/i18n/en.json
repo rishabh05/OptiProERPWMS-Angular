@@ -35,6 +35,16 @@
   "ItemLabel": "Item Label",
   "InventoryEnquiry": "Inventory Enquiry",
   "SpotCount": "Spot Count",
+
+  "Dashboard_AppVersion":"Version: ",
+  "Dashboard_CopyWrt_Msg":"Copyright 2000-2018. All rights reserved.",
+  "Dashboard_ProductName":"WMS",
+  "Dashboard_Logout_Msg":"Do you want to Logout?",
+
+  "Inbound_Expdate_Msg": "Expiry date should not past date",
+  "Inbound_GoodsReceiptPO": "Goods Receipt PO",
+
+
   "FromBin": "From Bin",
   "ToBin": "To Bin",
   "OnHandQty": "OnHand Qty.",
@@ -91,7 +101,7 @@
   "SerialNotBlank": "Serial no. cannot be blank",
   "OpenQty": "Open Qty",
   "ReceiveQty": "Receive Qty",
-  "ReceiveForPO:": "Receive for PO:",
+  "Inbound_ReceiveForPO:": "Receive for PO:",
   "UOM": "UOM",
   "Manual": "Manual",
   "ReceivingBin": "Receiving Bin",
@@ -113,7 +123,7 @@
   "CommonLogoutMsg": "Logout Sucessfully",
   "DoYouWantToDeleteAllTheLines": "Do you want to delete all lines?",
   "GRPOSuccessMessage": "Goods Receipt PO generated successfully with Doc No: ",
-  "GoodsReciptPO": "Goods Recipt PO",
+
   "VendCode": "Vendor",
   "VendorList": "Vendor List",
   "VendorExistMessge": "Vendor does not exist!",

@@ -60,7 +60,7 @@ export class ProductionService {
   isSerialExists( serialNo:string,itemCode:string,transType:string,tracking:string,wono:string): Observable<any> {
      
     var jObject = { SerialNo: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), ItemCode: itemCode, SerialNo: serialNo,TransType:transType,TRACKING:tracking,WONO:wono }]) };
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/CheckSerialNo", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/CheckSerialNoPROD", jObject, this.httpOptions);
   }
 
    /**

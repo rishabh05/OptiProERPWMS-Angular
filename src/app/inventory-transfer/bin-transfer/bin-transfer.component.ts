@@ -225,6 +225,7 @@ export class BinTransferComponent implements OnInit {
             this.formatTransferNumbers();
             this.formatOnHandQty();
             this.SysNumber = data[0].SYSNUMBER;
+            this.fromBin = data[0].BINNO;
           }
         }
       },

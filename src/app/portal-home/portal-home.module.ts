@@ -24,6 +24,8 @@ import { OutboundModule } from '../outbound/outbound.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChangeWarehouseComponent } from '../change-warehouse/change-warehouse.component';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
+import { GridModule } from '@progress/kendo-angular-grid';
+import { SharedModule } from '../shared-module/shared-module.module';
 
 @NgModule({
   imports: [
@@ -40,6 +42,10 @@ import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
     HttpClientModule,         
     FormsModule,
     NgbModule,
+
+    CommonModule,
+    GridModule,
+    SharedModule,
 
     InboundModule,
     OutboundModule,

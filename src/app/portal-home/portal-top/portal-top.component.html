@@ -175,8 +175,8 @@
         <p>
             <img src="assets/images/logo/large-logo-old.png" alt="Large Logo" class="opti_large-logo" />
         </p>
-        <p>Version {{applicationVersion}}</p>
-        <p>Copyright 2000-2018. All rights reserved.</p>
+        <p>{{appVersion}}</p>
+        <p>{{'Dashboard_CopyWrt_Msg'|translate}}</p>
     </div>
 
     <!-- <div class="modal-footer">
@@ -195,3 +195,8 @@
     </div>
 </ng-template>
 <!-- mobile search end -->
+
+<span *ngIf="showConfirmDialog">
+    <app-comon-confirm-dialog [titleMessage]="dialogMsg" [yesButtonText]="yesButtonText" [fromWhere]="dialogFor" [noButtonText]="noButtonText"
+        (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
+</span>

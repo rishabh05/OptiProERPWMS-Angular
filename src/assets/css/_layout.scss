@@ -144,7 +144,6 @@ body.opti_account-module{
     }
     .k-checkbox:checked + .k-checkbox-label::before {
         border-color: $themeForAccountSection;
-        background-color: #fff;
     }
     .ps__thumb-y, .ps__rail-y:hover > .ps__thumb-y, .ps__rail-y:focus > .ps__thumb-y{
         background-color: $themeForAccountSection;
