@@ -172,10 +172,10 @@
                             </kendo-grid-column>
                             <!-- grid for mobile end -->
 
-                            <kendo-grid-column class="pl-1" media="(min-width: 768px)" field="ItemCode" title="{{'Item'|translate}}" [width]="160"></kendo-grid-column>
+                            <kendo-grid-column class="pl-1" media="(min-width: 768px)" field="ItemCode" title="{{'ItemCode'|translate}}" [width]="160"></kendo-grid-column>
                             <kendo-grid-column media="(min-width: 768px)" field="Qty" headerClass="text-right" class="text-right" title="{{'Qty'|translate}}"
                                 [width]="60"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="LotNo" [width]="160" title="{{'Batch'|translate}}"></kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" field="LotNo" [width]="160" title="{{'BatchNo'|translate}}"></kendo-grid-column>
                             <kendo-grid-column media="(min-width: 768px)" field="BinNo" [width]="160" title="{{'FromBin'|translate}}"></kendo-grid-column>
                             <kendo-grid-column media="(min-width: 768px)" field="ToBin" title="{{'ToBin'|translate}}" [width]="160"></kendo-grid-column>
                             <kendo-grid-column media="(min-width: 768px)" field="Delete" headerClass="text-center" class="text-center" title="" width="30">
@@ -198,7 +198,7 @@
             <div class="col-sm-12 col-12">
                 <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text" (click)="OnOKClick()">
                     <span class="k-icon k-i-check" role="presentation"></span> {{'Ok'|translate}}</button>
-                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="openModal(template)">
+                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="deleteAll()">
                     <span class="k-icon k-i-delete" role="presentation"></span> {{'DeleteAll'|translate}}</button>
             </div>
         </div>
@@ -212,7 +212,7 @@
             </button>
         </div>
         <div class="modal-body">
-            {{'DoYouWantToDeleteAllTheLines'|translate}}
+            {{'DeleteAllLines'|translate}}
         </div>
         <div class="modal-footer">
             <button class="btn btn-primary k-button btn-sm" type="button" (click)="deleteAllOkClick()">{{'Ok'|translate}}</button>
@@ -248,3 +248,8 @@
 <div class="opti_loader full-section" *ngIf="showLoader">
     <div class="opti_spinner"></div>
 </div>
+
+<span *ngIf="showConfirmDialog">
+    <app-comon-confirm-dialog [titleMessage]="dialogMsg" [yesButtonText]="yesButtonText" [fromWhere]="dialogFor" [noButtonText]="noButtonText"
+        (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
+</span>

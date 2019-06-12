@@ -46,7 +46,7 @@
                 <div class="row" *ngIf="showRejectQtyField">
                     <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
                         <div class="form-group row align-items-center">
-                            <label for="inputPassword" class="col-sm-3 col-form-label">{{'TransType'|translate}}</label>
+                            <label for="inputPassword" class="col-sm-3 col-form-label">{{'ProdReceipt_TransType'|translate}}</label>
                             <div class="col-sm-9">
                                 <fieldset class="d-block w-100">
                                     <div class="d-flex align-items-center w-100">
@@ -97,18 +97,18 @@
                 <div class="row">
                     <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
                         <div class="form-group row" *ngIf="tracking=='S'">
-                            <label for="inputPassword" class="col-sm-3 col-form-label">{{'Serial'|translate}}</label>
+                            <label for="inputPassword" class="col-sm-3 col-form-label">{{'SerialNo'|translate}}</label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control form-control-sm"
                                     (blur)="checkAndValidateSerial()" [(ngModel)]=serialBatchNo name='Serial'
-                                    placeholder="{{'Serial'|translate}}">
+                                    placeholder="{{'SerialNo'|translate}}">
                             </div>
                         </div>
                         <div class="form-group row" *ngIf="tracking=='B'">
-                            <label for="inputPassword" class="col-sm-3 col-form-label">{{'Batch'|translate}}</label>
+                            <label for="inputPassword" class="col-sm-3 col-form-label">{{'BatchNo'|translate}}</label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control form-control-sm" name='Batch'
-                                    [(ngModel)]=serialBatchNo placeholder="{{'Batch'|translate}}">
+                                    [(ngModel)]=serialBatchNo placeholder="{{'BatchNo'|translate}}">
                             </div>
                         </div>
                     </div>
@@ -119,8 +119,8 @@
                             <label for="inputPassword"
                                 class="col-sm-3 col-form-label">{{'ExpiryDate'|translate}}</label>
                             <div class="col-sm-9">
-                                <kendo-datepicker [format]="'MM/dd/yy'" [value]="value" name="expiryDate"
-                                    [(ngModel)]=expDate placeholder="MM/dd/yy"></kendo-datepicker>
+                                <kendo-datepicker [format]=dateFormat [value]="value" name="expiryDate"
+                                    [(ngModel)]=expDate placeholder={{dateFormat}}></kendo-datepicker>
                             </div>
                         </div>
                     </div>
@@ -128,11 +128,11 @@
                 <div class="row">
                     <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
                         <div class="form-group row">
-                            <label for="inputPassword" class="col-sm-3 col-form-label">{{'Bin'|translate}}</label>
+                            <label for="inputPassword" class="col-sm-3 col-form-label">{{'BinNo'|translate}}</label>
                             <div class="col-sm-9">
                                 <div class="input-group input-group-sm">
                                     <input type="text" class="form-control form-control-sm" (blur)="OnBinValueChange()"
-                                        [(ngModel)]=binNo name='binNo' placeholder="{{'Bin'|translate}}">
+                                        [(ngModel)]=binNo name='binNo' placeholder="{{'BinNo'|translate}}">
                                     <div class="input-group-append">
                                         <button class="k-button k-primary btn" type="button" (click)="getBinList()">
                                             <i class="opti-icon-hammenu"></i>
@@ -154,11 +154,11 @@
                             </div>
                         </div>
                         <div class="form-group row" *ngIf="showRejectQtyField">
-                            <label for="inputPassword" class="col-sm-3 col-form-label">{{'DefectQty'|translate}}</label>
+                            <label for="inputPassword" class="col-sm-3 col-form-label">{{'ProdReceipt_DefectQty'|translate}}</label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control form-control-sm text-right" name='defectQty'
                                     [attr.disabled]="disableDefRejQty" [ngModel]="rejectQty | numberFormat"
-                                    (ngModelChange)="rejectQty=$event" placeholder="{{'DefectQty'|translate}}">
+                                    (ngModelChange)="rejectQty=$event" placeholder="{{'ProdReceipt_DefectQty'|translate}}">
                             </div>
                         </div>
                     </div>
@@ -168,20 +168,20 @@
                 <div class="row">
                     <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
                         <div class="form-group row">
-                            <label for="inputPassword" class="col-sm-3 col-form-label">{{'AcceptQty'|translate}}</label>
+                            <label for="inputPassword" class="col-sm-3 col-form-label">{{'ProdReceipt_AcceptQty'|translate}}</label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control form-control-sm text-right" name='acceptQty'
-                                    placeholder="{{'AcceptQty'|translate}}" [attr.disabled]="disableAcceptQty"
+                                    placeholder="{{'ProdReceipt_AcceptQty'|translate}}" [attr.disabled]="disableAcceptQty"
                                     [ngModel]="acceptQty | numberFormat" (ngModelChange)="acceptQty=$event">
                             </div>
                         </div>
 
                         <div class="form-group row" *ngIf="showRejectQtyField">
-                            <label for="inputPassword" class="col-sm-3 col-form-label">{{'RejectQty'|translate}}</label>
+                            <label for="inputPassword" class="col-sm-3 col-form-label">{{'ProdReceipt_RejectQty'|translate}}</label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control form-control-sm text-right" name='rejectQty'
                                     [ngModel]="rjQty | numberFormat" (ngModelChange)="rjQty=$event"
-                                    [attr.disabled]="disableDefRejQty" placeholder="{{'RejectQty'|translate}}">
+                                    [attr.disabled]="disableDefRejQty" placeholder="{{'ProdReceipt_RejectQty'|translate}}">
                             </div>
                         </div>
                     </div>
@@ -246,7 +246,7 @@
                                     <dd>{{ dataItem.LotQty }}</dd>
                                 </dl>
                                 <dl class="opti_mobile_grid_dl">
-                                    <dt class="d-flex align-items-center">{{'BinNoHeading'|translate}}
+                                    <dt class="d-flex align-items-center">{{'BinNo'|translate}}
                                         <button class="btn btn-danger k-button btn-sm btn-icon ml-auto" type="button">
                                             <span class="k-icon k-i-delete"></span>
                                         </button>
@@ -260,7 +260,7 @@
 
                         <kendo-grid-column media="(min-width: 768px)" field="LotNumber" title="{{lotSerialHeading}}">
                         </kendo-grid-column>
-                        <kendo-grid-column media="(min-width: 768px)" field="Bin" title="{{'BinNoHeading'|translate}}">
+                        <kendo-grid-column media="(min-width: 768px)" field="Bin" title="{{'BinNo'|translate}}">
                         </kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="LotQty" title="{{'Quantity'|translate}}">
                         </kendo-grid-column>
@@ -326,7 +326,7 @@
                                     <dd>{{ dataItem.LotQty }}</dd>
                                 </dl>
                                 <dl class="opti_mobile_grid_dl">
-                                    <dt class="d-flex align-items-center">{{'BinNoHeading'|translate}}
+                                    <dt class="d-flex align-items-center">{{'BinNo'|translate}}
                                         <button class="btn btn-danger k-button btn-sm btn-icon ml-auto" type="button">
                                             <span class="k-icon k-i-delete"></span>
                                         </button>
@@ -342,7 +342,7 @@
                         </kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="LotQty" title="{{'Quantity'|translate}}">
                         </kendo-grid-column>
-                        <kendo-grid-column media="(min-width: 768px)" field="Bin" title="{{'BinNoHeading'|translate}}">
+                        <kendo-grid-column media="(min-width: 768px)" field="Bin" title="{{'BinNo'|translate}}">
                         </kendo-grid-column>
                         <kendo-grid-column headerClass="text-center" class="text-center" media="(min-width: 768px)" field="" width="60">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">

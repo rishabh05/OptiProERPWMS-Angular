@@ -100,7 +100,7 @@ export class ProductionReceiptComponent implements OnInit {
   @ViewChild('SerialQty') SerialQtyField: ElementRef;
   @ViewChild('BatchQty') BatchQtyField: ElementRef;
   @ViewChild('Qty') QtyField: ElementRef;
-
+  dateFormat: string;
   pagable: boolean = false;
   pageSize:number = Commonservice.pageSize;
 
@@ -114,6 +114,7 @@ export class ProductionReceiptComponent implements OnInit {
     this.rjQty =  Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));//ye niche vali field jo calculation se dikhate hai.
     console.log("entered qty"+this.enteredQty);
     console.log("acceptQty qty"+this.acceptQty);
+    this.dateFormat = localStorage.getItem("DATEFORMAT");
   }
 
 
@@ -254,7 +255,7 @@ export class ProductionReceiptComponent implements OnInit {
           } 
           //check and update response for entered serial no.
           if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
-            this.toastr.success( this.translate.instant("FGRSuccessMessage")+data[0].DocEntry);
+            this.toastr.success('', this.translate.instant("FGRSuccessMessage") + data[0].DocEntry);
             this.resetAfterSubmit(); 
           }else{
             if (data[0].ErrorMsg != ""){
@@ -843,16 +844,16 @@ export class ProductionReceiptComponent implements OnInit {
 
   }
   showMainLayoutItems: boolean = true;
-  lotSerialHeading: any = this.translate.instant("LotNoHeading");
+  lotSerialHeading: any = this.translate.instant("BatchNo");
 
   showViewAcceptItems($event){
     this.showMainLayoutItems = false;
     this.acceptItemsGrid = true;
     this.rejectItemsGrid = false;
     if(this.tracking=="S"){
-      this.lotSerialHeading = this.translate.instant("Serial");
+      this.lotSerialHeading = this.translate.instant("SerialNo");
     }else{
-      this.lotSerialHeading = this.translate.instant("LotNoHeading");
+      this.lotSerialHeading = this.translate.instant("BatchNo");
     } 
 
   }
@@ -864,9 +865,9 @@ export class ProductionReceiptComponent implements OnInit {
     this.acceptItemsGrid = false;
     this.rejectItemsGrid = true;
     if(this.tracking=="S"){
-      this.lotSerialHeading = this.translate.instant("Serial");
+      this.lotSerialHeading = this.translate.instant("SerialNo");
     }else{
-      this.lotSerialHeading = this.translate.instant("LotNoHeading");
+      this.lotSerialHeading = this.translate.instant("BatchNo");
     }
   }
 

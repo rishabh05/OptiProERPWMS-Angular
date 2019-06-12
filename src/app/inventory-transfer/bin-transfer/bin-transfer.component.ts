@@ -48,9 +48,15 @@ export class BinTransferComponent implements OnInit {
   batchNoPlaceholder: string = "";
   zero: string;
   showValidation: boolean = true;
+  dialogFor: string;
+  yesButtonText: string;
+  noButtonText: string;
+  showConfirmDialog = false;
+  dialogMsg: string;
 
   pagable: boolean = false;
   pageSize:number = Commonservice.pageSize;
+
   constructor(private commonservice: Commonservice, private activatedRoute: ActivatedRoute,
     private router: Router, private inventoryTransferService: InventoryTransferService,
     private toastr: ToastrService, private translate: TranslateService,
@@ -674,14 +680,6 @@ export class BinTransferComponent implements OnInit {
       this.showBatchNo = true;
       this.editTransferQty = true;
       this.batchNoPlaceholder = this.translate.instant("SerialNo");
-      // oTxtTransferQty.setEnabled(false);
-      // var qty = olblQtyOnhand.getValue();
-      // if (qty > 0) {
-      //     oWhsTransEditLot.TransferQty = oCurrentController.getFormatedValue("1");
-      // }
-      // else {
-      //     oWhsTransEditLot.TransferQty = oCurrentController.getFormatedValue("0");
-      // }
     }
     else if (this.ItemTracking == "N") {
       this.isItemSerialTrack = false;
@@ -694,10 +692,13 @@ export class BinTransferComponent implements OnInit {
     this.lotValue = "";
   }
 
+  rowindex: any;
+  gridDataRow: any;
   ViewLinesRowDeleteClick(rowindex, gridData: any) {
-    this.TransferedItemsDetail.splice(rowindex, 1);
-    gridData.data = this.TransferedItemsDetail;
-    console.log(this.TransferedItemsDetail.length);
+    this.showDialog("delete", this.translate.instant("yes"), this.translate.instant("no"),
+    this.translate.instant("DeleteRecordsMsg"));
+    this.rowindex = rowindex;
+    this.gridDataRow = gridData;
   }
 
   OnOKClick() {
@@ -722,6 +723,46 @@ export class BinTransferComponent implements OnInit {
       this.router.navigate(['home/dashboard']);
     } else {
       this.cancelevent.emit(true);
+    }
+  }
+
+  deleteAll(){
+    this.showDialog("deleteAll", this.translate.instant("yes"), this.translate.instant("no"),
+    this.translate.instant("DeleteAllLines"));
+  }
+
+  showDialog(dialogFor: string, yesbtn: string, nobtn: string, msg: string) {
+    this.dialogFor = dialogFor;
+    this.yesButtonText = yesbtn;
+    this.noButtonText = nobtn;
+    this.showConfirmDialog = true;
+    this.dialogMsg = msg;
+  }
+
+  getConfirmDialogValue($event) {
+    this.showConfirmDialog = false;
+    if ($event.Status == "yes") {
+      switch ($event.From) {
+        case ("delete"):
+          this.TransferedItemsDetail.splice(this.rowindex, 1);
+          this.gridDataRow.data = this.TransferedItemsDetail;
+          console.log(this.TransferedItemsDetail.length);
+          break;
+        case ("deleteAll"):
+          this.deleteAllOkClick();
+          break;
+
+      }
+    } else {
+      if ($event.Status == "no") {
+        switch ($event.From) {
+          case ("delete"):
+            break;
+          case ("deleteAll"):
+            break;
+
+        }
+      }
     }
   }
 }

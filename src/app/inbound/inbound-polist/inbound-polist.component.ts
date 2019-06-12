@@ -155,6 +155,12 @@ export class InboundPolistComponent implements OnInit {
             this.BatchItemsDetail = [];
             this.NonItemsDetail = [];
             this.SerialItemsDetail = [];
+
+            if(data.Table.length == 0){
+              this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+              return;
+            }
+
             this.openPOLinesModel = data.Table;
           
             // var  unmatchedPOLinesModel = data.Table;

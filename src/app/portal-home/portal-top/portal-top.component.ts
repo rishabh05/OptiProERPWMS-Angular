@@ -27,7 +27,8 @@ export class PortalTopComponent implements OnInit {
   loggedinWarehouse: string;
   updatetopBarSubs: ISubscription;
   showConfirmDialog:boolean = false;
-
+  appVersion: string;
+  
   constructor(
     private modalService: NgbModal, private commonService: Commonservice, private toastr: ToastrService, private router: Router, private translate: TranslateService) {
       let userLang = navigator.language.split('-')[0];
