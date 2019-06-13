@@ -4988,7 +4988,7 @@ body .k-grid tr.k-grid-norecords td{
       border-color: rgba(33, 37, 41, 0.125); }
     .k-grid .k-alt {
       color: #292b2c;
-      background-color: rgba(41, 43, 44, 0.03); }
+      background-color: #f5f5f5; }
     .k-grid tbody tr:hover {
       color: #292b2c;
       background-color: rgba(41, 43, 44, 0.065); }
