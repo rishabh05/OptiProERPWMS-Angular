@@ -150,7 +150,7 @@ export class InboundPolistComponent implements OnInit {
           this.showNonTrackItem = false;
           this.showBatchTrackItem = false;
           this.showSerialTrackItem = false;
-          if (data.Table != undefined && data.Table != null && data.Table != "") {
+          if (data.Table != undefined && data.Table != null) {
             this.openPOLinesModel = [];
             this.BatchItemsDetail = [];
             this.NonItemsDetail = [];

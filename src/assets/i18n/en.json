@@ -1,5 +1,5 @@
 {
-  "Username": "Username*",
+ 
   "Password": "Password*",
   "SelectWarehouse": "Select Warehouse",
   "SelectCompany": "Select Company",
@@ -38,7 +38,7 @@
 
 
 
-
+  "Login_Username": "Username*",
 
   "Dashboard_AppVersion":"Version: ",
   "Dashboard_CopyWrt_Msg":"Copyright 2000-2018. All rights reserved.",
