@@ -100,7 +100,7 @@ export class PortalTopComponent implements OnInit {
       switch ($event.From) {
         case ("Logout"):
           this.commonService.RemoveLicenseAndSignout(this.toastr, this.router, 
-          this.translate.instant("LogoutSuccess"))
+          this.translate.instant("Dashboard_LogoutSuccess"))
           break;
       }
     } else {

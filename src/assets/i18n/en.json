@@ -1,24 +1,25 @@
 {
-  "Username": "Username*",
-  "Password": "Password*",
-  "SelectWarehouse": "Select Warehouse",
-  "SelectCompany": "Select Company",
-  "EnterUsername": "Enter Username",
-  "EnterPassword": "Enter Password",
-  "PsurlFailed": "PSURL Failed",
-  "Company": "Company",
-  "Warehouse": "Warehouse",
-  "UnPwdBlankErrorMsg": "username or password cannot be blank",
-  "InvalidUnPwdErrMsg": "Invalid username & password",
-  "InvalidUn": "Invalid Username",
-  "UsernotActive": "User not active",
-  "SelectCompanyMsg": "Please Select Company!",
-  "SelectwarehouseMsg": "Please Select Warehouse!",
-  "RememberMe": "Remember Me",
-  "Connect": "Connect",
-  "Login": "Login",
-  "UnBlankErrMsg": "Username is required.",
-  "PwdBlankErrMsg": "Password is required.",
+  "Login_Username": "Username*",
+  "Login_Password": "Password*",
+  "Login_SelectCompany": "Select Company",
+  "Login_EnterUsername": "Enter Username",
+  "Login_EnterPassword": "Enter Password",
+  "Login_RememberMe": "Remember Me",
+  "Login_Connect": "Connect",
+  "Login_Login": "Login",
+  "Login_UnBlankErrMsg": "Username is required.",
+  "Login_PwdBlankErrMsg": "Password is required.",
+  "Login_Company": "Company",
+  "Login_Warehouse": "Warehouse",
+  "Login_UnPwdBlankErrorMsg": "username or password cannot be blank",
+  "Login_InvalidUnPwdErrMsg": "Invalid username & password",
+  "Login_InvalidUn": "Invalid Username",
+  "Login_UsernotActive": "User not active",
+  "Login_SelectCompanyMsg": "Please Select Company!",
+  "Login_SelectwarehouseMsg": "Please Select Warehouse!",
+  "Login_Reset":"Reset",
+  "Login_licenseFailed": "license Failed",
+
   "Inbound": "Inbound",
   "Outbound": "Outbound",
   "InventoryTransfer": "Inventory Transfer",
@@ -34,16 +35,12 @@
   "BinLabel": "Bin Label",
   "ItemLabel": "Item Label",
   "InventoryEnquiry": "Inventory Enquiry",
-  "SpotCount": "Spot Count",
-
-
-
-
 
   "Dashboard_AppVersion":"Version: ",
   "Dashboard_CopyWrt_Msg":"Copyright 2000-2018. All rights reserved.",
   "Dashboard_ProductName":"WMS",
   "Dashboard_Logout_Msg":"Do you want to Logout?",
+  "Dashboard_LogoutSuccess":"You have successfully logged out",
 
   "Inbound_Expdate_Msg": "Expiry date should not past date",
   "Inbound_GoodsReceiptPO": "Goods Receipt PO",
@@ -61,7 +58,6 @@
   "ToBin": "To Bin",
   "OnHandQty": "OnHand Qty.",
   "SerialQty": "Serial Qty.",
-  "SerialNo": "Serial No.",
   "TransferQty": "Transfer Qty.",
   "Reason": "Reason",
   "ToWhse": "To Whse",
@@ -211,7 +207,7 @@
   "SysBatch": "Sys Batch",
   "MfrBatch": "Mfr Batch",
   "ScanBatch": "Scan Batch",
-  "BatchNo": "Batch No.",
+
   "MfrBatchNo": "Mfr Batch No.",
   "InvalidScanCode": "Invalid scan code!",
   "PurchaseOrderNumber": "Purchase Order Number",
@@ -232,7 +228,7 @@
   "InvoiceDate": "Invoice Date",
   "PORef#": "PO Ref.#",
   "Invoice#": "Invoice#",
-  "selectWarehouse": "Select Warehouse",
+  
   "DecimalQuantity": "Quantity cannot be decimal",
   "PostToInv": "Post To Inv",
   "PostToReject": "Post To Reject",
@@ -292,8 +288,14 @@
   "AcceptedLot":"Accepted Lot",
   "RejectedLot": "Rejected Lot",
   "BatchAlreadyExists": "Batch already exists",
-  "Reset":"Reset",
-  "LogoutSuccess":"You have successfully logged out"
+  
 
 
+
+  "SelectWarehouse": "Select Warehouse",
+  "BatchNo": "Batch No.",
+  "SerialNo": "Serial No.",
+
+
+  "":""
 }
