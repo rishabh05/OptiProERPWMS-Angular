@@ -165,12 +165,12 @@ export class BinLabelComponent implements OnInit {
   */
   checkValidation(): boolean {
     if (this.fromBin == "") {
-      this.toastr.error('', this.translate.instant("FromBinMsg"));
+      this.toastr.error('', this.translate.instant("InvTransfer_FromBinMsg"));
       this.fromBinInput.nativeElement.focus();
       return false;
     }
     if (this.toBin == "") {
-      this.toastr.error('', this.translate.instant("ToBinMsg"));
+      this.toastr.error('', this.translate.instant("InvTransfer_ToBinMsg"));
       this.toBinInput.nativeElement.focus();
       return false;
     }
