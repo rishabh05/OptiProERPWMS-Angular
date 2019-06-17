@@ -70,7 +70,7 @@ export class WhsTransferComponent implements OnInit {
    */
   listClick(event, module) { 
     if (this.toWhse == "" || this.toWhse == undefined) {
-      this.toastr.error('', this.translate.instant("ToWhsBlankErrMsg"));
+      this.toastr.error('', this.translate.instant("InvTransfer_ToWhsBlankErrMsg"));
       return;
     }
     localStorage.setItem("towhseId", this.toWhse);
@@ -122,13 +122,13 @@ export class WhsTransferComponent implements OnInit {
       }
     );
     if (this.fromWhse == this.toWhse && this.fromWhse != "" && this.toWhse != "") {
-      this.toastr.error('', this.translate.instant("FrmnToNotSame"));
+      this.toastr.error('', this.translate.instant("InvTransfer_FrmnToNotSame"));
     }
   }  
 
   viewSwitch(){
     if (this.toWhse == "" || this.toWhse == undefined) {
-      this.toastr.error('', this.translate.instant("ToWhsBlankErrMsg"));
+      this.toastr.error('', this.translate.instant("InvTransfer_ToWhsBlankErrMsg"));
       return;
     }
     localStorage.setItem("towhseId", this.toWhse);

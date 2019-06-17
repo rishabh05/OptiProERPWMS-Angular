@@ -27,7 +27,7 @@ export class PortalTopComponent implements OnInit {
   loggedinWarehouse: string;
   updatetopBarSubs: ISubscription;
   showConfirmDialog:boolean = false;
-  appVersion: string;
+  appVersion: string="";
   
   constructor(
     private modalService: NgbModal, private commonService: Commonservice, private toastr: ToastrService, private router: Router, private translate: TranslateService) {
@@ -48,7 +48,7 @@ export class PortalTopComponent implements OnInit {
       this.loggedinWarehouse = localStorage.getItem("whseId");
     });
 
-    this.appVersion = "Version: " +   this.commonservice.config_params.AppVersion;
+    // this.appVersion = "Version: " +   this.commonservice.config_params.AppVersion;
 
     // this.appVersion = this.translate.instant("Dashboard_AppVersion") +   this.commonservice.config_params.AppVersion;
   }
@@ -100,7 +100,7 @@ export class PortalTopComponent implements OnInit {
       switch ($event.From) {
         case ("Logout"):
           this.commonService.RemoveLicenseAndSignout(this.toastr, this.router, 
-          this.translate.instant("LogoutSuccess"))
+          this.translate.instant("Dashboard_LogoutSuccess"))
           break;
       }
     } else {

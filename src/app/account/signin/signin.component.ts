@@ -54,7 +54,7 @@ export class SigninComponent implements OnInit {
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
     translate.use(userLang);
     translate.onLangChange.subscribe((event: LangChangeEvent) => {
-      this.selectedItem = translate.instant("SelectCompany");
+      this.selectedItem = translate.instant("Login_SelectCompany");
       this.defaultWHS = { OPTM_WHSE: translate.instant("SelectWarehouse"), BPLid: 0 };
     });
     this.commonService.loadConfig();
@@ -65,7 +65,7 @@ export class SigninComponent implements OnInit {
 
   ngOnInit() {
     
-    this.selectedItem = this.translate.instant("SelectCompany");
+    this.selectedItem = this.translate.instant("Login_SelectCompany");
     this.defaultWHS = { OPTM_WHSE: this.translate.instant("SelectWarehouse"), BPLid: 0 }
 
     this.showFullPageLoader = false;
@@ -125,29 +125,6 @@ export class SigninComponent implements OnInit {
     this.signinService.loadConfig();
   }
 
-
-  onScanClick(){
-    
-  }
-  // getPSURL() {
-  //   alert('getPs:: getps url');
-  //  // localStorage.setItem("PSURLFORADMIN", "http://139.144.10.220/OptiAdmin/");
-  //   //alert('getps url'+localStorage.getItem("PSURLFORADMIN"));
-  //   this.signinService.getPSURL().subscribe(
-  //     data => {
-  //       alert('success data ps url:'+data);
-  //      localStorage.setItem("PSURLFORADMIN", "http://139.144.10.220/OptiAdmin/");
-  //     },
-  //     error => {
-  //       alert('failure ps url'+error);
-  //       this.toastr.error('', this.translate.instant("PsurlFailed"), 
-  //       this.commonService.toast_config.iconClasses.error);
-  //     }
-  //   );
-  //   alert(' at last getps url');
-  // }
-
-  
   /**
    * Function for login
    */
@@ -155,7 +132,7 @@ export class SigninComponent implements OnInit {
    // alert('login:: at login method top');
     // this.isCompleteLoginVisible = true;
     if (this.userName == "" || this.password == "") {
-      this.toastr.error('', this.translate.instant("UnPwdBlankErrorMsg"), this.commonService.toast_config.iconClasses.error);
+      this.toastr.error('', this.translate.instant("Login_UnPwdBlankErrorMsg"), this.commonService.toast_config.iconClasses.error);
       return true;
     }
 
@@ -191,7 +168,7 @@ export class SigninComponent implements OnInit {
       error => {
         
       //  alert("error:"+JSON.stringify(error));
-        this.toastr.error('', this.translate.instant("InvalidUnPwdErrMsg"), 
+        this.toastr.error('', this.translate.instant("Login_InvalidUnPwdErrMsg"), 
         this.commonService.toast_config.iconClasses.error);
         this.showLoader = false;
       }
@@ -207,7 +184,7 @@ export class SigninComponent implements OnInit {
      this.setCookie('CompID', "", 365);
      this.setCookie('whseId', "", 365);
      this.companyName = [];
-     this.selectedItem = this.translate.instant("SelectCompany");
+     this.selectedItem = this.translate.instant("Login_SelectCompany");
      this.defaultWHS = { OPTM_WHSE: this.translate.instant("SelectWarehouse"), BPLid: 0 };
   }
 
@@ -220,14 +197,13 @@ export class SigninComponent implements OnInit {
           this.handleLicenseDataSuccessResponse();
         }else{
           this.showLoader = false;  
-          this.toastr.error('', this.translate.instant("license Failed"));
+          this.toastr.error('', this.translate.instant("Login_licenseFailed"));
         }
       },
       error => {
-       // alert("in getLicenseData() subs result error"+error)
         this.showLoader = false;
         this.showFullPageLoader = false;
-        this.toastr.error('', this.translate.instant("license Failed"), 
+        this.toastr.error('', this.translate.instant("Login_licenseFailed"), 
         this.commonService.toast_config.iconClasses.error);
       }
     );
@@ -286,11 +262,11 @@ export class SigninComponent implements OnInit {
   private handleValidationUserSuccessResponse() {
     this.showLoader = false;
     if (this.userDetails == null || this.userDetails.length < 1) {
-      this.toastr.error('', this.translate.instant("InvalidUn"), this.commonService.toast_config.iconClasses.error);
+      this.toastr.error('', this.translate.instant("Login_InvalidUn"), this.commonService.toast_config.iconClasses.error);
       return true;
     }
     if (this.userDetails[0].OPTM_ACTIVE == 0) {
-      this.toastr.error('', this.translate.instant("UsernotActive"), this.commonService.toast_config.iconClasses.error);
+      this.toastr.error('', this.translate.instant("Login_UsernotActive"), this.commonService.toast_config.iconClasses.error);
       return true;
     }
     localStorage.setItem("UserId", this.userName);
@@ -331,15 +307,15 @@ export class SigninComponent implements OnInit {
 
 
   private validateFields(): boolean {
-    if (this.selectedItem == this.translate.instant("SelectCompany") || this.selectedItem == '') {
+    if (this.selectedItem == this.translate.instant("Login_SelectCompany") || this.selectedItem == '') {
       this.showLoader = false;
-      this.toastr.error('', this.translate.instant("SelectCompanyMsg"), this.commonService.toast_config.iconClasses.error);
+      this.toastr.error('', this.translate.instant("Login_SelectCompanyMsg"), this.commonService.toast_config.iconClasses.error);
       return true;
     }
     if (document.getElementById("whseId").innerText.trim() == this.translate.instant("SelectWarehouse")||
       document.getElementById("whseId").innerText.trim() == "") {
       this.showLoader = false;
-      this.toastr.error('', this.translate.instant("SelectCompanyMsg"), this.commonService.toast_config.iconClasses.error);
+      this.toastr.error('', this.translate.instant("Login_SelectCompanyMsg"), this.commonService.toast_config.iconClasses.error);
       return true;
     }
     return false;

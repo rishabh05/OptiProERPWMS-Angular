@@ -1,24 +1,25 @@
 {
- 
-  "Password": "Password*",
-  "SelectWarehouse": "Select Warehouse",
-  "SelectCompany": "Select Company",
-  "EnterUsername": "Enter Username",
-  "EnterPassword": "Enter Password",
-  "PsurlFailed": "PSURL Failed",
-  "Company": "Company",
-  "Warehouse": "Warehouse",
-  "UnPwdBlankErrorMsg": "username or password cannot be blank",
-  "InvalidUnPwdErrMsg": "Invalid username & password",
-  "InvalidUn": "Invalid Username",
-  "UsernotActive": "User not active",
-  "SelectCompanyMsg": "Please Select Company!",
-  "SelectwarehouseMsg": "Please Select Warehouse!",
-  "RememberMe": "Remember Me",
-  "Connect": "Connect",
-  "Login": "Login",
-  "UnBlankErrMsg": "Username is required.",
-  "PwdBlankErrMsg": "Password is required.",
+  "Login_Username": "Username*",
+  "Login_Password": "Password*",
+  "Login_SelectCompany": "Select Company",
+  "Login_EnterUsername": "Enter Username",
+  "Login_EnterPassword": "Enter Password",
+  "Login_RememberMe": "Remember Me",
+  "Login_Connect": "Connect",
+  "Login_Login": "Login",
+  "Login_UnBlankErrMsg": "Username is required.",
+  "Login_PwdBlankErrMsg": "Password is required.",
+  "Login_Company": "Company",
+  "Login_Warehouse": "Warehouse",
+  "Login_UnPwdBlankErrorMsg": "username or password cannot be blank",
+  "Login_InvalidUnPwdErrMsg": "Invalid username & password",
+  "Login_InvalidUn": "Invalid Username",
+  "Login_UsernotActive": "User not active",
+  "Login_SelectCompanyMsg": "Please Select Company!",
+  "Login_SelectwarehouseMsg": "Please Select Warehouse!",
+  "Login_Reset":"Reset",
+  "Login_licenseFailed": "license Failed",
+
   "Inbound": "Inbound",
   "Outbound": "Outbound",
   "InventoryTransfer": "Inventory Transfer",
@@ -34,16 +35,12 @@
   "BinLabel": "Bin Label",
   "ItemLabel": "Item Label",
   "InventoryEnquiry": "Inventory Enquiry",
-  "SpotCount": "Spot Count",
-
-
-
-  "Login_Username": "Username*",
 
   "Dashboard_AppVersion":"Version: ",
   "Dashboard_CopyWrt_Msg":"Copyright 2000-2018. All rights reserved.",
   "Dashboard_ProductName":"WMS",
   "Dashboard_Logout_Msg":"Do you want to Logout?",
+  "Dashboard_LogoutSuccess":"You have successfully logged out",
 
   "Inbound_Expdate_Msg": "Expiry date should not past date",
   "Inbound_GoodsReceiptPO": "Goods Receipt PO",
@@ -58,45 +55,34 @@
   "LookupTitle_BinNoList": "Bin No. List",
   "LookupTitle_OrderList": "Order List",
 
+  "InvTransfer_FromBin": "From Bin",
+  "InvTransfer_ToBin": "To Bin",
+  "InvTransfer_OnHandQty": "OnHand Qty.",
+  "InvTransfer_TransferQty": "Transfer Qty.",
+  "InvTransfer_Reason": "Reason",
+  "InvTransfer_ToWhse": "To Whse",
+  "InvTransfer_FromWhse": "From Whse",
+  "InvTransfer_ViewLines": "View Lines",
+  "InvTransfer_InvalidSerial": "Serial Number not valid.",
+  "InvTransfer_ToBinMsg": "To bin cannot be blank",
+  "InvTransfer_FrmnToNotSame": "From and To Warehouse can not be Same",
+  "InvTransfer_ToWhsBlankErrMsg": "To Whse cannot be blank",
+  "InvTransfer_FromBinMsg": "From bin cannot be blank",
+  "InvTransfer_ItemsTranSuccessfully": "Items Transferred Successfully with reference no.",
 
-
-
-
-
-
-
-  "FromBin": "From Bin",
-  "ToBin": "To Bin",
-  "OnHandQty": "OnHand Qty.",
+  "WhsTransferEdit.overwrite": "Do you want to overwrite the quantity?",
+  "EnterLotQuantity": "Enter Batch Quantity",
+  "Enterquantitygreaterthanzero": "Enter quantity greater than zero",
   "SerialQty": "Serial Qty.",
-  "SerialNo": "Serial No.",
-  "TransferQty": "Transfer Qty.",
-  "Reason": "Reason",
-  "ToWhse": "To Whse",
-  "FromWhse": "From Whse",
-  "Submit": "Submit",
-  "AddMore": "Add More",
-  "ViewLines": "View Lines",
   "WhseCode": "Whse Code",
   "WhseName": "Whse Name",
-  "InvalidWhsErrorMsg": "Invalid Warehouse",
-  "FrmnToNotSame": "From and To Warehouse can not be Same",
-  "ToWhsBlankErrMsg": "To Whse cannot be blank!",
   "WarehouseList": "Warehouse List",
-  "ItemCodeList": "Item Code List",
   "InvalidItemCode": "Invalid Item Code",
   "InvalidBatch": "Batch Number not valid.",
-  "InvalidSerial": "Serial Number not valid.",
-  "SerialAlreadyExist": "Serial already exist",
   "ItemCannotbeBlank": "Item cannot be blank",
   "Lotcannotbeblank": "Batch cannot be blank",
   "SerialNoCantBlank": "Serial No Can not be Blank",
-  "Enterquantitygreaterthanzero": "Enter quantity greater than zero",
-  "FromBinMsg": "From bin cannot be blank",
-  "ToBinMsg": "To bin cannot be blank",
-  "EnterLotQuantity": "Enter Batch Quantity",
-  "WhsTransferEdit.overwrite": "Do you want to overwrite the quantity?",
-  "ItemsTranSuccessfully": "Items Transferred Successfully with reference no.",
+  
   "LotNo": "Lot No.",
   "TOTALQTY": "Total Qty.",
   "BinNo": "Bin No.",
@@ -219,7 +205,7 @@
   "SysBatch": "Sys Batch",
   "MfrBatch": "Mfr Batch",
   "ScanBatch": "Scan Batch",
-  "BatchNo": "Batch No.",
+
   "MfrBatchNo": "Mfr Batch No.",
   "InvalidScanCode": "Invalid scan code!",
   "PurchaseOrderNumber": "Purchase Order Number",
@@ -240,7 +226,7 @@
   "InvoiceDate": "Invoice Date",
   "PORef#": "PO Ref.#",
   "Invoice#": "Invoice#",
-  "selectWarehouse": "Select Warehouse",
+  
   "DecimalQuantity": "Quantity cannot be decimal",
   "PostToInv": "Post To Inv",
   "PostToReject": "Post To Reject",
@@ -299,8 +285,18 @@
   "DeleteAllLines": "Do you want to delete all Lines?",
 
   "BatchAlreadyExists": "Batch already exists",
-  "Reset":"Reset",
-  "LogoutSuccess":"You have successfully logged out"
+  
 
 
+
+  "SelectWarehouse": "Select Warehouse",
+  "BatchNo": "Batch No.",
+  "SerialNo": "Serial No.",
+  "Submit": "Submit",
+  "AddMore": "Add More",
+  "InvalidWhsErrorMsg": "Invalid Warehouse",
+  "ItemCodeList": "Item Code List",
+  "SerialAlreadyExist": "Serial already exist",
+
+  "":""
 }
