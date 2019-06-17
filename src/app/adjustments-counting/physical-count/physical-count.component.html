@@ -242,7 +242,7 @@
     <kendo-dialog-titlebar>
         Reported Quantities
     </kendo-dialog-titlebar>
-    <p>{{ItemCode}}</p>
+    <p>{{ItemCodeTemp}}</p>
     <kendo-grid [resizable]="true" [pageSize]="pageSize" [pageable]="pagable" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
         [height]=gridHeight [selectable]="true" [data]="BatchSerialArray" style="max-height:370px" class="no-shadow" #gridItem>
 
@@ -271,7 +271,7 @@
         </kendo-grid-column>
         <!-- grid for mobile end -->
 
-        <kendo-grid-column *ngIf="ItemTracking != 'N'" media="(min-width: 768px)" field="LotNo" title="{{'BatchSerial'|translate}}" width="130">
+        <kendo-grid-column *ngIf="trackingtemp != 'N'" media="(min-width: 768px)" field="LotNo" title="{{'BatchSerial'|translate}}" width="130">
         </kendo-grid-column>
         <kendo-grid-column media="(min-width: 768px)" field="BinNo" title="{{'BinNo'|translate}}" width="230">
         </kendo-grid-column>

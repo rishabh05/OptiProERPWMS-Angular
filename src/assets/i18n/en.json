@@ -52,9 +52,17 @@
   "ProdReceipt_TransType": "Trans. Type",
   "ProdReceipt_RejectQty": "Rejected Qty.",
   "ProdReceipt_DefectQty": "Defect Qty.",
+  "ProdReceipt_AcceptedLot":"Accepted Quantity",
+  "ProdReceipt_RejectedLot": "Rejected Quantity",
 
   "LookupTitle_BinNoList": "Bin No. List",
   "LookupTitle_OrderList": "Order List",
+
+
+
+
+
+
 
 
   "FromBin": "From Bin",
@@ -289,8 +297,7 @@
   "FGRSuccessMessage": " Production Receipt generated successfully with Document No:", 
   "SelectedQtyGrater":"Selected qty greater than required qty",
   "DeleteAllLines": "Do you want to delete all Lines?",
-  "AcceptedLot":"Accepted Lot",
-  "RejectedLot": "Rejected Lot",
+
   "BatchAlreadyExists": "Batch already exists",
   "Reset":"Reset",
   "LogoutSuccess":"You have successfully logged out"
