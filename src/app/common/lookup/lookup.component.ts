@@ -98,7 +98,7 @@ export class LookupComponent implements OnInit {
 
     if (this.lookupfor == "toWhsList") {
       this.showToWhsList();
-    } else if (this.lookupfor == "ItemCodeList") {
+    } else if (this.lookupfor == "ItemsList") {
       this.showItemCodeList();
     } else if (this.lookupfor == "BatchNoList") {
       this.showBatchNoList();
@@ -345,7 +345,7 @@ export class LookupComponent implements OnInit {
         width: '100'
       }
     ];
-    this.lookupTitle = this.translate.instant("BinLookupTitle");
+    this.lookupTitle = this.translate.instant("LookupTitle_BinNoList");
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
         this.dialogOpened = true;
@@ -384,13 +384,13 @@ export class LookupComponent implements OnInit {
     this.table_head = [
       {
         field: 'CARDCODE',
-        title: this.translate.instant("VendCode"),
+        title: this.translate.instant("VendorCode"),
         type: 'text',
         width: '100'
       },
       {
         field: 'CARDNAME',
-        title: this.translate.instant("Name"),
+        title: this.translate.instant("VendorName"),
         type: 'text',
         width: '100'
       }
@@ -418,7 +418,7 @@ export class LookupComponent implements OnInit {
         width: '100'
       },
     ];
-    this.lookupTitle = this.translate.instant("ItemCodeList");
+    this.lookupTitle = this.translate.instant("ItemsList");
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
         this.dialogOpened = true;
@@ -442,13 +442,13 @@ export class LookupComponent implements OnInit {
       },
       {
         field: 'CardCode',
-        title: this.translate.instant("VenderCode"),
+        title: this.translate.instant("VendorCode"),
         type: 'text',
         width: '100'
       },
       {
         field: 'CardName',
-        title: this.translate.instant("Name"),
+        title: this.translate.instant("VendorName"),
         type: 'text',
         width: '100'
       }
@@ -479,13 +479,13 @@ export class LookupComponent implements OnInit {
       },
       {
         field: 'Bin',
-        title: this.translate.instant("Bin"),
+        title: this.translate.instant("BinNo"),
         type: 'text',
         width: '180'
       },
       {
         field: 'InWhsQty',
-        title: this.translate.instant("InWhsQty"),
+        title: this.translate.instant("OnHandQty"),
         headerClass: 'text-right',
         class: 'text-right',
         type: 'numeric',
@@ -499,12 +499,12 @@ export class LookupComponent implements OnInit {
       },
       {
         field: 'IsTeamCount',
-        title: this.translate.instant("IsTeamCount"),
+        title: this.translate.instant("TeamCount"),
         type: 'text',
         width: '70'
       }
     ];
-    this.lookupTitle = this.translate.instant("ItemCodeList");
+    this.lookupTitle = this.translate.instant("ItemsList");
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
         this.dialogOpened = true;
@@ -516,7 +516,7 @@ export class LookupComponent implements OnInit {
     this.table_head = [
       {
         field: 'LOTNO',
-        title: this.translate.instant("LotNo"),
+        title: this.translate.instant("BatchSerial_No"),
         type: 'text'
       },
       {
@@ -533,7 +533,7 @@ export class LookupComponent implements OnInit {
       },
       {
         field: 'BINNO',
-        title: this.translate.instant("BinCode"),
+        title: this.translate.instant("BinNo"),
         type: 'text'
       }
     ];
@@ -554,11 +554,11 @@ export class LookupComponent implements OnInit {
       },
       {
         field: 'BinCode',
-        title: this.translate.instant("BinCode"),
+        title: this.translate.instant("BinNo"),
         type: 'text'
       }
     ];
-    this.lookupTitle = this.translate.instant("ItemCodeList");
+    this.lookupTitle = this.translate.instant("ItemsList");
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
         this.dialogOpened = true;
@@ -690,7 +690,7 @@ export class LookupComponent implements OnInit {
         width: '100'
       },
     ];
-    this.lookupTitle = this.translate.instant("ItemCodeList");
+    this.lookupTitle = this.translate.instant("ItemsList");
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
         this.dialogOpened = true;

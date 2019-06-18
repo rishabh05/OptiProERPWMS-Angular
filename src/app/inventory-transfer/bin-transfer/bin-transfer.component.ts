@@ -97,7 +97,7 @@ export class BinTransferComponent implements OnInit {
     if (localStorage.getItem("towhseId") == localStorage.getItem("whseId")) {
       this.PageTitle = this.translate.instant("BinTransfer");
     } else {
-      this.PageTitle = this.translate.instant("WarehouseTransfer") + this.translate.instant("From") + localStorage.getItem("whseId") + this.translate.instant("To") + localStorage.getItem("towhseId");
+      this.PageTitle = this.translate.instant("WarehouseTransfer") + this.translate.instant("InvTransfer_From") + localStorage.getItem("whseId") + this.translate.instant("InvTransfer_To") + localStorage.getItem("towhseId");
     }
     this.formatTransferNumbers();
     this.formatOnHandQty();
@@ -159,7 +159,7 @@ export class BinTransferComponent implements OnInit {
           }
           this.showLookupLoader = false;
           this.serviceData = data;
-          this.lookupfor = "ItemCodeList";
+          this.lookupfor = "ItemsList";
         } else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         }
@@ -478,7 +478,7 @@ export class BinTransferComponent implements OnInit {
         this.toastr.error('', this.translate.instant("SerialAlreadyExist"));
         return false;
       } else {
-        this.showOverrideConfirmDailog();
+        this.showOverwriteConfirmDailog();
       }
     }
 
@@ -574,9 +574,9 @@ export class BinTransferComponent implements OnInit {
     );
   }
 
-  showOverrideConfirmDailog(){
-    this.showDialog("overrideQty", this.translate.instant("yes"), this.translate.instant("no"),
-    this.translate.instant("WhsTransferEdit.overwrite"));
+  showOverwriteConfirmDailog(){
+    this.showDialog("overwriteQty", this.translate.instant("yes"), this.translate.instant("no"),
+    this.translate.instant("InvTransfer_Overwrite"));
   }
 
   clearData() {
@@ -630,7 +630,7 @@ export class BinTransferComponent implements OnInit {
     else {
       if (Number(this.transferQty) <= 0) {
         if (this.showValidation) {
-          this.toastr.error('', this.translate.instant("Enterquantitygreaterthanzero"));
+          this.toastr.error('', this.translate.instant("InvTransfer_Enterquantitygreaterthanzero"));
         }
         return false;
       }
@@ -656,12 +656,12 @@ export class BinTransferComponent implements OnInit {
 
 
   getLookupValue($event) {
-    if (this.lookupfor == "ItemCodeList") {
+    if (this.lookupfor == "ItemsList") {
       this.itemCode = $event[0];
       this.itemName = $event[1];
       this.ItemTracking = $event[2];
       this.showItemName = true;
-      this.transferQty = this.translate.instant("zero");
+      this.transferQty = this.translate.instant("InvTransfer_zero");
       this.onHandQty = 0.000;
       if (localStorage.getItem("whseId") != localStorage.getItem("towhseId")) {
         this.getDefaultBin();
@@ -773,7 +773,7 @@ export class BinTransferComponent implements OnInit {
         case ("deleteAll"):
           this.deleteAllOkClick();
           break;
-        case ("overrideQty"):
+        case ("overwriteQty"):
           this.TransferedItemsDetail[this.itemIndex].Qty = this.transferQty;
           if(this.operationType == "submit"){
             this.SubmitFinally();
@@ -790,7 +790,7 @@ export class BinTransferComponent implements OnInit {
             break;
           case ("deleteAll"):
             break;
-          case ("overrideQty"):
+          case ("overwriteQty"):
             break;
         }
       }

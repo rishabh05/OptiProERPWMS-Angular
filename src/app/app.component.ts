@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Commonservice } from './services/commonservice.service';
+import { Router, NavigationEnd } from '@angular/router';
 // import { TranslateService, LangChangeEvent } from '../../node_modules/@ngx-translate/core';
 
 @Component({
@@ -9,10 +10,21 @@ import { Commonservice } from './services/commonservice.service';
 })
 export class AppComponent {
 
-  constructor(private CommonService: Commonservice) { 
+  constructor(private router: Router) { 
     // let userLang = navigator.language.split('-')[0];
     // userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
     // translate.use(userLang);
+
+    this.router.routeReuseStrategy.shouldReuseRoute = function(){
+      return false;
+  };
+  
+  this.router.events.subscribe((evt) => {
+      if (evt instanceof NavigationEnd) {
+          this.router.navigated = false;
+          window.scrollTo(0, 0);
+      }
+  });
   }
   title = 'app';
 
