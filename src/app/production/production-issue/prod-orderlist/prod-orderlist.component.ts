@@ -9,7 +9,7 @@ import { ProductionIssueComponent } from 'src/app/production/production-issue/pr
 import { OutboundData } from 'src/app/models/outbound/outbound-data';
 import { CommonConstants } from 'src/app/const/common-constants';
 import { Lot, Item, ProductionIssueModel } from 'src/app/models/Production/IFP';
-import { constants } from 'os';
+
 
 @Component({
   selector: 'app-prod-orderlist',

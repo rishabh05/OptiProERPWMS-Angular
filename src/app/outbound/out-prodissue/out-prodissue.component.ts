@@ -451,7 +451,7 @@ export class OutProdissueComponent implements OnInit {
     if (lookupValue) { 
            
       if(this.OrderType=='S'){
-        let data:[]=[];
+        let data:any[]=[];
         let tempLookup:[]=lookupValue;
         for (let index = 0; index < this._remainingMeterial; index++) {
           if(index<tempLookup.length){
