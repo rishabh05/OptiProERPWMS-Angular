@@ -251,8 +251,14 @@ export class LookupComponent implements OnInit {
   }
 
   showAvaliableItems() {
-    this.pagable = true;
-    this.pagesize = 100;
+    this.pagesize = 10;
+    if(this.serviceData.length>this.pagesize){
+      this.pagable = true;
+    }else{
+      this.pagable = false;
+    }
+    
+    
     this.showSelection = true;
     this.selectedValues = [];
     this.table_head = [

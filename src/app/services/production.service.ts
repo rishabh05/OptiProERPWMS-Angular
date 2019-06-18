@@ -76,4 +76,12 @@ export class ProductionService {
     var jObject = { BATCHNO: JSON.stringify([{ COMPANYDBNAME: localStorage.getItem("CompID"), ORDERNO: orderNo, WHSCODE:localStorage.getItem("whseId")}]) };
     return this.httpclient.post(this.config_params.service_url + "/api/ProductionIssue/GetBOMItemForProductionIssue", jObject, this.httpOptions);
   }
+
+
+  
+  public submitProduction(req: any) {
+    var body: any = { ProductionIssueModel: JSON.stringify(req) };
+    return this.httpclient.post(this.config_params.service_url + "/api/ProductionIssue/SubmitProductionIssue", body, this.httpOptions);
+  }
+
 }

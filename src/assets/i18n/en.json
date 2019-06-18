@@ -275,7 +275,9 @@
   "RejectedLot": "Rejected Lot",
   "BatchAlreadyExists": "Batch already exists",
   "Reset":"Reset",
-  "LogoutSuccess":"You have successfully logged out"
-
-
+  "LogoutSuccess":"You have successfully logged out",
+  "Issue":"Issue",
+  "IssueForPO": "Issue for PO#",
+  "OValidation": "Enter Order Number",
+  "CommonNoDataAvailableToIssueMsg": "No Data Available to Issue!."
 }

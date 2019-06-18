@@ -10,6 +10,9 @@ import { forEach } from '@angular/router/src/utils/collection';
 import { anyChanged } from '@progress/kendo-angular-grid/dist/es2015/utils';
 import { Commonservice } from 'src/app/services/commonservice.service';
 
+import { Lot, ProductionIssueModel, Item } from 'src/app/models/Production/IFP';
+import { ProductionService } from 'src/app/services/production.service';
+
 
 
 @Component({
@@ -34,7 +37,7 @@ export class OutProdissueComponent implements OnInit {
   public selectedMeterials: any = Array<MeterialModel>();
   public comingSelectedMeterials: any = Array<MeterialModel>();
   public indivisualPickQty: number = 0.000;
-  @Output() cancelevent = new EventEmitter();
+  @Output() screenBackEvent = new EventEmitter();
   public _requiredMeterialQty: number = 0;
   public _remainingMeterial: number = 0;
   public _pickedMeterialQty: number = 0;
@@ -53,18 +56,21 @@ export class OutProdissueComponent implements OnInit {
   PickQtylbl: string;
   OpenQtylbl: string;
   public pagable: boolean = false;
-  public pageSize:number = Commonservice.pageSize;
-  constructor(private ourboundService: OutboundService, private router: Router, private toastr: ToastrService, private translate: TranslateService) { }
+  public pageSize: number = Commonservice.pageSize;
+  public pageTitle: any = "";
+  constructor(private ourboundService: OutboundService, private router: Router, private toastr: ToastrService, private translate: TranslateService, private commonservice: Commonservice, private productionService: ProductionService) { }
   fromProduction = true;
+  public currentOrderNo: string;
 
   ngOnInit() {
+
     //lsOutbound
     let outboundData = localStorage.getItem(CommonConstants.OutboundData);
     if (outboundData != undefined && outboundData != '') {
       this.outbound = JSON.parse(outboundData);
       this.selected = this.outbound.SelectedItem;
       this.OrderType = this.selected.TRACKING;
-
+      this.currentOrderNo = this.outbound.OrderData["Order No"]
       if (this.OrderType != 'N') {
         if (this.OrderType === 'S') {
           this.SerialBatchHeaderTitle = "Serial";
@@ -75,14 +81,19 @@ export class OutProdissueComponent implements OnInit {
         this.manageOldCollection();
       }
 
-      if(localStorage.getItem("ComingFrom") == "ProductionIssue"){
+      if (localStorage.getItem("ComingFrom") == "ProductionIssue") {
+
         this.fromProduction = true;
+
         this.OpenQtylbl = this.translate.instant("BalanceQty");
         this.PickQtylbl = this.translate.instant("IssuedQty");
-      }else{
+        this.pageTitle = this.translate.instant("IssueForPO");
+      } else {
         this.fromProduction = false;
         this.PickQtylbl = this.translate.instant("PickQty");
         this.OpenQtylbl = this.translate.instant("OpenQty");
+        this.pageTitle = this.translate.instant("DeleiveryForSO");
+
         this.ourboundService.getUOMList(this.selected.ITEMCODE).subscribe(
           data => {
             this.uomList = data;
@@ -120,7 +131,7 @@ export class OutProdissueComponent implements OnInit {
 
       itemMeterials = this.outbound.TempMeterials.filter(
         (m: any) => m.Item.ITEMCODE
-          === this.outbound.SelectedItem.ITEMCODE &&  m.Item.ROWNUM
+          === this.outbound.SelectedItem.ITEMCODE && m.Item.ROWNUM
           === this.outbound.SelectedItem.ROWNUM && this.outbound.OrderData.DOCNUM === m.Item.DOCNUM);
     }
     if (itemMeterials !== undefined && itemMeterials !== null
@@ -130,12 +141,12 @@ export class OutProdissueComponent implements OnInit {
         this.selectedMeterials.push(element.Meterial)
       });;
       //applying paging..
-      this.pagable = this.selectedMeterials.length>this.pageSize;    
+      this.pagable = this.selectedMeterials.length > this.pageSize;
       this.manageMeterial();
       this.calculateTotalAndRemainingQty();
 
     }
-   
+
   }
 
   onScanInputChange() {
@@ -171,7 +182,16 @@ export class OutProdissueComponent implements OnInit {
       return;
     }
     let this1 = this;
-    this.ourboundService.checkAndScanCode(this.outbound.CustomerData.CustomerCode, this.ScanInputs).subscribe(
+    var code ="";
+    if(this.outbound.CustomerData!= null && 
+      this.outbound.CustomerData!=undefined &&
+      this.outbound.CustomerData!="null" ){
+        code = this.outbound.CustomerData.CustomerCode;
+      }else{
+        code = ""
+      }
+
+    this.ourboundService.checkAndScanCode(code, this.ScanInputs).subscribe(
       (data: any) => {
         //  alert("check and scan code api call response data:"+JSON.stringify(data));
         let openQty: number;
@@ -251,13 +271,15 @@ export class OutProdissueComponent implements OnInit {
                     TOTALQTY: totalQty, LOTNO: lotNo, PickQty: PickQty
                   }];
                   let el: any = document.getElementById('gridSelectedMeterial');
-                  this.getLookupValue(lookupArray, el, true,false);
+                  this.getLookupValue(lookupArray, el, true, false);
+                }else{
+                  this.toastr.error('', this.translate.instant("CommonNoDataAvailableToIssueMsg"));
                 }
                 this.ScanInputs = "";
               },
               error => {
                 console.log("Error when checking availability: ", error);
-              }); 
+              });
         }
       },
       error => {
@@ -314,7 +336,7 @@ export class OutProdissueComponent implements OnInit {
 
         this.selectedMeterials.push(meterial);
         //apply paging..
-        this.pagable = this.selectedMeterials.length>this.pageSize;    
+        this.pagable = this.selectedMeterials.length > this.pageSize;
       }
 
       this.totalPickQty = this.totalPickQty + this.selectedMeterials.map(i => i.MeterialPickQty).reduce((sum, c) => sum + c);
@@ -326,7 +348,7 @@ export class OutProdissueComponent implements OnInit {
   }
 
   QtyFilled() {
-    if (this.selectedMeterials !=undefined && this.selectedMeterials != null && this.selectedMeterials.length > 0) {
+    if (this.selectedMeterials != undefined && this.selectedMeterials != null && this.selectedMeterials.length > 0) {
       this.totalPickQty = this.totalPickQty + this.selectedMeterials.map(i => i.MeterialPickQty).reduce((sum, c) => sum + c);
     }
     else {
@@ -374,8 +396,8 @@ export class OutProdissueComponent implements OnInit {
       txt.value = oldValue;
       this.selectedMeterials[idx].MeterialPickQty = oldValue;
       //apply paging..
-      this.pagable = this.selectedMeterials.length>this.pageSize;    
-      
+      this.pagable = this.selectedMeterials.length > this.pageSize;
+
       this.calculateTotalAndRemainingQty();
       return;
     }
@@ -425,20 +447,43 @@ export class OutProdissueComponent implements OnInit {
     )
   }
 
-  getLookupValue(lookupValue: any, gridSelectedMeterial: any, updateGrid: boolean = true,scan:boolean=false) {
+  getLookupValue(lookupValue: any, gridSelectedMeterial: any, updateGrid: boolean = true, scan: boolean = false) {
+    if (lookupValue) { 
+           
+      if(this.OrderType=='S'){
+        let data:[]=[];
+        let tempLookup:[]=lookupValue;
+        for (let index = 0; index < this._remainingMeterial; index++) {
+          if(index<tempLookup.length){
+          data.push(tempLookup[index]);          
+          }
+        }
+        this.comingSelectedMeterials = data;
+      }
+      else{
+        this.comingSelectedMeterials = lookupValue;
+      }
 
-    this.comingSelectedMeterials = lookupValue;
-    this.manageMeterial(scan);
-    console.log("SelectedMeterial", this.selectedMeterials);
-    if (updateGrid == true)
-      gridSelectedMeterial.data = this.selectedMeterials;
-    //lsOutbound
-    this.outbound = JSON.parse(localStorage.getItem(CommonConstants.OutboundData));
-    this.outbound.SelectedMeterials = lookupValue;
-    localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound)); 
+      
+
+      this.manageMeterial(scan);
+      console.log("SelectedMeterial", this.selectedMeterials);
+      if (updateGrid == true)
+        gridSelectedMeterial.data = this.selectedMeterials;
+      //lsOutbound
+      this.outbound = JSON.parse(localStorage.getItem(CommonConstants.OutboundData));
+      this.outbound.SelectedMeterials = lookupValue;
+      localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+
+    }
+    else {
+      this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+      this.showLookupLoader = false;
+      this.showLookup = false;
+    }
   }
 
- 
+
 
   valueChange(e: any) {
     this.selectedUOM = e;
@@ -450,7 +495,7 @@ export class OutProdissueComponent implements OnInit {
     grd.data = this.selectedMeterials;
     this.calculateTotalAndRemainingQty();
     //setting paging..
-    this.pagable = this.selectedMeterials.length>this.pageSize;    
+    this.pagable = this.selectedMeterials.length > this.pageSize;
   }
 
   removeMeterial(idx: any, grd: any) {
@@ -485,34 +530,34 @@ export class OutProdissueComponent implements OnInit {
 
     if (pickedMeterialQty < requiredMeterialQty) {
       // if scan
-      if (scan) { 
+      if (scan) {
         let meterial = this.comingSelectedMeterials[0];
 
-        if(meterial.PickQty>requiredMeterialQty){
-            if(meterial.totalPickQty>remailingMeterialQty){
-              meterial.MeterialPickQty= remailingMeterialQty
-            }
-            else{
-              meterial.MeterialPickQty= meterial.totalPickQty
-            }          
-        }
-        else{
-
-          if(meterial.totalPickQty>remailingMeterialQty){
-            meterial.MeterialPickQty= remailingMeterialQty
+        if (meterial.PickQty > requiredMeterialQty) {
+          if (meterial.totalPickQty > remailingMeterialQty) {
+            meterial.MeterialPickQty = remailingMeterialQty
           }
-          else{
-            meterial.MeterialPickQty= meterial.totalPickQty
-          }  
-          meterial.MeterialPickQty= meterial.TOTALQTY-meterial.PickQty
+          else {
+            meterial.MeterialPickQty = meterial.totalPickQty
+          }
+        }
+        else {
+
+          if (meterial.totalPickQty > remailingMeterialQty) {
+            meterial.MeterialPickQty = remailingMeterialQty
+          }
+          else {
+            meterial.MeterialPickQty = meterial.totalPickQty
+          }
+          meterial.MeterialPickQty = meterial.TOTALQTY - meterial.PickQty
         }
 
-        
+
         this.selectedMeterials.push(meterial);
         //apply paging..
-        this.pagable = this.selectedMeterials.length>this.pageSize;    
+        this.pagable = this.selectedMeterials.length > this.pageSize;
 
-       
+
         pickedMeterialQty = pickedMeterialQty + meterial.MeterialPickQty;
         remailingMeterialQty = requiredMeterialQty - pickedMeterialQty;
       }
@@ -541,14 +586,14 @@ export class OutProdissueComponent implements OnInit {
 
           this.selectedMeterials.push(meterial);
           //apply paging..
-          this.pagable = this.selectedMeterials.length>this.pageSize;    
-         
+          this.pagable = this.selectedMeterials.length > this.pageSize;
+
           pickedMeterialQty = pickedMeterialQty + meterial.MeterialPickQty;
           remailingMeterialQty = requiredMeterialQty - pickedMeterialQty;
         }
       }
       // Selected meterial
-      if (this.selectedMeterials  && this.selectedMeterials.length > 0) {
+      if (this.selectedMeterials && this.selectedMeterials.length > 0) {
         this._pickedMeterialQty = this.selectedMeterials.map(i => i.MeterialPickQty).reduce((sum, c) => sum + c);
         this._remainingMeterial = this._requiredMeterialQty - this._pickedMeterialQty;
       }
@@ -560,12 +605,19 @@ export class OutProdissueComponent implements OnInit {
     }
 
     this.oldSelectedMeterials = JSON.parse(JSON.stringify(this.selectedMeterials));
-    this.pagable = this.selectedMeterials.length>this.pageSize;    
-   
+    this.pagable = this.selectedMeterials.length > this.pageSize;
+
   }
 
-  addMetToCollection() {
+  // Save click
+  addMetToCollection(fromIFPSave: boolean = false) {
     //lsOutbound
+
+
+
+
+
+
     let outboundData = localStorage.getItem(CommonConstants.OutboundData);
 
     if (outboundData != undefined && outboundData != '') {
@@ -575,10 +627,14 @@ export class OutProdissueComponent implements OnInit {
       if (this.outbound.TempMeterials !== undefined
         && this.outbound.TempMeterials !== null && this.outbound.TempMeterials.length > 0) {
 
-
-        this.outbound.TempMeterials = this.outbound.TempMeterials.filter((t: any) =>
-        t.Item.ROWNUM !== this.outbound.SelectedItem.ROWNUM && t.Item.ITEMCODE !== this.outbound.SelectedItem.ITEMCODE || t.Item.DOCNUM !== this.outbound.OrderData.DOCNUM);
-
+        if (this.fromProduction) { 
+          this.outbound.TempMeterials = this.outbound.TempMeterials.filter((t: any) =>
+            t.Item.RefLineNo !== this.outbound.SelectedItem.RefLineNo && t.Item.ITEMCODE !== this.outbound.SelectedItem.ITEMCODE|| t.Order["Order No"] !== this.outbound.OrderData["Order No"] );
+        }
+        else {
+          this.outbound.TempMeterials = this.outbound.TempMeterials.filter((t: any) =>
+            t.Item.ROWNUM !== this.outbound.SelectedItem.ROWNUM && t.Item.ITEMCODE !== this.outbound.SelectedItem.ITEMCODE || t.Item.DOCNUM !== this.outbound.OrderData.DOCNUM);
+        }
         // loop selected Items
         for (let index = 0; index < this.selectedMeterials.length; index++) {
           const m = this.selectedMeterials[index];
@@ -588,10 +644,6 @@ export class OutProdissueComponent implements OnInit {
           }
         }
 
-        // this.selectedMeterials.forEach(m => {
-
-        // }
-        // );
       }
       else {
 
@@ -606,25 +658,29 @@ export class OutProdissueComponent implements OnInit {
           }
         }
 
-        // this.selectedMeterials.forEach(element => {
-        //   let item = { Order: this.outbound.OrderData, Item: this.outbound.SelectedItem, Meterial: element }
-        //   this.outbound.TempMeterials.push(item)
-        // });
-
-
       }
-
 
     }
     // //lsOutbound
     localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
-    this.back();
+
+    if (this.fromProduction==true && fromIFPSave == true) {
+      this.back(2);
+    }
+    else if(this.fromProduction==false) {
+      this.back(-1);
+    }
+
   }
 
-  back() {
-    if(localStorage.getItem("ComingFrom") == "ProductionIssue"){
-      this.cancelevent.emit(true);
-    }else{
+  back(fromwhereval: number) {
+
+
+    if (localStorage.getItem("ComingFrom") == "ProductionIssue") {
+
+      var statusObject: any = { fromwhere: fromwhereval }
+      this.screenBackEvent.emit(statusObject);
+    } else {
       this.router.navigateByUrl('home/outbound/outorder', { skipLocationChange: true });
     }
   }
@@ -675,24 +731,22 @@ export class OutProdissueComponent implements OnInit {
   }
 
 
-  private manageOldSelectedItems() {    
- 
+  private manageOldSelectedItems() {
+
     if (this.selectedMeterials !== null && this.selectedMeterials !== undefined && this.selectedMeterials.length > 0) {
 
       for (let index = 0; index < this.selectedMeterials.length; index++) {
         const element = this.selectedMeterials[index];
 
         for (let j = 0; j < this.lookupData.length; j++) {
-          const sd = this.lookupData[j];       
+          const sd = this.lookupData[j];
           if (sd.ITEMCODE === element.ITEMCODE
             && sd.LOTNO === element.LOTNO
             && sd.BINNO === element.BINNO) {
             sd.OldData = true;
-              
             // if(sd.TOTALQTY>=element.MeterialPickQty  ){
             // sd.TOTALQTY = sd.TOTALQTY-element.MeterialPickQty;
             // }
-
             this.lookupData[j] = sd;
           }
           else {
@@ -752,7 +806,7 @@ export class OutProdissueComponent implements OnInit {
               sd.TOTALQTY = sd.TOTALQTY - element.TotalAllocatedMetQty;
 
               if (element.TotalAllocatedMetQty >= sd.TOTALQTY) {
-                if (tempLookup.length > j   && this.OrderType != 'B') {
+                if (tempLookup.length > j && this.OrderType != 'B') {
                   tempLookup.splice(j, 1);
                   break;
                 }
@@ -771,7 +825,7 @@ export class OutProdissueComponent implements OnInit {
   }
 
   private getBinAndTotalMeterial(tempCollection: any[]): any[] {
-    
+
     let binAndQtyCollectionArray: any[] = [];
     let ProcessedCount: number = 0;
 
@@ -782,7 +836,7 @@ export class OutProdissueComponent implements OnInit {
       let tCollection: any = tempCollection.filter(t =>
         element.Meterial.BINNO === t.Meterial.BINNO &&
         element.Meterial.LOTNO === t.Meterial.LOTNO &&
-        element.Meterial.ITEMCODE === t.Meterial.ITEMCODE )
+        element.Meterial.ITEMCODE === t.Meterial.ITEMCODE)
 
       ProcessedCount = ProcessedCount + tCollection.length;
 
@@ -791,15 +845,15 @@ export class OutProdissueComponent implements OnInit {
         let existCol = binAndQtyCollectionArray.filter(t =>
           element.Meterial.BINNO === t.BINNO &&
           element.Meterial.LOTNO === t.LOTNO &&
-          element.Meterial.ITEMCODE === t.ITEMCODE 
-          
-          );
+          element.Meterial.ITEMCODE === t.ITEMCODE
+
+        );
 
         if (existCol.length == 0) {
           let binAndQtyCollection: any = {};
           binAndQtyCollection.BINNO = element.Meterial.BINNO;
           binAndQtyCollection.LOTNO = element.Meterial.LOTNO;
-          binAndQtyCollection.ITEMCODE = element.Meterial.ITEMCODE;          
+          binAndQtyCollection.ITEMCODE = element.Meterial.ITEMCODE;
           binAndQtyCollection.TotalAllocatedMetQty = tCollection.map(i => i.Meterial.MeterialPickQty).reduce((sum, c) => sum + c);
 
           binAndQtyCollectionArray.push(binAndQtyCollection);
@@ -810,6 +864,302 @@ export class OutProdissueComponent implements OnInit {
     return binAndQtyCollectionArray;
   }
 
+  // IFP
+
+  public addToDeleiver(goToCustomer: boolean = true) {
+    this.showLookupLoader = true;
+    //lsOutbound
+    let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+
+    if (outboundData != undefined && outboundData != '') {
+      this.outbound = JSON.parse(outboundData);
+
+      this.prepareDeleiveryTempCollection();
+
+
+      localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+
+      this.showLookupLoader = false;
+    }
+  }
+
+
+  // On Issue Click
+  public submitProduction(orderId: any = null) {
+
+    this.addMetToCollection();
+    this.addToDeleiver(false);
+    this.prepareDeleiveryCollectionAndDeliver(orderId);
+
+  }
+
+  prepareDeleiveryTempCollection() {
+    if (this.outbound) {
+      let tempMeterialCollection: any[] = this.outbound.TempMeterials;
+
+      for (let index = 0; index < this.outbound.DeleiveryCollection.length; index++) {
+
+        const d = this.outbound.DeleiveryCollection[index];
+
+        for (let j = 0; j < tempMeterialCollection.length; j++) {
+
+          const element = tempMeterialCollection[j];
+
+          if (d.Item.DOCENTRY == element.Item.DOCENTRY && d.Order.DOCNUM == element.Order.DOCNUM) {
+
+            tempMeterialCollection.slice(index, 1);
+          }
+        }
+      }
+
+
+      if (tempMeterialCollection !== undefined &&
+        tempMeterialCollection !== null && tempMeterialCollection.length > 0) {
+        for (let index = 0; index < tempMeterialCollection.length; index++) {
+          const tm = tempMeterialCollection[index];
+
+          let hasitem = this.outbound.DeleiveryCollection.filter(d =>
+            d.Item.DOCENTRY === tm.Item.DOCENTRY &&
+            d.Item.TRACKING === tm.Item.TRACKING &&
+            d.Order.DOCNUM === tm.Order.DOCNUM &&
+            d.Meterial.LOTNO === tm.Meterial.LOTNO &&
+            d.Meterial.BINNO === tm.Meterial.BINNO
+          );
+
+          if (hasitem.length == 0) {
+            this.outbound.DeleiveryCollection.push(tm)
+          }
+
+        }
+
+      }
+    }
+  }
+
+  prepareDeleiveryCollectionAndDeliver(orderId: any) {
+
+    if (this.outbound != null && this.outbound != undefined
+      && this.outbound.DeleiveryCollection != null && this.outbound.DeleiveryCollection != undefined
+      && this.outbound.DeleiveryCollection.length > 0
+    ) {
+
+      if (orderId !== undefined && orderId !== null) {
+        this.outbound.DeleiveryCollection = this.outbound.DeleiveryCollection.filter(d => d.Order.DOCNUM === orderId);
+      }
+
+      let arrIssues: Item[] = [];
+      let arrLots: Lot[] = [];
+      let prodIssueModel: ProductionIssueModel = new ProductionIssueModel();
+
+      // Hdr
+      let comDbId = localStorage.getItem('CompID');
+      let token = localStorage.getItem('Token');
+      let guid: string = localStorage.getItem('GUID');
+      let uid: string = localStorage.getItem('UserId');
+      let hdrLine: number = 0;
+      let limit = -1;
+      let hdrLineVal = -1;
+      let refLineNo = 0;
+
+      this.showLookupLoader = true;
+      // Loop through delivery collection 
+      for (let index = 0; index < this.outbound.DeleiveryCollection.length; index++) {
+
+        //get first item from collection        
+        const element = this.outbound.DeleiveryCollection[index];
+
+        // Filter for getting  current item :: May be we need to change this in future
+        this.outbound.DeleiveryCollection=this.outbound.DeleiveryCollection.filter(d=> d.Item.DOCENTRY===this.outbound.SelectedItem.DOCENTRY)
+
+
+        // let coll=Get all Item for Item.Lineno===i
+        let lineDeleiveryCollection = this.outbound.DeleiveryCollection.filter(d =>
+          //d.Item.LINENUM === element.Item.LINENUM
+          element.Order.DOCNUM === d.Order.DOCNUM &&
+          element.Item.DOCENTRY === d.Item.DOCENTRY &&
+          element.Item.TRACKING === d.Item.TRACKING
+        );
+
+        // Process Order Item and Tracking collection
+        for (let hIdx = 0; hIdx < lineDeleiveryCollection.length; hIdx++) {
+          const o = lineDeleiveryCollection[hIdx];
+
+          // check hdr exists
+          let existHdr = false;
+          for (let index = 0; index < arrIssues.length; index++) {
+            const h = arrIssues[index];
+            if (h.DOCENTRY === o.Item.DOCENTRY
+              && h.ItemCode === o.Item.ITEMCODE
+              && h.Tracking === o.Item.TRACKING) {
+              existHdr = true;
+              break;
+            }
+          }
+
+          if (existHdr == false) {
+
+            // Add Header here and then add 
+            hdrLineVal = hdrLineVal + 1;
+
+            let item: Item = new Item();
+
+            item.DiServerToken = token;
+            item.CompanyDBId = comDbId;
+            item.Transaction = "ProductionIssue"
+            item.RECUSERID = item.LoginId = item.UsernameForLic = uid
+            item.DOCENTRY = o.Item.DOCENTRY;
+            item.ItemCode = o.Item.ITEMCODE;
+            item.Tracking = o.Item.TRACKING;
+            item.RefLineNo = o.Item.RefLineNo;
+            item.BATCHNO = o.Order["Order No"]
+            refLineNo = item.RefLineNo;
+            item.ONLINEPOSTING = null
+            let metQty = lineDeleiveryCollection.map(i => i.Meterial.MeterialPickQty).reduce((sum, c) => sum + c);
+            item.DBIssuedQty = o.Item.IssuedQty
+            item.U_O_ACTISSQTY = metQty
+            item.U_O_PLNISSQTY = o.Item.ActualQty
+            item.U_O_BALQTY = o.Item.BalQty
+            item.FGWAREHOUSE = item.U_O_ISSWH = o.Item.WhsCode;
+            item.RefDocEntry = o.Order.RefDocEntry.toString();
+            item.GUID = guid;
+            item.LineId = o.Item.LineId;
+            item.LineNo = hdrLineVal;
+            item.IssuedQty = "0.000"
+
+            arrIssues.push(item);
+          }
+
+          // check weather item existe or not 
+          let hasDetail = false;
+          for (let index = 0; index < arrLots.length; index++) {
+            const element = arrLots[index];
+            if (element.LotNumber === o.Meterial.LOTNO && element.Bin === o.Meterial.BINNO && element.LineNo === refLineNo) {
+              hasDetail = true;
+              break;
+            }
+          }
+
+
+          if (hasDetail == false) {
+            // Add Detail here 
+            let dtl: Lot = new Lot();
+
+            dtl.Bin = o.Meterial.BINNO;
+            dtl.LotNumber = o.Meterial.LOTNO;
+            dtl.LotQty = o.Meterial.MeterialPickQty + "";
+            dtl.LOTSIGMASTATUS = 'N'
+            dtl.LineNo = refLineNo;
+            dtl.SYSNUMBER = o.Meterial.SYSNUMBER
+
+            arrLots.push(dtl);
+          }
+
+          limit = limit + lineDeleiveryCollection.length;
+
+
+        }
+      }
+
+      
+
+      console.log("Dtl", arrLots);
+      console.log("hdr", arrIssues);
+
+
+      if (arrIssues.length > 0 && arrLots.length > 0) {
+        prodIssueModel.Items = arrIssues;
+        prodIssueModel.Lots = arrLots;
+      }
+
+
+      this.productionService.submitProduction(prodIssueModel).subscribe(
+        data => {
+          if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
+            this.showLookupLoader = false;
+            this.toastr.success('', this.translate.instant("DeleiverySuccess") + " : " + data[0].SuccessNo);
+
+            this.resetIssueProduction();
+            this.back(1)
+          } else if (data[0].ErrorMsg == "7001") {
+            this.showLookupLoader = false;
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            this.back(1);
+            return;
+          }
+          else {
+            this.showLookupLoader = false;
+            this.toastr.error('', data[0].ErrorMsg);
+          }
+        },
+        error => {
+          this.showLookupLoader = false;
+          console.log(
+            error);
+        }
+
+      );
+      console.log("shdr", arrIssues);
+    }
+  }
+
+  
+  showAddToMeterialAndDelevery() {
+    let dBit: boolean = false;
+
+    if (this.outbound && this.outbound.TempMeterials) {
+      let data = this.outbound.TempMeterials.filter(tm => tm.Order["Order No"] === this.currentOrderNo);
+      dBit = data.length > 0
+    }
+    else {
+      dBit = false;
+    }
+    return dBit;
+  }
+  
+  resetIssueProduction() {
+    // this.ngOnInit();   
+    let data: OutboundData = this.outbound
+    this.outbound = new OutboundData();
+    this.outbound.OrderData = data.OrderData
+    this.outbound.SelectedItem = data.SelectedItem
+    localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+    this.selectedMeterials = [];
+
+  }
+
+  getItemListForOrder() {
+    this.productionService.GetBOMItemForProductionIssue(this.currentOrderNo).subscribe(
+      (data: any) => {
+
+        if (data != null) {
+          if (data.length > 0) {
+            // -------------------Check For Licence---------------
+            if (data[0].ErrorMsg != undefined) {
+              if (data[0].ErrorMsg.length > 0) {
+                this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+                  this.translate.instant("CommonSessionExpireMsg"));
+                return;
+              }
+            }
+          }
+          else {
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          }
+        }
+      },
+      error => {
+        //this.showLoader = false;
+        console.log("Error: ", error);
+      }
+    );
+  }
+
+
+
+  //this.addMetToCollection();
+  // this.addToDeleiver(false);
+  // this.prepareDeleiveryCollectionAndDeliver(orderId);
 
 }
 

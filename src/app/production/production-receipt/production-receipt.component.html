@@ -74,7 +74,9 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">{{'BatchQty'|translate}}</label>
                             <div class="col-sm-9">
                                 <input type="number" #BatchQty class="form-control form-control-sm text-right"
-                                name='BatchQty' [(ngModel)]=enteredQty  placeholder="{{'BatchQty'|translate}}"> 
+                                [ngModel]="enteredQty | numberFormat" 
+                                (ngModelChange)="enteredQty=$event" 
+                                name='BatchQty' placeholder="{{'BatchQty'|translate}}"> 
                             </div>
                         </div> 
                         <div class="form-group row"  *ngIf="tracking=='N'"  >
@@ -92,13 +94,15 @@
                         <div class="form-group row" *ngIf="tracking=='S'">
                             <label for="inputPassword" class="col-sm-3 col-form-label">{{'Serial'|translate}}</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control form-control-sm" (blur)="checkAndValidateSerial()" [(ngModel)]=serialBatchNo name='Serial' placeholder="{{'Serial'|translate}}">
+                                <input type="text" class="form-control form-control-sm" (blur)="checkAndValidateSerial()"
+                                 [(ngModel)]=serialBatchNo name='Serial' placeholder="{{'Serial'|translate}}">
                             </div>
                         </div>
                         <div class="form-group row" *ngIf="tracking=='B'">
                             <label for="inputPassword" class="col-sm-3 col-form-label">{{'Batch'|translate}}</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control form-control-sm" name='Batch'  [(ngModel)]=serialBatchNo  placeholder="{{'Batch'|translate}}">
+                                <input type="text" class="form-control form-control-sm" name='Batch' 
+                                 [(ngModel)]=serialBatchNo  placeholder="{{'Batch'|translate}}">
                             </div>
                         </div>
                     </div>

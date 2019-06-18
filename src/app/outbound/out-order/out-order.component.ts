@@ -120,7 +120,6 @@ export class OutOrderComponent implements OnInit {
     this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
   }
 
-
   public openPOByUOM(selection: any) {
     let selectdeData = selection.selectedRows[0].dataItem;
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
@@ -134,8 +133,14 @@ export class OutOrderComponent implements OnInit {
     }
 
   }
+  
   public openSOOrderList(orderNumber: any = null) {
-    if ((this.outbound.OrderData && this.outbound.OrderData != '' && this.outbound.OrderData != null) || orderNumber) {
+
+    if (!this.orderNumber) {
+      this.toastr.error('', this.translate.instant("OValidation"));
+      return;
+    }
+   if ((this.outbound.OrderData && this.outbound.OrderData != '' && this.outbound.OrderData != null) || orderNumber) {
       let tempOrderData: any = this.outbound.OrderData;
       if (orderNumber) {
         //         CARDCODE: "SP Contact"
@@ -189,7 +194,7 @@ export class OutOrderComponent implements OnInit {
 
 
           localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
-
+ 
           this.showSOIetDetail = true;
           this.showLookupLoader = false;
         },

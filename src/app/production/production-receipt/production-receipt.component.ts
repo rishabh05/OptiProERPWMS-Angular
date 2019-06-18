@@ -161,16 +161,16 @@ export class ProductionReceiptComponent implements OnInit {
     );
   }
 
-  public submitRecord(){
+  public submitRecord() {
 
-     // case when only single item is going to submit.
+    // case when only single item is going to submit.
     if (this.Lots.length == 0 && this.RejectLots.length == 0) {
       // object is empty.
       console.log("object is empty");
       //means user comming first time and directly clicking on submit
       if (this.validateForm() == false) {
         return;
-      } 
+      }
 
       if (this.showRejectQtyField == true && this.model.options == '2') { // if user entered rejected qty.
         if (this.enteredQty > this.rejectQty) {
@@ -184,7 +184,7 @@ export class ProductionReceiptComponent implements OnInit {
           LineNo: 1, //for reject lot item. (crosscheck)
           LotNumber: this.serialBatchNo,
           LotQty: this.enteredQty,//need to check
-          ExpiryDate: this.GetSubmitDateFormat(this.expDate)
+          ExpiryDate: this.GetReceiptSubmitDateFormat(this.expDate)
         })
         this.RejectItems = this.prepareRejectItemData(this.enteredQty);
         this.UDF = [];
@@ -209,7 +209,7 @@ export class ProductionReceiptComponent implements OnInit {
           LineNo: 0, //abhi k lea kea h need to check
           LotNumber: this.serialBatchNo,
           LotQty: this.enteredQty,//need to check
-          ExpiryDate:this.GetSubmitDateFormat(this.expDate)
+          ExpiryDate: this.GetReceiptSubmitDateFormat(this.expDate)
         })
         this.Items = this.prepareCommonItemData(this.enteredQty);
         this.UDF = [];
@@ -219,7 +219,12 @@ export class ProductionReceiptComponent implements OnInit {
         this.submitProductionReport(this.submitRecProdData);
       }
     } else {
-
+      //case when already added items are there and user also want to add current record with add more items on submit click.
+      if(this.tracking == "S" || this.tracking == "B" ){ //check in case of S or B because we have add more case in both of these cases.
+         if(this.serialBatchNo !=null && this.serialBatchNo != undefined && this.serialBatchNo!=""){
+           this.addMoreClick();//adding the current displaying item on add more then below submit data code will run.
+         } 
+      }
       // if multiple items are submitted.
       console.log("object is not empty");
       if (this.Lots.length > 0) {
@@ -232,12 +237,8 @@ export class ProductionReceiptComponent implements OnInit {
       this.submitRecProdData = { Items: this.Items, Lots: this.Lots, UDF: this.UDF, RejectItems: this.RejectItems, RejectLots: this.RejectLots }
       this.submitProductionReport(this.submitRecProdData);
       //case when multiple items will be submitted then two cases if user adding new item with old items or
-
       // if user only submitting previous items which are stored in array.
       //then no need to validate we can submit directly using updated qty.
-
-
-
     }
   }
 
@@ -254,7 +255,7 @@ export class ProductionReceiptComponent implements OnInit {
           } 
           //check and update response for entered serial no.
           if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
-            this.toastr.success( this.translate.instant("FGRSuccessMessage")+data[0].DocEntry);
+            this.toastr.success( this.translate.instant("FGRSuccessMessage") +data[0].SuccessNo);
             this.resetAfterSubmit(); 
           }else{
             if (data[0].ErrorMsg != ""){
@@ -396,7 +397,7 @@ export class ProductionReceiptComponent implements OnInit {
         LineNo: 0, //for reject lot item. (crosscheck)
         LotNumber: this.serialBatchNo,
         LotQty: Number(this.enteredQty),//need to check 
-        ExpiryDate: this.GetSubmitDateFormat(this.expDate)
+        ExpiryDate: this.GetReceiptSubmitDateFormat(this.expDate)
       })
       //this.totalQtyToSubmit = tempQty; // at the end update totalQty with calculated qty.
       this.acceptQty = tempQty;
@@ -429,7 +430,7 @@ export class ProductionReceiptComponent implements OnInit {
         LineNo: 1, //for reject lot item. (crosscheck)
         LotNumber: this.serialBatchNo,
         LotQty: Number(this.enteredQty),//need to check 
-        ExpiryDate: this.GetSubmitDateFormat(this.expDate)
+        ExpiryDate: this.GetReceiptSubmitDateFormat(this.expDate)
       })
      
       //this.totalQtyToSubmit = tempQty; // at the end update totalQty with calculated qty.
@@ -488,7 +489,7 @@ export class ProductionReceiptComponent implements OnInit {
     LineNo: 0, //abhi k lea kea h need to check
     LotNumber:this.serialBatchNo,
     LotQty:this.enteredQty,//need to check
-    ExpiryDate: this.GetSubmitDateFormat(this.expDate)
+    ExpiryDate: this.GetReceiptSubmitDateFormat(this.expDate)
    })
    this.submitRecProdData = {Items:this.Items,Lots:this.Lots,UDF:this.UDF,RejectItems:this.RejectItems,RejectLots:this.RejectLots}
   }
@@ -991,6 +992,32 @@ export class ProductionReceiptComponent implements OnInit {
 
   onCancelClick() {
     this.router.navigate(['home/dashboard']);
+  }
+
+
+  GetReceiptSubmitDateFormat(EXPDATE) {
+    if (EXPDATE == "" || EXPDATE == null)
+      return "";
+    else {
+      var d = new Date(EXPDATE);
+      var day;
+
+      if (d.getDate().toString().length < 2) {
+        day = "0" + d.getDate();
+      }
+      else {
+        day = d.getDate();
+      }
+      var mth;
+      if ((d.getMonth() + 1).toString().length < 2) {
+        mth = "0" + (d.getMonth() + 1).toString();
+      }
+      else {
+        mth = d.getMonth() + 1;
+      }
+       return day + ":" + mth + ":" + d.getFullYear();
+      //return mth + "/" + day + "/" + d.getFullYear();
+    }
   }
 
 }
