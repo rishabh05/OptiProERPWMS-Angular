@@ -150,11 +150,17 @@ export class InboundPolistComponent implements OnInit {
           this.showNonTrackItem = false;
           this.showBatchTrackItem = false;
           this.showSerialTrackItem = false;
-          if (data.Table != undefined && data.Table != null && data.Table != "") {
+          if (data.Table != undefined && data.Table != null) {
             this.openPOLinesModel = [];
             this.BatchItemsDetail = [];
             this.NonItemsDetail = [];
             this.SerialItemsDetail = [];
+
+            if(data.Table.length == 0){
+              this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+              return;
+            }
+
             this.openPOLinesModel = data.Table;
           
             // var  unmatchedPOLinesModel = data.Table;
@@ -241,6 +247,7 @@ export class InboundPolistComponent implements OnInit {
     const poline = selection.selectedRows[0].dataItem;
     this.openPOLineModel = poline;
     this.openPOLineModel.RPTQTY = 0;
+    this.openPOLineModel.DocNum = this.poCode;
     this.inboundMasterComponent.setClickedItemDetail(this.openPOLineModel);
     this.getAutoLot(poline.ITEMCODE);
   }

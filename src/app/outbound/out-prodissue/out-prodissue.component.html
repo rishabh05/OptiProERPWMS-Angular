@@ -183,7 +183,7 @@
                             </ng-template>
                         </kendo-grid-column>
 
-                        <kendo-grid-column media="(min-width: 768px)" *ngIf="OrderType!='N'" field="LOTNO" title=""
+                        <kendo-grid-column headerClass="text-center" class="text-center" media="(min-width: 768px)" *ngIf="OrderType!='N'" field="LOTNO" title=""
                             width="10">
                             <ng-template kendoGridCellTemplate let-idx="rowIndex">
                                 <button id="removeSelectedMeterial" (click)="removeMeterial(idx,gridSelectedMeterial)"

@@ -43,12 +43,13 @@ export class InventoryEnquiryComponent implements OnInit {
   itemDetail: boolean = false;
 
   showQuantityGrid:boolean = false;
-  quantityGridData: any[];
+  quantityGridData: any[]; 
 
   isFromLotChange:boolean = false;
   isFromItemChange:boolean = false;
   totalSum: number = 0;
-  pageSize: number = Commonservice.pageSize;
+  //pageSize: number = Commonservice.pageSize;
+  pageSize:number = 10;
 
   constructor(private renderer: Renderer, private commonservice: Commonservice, private router: Router, private labelPrintReportsService: LabelPrintReportsService,
     private toastr: ToastrService, private translate: TranslateService) {
@@ -60,6 +61,7 @@ export class InventoryEnquiryComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log("PageSize:",this.pageSize);
     this.initialize();
   }
 
@@ -110,7 +112,7 @@ export class InventoryEnquiryComponent implements OnInit {
   /**
    * Batch serial lookup click.
    */
-  OnBatchSerialLookupClick (){
+  OnBatchSerialLookupClick(){
       this.showLotsList();
   }
 
@@ -278,10 +280,14 @@ export class InventoryEnquiryComponent implements OnInit {
             return;
           }
         } else {
+          this.pagable =false;
+          this.quantityGridData = [];
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         }
       },
       error => {
+        this.pagable =false;
+        this.quantityGridData = [];
         this.toastr.error('', error);
       }
     );

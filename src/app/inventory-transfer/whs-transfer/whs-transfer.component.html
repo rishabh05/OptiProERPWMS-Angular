@@ -7,17 +7,17 @@
       <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-8 col-xl-6">
           <div class="form-group row">
-            <label for="inputPassword" class="col-sm-3 col-form-label">{{'FromWhse'|translate}}</label>
+            <label for="inputPassword" class="col-sm-3 col-form-label">{{'InvTransfer_FromWhse'|translate}}</label>
             <div class="col-sm-9">
-              <input id="fromWhse" name="fromWhse" [(ngModel)]="fromWhse" type="text" class="form-control form-control-sm" placeholder="{{'FromWhse'|translate}}"
+              <input id="fromWhse" name="fromWhse" [(ngModel)]="fromWhse" type="text" class="form-control form-control-sm" placeholder="{{'InvTransfer_FromWhse'|translate}}"
                 disabled>
             </div>
           </div>
           <div class="form-group row">
-            <label for="inputPassword" class="col-sm-3 col-form-label">{{'ToWhse'|translate}}</label>
+            <label for="inputPassword" class="col-sm-3 col-form-label">{{'InvTransfer_ToWhse'|translate}}</label>
             <div class="col-sm-9">
               <div class="input-group input-group-sm">
-                <input type="text" name="toWhse" [(ngModel)]="toWhse" class="form-control form-control-sm" placeholder="{{'ToWhse'|translate}}"
+                <input type="text" name="toWhse" [(ngModel)]="toWhse" class="form-control form-control-sm" placeholder="{{'InvTransfer_ToWhse'|translate}}"
                   (blur)="OnToWarehouseChange()">
                 <div class="input-group-append">
                   <button class="k-button k-primary btn" type="button" (click)="getToWhse()">

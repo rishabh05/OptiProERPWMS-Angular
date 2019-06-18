@@ -48,9 +48,16 @@ export class BinTransferComponent implements OnInit {
   batchNoPlaceholder: string = "";
   zero: string;
   showValidation: boolean = true;
+  dialogFor: string;
+  yesButtonText: string;
+  noButtonText: string;
+  showConfirmDialog = false;
+  dialogMsg: string;
 
   pagable: boolean = false;
   pageSize:number = Commonservice.pageSize;
+  operationType: string = "";
+  itemIndex: number = -1;
   constructor(private commonservice: Commonservice, private activatedRoute: ActivatedRoute,
     private router: Router, private inventoryTransferService: InventoryTransferService,
     private toastr: ToastrService, private translate: TranslateService,
@@ -101,6 +108,7 @@ export class BinTransferComponent implements OnInit {
 
   /** Simple method to toggle element visibility */
   public ShowSavedData(): void {
+    this.operationType = "viewlines";
     if (this.TransferedItemsDetail.length > 0) {
       this.viewLines = !this.viewLines;
     } else {
@@ -212,7 +220,7 @@ export class BinTransferComponent implements OnInit {
         if (data != null) {
           if (data.length == 0) {
             if (this.ItemTracking == "S") {
-              this.toastr.error('', this.translate.instant("InvalidSerial"));
+              this.toastr.error('', this.translate.instant("InvTransfer_InvalidSerial"));
             }
             else {
               this.toastr.error('', this.translate.instant("InvalidBatch"));
@@ -225,6 +233,7 @@ export class BinTransferComponent implements OnInit {
             this.formatTransferNumbers();
             this.formatOnHandQty();
             this.SysNumber = data[0].SYSNUMBER;
+            this.fromBin = data[0].BINNO;
           }
         }
       },
@@ -441,13 +450,14 @@ export class BinTransferComponent implements OnInit {
   }
 
   AddLineLots() {
+    this.operationType = "add";
+
     if (!this.CheckValidation()) {
       return;
     }
-    var itemIndex = this.IsInvTransferDetailLineExists(this.itemCode,
+    this.itemIndex = this.IsInvTransferDetailLineExists(this.itemCode,
       this.lotValue, this.fromBin, this.toBin, this.Remarks, "");
-    var transferedItemsDetail;
-    if (itemIndex == -1) {
+    if (this.itemIndex == -1) {
       this.TransferedItemsDetail.push({
         LineNum: '01',
         LotNo: this.lotValue,
@@ -462,43 +472,45 @@ export class BinTransferComponent implements OnInit {
         OnHandQty: this.onHandQty,
         Remarks: this.Remarks
       });
-      this.clearData();
-    }
-    else {
+      this.clearDataForAddMore();
+    } else {
       if (this.ItemTracking == "S") {
         this.toastr.error('', this.translate.instant("SerialAlreadyExist"));
         return false;
-      }
-      else {
-        //this.toastr.error('', this.translate.instant("WhsTransferEdit.overwrite"));
-        this.showModal();
-        this.ModalContent = this.translate.instant("WhsTransferEdit.overwrite");
-        let that = this;
-
-        setTimeout(() => {
-          let el: HTMLElement = this.transferedItemsBtn.nativeElement as HTMLElement;
-          el.onclick = function () {
-            that.TransferedItemsDetail[itemIndex].Qty = that.transferQty;
-            that.autoShownModal.hide();
-            that.clearData();
-          }
-        }, 1000);
+      } else {
+        this.showOverrideConfirmDailog();
       }
     }
+
     if(this.TransferedItemsDetail.length>this.pageSize){
       this.pagable = true;
-    }else{
+    } else{
       this.pagable = false;
     }
-  }
 
+    if(this.itemIndex == -1){
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   SubmitPutAway() {
     this.showValidation = true;
     if (this.TransferedItemsDetail.length > 0) {
       this.showValidation = false;
     }
-    this.AddLineLots();
+    
+    var _is = this.AddLineLots();
+    this.operationType = "submit";
+
+    if(!_is) {
+      return;
+    }
+    this.SubmitFinally();
+  }
+
+  SubmitFinally(){
     var oWhsTransAddLot: any = {};
     oWhsTransAddLot.Header = [];
     oWhsTransAddLot.Detail = [];
@@ -542,7 +554,7 @@ export class BinTransferComponent implements OnInit {
             }
             //-----------------------------------End for the Function Check for Licence--------------------------------
             if (data[0].ErrorMsg == "") {
-              this.toastr.success('', this.translate.instant("ItemsTranSuccessfully") + data[0].SuccessNo);
+              this.toastr.success('', this.translate.instant("InvTransfer_ItemsTranSuccessfully") +" "+ data[0].SuccessNo);
               oWhsTransAddLot = {};
               oWhsTransAddLot.Header = [];
               oWhsTransAddLot.Detail = [];
@@ -562,6 +574,11 @@ export class BinTransferComponent implements OnInit {
     );
   }
 
+  showOverrideConfirmDailog(){
+    this.showDialog("overrideQty", this.translate.instant("yes"), this.translate.instant("no"),
+    this.translate.instant("WhsTransferEdit.overwrite"));
+  }
+
   clearData() {
     this.itemCode = "";
     this.itemName = "";
@@ -574,6 +591,17 @@ export class BinTransferComponent implements OnInit {
     this.Remarks = "";
   }
 
+  clearDataForAddMore() {
+    //this.itemCode = "";
+    // this.itemName = "";
+    // this.ItemTracking = "";
+    this.lotValue = "";
+    this.transferQty = "";
+    //this.toBin = "";
+    this.fromBin = "";
+    this.onHandQty = "";
+    this.Remarks = "";
+  }
 
   CheckValidation() {
     if (this.itemCode == "") {
@@ -608,12 +636,12 @@ export class BinTransferComponent implements OnInit {
       }
     }
     if (this.fromBin == "") {
-      this.toastr.error('', this.translate.instant("FromBinMsg"));
+      this.toastr.error('', this.translate.instant("InvTransfer_FromBinMsg"));
       return false;
     }
     if (this.toBin == "") {
       if (this.showValidation) {
-        this.toastr.error('', this.translate.instant("ToBinMsg"));
+        this.toastr.error('', this.translate.instant("InvTransfer_ToBinMsg"));
       }
       return false;
     }
@@ -673,14 +701,6 @@ export class BinTransferComponent implements OnInit {
       this.showBatchNo = true;
       this.editTransferQty = true;
       this.batchNoPlaceholder = this.translate.instant("SerialNo");
-      // oTxtTransferQty.setEnabled(false);
-      // var qty = olblQtyOnhand.getValue();
-      // if (qty > 0) {
-      //     oWhsTransEditLot.TransferQty = oCurrentController.getFormatedValue("1");
-      // }
-      // else {
-      //     oWhsTransEditLot.TransferQty = oCurrentController.getFormatedValue("0");
-      // }
     }
     else if (this.ItemTracking == "N") {
       this.isItemSerialTrack = false;
@@ -693,10 +713,13 @@ export class BinTransferComponent implements OnInit {
     this.lotValue = "";
   }
 
+  rowindex: any;
+  gridDataRow: any;
   ViewLinesRowDeleteClick(rowindex, gridData: any) {
-    this.TransferedItemsDetail.splice(rowindex, 1);
-    gridData.data = this.TransferedItemsDetail;
-    console.log(this.TransferedItemsDetail.length);
+    this.showDialog("delete", this.translate.instant("yes"), this.translate.instant("no"),
+    this.translate.instant("DeleteRecordsMsg"));
+    this.rowindex = rowindex;
+    this.gridDataRow = gridData;
   }
 
   OnOKClick() {
@@ -717,10 +740,60 @@ export class BinTransferComponent implements OnInit {
   }
 
   goBack() {
+    this.operationType = "back";
     if (localStorage.getItem("towhseId") == localStorage.getItem("whseId")) {
       this.router.navigate(['home/dashboard']);
     } else {
       this.cancelevent.emit(true);
+    }
+  }
+
+  deleteAll(){
+    this.showDialog("deleteAll", this.translate.instant("yes"), this.translate.instant("no"),
+    this.translate.instant("DeleteAllLines"));
+  }
+
+  showDialog(dialogFor: string, yesbtn: string, nobtn: string, msg: string) {
+    this.dialogFor = dialogFor;
+    this.yesButtonText = yesbtn;
+    this.noButtonText = nobtn;
+    this.showConfirmDialog = true;
+    this.dialogMsg = msg;
+  }
+
+  getConfirmDialogValue($event) {
+    this.showConfirmDialog = false;
+    if ($event.Status == "yes") {
+      switch ($event.From) {
+        case ("delete"):
+          this.TransferedItemsDetail.splice(this.rowindex, 1);
+          this.gridDataRow.data = this.TransferedItemsDetail;
+          console.log(this.TransferedItemsDetail.length);
+          break;
+        case ("deleteAll"):
+          this.deleteAllOkClick();
+          break;
+        case ("overrideQty"):
+          this.TransferedItemsDetail[this.itemIndex].Qty = this.transferQty;
+          if(this.operationType == "submit"){
+            this.SubmitFinally();
+            this.clearData();
+          } else if(this.operationType == "add"){
+            this.clearDataForAddMore();
+          }
+          break;
+      }
+    } else {
+      if ($event.Status == "no") {
+        switch ($event.From) {
+          case ("delete"):
+            break;
+          case ("deleteAll"):
+            break;
+          case ("overrideQty"):
+            break;
+        }
+      }
     }
   }
 }

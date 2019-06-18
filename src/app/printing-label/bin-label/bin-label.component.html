@@ -9,11 +9,11 @@
             <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
 
                 <div class="form-group row">
-                    <label for="inputPassword" class="col-sm-3 col-form-label">{{'FromBin'|translate}}</label>
+                    <label for="inputPassword" class="col-sm-3 col-form-label">{{'InvTransfer_FromBin'|translate}}</label>
                     <div class="col-sm-9">
                         <div class="input-group input-group-sm">
                             <input type="text" class="form-control form-control-sm" #fromBinIp=ngModel
-                             [(ngModel)] ='fromBin' (blur)="OnFromBinChange()" name ='fromBin' placeholder="{{'FromBin'|translate}}">
+                             [(ngModel)] ='fromBin' (blur)="OnFromBinChange()" name ='fromBin' placeholder="{{'InvTransfer_FromBin'|translate}}">
                             <div class="input-group-append">
                                 <button class="k-button k-primary btn" type="button"  (click)="OnFromBinLookupClick()">
                                     <i class="opti-icon-hammenu"></i>
@@ -23,11 +23,11 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                  <label for="inputPassword" class="col-sm-3 col-form-label">{{'ToBin'|translate}}</label>
+                  <label for="inputPassword" class="col-sm-3 col-form-label">{{'InvTransfer_ToBin'|translate}}</label>
                   <div class="col-sm-9">
                       <div class="input-group input-group-sm">
                           <input type="text" (blur)="OnToBinChange()" class="form-control form-control-sm" [(ngModel)]='toBin' #toBinIp=ngModel
-                           name ='toBin' placeholder="{{'ToBin'|translate}}">
+                           name ='toBin' placeholder="{{'InvTransfer_ToBin'|translate}}">
                           <div class="input-group-append">
                               <button class="k-button k-primary btn" type="button" (click)="OnToBinLookupClick()">
                                   <i class="opti-icon-hammenu"></i>

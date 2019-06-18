@@ -26,8 +26,9 @@ export class PortalTopComponent implements OnInit {
   loggedInUserName: string;
   loggedinWarehouse: string;
   updatetopBarSubs: ISubscription;
-
-
+  showConfirmDialog:boolean = false;
+  appVersion: string="";
+  
   constructor(
     private modalService: NgbModal, private commonService: Commonservice, private toastr: ToastrService, private router: Router, private translate: TranslateService) {
       let userLang = navigator.language.split('-')[0];
@@ -46,6 +47,10 @@ export class PortalTopComponent implements OnInit {
     this.updatetopBarSubs = this.commonService.refreshTopbarSubscriber.subscribe(data => {
       this.loggedinWarehouse = localStorage.getItem("whseId");
     });
+
+    // this.appVersion = "Version: " +   this.commonservice.config_params.AppVersion;
+
+    // this.appVersion = this.translate.instant("Dashboard_AppVersion") +   this.commonservice.config_params.AppVersion;
   }
 
   // open and close theme setting side panel
@@ -81,27 +86,36 @@ export class PortalTopComponent implements OnInit {
     this.router.navigate(['home/' + module]);
   }
 
+  showDialog(dialogFor: string, yesbtn: string, nobtn: string, msg: string) {
+    this.dialogFor = dialogFor;
+    this.yesButtonText = yesbtn;
+    this.noButtonText = nobtn;
+    this.showConfirmDialog = true;
+    this.dialogMsg = msg;
+  }
+
+  getConfirmDialogValue($event) {
+    this.showConfirmDialog = false;
+    if ($event.Status == "yes") {
+      switch ($event.From) {
+        case ("Logout"):
+          this.commonService.RemoveLicenseAndSignout(this.toastr, this.router, 
+          this.translate.instant("Dashboard_LogoutSuccess"))
+          break;
+      }
+    } else {
+      if ($event.Status == "no") {
+        switch ($event.From) {
+          case ("Logout"):
+            break;
+        }
+      }
+    }
+  }
 
   signOut(){
-    // this.toastr.success('', message, this.toast_config);
-
-    // // let login_page = this.common_params.application_path + '/index.html#login';
-        
-    // sessionStorage.removeItem('isLoggedIn');
-    // sessionStorage.removeItem('selectedComp');
-    // sessionStorage.removeItem('loggedInUser');
-    // sessionStorage.removeItem('ConfigData');
-
-    // localStorage.removeItem('CompID');
-    // localStorage.removeItem('GUID');
-    // localStorage.removeItem('Token');
-    // localStorage.removeItem('UserId');
-    // localStorage.removeItem('whseId');
-    
-    // this.router.navigateByUrl('/account');    
-    this.commonService.RemoveLicenseAndSignout(this.toastr, this.router, 
-    this.translate.instant("LogoutSuccess"))
-
+    this.showDialog("Logout", this.translate.instant("yes"), this.translate.instant("no"),
+    this.translate.instant("Dashboard_Logout_Msg"));
   }
   
   ngOnDestroy() {

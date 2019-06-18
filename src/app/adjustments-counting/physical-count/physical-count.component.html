@@ -193,7 +193,7 @@
                                 </button>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column media="(min-width: 768px)" field="" width="60">
+                        <kendo-grid-column media="(min-width: 768px)" field="" headerClass="text-center" class="text-center" width="60">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                 <button class="btn btn-danger k-button btn-sm btn-icon" type="button" (click)="ItemListRowDeleteClick(rowIndex, gridItem)">
                                     <span class="k-icon k-i-delete"></span>
@@ -242,7 +242,7 @@
     <kendo-dialog-titlebar>
         Reported Quantities
     </kendo-dialog-titlebar>
-    <p>{{ItemCode}}</p>
+    <p>{{ItemCodeTemp}}</p>
     <kendo-grid [resizable]="true" [pageSize]="pageSize" [pageable]="pagable" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
         [height]=gridHeight [selectable]="true" [data]="BatchSerialArray" style="max-height:370px" class="no-shadow" #gridItem>
 
@@ -271,7 +271,7 @@
         </kendo-grid-column>
         <!-- grid for mobile end -->
 
-        <kendo-grid-column *ngIf="ItemTracking != 'N'" media="(min-width: 768px)" field="LotNo" title="{{'BatchSerial'|translate}}" width="130">
+        <kendo-grid-column *ngIf="trackingtemp != 'N'" media="(min-width: 768px)" field="LotNo" title="{{'BatchSerial'|translate}}" width="130">
         </kendo-grid-column>
         <kendo-grid-column media="(min-width: 768px)" field="BinNo" title="{{'BinNo'|translate}}" width="230">
         </kendo-grid-column>
@@ -280,7 +280,7 @@
         </kendo-grid-column>
         <kendo-grid-column media="(min-width: 768px)" field="InWhsQty" title="{{'QtyOnHand'|translate}}" width="100" class="text-right" headerClass="text-right">
         </kendo-grid-column>
-        <kendo-grid-column media="(min-width: 768px)" field="" width="80">
+        <kendo-grid-column media="(min-width: 768px)" field="" headerClass="text-center" class="text-center" width="80">
             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                 <button class="btn btn-danger k-button btn-sm btn-icon" type="button" (click)="LotSerialDeleteClick(rowIndex, gridItem)">
                     <span class="k-icon k-i-delete"></span>

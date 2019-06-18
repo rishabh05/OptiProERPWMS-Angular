@@ -94,77 +94,6 @@ export class LookupComponent implements OnInit {
   ngOnInit() {
   }
 
-
-  // async ngOnChanges(): Promise<void> {
-
-  //   switch (this.lookupfor) {
-  //     case "toWhsList":
-  //       this.showToWhsList();
-  //       break;
-  //     case "ItemCodeList":
-  //       this.showItemCodeList();
-  //       break;
-  //     case "BatchNoList":
-  //       this.showBatchNoList();
-  //       break;
-  //     case "NTrackFromBin":
-  //       this.showNTrackFromBinList();
-  //       break;
-  //     case "SBTrackFromBin":
-  //     case "toBinsList":
-  //       this.showSBTrackFromBinList();
-  //       break;
-  //     case "RecvBinList":
-  //       this.showRecvBinList();
-  //       break;
-  //     case "VendorList":
-  //       this.showVendorList();
-  //       break;
-  //   }
-
-
-  //   // else if (this.lookupfor == "POList") {
-  //   //   this.showPOList();
-  //   // }
-  //   // else if (this.lookupfor == "POItemList") {
-  //   //   this.showPOItemList();
-  //   // }
-  //   // else if (this.lookupfor == "out-customer") {
-  //   //   this.showCustomerList();
-  //   // }
-  //   // else if (this.lookupfor == "out-items") {
-  //   //   this.showAvaliableItems();
-  //   // }
-
-  //   // else if (this.lookupfor == 'out-order') {
-  //   //   this.showOutSOList();
-  //   // }
-  //   // else if (this.lookupfor == "LotsList") {
-  //   //   this.showLotsList();
-  //   // }
-  //   // else if (this.lookupfor == "FromBinList") {
-  //   //   this.showBinList();
-  //   // }
-  //   // else if (this.lookupfor == "ToBinList") {
-  //   //   this.showBinList();
-  //   // }
-  //   // else if (this.lookupfor == "OrderList") {
-  //   //   this.orderList();
-  //   // } else if (this.lookupfor == "PhyCntItemList") {
-  //   //   this.ShowPhyCntItemList();
-  //   // } else if (this.lookupfor == "showPhyCntItemsList") {
-  //   //   this.ShowPhyCntInnerItemList();
-  //   // } else if (this.lookupfor == "ShowBatachSerList") {
-  //   //   this.ShowBatachSerList();
-  //   // } else if (this.lookupfor = "PIOrderList") {
-  //   //   this.orderList();
-  //   // }
-
-  //   this.clearFilters();
-  //   this.isColumnFilter = false
-  // }
-
-
   async ngOnChanges(): Promise<void> {
 
     if (this.lookupfor == "toWhsList") {
@@ -294,27 +223,6 @@ export class LookupComponent implements OnInit {
     }
   }
 
-  // ShowPIOrderList() {
-  //   this.table_head = [
-  //     {
-  //       field: 'Order No',
-  //       title: this.translate.instant("OrderNo"),
-  //       type: 'text'
-  //     },
-  //     {
-  //       field: 'Item',
-  //       title: this.translate.instant("Item"),
-  //       type: 'text'
-  //     },
-  //   ];
-  //   this.lookupTitle = this.translate.instant("OrderList");
-  //   if (this.serviceData !== undefined) {
-  //     if (this.serviceData.length > 0) {
-  //       this.dialogOpened = true;
-  //     }
-  //   }
-  // }
-
   showBatchNoList() {
     this.table_head = [
       {
@@ -350,7 +258,7 @@ export class LookupComponent implements OnInit {
         width: '100'
       }
     ];
-    this.lookupTitle = this.translate.instant("BinNoList");
+    this.lookupTitle = this.translate.instant("LookupTitle_BinNoList");
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
         this.dialogOpened = true;
@@ -385,7 +293,7 @@ export class LookupComponent implements OnInit {
         class: '',
       }
     ];
-    this.lookupTitle = this.translate.instant("BinNoList");
+    this.lookupTitle = this.translate.instant("LookupTitle_BinNoList");
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
         this.dialogOpened = true;
@@ -408,7 +316,7 @@ export class LookupComponent implements OnInit {
         width: '100'
       }
     ];
-    this.lookupTitle = this.translate.instant("BinNoList");
+    this.lookupTitle = this.translate.instant("LookupTitle_BinNoList");
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
         this.dialogOpened = true;
@@ -431,7 +339,7 @@ export class LookupComponent implements OnInit {
         width: '100'
       }
     ];
-    this.lookupTitle = this.translate.instant("BinNoList");
+    this.lookupTitle = this.translate.instant("LookupTitle_BinNoList");
   }
 
   showRecvBinList() {
@@ -742,7 +650,7 @@ export class LookupComponent implements OnInit {
         width: '100'
       }
     ];
-    this.lookupTitle = this.translate.instant("FromBinList");
+    this.lookupTitle = this.translate.instant("LookupTitle_BinNoList");
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
         this.dialogOpened = true;
@@ -760,12 +668,12 @@ export class LookupComponent implements OnInit {
       },
       {
         field: 'Item',
-        title: this.translate.instant("Item"),
+        title: this.translate.instant("ItemCode"),
         type: 'text',
         width: '100'
       }
     ];
-    this.lookupTitle = this.translate.instant("OrderList");
+    this.lookupTitle = this.translate.instant("LookupTitle_OrderList");
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
         this.dialogOpened = true;
