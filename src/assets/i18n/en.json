@@ -54,6 +54,8 @@
   "ProdReceipt_TransType": "Trans. Type",
   "ProdReceipt_RejectQty": "Rejected Qty.",
   "ProdReceipt_DefectQty": "Defect Qty.",
+  "ProdReceipt_AcceptedLot":"Accepted Quantity",
+  "ProdReceipt_RejectedLot": "Rejected Quantity",
 
   "LookupTitle_BinNoList": "Bin No. List",
   "LookupTitle_OrderList": "Order List",
@@ -276,7 +278,12 @@
   "RejectedLot": "Rejected Lot",
   "BatchAlreadyExists": "Batch already exists",
   "QtyGraterThenZero": "Quantity should be greater than zero(0).",
-
+  "Reset":"Reset",
+  "LogoutSuccess":"You have successfully logged out",
+  "Issue":"Issue",
+  "IssueForPO": "Issue for PO#",
+  "OValidation": "Enter Order Number",
+  "CommonNoDataAvailableToIssueMsg": "No Data Available to Issue!.",
   "SelectWarehouse": "Select Warehouse",
   "BatchNo": "Batch No.",
   "SerialNo": "Serial No.",

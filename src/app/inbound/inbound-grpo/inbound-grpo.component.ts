@@ -100,7 +100,7 @@ export class InboundGRPOComponent implements OnInit {
     this.operationType = "";
     // also update this.openPOLineModel[0].RPTQTY with local storage value
     if (this.openPOLineModel != undefined && this.openPOLineModel != null) {
-      this.Ponumber = this.openPOLineModel[0].DOCENTRY;
+      this.Ponumber = this.openPOLineModel[0].DocNum;
       this.tracking = this.openPOLineModel[0].TRACKING;
       this.OpenQty = this.openPOLineModel[0].OPENQTY;
       this.ItemCode = this.openPOLineModel[0].ITEMCODE;
@@ -813,7 +813,7 @@ export class InboundGRPOComponent implements OnInit {
     }
     oSubmitPOLotsObj.POReceiptLots.push({
       DiServerToken: localStorage.getItem("Token"),
-      PONumber: this.Ponumber,
+      PONumber: this.openPOLineModel[0].DOCENTRY,
       CompanyDBId: localStorage.getItem("CompID"),
       LineNo: this.openPOLineModel[0].LINENUM,
       ShipQty: this.openPOLineModel[0].RPTQTY.toString(),

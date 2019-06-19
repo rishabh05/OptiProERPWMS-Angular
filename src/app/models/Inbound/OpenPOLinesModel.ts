@@ -3,6 +3,7 @@ import { UOM } from './UOM';
 export interface OpenPOLinesModel{
     CardCode: string;
     DOCENTRY: number;
+    DocNum: string;
     FACTOR: number;
     ITEMCODE: string;
     ITEMNAME: string;

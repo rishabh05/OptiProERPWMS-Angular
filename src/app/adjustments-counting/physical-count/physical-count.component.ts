@@ -56,6 +56,9 @@ export class PhysicalCountComponent implements OnInit {
 
   pagable: boolean = false;
   pageSize:number = Commonservice.pageSize;
+  ItemCodeTemp: string;
+  trackingtemp: string;
+
   constructor(private phycountService: PhysicalcountService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService) {
     let userLang = navigator.language.split('-')[0];
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
@@ -485,6 +488,7 @@ export class PhysicalCountComponent implements OnInit {
             this.translate.instant("PhyCount_SubmitSaveLines"));
         }
         else {
+          this.resetData();
           this.ItemCode = this.DocNoDetails[nextIndex].ItemCode;
           this.ItemName = this.DocNoDetails[nextIndex].ItemName;
           this.BinNo = this.DocNoDetails[nextIndex].BinCode;
@@ -513,6 +517,7 @@ export class PhysicalCountComponent implements OnInit {
             this.formatCountedQty();
             this.formatOnHandQty();
             this.NextRecord();
+            this.showitemlist = true;
           }
           else {
             this.toastr.success('', this.translate.instant("PhyCount_NoDataSaved"));
@@ -832,6 +837,8 @@ export class PhysicalCountComponent implements OnInit {
     } else {
       oAddPhysicalCountData = JSON.parse(dataModel);
     }
+    this.ItemCodeTemp = this.ItemCode;
+    this.trackingtemp = this.ItemTracking;
     this.dialogOpened = true;
     this.BatchSerialArray = [];
 
@@ -875,6 +882,8 @@ export class PhysicalCountComponent implements OnInit {
     } else {
       oAddPhysicalCountData = JSON.parse(dataModel);
     }
+    this.ItemCodeTemp = gridData.data[rowindex].ItemCode;
+    this.trackingtemp = gridData.data[rowindex].ItemCode;
     this.dialogOpened = true;
     this.BatchSerialArray = [];
 
@@ -900,11 +909,12 @@ export class PhysicalCountComponent implements OnInit {
         }
         return;
       }
+      if(!this.isLotAdded){
+        this.OnLotChange();
+        return;
+      }
     }
-    if(!this.isLotAdded){
-      this.OnLotChange();
-      return;
-    }
+
     if (!this.isLotAdded && this.ItemTracking != "N") {
       if (this.ItemTracking == "S") {
         this.toastr.error('', this.translate.instant("PhyCount_SerialLotisnotadded"));
@@ -1034,24 +1044,18 @@ export class PhysicalCountComponent implements OnInit {
     // showSavedItems = false;
     this.showbatchser = false;
     this.showitemlist = false;
-    // // Kendo Dialog box
-    // public dialogOpened = false;
-    // BatchSerialArray: any = [];
-    // ItemArray: any = [];
+    this.QtyOnHand = "0";
+    this.CountedQty = "0";
+    this.formatCountedQty();
+    this.formatOnHandQty();
   }
 
+  resetData(){
+    this.batchserno = "";
+    this.QtyOnHand = "0";
+    this.CountedQty = "0";
+  }
 
-  //   SetQRDataInGrid (result) {
-  //     oCurrentController.OnGS1ScanItem(result);
-  //     otxtScan.focus();
-  // }
-
-  // onScanQRCode () {
-  //     qrcode.callback = oCurrentController.SetQRDataInGrid;
-  //     piQRCodeUsed = 1;
-  //     $("input[type=file]").click();
-  //     $("input[type=file]").val("");
-  // }
   onHiddenScanClick(){
     this.onScanCodeChange();
   }
