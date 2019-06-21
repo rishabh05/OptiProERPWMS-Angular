@@ -1010,7 +1010,7 @@ export class InboundGRPOComponent implements OnInit {
           }
 
           // alert("Goods Receipt PO generated successfully with Doc No: " + data.DocEntry);
-          this.toastr.success('', this.translate.instant("GRPOSuccessMessage") + data[0].DocEntry);
+          this.toastr.success('', this.translate.instant("GRPOSuccessMessage")+" "+ data[0].SuccessNo);
 
           if (this.showPDF) {
             //show pdf

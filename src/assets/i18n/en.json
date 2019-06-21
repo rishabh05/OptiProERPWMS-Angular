@@ -279,9 +279,9 @@
   "RejectedSerials":"Rejected Serials",
   "BalanceQty": "Balance Qty",
   "IssuedQty": "Issue Qty",
-  "SerialNoAlreadyUsed": "This serial no is already in use.",
+  "SerialNoAlreadyUsed": "This Serial No. is already in use.",
   "FGRSuccessMessage": " Production Receipt generated successfully with Document No:", 
-  "SelectedQtyGrater":"Selected qty greater than required qty",
+  "SelectedQtyGrater":"Selected quantity can not be greater than Open quantity",
   "DeleteAllLines": "Do you want to delete all Lines?",
 
   "BatchAlreadyExists": "Batch already exists",
@@ -296,7 +296,7 @@
   "AddMore": "Add More",
   "InvalidWhsErrorMsg": "Invalid Warehouse",
   "ItemCodeList": "Item Code List",
-  "SerialAlreadyExist": "Serial already exist",
+  "SerialAlreadyExist": "Serial already exists.",
 
   "":""
 }
