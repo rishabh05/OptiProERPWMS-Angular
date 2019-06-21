@@ -44,7 +44,7 @@ export class OutProdissueComponent implements OnInit {
   public OrderType: string = '';
   public oldSelectedMeterials: any = Array<MeterialModel>();
   public OperationType: any;
-  public scanInputPlaceholder = "Scan"
+  public scanInputPlaceholder = "Select/Scan"
   public SerialBatchHeaderTitle: string = "";
   showConfirmDialog: boolean;
   rowindexForDelete: any;
@@ -452,7 +452,7 @@ export class OutProdissueComponent implements OnInit {
            
       if(this.OrderType=='S'){
         let data:any[]=[];
-        let tempLookup:[]=lookupValue;
+        let tempLookup: any[]=lookupValue;
         for (let index = 0; index < this._remainingMeterial; index++) {
           if(index<tempLookup.length){
           data.push(tempLookup[index]);          
@@ -613,7 +613,7 @@ export class OutProdissueComponent implements OnInit {
   addMetToCollection(fromIFPSave: boolean = false) {
     //lsOutbound
 
-
+   
 
 
 

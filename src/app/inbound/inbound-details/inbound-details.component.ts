@@ -34,6 +34,7 @@ export class InboundDetailsComponent implements OnInit {
   base64String: string = ""; 
   fileName: string = "";
   displayPDF1: boolean = false;
+  detailsAvailable: boolean = false;
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent) {
     let userLang = navigator.language.split('-')[0];
@@ -145,7 +146,7 @@ export class InboundDetailsComponent implements OnInit {
     );
   }
 
-
+  
   OnVendorChange() {
     if (this.VendCode == "" || this.VendCode == undefined) {
       return;
@@ -190,6 +191,7 @@ export class InboundDetailsComponent implements OnInit {
     this.VendCode = $event[0];
     this.VendName = $event[1];
     this.showNext = true;
+    this.detailsAvailable = true;
   }
 
   public onNextClick() {

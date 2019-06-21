@@ -115,7 +115,7 @@ export class LookupComponent implements OnInit {
     else if (this.lookupfor == "VendorList") {
       this.showVendorList();
     }
-    else if (this.lookupfor == "POList") {
+    else if (this.lookupfor == "SalesOrderList") {
       this.showPOList();
     }
     else if (this.lookupfor == "POItemList") {
@@ -459,7 +459,7 @@ export class LookupComponent implements OnInit {
         width: '100'
       }
     ];
-    this.lookupTitle = this.translate.instant("POList");
+    this.lookupTitle = this.translate.instant("SalesOrderList");
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
         this.dialogOpened = true;
@@ -495,13 +495,13 @@ export class LookupComponent implements OnInit {
         headerClass: 'text-right',
         class: 'text-right',
         type: 'numeric',
-        width: '50'
+        width: '70'
       },
       {
         field: 'CountDate',
         title: this.translate.instant("CountDate"),
         type: 'text',
-        width: '80'
+        width: '70'
       },
       {
         field: 'IsTeamCount',
