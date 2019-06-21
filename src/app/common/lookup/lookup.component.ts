@@ -115,7 +115,7 @@ export class LookupComponent implements OnInit {
     else if (this.lookupfor == "VendorList") {
       this.showVendorList();
     }
-    else if (this.lookupfor == "SalesOrderList") {
+    else if (this.lookupfor == "POList") {
       this.showPOList();
     }
     else if (this.lookupfor == "POItemList") {
@@ -459,7 +459,7 @@ export class LookupComponent implements OnInit {
         width: '100'
       }
     ];
-    this.lookupTitle = this.translate.instant("SalesOrderList");
+    this.lookupTitle = this.translate.instant("POList");
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
         this.dialogOpened = true;
