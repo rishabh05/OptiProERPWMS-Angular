@@ -495,13 +495,13 @@ export class LookupComponent implements OnInit {
         headerClass: 'text-right',
         class: 'text-right',
         type: 'numeric',
-        width: '50'
+        width: '70'
       },
       {
         field: 'CountDate',
         title: this.translate.instant("CountDate"),
         type: 'text',
-        width: '80'
+        width: '70'
       },
       {
         field: 'IsTeamCount',
@@ -613,26 +613,39 @@ export class LookupComponent implements OnInit {
   }
 
   showLotsList() {
+    var titleValue = this.translate.instant("BatchNo");
+    if (this.serviceData !== undefined && this.serviceData.length > 0) {
+        if("S" == this.serviceData[0].TRACKING){
+          titleValue = this.translate.instant("SerialNo");
+        } else if("N" == this.serviceData[0].TRACKING){
+          titleValue = this.serviceData[0].TRACKING;
+        }
+    }
     this.table_head = [
-      {
-        field: 'LOTNO',
-        title: this.translate.instant("BatchNo"),
-        type: 'text',
-        width: '100'
-      },
-      {
-        field: 'ITEMCODE',
-        title: this.translate.instant("ItemCode"),
-        type: 'text',
-        width: '100'
-      },
-      {
-        field: 'BINNO',
-        title: this.translate.instant("BinNo"),
-        type: 'text',
-        width: '100'
-      }
-    ];
+        {
+          field: 'LOTNO',
+          title: titleValue,
+          type: 'text',
+          width: '100'
+        },
+        {
+          field: 'ITEMCODE',
+          title: this.translate.instant("ItemCode"),
+          type: 'text',
+          width: '100'
+        },
+        {
+          field: 'BINNO',
+          title: this.translate.instant("BinNo"),
+          type: 'text',
+          width: '100'
+        }
+      ];
+    
+    if("N" == titleValue){
+      this.table_head.splice(0, 1);
+    }
+
     this.lookupTitle = this.translate.instant("BatchSrBinList");
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {

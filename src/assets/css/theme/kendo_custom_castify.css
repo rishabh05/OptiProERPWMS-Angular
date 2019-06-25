@@ -3603,7 +3603,6 @@
     border-color: transparent !important;
     color: inherit;
     background: none !important;
-    box-shadow: none !important;
     transition: color .2s ease-in-out; }
     .k-button.k-flat:hover, .k-button.k-flat.k-state-hover, .k-button.k-flat:active, .k-button.k-flat.k-state-active, .k-button.k-flat:hover:active, .k-button.k-flat:hover.k-state-active,
     .k-button.k-bare:hover,
