@@ -66,7 +66,7 @@ export class BinLabelComponent implements OnInit {
    * Batch serial lookup click.
    */
   OnToBinLookupClick() {
-    console.log('from bin click');
+    console.log('to bin click');
     this.getToBinsList();
   }
 
@@ -115,8 +115,21 @@ export class BinLabelComponent implements OnInit {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
             return;
           }
+          
           this.serviceData = data;
-          this.lookupfor = "ToBinList";
+          var serviceDataTemp: any[] =[];  
+          var shouldAdd: boolean = false;
+          for (let index = 0; index < this.serviceData.length; index++) {
+            if(this.fromBin == this.serviceData[index].BINNO){
+              shouldAdd = true;
+              continue;
+            } 
+            if(shouldAdd){ 
+              serviceDataTemp.push(this.serviceData[index]);
+            }
+          }
+          this.serviceData = serviceDataTemp;
+          this.lookupfor = "ToBinList"; 
         }
         else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
