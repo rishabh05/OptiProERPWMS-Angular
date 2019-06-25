@@ -24,7 +24,7 @@ export class ItemLabelComponent implements OnInit {
   @ViewChild('batchSrBinIp') batchSrBinIp : ElementRef;
   @ViewChild('noOfCopiesIp') noOfCopiesIp : ElementRef;
 
-
+  
   showLoader: boolean = false;
   showLookupLoader: boolean = true;
   serviceData: any[];
@@ -101,7 +101,7 @@ export class ItemLabelComponent implements OnInit {
           }
           this.showLookupLoader = false; 
           this.serviceData = data; 
-          this.lookupfor = "ItemCodeList";  
+          this.lookupfor = "ItemsList";  
         }
         else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
@@ -216,9 +216,9 @@ export class ItemLabelComponent implements OnInit {
    */
   getLookupValue($event) {
 
-    if (this.lookupfor == "ItemCodeList") {
+    if (this.lookupfor == "ItemsList") {
       this.itemCode = $event[0];
-     
+      
     }
     else if (this.lookupfor == "LotsList") {
       console.log("value of lots" + $event);

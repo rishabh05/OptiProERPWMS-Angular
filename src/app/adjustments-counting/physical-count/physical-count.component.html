@@ -12,10 +12,10 @@
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
 
                     <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'DocNo'|translate}}</label>
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'PhyCount_DocNo'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" placeholder="{{'DocNo'|translate}}" name="DocNo" [(ngModel)]="DocNo"
+                                <input type="text" class="form-control form-control-sm" placeholder="{{'PhyCount_DocNo'|translate}}" name="DocNo" [(ngModel)]="DocNo"
                                     [disabled]=true>
                             </div>
                         </div>
@@ -105,16 +105,16 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'QtyOnHand'|translate}}</label>
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'OnHandQty'|translate}}</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control form-control-sm text-right" name="QtyOnHand" [(ngModel)]="QtyOnHand" placeholder="{{'QtyOnHand'|translate}}" [disabled]=true>
+                            <input type="text" class="form-control form-control-sm text-right" name="QtyOnHand" [(ngModel)]="QtyOnHand" placeholder="{{'OnHandQty'|translate}}" [disabled]=true>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'CountedQty'|translate}}</label>
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'PhyCount_CountedQty'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm text-right" name='CountedQty' [(ngModel)]="CountedQty" placeholder="{{'CountedQty'|translate}}"
+                                <input type="text" class="form-control form-control-sm text-right" name='CountedQty' [(ngModel)]="CountedQty" placeholder="{{'PhyCount_CountedQty'|translate}}"
                                     (blur)="onCountedQtyChanged()">
                                 <div class="input-group-append">
                                     <button class="k-button k-primary btn" type="button" *ngIf="!isNonTrack" (click)="onAddItemClick()">
@@ -168,7 +168,7 @@
                                     </dt>
                                     <dd>{{ dataItem.ItemCode }}</dd>
 
-                                    <dt>{{'ViewBatchSerial'|translate}}</dt>
+                                    <dt>{{'PhyCount_ViewBatchSerial'|translate}}</dt>
                                     <dd>
                                         <button class="k-button k-primary simple-btn" type="button" (click)="ShowBatachSerListForClickRow(rowIndex, gridItem)">
                                             <i class="opti-icon-detail-view"></i>
@@ -180,13 +180,13 @@
 
                         <!-- grid for mobile end -->
 
-                        <kendo-grid-column media="(min-width: 768px)" field="DocNo" title="{{'DocNo'|translate}}">
+                        <kendo-grid-column media="(min-width: 768px)" field="DocNo" title="{{'PhyCount_DocNo'|translate}}">
                         </kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="ItemCode" title="{{'ItemCode'|translate}}">
                         </kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="BinNo" title="{{'BinNo'|translate}}">
                         </kendo-grid-column>
-                        <kendo-grid-column media="(min-width: 768px)" field="Discontinued" width="120" title="{{'ViewBatchSerial'|translate}}">
+                        <kendo-grid-column media="(min-width: 768px)" field="Discontinued" width="120" title="{{'PhyCount_ViewBatchSerial'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                 <button class="k-button k-primary simple-btn" type="button" (click)="ShowBatachSerListForClickRow(rowIndex, gridItem)">
                                     <i class="opti-icon-detail-view"></i>
@@ -242,7 +242,7 @@
     <kendo-dialog-titlebar>
         Reported Quantities
     </kendo-dialog-titlebar>
-    <p>{{ItemCode}}</p>
+    <p>{{ItemCodeTemp}}</p>
     <kendo-grid [resizable]="true" [pageSize]="pageSize" [pageable]="pagable" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
         [height]=gridHeight [selectable]="true" [data]="BatchSerialArray" style="max-height:370px" class="no-shadow" #gridItem>
 
@@ -250,10 +250,10 @@
         <kendo-grid-column media="(max-width: 767px)" title="{{'Items'|translate}}" class="opti_mobile-grid-td">
             <ng-template kendoGridCellTemplate let-dataItem>
                 <dl class="opti_mobile_grid_dl">
-                    <dt>{{'BatchSerial'|translate}}</dt>
+                    <dt>{{'BatchSerial_No'|translate}}</dt>
                     <dd>{{ dataItem.LotNo }}</dd>
 
-                    <dt>{{'CountedQty'|translate}}</dt>
+                    <dt>{{'PhyCount_CountedQty'|translate}}</dt>
                     <dd>{{ dataItem.QtyCounted }}</dd>
                 </dl>
                 <dl class="opti_mobile_grid_dl">
@@ -264,21 +264,21 @@
                     </dt>
                     <dd>{{ dataItem.BinNo }}</dd>
 
-                    <dt>{{'QtyOnHand'|translate}}</dt>
+                    <dt>{{'OnHandQty'|translate}}</dt>
                     <dd>{{ dataItem.InWhsQty }}</dd>
                 </dl>
             </ng-template>
         </kendo-grid-column>
         <!-- grid for mobile end -->
 
-        <kendo-grid-column *ngIf="ItemTracking != 'N'" media="(min-width: 768px)" field="LotNo" title="{{'BatchSerial'|translate}}" width="130">
+        <kendo-grid-column *ngIf="ItemTracking != 'N'" media="(min-width: 768px)" field="LotNo" title="{{'BatchSerial_No'|translate}}" width="130">
         </kendo-grid-column>
         <kendo-grid-column media="(min-width: 768px)" field="BinNo" title="{{'BinNo'|translate}}" width="230">
         </kendo-grid-column>
-        <kendo-grid-column media="(min-width: 768px)" field="QtyCounted" title="{{'CountedQty'|translate}}"
+        <kendo-grid-column media="(min-width: 768px)" field="QtyCounted" title="{{'PhyCount_CountedQty'|translate}}"
         class="text-right" headerClass="text-right">
         </kendo-grid-column>
-        <kendo-grid-column media="(min-width: 768px)" field="InWhsQty" title="{{'QtyOnHand'|translate}}" width="100" class="text-right" headerClass="text-right">
+        <kendo-grid-column media="(min-width: 768px)" field="InWhsQty" title="{{'OnHandQty'|translate}}" width="100" class="text-right" headerClass="text-right">
         </kendo-grid-column>
         <kendo-grid-column media="(min-width: 768px)" field="" headerClass="text-center" class="text-center" width="80">
             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">

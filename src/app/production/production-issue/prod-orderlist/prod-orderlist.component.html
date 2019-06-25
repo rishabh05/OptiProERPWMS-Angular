@@ -1,110 +1,114 @@
 <div class="opti_container position-relative bg-white rounded" *ngIf="prodOrderlist == true">
-    <form class="form-with-fix-btnBar" >
+    <form class="form-with-fix-btnBar">
         <div class="opti_container_inner" [perfectScrollbar]=" ">
-  
+
             <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
                 {{'issueForProduction'|translate}}
             </h3>
             <div class="row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
-  
+
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'OrderNo'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" name ='orderNo' 
-                                [(ngModel)]="orderNo" placeholder="{{'OrderNo'|translate}}">
+                                <input type="text" class="form-control form-control-sm" name='orderNo' [(ngModel)]="orderNo"
+                                    placeholder="{{'OrderNo'|translate}}">
                                 <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" type="button" (click)="getOrderList()">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
-                                    <button class="k-button k-primary btn separate-btn" type="button" (click)="getItemListForOrder()">
-                                          <i class="opti-icon-search"></i>
-                                      </button>
+                                    <button class="k-button k-primary btn separate-btn" type="button" (click)="getItemListForOrder(false,true)">
+                                        <i class="opti-icon-search"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-  
+
             <div *ngIf="showSOIetDetail">
-              <!-- Serial tracked item -->
-              <div class="row" *ngIf="soItemsDetail!=undefined && soItemsDetail!=null && soItemsDetail.length>0 ">
-                  <div class="col-12 col-sm-12 col-md-12">
-                      <div class="d-flex align-items-center">
-                          <h4 class="mt-2 mb-2  mt-md-0">{{'Items'|translate}}</h4>
-                          <ul class="color-label mt-2 mt-md-0 ml-auto mb-2">
-                              <li><span class="color-block blue"></span><span>Batch</span></li>
-                              <li><span class="color-block red"></span><span>Serial</span></li>
-                              <li><span class="color-block "></span><span>None</span></li>
-                          </ul>
-                      </div>
-                      <div class="col-12 mb-2 border-bottom"></div>
-                      <kendo-grid class="no-shadow" [kendoGridBinding]="soItemsDetail" [resizable]="true" [pageSize]="pageSize" [pageable]="pagable"
-                       [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
-                          [height]=gridHeight [selectable]="true" [rowClass]="rowCallback" (selectionChange)="openPOByUOM($event, soItemsDetail.ItemCode)"
-                          #gridItem>
-  
-                          <!-- grid for mobile start -->
-                          <kendo-grid-column media="(max-width: 767px)" title="{{'Items'|translate}}" class="opti_mobile-grid-td">
-                              <ng-template kendoGridCellTemplate let-dataItem>
-                                  <dl class="opti_mobile_grid_dl">
-                                      <dt>{{'ItemCode'|translate}}</dt>
-                                      <dd>{{ dataItem.ITEMCODE }}</dd>
-  
-                                      <dt>{{'IssuedQty'|translate}}</dt>
-                                      <dd>{{ dataItem.IssuedQty|numberFormat }}</dd>
-                                  </dl>
-                                  <dl class="opti_mobile_grid_dl">
-                                      <dt class="d-flex align-items-center">{{'BalanceQty'|translate}} <span class="opti_arrow-grid-detail float-right text-center opti_vertical-align ml-auto">›</span></dt>
-                                      <dd>{{ dataItem.BalQty|numberFormat }}</dd>
-                                  </dl>
-                              </ng-template>
-                          </kendo-grid-column>
-                          <!-- grid for mobile end -->
-  
-                          <kendo-grid-column media="(min-width: 768px)" field="ItemCode" title="{{'ItemCode'|translate}}"
-                              [width]="6"></kendo-grid-column>
-                          <kendo-grid-column media="(min-width: 768px)" field="BalQty" headerClass="text-right"
-                              class="text-right" [width]="6" title="{{'BalanceQty'|translate}}">
-                              <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.BalQty | numberFormat}}</ng-template>
-  
-                          </kendo-grid-column>
-                          <kendo-grid-column media="(min-width: 768px)" field="IssuedQty" headerClass="text-right" class="text-right"
-                              [width]="6" format="{0:n3}" title="{{'IssuedQty'|translate}}">
-                              <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.IssuedQty | numberFormat}}</ng-template>
-                          </kendo-grid-column>
-                      </kendo-grid>
-                  </div>
-              </div>
-  
-          </div>
+                <!-- Serial tracked item -->
+                <div class="row" *ngIf="soItemsDetail!=undefined && soItemsDetail!=null && soItemsDetail.length>0 ">
+                    <div class="col-12 col-sm-12 col-md-12">
+                        <div class="d-flex align-items-center">
+                            <h4 class="mt-2 mb-2  mt-md-0">{{'Items'|translate}}</h4>
+                            <ul class="color-label mt-2 mt-md-0 ml-auto mb-2">
+                                <li><span class="color-block blue"></span><span>Batch</span></li>
+                                <li><span class="color-block red"></span><span>Serial</span></li>
+                                <li><span class="color-block "></span><span>None</span></li>
+                            </ul>
+                        </div>
+                        <div class="col-12 mb-2 border-bottom"></div>
+                        <kendo-grid class="no-shadow" [kendoGridBinding]="soItemsDetail" [resizable]="true" [pageSize]="pageSize"
+                            [pageable]="pagable" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
+                            [height]=gridHeight [selectable]="true" [rowClass]="rowCallback" (selectionChange)="openPOByUOM($event, soItemsDetail.ItemCode)"
+                            #gridItem>
+
+                            <!-- grid for mobile start -->
+                            <kendo-grid-column media="(max-width: 767px)" title="{{'Items'|translate}}" class="opti_mobile-grid-td">
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                    <dl class="opti_mobile_grid_dl">
+                                        <dt>{{'ItemCode'|translate}}</dt>
+                                        <dd>{{ dataItem.ITEMCODE }}</dd>
+
+                                        <dt>{{'IssuedQty'|translate}}</dt>
+                                        <dd>{{ dataItem.IssuedQty|numberFormat }}</dd>
+                                    </dl>
+                                    <dl class="opti_mobile_grid_dl">
+                                        <dt class="d-flex align-items-center">{{'BalanceQty'|translate}} <span class="opti_arrow-grid-detail float-right text-center opti_vertical-align ml-auto">›</span></dt>
+                                        <dd>{{ dataItem.BalQty|numberFormat }}</dd>
+                                    </dl>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <!-- grid for mobile end -->
+
+                            <kendo-grid-column media="(min-width: 768px)" field="ItemCode" title="{{'ItemCode'|translate}}"
+                                [width]="6"></kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" field="BalQty" headerClass="text-right" class="text-right"
+                                [width]="6" title="{{'BalanceQty'|translate}}">
+                                <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.BalQty | numberFormat}}</ng-template>
+
+                            </kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" field="RPTQTY" headerClass="text-right" class="text-right"
+                                [width]="6" format="{0:n3}" title="{{'IssuedQty'|translate}}">
+                                <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.RPTQTY | numberFormat}}</ng-template>
+                            </kendo-grid-column>
+                        </kendo-grid>
+                        
+                    </div>
+                </div>
+
+            </div>
         </div>
+        
         <div class="fix-footer-btnBar">
             <div class="col-sm-12 col-12">
                 <hr />
             </div>
-            <div class="col-sm-12 col-12">
-                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="onCancelClick()"><span class="k-icon k-i-close-outline"
-                        role="presentation"></span> {{'Cancel'|translate}}</button>
-                <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" 
-                    roterLink="binTransfer" skipLocationChange><i class="opti-icon-arrow-next"></i></button>
+            <div class="col-sm-12 col-12">               
+                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="onCancelClick()"><span
+                        class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
+                <button type="button" *ngIf="showAddToMeterialAndDelevery()" (click)="submitProduction()"
+                    class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-check"></span>
+                    {{'Submit'|translate}}</button>
             </div>
         </div>
     </form>
 </div>
-  
 
-<app-out-prodissue *ngIf="prodOrderlist == false" (cancelevent)="CancelEvent($event)"></app-out-prodissue>
-  <span *ngIf="showLookupLoader == false">
-      <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
-  </span>
-  
-  <span *ngIf="showConfirmDialog">
-      <app-comon-confirm-dialog [titleMessage]="dialogMsg" [yesButtonText]="yesButtonText" [fromWhere]="dialogFor" [noButtonText]="noButtonText"
-          (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
-  </span>
-  <div class="opti_loader full-section" *ngIf="showLoader">
-      <div class="opti_spinner"></div>
-  </div>
+
+
+<app-out-prodissue *ngIf="prodOrderlist == false" (screenBackEvent)="onBackToScreen($event)"></app-out-prodissue>
+<span *ngIf="showLookupLoader == false">
+    <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupkey)="getLookupKey($event)"></app-lookup>
+</span>
+
+<span *ngIf="showConfirmDialog">
+    <app-comon-confirm-dialog [titleMessage]="dialogMsg" [yesButtonText]="yesButtonText" [fromWhere]="dialogFor"
+        [noButtonText]="noButtonText" (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
+</span>
+<div class="opti_loader full-section" *ngIf="showLoader">
+    <div class="opti_spinner"></div>
+</div>

@@ -165,23 +165,38 @@ export class BinLabelComponent implements OnInit {
   */
   checkValidation(): boolean {
     if (this.fromBin == "") {
-      this.toastr.error('', this.translate.instant("FromBinMsg"));
+      this.toastr.error('', this.translate.instant("InvTransfer_FromBinMsg"));
       this.fromBinInput.nativeElement.focus();
       return false;
     }
     if (this.toBin == "") {
-      this.toastr.error('', this.translate.instant("ToBinMsg"));
+      this.toastr.error('', this.translate.instant("InvTransfer_ToBinMsg"));
       this.toBinInput.nativeElement.focus();
       return false;
     }
-    if (this.noOfCopies == "") {
+    if (this.noOfCopies == "" || this.noOfCopies == "0") {
       this.toastr.error('', this.translate.instant("NoOfCopiesCannotbeBlank"));
       this.noOfCopiesInput.nativeElement.focus();
       return false;
     }
+    if (!this.check_if_is_integer(this.noOfCopies)) {
+      this.toastr.error('', this.translate.instant("NoOfCopiesShouldBeNumeric"));
+      this.noOfCopiesInput.nativeElement.focus();
+      return false;
+    }
+    
     return true;
   }
 
+  check_if_is_integer(value){
+    // I can have spacespacespace1 - which is 1 and validators pases but
+    // spacespacespace doesn't - which is what i wanted.
+    // 1space2 doesn't pass - good
+    // of course, when saving data you do another parseInt.
+ 
+    return ((parseFloat(value) == parseInt(value)) && !isNaN(value));
+ 
+ }
 
   /**
    * this method will check no. of copy count value from server.

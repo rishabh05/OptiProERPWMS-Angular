@@ -70,10 +70,10 @@
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
 
                     <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'ReceivingBin'|translate}}</label>
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'Inbound_ReceivingBin'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" name="RecvbBinvalue" [(ngModel)]=RecvbBinvalue placeholder="{{'ReceivingBin'|translate}}"
+                                <input type="text" class="form-control form-control-sm" name="RecvbBinvalue" [(ngModel)]=RecvbBinvalue placeholder="{{'Inbound_ReceivingBin'|translate}}"
                                     (blur)="OnBinChange()">
                                 <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" type="button" (click)="ShowBins()">
@@ -179,7 +179,7 @@
                                         id="display_name" #display_name (change)="updateLotNumber(display_name.value, rowIndex, gridItem)">
                                     </dd>
 
-                                    <dt>{{'Bin'|translate}}</dt>
+                                    <dt>{{'BinNo'|translate}}</dt>
                                     <dd>{{dataItem.Bin}}</dd>
                                 </dl>
                             </ng-template>
@@ -203,7 +203,7 @@
                                 {{dataItem.LotQty | numberFormat}}
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column media="(min-width: 768px)" field="Bin" [width]="18" title="{{'Bin'|translate}}"></kendo-grid-column>
+                        <kendo-grid-column media="(min-width: 768px)" field="Bin" [width]="18" title="{{'BinNo'|translate}}"></kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="expiryDate" [width]="18" title="{{'ExpiryDate'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem>
                                 {{dataItem.expiryDate | date:dateFormat}}
@@ -234,7 +234,7 @@
                                 </dl>
 
                                 <dl class="opti_mobile_grid_dl">
-                                    <dt class="d-flex align-items-center">{{'Bin'|translate}}
+                                    <dt class="d-flex align-items-center">{{'BinNo'|translate}}
                                         <button type="button" class="btn btn-danger k-button btn-sm btn-icon ml-auto" (click)="openConfirmForDelete(rowIndex, gridItem)">
                                             <span class="k-icon k-i-delete" role="presentation"></span>
                                         </button>
@@ -250,7 +250,7 @@
                                 {{dataItem.LotQty |numberFormat}}
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column media="(min-width: 768px)" field="Bin" [width]="45" title="{{'Bin'|translate}}"></kendo-grid-column>
+                        <kendo-grid-column media="(min-width: 768px)" field="Bin" [width]="45" title="{{'BinNo'|translate}}"></kendo-grid-column>
 
                         <kendo-grid-column media="(min-width: 768px)" headerClass="text-center" class="text-center" field="" [width]="10" title="">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">

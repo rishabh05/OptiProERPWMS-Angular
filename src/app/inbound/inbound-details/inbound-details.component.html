@@ -9,10 +9,10 @@
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
 
                     <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'VendCode'|translate}}</label>
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'VendorCode'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" name="VendCode" [(ngModel)]="VendCode" placeholder="{{'VendCode'|translate}}"
+                                <input type="text" class="form-control form-control-sm" name="VendCode" [(ngModel)]="VendCode" placeholder="{{'VendorCode'|translate}}"
                                     (blur)="OnVendorChange()" [disabled]=showGRPOGridAndBtn>
                                 <div class="input-group-append">
                                     <button class="k-button k-primary btn" type="button" (click)="onVendorLookupClick()" [disabled]=showGRPOGridAndBtn>
@@ -23,7 +23,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'Name'|translate}}</label>
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'VendorName'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
                                 <input type="text" class="form-control form-control-sm" name="VendName" [(ngModel)]="VendName" [disabled]="true">
@@ -81,8 +81,8 @@
                     <span class="k-icon k-i-check" role="presentation"></span> {{'Receive'|translate}}</button>
                 <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="OnCancelClick()">
                     <span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
-                <button type="button" *ngIf="showNext" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" (click)="onNextClick()"
-                    skipLocationChange>
+                <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" 
+                (click)="onNextClick()" [disabled]="!detailsAvailable" skipLocationChange >
                     <i class="opti-icon-arrow-next"></i>
                 </button>
             </div>

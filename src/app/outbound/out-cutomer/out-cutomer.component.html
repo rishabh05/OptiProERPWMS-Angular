@@ -3,18 +3,18 @@
         <div class="opti_container_inner" [perfectScrollbar]=" ">
 
             <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
-                {{'Delivery'|translate}}
+                {{'Outbound_Delivery'|translate}}
             </h3>
             <div class="row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
 
                     <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'Customer'|translate}}</label>
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'Outbound_Customer'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
                                 <input (blur)="onCustomerCodeBlur()" [disabled]='orderCollection!=undefined && orderCollection!=null && orderCollection.length>0'
                                     type="text" class="form-control form-control-sm" name='customerCode' [(ngModel)]="customerCode"
-                                    placeholder="{{'Customer'|translate}}" >
+                                    placeholder="{{'Outbound_Customer'|translate}}" >
                                 <div class="input-group-append">
                                     <button [disabled]='orderCollection!=undefined && orderCollection!=null && orderCollection.length>0'
                                         class="k-button k-primary btn" (click)="openCustomerLookup()" type="button">
