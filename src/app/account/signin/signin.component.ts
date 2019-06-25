@@ -94,6 +94,10 @@ export class SigninComponent implements OnInit {
         sessionStorage.setItem('ConfigData', JSON.stringify(data));
         this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
         //alert("config param service url:"+this.config_params.service_url);
+
+        // localStorage.setItem("PSURLFORADMIN", "http://139.144.10.220/OptiAdminhana/");
+
+
         this.signinService.getPSURL(this.config_params.service_url).subscribe(
           data => {
            // alert("getPSURL data:"+data);

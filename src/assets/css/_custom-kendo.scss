@@ -83,7 +83,6 @@ body {
         font-size: $font-size-small;
         border: none;
         &:focus {
-            outline: none;
         }
     }
     button.k-button:first-child:not(:last-child) {

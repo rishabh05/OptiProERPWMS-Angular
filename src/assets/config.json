@@ -1,5 +1,5 @@
 {
-    "service_url": "http://172.16.6.140/optiprowms/",
+    "service_url": "http://localhost:57911/",
     "AppVersion": "1.2.10",
     "clientName": "EllyzaLondon"
 }

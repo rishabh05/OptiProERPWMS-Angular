@@ -459,7 +459,7 @@ export class OutProdissueComponent implements OnInit {
           }
         }
         this.comingSelectedMeterials = data;
-      }
+      } 
       else{
         this.comingSelectedMeterials = lookupValue;
       }
