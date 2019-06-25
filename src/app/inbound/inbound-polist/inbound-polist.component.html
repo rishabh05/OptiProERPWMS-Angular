@@ -37,10 +37,10 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'Item'|translate}}</label>
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'ItemCode'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" placeholder="{{'Item'|translate}}" class="form-control form-control-sm" name="itemCode" [(ngModel)]=itemCode>
+                                <input type="text" placeholder="{{'ItemCode'|translate}}" class="form-control form-control-sm" name="itemCode" [(ngModel)]=itemCode>
                                 <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" type="button" (click)="onItemlookupClick()">
                                         <i class="opti-icon-hammenu"></i>
@@ -86,12 +86,12 @@
                                         <dt>{{'ItemCode'|translate}}</dt>
                                         <dd>{{ dataItem.ITEMCODE }}</dd>
 
-                                        <dt>{{'ReceiveQuantity'|translate}}</dt>
+                                        <dt>{{'ReceiveQty'|translate}}</dt>
                                         <dd>{{dataItem.RPTQTY | numberFormat}}</dd>
                                     </dl>
 
                                     <dl class="opti_mobile_grid_dl">
-                                        <dt class="d-flex align-items-center">{{'OpenQuantity'|translate}}
+                                        <dt class="d-flex align-items-center">{{'OpenQty'|translate}}
                                             <span class="opti_arrow-grid-detail ml-auto text-center opti_vertical-align">›</span>
                                         </dt>
                                         <dd>{{dataItem.OPENQTY | numberFormat}}</dd>
@@ -101,12 +101,12 @@
                             <!-- grid for mobile end -->
 
                             <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE" title="{{'ItemCode'|translate}}"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" title="{{'OpenQuantity'|translate}}" headerClass="text-right" class="text-right">
+                            <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" title="{{'OpenQty'|translate}}" headerClass="text-right" class="text-right">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     {{dataItem.OPENQTY | numberFormat}}
                                 </ng-template>
                             </kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="RPTQTY" title="{{'ReceiveQuantity'|translate}}" headerClass="text-right" class="text-right">
+                            <kendo-grid-column media="(min-width: 768px)" field="RPTQTY" title="{{'ReceiveQty'|translate}}" headerClass="text-right" class="text-right">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     {{dataItem.RPTQTY |numberFormat}}
                                 </ng-template>

@@ -81,7 +81,9 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">{{'BatchQty'|translate}}</label>
                             <div class="col-sm-9">
                                 <input type="number" #BatchQty class="form-control form-control-sm text-right"
-                                    name='BatchQty' [(ngModel)]=enteredQty placeholder="{{'BatchQty'|translate}}">
+                                [ngModel]="enteredQty | numberFormat" 
+                                (ngModelChange)="enteredQty=$event" 
+                                name='BatchQty' placeholder="{{'BatchQty'|translate}}"> 
                             </div>
                         </div>
                         <div class="form-group row" *ngIf="tracking=='N'">
@@ -99,9 +101,8 @@
                         <div class="form-group row" *ngIf="tracking=='S'">
                             <label for="inputPassword" class="col-sm-3 col-form-label">{{'SerialNo'|translate}}</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control form-control-sm"
-                                    (blur)="checkAndValidateSerial()" [(ngModel)]=serialBatchNo name='Serial'
-                                    placeholder="{{'SerialNo'|translate}}">
+                                <input type="text" class="form-control form-control-sm" (blur)="checkAndValidateSerial()"
+                                 [(ngModel)]=serialBatchNo name='Serial' placeholder="{{'Serial'|translate}}">
                             </div>
                         </div>
                         <div class="form-group row" *ngIf="tracking=='B'">

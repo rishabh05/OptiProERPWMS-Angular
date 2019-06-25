@@ -246,13 +246,13 @@ export class PhysicalCountComponent implements OnInit {
   LotExistCheck() {
     if (this.ItemTracking == "S") {
       this.showDialog("addBatchSer", this.translate.instant("yes"), this.translate.instant("no"),
-        this.translate.instant("LotvalidSerial"));
+        this.translate.instant("PhyCount_LotvalidSerial"));
       this.CountedQty = "1";
       this.formatCountedQty();
     }
     if (this.ItemTracking == "B") {
       this.showDialog("addBatchSer", this.translate.instant("yes"), this.translate.instant("no"),
-        this.translate.instant("LotvalidBatch"));
+        this.translate.instant("PhyCount_LotvalidBatch"));
     }
   }
 
@@ -485,7 +485,7 @@ export class PhysicalCountComponent implements OnInit {
 
         if (TotalSave == DocDataLength) {
           this.showDialog("SubmitAll", this.translate.instant("yes"), this.translate.instant("no"),
-            this.translate.instant("PhysicalCount.SubmitSaveLines"));
+            this.translate.instant("PhyCount_SubmitSaveLines"));
         }
         else {
           this.resetData();
@@ -511,12 +511,16 @@ export class PhysicalCountComponent implements OnInit {
         this.showLoader = false;
         if (data != null) {
           if (data == "True") {
-            this.toastr.success('', this.translate.instant("PhysicalCount.DataSavedSuccessfully"));
+            this.toastr.success('', this.translate.instant("PhyCount_DataSavedSuccessfully"));
+            this.QtyOnHand = "0";
+            this.CountedQty = "0";
+            this.formatCountedQty();
+            this.formatOnHandQty();
             this.NextRecord();
             this.showitemlist = true;
           }
           else {
-            this.toastr.success('', this.translate.instant("PhysicalCount.NoDataSaved"));
+            this.toastr.success('', this.translate.instant("PhyCount_NoDataSaved"));
           }
         }
       },
@@ -707,12 +711,12 @@ export class PhysicalCountComponent implements OnInit {
     let result = oAddPhysicalCountData.LotSerial.find(element => element.ItemCode == this.ItemCode && element.DocNo == this.DocNo && element.LotNo.toUpperCase() == this.batchserno.toUpperCase());
     if (result != undefined) {
       if (this.ItemTracking == "S") {
-        this.showDialog("overwrite", this.translate.instant("PhysicalCount.Overwrite"), "",
-          this.translate.instant("PhysicalCount.SerialQtyChangeMsg"));
+        this.showDialog("overwrite", this.translate.instant("PhyCount_Overwrite"), "",
+          this.translate.instant("PhyCount_SerialQtyChangeMsg"));
       }
       if (this.ItemTracking == "B") {
-        this.showDialog("overwrite", this.translate.instant("PhysicalCount.Overwrite"), "add",
-          this.translate.instant("PhysicalCount.BatchQtyChangeMsg"));
+        this.showDialog("overwrite", this.translate.instant("PhyCount_Overwrite"), "add",
+          this.translate.instant("PhyCount_BatchQtyChangeMsg"));
       }
     }
     this.formatCountedQty();
@@ -722,9 +726,9 @@ export class PhysicalCountComponent implements OnInit {
     if (this.ItemTracking != "N") {
       if (this.batchserno == undefined || this.batchserno == "" || this.batchserno == null) {
         if (this.ItemTracking == "S") {
-          this.toastr.error('', this.translate.instant("PhysicalCount.SerialLotcannotbeblank"));
+          this.toastr.error('', this.translate.instant("PhyCount_SerialLotcannotbeblank"));
         } else {
-          this.toastr.error('', this.translate.instant("PhysicalCount.BatchLotcannotbeblank"));
+          this.toastr.error('', this.translate.instant("PhyCount_BatchLotcannotbeblank"));
         }
         return;
       }
@@ -736,9 +740,9 @@ export class PhysicalCountComponent implements OnInit {
 
     if (!this.isLotAdded && this.ItemTracking != "N") {
       if (this.ItemTracking == "S") {
-        this.toastr.error('', this.translate.instant("PhysicalCount.SerialLotisnotadded"));
+        this.toastr.error('', this.translate.instant("PhyCount_SerialLotisnotadded"));
       } else {
-        this.toastr.error('', this.translate.instant("PhysicalCount.BatchLotisnotadded"));
+        this.toastr.error('', this.translate.instant("PhyCount_BatchLotisnotadded"));
       }
       return;
     }
@@ -766,9 +770,9 @@ export class PhysicalCountComponent implements OnInit {
     if (this.ItemTracking != "N") {
       if (this.batchserno == undefined || this.batchserno == "" || this.batchserno == null) {
         if (this.ItemTracking == "S") {
-          this.toastr.error('', this.translate.instant("PhysicalCount.SerialLotcannotbeblank"));
+          this.toastr.error('', this.translate.instant("PhyCount_SerialLotcannotbeblank"));
         } else {
-          this.toastr.error('', this.translate.instant("PhysicalCount.BatchLotcannotbeblank"));
+          this.toastr.error('', this.translate.instant("PhyCount_BatchLotcannotbeblank"));
         }
         return;
       }
@@ -780,9 +784,9 @@ export class PhysicalCountComponent implements OnInit {
 
     if (!this.isLotAdded && this.ItemTracking != "N") {
       if (this.ItemTracking == "S") {
-        this.toastr.error('', this.translate.instant("PhysicalCount.SerialLotisnotadded"));
+        this.toastr.error('', this.translate.instant("PhyCount_SerialLotisnotadded"));
       } else {
-        this.toastr.error('', this.translate.instant("PhysicalCount.BatchLotisnotadded"));
+        this.toastr.error('', this.translate.instant("PhyCount_BatchLotisnotadded"));
       }
       return;
     }
@@ -808,7 +812,7 @@ export class PhysicalCountComponent implements OnInit {
       this.showbatchser = false;
       this.showitemlist = false;
     }
-    this.toastr.success('', this.translate.instant("PhysicalCount.Operation"));
+    this.toastr.success('', this.translate.instant("PhyCount_Operation"));
     this.batchserno = "";
     this.CountedQty = "0";
     this.formatCountedQty();
@@ -899,9 +903,9 @@ export class PhysicalCountComponent implements OnInit {
     if (this.ItemTracking != "N") {
       if (this.batchserno == undefined || this.batchserno == "" || this.batchserno == null) {
         if (this.ItemTracking == "S") {
-          this.toastr.error('', this.translate.instant("PhysicalCount.SerialLotcannotbeblank"));
+          this.toastr.error('', this.translate.instant("PhyCount_SerialLotcannotbeblank"));
         } else {
-          this.toastr.error('', this.translate.instant("PhysicalCount.BatchLotcannotbeblank"));
+          this.toastr.error('', this.translate.instant("PhyCount_BatchLotcannotbeblank"));
         }
         return;
       }
@@ -913,9 +917,9 @@ export class PhysicalCountComponent implements OnInit {
 
     if (!this.isLotAdded && this.ItemTracking != "N") {
       if (this.ItemTracking == "S") {
-        this.toastr.error('', this.translate.instant("PhysicalCount.SerialLotisnotadded"));
+        this.toastr.error('', this.translate.instant("PhyCount_SerialLotisnotadded"));
       } else {
-        this.toastr.error('', this.translate.instant("PhysicalCount.BatchLotisnotadded"));
+        this.toastr.error('', this.translate.instant("PhyCount_BatchLotisnotadded"));
       }
       return;
     }
