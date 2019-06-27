@@ -227,7 +227,7 @@ export class LookupComponent implements OnInit {
     this.table_head = [
       {
         field: 'LOTNO',
-        title: this.translate.instant("LotNo"),
+        title: this.translate.instant("BatchSerial_No"),
         type: 'text',
         width: '100'
       },
@@ -258,7 +258,7 @@ export class LookupComponent implements OnInit {
         width: '100'
       }
     ];
-    this.lookupTitle = this.translate.instant("LookupTitle_BinNoList");
+    this.lookupTitle = this.translate.instant("Palletmessage.Lot");
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
         this.dialogOpened = true;

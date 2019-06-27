@@ -160,7 +160,7 @@
                                         #VendorLot (change)="updateVendorLot(VendorLot.value, rowIndex)">
                                     </dd>
 
-                                    <dt>{{'Qty'|translate}}</dt>
+                                    <dt>{{'Quantity'|translate}}</dt>
                                     <dd>{{dataItem.LotQty | numberFormat}}</dd>
 
                                     <dt>{{'ExpiryDate'|translate}}</dt>
@@ -198,7 +198,7 @@
                                     id="display_name" #display_name (change)="updateLotNumber(display_name.value, idx, gridItem)">
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column media="(min-width: 768px)" field="LotQty" headerClass="text-right" class="text-right" [width]="18" title="{{'Qty'|translate}}">
+                        <kendo-grid-column media="(min-width: 768px)" field="LotQty" headerClass="text-right" class="text-right" [width]="18" title="{{'Quantity'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem>
                                 {{dataItem.LotQty | numberFormat}}
                             </ng-template>
@@ -229,7 +229,7 @@
                         <kendo-grid-column media="(max-width: 767px)" title="List" class="opti_mobile-grid-td">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                 <dl class="opti_mobile_grid_dl">
-                                    <dt>{{'Qty'|translate}}</dt>
+                                    <dt>{{'Quantity'|translate}}</dt>
                                     <dd>{{dataItem.LotQty |numberFormat}}</dd>
                                 </dl>
 
@@ -245,7 +245,7 @@
                         </kendo-grid-column>
                         <!-- grid for mobile end -->
 
-                        <kendo-grid-column media="(min-width: 768px)" field="LotQty" headerClass="text-right" class="text-right" [width]="45" title="{{'Qty'|translate}}">
+                        <kendo-grid-column media="(min-width: 768px)" field="LotQty" headerClass="text-right" class="text-right" [width]="45" title="{{'Quantity'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem>
                                 {{dataItem.LotQty |numberFormat}}
                             </ng-template>
