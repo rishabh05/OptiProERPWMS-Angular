@@ -213,6 +213,7 @@
   "AddToDeleiver": "Add To Delivery",
   "Deleiver": "Deliver",
   "NoOpenQuantity": "No open quantity available",
+  "NoOpenQuantityValid": "Quantity must be equal or less than open quantity",
   "SysBatch": "Sys Batch",
   "MfrBatch": "Mfr Batch",
   "ScanBatch": "Scan Batch",

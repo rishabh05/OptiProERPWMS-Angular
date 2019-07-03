@@ -281,8 +281,13 @@ export class InboundGRPOComponent implements OnInit {
       quantitySum += Number(this.recvingQuantityBinArray[i].LotQty);
     }
     quantitySum = quantitySum + Number(this.qty);
-    if (quantitySum > Number(this.OpenQty)) {
+
+    if(Number(this.OpenQty) == 0){
       this.toastr.error('', this.translate.instant("NoOpenQuantity"));
+      this.qty = 0;
+      return false;
+    } else if (quantitySum > Number(this.OpenQty)) {
+      this.toastr.error('', this.translate.instant("NoOpenQuantityValid"));
       this.qty = 0;
       return false;
     } else {
