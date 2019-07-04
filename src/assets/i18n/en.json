@@ -49,6 +49,7 @@
   "Outbound_Delivery": "Delivery",
   "Outbound_Customer": "Customer",
   "Outbound_DeleiveryToCustomer": "Delivery to Customer",
+  "Outbound_SO": "SO #",
 
   "ProdReceipt_AcceptQty": "Accepted Qty.",
   "ProdReceipt_TransType": "Trans. Type",
