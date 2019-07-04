@@ -198,7 +198,8 @@ export class InventoryEnquiryComponent implements OnInit {
     if (this.lookupfor == "LotsList") {
       //this.lotNo = $event[0];
       this.isFromLotChange = false;// reset this variable for batch value is not from on change.
-      this.itemCode = $event[2];
+      //this.itemCode = $event[2];
+      this.itemCode = "";
       this.binNo = $event[3];
       this.itemNameLabel = $event[8];
       this.itemName = "";//in case of  item code send itemName = ""
@@ -210,7 +211,7 @@ export class InventoryEnquiryComponent implements OnInit {
         this.lotNo = $event[0];
         this.nonTracked = false;
       }
-      if (this.lotNo != "" && this.itemCode != "")
+      if (this.lotNo != "" ) 
         this.GetItemOrBatchDetail();
 
     }

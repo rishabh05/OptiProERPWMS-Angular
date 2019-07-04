@@ -1,6 +1,7 @@
 {
-    "service_url": "http://172.16.6.140/optiprowms/",
+    "service_url": "http://172.16.6.134/OptiProWMS/",
     "AppVersion": "1.2.10",
     "clientName": "EllyzaLondon"
-}
+} 
+     
   

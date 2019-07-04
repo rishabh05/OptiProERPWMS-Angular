@@ -286,8 +286,14 @@ export class ProductionReceiptComponent implements OnInit {
     this.model = { options: '1' };
     this.acceptQty =  Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));//ye niche vali field jo calculation se dikhate hai.
     this.rjQty =  Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));//ye niche vali field jo calculation se dikhate hai.
+    this.showViewAcceptButton = false;
+    this.showViewRejectButton = false;
+    this.showAddMoreButton = false; 
   }
   resetOnSerchClick(){
+    this.showViewAcceptButton = false;
+    this.showViewRejectButton = false;
+
     this.Lots = [];
     this.Items = [];
     this.UDF = [];

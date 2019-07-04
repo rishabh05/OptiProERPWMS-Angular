@@ -55,6 +55,7 @@ export class PortalLeftComponent implements OnInit {
   getAllMenus(){
     this.menuService.getAllMenus().subscribe(
       data => {
+        if(data!=null)
         this.displayMenuOptions(data.Modules);
       },
       error => {

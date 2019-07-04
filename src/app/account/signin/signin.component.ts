@@ -79,46 +79,48 @@ export class SigninComponent implements OnInit {
       this.password = '';
       this.isRemember = false;
     }
-   // alert('ng on init');
     // Apply classes on Body
     const element = document.getElementsByTagName("body")[0];
     element.className = "";
-    element.classList.add("opti_body-login");
+    element.classList.add("opti_body-login"); 
     element.classList.add("opti_account-module");
-    //this.getPSURL();
-   console.log("init","init");
-
-   // alert("ngoninit config.json subs get data");
+    //localStorage.setItem("service_url","http://172.16.6.134/OptiProWMS/");
+  if(localStorage.getItem("service_url")!=null && localStorage.getItem("service_url")!=undefined && 
+  localStorage.getItem("service_url")!=""){
+    
+    var url:any ={ 'service_url':localStorage.getItem("service_url")}
+    //alert("serviceURL not null:"+JSON.stringify(url));
+    sessionStorage.setItem('ConfigData', JSON.stringify(url));  
+         this.getPSURL(); //call method after seting configDataObject.
+   }else{
+    //alert("serviceURL null:"+JSON.stringify(url));
     this.httpClientSer.get('./assets/config.json').subscribe( 
       data => {
         sessionStorage.setItem('ConfigData', JSON.stringify(data));
-        this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
-        //alert("config param service url:"+this.config_params.service_url);
-        this.signinService.getPSURL(this.config_params.service_url).subscribe(
-          data => {
-           // alert("getPSURL data:"+data);
-            if (data != null) {
-             // alert('success data ps url:'+data);
-              // localStorage.setItem("PSURLFORADMIN", "http://139.144.10.220/OptiAdmin/");
-              localStorage.setItem("PSURLFORADMIN", data);
-            } 
-          },
-          error => {
-          //  alert("getPSURL error:"+error);
-            this.toastr.error('', 'There is some error to connect with server', error);
-            this.showLoader = false;
-          }
-        )  
+           this.getPSURL(); 
       },
       (err: HttpErrorResponse) => {
-      //  alert("getPSURL httperrorsection");
         console.log(err.message);
       }
     );
-
-
-
+   } 
   }
+
+  getPSURL(){
+    //localStorage.setItem("PSURLFORADMIN", "http://172.16.6.140/OptiADMINHANA/");
+    this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
+        this.signinService.getPSURL(this.config_params.service_url).subscribe(
+          data => {
+            if (data != null) {
+              localStorage.setItem("PSURLFORADMIN", data);
+            } 
+          }, 
+          error => {
+            this.toastr.error('', 'There is some error to connect with server', error);
+            this.showLoader = false;
+          });
+  }
+    
 
   async ngOnChanges(): Promise<void> { 
     this.commonService.loadConfig();
@@ -143,10 +145,8 @@ export class SigninComponent implements OnInit {
       this.selectedItem = document.getElementById("compId").innerText.trim();
       if (this.validateFields()) {
         this.showLoader = false;
-        
         return;
       }
-      //alert("call getlicence data");
       this.getLicenseData();
     //  this.showLoader = false;
     //   // localStorage.setItem("GUID", this.licenseData[1].GUID);
