@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
     "service_url": "http://172.16.6.134/OptiProWMS/",
+=======
+    "service_url": "http://localhost:57911/",
+>>>>>>> 1a0c9d99b47c3deb89406ee434f97c2ab825354e
     "AppVersion": "1.2.10",
     "clientName": "EllyzaLondon"
 } 

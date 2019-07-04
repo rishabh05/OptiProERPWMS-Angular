@@ -88,7 +88,7 @@ export class InboundDetailsComponent implements OnInit {
         console.log(data);
         if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
           // alert("Goods Receipt PO generated successfully with Doc No: " + data.DocEntry);
-          this.toastr.success('', this.translate.instant("GRPOSuccessMessage") + data[0].DocEntry);
+          this.toastr.success('', this.translate.instant("GRPOSuccessMessage") +" "+ data[0].SuccessNo);
           localStorage.setItem("Line", "0");
           localStorage.setItem("GRPOReceieveData", "");
           localStorage.setItem("AddToGRPO", "");

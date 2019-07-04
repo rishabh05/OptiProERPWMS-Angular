@@ -313,7 +313,7 @@ export class BinTransferComponent implements OnInit {
             this.serviceData = data;
           }
           else {
-            this.toastr.error('', this.translate.instant("NoBinsAvailableMsg"));
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
           }
         }
       },
@@ -426,7 +426,7 @@ export class BinTransferComponent implements OnInit {
             }
           }
           else {
-            this.toastr.error('', this.translate.instant("NoBinsAvailableMsg"));
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
           }
         }
       },

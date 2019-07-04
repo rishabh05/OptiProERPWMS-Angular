@@ -64,7 +64,7 @@ export class ProductionReceiptComponent implements OnInit {
   enteredQty:any = "0";
   enterQtyPlaceholder:any;
   displayFormAndSubmit: boolean= false;
-
+  shouldShowExpiryDate: boolean= true;
   acceptQty:any ;
   rjQty:any ;
   showAddMoreButton: boolean = false;
@@ -272,6 +272,10 @@ export class ProductionReceiptComponent implements OnInit {
     );
   }
   resetAfterSubmit() {
+    this.showAddMoreButton = false;
+    this.showViewAcceptButton = false;
+    this.showViewRejectButton = false;
+    this.shouldShowExpiryDate = true;
     this.displayFormAndSubmit = false;
     this.Lots = [];
     this.Items = [];
@@ -732,7 +736,11 @@ export class ProductionReceiptComponent implements OnInit {
         if (data.Table != undefined && data.Table != null && data.Table!="" && data.Table.length>0) { 
            this.showLookupLoader = false;
            this.itemDataResponse =  data.Table[0];
-           this.setFormData(data.Table[0])
+           this.shouldShowExpiryDate = true;
+           if("N" == this.itemDataResponse.TRACKING){
+            this.shouldShowExpiryDate = false;
+           }
+           this.setFormData(data.Table[0]);          
           return;
         } else{ 
           this.toastr.error('', this.translate.instant("OrderNotExistMessge"));

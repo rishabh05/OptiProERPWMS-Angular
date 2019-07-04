@@ -227,7 +227,7 @@ export class LookupComponent implements OnInit {
     this.table_head = [
       {
         field: 'LOTNO',
-        title: this.translate.instant("LotNo"),
+        title: this.translate.instant("BatchSerial_No"),
         type: 'text',
         width: '100'
       },
@@ -258,7 +258,7 @@ export class LookupComponent implements OnInit {
         width: '100'
       }
     ];
-    this.lookupTitle = this.translate.instant("LookupTitle_BinNoList");
+    this.lookupTitle = this.translate.instant("Palletmessage.Lot");
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
         this.dialogOpened = true;
@@ -613,26 +613,39 @@ export class LookupComponent implements OnInit {
   }
 
   showLotsList() {
+    var titleValue = this.translate.instant("BatchNo");
+    if (this.serviceData !== undefined && this.serviceData.length > 0) {
+        if("S" == this.serviceData[0].TRACKING){
+          titleValue = this.translate.instant("SerialNo");
+        } else if("N" == this.serviceData[0].TRACKING){
+          titleValue = this.serviceData[0].TRACKING;
+        }
+    }
     this.table_head = [
-      {
-        field: 'LOTNO',
-        title: this.translate.instant("BatchNo"),
-        type: 'text',
-        width: '100'
-      },
-      {
-        field: 'ITEMCODE',
-        title: this.translate.instant("ItemCode"),
-        type: 'text',
-        width: '100'
-      },
-      {
-        field: 'BINNO',
-        title: this.translate.instant("BinNo"),
-        type: 'text',
-        width: '100'
-      }
-    ];
+        {
+          field: 'LOTNO',
+          title: titleValue,
+          type: 'text',
+          width: '100'
+        },
+        {
+          field: 'ITEMCODE',
+          title: this.translate.instant("ItemCode"),
+          type: 'text',
+          width: '100'
+        },
+        {
+          field: 'BINNO',
+          title: this.translate.instant("BinNo"),
+          type: 'text',
+          width: '100'
+        }
+      ];
+    
+    if("N" == titleValue){
+      this.table_head.splice(0, 1);
+    }
+
     this.lookupTitle = this.translate.instant("BatchSrBinList");
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {

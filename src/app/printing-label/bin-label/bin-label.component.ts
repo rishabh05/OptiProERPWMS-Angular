@@ -66,7 +66,7 @@ export class BinLabelComponent implements OnInit {
    * Batch serial lookup click.
    */
   OnToBinLookupClick() {
-    console.log('from bin click');
+    console.log('to bin click');
     this.getToBinsList();
   }
 
@@ -115,8 +115,21 @@ export class BinLabelComponent implements OnInit {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
             return;
           }
+          
           this.serviceData = data;
-          this.lookupfor = "ToBinList";
+          var serviceDataTemp: any[] =[];  
+          var shouldAdd: boolean = false;
+          for (let index = 0; index < this.serviceData.length; index++) {
+            if(this.fromBin == this.serviceData[index].BINNO){
+              shouldAdd = true;
+              continue;
+            } 
+            if(shouldAdd){ 
+              serviceDataTemp.push(this.serviceData[index]);
+            }
+          }
+          this.serviceData = serviceDataTemp;
+          this.lookupfor = "ToBinList"; 
         }
         else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
@@ -174,14 +187,29 @@ export class BinLabelComponent implements OnInit {
       this.toBinInput.nativeElement.focus();
       return false;
     }
-    if (this.noOfCopies == "") {
+    if (this.noOfCopies == "" || this.noOfCopies == "0") {
       this.toastr.error('', this.translate.instant("NoOfCopiesCannotbeBlank"));
       this.noOfCopiesInput.nativeElement.focus();
       return false;
     }
+    if (!this.check_if_is_integer(this.noOfCopies)) {
+      this.toastr.error('', this.translate.instant("NoOfCopiesShouldBeNumeric"));
+      this.noOfCopiesInput.nativeElement.focus();
+      return false;
+    }
+    
     return true;
   }
 
+  check_if_is_integer(value){
+    // I can have spacespacespace1 - which is 1 and validators pases but
+    // spacespacespace doesn't - which is what i wanted.
+    // 1space2 doesn't pass - good
+    // of course, when saving data you do another parseInt.
+ 
+    return ((parseFloat(value) == parseInt(value)) && !isNaN(value));
+ 
+ }
 
   /**
    * this method will check no. of copy count value from server.

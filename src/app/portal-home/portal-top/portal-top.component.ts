@@ -27,7 +27,7 @@ export class PortalTopComponent implements OnInit {
   loggedinWarehouse: string;
   updatetopBarSubs: ISubscription;
   showConfirmDialog:boolean = false;
-  appVersion: string="";
+  appVersion: string="Version : 1.2.10";
   
   constructor(
     private modalService: NgbModal, private commonService: Commonservice, private toastr: ToastrService, private router: Router, private translate: TranslateService) {

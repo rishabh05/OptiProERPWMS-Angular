@@ -211,11 +211,15 @@ export class InventoryEnquiryComponent implements OnInit {
         this.lotNo = $event[0];
         this.nonTracked = false;
       }
+<<<<<<< HEAD
       if (this.lotNo != "" ) 
+=======
+      if (this.lotNo != "")
+>>>>>>> 1a0c9d99b47c3deb89406ee434f97c2ab825354e
         this.GetItemOrBatchDetail();
 
     }
-    if (this.lookupfor == "ItemCodeList") {
+    if (this.lookupfor == "ItemsList") {
       this.isFromItemChange = false;// reset this variable for batch value is not from on change.
       console.log("value of lots" + $event);
       this.lotNo = "";  //in case of  item code send lotNo = ""
@@ -342,7 +346,7 @@ export class InventoryEnquiryComponent implements OnInit {
           }
           this.showLookupLoader = false;
           this.serviceData = data;
-          this.lookupfor = "ItemCodeList";
+          this.lookupfor = "ItemsList";
         }
         else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
