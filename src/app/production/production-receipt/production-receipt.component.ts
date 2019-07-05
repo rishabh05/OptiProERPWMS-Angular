@@ -668,8 +668,12 @@ export class ProductionReceiptComponent implements OnInit {
            this.toastr.error('', this.translate.instant("SerialNoAlreadyUsed"));
            this.serialBatchNo = "";
             return;
-          }else{
-            // allow data
+          }else if(data =="2"){
+            this.toastr.error('', this.translate.instant("invalidBatchSerial"));
+           this.serialBatchNo = "";
+            return;
+          }else{ 
+            // allow data 
           }
         }
       },
@@ -683,7 +687,7 @@ export class ProductionReceiptComponent implements OnInit {
   * Method to get list of inquries from server.
   */
   public showOrderList() {
-    this.showLoader = true;
+    this.showLoader = true; 
     this.orderNoListSubs = this.productionService.getOrderNumberList(this.orderNumber).subscribe(
       data => {
         this.showLoader = false;
@@ -699,7 +703,7 @@ export class ProductionReceiptComponent implements OnInit {
             this.lookupfor = "OrderList";
             return;
           }
-        }
+        } 
       },
       error => {
         this.toastr.error('', error);
