@@ -211,11 +211,7 @@ export class InventoryEnquiryComponent implements OnInit {
         this.lotNo = $event[0];
         this.nonTracked = false;
       }
-<<<<<<< HEAD
       if (this.lotNo != "" ) 
-=======
-      if (this.lotNo != "")
->>>>>>> 1a0c9d99b47c3deb89406ee434f97c2ab825354e
         this.GetItemOrBatchDetail();
 
     }
