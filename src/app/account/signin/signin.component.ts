@@ -97,7 +97,6 @@ export class SigninComponent implements OnInit {
     this.httpClientSer.get('./assets/config.json').subscribe( 
       data => {
         sessionStorage.setItem('ConfigData', JSON.stringify(data));
-<<<<<<< HEAD
            this.getPSURL(); 
       },
       (err: HttpErrorResponse) => {
@@ -110,14 +109,6 @@ export class SigninComponent implements OnInit {
   getPSURL(){
     //localStorage.setItem("PSURLFORADMIN", "http://172.16.6.140/OptiADMINHANA/");
     this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
-=======
-        this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
-        //alert("config param service url:"+this.config_params.service_url);
-
-        // localStorage.setItem("PSURLFORADMIN", "http://139.144.10.220/OptiAdminhana/");
-
-
->>>>>>> 1a0c9d99b47c3deb89406ee434f97c2ab825354e
         this.signinService.getPSURL(this.config_params.service_url).subscribe(
           data => {
             if (data != null) {
