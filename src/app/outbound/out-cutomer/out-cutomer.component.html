@@ -43,7 +43,7 @@
                     <div>
                         <!-- (selectionChange)="openPOByUOM($event,soItemsDetail.ITEMCODE)" -->
                         <kendo-grid class="no-shadow" [kendoGridBinding]="orderCollection" [resizable]="true"
-                            [pageSize]="50" [pageable]="true" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
+                            [pageSize]="pageSize" [pageable]="pagable" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
                             [height]=gridHeight (selectionChange)="openOrderScreen($event)"
                             [selectable]="true" #gridItem>
 

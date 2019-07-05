@@ -316,11 +316,17 @@ export class ProductionReceiptComponent implements OnInit {
     if (this.showRejectQtyField == true && this.model.options == '2') { // reject qty
       //means add in accept qty
       if (this.validateForm() == false) { return; }
-      if (this.checkIfSerialBatchAlreadyExists(this.serialBatchNo) == true) {
-        if (this.tracking == "B") { this.toastr.error('', this.translate.instant("BatchAlreadyExists")); }
-        if (this.tracking == "S") { this.toastr.error('', this.translate.instant("SerialAlreadyExist")); }
-        return;
-      } else { }
+      if(this.tracking == "N"){
+
+      }else{
+       //check case or check karna padega ki non tracked hai kya
+       if (this.checkIfSerialBatchAlreadyExists(this.serialBatchNo) == true) {
+       if (this.tracking == "B") { this.toastr.error('', this.translate.instant("BatchAlreadyExists")); }
+       if (this.tracking == "S") { this.toastr.error('', this.translate.instant("SerialAlreadyExist")); }
+       return;
+       } else { }
+      }
+      
       this.calculateRejectQtyOnAddMore();
     } else {
 
@@ -859,6 +865,11 @@ export class ProductionReceiptComponent implements OnInit {
       if(parseFloat(this.rejectQty).toFixed(4)> parseFloat("0").toFixed(4)){
         this.showRejectQtyField = true;
       }
+    }
+
+    // show add more button incase of non track item if rejected items available.
+    if(this.tracking == "N" && this.showRejectQtyField == true ){
+      this.showAddMoreButton = true;    
     }
 
   }
