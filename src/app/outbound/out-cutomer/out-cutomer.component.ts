@@ -156,7 +156,11 @@ export class OutCutomerComponent implements OnInit {
           //this.showLookup = true;
           this.serviceData = resp;
           this.showLookupLoader = false;
-          this.showLookup = true;
+          if(this.serviceData.length > 0){
+            this.showLookup = true;
+          } else {
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          }
         }
         else {
 

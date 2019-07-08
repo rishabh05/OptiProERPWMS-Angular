@@ -94,7 +94,11 @@ export class OutOrderComponent implements OnInit {
 
           this.serviceData = resp;
           this.showLookupLoader = false;
-          this.showLookup = true;
+          if(this.serviceData.length > 0){
+            this.showLookup = true;
+          } else {
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          }
         },
         error => {
           this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
