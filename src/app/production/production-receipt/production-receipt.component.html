@@ -109,7 +109,7 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">{{'BatchNo'|translate}}</label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control form-control-sm" name='Batch'
-                                    [(ngModel)]=serialBatchNo placeholder="{{'BatchNo'|translate}}">
+                                    [(ngModel)]=serialBatchNo  (blur)="checkAndValidateSerial()" placeholder="{{'BatchNo'|translate}}">
                             </div>
                         </div>
                     </div>

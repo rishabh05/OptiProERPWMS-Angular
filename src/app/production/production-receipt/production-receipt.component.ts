@@ -290,8 +290,14 @@ export class ProductionReceiptComponent implements OnInit {
     this.model = { options: '1' };
     this.acceptQty =  Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));//ye niche vali field jo calculation se dikhate hai.
     this.rjQty =  Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));//ye niche vali field jo calculation se dikhate hai.
+    this.showViewAcceptButton = false;
+    this.showViewRejectButton = false;
+    this.showAddMoreButton = false; 
   }
   resetOnSerchClick(){
+    this.showViewAcceptButton = false;
+    this.showViewRejectButton = false;
+
     this.Lots = [];
     this.Items = [];
     this.UDF = [];
@@ -310,11 +316,17 @@ export class ProductionReceiptComponent implements OnInit {
     if (this.showRejectQtyField == true && this.model.options == '2') { // reject qty
       //means add in accept qty
       if (this.validateForm() == false) { return; }
-      if (this.checkIfSerialBatchAlreadyExists(this.serialBatchNo) == true) {
-        if (this.tracking == "B") { this.toastr.error('', this.translate.instant("BatchAlreadyExists")); }
-        if (this.tracking == "S") { this.toastr.error('', this.translate.instant("SerialAlreadyExist")); }
-        return;
-      } else { }
+      if(this.tracking == "N"){
+
+      }else{
+       //check case or check karna padega ki non tracked hai kya
+       if (this.checkIfSerialBatchAlreadyExists(this.serialBatchNo) == true) {
+       if (this.tracking == "B") { this.toastr.error('', this.translate.instant("BatchAlreadyExists")); }
+       if (this.tracking == "S") { this.toastr.error('', this.translate.instant("SerialAlreadyExist")); }
+       return;
+       } else { }
+      }
+      
       this.calculateRejectQtyOnAddMore();
     } else {
 
@@ -656,8 +668,12 @@ export class ProductionReceiptComponent implements OnInit {
            this.toastr.error('', this.translate.instant("SerialNoAlreadyUsed"));
            this.serialBatchNo = "";
             return;
-          }else{
-            // allow data
+          }else if(data =="2"){
+            this.toastr.error('', this.translate.instant("invalidBatchSerial"));
+           this.serialBatchNo = "";
+            return;
+          }else{ 
+            // allow data 
           }
         }
       },
@@ -671,7 +687,7 @@ export class ProductionReceiptComponent implements OnInit {
   * Method to get list of inquries from server.
   */
   public showOrderList() {
-    this.showLoader = true;
+    this.showLoader = true; 
     this.orderNoListSubs = this.productionService.getOrderNumberList(this.orderNumber).subscribe(
       data => {
         this.showLoader = false;
@@ -687,7 +703,7 @@ export class ProductionReceiptComponent implements OnInit {
             this.lookupfor = "OrderList";
             return;
           }
-        }
+        } 
       },
       error => {
         this.toastr.error('', error);
@@ -849,6 +865,11 @@ export class ProductionReceiptComponent implements OnInit {
       if(parseFloat(this.rejectQty).toFixed(4)> parseFloat("0").toFixed(4)){
         this.showRejectQtyField = true;
       }
+    }
+
+    // show add more button incase of non track item if rejected items available.
+    if(this.tracking == "N" && this.showRejectQtyField == true ){
+      this.showAddMoreButton = true;    
     }
 
   }

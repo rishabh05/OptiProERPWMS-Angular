@@ -445,19 +445,19 @@ export class LookupComponent implements OnInit {
         title: this.translate.instant("DelDate"),
         type: 'date',
         width: '100'
-      },
-      {
-        field: 'CardCode',
-        title: this.translate.instant("VendorCode"),
-        type: 'text',
-        width: '100'
-      },
-      {
-        field: 'CardName',
-        title: this.translate.instant("VendorName"),
-        type: 'text',
-        width: '100'
-      }
+       }//,
+      // {
+      //   field: 'CardCode',
+      //   title: this.translate.instant("VendorCode"),
+      //   type: 'text',
+      //   width: '100'
+      // },
+      // {
+      //   field: 'CardName',
+      //   title: this.translate.instant("VendorName"),
+      //   type: 'text',
+      //   width: '100'
+      // }
     ];
     this.lookupTitle = this.translate.instant("POList");
     if (this.serviceData !== undefined) {

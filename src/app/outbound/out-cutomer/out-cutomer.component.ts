@@ -36,6 +36,8 @@ export class OutCutomerComponent implements OnInit {
   delGrd: any;
   showLookupLoader: boolean = false;
   public uomList: any = [];
+  pagable: boolean = false;
+  pageSize:number = Commonservice.pageSize;
 
   constructor(private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) { }
 
@@ -58,6 +60,9 @@ export class OutCutomerComponent implements OnInit {
         if (this.outbound.DeleiveryCollection !== undefined && this.outbound.DeleiveryCollection !== null && this.outbound.DeleiveryCollection.length > 0) {
 
           this.orderCollection = this.getUniqueValuesByProperty(this.outbound.DeleiveryCollection);
+          if (this.orderCollection.length > this.pageSize) {
+            this.pagable = true;
+          }
         }
       }
 
@@ -456,6 +461,9 @@ export class OutCutomerComponent implements OnInit {
     this.filterData(idx);
     this.orderCollection.splice(idx, 1);
     grd.data = this.orderCollection;
+    if (this.orderCollection.length > this.pageSize) {
+      this.pagable = true;
+    }
   }
 
   filterData(idx: any) {
