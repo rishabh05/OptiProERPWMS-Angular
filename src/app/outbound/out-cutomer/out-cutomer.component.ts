@@ -37,7 +37,7 @@ export class OutCutomerComponent implements OnInit {
   showLookupLoader: boolean = false;
   public uomList: any = [];
   pagable: boolean = false;
-  pageSize:number = Commonservice.pageSize;
+  pageSize:number = 10;
 
   constructor(private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) { }
 
@@ -303,7 +303,7 @@ export class OutCutomerComponent implements OnInit {
             // "Line":0
 
             hdr.DiServerToken = token;
-            hdr.SONumber = o.Order.DOCNUM;
+            hdr.SONumber = o.Item.DOCENTRY;
             hdr.CompanyDBId = comDbId;
             hdr.LineNo = o.Item.LINENUM;           
             let metQty = lineDeleiveryCollection.map(i => i.Meterial.MeterialPickQty).reduce((sum, c) => sum + c);

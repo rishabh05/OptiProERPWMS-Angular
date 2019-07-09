@@ -125,6 +125,7 @@ export class ItemLabelComponent implements OnInit {
       this.itemTracking = "";
       return;
     } 
+    this.binNo = ""; 
     this.showLoader = true;
     this.isItemExistsSubs = this.labelPrintReportsService.isItemExists(this.itemCode).subscribe(
       data => {
@@ -218,7 +219,7 @@ export class ItemLabelComponent implements OnInit {
 
     if (this.lookupfor == "ItemsList") {
       this.itemCode = $event[0];
-      
+      this.binNo = "";
     }
     else if (this.lookupfor == "LotsList") {
       console.log("value of lots" + $event);

@@ -412,7 +412,7 @@ export class OutOrderComponent implements OnInit {
             // "UOM":-1,
             // "Line":0
             hdr.DiServerToken = token;
-            hdr.SONumber = o.Order.DOCNUM;
+            hdr.SONumber = o.Item.DOCENTRY;
             hdr.CompanyDBId = comDbId;
             hdr.LineNo = o.Item.LINENUM;
             //hdr.tShipQty = lineDeleiveryCollection.map(i => i.Meterial.MeterialPickQty).reduce((sum, c) => sum + c);
@@ -446,7 +446,7 @@ export class OutOrderComponent implements OnInit {
           }
 
 
-          if (hasDetail == false) {
+          if (hasDetail == false) { 
             // Add Detail here 
             let dtl: SODETAIL = new SODETAIL();
 
