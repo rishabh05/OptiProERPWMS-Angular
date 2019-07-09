@@ -103,6 +103,7 @@ export class ProductionReceiptComponent implements OnInit {
   dateFormat: string;
   pagable: boolean = false;
   pageSize:number = Commonservice.pageSize;
+  
 
   constructor(private renderer: Renderer, private commonservice: Commonservice, private router: Router, private productionService: ProductionService,
     private toastr: ToastrService, private translate: TranslateService) { }
@@ -256,7 +257,8 @@ export class ProductionReceiptComponent implements OnInit {
           } 
           //check and update response for entered serial no.
           if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
-            this.toastr.success( this.translate.instant("FGRSuccessMessage") +data[0].SuccessNo);
+           // this.toastr.success( this.translate.instant("FGRSuccessMessage") +data[0].SuccessNo);
+            this.toastr.success('', this.translate.instant("FGRSuccessMessage")+" "+ data[0].SuccessNo);
             this.resetAfterSubmit(); 
           }else{
             if (data[0].ErrorMsg != ""){
@@ -929,6 +931,9 @@ export class ProductionReceiptComponent implements OnInit {
     }
     this.orignalActualQty = this.orignalActualQty +  itemToDelete.LotQty;
     this.Lots.splice(rowIndex,1); 
+    this.gridDataAcceptItems.data  = this.Lots;
+     //var values=  this.Lots.splice(rowIndex,1);
+    // this.Lots = values; 
   }
 
   
@@ -946,7 +951,7 @@ export class ProductionReceiptComponent implements OnInit {
     this.rejectQty = this.itemDataResponse.RejectQTY;
     this.rjQty =  Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));//ye niche vali field jo calculation se dikhate hai.
 
-  }
+  } 
 
   viewRejectDeleteItem($event,rowIndex){
     //splice item from Array. and update grid.
@@ -958,7 +963,9 @@ export class ProductionReceiptComponent implements OnInit {
     }
     this.rejectQty = this.rejectQty +  itemToDelete.LotQty;
     this.RejectLots.splice(rowIndex,1); 
+    this.gridDataRejectItems.data = this.RejectLots; 
   }
+
   ngOnDestroy() { 
   if (this.orderNoListSubs != undefined)
     this.orderNoListSubs.unsubscribe();
@@ -979,21 +986,30 @@ export class ProductionReceiptComponent implements OnInit {
     this.showConfirmDialog = true;
   }
 
-  public confirmDialogForDeleteAcceptItem($event,rowIndex) {
+  rowindexDelAccpetItem: any;
+  gridDataAcceptItems: any;
+  public confirmDialogForDeleteAcceptItem(rowIndex,gridData: any) {
     this.rowIndexForDelete = rowIndex;
     this.dialogFor = "deleteAcceptItem";
     this.dialogMsg = this.translate.instant("DeleteRecordsMsg");
     this.yesButtonText = this.translate.instant("yes");
     this.noButtonText = this.translate.instant("no");
     this.showConfirmDialog = true;
+    this.rowindexDelAccpetItem = rowIndex;
+    this.gridDataAcceptItems = gridData;
   }
-  public confirmDialogForDeleteRejectItem($event,rowIndex) {
+
+  rowindexDelRejectItem: any;
+  gridDataRejectItems: any;
+  public confirmDialogForDeleteRejectItem(rowIndex,gridData: any) {
     this.rowIndexForDelete = rowIndex;
     this.dialogFor = "deleteRejectItem";
     this.dialogMsg = this.translate.instant("DeleteRecordsMsg");
     this.yesButtonText = this.translate.instant("yes");
     this.noButtonText = this.translate.instant("no");
     this.showConfirmDialog = true;
+    this.rowindexDelRejectItem = rowIndex;
+    this.gridDataRejectItems = gridData;
   }
   
 

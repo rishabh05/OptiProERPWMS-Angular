@@ -87,6 +87,7 @@ export class OutOrderComponent implements OnInit {
 
       this.outboundservice.getCustomerSOList(this.selectedCustomer.CustomerCode).subscribe(
         resp => {
+          if(resp!=null){
           if (resp[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
             return;
@@ -95,6 +96,7 @@ export class OutOrderComponent implements OnInit {
           this.serviceData = resp;
           this.showLookupLoader = false;
           this.showLookup = true;
+        }else{ this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));}
         },
         error => {
           this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));

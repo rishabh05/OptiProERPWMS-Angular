@@ -90,7 +90,8 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">{{'Quantity'|translate}}</label>
                             <div class="col-sm-9">
                                 <input type="text" #Qty class="form-control form-control-sm text-right" name='Qty'
-                                    [(ngModel)]=enteredQty placeholder="{{'Quantity'|translate}}">
+                                [ngModel]="enteredQty | numberFormat" 
+                                (ngModelChange)="enteredQty=$event"  placeholder="{{'Quantity'|translate}}">
                             </div>
                         </div>
 
@@ -231,7 +232,7 @@
             <div class="row">
                 <div class="col-12">
 
-                    <kendo-grid [kendoGridBinding]="Lots" [resizable]="true" [pageSize]="pageSize" [pageable]="pagable"
+                    <kendo-grid  [kendoGridBinding]="Lots" [resizable]="true" [pageSize]="pageSize" [pageable]="pagable"
                         [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup [height]=gridHeight
                         [selectable]="true" [data]="ItemArray" style="max-height:400px" class="no-shadow" #gridItem>
 
@@ -240,15 +241,15 @@
                             class="opti_mobile-grid-td">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex='rowIndex'>
                                 <dl class="opti_mobile_grid_dl">
-                                    <dt>{{lotSerialHeading}}</dt>
-                                    <dd>{{ dataItem.LotNumber }}</dd>
+                                    <dt *ngIf="tracking!='N'">{{lotSerialHeading}}</dt>
+                                    <dd *ngIf="tracking!='N'">{{ dataItem.LotNumber }}</dd>
 
                                     <dt>{{'Quantity'|translate}}</dt>
                                     <dd>{{ dataItem.LotQty }}</dd>
                                 </dl>
                                 <dl class="opti_mobile_grid_dl">
                                     <dt class="d-flex align-items-center">{{'BinNo'|translate}}
-                                        <button class="btn btn-danger k-button btn-sm btn-icon ml-auto" type="button">
+                                        <button  (click)="confirmDialogForDeleteAcceptItem(rowIndex,gridItem)" class="btn btn-danger k-button btn-sm btn-icon ml-auto" type="button">
                                             <span class="k-icon k-i-delete"></span>
                                         </button>
                                     </dt>
@@ -259,7 +260,7 @@
 
                         <!-- grid for mobile end -->
 
-                        <kendo-grid-column media="(min-width: 768px)" field="LotNumber" title="{{lotSerialHeading}}">
+                        <kendo-grid-column *ngIf="tracking!='N'" media="(min-width: 768px)" field="LotNumber" title="{{lotSerialHeading}}">
                         </kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="Bin" title="{{'BinNo'|translate}}">
                         </kendo-grid-column>
@@ -267,7 +268,7 @@
                         </kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="" class="text-center" headerClass="text-center" width="60">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                <button (click)="confirmDialogForDeleteAcceptItem($event,rowIndex)"
+                                <button (click)="confirmDialogForDeleteAcceptItem(rowIndex,gridItem)"
                                     class="btn btn-danger k-button btn-sm btn-icon" type="button">
                                     <span class="k-icon k-i-delete"></span>
                                 </button>
@@ -320,15 +321,15 @@
                             class="opti_mobile-grid-td">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex='rowIndex'>
                                 <dl class="opti_mobile_grid_dl">
-                                    <dt>{{lotSerialHeading}}</dt>
-                                    <dd>{{ dataItem.LotNumber }}</dd>
+                                    <dt *ngIf="tracking!='N'">{{lotSerialHeading}}</dt>
+                                    <dd *ngIf="tracking!='N'">{{ dataItem.LotNumber }}</dd>
 
                                     <dt>{{'Quantity'|translate}}</dt>
                                     <dd>{{ dataItem.LotQty }}</dd>
                                 </dl>
                                 <dl class="opti_mobile_grid_dl">
                                     <dt class="d-flex align-items-center">{{'BinNo'|translate}}
-                                        <button class="btn btn-danger k-button btn-sm btn-icon ml-auto" type="button">
+                                        <button (click)="confirmDialogForDeleteRejectItem(rowIndex,gridItem)" class="btn btn-danger k-button btn-sm btn-icon ml-auto" type="button">
                                             <span class="k-icon k-i-delete"></span>
                                         </button>
                                     </dt>
@@ -339,7 +340,7 @@
 
                         <!-- grid for mobile end -->
 
-                        <kendo-grid-column media="(min-width: 768px)" field="LotNumber" title="{{lotSerialHeading}}">
+                        <kendo-grid-column *ngIf="tracking!='N'" media="(min-width: 768px)" field="LotNumber" title="{{lotSerialHeading}}">
                         </kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="Bin" title="{{'BinNo'|translate}}">
                         </kendo-grid-column>
@@ -347,9 +348,10 @@
                         </kendo-grid-column>
                         <kendo-grid-column headerClass="text-center" class="text-center" media="(min-width: 768px)" field="" width="60">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                <button (click)="confirmDialogForDeleteRejectItem($event,rowIndex)"
+                                <button (click)="confirmDialogForDeleteRejectItem(rowIndex,gridItem)"
                                     class="btn btn-danger k-button btn-sm btn-icon" type="button">
                                     <span class="k-icon k-i-delete"></span>
+                                   
                                 </button>
                             </ng-template>
                         </kendo-grid-column>
