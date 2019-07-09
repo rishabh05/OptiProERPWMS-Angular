@@ -194,6 +194,7 @@ export class SigninComponent implements OnInit {
                 this.licenseData = data;
                 if (this.licenseData != null && this.licenseData != undefined) {
                     this.handleLicenseDataSuccessResponse();
+                    this.showFullPageLoader = false;
                 } else {
                     this.showLoader = false;
                     this.toastr.error('', this.translate.instant("Login_licenseFailed"));

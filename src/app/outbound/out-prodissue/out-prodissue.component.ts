@@ -439,10 +439,14 @@ export class OutProdissueComponent implements OnInit {
     this.ourboundService.getAvaliableMeterial(itemCode, docEntry).subscribe(
       (resp: any) => {
         this.lookupData = resp;
-        this.manageOldSelectedItems();
-        this.manageExistingItem();
         this.showLookupLoader = false;
-        this.showLookup = true;
+        if(this.lookupData.length > 0){
+          this.manageOldSelectedItems();
+          this.manageExistingItem();
+          this.showLookup = true;
+        } else {
+          this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+        }
       }
     )
   }
