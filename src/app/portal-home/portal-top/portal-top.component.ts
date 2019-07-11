@@ -128,16 +128,15 @@ export class PortalTopComponent implements OnInit {
       this.translate.instant("Dashboard_LogoutSuccess")).subscribe(
       data => {
         this.showLoader = false;
-        if (data != null || data != undefined) {
+        //if (data != null || data != undefined) {
+          this.commonService.signOut(this.toastr, this.router, this.translate.instant("Dashboard_LogoutSuccess"));  
           console.log(data);
-          this.commonService.signOut(this.toastr, this.router, this.translate.instant("Dashboard_LogoutSuccess"));
-        }
+        //}
       },
       error => {
-        //this.toastr.error('', this.language.some_error, this.baseClassObj.messageConfig);
-        console.log("Error in logout: ", error.msg);
         this.showLoader = false;
         this.commonService.signOut(this.toastr, this.router, this.translate.instant("Dashboard_LogoutSuccess"));
+        console.log("Error in logout: ", error.msg);
       }
     )
 

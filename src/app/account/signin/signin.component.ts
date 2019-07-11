@@ -84,7 +84,7 @@ export class SigninComponent implements OnInit {
         element.className = "";
         element.classList.add("opti_body-login");
         element.classList.add("opti_account-module");
-        localStorage.setItem("","http://139.144.10.220/OptiProAdmin/");
+        //localStorage.setItem("service_url","http://172.16.6.134/OptiProWMS/");
         if (localStorage.getItem("service_url") != null && localStorage.getItem("service_url") != undefined && localStorage.getItem("service_url") != "") {
 
             var url: any = { 'service_url': localStorage.getItem("service_url") }
