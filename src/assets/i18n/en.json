@@ -187,7 +187,7 @@
   "AvaliableMeterial": "Avaliable Meterial",
   "BatchSrBinList": "Batch/Sr/Bin No. List",
   "NoOfCopiesCannotbeBlank": "No. of copies cannot be blank or zero",
-  "NoOfCopiesShouldBeNumeric": "No. of copies should be numeric",
+  "NoOfCopiesShouldBeNumeric": "No. of copies should be numeric and without decimal",
   "Total": "Total",
   "StockQty": "Stock Qty.",
   "MeterialCanNotBeZero": "Issue meterial quantity can not be 0.",

@@ -159,9 +159,11 @@ export class Commonservice {
     return this.httpclient.post(this.config_params.service_url + "/api/Gs1/GS1SETUP", jObject, this.httpOptions);
   }
 
-  RemoveLicenseAndSignout(toastr: ToastrService, router: Router, message: string) : Observable<any> {
+  RemoveLicenseAndSignout(toastr: ToastrService, router: Router, message: string) {
     var jObject = { GUID: localStorage.getItem("GUID"), LoginId: localStorage.getItem("UserId") };
-    return this.httpclient.post(this.config_params.service_url + "/api/Login/RemoveLoggedInUser", jObject, this.httpOptions);
+    this.httpclient.post(this.config_params.service_url + "/api/Login/RemoveLoggedInUser", jObject, this.httpOptions);
+    this.signOut(this.toastr, this.router, message); 
+    //return this.httpclient.post(this.config_params.service_url + "/api/Login/RemoveLoggedInUser", jObject, this.httpOptions);
   }
 
   //Get Setting from DB
