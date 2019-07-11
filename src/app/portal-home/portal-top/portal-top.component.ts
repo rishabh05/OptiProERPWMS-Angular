@@ -99,8 +99,7 @@ export class PortalTopComponent implements OnInit {
     if ($event.Status == "yes") {
       switch ($event.From) {
         case ("Logout"):
-          this.commonService.RemoveLicenseAndSignout(this.toastr, this.router, 
-          this.translate.instant("Dashboard_LogoutSuccess"))
+          this.removeLicenceAPI();
           break;
       }
     } else {
@@ -121,6 +120,27 @@ export class PortalTopComponent implements OnInit {
   ngOnDestroy() {
     if (this.updatetopBarSubs != undefined)
       this.updatetopBarSubs.unsubscribe();
+  }
+
+  removeLicenceAPI() {
+    this.showLoader = true;
+    this.commonService.RemoveLicenseAndSignout(this.toastr, this.router, 
+      this.translate.instant("Dashboard_LogoutSuccess")).subscribe(
+      data => {
+        this.showLoader = false;
+        if (data != null || data != undefined) {
+          console.log(data);
+          this.commonService.signOut(this.toastr, this.router, this.translate.instant("Dashboard_LogoutSuccess"));
+        }
+      },
+      error => {
+        //this.toastr.error('', this.language.some_error, this.baseClassObj.messageConfig);
+        console.log("Error in logout: ", error.msg);
+        this.showLoader = false;
+        this.commonService.signOut(this.toastr, this.router, this.translate.instant("Dashboard_LogoutSuccess"));
+      }
+    )
+
   }
 
 } 

@@ -67,7 +67,7 @@ export class SigninComponent implements OnInit {
 
         this.selectedItem = this.translate.instant("Login_SelectCompany");
         this.defaultWHS = { OPTM_WHSE: this.translate.instant("SelectWarehouse"), BPLid: 0 }
-
+        
         this.showFullPageLoader = false;
         // Get cookie start
         if (this.getCookie('cookieEmail') != '' && this.getCookie('cookiePassword') != '') {
@@ -84,7 +84,7 @@ export class SigninComponent implements OnInit {
         element.className = "";
         element.classList.add("opti_body-login");
         element.classList.add("opti_account-module");
-        //localStorage.setItem("service_url","http://172.16.6.134/OptiProWMS/");
+        localStorage.setItem("","http://139.144.10.220/OptiProAdmin/");
         if (localStorage.getItem("service_url") != null && localStorage.getItem("service_url") != undefined && localStorage.getItem("service_url") != "") {
 
             var url: any = { 'service_url': localStorage.getItem("service_url") }
@@ -296,7 +296,9 @@ export class SigninComponent implements OnInit {
                 this.whsList = data.Table;
                 for (var i = 0; i < this.whsList.length; i++) {
                     if (this.getCookie('whseId') == this.whsList[i].OPTM_WHSE) {
-                        this.defaultWHS = this.whsList[i];
+                        this.defaultWHS = { OPTM_WHSE: this.whsList[i].OPTM_WHSE, BPLid: 0 };
+                        //this.selectedWhse = this.defaultWHS.OPTM_WHSE;
+                        //localStorage.setItem("whseId", this.selectedWhse);
                     }
                 }
             },
