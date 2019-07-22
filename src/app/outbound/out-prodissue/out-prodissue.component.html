@@ -128,8 +128,8 @@
                         <kendo-grid-column media="(max-width: 767px)" title="{{'SelectedMaterials'|translate}}" class="opti_mobile-grid-td">
                             <ng-template kendoGridCellTemplate let-dataItem let-idx="rowIndex">
                                 <dl class="opti_mobile_grid_dl">
-                                    <dt *ngIf="OperationType==='S' || OperationType==='B'">{{selected.ITEMCODE}}</dt>
-                                    <dd *ngIf="OperationType==='S' || OperationType==='B'">{{ dataItem.LOTNO }}</dd>
+                                    <dt *ngIf="OrderType==='S' || OrderType==='B'">{{selected.ITEMCODE}}</dt>
+                                    <dd *ngIf="OrderType==='S' || OrderType==='B'">{{ dataItem.LOTNO }}</dd>
 
                                     <dt>{{'BINNO'|translate}}</dt>
                                     <dd>{{ dataItem.BINNO }}</dd>
