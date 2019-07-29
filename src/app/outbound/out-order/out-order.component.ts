@@ -109,7 +109,11 @@ export class OutOrderComponent implements OnInit {
             this.showLookupLoader = false;
             this.showLookup = false;
           }
-        }},
+        }else{
+           this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
+          }
+          
+        },
         error => {
           this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
           this.showLookupLoader = false;
@@ -146,7 +150,7 @@ export class OutOrderComponent implements OnInit {
       this.router.navigateByUrl('home/outbound/outprodissue', { skipLocationChange: true });
     }
 
-  }
+  } 
   
   public openSOOrderList(orderNumber: any = null) {
 
