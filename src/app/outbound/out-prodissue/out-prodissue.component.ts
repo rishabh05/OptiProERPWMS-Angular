@@ -73,10 +73,10 @@ export class OutProdissueComponent implements OnInit {
       this.currentOrderNo = this.outbound.OrderData["Order No"]
       if (this.OrderType != 'N') {
         if (this.OrderType === 'S') {
-          this.SerialBatchHeaderTitle = "Serial";
+          this.SerialBatchHeaderTitle = this.translate.instant("SerialNo");
         }
         else if (this.OrderType === 'B') {
-          this.SerialBatchHeaderTitle = "Batch";
+          this.SerialBatchHeaderTitle = this.translate.instant("BatchNo");
         }
         this.manageOldCollection();
       }
@@ -362,6 +362,18 @@ export class OutProdissueComponent implements OnInit {
     return this._pickedMeterialQty < this._requiredMeterialQty;
   }
 
+  // updatePickQty(value, rowindex) {
+  //   for (let i = 0; i < this.selectedMeterials.length; ++i) {
+  //     if (i === rowindex) {
+  //       this.selectedMeterials[rowindex].MeterialPickQty = value;
+
+  //       if(this.selectedMeterials[rowindex].BalanceQty < value){
+  //         this.toastr.error('', this.translate.instant("Pickup quntity must be less or equal balance quantity"));
+  //       }
+  //     }
+  //   }
+  // }
+
   onIssueMeterialQtyChange(idx: number, txt: any) {
 
     let oldValue: number = parseFloat(this.oldSelectedMeterials[idx].MeterialPickQty);
@@ -616,11 +628,6 @@ export class OutProdissueComponent implements OnInit {
   // Save click
   addMetToCollection(fromIFPSave: boolean = false) {
     //lsOutbound
-
-   
-
-
-
 
     let outboundData = localStorage.getItem(CommonConstants.OutboundData);
 
@@ -1080,7 +1087,7 @@ export class OutProdissueComponent implements OnInit {
         data => {
           if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
             this.showLookupLoader = false;
-            this.toastr.success('', this.translate.instant("ProductionIssueSuccess") + " : " + data[0].SuccessNo);
+            this.toastr.success('', this.translate.instant("DeleiverySuccess") + " : " + data[0].SuccessNo);
 
             this.resetIssueProduction();
             this.back(1)

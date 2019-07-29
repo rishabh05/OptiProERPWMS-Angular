@@ -13,7 +13,8 @@
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
                                 <input type="text" class="form-control form-control-sm" name='orderNo' [(ngModel)]="orderNo"
-                                    placeholder="{{'OrderNo'|translate}}">
+                                    placeholder="{{'OrderNo'|translate}}"
+                                    (blur)="getItemListForOrder(false,true)">
                                 <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" type="button" (click)="getOrderList()">
                                         <i class="opti-icon-hammenu"></i>

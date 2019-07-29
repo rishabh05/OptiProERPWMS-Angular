@@ -194,7 +194,7 @@ export class LookupComponent implements OnInit {
 
       {
         field: 'LOTNO',
-        title: 'Serial',
+        title: this.translate.instant("SerialNo"),
         type: 'text',
         width: '100'
       },
@@ -726,7 +726,7 @@ export class LookupComponent implements OnInit {
     } 
     else {
       // let rixd: number= this.selectedValues.findIndex(i => i.LOTNO == servivceItem.LOTNO && i.LOTNO == servivceItem.BINNO)
-     var temp = this.selectedValues.splice(index, 1);
+      var temp = this.selectedValues.splice(index, 1);
      this.selectedValues = this.selectedValues;
      console.log("selectedValues.size", this.selectedValues.length);
     }
