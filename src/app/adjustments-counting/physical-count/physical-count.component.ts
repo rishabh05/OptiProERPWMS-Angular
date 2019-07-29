@@ -58,6 +58,7 @@ export class PhysicalCountComponent implements OnInit {
   pageSize:number = Commonservice.pageSize;
   ItemCodeTemp: string;
   trackingtemp: string;
+  scanPlaceholder: string = "Scan";
 
   constructor(private phycountService: PhysicalcountService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService) {
     let userLang = navigator.language.split('-')[0];
@@ -415,11 +416,13 @@ export class PhysicalCountComponent implements OnInit {
       this.isNonTrack = false;
       this.batchNoPlaceholder = this.translate.instant("BatchNo");
       this.batchSrBtn = this.translate.instant("Batch");
+      this.scanPlaceholder = this.translate.instant("ScanBatch");
     }
     else if (this.ItemTracking == "S") {
       this.isNonTrack = false;
       this.batchNoPlaceholder = this.translate.instant("SerialNo");
       this.batchSrBtn = this.translate.instant("Serial");
+      this.scanPlaceholder = this.translate.instant("ScanSerial");
     }
     else if (this.ItemTracking == "N") {
       this.isNonTrack = true;

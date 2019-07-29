@@ -194,7 +194,7 @@ export class LookupComponent implements OnInit {
 
       {
         field: 'LOTNO',
-        title: 'Serial',
+        title: this.translate.instant("SerialNo"),
         type: 'text',
         width: '100'
       },

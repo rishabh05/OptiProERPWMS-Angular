@@ -63,6 +63,7 @@ export class InboundDetailsComponent implements OnInit {
       var inboundData = JSON.parse(dataModel);
       this.Polist = inboundData.PONumbers;
       this.showGRPOGridAndBtn = true;
+      this.detailsAvailable = true;
     }
   }
 
