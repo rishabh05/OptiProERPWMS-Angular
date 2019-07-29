@@ -92,13 +92,15 @@ export class OutOrderComponent implements OnInit {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
             return;
           }
-
+          
           this.serviceData = resp;
           this.showLookupLoader = false;
           if(this.serviceData.length > 0){
             this.showLookup = true;
           } else {
             this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+            this.showLookupLoader = false;
+            this.showLookup = false;
           }
         }else{
            this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));

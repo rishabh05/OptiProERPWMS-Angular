@@ -723,10 +723,12 @@ export class LookupComponent implements OnInit {
     let servivceItem: any = this.serviceData[index];
     if (checked) {
       this.selectedValues.push(servivceItem);
-    }
+    } 
     else {
       // let rixd: number= this.selectedValues.findIndex(i => i.LOTNO == servivceItem.LOTNO && i.LOTNO == servivceItem.BINNO)
-      this.selectedValues = this.selectedValues.splice(index, 1);
+     var temp = this.selectedValues.splice(index, 1);
+     this.selectedValues = this.selectedValues;
+     console.log("selectedValues.size", this.selectedValues.length);
     }
   }
 
@@ -735,7 +737,7 @@ export class LookupComponent implements OnInit {
 
   Done() {
     this.lookupkey.emit(this.selectedValues);
-    this.dialogOpened = false;
+    this.dialogOpened = false; 
   }
 
 

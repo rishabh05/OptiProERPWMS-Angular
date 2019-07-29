@@ -67,7 +67,7 @@ export class SigninComponent implements OnInit {
 
         this.selectedItem = this.translate.instant("Login_SelectCompany");
         this.defaultWHS = { OPTM_WHSE: this.translate.instant("SelectWarehouse"), BPLid: 0 }
-
+        
         this.showFullPageLoader = false;
         // Get cookie start
         if (this.getCookie('cookieEmail') != '' && this.getCookie('cookiePassword') != '') {
@@ -296,7 +296,9 @@ export class SigninComponent implements OnInit {
                 this.whsList = data.Table;
                 for (var i = 0; i < this.whsList.length; i++) {
                     if (this.getCookie('whseId') == this.whsList[i].OPTM_WHSE) {
-                        this.defaultWHS = this.whsList[i];
+                        this.defaultWHS = { OPTM_WHSE: this.whsList[i].OPTM_WHSE, BPLid: 0 };
+                        //this.selectedWhse = this.defaultWHS.OPTM_WHSE;
+                        //localStorage.setItem("whseId", this.selectedWhse);
                     }
                 }
             },

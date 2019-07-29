@@ -1080,7 +1080,7 @@ export class OutProdissueComponent implements OnInit {
         data => {
           if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
             this.showLookupLoader = false;
-            this.toastr.success('', this.translate.instant("DeleiverySuccess") + " : " + data[0].SuccessNo);
+            this.toastr.success('', this.translate.instant("ProductionIssueSuccess") + " : " + data[0].SuccessNo);
 
             this.resetIssueProduction();
             this.back(1)

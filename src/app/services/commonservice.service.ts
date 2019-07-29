@@ -161,10 +161,9 @@ export class Commonservice {
 
   RemoveLicenseAndSignout(toastr: ToastrService, router: Router, message: string) {
     var jObject = { GUID: localStorage.getItem("GUID"), LoginId: localStorage.getItem("UserId") };
-    this.httpclient.post(this.config_params.service_url + "/Login/RemoveLoggedInUser", jObject, this.httpOptions);
-
-    this.signOut(toastr, router, message);
-
+    this.httpclient.post(this.config_params.service_url + "/api/Login/RemoveLoggedInUser", jObject, this.httpOptions);
+    this.signOut(this.toastr, this.router, message); 
+    //return this.httpclient.post(this.config_params.service_url + "/api/Login/RemoveLoggedInUser", jObject, this.httpOptions);
   }
 
   //Get Setting from DB
