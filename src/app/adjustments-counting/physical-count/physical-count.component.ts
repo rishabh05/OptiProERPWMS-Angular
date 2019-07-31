@@ -265,7 +265,7 @@ export class PhysicalCountComponent implements OnInit {
     this.dialogMsg = msg;
   }
 
-  OnLotChange() {
+  OnLotChange(savenext?: string) {
     if (this.batchserno == "" || this.batchserno == undefined) {
       return;
     }
@@ -290,6 +290,9 @@ export class PhysicalCountComponent implements OnInit {
             this.CheckTrackingandVisiblity();
             this.formatCountedQty();
             this.formatOnHandQty();
+            if(savenext == "savenext"){
+              this.onSaveClick(true)
+            }
           }
         }
 
@@ -725,7 +728,7 @@ export class PhysicalCountComponent implements OnInit {
     this.formatCountedQty();
   }
 
-  onSaveClick() {
+  onSaveClick(existingItem?:boolean) {
     if (this.ItemTracking != "N") {
       if (this.batchserno == undefined || this.batchserno == "" || this.batchserno == null) {
         if (this.ItemTracking == "S") {
@@ -735,8 +738,8 @@ export class PhysicalCountComponent implements OnInit {
         }
         return;
       }
-      if(!this.isLotAdded){
-        this.OnLotChange();
+      if(!this.isLotAdded && !existingItem){
+        this.OnLotChange("savenext");
         return;
       }
     }
