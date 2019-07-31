@@ -671,7 +671,7 @@ export class ProductionReceiptComponent implements OnInit {
            this.serialBatchNo = "";
             return;
           }else if(data =="2"){
-            this.toastr.error('', this.translate.instant("invalidBatchSerial"));
+            this.toastr.error('', this.translate.instant("InvalidBatchSerial"));
            this.serialBatchNo = "";
             return;
           }else{ 

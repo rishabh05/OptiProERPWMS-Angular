@@ -22,7 +22,7 @@
                                     <dd>{{ dataItem.ITEMCODE }}</dd>
 
                                     <dt>{{PickQtylbl}}</dt>
-                                    <dd>{{ dataItem.RPTQTY|numberFormat }}</dd>
+                                    <dd>{{ _pickedMeterialQty|numberFormat }}</dd>
                                 </dl>
                                 <dl class="opti_mobile_grid_dl">
                                     <dt>{{OpenQtylbl}}</dt>
@@ -123,22 +123,11 @@
                         <kendo-grid-column media="(max-width: 767px)" title="{{'SelectedMaterials'|translate}}" class="opti_mobile-grid-td">
                             <ng-template kendoGridCellTemplate let-dataItem let-idx="rowIndex">
                                 <dl class="opti_mobile_grid_dl">
-                                    <dt *ngIf="OrderType==='S' || OrderType==='B'">{{selected.ITEMCODE}}</dt>
+                                    <dt *ngIf="OrderType==='S' || OrderType==='B'">{{SerialBatchHeaderTitle}}</dt>
                                     <dd *ngIf="OrderType==='S' || OrderType==='B'">{{ dataItem.LOTNO }}</dd>
 
                                     <dt>{{'BinNo'|translate}}</dt>
-                                    <dd>{{ dataItem.BINNO }}</dd>
-
-                                    <dt *ngIf="OrderType!='S'">{{'PickQty'|translate}}</dt>
-                                    <dd *ngIf="OrderType!='S'">
-                                        <!-- <kendo-numerictextbox #txtMet name="data" (blur)="onIssueMeterialQtyChange(idx,txtMet,e)"
-                                            class="form-control form-control-sm text-right!important" [format]="'n3'"
-                                            [(value)]="dataItem.MeterialPickQty" [step]="step"></kendo-numerictextbox> -->
-
-                                        <input [ngModel]="dataItem.MeterialPickQty | numberFormat"(ngModelChange)="dataItem.MeterialPickQty=$event"
-                                            name="inputField" type="text"
-                                            #display_name (change)="updatePickQty(display_name.value, idx)" />
-                                    </dd>
+                                    <dd>{{ dataItem.BINNO }}</dd>  
                                 </dl>
 
                                 <dl class="opti_mobile_grid_dl">
@@ -149,7 +138,18 @@
                                             <span class="k-icon k-i-delete" role="presentation"></span></button>
                                     </dt>
                                     <dd>{{ dataItem.TOTALQTY | numberFormat }}</dd>
+                                    <dt *ngIf="OrderType!='S'">{{'PickQty'|translate}}</dt>
+                                    <dd *ngIf="OrderType!='S'">
+                                        <kendo-numerictextbox #txtMet name="data"
+                                            class="form-control form-control-sm text-right!important" [format]="'n3'"
+                                            [(value)]="dataItem.MeterialPickQty" [step]="step"
+                                            (blur)="onIssueMeterialQtyChange(idx,txtMet)"
+                                            #display_name (change)="updatePickQty(display_name.value, idx)"></kendo-numerictextbox>
 
+                                        <!-- <input [ngModel]="dataItem.MeterialPickQty | numberFormat"(ngModelChange)="dataItem.MeterialPickQty=$event"
+                                            name="inputField" type="text"
+                                            #display_name (change)="updatePickQty(display_name.value, idx)" /> -->
+                                    </dd>
                                 </dl>
                             </ng-template>
                         </kendo-grid-column>
@@ -170,14 +170,14 @@
                             class="text-right" field="MeterialPickQty" width="50" editor="numeric" title="{{'PickQty'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem="dataItem" class="text-right" let-idx="rowIndex">
                                 
-                                    <input [ngModel]="dataItem.MeterialPickQty | numberFormat"  (blur)="onIssueMeterialQtyChange(idx,txtMet, e)"
+                                    <!-- <input [ngModel]="dataItem.MeterialPickQty | numberFormat"  (blur)="onIssueMeterialQtyChange(idx,txtMet, e)"
                                     (ngModelChange)="dataItem.MeterialPickQty=$event" 
-                                    #display_name (change)="updatePickQty(display_name.value, idx)" class="text-right" name="inputField" type="number" />
+                                    #display_name (change)="updatePickQty(display_name.value, idx)" class="text-right" name="inputField" type="number" /> -->
 
-                                <!-- <kendo-numerictextbox #txtMet name="data" (blur)="onIssueMeterialQtyChange(idx,txtMet,e)"
+                                <kendo-numerictextbox #txtMet name="data" (blur)="onIssueMeterialQtyChange(idx,txtMet)"
                                     class="form-control text-right form-control-sm text-right!important" [format]="'n3'"
                                     [(value)]="dataItem.MeterialPickQty" [step]="step"
-                                    #display_name (change)="updatePickQty(display_name.value, idx)"></kendo-numerictextbox> -->
+                                    #display_name (change)="updatePickQty(display_name.value, idx)"></kendo-numerictextbox>
                             </ng-template>
                         </kendo-grid-column>
 
