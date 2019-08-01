@@ -266,9 +266,10 @@ export class OutProdissueComponent implements OnInit {
                   var totalQty = data[0].TOTALQTY;
                   var lotNo = data[0].LOTNO;
                   var PickQty = openQty;
+                  var sysNumber = data[0].SYSNUMBER;
                   let lookupArray: any = [{
                     ITEMCODE: itemCode, OPENQTY: openQty, BINNO: binno,
-                    TOTALQTY: totalQty, LOTNO: lotNo, PickQty: PickQty
+                    TOTALQTY: totalQty, LOTNO: lotNo, PickQty: PickQty, SYSNUMBER: sysNumber
                   }];
                   let el: any = document.getElementById('gridSelectedMeterial');
                   this.getLookupValue(lookupArray, el, true, false);
@@ -1087,7 +1088,7 @@ export class OutProdissueComponent implements OnInit {
         data => {
           if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
             this.showLookupLoader = false;
-            this.toastr.success('', this.translate.instant("DeleiverySuccess") + " : " + data[0].SuccessNo);
+            this.toastr.success('', this.translate.instant("ProductionIssueSuccess") + " : " + data[0].SuccessNo);
 
             this.resetIssueProduction();
             this.back(1)
