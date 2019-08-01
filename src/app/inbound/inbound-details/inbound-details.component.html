@@ -40,7 +40,7 @@
                         [selectable]="true" (selectionChange)="onPOSelection($event)" #gridItem>
 
                         <!-- grid for mobile start -->
-                        <kendo-grid-column media="(max-width: 767px)" title="Payment List" class="opti_mobile-grid-td">
+                        <kendo-grid-column media="(max-width: 767px)" class="opti_mobile-grid-td" title="{{'POList'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                 <dl class="opti_mobile_grid_dl w-100">
                                     <dt class="d-flex align-items-center">{{'PurchaseOrderNumber'|translate}}
