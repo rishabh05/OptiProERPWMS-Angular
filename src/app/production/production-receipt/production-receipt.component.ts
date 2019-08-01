@@ -317,7 +317,10 @@ export class ProductionReceiptComponent implements OnInit {
   public addMoreClick() { //case when serial or batch item.
     if (this.showRejectQtyField == true && this.model.options == '2') { // reject qty
       //means add in accept qty
-      if (this.validateForm() == false) { return; }
+      if (this.validateForm() == false) 
+      {
+         return; 
+      }
       if(this.tracking == "N"){
 
       }else{
@@ -676,6 +679,8 @@ export class ProductionReceiptComponent implements OnInit {
             return;
           }else{ 
             // allow data 
+
+            
           }
         }
       },

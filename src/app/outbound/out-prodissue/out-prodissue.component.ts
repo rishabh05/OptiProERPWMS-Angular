@@ -182,14 +182,14 @@ export class OutProdissueComponent implements OnInit {
       return;
     }
     let this1 = this;
-    var code ="";
-    if(this.outbound.CustomerData!= null && 
-      this.outbound.CustomerData!=undefined &&
-      this.outbound.CustomerData!="null" ){
-        code = this.outbound.CustomerData.CustomerCode;
-      }else{
-        code = ""
-      }
+    var code = "";
+    if (this.outbound.CustomerData != null &&
+      this.outbound.CustomerData != undefined &&
+      this.outbound.CustomerData != "null") {
+      code = this.outbound.CustomerData.CustomerCode;
+    } else {
+      code = ""
+    }
 
     this.ourboundService.checkAndScanCode(code, this.ScanInputs).subscribe(
       (data: any) => {
@@ -273,7 +273,7 @@ export class OutProdissueComponent implements OnInit {
                   }];
                   let el: any = document.getElementById('gridSelectedMeterial');
                   this.getLookupValue(lookupArray, el, true, false);
-                }else{
+                } else {
                   this.toastr.error('', this.translate.instant("CommonNoDataAvailableToIssueMsg"));
                 }
                 this.ScanInputs = "";
@@ -375,56 +375,46 @@ export class OutProdissueComponent implements OnInit {
   //   }
   // }
 
-  onIssueMeterialQtyChange(idx: number, txt: any) {
-
+  onIssueMeterialQtyChange(idx: number, txtValue: any, gridData: any) {
     let oldValue: number = parseFloat(this.oldSelectedMeterials[idx].MeterialPickQty);
-
     if (this.selectedMeterials[idx].MeterialPickQty === null || this.selectedMeterials[idx].MeterialPickQty === undefined) {
       this.selectedMeterials[idx].MeterialPickQty = oldValue;
+      gridData.data = this.selectedMeterials;
     }
-    //let oldValue: number = parseFloat(this.selectedMeterials[idx].MeterialPickQty);
-
-    if (txt.value === '' || txt.value === undefined || txt.value === null) {
+    if (txtValue === '' || txtValue === undefined || txtValue === null) {
       this.toastr.error('', this.translate.instant("MeterialCanNotBeBlank"));
-      txt.value = oldValue;
+      // txtValue = oldValue;
       this.selectedMeterials[idx].MeterialPickQty = oldValue;
+      gridData.data = this.selectedMeterials;
       return;
     }
-
-    this.selectedMeterials[idx].MeterialPickQty = parseFloat(txt.value);
-
+    this.selectedMeterials[idx].MeterialPickQty = parseFloat(txtValue);
     if (this.selectedMeterials[idx].MeterialPickQty > this.selectedMeterials[idx].TOTALQTY) {
-
       this.toastr.error('', this.translate.instant("QtyGTTotal"));
-      txt.value = oldValue;
+      // txtValue = oldValue;
       this.selectedMeterials[idx].MeterialPickQty = oldValue;
+      gridData.data = this.selectedMeterials;
+      return;
     }
-
     this.calculateTotalAndRemainingQty();
-
     if (this._pickedMeterialQty < 0) {
-
       this.toastr.error('', this.translate.instant("MeterialCanNotBeLTZero"));
-
-      txt.value = oldValue;
+      // txtValue = oldValue;
       this.selectedMeterials[idx].MeterialPickQty = oldValue;
       //apply paging..
       this.pagable = this.selectedMeterials.length > this.pageSize;
-
       this.calculateTotalAndRemainingQty();
+      gridData.data = this.selectedMeterials;
       return;
     }
-
     if (this._pickedMeterialQty > this._requiredMeterialQty) {
       this.toastr.error('', this.translate.instant("QtyGTOpen"));
-
-      txt.value = oldValue;
+      // txtValue = oldValue;
       this.selectedMeterials[idx].MeterialPickQty = oldValue;
       this.calculateTotalAndRemainingQty();
-      return;
+      gridData.data = this.selectedMeterials;
+     return;
     }
-
-
   }
 
   calculateTotalAndRemainingQty() {
@@ -453,7 +443,7 @@ export class OutProdissueComponent implements OnInit {
       (resp: any) => {
         this.lookupData = resp;
         this.showLookupLoader = false;
-        if(this.lookupData.length > 0){
+        if (this.lookupData.length > 0) {
           this.manageOldSelectedItems();
           this.manageExistingItem();
           this.showLookup = true;
@@ -465,23 +455,21 @@ export class OutProdissueComponent implements OnInit {
   }
 
   getLookupValue(lookupValue: any, gridSelectedMeterial: any, updateGrid: boolean = true, scan: boolean = false) {
-    if (lookupValue) { 
-           
-      if(this.OrderType=='S'){
-        let data:any[]=[];
-        let tempLookup: any[]=lookupValue;
+    if (lookupValue) {
+
+      if (this.OrderType == 'S') {
+        let data: any[] = [];
+        let tempLookup: any[] = lookupValue;
         for (let index = 0; index < this._remainingMeterial; index++) {
-          if(index<tempLookup.length){
-          data.push(tempLookup[index]);          
+          if (index < tempLookup.length) {
+            data.push(tempLookup[index]);
           }
         }
         this.comingSelectedMeterials = data;
-      } 
-      else{
+      }
+      else {
         this.comingSelectedMeterials = lookupValue;
       }
-
-      
 
       this.manageMeterial(scan);
       console.log("SelectedMeterial", this.selectedMeterials);
@@ -635,27 +623,32 @@ export class OutProdissueComponent implements OnInit {
     if (outboundData != undefined && outboundData != '') {
 
       this.outbound = JSON.parse(outboundData);
-
+      let count=0;
       if (this.outbound.TempMeterials !== undefined
         && this.outbound.TempMeterials !== null && this.outbound.TempMeterials.length > 0) {
 
-        if (this.fromProduction) { 
+        if (this.fromProduction) {
           this.outbound.TempMeterials = this.outbound.TempMeterials.filter((t: any) =>
-            t.Item.RefLineNo !== this.outbound.SelectedItem.RefLineNo && t.Item.ITEMCODE !== this.outbound.SelectedItem.ITEMCODE|| t.Order["Order No"] !== this.outbound.OrderData["Order No"] );
+            t.Item.RefLineNo !== this.outbound.SelectedItem.RefLineNo && t.Item.ITEMCODE !== this.outbound.SelectedItem.ITEMCODE || t.Order["Order No"] !== this.outbound.OrderData["Order No"]);
         }
         else {
           this.outbound.TempMeterials = this.outbound.TempMeterials.filter((t: any) =>
             t.Item.ROWNUM !== this.outbound.SelectedItem.ROWNUM && t.Item.ITEMCODE !== this.outbound.SelectedItem.ITEMCODE || t.Item.DOCNUM !== this.outbound.OrderData.DOCNUM);
         }
+
         // loop selected Items
         for (let index = 0; index < this.selectedMeterials.length; index++) {
           const m = this.selectedMeterials[index];
+          count = count + m.MeterialPickQty; 
+          if(count > this._requiredMeterialQty){
+            this.toastr.error('', this.translate.instant("QtyGTTotal"));
+            return;
+          }
           if (m.MeterialPickQty > 0) {
             let item = { Order: this.outbound.OrderData, Item: this.outbound.SelectedItem, Meterial: m }
             this.outbound.TempMeterials.push(item)
           }
         }
-
       }
       else {
 
@@ -664,6 +657,11 @@ export class OutProdissueComponent implements OnInit {
         // loop selected Items
         for (let index = 0; index < this.selectedMeterials.length; index++) {
           const m = this.selectedMeterials[index];
+          count = count + m.MeterialPickQty; 
+          if(count > this._requiredMeterialQty){
+            this.toastr.error('', this.translate.instant("QtyGTTotal"));
+            return;
+          }
           if (m.MeterialPickQty > 0) {
             let item = { Order: this.outbound.OrderData, Item: this.outbound.SelectedItem, Meterial: m }
             this.outbound.TempMeterials.push(item)
@@ -676,10 +674,10 @@ export class OutProdissueComponent implements OnInit {
     // //lsOutbound
     localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
 
-    if (this.fromProduction==true && fromIFPSave == true) {
+    if (this.fromProduction == true && fromIFPSave == true) {
       this.back(2);
     }
-    else if(this.fromProduction==false) {
+    else if (this.fromProduction == false) {
       this.back(-1);
     }
 
@@ -981,7 +979,7 @@ export class OutProdissueComponent implements OnInit {
         const element = this.outbound.DeleiveryCollection[index];
 
         // Filter for getting  current item :: May be we need to change this in future
-        this.outbound.DeleiveryCollection=this.outbound.DeleiveryCollection.filter(d=> d.Item.DOCENTRY===this.outbound.SelectedItem.DOCENTRY)
+        this.outbound.DeleiveryCollection = this.outbound.DeleiveryCollection.filter(d => d.Item.DOCENTRY === this.outbound.SelectedItem.DOCENTRY)
 
 
         // let coll=Get all Item for Item.Lineno===i
@@ -1072,7 +1070,7 @@ export class OutProdissueComponent implements OnInit {
         }
       }
 
-      
+
 
       console.log("Dtl", arrLots);
       console.log("hdr", arrIssues);
@@ -1115,7 +1113,7 @@ export class OutProdissueComponent implements OnInit {
     }
   }
 
-  
+
   showAddToMeterialAndDelevery() {
     let dBit: boolean = false;
 
@@ -1128,7 +1126,7 @@ export class OutProdissueComponent implements OnInit {
     }
     return dBit;
   }
-  
+
   resetIssueProduction() {
     // this.ngOnInit();   
     let data: OutboundData = this.outbound
