@@ -744,7 +744,7 @@ export class PhysicalCountComponent implements OnInit {
       }
     }
 
-    if (!this.isLotAdded && this.ItemTracking != "N") {
+    if (!this.isLotAdded && this.ItemTracking != "N" && !existingItem) {
       if (this.ItemTracking == "S") {
         this.toastr.error('', this.translate.instant("PhyCount_SerialLotisnotadded"));
       } else {

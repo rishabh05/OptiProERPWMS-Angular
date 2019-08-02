@@ -232,6 +232,13 @@ export class OutProdissueComponent implements OnInit {
               if (data[i].Key == '10' || data[i].Key == '21' || data[i].Key == '23') {
                 this.ScanInputs = data[i].Value;
                 serialNo = data[i].Value;
+
+                let result = this.selectedMeterials.find(element => element.LOTNO == serialNo);
+                if (result != undefined) {
+                  this.toastr.error('', this.translate.instant("BatchSerialAlreadyExist"));
+                  return;
+                }
+
                 //scan input value me set karna hai
                 // make sure ScanInputs variable me puri string aati hai.. to uski value change karne
                 // se kuch affect na kare.
@@ -275,7 +282,7 @@ export class OutProdissueComponent implements OnInit {
                   let el: any = document.getElementById('gridSelectedMeterial');
                   this.getLookupValue(lookupArray, el, true, false);
                 } else {
-                  this.toastr.error('', this.translate.instant("CommonNoDataAvailableToIssueMsg"));
+                  this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
                 }
                 this.ScanInputs = "";
               },
@@ -607,8 +614,8 @@ export class OutProdissueComponent implements OnInit {
             && itemMeterials.length > 0) {
             // this.selectedMeterials = [];
             itemMeterials.forEach(element => {
-              for(var i=0; i<this.selectedMeterials.length; i++){
-                if(this.selectedMeterials[i].BINNO == element.Meterial.BINNO){
+              for (var i = 0; i < this.selectedMeterials.length; i++) {
+                if (this.selectedMeterials[i].BINNO == element.Meterial.BINNO) {
                   this.selectedMeterials[i] = (element.Meterial)
                 }
               }
