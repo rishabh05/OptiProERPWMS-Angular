@@ -108,6 +108,7 @@ export class OutProdissueComponent implements OnInit {
       this.selectedItems = [this.selected];
 
       if (this.OrderType == 'N') {
+        this.showLookupLoader = true;
         this.ourboundService.getAvaliableMeterialForNoneTracked(this.selected.ITEMCODE).subscribe(
           mdata => {
             let el: any = document.getElementById('gridSelectedMeterial');
@@ -182,14 +183,14 @@ export class OutProdissueComponent implements OnInit {
       return;
     }
     let this1 = this;
-    var code ="";
-    if(this.outbound.CustomerData!= null && 
-      this.outbound.CustomerData!=undefined &&
-      this.outbound.CustomerData!="null" ){
-        code = this.outbound.CustomerData.CustomerCode;
-      }else{
-        code = ""
-      }
+    var code = "";
+    if (this.outbound.CustomerData != null &&
+      this.outbound.CustomerData != undefined &&
+      this.outbound.CustomerData != "null") {
+      code = this.outbound.CustomerData.CustomerCode;
+    } else {
+      code = ""
+    }
 
     this.ourboundService.checkAndScanCode(code, this.ScanInputs).subscribe(
       (data: any) => {
@@ -441,7 +442,7 @@ export class OutProdissueComponent implements OnInit {
       (resp: any) => {
         this.lookupData = resp;
         this.showLookupLoader = false;
-        if(this.lookupData.length > 0){
+        if (this.lookupData.length > 0) {
           this.manageOldSelectedItems();
           this.manageExistingItem();
           this.showLookup = true;
@@ -453,23 +454,20 @@ export class OutProdissueComponent implements OnInit {
   }
 
   getLookupValue(lookupValue: any, gridSelectedMeterial: any, updateGrid: boolean = true, scan: boolean = false) {
-    if (lookupValue) { 
-           
-      if(this.OrderType=='S'){
-        let data:any[]=[];
-        let tempLookup: any[]=lookupValue;
+    if (lookupValue) {
+      this.showLookupLoader = false;
+      if (this.OrderType == 'S') {
+        let data: any[] = [];
+        let tempLookup: any[] = lookupValue;
         for (let index = 0; index < this._remainingMeterial; index++) {
-          if(index<tempLookup.length){
-          data.push(tempLookup[index]);          
+          if (index < tempLookup.length) {
+            data.push(tempLookup[index]);
           }
         }
         this.comingSelectedMeterials = data;
-      } 
-      else{
+      } else {
         this.comingSelectedMeterials = lookupValue;
       }
-
-      
 
       this.manageMeterial(scan);
       console.log("SelectedMeterial", this.selectedMeterials);
@@ -479,16 +477,12 @@ export class OutProdissueComponent implements OnInit {
       this.outbound = JSON.parse(localStorage.getItem(CommonConstants.OutboundData));
       this.outbound.SelectedMeterials = lookupValue;
       localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
-
-    }
-    else {
+    } else {
       this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
       this.showLookupLoader = false;
       this.showLookup = false;
     }
   }
-
-
 
   valueChange(e: any) {
     this.selectedUOM = e;
@@ -588,7 +582,6 @@ export class OutProdissueComponent implements OnInit {
           // else {
           //   meterial.MeterialPickQty = remailingMeterialQty;
           // }
-
           this.selectedMeterials.push(meterial);
           //apply paging..
           this.pagable = this.selectedMeterials.length > this.pageSize;
@@ -596,6 +589,33 @@ export class OutProdissueComponent implements OnInit {
           pickedMeterialQty = pickedMeterialQty + meterial.MeterialPickQty;
           remailingMeterialQty = requiredMeterialQty - pickedMeterialQty;
         }
+
+        //code only for non tracked item
+        //fixed issue: save&remaing items showing 
+        if (this.OrderType == 'N') {
+          let itemMeterials
+          if (this.outbound.TempMeterials !== undefined
+            && this.outbound.TempMeterials !== null
+            && this.outbound.TempMeterials.length > 0) {
+
+            itemMeterials = this.outbound.TempMeterials.filter(
+              (m: any) => m.Item.ITEMCODE
+                === this.outbound.SelectedItem.ITEMCODE && m.Item.ROWNUM
+                === this.outbound.SelectedItem.ROWNUM && this.outbound.OrderData.DOCNUM === m.Item.DOCNUM);
+          }
+          if (itemMeterials !== undefined && itemMeterials !== null
+            && itemMeterials.length > 0) {
+            // this.selectedMeterials = [];
+            itemMeterials.forEach(element => {
+              for(var i=0; i<this.selectedMeterials.length; i++){
+                if(this.selectedMeterials[i].BINNO == element.Meterial.BINNO){
+                  this.selectedMeterials[i] = (element.Meterial)
+                }
+              }
+            });
+          }
+        }
+
       }
       // Selected meterial
       if (this.selectedMeterials && this.selectedMeterials.length > 0) {
@@ -623,13 +643,13 @@ export class OutProdissueComponent implements OnInit {
     if (outboundData != undefined && outboundData != '') {
 
       this.outbound = JSON.parse(outboundData);
-      let count=0;
+      let count = 0;
       if (this.outbound.TempMeterials !== undefined
         && this.outbound.TempMeterials !== null && this.outbound.TempMeterials.length > 0) {
 
-        if (this.fromProduction) { 
+        if (this.fromProduction) {
           this.outbound.TempMeterials = this.outbound.TempMeterials.filter((t: any) =>
-            t.Item.RefLineNo !== this.outbound.SelectedItem.RefLineNo && t.Item.ITEMCODE !== this.outbound.SelectedItem.ITEMCODE|| t.Order["Order No"] !== this.outbound.OrderData["Order No"] );
+            t.Item.RefLineNo !== this.outbound.SelectedItem.RefLineNo && t.Item.ITEMCODE !== this.outbound.SelectedItem.ITEMCODE || t.Order["Order No"] !== this.outbound.OrderData["Order No"]);
         }
         else {
           this.outbound.TempMeterials = this.outbound.TempMeterials.filter((t: any) =>
@@ -638,8 +658,8 @@ export class OutProdissueComponent implements OnInit {
         // loop selected Items
         for (let index = 0; index < this.selectedMeterials.length; index++) {
           const m = this.selectedMeterials[index];
-          count = count + m.MeterialPickQty; 
-          if(count > this._requiredMeterialQty){
+          count = count + m.MeterialPickQty;
+          if (count > this._requiredMeterialQty) {
             this.toastr.error('', this.translate.instant("QtyGTTotal"));
             return;
           }
@@ -657,8 +677,8 @@ export class OutProdissueComponent implements OnInit {
         // loop selected Items
         for (let index = 0; index < this.selectedMeterials.length; index++) {
           const m = this.selectedMeterials[index];
-          count = count + m.MeterialPickQty; 
-          if(count > this._requiredMeterialQty){
+          count = count + m.MeterialPickQty;
+          if (count > this._requiredMeterialQty) {
             this.toastr.error('', this.translate.instant("QtyGTTotal"));
             return;
           }
@@ -674,10 +694,9 @@ export class OutProdissueComponent implements OnInit {
     // //lsOutbound
     localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
 
-    if (this.fromProduction==true && fromIFPSave == true) {
+    if (this.fromProduction == true && fromIFPSave == true) {
       this.back(2);
-    }
-    else if(this.fromProduction==false) {
+    } else if (this.fromProduction == false) {
       this.back(-1);
     }
 
@@ -766,8 +785,6 @@ export class OutProdissueComponent implements OnInit {
         }
       }
     }
-
-
   }
 
   private manageExistingItem() {
@@ -979,7 +996,7 @@ export class OutProdissueComponent implements OnInit {
         const element = this.outbound.DeleiveryCollection[index];
 
         // Filter for getting  current item :: May be we need to change this in future
-        this.outbound.DeleiveryCollection=this.outbound.DeleiveryCollection.filter(d=> d.Item.DOCENTRY===this.outbound.SelectedItem.DOCENTRY)
+        this.outbound.DeleiveryCollection = this.outbound.DeleiveryCollection.filter(d => d.Item.DOCENTRY === this.outbound.SelectedItem.DOCENTRY)
 
 
         // let coll=Get all Item for Item.Lineno===i
@@ -1070,7 +1087,7 @@ export class OutProdissueComponent implements OnInit {
         }
       }
 
-      
+
 
       console.log("Dtl", arrLots);
       console.log("hdr", arrIssues);
@@ -1113,7 +1130,7 @@ export class OutProdissueComponent implements OnInit {
     }
   }
 
-  
+
   showAddToMeterialAndDelevery() {
     let dBit: boolean = false;
 
@@ -1126,7 +1143,7 @@ export class OutProdissueComponent implements OnInit {
     }
     return dBit;
   }
-  
+
   resetIssueProduction() {
     // this.ngOnInit();   
     let data: OutboundData = this.outbound
