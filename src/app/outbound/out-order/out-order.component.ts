@@ -84,8 +84,9 @@ export class OutOrderComponent implements OnInit {
   public openOrderLookup() {
     if (this.selectedCustomer != null && this.selectedCustomer != undefined
       && this.selectedCustomer.CustomerCode != '' && this.selectedCustomer.CustomerCode != null) {
-
-      this.outboundservice.getCustomerSOList(this.selectedCustomer.CustomerCode).subscribe(
+        
+      let whseId = localStorage.getItem("whseId");
+      this.outboundservice.getCustomerSOList(this.selectedCustomer.CustomerCode, "",  whseId).subscribe(
         resp => {
           if(resp!=null){
           if (resp[0].ErrorMsg == "7001") {
