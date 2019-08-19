@@ -55,6 +55,8 @@ export class InboundDetailsComponent implements OnInit {
     this.dateAvailableToReceieve();
   }
 
+ 
+
   dateAvailableToReceieve() {
     var dataModel = localStorage.getItem("addToGRPOPONumbers");
     if (dataModel == null || dataModel == undefined || dataModel == "") {

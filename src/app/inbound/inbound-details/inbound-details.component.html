@@ -82,7 +82,7 @@
                 <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="OnCancelClick()">
                     <span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
                 <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" 
-                (click)="onNextClick()" [disabled]="!detailsAvailable" skipLocationChange >
+                (click)="onNextClick()" [disabled]="!showNext" skipLocationChange >
                     <i class="opti-icon-arrow-next"></i>
                 </button>
             </div>
