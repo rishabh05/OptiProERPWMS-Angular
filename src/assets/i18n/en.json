@@ -306,5 +306,6 @@
   "Save": "Save",
   "Ok": "Ok",
   "InvalidBatchSerial": "Invalid Batch/Serial No.",
-  "":""
+  "":"",
+  "ProductionIssueSuccess": "Production Issue generated successfully with Document No:"
 }
