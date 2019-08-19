@@ -46,10 +46,11 @@ export class OutboundService {
     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetOpenSoItemList", body, this.httpOptions);
   }
 
-  public getCustomerSOList(custCode: string, docNum: string = ""): Observable<any> {
+  public getCustomerSOList(custCode: string, docNum: string, whseId: string): Observable<any> {
     this.outRequest = new OutRequest();
     this.outRequest.DOCNUM = docNum;
     this.outRequest.CUSTCODE = custCode;
+    this.outRequest.Whse = whseId;
     var body: any = { DeliveryToken: this.prepareRequest() };
 
     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/SoCustomerWiseLookup", body, this.httpOptions);

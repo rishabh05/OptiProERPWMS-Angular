@@ -180,7 +180,7 @@ export class LookupComponent implements OnInit {
   }
 
   showAvaliableItems() {
-    this.pagesize = 10;
+    this.pagesize = 5;
     if(this.serviceData.length>this.pagesize){
       this.pagable = true;
     }else{
@@ -194,7 +194,7 @@ export class LookupComponent implements OnInit {
 
       {
         field: 'LOTNO',
-        title: 'Serial',
+        title: this.translate.instant("BatchSerial_No"),
         type: 'text',
         width: '100'
       },
@@ -216,8 +216,14 @@ export class LookupComponent implements OnInit {
     ];
     this.lookupTitle = this.translate.instant("AvaliableMeterial");
     if (this.serviceData !== undefined) {
-      if (this.serviceData.length > 0) {
+      var len = this.serviceData.length;
+      if (len > 0) {
         //  console.log('ServiceData', this.serviceData);
+        var tempData: any;
+        for(var i=0;i<len;i++){
+          var qty = Number(this.serviceData[i].TOTALQTY).toFixed(Number(localStorage.getItem("DecimalPrecision")));
+          this.serviceData[i].TOTALQTY = qty;
+        }
         this.dialogOpened = true;
       }
     }
@@ -726,7 +732,7 @@ export class LookupComponent implements OnInit {
     } 
     else {
       // let rixd: number= this.selectedValues.findIndex(i => i.LOTNO == servivceItem.LOTNO && i.LOTNO == servivceItem.BINNO)
-     var temp = this.selectedValues.splice(index, 1);
+      var temp = this.selectedValues.splice(index, 1);
      this.selectedValues = this.selectedValues;
      console.log("selectedValues.size", this.selectedValues.length);
     }

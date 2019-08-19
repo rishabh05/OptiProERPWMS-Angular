@@ -40,7 +40,7 @@
                         [selectable]="true" (selectionChange)="onPOSelection($event)" #gridItem>
 
                         <!-- grid for mobile start -->
-                        <kendo-grid-column media="(max-width: 767px)" title="Payment List" class="opti_mobile-grid-td">
+                        <kendo-grid-column media="(max-width: 767px)" class="opti_mobile-grid-td" title="{{'POList'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                 <dl class="opti_mobile_grid_dl w-100">
                                     <dt class="d-flex align-items-center">{{'PurchaseOrderNumber'|translate}}
@@ -82,7 +82,7 @@
                 <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="OnCancelClick()">
                     <span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
                 <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" 
-                (click)="onNextClick()" [disabled]="!detailsAvailable" skipLocationChange >
+                (click)="onNextClick()" [disabled]="!showNext" skipLocationChange >
                     <i class="opti-icon-arrow-next"></i>
                 </button>
             </div>

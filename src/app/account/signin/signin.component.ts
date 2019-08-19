@@ -67,7 +67,7 @@ export class SigninComponent implements OnInit {
 
         this.selectedItem = this.translate.instant("Login_SelectCompany");
         this.defaultWHS = { OPTM_WHSE: this.translate.instant("SelectWarehouse"), BPLid: 0 }
-        
+
         this.showFullPageLoader = false;
         // Get cookie start
         if (this.getCookie('cookieEmail') != '' && this.getCookie('cookiePassword') != '') {
@@ -221,18 +221,23 @@ export class SigninComponent implements OnInit {
                     localStorage.setItem("CompID", this.selectedItem);
                     localStorage.setItem("whseId", this.selectedWhse);
                     localStorage.setItem("Token", this.licenseData[0].Token);
-                    if (this.licenseData[0].DefaultValues.length == 8) {
-                        localStorage.setItem("DefaultValues", JSON.stringify(this.licenseData[0].DefaultValues));
-                        localStorage.setItem("DecimalPrecision", this.licenseData[0].DefaultValues[3].DefaultValue);
-                        localStorage.setItem("DecimalSeparator", this.licenseData[0].DefaultValues[4].DefaultValue);
-                        localStorage.setItem("ThousandSeparator", this.licenseData[0].DefaultValues[5].DefaultValue);
-                        localStorage.setItem("DATEFORMAT", this.licenseData[0].DefaultValues[6].DefaultValue);
-                    } else {
-                        localStorage.setItem("DefaultValues", JSON.stringify(this.licenseData[0].DefaultValues));
-                        localStorage.setItem("DecimalPrecision", this.licenseData[0].DefaultValues[0].DefaultValue);
-                        localStorage.setItem("DecimalSeparator", this.licenseData[0].DefaultValues[1].DefaultValue);
-                        localStorage.setItem("ThousandSeparator", this.licenseData[0].DefaultValues[2].DefaultValue);
-                        localStorage.setItem("DATEFORMAT", this.licenseData[0].DefaultValues[3].DefaultValue);
+
+                    localStorage.setItem("DefaultValues", JSON.stringify(this.licenseData[0].DefaultValues));
+                    for (var i = 0; i < this.licenseData[0].DefaultValues.length; i++) {
+                        switch (this.licenseData[0].DefaultValues[i].DefaultKey) {
+                            case "DecimalPrecision":
+                                localStorage.setItem("DecimalPrecision", this.licenseData[0].DefaultValues[i].DefaultValue);
+                                break;
+                            case "DecimalSeparator":
+                                localStorage.setItem("DecimalSeparator", this.licenseData[0].DefaultValues[i].DefaultValue);
+                                break;
+                            case "ThousandSeparator":
+                                localStorage.setItem("ThousandSeparator", this.licenseData[0].DefaultValues[i].DefaultValue);
+                                break;
+                            case "DATEFORMAT":
+                                localStorage.setItem("DATEFORMAT", this.licenseData[0].DefaultValues[i].DefaultValue);
+                                break;
+                        }
                     }
 
                     // code for remember me 

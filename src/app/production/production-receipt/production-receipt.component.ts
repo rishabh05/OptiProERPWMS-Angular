@@ -317,7 +317,10 @@ export class ProductionReceiptComponent implements OnInit {
   public addMoreClick() { //case when serial or batch item.
     if (this.showRejectQtyField == true && this.model.options == '2') { // reject qty
       //means add in accept qty
-      if (this.validateForm() == false) { return; }
+      if (this.validateForm() == false) 
+      {
+         return; 
+      }
       if(this.tracking == "N"){
 
       }else{
@@ -671,11 +674,13 @@ export class ProductionReceiptComponent implements OnInit {
            this.serialBatchNo = "";
             return;
           }else if(data =="2"){
-            this.toastr.error('', this.translate.instant("invalidBatchSerial"));
+            this.toastr.error('', this.translate.instant("InvalidBatchSerial"));
            this.serialBatchNo = "";
             return;
           }else{ 
             // allow data 
+
+            
           }
         }
       },
