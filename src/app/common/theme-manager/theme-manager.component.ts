@@ -37,7 +37,7 @@ export class ThemeManagerComponent implements OnInit {
   ngOnInit() {
     setTimeout(()=>{
       $('#'+this.selectedThemeID).click(); 
-    }, 500);
+    },10);
   }
 
   // Function called on cross icon.

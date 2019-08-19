@@ -7,7 +7,6 @@ import { PortalRightComponent } from './portal-right/portal-right.component';
 import { PortalTopComponent } from './portal-top/portal-top.component';
 import { PortalHomeComponent } from './portal-home.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
-import { ThemeManagerComponent } from '../common/theme-manager/theme-manager.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
@@ -51,7 +50,7 @@ import { SharedModule } from '../shared-module/shared-module.module';
     OutboundModule,
     InventoryTransferModule
   ],
-  declarations: [PortalHomeComponent, PortalLeftComponent, PortalRightComponent, PortalTopComponent, DashboardComponent, ThemeManagerComponent, ChangeWarehouseComponent],
+  declarations: [PortalHomeComponent, PortalLeftComponent, PortalRightComponent, PortalTopComponent, DashboardComponent, ChangeWarehouseComponent],
   providers:[DashboardComponent ]
 })
 export class PortalHomeModule { }
