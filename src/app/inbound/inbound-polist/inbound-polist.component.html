@@ -9,7 +9,7 @@
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
 
                     <div class="form-group row align-items-center">
-                        <label for="inputPassword" class="col-4 col-sm-3 col-form-label py-0">{{'FuturePOs'|translate}}</label>
+                        <label for="inputPassword" class="col-4 col-sm-3 col-form-label py-0">{{'Inbound_FuturePOs'|translate}}</label>
                         <div class="col-8 col-sm-9">
                             <div class="opti_input-group-checkbox">
                                 <input type="checkbox" id="ch7" class="k-checkbox" name="futurepo" ([ngModel])="futurepo" />
@@ -20,10 +20,10 @@
 
 
                     <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'PO#'|translate}}</label>
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'Inbound_PO#'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" name="poCode" [(ngModel)]=poCode placeholder="{{'PO#'|translate}}"
+                                <input type="text" class="form-control form-control-sm" name="poCode" [(ngModel)]=poCode placeholder="{{'Inbound_PO#'|translate}}"
                                     (blur)="OnPOChange()" [disabled]=disablePO>
                                 <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" type="button" (click)="onPOlookupClick()" [disabled]=disablePO>
@@ -96,7 +96,7 @@
                                         <dt>{{'ItemCode'|translate}}</dt>
                                         <dd>{{ dataItem.ITEMCODE }}</dd>
 
-                                        <dt>{{'ReceiveQty'|translate}}</dt>
+                                        <dt>{{'Inbound_ReceiveQty'|translate}}</dt>
                                         <dd>{{dataItem.RPTQTY | numberFormat}}</dd>
                                     </dl>
 
@@ -116,7 +116,7 @@
                                     {{dataItem.OPENQTY | numberFormat}}
                                 </ng-template>
                             </kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="RPTQTY" title="{{'ReceiveQty'|translate}}" headerClass="text-right" class="text-right">
+                            <kendo-grid-column media="(min-width: 768px)" field="RPTQTY" title="{{'Inbound_ReceiveQty'|translate}}" headerClass="text-right" class="text-right">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     {{dataItem.RPTQTY |numberFormat}}
                                 </ng-template>

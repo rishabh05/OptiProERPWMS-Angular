@@ -216,13 +216,13 @@ export class InboundPolistComponent implements OnInit {
           }
           else {
             this.poCode = "";
-            this.toastr.error('', this.translate.instant("POExistMessage"));
+            this.toastr.error('', this.translate.instant("Inbound_POExistMessage"));
 
             return;
           }
         } else {
           this.poCode = "";
-          this.toastr.error('', this.translate.instant("POExistMessage"));
+          this.toastr.error('', this.translate.instant("Inbound_POExistMessage"));
         }
       },
       error => {

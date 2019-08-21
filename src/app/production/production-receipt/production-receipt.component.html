@@ -9,11 +9,11 @@
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
 
                     <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'OrderNo'|translate}}</label>
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'Outbound_OrderNo'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
                                 <input type="text" class="form-control form-control-sm" [(ngModel)]=orderNumber
-                                    (blur)="OnOrderValueChange()" name='orderNo' placeholder="{{'OrderNo'|translate}}">
+                                    (blur)="OnOrderValueChange()" name='orderNo' placeholder="{{'Outbound_OrderNo'|translate}}">
                                 <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" (click)="OnOrderLookupClick()" type="button">
                                         <i class="opti-icon-hammenu"></i>
@@ -55,11 +55,11 @@
                                             <input type="radio" id="radio1" name="group" class="k-radio"
                                                 [(ngModel)]="model.options" value="1">
                                             <label class="k-radio-label mr-3"
-                                                for="radio1">{{'PostToInv'|translate}}</label>
+                                                for="radio1">{{'ProdReceipt_PostToInv'|translate}}</label>
                                             <input type="radio" id="radio2" name="group" class="k-radio"
                                                 [(ngModel)]="model.options" value="2">
                                             <label class="k-radio-label mr-3"
-                                                for="radio2">{{'PostToReject'|translate}}</label>
+                                                for="radio2">{{'ProdReceipt_PostToReject'|translate}}</label>
                                         </div>
                                     </div>
                                 </fieldset>
@@ -166,7 +166,7 @@
                     </div>
                 </div>
 
-                <h5>{{'AssignedQuantity'|translate}}</h5>
+                <h5>{{'ProdReceipt_AssignedQuantity'|translate}}</h5>
                 <div class="row">
                     <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
                         <div class="form-group row">

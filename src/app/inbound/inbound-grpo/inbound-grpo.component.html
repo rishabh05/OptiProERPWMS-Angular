@@ -21,7 +21,7 @@
                                     <dt>{{'ItemCode'|translate}}</dt>
                                     <dd>{{ dataItem.ITEMCODE }}</dd>
 
-                                    <dt>{{'ReceiveQty'|translate}}</dt>
+                                    <dt>{{'Inbound_ReceiveQty'|translate}}</dt>
                                     <dd>{{dataItem.RPTQTY | numberFormat}}</dd>
 
                                 </dl>
@@ -48,7 +48,7 @@
                                 {{dataItem.OPENQTY | numberFormat}}
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column media="(min-width: 768px)" field="RPTQTY" headerClass="text-right" title="{{'ReceiveQty'|translate}}"
+                        <kendo-grid-column media="(min-width: 768px)" field="RPTQTY" headerClass="text-right" title="{{'Inbound_ReceiveQty'|translate}}"
                             class="text-right">
                             <ng-template kendoGridCellTemplate let-dataItem>
                                 {{dataItem.RPTQTY | numberFormat}}

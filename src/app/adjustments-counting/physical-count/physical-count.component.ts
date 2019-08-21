@@ -149,10 +149,10 @@ export class PhysicalCountComponent implements OnInit {
             this.serviceData = data;
             this.lookupfor = "ShowBatachSerList";
           } else {
-            this.toastr.error('', this.translate.instant("BinTransfer.NoData"));
+            this.toastr.error('', this.translate.instant("PhyCount_BinTransfer.NoData"));
           }
         } else {
-          this.toastr.error('', this.translate.instant("BinTransfer.NoData"));
+          this.toastr.error('', this.translate.instant("PhyCount_BinTransfer.NoData"));
         }
       },
       error => {
@@ -181,14 +181,14 @@ export class PhysicalCountComponent implements OnInit {
             this.CheckTrackingandVisiblity();
           }
           else {
-            this.toastr.error('', this.translate.instant("GoodsIssue.INVALIDITEM"));
+            this.toastr.error('', this.translate.instant("PhyCount_GoodsIssue.INVALIDITEM"));
             this.ItemCode = "";
             this.ItemName = "";
             this.ItemTracking = "";
           }
         }
         else {
-          this.toastr.error('', this.translate.instant("GoodsIssue.INVALIDITEM"));
+          this.toastr.error('', this.translate.instant("PhyCount_GoodsIssue.INVALIDITEM"));
           this.ItemCode = "";
           this.ItemName = "";
           this.ItemTracking = "";
@@ -556,7 +556,7 @@ export class PhysicalCountComponent implements OnInit {
             }
             if (data[0].ErrorMsg == "" && data[0].Successmsg != "") {
 
-              this.toastr.success('', this.translate.instant("DocUpdatedSucessfullyMsg") + " " + this.DocEntry);
+              this.toastr.success('', this.translate.instant("PhyCount_DocUpdatedSucessfullyMsg") + " " + this.DocEntry);
               this.clearData();
               this.getPhysicalCountData();
               return;

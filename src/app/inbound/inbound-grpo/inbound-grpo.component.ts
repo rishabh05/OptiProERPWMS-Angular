@@ -146,10 +146,10 @@ export class InboundGRPOComponent implements OnInit {
 
   setLocalStringForBatch() {
     this.serialNoTitle = this.translate.instant("SerialNo");
-    this.mfrRadioText = this.translate.instant("MfrBatchNo");
-    this.sysRadioText = this.translate.instant("SysBatch");
+    this.mfrRadioText = this.translate.instant("Inbound_MfrBatchNo");
+    this.sysRadioText = this.translate.instant("Inbound_SysBatch");
     this.scanInputPlaceholder = this.translate.instant("ScanBatch");
-    this.mfrGridColumnText = this.translate.instant("MfrBatchNo");
+    this.mfrGridColumnText = this.translate.instant("Inbound_MfrBatchNo");
     this.SRBatchColumnText = this.translate.instant("BatchNo");
   }
   setLocalStringForSerial() {
@@ -185,7 +185,7 @@ export class InboundGRPOComponent implements OnInit {
               return;
             }
           } else {
-            this.toastr.error('', this.translate.instant("NoBinsAvailableMsg"));
+            this.toastr.error('', this.translate.instant("Inbound_NoBinsAvailableMsg"));
           }
         }
       },
@@ -283,11 +283,11 @@ export class InboundGRPOComponent implements OnInit {
     quantitySum = quantitySum + Number(this.qty);
 
     if(Number(this.OpenQty) == 0){
-      this.toastr.error('', this.translate.instant("NoOpenQuantity"));
+      this.toastr.error('', this.translate.instant("Inbound_NoOpenQuantity"));
       this.qty = 0;
       return false;
     } else if (quantitySum > Number(this.OpenQty)) {
-      this.toastr.error('', this.translate.instant("NoOpenQuantityValid"));
+      this.toastr.error('', this.translate.instant("Inbound_NoOpenQuantityValid"));
       this.qty = 0;
       return false;
     } else {
@@ -308,9 +308,9 @@ export class InboundGRPOComponent implements OnInit {
     if (result != undefined) {
       if (this.openPOLineModel[0].TRACKING != "N") {
         if (this.openPOLineModel[0].TRACKING == "S") {
-          this.toastr.error('', this.translate.instant("SerialCanNotbeSame"));
+          this.toastr.error('', this.translate.instant("Inbound_SerialCanNotbeSame"));
         } else {
-          this.toastr.error('', this.translate.instant("BatchCanNotbeSame"));
+          this.toastr.error('', this.translate.instant("Inbound_BatchCanNotbeSame"));
         }
       }
       //this.recvingQuantityBinArray[rowindex].LotNumber = "";
@@ -332,7 +332,7 @@ export class InboundGRPOComponent implements OnInit {
 
   addQuantity() {
     if (this.qty == 0 || this.qty == undefined) {
-      this.toastr.error('', this.translate.instant("EnterQuantityErrMsg"));
+      this.toastr.error('', this.translate.instant("Inbound_EnterQuantityErrMsg"));
       return;
     }
     if (!Number.isInteger(this.qty)) {
@@ -419,7 +419,7 @@ export class InboundGRPOComponent implements OnInit {
       this.recvingQuantityBinArray.push(new RecvingQuantityBin("", "", qty, this.RecvbBinvalue, this.expiryDate));
       this.showButton = true;
     } else {
-      this.toastr.error('', this.translate.instant("BinValidation"));
+      this.toastr.error('', this.translate.instant("Inbound_BinValidation"));
       return;
     }
     
@@ -485,7 +485,7 @@ export class InboundGRPOComponent implements OnInit {
 
   public openConfirmForDelete(rowindex, gridData: any) {
     this.dialogFor = "deleteRow";
-    this.dialogMsg = this.translate.instant("DoYouWantToDelete");
+    this.dialogMsg = this.translate.instant("Inbound_DoYouWantToDelete");
     this.yesButtonText = this.translate.instant("yes");
     this.noButtonText = this.translate.instant("no");
     this.rowindexForDelete = rowindex;
@@ -506,7 +506,7 @@ export class InboundGRPOComponent implements OnInit {
           this.yesButtonText = this.translate.instant("yes");
           this.noButtonText = this.translate.instant("no");
           this.dialogFor = "receiveMultiplePDFDialog";
-          this.dialogMsg = this.translate.instant("PrintAllLabelsAfterSubmit");
+          this.dialogMsg = this.translate.instant("Inbound_PrintAllLabelsAfterSubmit");
           this.operationType = "All";
           this.showConfirmDialog = true; // show dialog
           this.showPDF = true;
@@ -532,7 +532,7 @@ export class InboundGRPOComponent implements OnInit {
           this.yesButtonText = this.translate.instant("yes");
           this.noButtonText = this.translate.instant("no");
           this.dialogFor = "receiveSinglePDFDialog";
-          this.dialogMsg = this.translate.instant("PrintAllLabelsAfterSubmit");
+          this.dialogMsg = this.translate.instant("Inbound_PrintAllLabelsAfterSubmit");
           this.operationType = "Current";
           this.showConfirmDialog = true; // show dialog
         }
@@ -584,9 +584,9 @@ export class InboundGRPOComponent implements OnInit {
       let result = this.recvingQuantityBinArray.find(element => element.LotNumber == "");
       if (result != undefined) {
         if (this.openPOLineModel[0].TRACKING == "S") {
-          this.toastr.error('', this.translate.instant("SerialNotBlank"));
+          this.toastr.error('', this.translate.instant("Inbound_SerialNotBlank"));
         } else {
-          this.toastr.error('', this.translate.instant("BatchNotBlank"));
+          this.toastr.error('', this.translate.instant("Inbound_BatchNotBlank"));
         }
         return;
       }
@@ -772,9 +772,9 @@ export class InboundGRPOComponent implements OnInit {
       let result = this.recvingQuantityBinArray.find(element => element.LotNumber == "");
       if (result != undefined) {
         if (this.openPOLineModel[0].TRACKING == "S") {
-          this.toastr.error('', this.translate.instant("SerialNotBlank"));
+          this.toastr.error('', this.translate.instant("Inbound_SerialNotBlank"));
         } else {
-          this.toastr.error('', this.translate.instant("BatchNotBlank"));
+          this.toastr.error('', this.translate.instant("Inbound_BatchNotBlank"));
         }
         return;
       }
@@ -787,7 +787,7 @@ export class InboundGRPOComponent implements OnInit {
       this.yesButtonText = this.translate.instant("yes");
       this.noButtonText = this.translate.instant("no");
       this.dialogFor = "receiveSinglePDFDialog";
-      this.dialogMsg = this.translate.instant("PrintAllLabelsAfterSubmit");
+      this.dialogMsg = this.translate.instant("Inbound_PrintAllLabelsAfterSubmit");
       this.showConfirmDialog = true; // show dialog
 
     } else {
@@ -796,7 +796,7 @@ export class InboundGRPOComponent implements OnInit {
         this.yesButtonText = this.translate.instant("yes");
         this.noButtonText = this.translate.instant("no");
         this.dialogFor = "receiveSinglePDFDialog";
-        this.dialogMsg = this.translate.instant("PrintAllLabelsAfterSubmit");
+        this.dialogMsg = this.translate.instant("Inbound_PrintAllLabelsAfterSubmit");
         this.showConfirmDialog = true; // show dialog
         //this.submitCurrentGRPO();
 
@@ -805,7 +805,7 @@ export class InboundGRPOComponent implements OnInit {
       this.yesButtonText = this.translate.instant("All");
       this.noButtonText = this.translate.instant("Current");
       this.dialogFor = "recCurrentOrAll";
-      this.dialogMsg = this.translate.instant("ReceiveCurrentOrAll")
+      this.dialogMsg = this.translate.instant("Inbound_ReceiveCurrentOrAll")
       this.showConfirmDialog = true; // show dialog
     }
   }
@@ -1015,7 +1015,7 @@ export class InboundGRPOComponent implements OnInit {
           }
 
           // alert("Goods Receipt PO generated successfully with Doc No: " + data.DocEntry);
-          this.toastr.success('', this.translate.instant("GRPOSuccessMessage")+" "+ data[0].SuccessNo);
+          this.toastr.success('', this.translate.instant("Inbound_GRPOSuccessMessage")+" "+ data[0].SuccessNo);
 
           if (this.showPDF) {
             //show pdf
@@ -1119,7 +1119,7 @@ export class InboundGRPOComponent implements OnInit {
             return;
           }
           else {
-            this.toastr.error('', this.translate.instant("NoBinsAvailableMsg"));
+            this.toastr.error('', this.translate.instant("Inbound_NoBinsAvailableMsg"));
           }
         }
       },
