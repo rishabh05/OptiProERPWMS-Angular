@@ -376,7 +376,7 @@ export class LookupComponent implements OnInit {
       },
 
       {
-        title: this.translate.instant("Name"),
+        title: this.translate.instant("Outbound_CustomerName"),
         field: 'CUSTOMER NAME',
         type: 'text',
         width: '100'

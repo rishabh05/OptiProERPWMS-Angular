@@ -88,11 +88,10 @@ export class SigninComponent implements OnInit {
         if (localStorage.getItem("service_url") != null && localStorage.getItem("service_url") != undefined && localStorage.getItem("service_url") != "") {
 
             var url: any = { 'service_url': localStorage.getItem("service_url") }
-            //alert("serviceURL not null:"+JSON.stringify(url));
-            sessionStorage.setItem('ConfigData', JSON.stringify(url));
+            alert("serviceURL not null:"+JSON.stringify(url));
             this.getPSURL(); //call method after seting configDataObject.
         } else {
-            //alert("serviceURL null:"+JSON.stringify(url));
+            alert("serviceURL null:"+JSON.stringify(url));
             this.httpClientSer.get('./assets/config.json').subscribe(
                 data => {
                     sessionStorage.setItem('ConfigData', JSON.stringify(data));
@@ -100,24 +99,25 @@ export class SigninComponent implements OnInit {
                 },
                 (err: HttpErrorResponse) => {
                     console.log(err.message);
+                    alert("HttpErrorResponse:"+err.message);
                 }
             );
         }
     }
 
     getPSURL() {
-        //localStorage.setItem("PSURLFORADMIN", "http://172.16.6.140/OptiADMINHANA/");
-        this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
-        this.signinService.getPSURL(this.config_params.service_url).subscribe(
-            data => {
-                if (data != null) {
-                    localStorage.setItem("PSURLFORADMIN", data);
-                }
-            },
-            error => {
-                this.toastr.error('', 'There is some error to connect with server', error);
-                this.showLoader = false;
-            });
+        localStorage.setItem("PSURLFORADMIN", "http://139.144.10.220/optiproadmin/");
+        // this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
+        // this.signinService.getPSURL(this.config_params.service_url).subscribe(
+        //     data => {
+        //         if (data != null) {
+        //             localStorage.setItem("PSURLFORADMIN", data);
+        //         }
+        //     },
+        //     error => {
+        //         this.toastr.error('', 'There is some error to connect with server', error);
+        //         this.showLoader = false;
+        //     });
     }
 
 

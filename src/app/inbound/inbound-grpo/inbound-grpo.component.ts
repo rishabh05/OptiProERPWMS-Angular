@@ -146,7 +146,7 @@ export class InboundGRPOComponent implements OnInit {
 
   setLocalStringForBatch() {
     this.serialNoTitle = this.translate.instant("SerialNo");
-    this.mfrRadioText = this.translate.instant("MfrBatch");
+    this.mfrRadioText = this.translate.instant("MfrBatchNo");
     this.sysRadioText = this.translate.instant("SysBatch");
     this.scanInputPlaceholder = this.translate.instant("ScanBatch");
     this.mfrGridColumnText = this.translate.instant("MfrBatchNo");
@@ -154,7 +154,7 @@ export class InboundGRPOComponent implements OnInit {
   }
   setLocalStringForSerial() {
     this.serialNoTitle = this.translate.instant("SerialNo");
-    this.mfrRadioText = this.translate.instant("MfrSerial");
+    this.mfrRadioText = this.translate.instant("MfrSerialNo");
     this.sysRadioText = this.translate.instant("SysSerial");
     this.scanInputPlaceholder = this.translate.instant("ScanSerial");
     this.mfrGridColumnText = this.translate.instant("MfrSerialNo");
@@ -780,7 +780,7 @@ export class InboundGRPOComponent implements OnInit {
       }
     }
 
-    var dataModel = localStorage.getItem("GRPOReceieveData");
+    var dataModel: any = localStorage.getItem("GRPOReceieveData");
     if (dataModel == null || dataModel == undefined || dataModel == "") {
       //this.submitCurrentGRPO();
       // show print dialog here and onclick its handling.  
@@ -792,7 +792,7 @@ export class InboundGRPOComponent implements OnInit {
 
     } else {
       dataModel = this.manageRecords(JSON.parse(dataModel));
-      if (dataModel == null || dataModel == undefined || dataModel == "") {
+      if (dataModel == null || dataModel == undefined || dataModel == "" || dataModel.POReceiptLots.length <1) {
         this.yesButtonText = this.translate.instant("yes");
         this.noButtonText = this.translate.instant("no");
         this.dialogFor = "receiveSinglePDFDialog";
