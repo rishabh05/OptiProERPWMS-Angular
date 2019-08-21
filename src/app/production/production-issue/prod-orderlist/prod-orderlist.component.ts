@@ -460,7 +460,7 @@ export class ProdOrderlistComponent implements OnInit {
         data => {
           if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
             this.showLoader = false;
-            this.toastr.success('', this.translate.instant("ProductionIssueSuccess") + " : " + data[0].SuccessNo);
+            this.toastr.success('', this.translate.instant("ProdIssue_ProductionIssueSuccess") + " : " + data[0].SuccessNo);
 
             this.resetIssueProduction();
 

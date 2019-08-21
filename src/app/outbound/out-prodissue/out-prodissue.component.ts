@@ -87,12 +87,12 @@ export class OutProdissueComponent implements OnInit {
 
         this.OpenQtylbl = this.translate.instant("BalanceQty");
         this.PickQtylbl = this.translate.instant("IssuedQty");
-        this.pageTitle = this.translate.instant("IssueForPO");
+        this.pageTitle = this.translate.instant("ProdIssue_IssueForPO");
       } else {
         this.fromProduction = false;
         this.PickQtylbl = this.translate.instant("PickQty");
         this.OpenQtylbl = this.translate.instant("OpenQty");
-        this.pageTitle = this.translate.instant("DeleiveryForSO");
+        this.pageTitle = this.translate.instant("ProdIssue_DeleiveryForSO");
 
         this.ourboundService.getUOMList(this.selected.ITEMCODE).subscribe(
           data => {
@@ -152,7 +152,7 @@ export class OutProdissueComponent implements OnInit {
 
   onScanInputChange() {
     if (this.needMeterial() == false) {
-      this.toastr.error('', this.translate.instant("PickedAllRequiredItems"));
+      this.toastr.error('', this.translate.instant("ProdIssue_PickedAllRequiredItems"));
       //alert('You picked all requerde items.');
       return;
     }
@@ -235,7 +235,7 @@ export class OutProdissueComponent implements OnInit {
 
                 let result = this.selectedMeterials.find(element => element.LOTNO == serialNo);
                 if (result != undefined) {
-                  this.toastr.error('', this.translate.instant("BatchSerialAlreadyExist"));
+                  this.toastr.error('', this.translate.instant("ProdIssue_BatchSerialAlreadyExist"));
                   return;
                 }
 
@@ -391,7 +391,7 @@ export class OutProdissueComponent implements OnInit {
     //let oldValue: number = parseFloat(this.selectedMeterials[idx].MeterialPickQty);
 
     if (txt.value === '' || txt.value === undefined || txt.value === null) {
-      this.toastr.error('', this.translate.instant("MeterialCanNotBeBlank"));
+      this.toastr.error('', this.translate.instant("ProdIssue_MeterialCanNotBeBlank"));
       txt.value = oldValue;
       this.selectedMeterials[idx].MeterialPickQty = oldValue;
       return;
@@ -399,13 +399,13 @@ export class OutProdissueComponent implements OnInit {
     this.selectedMeterials[idx].MeterialPickQty = parseFloat(txt.value);
     if (this.selectedMeterials[idx].MeterialPickQty > this.selectedMeterials[idx].TOTALQTY) {
 
-      this.toastr.error('', this.translate.instant("QtyGTTotal"));
+      this.toastr.error('', this.translate.instant("ProdIssue_QtyGTTotal"));
       txt.value = oldValue;
       this.selectedMeterials[idx].MeterialPickQty = oldValue;
     }
     this.calculateTotalAndRemainingQty();
     if (this._pickedMeterialQty < 0) {
-      this.toastr.error('', this.translate.instant("MeterialCanNotBeLTZero"));
+      this.toastr.error('', this.translate.instant("ProdIssue_MeterialCanNotBeLTZero"));
       txt.value = oldValue;
       this.selectedMeterials[idx].MeterialPickQty = oldValue;
       //apply paging..
@@ -414,7 +414,7 @@ export class OutProdissueComponent implements OnInit {
       return;
     }
     if (this._pickedMeterialQty > this._requiredMeterialQty) {
-      this.toastr.error('', this.translate.instant("QtyGTOpen"));
+      this.toastr.error('', this.translate.instant("ProdIssue_QtyGTOpen"));
       txt.value = oldValue;
       this.selectedMeterials[idx].MeterialPickQty = oldValue;
       this.calculateTotalAndRemainingQty();
@@ -437,7 +437,7 @@ export class OutProdissueComponent implements OnInit {
   public openAvaliableMeterials() {
 
     if (this.needMeterial() == false) {
-      this.toastr.error('', this.translate.instant("PickedAllRequiredItems"));
+      this.toastr.error('', this.translate.instant("ProdIssue_PickedAllRequiredItems"));
       //alert('You picked all requerde items.');
       return;
     }
@@ -667,7 +667,7 @@ export class OutProdissueComponent implements OnInit {
           const m = this.selectedMeterials[index];
           count = count + m.MeterialPickQty;
           if (count > this._requiredMeterialQty) {
-            this.toastr.error('', this.translate.instant("QtyGTTotal"));
+            this.toastr.error('', this.translate.instant("ProdIssue_QtyGTTotal"));
             return;
           }
           if (m.MeterialPickQty > 0) {
@@ -686,7 +686,7 @@ export class OutProdissueComponent implements OnInit {
           const m = this.selectedMeterials[index];
           count = count + m.MeterialPickQty;
           if (count > this._requiredMeterialQty) {
-            this.toastr.error('', this.translate.instant("QtyGTTotal"));
+            this.toastr.error('', this.translate.instant("ProdIssue_QtyGTTotal"));
             return;
           }
           if (m.MeterialPickQty > 0) {
@@ -1110,7 +1110,7 @@ export class OutProdissueComponent implements OnInit {
         data => {
           if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
             this.showLookupLoader = false;
-            this.toastr.success('', this.translate.instant("ProductionIssueSuccess") + " : " + data[0].SuccessNo);
+            this.toastr.success('', this.translate.instant("ProdIssue_ProductionIssueSuccess") + " : " + data[0].SuccessNo);
 
             this.resetIssueProduction();
             this.back(1)

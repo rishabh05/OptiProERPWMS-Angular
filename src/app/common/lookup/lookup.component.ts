@@ -402,7 +402,7 @@ export class LookupComponent implements OnInit {
       },
       {
         field: 'CARDNAME',
-        title: this.translate.instant("VendorName"),
+        title: this.translate.instant("Inbound_VendorName"),
         type: 'text',
         width: '100'
       }
@@ -442,7 +442,7 @@ export class LookupComponent implements OnInit {
     this.table_head = [
       {
         field: 'DocNum',
-        title: this.translate.instant("PO#"),
+        title: this.translate.instant("Inbound_PO#"),
         type: 'numeric',
         width: '100'
       },
@@ -465,7 +465,7 @@ export class LookupComponent implements OnInit {
       //   width: '100'
       // }
     ];
-    this.lookupTitle = this.translate.instant("POList");
+    this.lookupTitle = this.translate.instant("Inbound_POList");
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
         this.dialogOpened = true;
@@ -681,7 +681,7 @@ export class LookupComponent implements OnInit {
     this.table_head = [
       {
         field: 'Order No',
-        title: this.translate.instant("OrderNo"),
+        title: this.translate.instant("Outbound_OrderNo"),
         type: 'text',
         width: '100'
       },

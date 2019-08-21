@@ -258,7 +258,7 @@ export class ProductionReceiptComponent implements OnInit {
           //check and update response for entered serial no.
           if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
            // this.toastr.success( this.translate.instant("FGRSuccessMessage") +data[0].SuccessNo);
-            this.toastr.success('', this.translate.instant("FGRSuccessMessage")+" "+ data[0].SuccessNo);
+            this.toastr.success('', this.translate.instant("ProdReceipt_FGRSuccessMessage")+" "+ data[0].SuccessNo);
             this.resetAfterSubmit(); 
           }else{
             if (data[0].ErrorMsg != ""){
@@ -326,7 +326,7 @@ export class ProductionReceiptComponent implements OnInit {
       }else{
        //check case or check karna padega ki non tracked hai kya
        if (this.checkIfSerialBatchAlreadyExists(this.serialBatchNo) == true) {
-       if (this.tracking == "B") { this.toastr.error('', this.translate.instant("BatchAlreadyExists")); }
+       if (this.tracking == "B") { this.toastr.error('', this.translate.instant("ProdReceipt_BatchAlreadyExists")); }
        if (this.tracking == "S") { this.toastr.error('', this.translate.instant("SerialAlreadyExist")); }
        return;
        } else { }
@@ -337,7 +337,7 @@ export class ProductionReceiptComponent implements OnInit {
 
       if (this.validateForm() == false) { return; }
       if (this.checkIfSerialBatchAlreadyExists(this.serialBatchNo) == true) {
-        if (this.tracking == "B") { this.toastr.error('', this.translate.instant("BatchAlreadyExists")); }
+        if (this.tracking == "B") { this.toastr.error('', this.translate.instant("ProdReceipt_BatchAlreadyExists")); }
         if (this.tracking == "S") { this.toastr.error('', this.translate.instant("SerialAlreadyExist")); }
         return;
       }
@@ -603,7 +603,7 @@ export class ProductionReceiptComponent implements OnInit {
       return false ;
     }
     if(parseFloat(this.enteredQty).toFixed(4) < parseFloat("0").toFixed(4)){
-      this.toastr.error('', this.translate.instant("QtyGraterThenZero"));
+      this.toastr.error('', this.translate.instant("ProdReceipt_QtyGraterThenZero"));
       return false ;
     }
     // if(this.enteredQty>this.orignalActualQty){
@@ -646,7 +646,7 @@ export class ProductionReceiptComponent implements OnInit {
       return false ;
     }
     if(parseFloat(this.enteredQty).toFixed(4) < parseFloat("0").toFixed(4)){
-      this.toastr.error('', this.translate.instant("QtyGraterThenZero"));
+      this.toastr.error('', this.translate.instant("ProdReceipt_QtyGraterThenZero"));
       return false ;
     }
     // if(this.enteredQty>this.orignalActualQty){
@@ -670,11 +670,11 @@ export class ProductionReceiptComponent implements OnInit {
           //check and update response for entered serial no.
           if (data== "1") { 
            //error message
-           this.toastr.error('', this.translate.instant("SerialNoAlreadyUsed"));
+           this.toastr.error('', this.translate.instant("ProdReceipt_SerialNoAlreadyUsed"));
            this.serialBatchNo = "";
             return;
           }else if(data =="2"){
-            this.toastr.error('', this.translate.instant("InvalidBatchSerial"));
+            this.toastr.error('', this.translate.instant("ProdReceipt_InvalidBatchSerial"));
            this.serialBatchNo = "";
             return;
           }else{ 

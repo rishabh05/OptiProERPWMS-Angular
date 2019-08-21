@@ -28,7 +28,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'VendorName'|translate}}</label>
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'Inbound_VendorName'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
                                 <input type="text" class="form-control form-control-sm" name="VendName" [(ngModel)]="VendName" [disabled]="true">
@@ -45,10 +45,10 @@
                         [selectable]="true" (selectionChange)="onPOSelection($event)" #gridItem>
 
                         <!-- grid for mobile start -->
-                        <kendo-grid-column media="(max-width: 767px)" class="opti_mobile-grid-td" title="{{'POList'|translate}}">
+                        <kendo-grid-column media="(max-width: 767px)" class="opti_mobile-grid-td" title="{{'Inbound_POList'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                 <dl class="opti_mobile_grid_dl w-100">
-                                    <dt class="d-flex align-items-center">{{'PurchaseOrderNumber'|translate}}
+                                    <dt class="d-flex align-items-center">{{'Inbound_PurchaseOrderNumber'|translate}}
                                         <div class="d-flex align-items-center  ml-auto">
                                             <span class="opti_arrow-grid-detail text-center opti_vertical-align">›</span>
                                             <button class="btn btn-danger k-button btn-sm btn-icon ml-2" type="button" (click)="openConfirmForDelete(rowIndex, gridItem)">
@@ -62,7 +62,7 @@
                         </kendo-grid-column>
                         <!-- grid for mobile end -->
 
-                        <kendo-grid-column media="(min-width: 768px)" field="PONumber" headerClass="text-center" class="text-center" title="{{'PurchaseOrderNumber'|translate}}"
+                        <kendo-grid-column media="(min-width: 768px)" field="PONumber" headerClass="text-center" class="text-center" title="{{'Inbound_PurchaseOrderNumber'|translate}}"
                             [width]="90"></kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="" headerClass="text-center" class="text-center" title="" [width]="10">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
