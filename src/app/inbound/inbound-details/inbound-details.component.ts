@@ -391,4 +391,19 @@ export class InboundDetailsComponent implements OnInit {
       }
     );
   }
+
+  onInboundScan() {
+    // alert("scan click");
+  }
+
+  onHiddenScanClick() {
+    this.onGS1ItemScan();
+  }
+
+  onGS1ItemScan() {
+    var inputValue = (<HTMLInputElement>document.getElementById('inboundScanInputField')).value;
+    if (inputValue.length > 0) {
+      this.VendCode = inputValue;
+    }
+  }
 }

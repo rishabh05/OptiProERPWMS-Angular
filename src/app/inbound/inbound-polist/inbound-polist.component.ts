@@ -492,4 +492,30 @@ export class InboundPolistComponent implements OnInit {
       }
     }
   }
+
+  onInboundScan() {
+    // alert("scan click");
+  }
+
+  onHiddenScanClick() {
+    this.onGS1ItemScan();
+  }
+
+  onGS1ItemScan() {
+    var inputValue = (<HTMLInputElement>document.getElementById('inboundScanInputField')).value;
+    if (inputValue.length > 0) {
+      this.poCode = inputValue;
+    }
+  }
+
+  onItemHiddenScanClick() {
+    this.onGS1ItemScan1();
+  }
+
+  onGS1ItemScan1() {
+    var inputValue = (<HTMLInputElement>document.getElementById('inboundScanInputField')).value;
+    if (inputValue.length > 0) {
+      this.itemCode = inputValue;
+    }
+  }
 }

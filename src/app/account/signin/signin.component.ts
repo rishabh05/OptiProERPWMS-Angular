@@ -88,10 +88,10 @@ export class SigninComponent implements OnInit {
         if (localStorage.getItem("service_url") != null && localStorage.getItem("service_url") != undefined && localStorage.getItem("service_url") != "") {
 
             var url: any = { 'service_url': localStorage.getItem("service_url") }
-            alert("serviceURL not null:"+JSON.stringify(url));
+            // alert("serviceURL not null:"+JSON.stringify(url));
             this.getPSURL(); //call method after seting configDataObject.
         } else {
-            alert("serviceURL null:"+JSON.stringify(url));
+            // alert("serviceURL null:"+JSON.stringify(url));
             this.httpClientSer.get('./assets/config.json').subscribe(
                 data => {
                     sessionStorage.setItem('ConfigData', JSON.stringify(data));
