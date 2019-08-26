@@ -216,13 +216,13 @@ export class InboundPolistComponent implements OnInit {
           }
           else {
             this.poCode = "";
-            this.toastr.error('', this.translate.instant("POExistMessage"));
+            this.toastr.error('', this.translate.instant("Inbound_POExistMessage"));
 
             return;
           }
         } else {
           this.poCode = "";
-          this.toastr.error('', this.translate.instant("POExistMessage"));
+          this.toastr.error('', this.translate.instant("Inbound_POExistMessage"));
         }
       },
       error => {
@@ -490,6 +490,32 @@ export class InboundPolistComponent implements OnInit {
         this.addToGRPOArray.POReceiptLots.splice(i, 1);
         i = -1;
       }
+    }
+  }
+
+  onInboundScan() {
+    // alert("scan click");
+  }
+
+  onHiddenScanClick() {
+    this.onGS1ItemScan();
+  }
+
+  onGS1ItemScan() {
+    var inputValue = (<HTMLInputElement>document.getElementById('inboundScanInputField')).value;
+    if (inputValue.length > 0) {
+      this.poCode = inputValue;
+    }
+  }
+
+  onItemHiddenScanClick() {
+    this.onGS1ItemScan1();
+  }
+
+  onGS1ItemScan1() {
+    var inputValue = (<HTMLInputElement>document.getElementById('inboundScanInputField')).value;
+    if (inputValue.length > 0) {
+      this.itemCode = inputValue;
     }
   }
 }

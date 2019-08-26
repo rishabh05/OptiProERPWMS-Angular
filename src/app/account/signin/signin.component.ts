@@ -88,11 +88,10 @@ export class SigninComponent implements OnInit {
          && localStorage.getItem("service_url") != "") {
 
             var url: any = { 'service_url': localStorage.getItem("service_url") }
-            //alert("serviceURL not null:"+JSON.stringify(url));
-            sessionStorage.setItem('ConfigData', JSON.stringify(url));
+            // alert("serviceURL not null:"+JSON.stringify(url));
             this.getPSURL(); //call method after seting configDataObject.
         } else {
-            //alert("serviceURL null:"+JSON.stringify(url));
+            // alert("serviceURL null:"+JSON.stringify(url));
             this.httpClientSer.get('./assets/config.json').subscribe(
                 (data: any) => {
                     sessionStorage.setItem('ConfigData', JSON.stringify(data));
@@ -100,6 +99,7 @@ export class SigninComponent implements OnInit {
                 },
                 (err: HttpErrorResponse) => {
                     console.log(err.message);
+                    alert("HttpErrorResponse:"+err.message);
                 }
             );
         }

@@ -9,7 +9,7 @@
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
 
                     <div class="form-group row align-items-center">
-                        <label for="inputPassword" class="col-4 col-sm-3 col-form-label py-0">{{'FuturePOs'|translate}}</label>
+                        <label for="inputPassword" class="col-4 col-sm-3 col-form-label py-0">{{'Inbound_FuturePOs'|translate}}</label>
                         <div class="col-8 col-sm-9">
                             <div class="opti_input-group-checkbox">
                                 <input type="checkbox" id="ch7" class="k-checkbox" name="futurepo" ([ngModel])="futurepo" />
@@ -20,11 +20,11 @@
 
 
                     <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'PO#'|translate}}</label>
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'Inbound_PO#'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" name="poCode" [(ngModel)]=poCode placeholder="{{'PO#'|translate}}"
-                                    (blur)="OnPOChange()" [disabled]=disablePO>
+                                <input type="text" class="form-control form-control-sm" name="poCode" [(ngModel)]=poCode placeholder="{{'Inbound_PO#'|translate}}"
+                                    (blur)="OnPOChange()" [disabled]=disablePO id="poScanInputField">
                                 <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" type="button" (click)="onPOlookupClick()" [disabled]=disablePO>
                                         <i class="opti-icon-hammenu"></i>
@@ -33,6 +33,11 @@
                                         <i class="opti-icon-search"></i>
                                     </button>
                                 </div>
+                                <div class="ml-1 d-flex">
+                                    <button type="button" id="poscanButton"  (click)="onInboundScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                     <i class="opti-icon-qr-code fs-24"></i>
+                                     </button>
+                                 </div> 
                             </div>
                         </div>
                     </div>
@@ -40,12 +45,17 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'ItemCode'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" placeholder="{{'ItemCode'|translate}}" class="form-control form-control-sm" name="itemCode" [(ngModel)]=itemCode>
+                                <input type="text" placeholder="{{'ItemCode'|translate}}" class="form-control form-control-sm" name="itemCode" [(ngModel)]=itemCode id="itemScanInputField">
                                 <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" type="button" (click)="onItemlookupClick()">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
                                 </div>
+                                <div class="ml-1 d-flex">
+                                    <button type="button" id="itemscanButton"  (click)="onInboundScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                     <i class="opti-icon-qr-code fs-24"></i>
+                                     </button>
+                                 </div> 
                             </div>
                         </div>
                     </div>
@@ -86,7 +96,7 @@
                                         <dt>{{'ItemCode'|translate}}</dt>
                                         <dd>{{ dataItem.ITEMCODE }}</dd>
 
-                                        <dt>{{'ReceiveQty'|translate}}</dt>
+                                        <dt>{{'Inbound_ReceiveQty'|translate}}</dt>
                                         <dd>{{dataItem.RPTQTY | numberFormat}}</dd>
                                     </dl>
 
@@ -106,7 +116,7 @@
                                     {{dataItem.OPENQTY | numberFormat}}
                                 </ng-template>
                             </kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="RPTQTY" title="{{'ReceiveQty'|translate}}" headerClass="text-right" class="text-right">
+                            <kendo-grid-column media="(min-width: 768px)" field="RPTQTY" title="{{'Inbound_ReceiveQty'|translate}}" headerClass="text-right" class="text-right">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     {{dataItem.RPTQTY |numberFormat}}
                                 </ng-template>
@@ -131,6 +141,11 @@
 
                 <button type="button" *ngIf="showGRPOButton" class="btn btn-primary k-button btn-sm btn-icon-with-text" (click)="onAddtoGRPOClick()">
                     <span class="k-icon k-i-plus-outline" role="presentation"></span>{{'AddToGRPO'|translate}} </button>
+
+                    <button type="button" id="pohiddenScanButton" style="visibility:hidden" (click)="onHiddenScanClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                        SB </button>  
+                        <button type="button" id="itemhiddenScanButton" style="visibility:hidden" (click)="onItemHiddenScanClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                            SB </button>                                          
             </div>
         </div>
     </form>

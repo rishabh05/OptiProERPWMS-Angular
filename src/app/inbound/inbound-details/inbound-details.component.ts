@@ -80,7 +80,7 @@ export class InboundDetailsComponent implements OnInit {
     this.yesButtonText = this.translate.instant("yes");
     this.noButtonText = this.translate.instant("no");
     this.dialogFor = "receiveSinglePDFDialog";
-    this.dialogMsg = this.translate.instant("PrintAllLabelsAfterSubmit");
+    this.dialogMsg = this.translate.instant("Inbound_PrintAllLabelsAfterSubmit");
     this.showConfirmDialog = true; // show dialog 
   }
   SubmitGoodsReceiptPO(oSubmitPOLotsObj: any) {
@@ -91,7 +91,7 @@ export class InboundDetailsComponent implements OnInit {
         console.log(data);
         if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
           // alert("Goods Receipt PO generated successfully with Doc No: " + data.DocEntry);
-          this.toastr.success('', this.translate.instant("GRPOSuccessMessage") +" "+ data[0].SuccessNo);
+          this.toastr.success('', this.translate.instant("Inbound_GRPOSuccessMessage") +" "+ data[0].SuccessNo);
           localStorage.setItem("Line", "0");
           localStorage.setItem("GRPOReceieveData", "");
           localStorage.setItem("AddToGRPO", "");
@@ -166,7 +166,7 @@ export class InboundDetailsComponent implements OnInit {
             return;
           }
           if (data[0].Result == "0") {
-            this.toastr.error('', this.translate.instant("VendorExistMessge"));
+            this.toastr.error('', this.translate.instant("Inbound_VendorExistMessge"));
             this.VendCode = "";
             this.showNext = false;
             return;
@@ -177,7 +177,7 @@ export class InboundDetailsComponent implements OnInit {
 
           }
         } else {
-          this.toastr.error('', this.translate.instant("VendorExistMessge"));
+          this.toastr.error('', this.translate.instant("Inbound_VendorExistMessge"));
           this.VendCode = "";
           this.showNext = false;
         }
@@ -207,7 +207,7 @@ export class InboundDetailsComponent implements OnInit {
       localStorage.setItem("PONumber", "");
     }
     else {
-      this.toastr.error('', this.translate.instant("SelectVendorValidateMsg"));
+      this.toastr.error('', this.translate.instant("Inbound_SelectVendorValidateMsg"));
     }
   }
 
@@ -222,7 +222,7 @@ export class InboundDetailsComponent implements OnInit {
  
   public openConfirmForDelete(rowindex, gridData: any) {
     this.dialogFor = "deleteRow";
-    this.dialogMsg = this.translate.instant("DoYouWantToDelete")
+    this.dialogMsg = this.translate.instant("Inbound_DoYouWantToDelete")
     this.yesButtonText = this.translate.instant("yes");
     this.noButtonText = this.translate.instant("no");
     this.rowindexForDelete = rowindex;
@@ -390,5 +390,20 @@ export class InboundDetailsComponent implements OnInit {
         this.toastr.error('', error);
       }
     );
+  }
+
+  onInboundScan() {
+    // alert("scan click");
+  }
+
+  onHiddenScanClick() {
+    this.onGS1ItemScan();
+  }
+
+  onGS1ItemScan() {
+    var inputValue = (<HTMLInputElement>document.getElementById('inboundScanInputField')).value;
+    if (inputValue.length > 0) {
+      this.VendCode = inputValue;
+    }
   }
 }
