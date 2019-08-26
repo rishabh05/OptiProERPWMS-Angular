@@ -64,7 +64,6 @@ export class SigninComponent implements OnInit {
     @ViewChild('myCanvas') myCanvas;
 
     ngOnInit() {
-
         this.selectedItem = this.translate.instant("Login_SelectCompany");
         this.defaultWHS = { OPTM_WHSE: this.translate.instant("SelectWarehouse"), BPLid: 0 }
 
@@ -85,7 +84,8 @@ export class SigninComponent implements OnInit {
         element.classList.add("opti_body-login");
         element.classList.add("opti_account-module");
         //localStorage.setItem("service_url","http://172.16.6.134/OptiProWMS/");
-        if (localStorage.getItem("service_url") != null && localStorage.getItem("service_url") != undefined && localStorage.getItem("service_url") != "") {
+        if (localStorage.getItem("service_url") != null && localStorage.getItem("service_url") != undefined
+         && localStorage.getItem("service_url") != "") {
 
             var url: any = { 'service_url': localStorage.getItem("service_url") }
             //alert("serviceURL not null:"+JSON.stringify(url));
@@ -94,7 +94,7 @@ export class SigninComponent implements OnInit {
         } else {
             //alert("serviceURL null:"+JSON.stringify(url));
             this.httpClientSer.get('./assets/config.json').subscribe(
-                data => {
+                (data: any) => {
                     sessionStorage.setItem('ConfigData', JSON.stringify(data));
                     this.getPSURL();
                 },
@@ -106,18 +106,23 @@ export class SigninComponent implements OnInit {
     }
 
     getPSURL() {
+      
         //localStorage.setItem("PSURLFORADMIN", "http://172.16.6.140/OptiADMINHANA/");
         this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
+        //alert("configparam url at getPSURL:"+this.config_params.service_url);
         this.signinService.getPSURL(this.config_params.service_url).subscribe(
             data => {
                 if (data != null) {
                     localStorage.setItem("PSURLFORADMIN", data);
+                    //alert("admin url url:"+localStorage.getItem("PSURLFORADMIN"));
                 }
             },
             error => {
                 this.toastr.error('', 'There is some error to connect with server', error);
                 this.showLoader = false;
             });
+            
+            
     }
 
 
