@@ -147,7 +147,7 @@
                         </div>
                     </div> 
                     <!-- Palletization Field For New Create-->
-                    <div class="form-group row mt-1 mt-md-0" *ngIf="isPalletizationEnable">
+                    <div class="form-group row mt-1 mt-md-0" *ngIf="showNewPallet">
                             <label class="col-sm-3 col-form-label"></label>
                             <div class="col-sm-9">
                                 <div class="d-flex">
@@ -160,7 +160,14 @@
                                         </div>
                                 </div>
                             </div>
+                    </div>
+                    <div class="form-group row">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-9">
+                                <a class="cursor-pointer d-inline-flex text-primay" [ngStyle]="{'color':'#1fa2ff'}" *ngIf="isPalletizationEnable"><small (click)="enableNewwPallet()">{{'Inbound_NewPallet'|translate}}</small></a>
+                            </div>
                         </div>
+                    
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Quantity'|translate}}</label>
                         <div class="col-sm-9">
@@ -231,10 +238,10 @@
                                     #display_name (change)="updateVendorLot(display_name.value, idx)">
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column media="(min-width: 768px)" field="LotNumber" [width]="18" title="{{SRBatchColumnText}}">
+                        <kendo-grid-column media="(min-width: 768px)" field="palletSBNo" [width]="18" title="{{SRBatchColumnText}}">
                             <ng-template kendoGridCellTemplate let-dataItem let-idx='rowIndex'>
-                                <input type="text" class="form-control form-control-sm" name="dataItem.LotNumber" value={{dataItem.LotNumber}} [disabled]=isDisabledScanInput
-                                    id="display_name" #display_name (change)="updateLotNumber(display_name.value, idx, gridItem)">
+                                <input type="text" class="form-control form-control-sm" name="dataItem.palletSBNo" value={{dataItem.palletSBNo}} [disabled]=true
+                                    id="display_name" #display_name >
                             </ng-template>
                         </kendo-grid-column>
                         <kendo-grid-column *ngIf="isPalletizationEnable" media="(min-width: 768px)" field="LotNumber" [width]="18" title="{{ActualSRBatchColumnText}}">

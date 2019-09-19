@@ -84,9 +84,12 @@ export class InboundGRPOComponent implements OnInit {
   isPalletizationEnable: boolean = false;
   palletValue: any = "";
   ActualSRBatchColumnText: string = "";
+  showNewPallet: boolean = false;
 
   pageSize: number = Commonservice.pageSize;
   @ViewChild('Quantity') QuantityField;
+  serialBatchNo: string ="";
+
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent) {
     // let userLang = navigator.language.split('-')[0];
@@ -328,6 +331,7 @@ export class InboundGRPOComponent implements OnInit {
       for (let i = 0; i < this.recvingQuantityBinArray.length; ++i) {
         if (i === rowindex) {
           this.recvingQuantityBinArray[i].LotNumber = "";
+          this.recvingQuantityBinArray[i].palletSBNo = "";
         }
       }
       //gridData.data = this.recvingQuantityBinArray;
@@ -336,6 +340,7 @@ export class InboundGRPOComponent implements OnInit {
       for (let i = 0; i < this.recvingQuantityBinArray.length; ++i) {
         if (i === rowindex) {
           this.recvingQuantityBinArray[i].LotNumber = value;
+          this.recvingQuantityBinArray[i].palletSBNo = value+"-"+this.palletValue;
         }
       }
     }
@@ -355,7 +360,7 @@ export class InboundGRPOComponent implements OnInit {
       this.toastr.error('', this.translate.instant("INVALIDBIN"));
       return;
     }
-    if (this.palletValue == "" || this.palletValue == undefined) {
+    if (this.isPalletizationEnable && (this.palletValue == "" || this.palletValue == undefined)) {
       this.toastr.error('', this.translate.instant("InValidPalletNo"));
       return;
     }
@@ -1423,7 +1428,11 @@ export class InboundGRPOComponent implements OnInit {
   onPalletScan() {
     // alert("scan click");
   }
-  
+
+  enableNewwPallet(){
+    this.showNewPallet = true;
+  }
+
   OnPalletChange() {
     // if (this.palletValue == "") {
     //   return;

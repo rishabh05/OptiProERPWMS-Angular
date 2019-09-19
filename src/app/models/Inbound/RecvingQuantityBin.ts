@@ -6,6 +6,7 @@ export class RecvingQuantityBin{
     public Bin: string;
     public expiryDate: string;
     public PalletCode: string;
+    public palletSBNo: String;
 
     constructor(MfrSerial: string, serial: string, qty:number, bin: string, expiryDate: string, palletCode: string){
         this.VendorLot = MfrSerial;
@@ -14,5 +15,8 @@ export class RecvingQuantityBin{
         this.Bin = bin;
         this.expiryDate = expiryDate;
         this.PalletCode = palletCode;
+        if(serial != ""){
+            this.palletSBNo = serial +"-"+palletCode;
+        }
     }
 }
