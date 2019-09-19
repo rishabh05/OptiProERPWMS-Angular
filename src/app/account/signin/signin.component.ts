@@ -84,8 +84,8 @@ export class SigninComponent implements OnInit {
         element.classList.add("opti_body-login");
         element.classList.add("opti_account-module");
         //localStorage.setItem("service_url","http://172.16.6.134/OptiProWMS/");
-        if (localStorage.getItem("service_url") != null && localStorage.getItem("service_url") != undefined
-         && localStorage.getItem("service_url") != "") {
+        if (localStorage.getItem("service_url") != null && localStorage.getItem("service_url") != undefined 
+        && localStorage.getItem("service_url") != "") {
 
             var url: any = { 'service_url': localStorage.getItem("service_url") }
             // alert("serviceURL not null:"+JSON.stringify(url));
@@ -93,7 +93,7 @@ export class SigninComponent implements OnInit {
         } else {
             // alert("serviceURL null:"+JSON.stringify(url));
             this.httpClientSer.get('./assets/config.json').subscribe(
-                (data: any) => {
+                data => {
                     sessionStorage.setItem('ConfigData', JSON.stringify(data));
                     this.getPSURL();
                 },
@@ -106,22 +106,20 @@ export class SigninComponent implements OnInit {
     }
 
     getPSURL() {
-      
-        //localStorage.setItem("PSURLFORADMIN", "http://172.16.6.140/OptiADMINHANA/");
+    //    localStorage.setItem("PSURLFORADMIN", "http://139.144.10.220/optiproadmin/");
+    //    localStorage.setItem("PSURLFORADMIN", "http://172.16.6.140/OptiProAdmin/");
         this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
-        //alert("configparam url at getPSURL:"+this.config_params.service_url);
         this.signinService.getPSURL(this.config_params.service_url).subscribe(
             data => {
                 if (data != null) {
                     localStorage.setItem("PSURLFORADMIN", data);
-                    //alert("admin url url:"+localStorage.getItem("PSURLFORADMIN"));
                 }
             },
             error => {
                 this.toastr.error('', 'There is some error to connect with server', error);
                 this.showLoader = false;
             });
-            
+
             
     }
 
@@ -226,6 +224,7 @@ export class SigninComponent implements OnInit {
                     localStorage.setItem("CompID", this.selectedItem);
                     localStorage.setItem("whseId", this.selectedWhse);
                     localStorage.setItem("Token", this.licenseData[0].Token);
+                    localStorage.setItem("PalletizationEnabled", this.licenseData[0].PalletizationEnabled);
 
                     localStorage.setItem("DefaultValues", JSON.stringify(this.licenseData[0].DefaultValues));
                     for (var i = 0; i < this.licenseData[0].DefaultValues.length; i++) {

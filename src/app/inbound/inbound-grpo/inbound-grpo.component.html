@@ -124,6 +124,26 @@
                             </div>
                         </div>
                     </div> 
+                    <div class="form-group row" *ngIf="isPalletizationEnable">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'Plt_PalletNo'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control form-control-sm" name="palletValue" [(ngModel)]=palletValue 
+                                (blur)="OnPalletChange()" placeholder="{{'Plt_PalletNo'|translate}}"
+                                    >
+                                <div class="input-group-append has-seprate-btn">
+                                    <button class="k-button k-primary btn" type="button" (click)="getPalletList()">
+                                        <i class="opti-icon-hammenu"></i>
+                                    </button>
+                                </div>
+                                <div class="ml-1 d-flex">
+                                    <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button" (click)="addQuantity(event)">
+                                        <i class="opti-icon-add1 fs-24"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Quantity'|translate}}</label>
                         <div class="col-sm-9">
@@ -165,7 +185,6 @@
 
                                     <dt>{{'ExpiryDate'|translate}}</dt>
                                     <dd>{{dataItem.expiryDate | date:dateFormat}}</dd>
-
                                 </dl>
 
                                 <dl class="opti_mobile_grid_dl">
@@ -181,6 +200,9 @@
 
                                     <dt>{{'BinNo'|translate}}</dt>
                                     <dd>{{dataItem.Bin}}</dd>
+
+                                    <dt>{{'Plt_PalletNo'|translate}}</dt>
+                                    <dd>{{dataItem.PalletCode}}</dd>
                                 </dl>
                             </ng-template>
                         </kendo-grid-column>
@@ -198,12 +220,20 @@
                                     id="display_name" #display_name (change)="updateLotNumber(display_name.value, idx, gridItem)">
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column media="(min-width: 768px)" field="LotQty" headerClass="text-right" class="text-right" [width]="18" title="{{'Quantity'|translate}}">
-                            <ng-template kendoGridCellTemplate let-dataItem>
-                                {{dataItem.LotQty | numberFormat}}
-                            </ng-template>
-                        </kendo-grid-column>
+                        <kendo-grid-column *ngIf="isPalletizationEnable" media="(min-width: 768px)" field="LotNumber" [width]="18" title="{{ActualSRBatchColumnText}}">
+                                <ng-template kendoGridCellTemplate let-dataItem let-idx='rowIndex'>
+                                    <input type="text" class="form-control form-control-sm" name="dataItem.LotNumber" value={{dataItem.LotNumber}} [disabled]=isDisabledScanInput
+                                        id="display_name" #display_name (change)="updateLotNumber(display_name.value, idx, gridItem)">
+                                </ng-template>
+                            </kendo-grid-column>
+                        
+                        <kendo-grid-column *ngIf="isPalletizationEnable" media="(min-width: 768px)" field="PalletCode" [width]="18" title="{{'Plt_PalletNo'|translate}}"></kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="Bin" [width]="18" title="{{'BinNo'|translate}}"></kendo-grid-column>
+                        <kendo-grid-column media="(min-width: 768px)" field="LotQty" headerClass="text-right" class="text-right" [width]="18" title="{{'Quantity'|translate}}">
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                    {{dataItem.LotQty | numberFormat}}
+                                </ng-template>
+                            </kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="expiryDate" [width]="18" title="{{'ExpiryDate'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem>
                                 {{dataItem.expiryDate | date:dateFormat}}

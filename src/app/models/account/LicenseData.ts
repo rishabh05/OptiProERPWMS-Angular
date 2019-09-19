@@ -25,5 +25,6 @@ export interface LicenseData{
     Product: string,
     UserExceed: string,
     ErrMessage: string,
-    SapUser: string
+    SapUser: string,
+    PalletizationEnabled: string
 }

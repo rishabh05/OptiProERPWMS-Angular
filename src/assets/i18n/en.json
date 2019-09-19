@@ -309,7 +309,17 @@
   "NoData": "No data",
   "Save": "Save",
   "Ok": "Ok",
-  "":"",
-  "ItemDetails": "Item Details"
-
+  "ItemDetails": "Item Details",
+  "Plt_PalletNo":"Pallet No.",
+  "Plt_FromPalletNo":"From Pallet No.",
+  "Plt_ToPalletNo":"To Pallet No.",
+  "Plt_PalletTransfer":"Pallet Transfer",
+  "Plt_PalletList": "Pallet List",
+  "InValidPalletNo": "In valid pallet no.",
+  "InvTransfer_InvDoc": "Inventory Document",
+  "InvTransfer_InvDocNo": "Document No.",
+  "InvTransfer_DocBlankErrMsg": "Document number can not blank",
+  "Inbound_ActualBatchNo": "Actual Batch No.",
+  "Inbound_ActualSerialNo": "Actual Serial No.",
+  "":""
 }

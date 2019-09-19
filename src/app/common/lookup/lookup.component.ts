@@ -148,8 +148,10 @@ export class LookupComponent implements OnInit {
       this.ShowPhyCntInnerItemList();
     } else if (this.lookupfor == "ShowBatachSerList") {
       this.ShowBatachSerList();
-    } else if(this.lookupfor = "PIOrderList"){
+    } else if(this.lookupfor == "PIOrderList"){
       this.orderList();
+    } else if(this.lookupfor == "PalletList"){
+      this.palletList();
     }
 
     this.clearFilters();
@@ -738,7 +740,29 @@ export class LookupComponent implements OnInit {
     }
   }
 
-
+  palletList() {
+    this.table_head = [
+      {
+        field: 'Code',
+        title: this.translate.instant("Plt_PalletNo"),
+        type: 'text',
+        width: '100'
+      }
+      // ,
+      // {
+      //   field: 'Name',
+      //   title: this.translate.instant("ItemCode"),
+      //   type: 'text',
+      //   width: '100'
+      // }
+    ];
+    this.lookupTitle = this.translate.instant("Plt_PalletList");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
 
 
   Done() {

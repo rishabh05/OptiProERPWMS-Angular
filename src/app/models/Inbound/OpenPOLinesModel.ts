@@ -20,4 +20,5 @@ export interface OpenPOLinesModel{
     UOM: string;
     WHSE: string;
     UOMList: UOM[];
+    PalletCode: string;
 }
