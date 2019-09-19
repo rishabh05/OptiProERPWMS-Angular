@@ -404,6 +404,7 @@ export class InboundDetailsComponent implements OnInit {
     var inputValue = (<HTMLInputElement>document.getElementById('inboundScanInputField')).value;
     if (inputValue.length > 0) {
       this.VendCode = inputValue;
+      this.OnVendorChange();
     }
   }
 }

@@ -505,6 +505,7 @@ export class InboundPolistComponent implements OnInit {
     var inputValue = (<HTMLInputElement>document.getElementById('inboundScanInputField')).value;
     if (inputValue.length > 0) {
       this.poCode = inputValue;
+      this.OnPOChange();
     }
   }
 
@@ -515,7 +516,7 @@ export class InboundPolistComponent implements OnInit {
   onGS1ItemScan1() {
     var inputValue = (<HTMLInputElement>document.getElementById('inboundScanInputField')).value;
     if (inputValue.length > 0) {
-      this.itemCode = inputValue;
+      this.itemCode = inputValue;      
     }
   }
 }
