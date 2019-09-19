@@ -11,10 +11,8 @@ export class SigninService {
   // private adminUrl = "http://172.16.6.167/OptiAdmin";
   private venderListUrl: string = "/api/GoodReceiptPO/GetVendorList";
   private validateUser: string = "/api/login/ValidateUserLogin";
-  private lisenceDataUrl: string = "/api/Login/GetLicenseData";
+  private lisenceDataUrl: string = "/api/WMSlogin/GetLicenseData";
   private POlistUrl: string = "/api/GoodReceiptPO/GetPOList";
-  private PSUrl: string = "/api/Login/GetPSURL";
-  private WHS: string = "/api/login/GetWHS";
   private getItemListUrl: string = "/api/GoodReceiptPO/GetItemList";
   private OpenPOLinesurl: string = "/api/GoodReceiptPO/GetOpenPOLines";
   private AutoLotUrl: string = "/api/GoodReceiptPO/GetAutoLot";
@@ -44,7 +42,7 @@ export class SigninService {
   getPSURL(url:string): Observable<any> {
     //this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
     let jObject = {};
-    return this.httpclient.post(url+"/api/Login/GetPSURL", jObject, this.httpOptions);
+    return this.httpclient.post(url+"/api/WMSLogin/GetPSURL", jObject, this.httpOptions);
   } 
 
   getWHS(compId: string): Observable<any> {

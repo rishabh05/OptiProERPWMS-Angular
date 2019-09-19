@@ -100,7 +100,7 @@ export class InboundGRPOComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (localStorage.getItem("PalletizationEnabled") == "True") {
+    if (localStorage.getItem("PalletizationEnabled") == "True" && localStorage.getItem("PalletizationEnabledForItem") == "True") {
       this.isPalletizationEnable = true;
     } else {
       this.isPalletizationEnable = false;

@@ -125,7 +125,7 @@
                         </div>
                     </div> 
                     <!-- Palletization Field For Lookup-->
-                    <div class="form-group row" *ngIf="isPalletizationEnable">
+                    <div class="form-group row" *ngIf="isPalletizationEnable && !isNonTrack">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Plt_PalletNo'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
@@ -147,7 +147,7 @@
                         </div>
                     </div> 
                     <!-- Palletization Field For New Create-->
-                    <div class="form-group row mt-1 mt-md-0" *ngIf="showNewPallet">
+                    <div class="form-group row mt-1 mt-md-0" *ngIf="showNewPallet && !isNonTrack">
                             <label class="col-sm-3 col-form-label"></label>
                             <div class="col-sm-9">
                                 <div class="d-flex">
@@ -161,7 +161,7 @@
                                 </div>
                             </div>
                     </div>
-                    <div class="form-group row">
+                    <div class="form-group row" *ngIf="!isNonTrack">
                             <div class="col-sm-3"></div>
                             <div class="col-sm-9">
                                 <a class="cursor-pointer d-inline-flex text-primay" [ngStyle]="{'color':'#1fa2ff'}" *ngIf="isPalletizationEnable"><small (click)="enableNewwPallet()">{{'Inbound_NewPallet'|translate}}</small></a>

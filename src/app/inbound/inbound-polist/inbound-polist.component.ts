@@ -236,6 +236,7 @@ export class InboundPolistComponent implements OnInit {
     if (this.lookupfor == "POList") {
       this.poCode = $event[0];
       this.Name = $event[1];
+      this.openPOLines()
     }
     else if (this.lookupfor == "POItemList") {
       this.itemCode = $event[0];
@@ -274,7 +275,7 @@ export class InboundPolistComponent implements OnInit {
         localStorage.setItem("primaryAutoLots", JSON.stringify(this.autoLot));
        // this.openPOLineModel = this.openPOLinesModel.find(e => e.ITEMCODE == itemCode);
         if (this.openPOLineModel != null) {
-
+          localStorage.setItem("PalletizationEnabledForItem", "True");
           this.inboundMasterComponent.inboundComponent = 3;
         }
       },
@@ -406,6 +407,7 @@ export class InboundPolistComponent implements OnInit {
                 VendorLot: this.oSavedPOLotsArray.POReceiptLotDetails[j].VendorLot,
                 SuppSerial: this.oSavedPOLotsArray.POReceiptLotDetails[j].SuppSerial,
                 ParentLineNo: this.oSavedPOLotsArray.POReceiptLotDetails[j].ParentLineNo,
+                PalletCode: this.oSavedPOLotsArray.POReceiptLotDetails[j].PalletCode,
                 LotSteelRollId: ""
               });
             }
