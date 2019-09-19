@@ -76,6 +76,9 @@
   "Inbound_BatchCanNotbeSame": "Batch no. cannot be Same",
   "Inbound_BatchNotBlank": "Batch no. cannot be blank",
   "Inbound_SerialNotBlank": "Serial no. cannot be blank",
+  "Inbound_ActualBatchNo": "Actual Batch No.",
+  "Inbound_ActualSerialNo": "Actual Serial No.",
+  "Inbound_NewPallet": "New Pallet",
   
   "5":"Outbound",
   "Outbound_Delivery": "Delivery",
@@ -319,7 +322,6 @@
   "InvTransfer_InvDoc": "Inventory Document",
   "InvTransfer_InvDocNo": "Document No.",
   "InvTransfer_DocBlankErrMsg": "Document number can not blank",
-  "Inbound_ActualBatchNo": "Actual Batch No.",
-  "Inbound_ActualSerialNo": "Actual Serial No.",
+  
   "":""
 }

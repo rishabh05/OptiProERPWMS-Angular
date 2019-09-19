@@ -100,7 +100,7 @@ export class InboundGRPOComponent implements OnInit {
     if (localStorage.getItem("PalletizationEnabled") == "True") {
       this.isPalletizationEnable = true;
     } else {
-      this.isPalletizationEnable = true;
+      this.isPalletizationEnable = false;
     }
 
     this.dateFormat = localStorage.getItem("DATEFORMAT");
@@ -1420,6 +1420,10 @@ export class InboundGRPOComponent implements OnInit {
     );
   }
 
+  onPalletScan() {
+    // alert("scan click");
+  }
+  
   OnPalletChange() {
     // if (this.palletValue == "") {
     //   return;
