@@ -4,10 +4,10 @@
             <h3 class="border-bottom d-flex pt-1 pb-3 mb-4" *ngIf="!fromProduction">
                 {{pageTitle}}: {{outbound.OrderData.DOCNUM}}
             </h3>
-            
+
             <h3 class="border-bottom d-flex pt-1 pb-3 mb-4" *ngIf="fromProduction">
-                    {{pageTitle}}: {{currentOrderNo}}
-                </h3>
+                {{pageTitle}}: {{currentOrderNo}}
+            </h3>
             <div class="row">
                 <div class="col-12">
 
@@ -62,8 +62,57 @@
                 </div>
             </div>
 
+            <div class="row mt-3" *ngIf="OrderType!='N'">
+                <!-- <label for="inputPassword" class="col-sm-3 col-form-label">{{'ScanInputs'|translate}}</label> -->
+                <div class="col-sm-9">
+                    <fieldset [disabled]=isDisabledScanInput class="d-block w-100">
+                        <div class="d-flex align-items-center w-100">
+                            <div class="d-flex align-items-center">
+                                <input type="radio" name="group" (change)="handleCheckChange($event)" id="palletOption1"
+                                    class="k-radio" checked />
+                                <label class="k-radio-label" for="palletOption1">{{'Outbound_Pallet'|translate}}</label>
+                            </div>
+                            <div class="d-flex align-items-center ml-3">
+                                <input type="radio" name="group" (change)="handleCheckChange($event)" id="palletOption2"
+                                    class="k-radio" />
+                                <label class="k-radio-label" for="palletOption2">{{'Outbound_PartialPallet'|translate}}</label>
+                            </div>
+                            <div class="d-flex align-items-center ml-3">
+                                <input type="radio" name="group" (change)="handleCheckChange($event)" id="palletOption3"
+                                    class="k-radio" />
+                                <label class="k-radio-label" for="palletOption3">{{'Outbound_WithoutPallet'|translate}}</label>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
             <div class="row mt-3">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+                    <div class="form-group row">
+                        <div *ngIf="OrderType!='N'" class="col-sm-9">
+                            <div class="d-flex">
+                                <div class="input-group input-group-sm">
+                                    <input type="text" id="palletValue" name="palletValue" value='' class="form-control form-control-sm"
+                                        [(ngModel)]=palletValue (blur)="OnPalletChange()"
+                                        placeholder="{{'Outbound_SelectScanPallet'|translate}}" [disabled]="radioSelected==2">
+                                    <div class="input-group-append">
+                                        <button class="k-button k-primary btn " type="button" [disabled]="radioSelected==2"
+                                            (click)="getPalletList()">
+                                            <i class="opti-icon-hammenu"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="ml-1 d-flex">
+                                    <button id="palletScanBtn" (click)="prodIssueScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
+                                        type="button" [disabled]="radioSelected==2">
+                                        <i class="opti-icon-qr-code fs-24"></i>
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <!-- <label for="inputPassword" class="col-sm-3 col-form-label"></label> -->
                         <!-- <div class="col-sm-9">
@@ -79,12 +128,14 @@
                             </div>
                         </div> -->
 
+
+
                         <div *ngIf="OrderType!='N'" class="col-sm-9">
                             <div class="d-flex">
                                 <div class="input-group input-group-sm">
                                     <input type="text" [(ngModel)]=ScanInputs id="outboundOrderNoScanInput" name="orderNumber"
                                         value='' class="form-control form-control-sm" (blur)="onScanInputChange()"
-                                        placeholder="{{scanInputPlaceholder}}">
+                                        placeholder="{{'Outbound_SelectScan'|translate}}">
                                     <div class="input-group-append">
                                         <button class="k-button k-primary btn " type="button" [disabled]="selected==null || selected==''"
                                             (click)="openAvaliableMeterials()">
@@ -120,14 +171,15 @@
                         #gridSelectedMeterial>
 
                         <!-- grid for mobile start -->
-                        <kendo-grid-column media="(max-width: 767px)" title="{{'ProdIssue_SelectedMaterials'|translate}}" class="opti_mobile-grid-td">
+                        <kendo-grid-column media="(max-width: 767px)" title="{{'ProdIssue_SelectedMaterials'|translate}}"
+                            class="opti_mobile-grid-td">
                             <ng-template kendoGridCellTemplate let-dataItem let-idx="rowIndex">
                                 <dl class="opti_mobile_grid_dl">
                                     <dt *ngIf="OrderType==='S' || OrderType==='B'">{{SerialBatchHeaderTitle}}</dt>
                                     <dd *ngIf="OrderType==='S' || OrderType==='B'">{{ dataItem.LOTNO }}</dd>
 
                                     <dt>{{'BinNo'|translate}}</dt>
-                                    <dd>{{ dataItem.BINNO }}</dd>  
+                                    <dd>{{ dataItem.BINNO }}</dd>
                                 </dl>
 
                                 <dl class="opti_mobile_grid_dl">
@@ -140,11 +192,8 @@
                                     <dd>{{ dataItem.TOTALQTY | numberFormat }}</dd>
                                     <dt *ngIf="OrderType!='S'">{{'PickQty'|translate}}</dt>
                                     <dd *ngIf="OrderType!='S'">
-                                        <kendo-numerictextbox #txtMet name="data"
-                                            class="form-control form-control-sm text-right!important" [format]="'n3'"
-                                            [(value)]="dataItem.MeterialPickQty" [step]="step"
-                                            (blur)="onIssueMeterialQtyChange(idx,txtMet)"
-                                            ></kendo-numerictextbox>
+                                        <kendo-numerictextbox #txtMet name="data" class="form-control form-control-sm text-right!important"
+                                            [format]="'n3'" [(value)]="dataItem.MeterialPickQty" [step]="step" (blur)="onIssueMeterialQtyChange(idx,txtMet)"></kendo-numerictextbox>
 
                                         <!-- <input [ngModel]="dataItem.MeterialPickQty | numberFormat"(ngModelChange)="dataItem.MeterialPickQty=$event"
                                             name="inputField" type="text"
@@ -169,20 +218,19 @@
                         <kendo-grid-column media="(min-width: 768px)" *ngIf="OrderType!='S'" headerClass="text-right"
                             class="text-right" field="MeterialPickQty" width="50" editor="numeric" title="{{'PickQty'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem="dataItem" class="text-right" let-idx="rowIndex">
-                                
-                                    <!-- <input [ngModel]="dataItem.MeterialPickQty | numberFormat"  (blur)="onIssueMeterialQtyChange(idx,txtMet, e)"
+
+                                <!-- <input [ngModel]="dataItem.MeterialPickQty | numberFormat"  (blur)="onIssueMeterialQtyChange(idx,txtMet, e)"
                                     (ngModelChange)="dataItem.MeterialPickQty=$event" 
                                     #display_name (change)="updatePickQty(display_name.value, idx)" class="text-right" name="inputField" type="number" /> -->
 
                                 <kendo-numerictextbox #txtMet name="data" (blur)="onIssueMeterialQtyChange(idx,txtMet)"
                                     class="form-control text-right form-control-sm text-right!important" [format]="'n3'"
-                                    [(value)]="dataItem.MeterialPickQty" [step]="step"
-                                   ></kendo-numerictextbox>
+                                    [(value)]="dataItem.MeterialPickQty" [step]="step"></kendo-numerictextbox>
                             </ng-template>
                         </kendo-grid-column>
 
-                        <kendo-grid-column headerClass="text-center" class="text-center" media="(min-width: 768px)" *ngIf="OrderType!='N'" field="LOTNO" title=""
-                            width="10">
+                        <kendo-grid-column headerClass="text-center" class="text-center" media="(min-width: 768px)"
+                            *ngIf="OrderType!='N'" field="LOTNO" title="" width="10">
                             <ng-template kendoGridCellTemplate let-idx="rowIndex">
                                 <button id="removeSelectedMeterial" (click)="removeMeterial(idx,gridSelectedMeterial)"
                                     class="btn btn-danger k-button btn-sm btn-icon">
@@ -208,9 +256,9 @@
                 <button type="button" *ngIf="selectedMeterials && selectedMeterials.length>0 && fromProduction" (click)="addMetToCollection(true)"
                     class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-save"></span>
                     {{'Save'|translate}}</button>
-                <button type="button" *ngIf="selectedMeterials && selectedMeterials.length>0 && fromProduction"  (click)="submitProduction()"
-                 class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-check"></span>
-                            {{'Issue'|translate}}</button>
+                <button type="button" *ngIf="selectedMeterials && selectedMeterials.length>0 && fromProduction" (click)="submitProduction()"
+                    class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-check"></span>
+                    {{'Issue'|translate}}</button>
                 <!-- <div class="clearfix mt-1 d-block d-sm-none"></div> -->
 
                 <button type="button" (click)="back(0)" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span

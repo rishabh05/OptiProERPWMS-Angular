@@ -44,7 +44,6 @@ export class OutProdissueComponent implements OnInit {
   public OrderType: string = '';
   public oldSelectedMeterials: any = Array<MeterialModel>();
   public OperationType: any;
-  public scanInputPlaceholder = "Select/Scan"
   public SerialBatchHeaderTitle: string = "";
   showConfirmDialog: boolean;
   rowindexForDelete: any;
@@ -61,7 +60,8 @@ export class OutProdissueComponent implements OnInit {
   constructor(private ourboundService: OutboundService, private router: Router, private toastr: ToastrService, private translate: TranslateService, private commonservice: Commonservice, private productionService: ProductionService) { }
   fromProduction = true;
   public currentOrderNo: string;
-
+  public radioSelected: number;
+  public palletValue: string;
   ngOnInit() {
 
     //lsOutbound
@@ -1189,10 +1189,50 @@ export class OutProdissueComponent implements OnInit {
     );
   }
 
-
+  handleCheckChange($event) {
+    if ($event.currentTarget.id == "palletOption1") {
+      // mfr serial radio selected.
+      this.radioSelected = 0;
+    }
+    if ($event.currentTarget.id == "palletOption2") {
+      // mfr serial radio selected.
+      this.radioSelected = 1;
+    }
+    if ($event.currentTarget.id == "palletOption3") {
+      // mfr serial radio selected.
+      this.radioSelected = 2;
+    }
+  }
 
   //this.addMetToCollection();
   // this.addToDeleiver(false);
   // this.prepareDeleiveryCollectionAndDeliver(orderId);
 
+  public getPalletList() {
+    this.showLookupLoader = true;
+    this.ourboundService.getPalletList(this.selected.ITEMCODE).subscribe(
+      (data: any) => {
+        this.showLookup = false;
+        console.log(data);
+        if (data != null) {
+          if (data.length > 0) {
+            console.log(data);
+            this.showLookup = true;
+            this.showLookupLoader = false;
+            this.lookupData = data;
+            this.palletValue = this.lookupData[0].Code;
+            //this.lookupfor = "PalletList";
+            return;
+          } else {
+            this.showLookupLoader = false;
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          }
+        }
+      },
+      error => {
+        this.showLookup = false;
+        console.log("Error: ", error);
+      }
+    );
+  }
 }
