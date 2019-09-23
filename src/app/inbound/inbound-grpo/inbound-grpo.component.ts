@@ -331,6 +331,10 @@ export class InboundGRPOComponent implements OnInit {
     for (let i = 0; i < this.recvingQuantityBinArray.length; ++i) {
       if (i === rowindex) {
         this.recvingQuantityBinArray[i].VendorLot = value;
+        if(this.isPalletizationEnable){
+          this.recvingQuantityBinArray[i].palletSBNo = value + "-" + this.palletValue;
+          this.recvingQuantityBinArray[i].LotNumber = value + "-" + this.palletValue;
+        }
       }
     }
   }
@@ -349,7 +353,9 @@ export class InboundGRPOComponent implements OnInit {
       for (let i = 0; i < this.recvingQuantityBinArray.length; ++i) {
         if (i === rowindex) {
           this.recvingQuantityBinArray[i].LotNumber = "";
-          this.recvingQuantityBinArray[i].palletSBNo = "";
+          if(this.isPalletizationEnable){
+            this.recvingQuantityBinArray[i].palletSBNo = "";
+          }
         }
       }
       //gridData.data = this.recvingQuantityBinArray;
@@ -358,7 +364,6 @@ export class InboundGRPOComponent implements OnInit {
       for (let i = 0; i < this.recvingQuantityBinArray.length; ++i) {
         if (i === rowindex) {
           this.recvingQuantityBinArray[i].LotNumber = value;
-          this.recvingQuantityBinArray[i].palletSBNo = value + "-" + this.palletValue;
         }
       }
     }
