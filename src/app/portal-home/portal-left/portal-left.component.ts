@@ -80,10 +80,13 @@ export class PortalLeftComponent implements OnInit {
     this.selectedItem = module;
     
     this.closeRightSidebar();
-    this.router.navigate(['home/' + module]);
+    this.router.navigate(['home/' + module]); 
+    
+    localStorage.setItem("ProdReceptItem", '');
+    localStorage.setItem("FromReceiptProd",'false');
   }
 
-  /**
+  /** 
    * 
    */
   closeRightSidebar() {

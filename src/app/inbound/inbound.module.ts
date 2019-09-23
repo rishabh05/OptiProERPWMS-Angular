@@ -29,6 +29,10 @@ import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
     InboundRoutingModule,
     DropDownsModule,
     DateInputsModule
-  ]
+  ],
+  providers: [ 
+    InboundGRPOComponent,InboundMasterComponent // added class in the providers
+  ],
+  exports: [InboundGRPOComponent,InboundDetailsComponent, InboundMasterComponent, InboundPolistComponent]
 })
 export class InboundModule { }

@@ -30,8 +30,8 @@
                                     <dt>{{'OpenQty'|translate}}</dt>
                                     <dd>{{dataItem.OPENQTY | numberFormat}}</dd>
 
-                                    <dt>{{'UoM'|translate}}</dt>
-                                    <dd>
+                                    <dt *ngIf="showUOM">{{'UoM'|translate}}</dt>
+                                    <dd *ngIf="showUOM">
                                         <kendo-dropdownlist class="form-control" name="uomSelectedVal" [(ngModel)]="uomSelectedVal" [data]="dataItem.UOMList" textField="UomName"
                                             valueField="UomCode"></kendo-dropdownlist>
                                     </dd>
@@ -54,7 +54,7 @@
                                 {{dataItem.RPTQTY | numberFormat}}
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column media="(min-width: 768px)" field="UOM1" title="{{'UoM'|translate}}">
+                        <kendo-grid-column media="(min-width: 768px)" field="UOM1" title="{{'UoM'|translate}}" *ngIf="showUOM">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                 <kendo-dropdownlist class="form-control" name="uomSelectedVal" [(ngModel)]="uomSelectedVal" [data]="dataItem.UOMList" textField="UomName"
                                     valueField="UomCode"></kendo-dropdownlist>

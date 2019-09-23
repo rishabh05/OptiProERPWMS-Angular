@@ -1,0 +1,124 @@
+
+<div class="opti_container position-relative bg-white rounded"  *ngIf="prodReceiptComponent == 1">
+    <form class="form-with-fix-btnBar">
+        <div class="opti_container_inner" [perfectScrollbar]=" ">
+
+            <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
+                {{'receiptFromProduction'|translate}}
+            </h3>
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'Outbound_OrderNo'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control form-control-sm" [(ngModel)]=orderNumber (blur)="OnOrderValueChange()"
+                                    name='orderNo' placeholder="{{'Outbound_OrderNo'|translate}}">
+                                <div class="input-group-append has-seprate-btn">
+                                    <button class="k-button k-primary btn" (click)="OnOrderLookupClick()" type="button">
+                                        <i class="opti-icon-hammenu"></i>
+                                    </button>
+                                    <button class="k-button k-primary btn separate-btn" (click)="getProductionDetail()"
+                                        type="button">
+                                        <i class="opti-icon-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+           
+            <div class="row">
+                <div class="col-12" *ngIf = "gridDataAvailable">
+               Hello :: 
+                    <kendo-grid [data]="gridDataNew" [resizable]="true" [pageSize]="pageSize" [pageable]="pagable"
+                        [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup [height]=gridHeight
+                        [selectable]="true" style="max-height:400px" class="no-shadow" #gridItems 
+                        (selectionChange)="onGridItemClick($event)" >
+
+                        <!-- grid for mobile start -->
+                        <kendo-grid-column media="(max-width: 767px)" class="opti_mobile-grid-td">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex='rowIndex'>
+                                <dl class="opti_mobile_grid_dl">
+                                    <dt *ngIf="tracking!='N'">Item code</dt>
+                                    <dd *ngIf="tracking!='N'">{{ dataItem.ITEMCODE }}</dd>
+
+                                    <dt>Open Qty</dt>
+                                    <dd>{{ dataItem.OPENQTY }}</dd>
+                                </dl>
+                                <dl class="opti_mobile_grid_dl">
+                                    <dt class="d-flex align-items-center">Status
+                                        <button (click)="confirmDialogForDeleteAcceptItem(rowIndex,gridItem)" class="btn btn-danger k-button btn-sm btn-icon ml-auto"
+                                            type="button">
+                                            <span class="k-icon k-i-delete"></span>
+                                        </button>
+                                    </dt>
+                                    <dd>{{ dataItem.Status }}</dd>
+                                </dl>
+                            </ng-template>
+                        </kendo-grid-column>
+                        <!-- grid for mobile end -->
+
+                        <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE" title="Item code">
+                        </kendo-grid-column>
+                       
+                        <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" title="Open Qty">
+                        </kendo-grid-column>
+                       
+                        <kendo-grid-column media="(min-width: 768px)" field="Status" title="Status">
+                        </kendo-grid-column>
+                        <!-- <kendo-grid-column media="(min-width: 768px)" field="" class="text-center" headerClass="text-center"
+                            width="60">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <button (click)="confirmDialogForDeleteAcceptItem(rowIndex,gridItem)" class="btn btn-danger k-button btn-sm btn-icon"
+                                    type="button">
+                                    <span class="k-icon k-i-delete"></span>
+                                </button>
+                            </ng-template>
+                        </kendo-grid-column> -->
+                    </kendo-grid>
+                </div>
+            </div>
+        </div>
+
+        <div class="fix-footer-btnBar">
+            <div class="col-sm-12 col-12">
+                <hr />
+            </div>
+            <div class="col-sm-12 col-12">
+                <button type="button" *ngIf="displayFormAndSubmit" (click)="submitRecord($event)" class="btn btn-success k-button btn-sm btn-icon-with-text">
+                    <span class="k-icon k-i-check" role="presentation"></span> {{'Submit'|translate}}</button>
+                <button class="btn btn-primary k-button btn-sm btn-icon-with-text" *ngIf="showAddMoreButton" type="button"
+                    (click)="addMoreClick($event)">
+                    <span class="k-icon k-i-plus" role="presentation"></span> {{'AddMore'|translate}}</button>
+                <button class="btn btn-primary k-button btn-sm btn-icon-with-text mr-1" *ngIf="showViewAcceptButton"
+                    type="button" (click)="showViewAcceptItems($event)">
+                    <span class="k-icon k-i-preview" role="presentation"></span> {{'ViewAccept'|translate}}</button>
+                <button type="button" class="btn btn-primary k-button btn-sm btn-icon-with-text" *ngIf="showViewRejectButton"
+                    (click)="showViewRejectItems($event)"><span class="k-icon k-i-preview" role="presentation"></span>
+                    {{'ViewReject'|translate}}</button>
+                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="onCancelClick()"><span
+                        class="k-icon k-i-close-outline" role="presentation"></span>
+                    {{'Cancel'|translate}}</button>
+                <!-- <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" 
+                  roterLink="binTransfer" skipLocationChange><i class="opti-icon-arrow-next"></i></button> -->
+            </div>
+        </div>
+    </form>
+
+
+    <div *ngIf="showLookupLoader==false">
+        <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
+    </div>
+    <!-- loader start -->
+    <div class="opti_loader" *ngIf="showLookupLoader==true">
+        <div class="opti_spinner"></div>
+    </div>
+  
+</div>
+<app-inbound-grpo *ngIf="prodReceiptComponent == 2" [fromWhere]='receipt' (screenBackEvent)="backFromInbound($event)" >
+</app-inbound-grpo>
