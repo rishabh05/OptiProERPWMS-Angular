@@ -322,6 +322,12 @@
   "InvTransfer_InvDoc": "Inventory Document",
   "InvTransfer_InvDocNo": "Document No.",
   "InvTransfer_DocBlankErrMsg": "Document number can not blank",
-  
+  "Outbound_SelectScanPallet": "Select/Scan Pallet No.",
+  "Outbound_SelectScan": "Select/Scan",
+  "Outbound_Pallet": "Pallet",
+  "Outbound_PartialPallet": "Partial Pallet",
+  "Outbound_WithoutPallet": "Without Pallet",
+  "Inbound_TargetWhsBlankErrMsg": "Target Warehouse cannot be blank",
+  "Inbound_TargetBinBlankErrMsg": "Target Bin cannot be blank",
   "":""
 }

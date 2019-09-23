@@ -88,7 +88,7 @@ export class OutOrderComponent implements OnInit {
       let whseId = localStorage.getItem("whseId");
       this.outboundservice.getCustomerSOList(this.selectedCustomer.CustomerCode, "",  whseId).subscribe(
         resp => {
-          if(resp!=null){
+          if(resp!=null && resp.length>0){
           if (resp[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
             return;
@@ -110,9 +110,9 @@ export class OutOrderComponent implements OnInit {
             this.showLookupLoader = false;
             this.showLookup = false;
           }
-        }else{
-           this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
-          }
+        } else {
+          this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+        }
           
         },
         error => {
@@ -137,6 +137,7 @@ export class OutOrderComponent implements OnInit {
     // lsOutbound
     localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
     this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
+    this.openSOOrderList();
   }
 
   public openPOByUOM(selection: any) {
@@ -597,6 +598,10 @@ export class OutOrderComponent implements OnInit {
 
   deliveryConfirmation() {
     this.showConfirmDialog = true;
+  }
+
+  onInboundScan() {
+    // alert("scan click");
   }
 }
 
