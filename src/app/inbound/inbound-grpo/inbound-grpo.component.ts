@@ -87,6 +87,7 @@ export class InboundGRPOComponent implements OnInit {
   @Output() screenBackEvent = new EventEmitter();
   isPalletizationEnable: boolean = false;
   palletValue: any = "";
+  inboundNewPallet: string;
   ActualSRBatchColumnText: string = "";
   showNewPallet: boolean = false;
   @Input() fromWhere;
@@ -95,6 +96,7 @@ export class InboundGRPOComponent implements OnInit {
   serialBatchNo: string = "";
   receiptData: any;
   fromReceiptProduction: boolean = false;
+  autoGenereatePalletEnable: boolean = false;
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent) {
     // let userLang = navigator.language.split('-')[0];
@@ -106,6 +108,10 @@ export class InboundGRPOComponent implements OnInit {
 
 
   ngOnInit() {
+    if(localStorage.getItem("AutoPalletIdGenerationChecked") == "True"){
+      this.autoGenereatePalletEnable = true;
+    }
+    
     if (localStorage.getItem("PalletizationEnabled") == "True" && localStorage.getItem("PalletizationEnabledForItem") == "True") {
       this.isPalletizationEnable = true;
     } else {
@@ -1641,5 +1647,43 @@ export class InboundGRPOComponent implements OnInit {
        Quantity: totalAcceptedRejectedQty,
     });
     return rejectItemsData;
+  }
+
+  onCheckChange(){
+    this.showNewPallet = !this.showNewPallet;
+  }
+
+  public createNewPallet() {
+    var palletId = "";
+    if(!this.autoGenereatePalletEnable){
+      palletId = this.inboundNewPallet;
+      if(palletId == '' || palletId == undefined){
+        this.toastr.error('', this.translate.instant("Plt_EnterPalletNo"));
+        return;
+      }
+    }
+    console.log("palletId: "+palletId);
+    this.showLoader = true;
+    this.inboundService.createNewPallet(palletId).subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        console.log(data);
+        if (data != null) {
+          if (data.length > 0) {
+            console.log(data);
+            this.showLookupLoader = false;
+            // this.serviceData = data;
+            this.palletValue = data;
+            return;
+          } else {
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          }
+        }
+      },
+      error => {
+        this.showLoader = false;
+        console.log("Error: ", error);
+      }
+    );
   }
 }

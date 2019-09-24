@@ -62,7 +62,7 @@
                 </div>
             </div>
 
-            <div class="row mt-3" *ngIf="OrderType!='N'">
+            <div class="row mt-3" *ngIf="isPalletizationEnable && OrderType!='N'">
                 <!-- <label for="inputPassword" class="col-sm-3 col-form-label">{{'ScanInputs'|translate}}</label> -->
                 <div class="col-sm-9">
                     <fieldset [disabled]=isDisabledScanInput class="d-block w-100">
@@ -89,11 +89,11 @@
 
             <div class="row mt-3">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
-                    <div class="form-group row">
-                        <div *ngIf="OrderType!='N'" class="col-sm-9">
+                    <div class="form-group row" *ngIf="isPalletizationEnable && OrderType!='N'">
+                        <div class="col-sm-9">
                             <div class="d-flex">
                                 <div class="input-group input-group-sm">
-                                    <input type="text" id="palletValue" name="palletValue" value='' class="form-control form-control-sm"
+                                    <input type="text" name="palletValue" value='' class="form-control form-control-sm"
                                         [(ngModel)]=palletValue (blur)="OnPalletChange()"
                                         placeholder="{{'Outbound_SelectScanPallet'|translate}}" [disabled]="radioSelected==2">
                                     <div class="input-group-append">
@@ -180,6 +180,9 @@
 
                                     <dt>{{'BinNo'|translate}}</dt>
                                     <dd>{{ dataItem.BINNO }}</dd>
+
+                                    <dt *ngIf="isPalletizationEnable && OrderType!='N'">{{'Plt_PalletNo'|translate}}</dt>
+                                    <dd *ngIf="isPalletizationEnable && OrderType!='N'">{{ dataItem.PalletCode }}</dd>
                                 </dl>
 
                                 <dl class="opti_mobile_grid_dl">
@@ -206,6 +209,8 @@
 
                         <kendo-grid-column media="(min-width: 768px)" *ngIf="OrderType==='S' || OrderType==='B'" field="LOTNO"
                             title="{{SerialBatchHeaderTitle}}" [width]="30"></kendo-grid-column>
+                        <kendo-grid-column media="(min-width: 768px)" *ngIf="isPalletizationEnable && OrderType!='N'" field="PalletCode"
+                            title="{{'Plt_PalletNo'|translate}}" [width]="30"></kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="BINNO" title="{{'BinNo'|translate}}"
                             [width]="30"></kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="TOTALQTY" headerClass="text-right" class=" text-right"

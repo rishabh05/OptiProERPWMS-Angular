@@ -62,7 +62,14 @@ export class OutProdissueComponent implements OnInit {
   public currentOrderNo: string;
   public radioSelected: number;
   public palletValue: string;
+  public lookupfor: string;
+  public isPalletizationEnable: boolean;
   ngOnInit() {
+    if (localStorage.getItem("PalletizationEnabled") == "True" && localStorage.getItem("PalletizationEnabledForItem") == "True") {
+      this.isPalletizationEnable = true;
+    } else {
+      this.isPalletizationEnable = false;
+    }
 
     //lsOutbound
     let outboundData = localStorage.getItem(CommonConstants.OutboundData);
@@ -1221,7 +1228,7 @@ export class OutProdissueComponent implements OnInit {
             this.showLookupLoader = false;
             this.lookupData = data;
             this.palletValue = this.lookupData[0].Code;
-            //this.lookupfor = "PalletList";
+            this.lookupfor = "PalletList";
             return;
           } else {
             this.showLookupLoader = false;
