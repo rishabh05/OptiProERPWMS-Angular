@@ -136,6 +136,13 @@ export class InboundGRPOComponent implements OnInit {
       this.getUOMList();
       this.LastSerialNumber = [];
       this.LineId = [];
+
+      if (this.openPOLineModel != undefined && this.openPOLineModel != null) {
+        this.Ponumber = this.openPOLineModel[0].DocNum;
+        this.tracking = this.openPOLineModel[0].TRACKING;
+        this.OpenQty = this.openPOLineModel[0].OPENQTY;
+        this.ItemCode = this.openPOLineModel[0].ITEMCODE;
+      }
       this.showSavedDataToGrid()
     }
 
