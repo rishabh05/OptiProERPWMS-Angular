@@ -87,7 +87,7 @@
                     <div class="form-group row" *ngIf="!isNonTrack">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'ExpiryDate'|translate}}</label>
                         <div class="col-sm-9">
-                            <kendo-datepicker [format]=dateFormat [value]="value" name="expiryDate" [(ngModel)]=expiryDate placeholder={{dateFormat}}></kendo-datepicker>
+                            <kendo-datepicker [format]=dateFormat [value]="defaultDateValue" name="expiryDate" [(ngModel)]=expiryDate placeholder={{dateFormat}}></kendo-datepicker>
                         </div>
                     </div>
                     <div class="form-group row align-items-center" *ngIf="showScanInput">
@@ -363,7 +363,7 @@
 
                 <button type="button" *ngIf="showButton" (click)="save($event)" class="btn btn-success k-button btn-sm btn-icon-with-text">
                     <span class="k-icon k-i-save" role="presentation"></span> {{'Save'|translate}}</button>
-                <button class="k-button k-primary k-button btn-sm btn-icon-with-text" *ngIf="showButton" type="button" (click)="receive($event)">
+                <button class="k-button k-primary k-button btn-sm btn-icon-with-text" *ngIf="showRecButton" type="button" (click)="receive($event)">
                     <span class="k-icon k-i-download" role="presentation"></span> {{'Receive'|translate}}</button>
                 <!-- <button class="k-button k-primary" type="button" (click)="cancel($event)">Cancel</button> -->
                 <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="cancel($event)">

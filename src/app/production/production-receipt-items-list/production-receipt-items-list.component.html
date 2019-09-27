@@ -19,10 +19,10 @@
                                     <button class="k-button k-primary btn" (click)="OnOrderLookupClick()" type="button">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
-                                    <button class="k-button k-primary btn separate-btn" (click)="getProductionDetail()"
+                                    <!-- <button class="k-button k-primary btn separate-btn" (click)="getProductionDetail()"
                                         type="button">
                                         <i class="opti-icon-search"></i>
-                                    </button>
+                                    </button> -->
                                 </div>
                             </div>
                         </div>
@@ -34,8 +34,8 @@
            
             <div class="row">
                 <div class="col-12" *ngIf = "gridDataAvailable">
-               Hello :: 
-                    <kendo-grid [data]="gridDataNew" [resizable]="true" [pageSize]="pageSize" [pageable]="pagable"
+               
+                    <kendo-grid [data]="gridDataNew1" [resizable]="true" [pageSize]="pageSize" [pageable]="pagable"
                         [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup [height]=gridHeight
                         [selectable]="true" style="max-height:400px" class="no-shadow" #gridItems 
                         (selectionChange)="onGridItemClick($event)" >
@@ -44,14 +44,14 @@
                         <kendo-grid-column media="(max-width: 767px)" class="opti_mobile-grid-td">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex='rowIndex'>
                                 <dl class="opti_mobile_grid_dl">
-                                    <dt *ngIf="tracking!='N'">Item code</dt>
+                                    <dt *ngIf="tracking!='N'">{{'ItemCode'|translate}}</dt>
                                     <dd *ngIf="tracking!='N'">{{ dataItem.ITEMCODE }}</dd>
 
-                                    <dt>Open Qty</dt>
+                                    <dt>{{'OpenQty'|translate}}</dt>
                                     <dd>{{ dataItem.OPENQTY }}</dd>
                                 </dl>
                                 <dl class="opti_mobile_grid_dl">
-                                    <dt class="d-flex align-items-center">Status
+                                    <dt class="d-flex align-items-center">{{'Status'|translate}}
                                         <button (click)="confirmDialogForDeleteAcceptItem(rowIndex,gridItem)" class="btn btn-danger k-button btn-sm btn-icon ml-auto"
                                             type="button">
                                             <span class="k-icon k-i-delete"></span>
@@ -63,13 +63,15 @@
                         </kendo-grid-column>
                         <!-- grid for mobile end -->
 
-                        <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE" title="Item code">
+                        <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE" title="{{'ItemCode'|translate}}">
                         </kendo-grid-column>
                        
-                        <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" title="Open Qty">
+                        <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" title="{{'OpenQty'|translate}}">
                         </kendo-grid-column>
                        
-                        <kendo-grid-column media="(min-width: 768px)" field="Status" title="Status">
+                        <kendo-grid-column media="(min-width: 768px)" field="Status" title="{{'Status'|translate}}">
+                        </kendo-grid-column>
+                        <kendo-grid-column media="(min-width: 768px)" field="ReceiveQty" title="{{'Inbound_ReceiveQty'|translate}}">
                         </kendo-grid-column>
                         <!-- <kendo-grid-column media="(min-width: 768px)" field="" class="text-center" headerClass="text-center"
                             width="60">
@@ -90,17 +92,10 @@
                 <hr />
             </div>
             <div class="col-sm-12 col-12">
-                <button type="button" *ngIf="displayFormAndSubmit" (click)="submitRecord($event)" class="btn btn-success k-button btn-sm btn-icon-with-text">
+                <button type="button" *ngIf="displaySubmit" (click)="submitProductionReport($event)" class="btn btn-success k-button btn-sm btn-icon-with-text">
                     <span class="k-icon k-i-check" role="presentation"></span> {{'Submit'|translate}}</button>
-                <button class="btn btn-primary k-button btn-sm btn-icon-with-text" *ngIf="showAddMoreButton" type="button"
-                    (click)="addMoreClick($event)">
-                    <span class="k-icon k-i-plus" role="presentation"></span> {{'AddMore'|translate}}</button>
-                <button class="btn btn-primary k-button btn-sm btn-icon-with-text mr-1" *ngIf="showViewAcceptButton"
-                    type="button" (click)="showViewAcceptItems($event)">
-                    <span class="k-icon k-i-preview" role="presentation"></span> {{'ViewAccept'|translate}}</button>
-                <button type="button" class="btn btn-primary k-button btn-sm btn-icon-with-text" *ngIf="showViewRejectButton"
-                    (click)="showViewRejectItems($event)"><span class="k-icon k-i-preview" role="presentation"></span>
-                    {{'ViewReject'|translate}}</button>
+            
+               
                 <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="onCancelClick()"><span
                         class="k-icon k-i-close-outline" role="presentation"></span>
                     {{'Cancel'|translate}}</button>
@@ -120,5 +115,5 @@
     </div>
   
 </div>
-<app-inbound-grpo *ngIf="prodReceiptComponent == 2" [fromWhere]='receipt' (screenBackEvent)="backFromInbound($event)" >
+<app-inbound-grpo *ngIf="prodReceiptComponent == 2" [fromWhere]='receipt' (screenBackEvent)="backFromGRPOScreen($event)" >
 </app-inbound-grpo>
