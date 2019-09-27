@@ -135,17 +135,18 @@
                                 <div class="input-group input-group-sm">
                                     <input type="text" [(ngModel)]=ScanInputs id="outboundOrderNoScanInput" name="orderNumber"
                                         value='' class="form-control form-control-sm" (blur)="onScanInputChange()"
-                                        placeholder="{{'Outbound_SelectScan'|translate}}">
+                                        placeholder="{{'Outbound_SelectScan'|translate}}" [disabled]="palletValue==null || palletValue==''">
                                     <div class="input-group-append">
-                                        <button class="k-button k-primary btn " type="button" [disabled]="selected==null || selected==''"
+                                        <button class="k-button k-primary btn " type="button" [disabled]="palletValue==null || palletValue==''"
                                             (click)="openAvaliableMeterials()">
                                             <i class="opti-icon-hammenu"></i>
                                         </button>
                                     </div>
                                 </div>
                                 <div class="ml-1 d-flex">
-                                    <button id="outBoundDeliverForSOScan" (click)="prodIssueScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
-                                        type="button">
+                                    <button id="outBoundDeliverForSOScan" (click)="prodIssueScan()" 
+                                    class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
+                                        type="button" [disabled]="palletValue==null || palletValue==''">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
                                 </div>
@@ -277,7 +278,11 @@
 </div>
 
 <span *ngIf="showLookup==true">
-    <app-lookup [lookupfor]='lookupFor' [serviceData]='lookupData' (lookupkey)="getLookupValue($event,gridSelectedMeterial)"></app-lookup>
+    <app-lookup [lookupfor]='lookupFor' [serviceData]='lookupData' (lookupkey)="getLookupValue($event, gridSelectedMeterial)"></app-lookup>
+</span>
+
+<span *ngIf="showPalletLookup == false">
+    <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
 </span>
 
 <!-- Loader -->
