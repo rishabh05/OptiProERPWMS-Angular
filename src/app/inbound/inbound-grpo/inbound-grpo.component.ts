@@ -88,6 +88,7 @@ export class InboundGRPOComponent implements OnInit {
   @Output() screenBackEvent = new EventEmitter();
   isPalletizationEnable: boolean = false;
   palletValue: any = "";
+  inboundNewPallet: string;
   ActualSRBatchColumnText: string = "";
   showNewPallet: boolean = false;
   @Input() fromWhere;
@@ -105,7 +106,7 @@ export class InboundGRPOComponent implements OnInit {
   RejItemsData: any = [];
   UDF: any = [];
   itemsData: any = [];
-
+  autoGenereatePalletEnable: boolean = false;
   constructor(private inboundService: InboundService, private commonservice: Commonservice,
     private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent, private productionService: ProductionService) {
@@ -118,6 +119,10 @@ export class InboundGRPOComponent implements OnInit {
 
 
   ngOnInit() {
+    if(localStorage.getItem("AutoPalletIdGenerationChecked") == "True"){
+      this.autoGenereatePalletEnable = true;
+    }
+    
     if (localStorage.getItem("PalletizationEnabled") == "True" && localStorage.getItem("PalletizationEnabledForItem") == "True") {
       this.isPalletizationEnable = true;
     } else {
@@ -166,7 +171,6 @@ export class InboundGRPOComponent implements OnInit {
     this.operationType = "";
     // also update this.openPOLineModel[0].RPTQTY with local storage value
     if (this.openPOLineModel != undefined && this.openPOLineModel != null) {
-
       this.showScanInput = true;
       if (this.tracking == "S") {
         this.isSerial = true;
@@ -355,6 +359,10 @@ export class InboundGRPOComponent implements OnInit {
     for (let i = 0; i < this.recvingQuantityBinArray.length; ++i) {
       if (i === rowindex) {
         this.recvingQuantityBinArray[i].VendorLot = value;
+        if(this.isPalletizationEnable){
+          this.recvingQuantityBinArray[i].palletSBNo = value + "-" + this.palletValue;
+          this.recvingQuantityBinArray[i].LotNumber = value + "-" + this.palletValue;
+        }
       }
     }
   }
@@ -373,7 +381,9 @@ export class InboundGRPOComponent implements OnInit {
       for (let i = 0; i < this.recvingQuantityBinArray.length; ++i) {
         if (i === rowindex) {
           this.recvingQuantityBinArray[i].LotNumber = "";
-          this.recvingQuantityBinArray[i].palletSBNo = "";
+          if(this.isPalletizationEnable){
+            this.recvingQuantityBinArray[i].palletSBNo = "";
+          }
         }
       }
       //gridData.data = this.recvingQuantityBinArray;
@@ -382,7 +392,6 @@ export class InboundGRPOComponent implements OnInit {
       for (let i = 0; i < this.recvingQuantityBinArray.length; ++i) {
         if (i === rowindex) {
           this.recvingQuantityBinArray[i].LotNumber = value;
-          this.recvingQuantityBinArray[i].palletSBNo = value + "-" + this.palletValue;
         }
       }
     }
@@ -1912,5 +1921,58 @@ export class InboundGRPOComponent implements OnInit {
       });
     }
     return rejectItemsData;
+  }
+
+  onCheckChange(){
+    this.showNewPallet = !this.showNewPallet;
+    if(this.showNewPallet){
+      this.palletValue = "";
+    } else {
+      this.inboundNewPallet = "";
+    }
+  }
+
+  public createNewPallet() {
+    var palletId;
+    if(this.showNewPallet){
+      palletId = this.inboundNewPallet;
+    }
+
+    if(this.autoGenereatePalletEnable){
+       palletId = "";
+    } else {
+      if(palletId == '' || palletId == undefined){
+        this.toastr.error('', this.translate.instant("Plt_EnterPalletNo"));
+        return;
+      }
+    }
+
+    console.log("palletId: "+palletId);
+    this.showLoader = true;
+    this.inboundService.createNewPallet(palletId).subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        console.log(data);
+        if (data != null) {
+          if (data.length > 0) {
+            console.log(data);
+            this.showLookupLoader = false;
+            // this.serviceData = data;
+            if(this.showNewPallet){
+              this.inboundNewPallet = data;
+            } else {
+              this.palletValue = data;
+            }
+            return;
+          } else {
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          }
+        }
+      },
+      error => {
+        this.showLoader = false;
+        console.log("Error: ", error);
+      }
+    );
   }
 }

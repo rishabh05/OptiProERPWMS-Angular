@@ -10,8 +10,9 @@
             <!-- Kendo Table Grid Row start -->
             <div class="row">
                 <div class="col-12 col-sm-12 col-md-12">
-                    <kendo-grid class="no-shadow" [kendoGridBinding]="openPOLineModel" [resizable]="true" [pageSize]="2" [pageable]="false" [sortable]="true"
-                        [filterable]=isColumnFilter [groupable]=isColumnGroup [height]=gridHeight [selectable]="true" (selectionChange)="openPOByUOM($event,soItemsDetail.ITEMCODE)"
+                    <kendo-grid class="no-shadow" [kendoGridBinding]="openPOLineModel" [resizable]="true" [pageSize]="2"
+                        [pageable]="false" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
+                        [height]=gridHeight [selectable]="true" (selectionChange)="openPOByUOM($event,soItemsDetail.ITEMCODE)"
                         #gridItem>
 
                         <!-- grid for mobile start -->
@@ -32,8 +33,8 @@
 
                                     <dt *ngIf="showUOM">{{'UoM'|translate}}</dt>
                                     <dd *ngIf="showUOM">
-                                        <kendo-dropdownlist class="form-control" name="uomSelectedVal" [(ngModel)]="uomSelectedVal" [data]="dataItem.UOMList" textField="UomName"
-                                            valueField="UomCode"></kendo-dropdownlist>
+                                        <kendo-dropdownlist class="form-control" name="uomSelectedVal" [(ngModel)]="uomSelectedVal"
+                                            [data]="dataItem.UOMList" textField="UomName" valueField="UomCode"></kendo-dropdownlist>
                                     </dd>
 
                                 </dl>
@@ -42,8 +43,8 @@
                         <!-- grid for mobile end -->
 
                         <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE" title="{{'ItemCode'|translate}}"></kendo-grid-column>
-                        <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" headerClass="text-right" class="text-right" title="{{'OpenQty'|translate}}"
-                            class="text-right">
+                        <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" headerClass="text-right" class="text-right"
+                            title="{{'OpenQty'|translate}}" class="text-right">
                             <ng-template kendoGridCellTemplate let-dataItem>
                                 {{dataItem.OPENQTY | numberFormat}}
                             </ng-template>
@@ -56,8 +57,8 @@
                         </kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="UOM1" title="{{'UoM'|translate}}" *ngIf="showUOM">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                <kendo-dropdownlist class="form-control" name="uomSelectedVal" [(ngModel)]="uomSelectedVal" [data]="dataItem.UOMList" textField="UomName"
-                                    valueField="UomCode"></kendo-dropdownlist>
+                                <kendo-dropdownlist class="form-control" name="uomSelectedVal" [(ngModel)]="uomSelectedVal"
+                                    [data]="dataItem.UOMList" textField="UomName" valueField="UomCode"></kendo-dropdownlist>
                             </ng-template>
                         </kendo-grid-column>
 
@@ -73,8 +74,8 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Inbound_ReceivingBin'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" name="RecvbBinvalue" [(ngModel)]=RecvbBinvalue placeholder="{{'Inbound_ReceivingBin'|translate}}"
-                                    (blur)="OnBinChange()">
+                                <input type="text" class="form-control form-control-sm" name="RecvbBinvalue"
+                                    [(ngModel)]=RecvbBinvalue placeholder="{{'Inbound_ReceivingBin'|translate}}" (blur)="OnBinChange()">
                                 <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" type="button" (click)="ShowBins()">
                                         <i class="opti-icon-hammenu"></i>
@@ -96,12 +97,13 @@
                             <fieldset [disabled]=isDisabledScanInput class="d-block w-100">
                                 <div class="d-flex align-items-center w-100">
                                     <div class="d-flex align-items-center">
-                                        <input type="radio" name="group" (change)="handleCheckChange($event)" id="InventoryEnquiryOptions1" class="k-radio" checked
-                                        />
+                                        <input type="radio" name="group" (change)="handleCheckChange($event)" id="InventoryEnquiryOptions1"
+                                            class="k-radio" checked />
                                         <label class="k-radio-label" for="InventoryEnquiryOptions1">{{mfrRadioText}}</label>
                                     </div>
                                     <div class="d-flex align-items-center ml-3">
-                                        <input type="radio" name="group" (change)="handleCheckChange($event)" id="InventoryEnquiryOptions2" class="k-radio" />
+                                        <input type="radio" name="group" (change)="handleCheckChange($event)" id="InventoryEnquiryOptions2"
+                                            class="k-radio" />
                                         <label class="k-radio-label" for="InventoryEnquiryOptions2">{{SRBatchColumnText}}</label>
                                     </div>
                                 </div>
@@ -112,69 +114,85 @@
                         <label class="col-sm-3 col-form-label"></label>
                         <div class="col-sm-9">
                             <div class="d-flex">
-                                <input type="text" class="form-control form-control-sm" id="inboundScanInputField" name="ScanInputs" 
-                                [(ngModel)]=ScanInputs (blur)="onScanCodeChange()" 
-                                    placeholder="{{scanInputPlaceholder}}">
+                                <input type="text" class="form-control form-control-sm" id="inboundScanInputField" name="ScanInputs"
+                                    [(ngModel)]=ScanInputs (blur)="onScanCodeChange()" placeholder="{{scanInputPlaceholder}}">
                                 <div class="ml-1 d-flex">
-                                   <button type="button" id="inboundscanButton"  (click)="onInboundScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
-                                    <i class="opti-icon-qr-code fs-24"></i>
+                                    <button type="button" id="inboundscanButton" (click)="onInboundScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                        <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
-                                    
-                                </div> 
+
+                                </div>
                             </div>
                         </div>
-                    </div> 
+                    </div>
                     <!-- Palletization Field For Lookup-->
                     <div class="form-group row" *ngIf="isPalletizationEnable && !isNonTrack">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Plt_PalletNo'|translate}}</label>
                         <div class="col-sm-9">
-                            <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" name="palletValue" [(ngModel)]=palletValue 
-                                (blur)="OnPalletChange()" placeholder="{{'Plt_PalletNo'|translate}}"
-                                    >
+                            <div class="input-group input-group-sm" >
+                                <input type="text" class="form-control form-control-sm" name="palletValue" [(ngModel)]=palletValue
+                                    (blur)="OnPalletChange()" placeholder="{{'Plt_PalletNo'|translate}}" [disabled]="showNewPallet">
                                 <div class="input-group-append has-seprate-btn">
-                                    <button class="k-button k-primary btn" type="button" (click)="getPalletList()">
+                                    <button class="k-button k-primary btn" type="button" (click)="getPalletList()" [disabled]="showNewPallet">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
                                 </div>
                                 <div class="ml-1 d-flex">
-                                        <button type="button" id="inboundscanButton"  (click)="onPalletScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
-                                         <i class="opti-icon-qr-code fs-24"></i>
-                                         </button>
-                                </div> 
-                                
+                                    <button type="button" id="inboundscanButton" (click)="onPalletScan()" 
+                                    class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" [disabled]="showNewPallet">
+                                        <i class="opti-icon-qr-code fs-24"></i>
+                                    </button>
+                                </div>
+
                             </div>
                         </div>
-                    </div> 
+                    </div>
                     <!-- Palletization Field For New Create-->
+                    <div class="form-group row mt-1 mt-md-0" *ngIf="isPalletizationEnable && !isNonTrack"son>
+                        <label class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <div class="opti_checkbox-container">
+                                <input type="checkbox" id="auth-2fa" class="k-checkbox float-left" name="newPallet"
+                                    (change)="onCheckChange()">
+                                <label class="k-checkbox-label" for="auth-2fa">{{'Inbound_NewPallet'|translate}}</label>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="form-group row mt-1 mt-md-0" *ngIf="showNewPallet && !isNonTrack">
-                            <label class="col-sm-3 col-form-label"></label>
-                            <div class="col-sm-9">
-                                <div class="d-flex">
-                                    <input type="text" class="form-control form-control-sm" id="inboundNewPallet" name="inboundNewPallet"
-                                        placeholder="{{'Inbound_NewPallet'|translate}}">
-                                        <div class="ml-1 d-flex">
-                                                <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button" (click)="newPallet(event)">
-                                                    <i class="opti-icon-add1 fs-24"></i>
-                                                </button>
-                                        </div>
+                        <label class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <div class="d-flex">
+                                <input type="text" class="form-control form-control-sm" id="inboundNewPallet" 
+                                name="inboundNewPallet" [(ngModel)]="inboundNewPallet"
+                                    placeholder="{{'Inbound_NewPallet'|translate}}" [disabled]="autoGenereatePalletEnable">
+                                <div class="ml-1 d-flex">
+                                    <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
+                                        type="button" (click)="createNewPallet(event)">
+                                        <i class="opti-icon-add1 fs-24"></i>
+                                    </button>
                                 </div>
                             </div>
-                    </div>
-                    <div class="form-group row" *ngIf="!isNonTrack">
-                            <div class="col-sm-3"></div>
-                            <div class="col-sm-9">
-                                <a class="cursor-pointer d-inline-flex text-primay" [ngStyle]="{'color':'#1fa2ff'}" *ngIf="isPalletizationEnable"><small (click)="enableNewwPallet()">{{'Inbound_NewPallet'|translate}}</small></a>
-                            </div>
                         </div>
-                    
+                    </div>
+
+                    <!-- <div class="form-group row" *ngIf="!isNonTrack">
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-9">
+                            <a class="cursor-pointer d-inline-flex text-primay" [ngStyle]="{'color':'#1fa2ff'}" *ngIf="isPalletizationEnable"><small
+                                    (click)="enableNewwPallet()">{{'Inbound_NewPallet'|translate}}</small></a>
+                        </div>
+                    </div> -->
+
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Quantity'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="d-flex">
-                                <input type="number" class="form-control form-control-sm" #Quantity name="qty" [(ngModel)]=qty placeholder="{{'Quantity'|translate}}">
+                                <input type="number" class="form-control form-control-sm" #Quantity name="qty"
+                                    [(ngModel)]=qty placeholder="{{'Quantity'|translate}}">
                                 <div class="ml-1 d-flex">
-                                    <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button" (click)="addQuantity(event)">
+                                    <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
+                                        type="button" (click)="addQuantity(event)">
                                         <i class="opti-icon-add1 fs-24"></i>
                                     </button>
                                 </div>
@@ -191,8 +209,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <kendo-grid *ngIf="!isNonTrack" class="no-shadow" [kendoGridBinding]="recvingQuantityBinArray"
-                     [resizable]="true" [sortable]="true"
-                        [selectable]="true" #gridItem>
+                        [resizable]="true" [sortable]="true" [selectable]="true" #gridItem>
 
                         <!-- grid for mobile start -->
                         <kendo-grid-column media="(max-width: 767px)" title="List" class="opti_mobile-grid-td">
@@ -200,8 +217,8 @@
                                 <dl class="opti_mobile_grid_dl">
                                     <dt style="margin-top:4px;">{{mfrGridColumnText}}</dt>
                                     <dd>
-                                        <input type="text" class="form-control form-control-sm" name="dataItem.VendorLot" [(ngModel)]=dataItem.VendorLot id="VendorLot"
-                                        #VendorLot (change)="updateVendorLot(VendorLot.value, rowIndex)">
+                                        <input type="text" class="form-control form-control-sm" name="dataItem.VendorLot"
+                                            [(ngModel)]=dataItem.VendorLot id="VendorLot" #VendorLot (change)="updateVendorLot(VendorLot.value, rowIndex)">
                                     </dd>
 
                                     <dt>{{'Quantity'|translate}}</dt>
@@ -213,13 +230,15 @@
 
                                 <dl class="opti_mobile_grid_dl">
                                     <dt class="d-flex align-items-center">{{SRBatchColumnText}}
-                                        <button type="button" class="btn btn-danger k-button btn-sm btn-icon ml-auto" style="margin-bottom: 2px;" (click)="openConfirmForDelete(rowIndex, gridItem)">
+                                        <button type="button" class="btn btn-danger k-button btn-sm btn-icon ml-auto"
+                                            style="margin-bottom: 2px;" (click)="openConfirmForDelete(rowIndex, gridItem)">
                                             <span class="k-icon k-i-delete" role="presentation"></span>
                                         </button>
                                     </dt>
                                     <dd>
-                                        <input type="text" class="form-control form-control-sm" name="dataItem.LotNumber" value={{dataItem.LotNumber}} [disabled]=isDisabledScanInput
-                                        id="display_name" #display_name (change)="updateLotNumber(display_name.value, rowIndex, gridItem)">
+                                        <input type="text" class="form-control form-control-sm" name="dataItem.LotNumber"
+                                            value={{dataItem.LotNumber}} [disabled]=isDisabledScanInput id="display_name"
+                                            #display_name (change)="updateLotNumber(display_name.value, rowIndex, gridItem)">
                                     </dd>
 
                                     <dt>{{'BinNo'|translate}}</dt>
@@ -234,37 +253,35 @@
 
                         <kendo-grid-column media="(min-width: 768px)" field="VendorLot" [width]="18" title="{{mfrGridColumnText}}">
                             <ng-template kendoGridCellTemplate let-dataItem let-idx='rowIndex'>
-                                <input type="text" class="form-control form-control-sm" name="dataItem.VendorLot" value={{dataItem.VendorLot}} id="display_name"
-                                    #display_name (change)="updateVendorLot(display_name.value, idx)">
+                                <input type="text" class="form-control form-control-sm" name="dataItem.VendorLot" value={{dataItem.VendorLot}}
+                                    id="display_name" #display_name (change)="updateVendorLot(display_name.value, idx)">
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column *ngIf="isPalletizationEnable" media="(min-width: 768px)" field="palletSBNo" [width]="18" title="{{SRBatchColumnText}}">
-                            <ng-template kendoGridCellTemplate let-dataItem let-idx='rowIndex'>
-                                <input type="text" class="form-control form-control-sm" name="dataItem.palletSBNo" value={{dataItem.palletSBNo}} [disabled]=true
-                                    id="display_name" #display_name >
-                            </ng-template>
-                        </kendo-grid-column>
-                        <kendo-grid-column media="(min-width: 768px)" field="LotNumber" [width]="18" title="{{ActualSRBatchColumnText}}">
-                                <ng-template kendoGridCellTemplate let-dataItem let-idx='rowIndex'>
-                                    <input type="text" class="form-control form-control-sm" name="dataItem.LotNumber" value={{dataItem.LotNumber}} [disabled]=isDisabledScanInput
-                                        id="display_name" #display_name (change)="updateLotNumber(display_name.value, idx, gridItem)">
-                                </ng-template>
-                            </kendo-grid-column>
                         
-                        <kendo-grid-column *ngIf="isPalletizationEnable" media="(min-width: 768px)" field="PalletCode" [width]="18" title="{{'Plt_PalletNo'|translate}}"></kendo-grid-column>
+                        <kendo-grid-column media="(min-width: 768px)" field="LotNumber" [width]="18" title="{{SRBatchColumnText}}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-idx='rowIndex'>
+                                <input type="text" class="form-control form-control-sm" name="dataItem.LotNumber" value={{dataItem.LotNumber}}
+                                    [disabled]="isPalletizationEnable" id="display_name" #display_name (change)="updateLotNumbe(display_name.value, idx, gridItem)">
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-column *ngIf="isPalletizationEnable" media="(min-width: 768px)" field="PalletCode"
+                            [width]="18" title="{{'Plt_PalletNo'|translate}}"></kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="Bin" [width]="18" title="{{'BinNo'|translate}}"></kendo-grid-column>
-                        <kendo-grid-column media="(min-width: 768px)" field="LotQty" headerClass="text-right" class="text-right" [width]="18" title="{{'Quantity'|translate}}">
-                                <ng-template kendoGridCellTemplate let-dataItem>
-                                    {{dataItem.LotQty | numberFormat}}
-                                </ng-template>
-                            </kendo-grid-column>
+                        <kendo-grid-column media="(min-width: 768px)" field="LotQty" headerClass="text-right" class="text-right"
+                            [width]="18" title="{{'Quantity'|translate}}">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                {{dataItem.LotQty | numberFormat}}
+                            </ng-template>
+                        </kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="expiryDate" [width]="18" title="{{'ExpiryDate'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem>
                                 {{dataItem.expiryDate | date:dateFormat}}
                             </ng-template>
                         </kendo-grid-column>
 
-                        <kendo-grid-column media="(min-width: 768px)" field="" headerClass="text-center" class="text-center" [width]="10" title="">
+                        <kendo-grid-column media="(min-width: 768px)" field="" headerClass="text-center" class="text-center"
+                            [width]="10" title="">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                 <button type="button" class="btn btn-danger k-button btn-sm btn-icon" (click)="openConfirmForDelete(rowIndex, gridItem)">
                                     <span class="k-icon k-i-delete" role="presentation"></span>
@@ -276,9 +293,8 @@
 
 
 
-                    <kendo-grid *ngIf="isNonTrack" class="no-shadow" [kendoGridBinding]="recvingQuantityBinArray" 
-                    [resizable]="true" [sortable]="true"
-                        [selectable]="true" #gridItem>
+                    <kendo-grid *ngIf="isNonTrack" class="no-shadow" [kendoGridBinding]="recvingQuantityBinArray"
+                        [resizable]="true" [sortable]="true" [selectable]="true" #gridItem>
                         <!-- grid for mobile start -->
                         <kendo-grid-column media="(max-width: 767px)" title="List" class="opti_mobile-grid-td">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
@@ -289,7 +305,8 @@
 
                                 <dl class="opti_mobile_grid_dl">
                                     <dt class="d-flex align-items-center">{{'BinNo'|translate}}
-                                        <button type="button" class="btn btn-danger k-button btn-sm btn-icon ml-auto" (click)="openConfirmForDelete(rowIndex, gridItem)">
+                                        <button type="button" class="btn btn-danger k-button btn-sm btn-icon ml-auto"
+                                            (click)="openConfirmForDelete(rowIndex, gridItem)">
                                             <span class="k-icon k-i-delete" role="presentation"></span>
                                         </button>
                                     </dt>
@@ -299,14 +316,16 @@
                         </kendo-grid-column>
                         <!-- grid for mobile end -->
 
-                        <kendo-grid-column media="(min-width: 768px)" field="LotQty" headerClass="text-right" class="text-right" [width]="45" title="{{'Quantity'|translate}}">
+                        <kendo-grid-column media="(min-width: 768px)" field="LotQty" headerClass="text-right" class="text-right"
+                            [width]="45" title="{{'Quantity'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem>
                                 {{dataItem.LotQty |numberFormat}}
                             </ng-template>
                         </kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="Bin" [width]="45" title="{{'BinNo'|translate}}"></kendo-grid-column>
 
-                        <kendo-grid-column media="(min-width: 768px)" headerClass="text-center" class="text-center" field="" [width]="10" title="">
+                        <kendo-grid-column media="(min-width: 768px)" headerClass="text-center" class="text-center"
+                            field="" [width]="10" title="">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                 <button type="button" class="btn btn-danger k-button btn-sm btn-icon" (click)="openConfirmForDelete(rowIndex, gridItem)">
                                     <span class="k-icon k-i-delete" role="presentation"></span>
@@ -325,8 +344,8 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'TargetWhse'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" name="targetWhse" [(ngModel)]=targetWhse placeholder="{{'TargetWhse'|translate}}"
-                                    (blur)="onQCWHSChange()">
+                                <input type="text" class="form-control form-control-sm" name="targetWhse" [(ngModel)]=targetWhse
+                                    placeholder="{{'TargetWhse'|translate}}" (blur)="onQCWHSChange()">
                                 <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" type="button" (click)="getTargetWhseList()">
                                         <i class="opti-icon-hammenu"></i>
@@ -340,8 +359,8 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'TargetBin'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" name="targetBinValue" [(ngModel)]=targetBin placeholder="{{'TargetBin'|translate}}"
-                                    (blur)="OnTargetBinChange()">
+                                <input type="text" class="form-control form-control-sm" name="targetBinValue"
+                                    [(ngModel)]=targetBin placeholder="{{'TargetBin'|translate}}" (blur)="OnTargetBinChange()">
                                 <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" type="button" (click)="getTargetBinList()">
                                         <i class="opti-icon-hammenu"></i>
@@ -368,8 +387,9 @@
                 <!-- <button class="k-button k-primary" type="button" (click)="cancel($event)">Cancel</button> -->
                 <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="cancel($event)">
                     <span class="k-icon k-i-close-outline" role="presentation"></span> Cancel</button>
-                    <button type="button" id="hiddenScanButton" style="visibility:hidden" (click)="onHiddenScanClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
-                            SB </button>
+                <button type="button" id="hiddenScanButton" style="visibility:hidden" (click)="onHiddenScanClick()"
+                    class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                    SB </button>
             </div>
         </div>
     </form>
@@ -380,8 +400,8 @@
     <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
 </span>
 <span *ngIf="showConfirmDialog">
-    <app-comon-confirm-dialog [titleMessage]="dialogMsg" [yesButtonText]="yesButtonText" [fromWhere]="dialogFor" [noButtonText]="noButtonText"
-        (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
+    <app-comon-confirm-dialog [titleMessage]="dialogMsg" [yesButtonText]="yesButtonText" [fromWhere]="dialogFor"
+        [noButtonText]="noButtonText" (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
 </span>
 
 <div>

@@ -28,7 +28,7 @@ export class OutProdissueComponent implements OnInit {
   public selected: any = null;
   public step: number = 0.001;
   public lookupData: any;
-  public lookupFor: any = 'out-items';
+  public lookupFor: any = "";
   public showLookup: boolean = false;
   public selectedItems: any;
   public totalPickQty: number = 0.000;
@@ -57,12 +57,23 @@ export class OutProdissueComponent implements OnInit {
   public pagable: boolean = false;
   public pageSize: number = Commonservice.pageSize;
   public pageTitle: any = "";
-  constructor(private ourboundService: OutboundService, private router: Router, private toastr: ToastrService, private translate: TranslateService, private commonservice: Commonservice, private productionService: ProductionService) { }
+  public serviceData: any;
+  showPalletLookup: boolean = true;
+  constructor(private ourboundService: OutboundService, private router: Router, private toastr: ToastrService, private translate: TranslateService, private commonservice: Commonservice, private productionService: ProductionService) { 
+
+  }
   fromProduction = true;
   public currentOrderNo: string;
   public radioSelected: number;
   public palletValue: string;
+  public lookupfor: string;
+  public isPalletizationEnable: boolean;
   ngOnInit() {
+    if (localStorage.getItem("PalletizationEnabled") == "True" && localStorage.getItem("PalletizationEnabledForItem") == "True") {
+      this.isPalletizationEnable = true;
+    } else {
+      this.isPalletizationEnable = false;
+    }
 
     //lsOutbound
     let outboundData = localStorage.getItem(CommonConstants.OutboundData);
@@ -461,7 +472,9 @@ export class OutProdissueComponent implements OnInit {
   }
 
   getLookupValue(lookupValue: any, gridSelectedMeterial: any, updateGrid: boolean = true, scan: boolean = false) {
-    if (lookupValue) {
+    if (this.lookupfor == "PalletList") {
+
+    } else if (lookupValue) {
       this.showLookupLoader = false;
       if (this.OrderType == 'S') {
         let data: any[] = [];
@@ -1209,7 +1222,7 @@ export class OutProdissueComponent implements OnInit {
   // this.prepareDeleiveryCollectionAndDeliver(orderId);
 
   public getPalletList() {
-    this.showLookupLoader = true;
+    this.showPalletLookup = true;
     this.ourboundService.getPalletList(this.selected.ITEMCODE).subscribe(
       (data: any) => {
         this.showLookup = false;
@@ -1217,14 +1230,13 @@ export class OutProdissueComponent implements OnInit {
         if (data != null) {
           if (data.length > 0) {
             console.log(data);
-            this.showLookup = true;
-            this.showLookupLoader = false;
-            this.lookupData = data;
-            this.palletValue = this.lookupData[0].Code;
-            //this.lookupfor = "PalletList";
-            return;
+            //this.showLookup = true;
+            this.showPalletLookup = false;
+            this.serviceData = data;
+            this.palletValue = this.serviceData[0].Code;
+            this.lookupfor = "PalletList";
           } else {
-            this.showLookupLoader = false;
+            this.showPalletLookup = false;
             this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
           }
         }

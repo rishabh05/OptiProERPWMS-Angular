@@ -329,5 +329,6 @@
   "Outbound_WithoutPallet": "Without Pallet",
   "Inbound_TargetWhsBlankErrMsg": "Target Warehouse cannot be blank",
   "Inbound_TargetBinBlankErrMsg": "Target Bin cannot be blank",
+  "Plt_EnterPalletNo": "Enter new pallet no.",
   "":""
 }
