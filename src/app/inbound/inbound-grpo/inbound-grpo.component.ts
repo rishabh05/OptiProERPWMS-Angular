@@ -152,10 +152,6 @@ export class InboundGRPOComponent implements OnInit {
     this.operationType = "";
     // also update this.openPOLineModel[0].RPTQTY with local storage value
     if (this.openPOLineModel != undefined && this.openPOLineModel != null) {
-      // this.Ponumber = this.openPOLineModel[0].DocNum;
-      // this.tracking = this.openPOLineModel[0].TRACKING;
-      // this.OpenQty = this.openPOLineModel[0].OPENQTY;
-      // this.ItemCode = this.openPOLineModel[0].ITEMCODE;
       this.showScanInput = true;
       if (this.tracking == "S") {
         this.isSerial = true;
