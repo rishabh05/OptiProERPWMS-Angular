@@ -1230,10 +1230,10 @@ export class OutProdissueComponent implements OnInit {
         if (data != null) {
           if (data.length > 0) {
             console.log(data);
-            this.showLookup = true;
+            //this.showLookup = true;
             this.showPalletLookup = false;
-            this.lookupData = data;
-            this.palletValue = this.lookupData[0].Code;
+            this.serviceData = data;
+            this.palletValue = this.serviceData[0].Code;
             this.lookupfor = "PalletList";
           } else {
             this.showPalletLookup = false;

@@ -152,10 +152,10 @@ export class InboundGRPOComponent implements OnInit {
     this.operationType = "";
     // also update this.openPOLineModel[0].RPTQTY with local storage value
     if (this.openPOLineModel != undefined && this.openPOLineModel != null) {
-      this.Ponumber = this.openPOLineModel[0].DocNum;
-      this.tracking = this.openPOLineModel[0].TRACKING;
-      this.OpenQty = this.openPOLineModel[0].OPENQTY;
-      this.ItemCode = this.openPOLineModel[0].ITEMCODE;
+      // this.Ponumber = this.openPOLineModel[0].DocNum;
+      // this.tracking = this.openPOLineModel[0].TRACKING;
+      // this.OpenQty = this.openPOLineModel[0].OPENQTY;
+      // this.ItemCode = this.openPOLineModel[0].ITEMCODE;
       this.showScanInput = true;
       if (this.tracking == "S") {
         this.isSerial = true;
@@ -1658,17 +1658,28 @@ export class InboundGRPOComponent implements OnInit {
 
   onCheckChange(){
     this.showNewPallet = !this.showNewPallet;
+    if(this.showNewPallet){
+      this.palletValue = "";
+    } else {
+      this.inboundNewPallet = "";
+    }
   }
 
   public createNewPallet() {
-    var palletId = "";
-    if(!this.autoGenereatePalletEnable){
+    var palletId;
+    if(this.showNewPallet){
       palletId = this.inboundNewPallet;
+    }
+
+    if(this.autoGenereatePalletEnable){
+       palletId = "";
+    } else {
       if(palletId == '' || palletId == undefined){
         this.toastr.error('', this.translate.instant("Plt_EnterPalletNo"));
         return;
       }
     }
+
     console.log("palletId: "+palletId);
     this.showLoader = true;
     this.inboundService.createNewPallet(palletId).subscribe(
@@ -1680,7 +1691,11 @@ export class InboundGRPOComponent implements OnInit {
             console.log(data);
             this.showLookupLoader = false;
             // this.serviceData = data;
-            this.palletValue = data;
+            if(this.showNewPallet){
+              this.inboundNewPallet = data;
+            } else {
+              this.palletValue = data;
+            }
             return;
           } else {
             this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));

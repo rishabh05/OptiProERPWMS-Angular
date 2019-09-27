@@ -130,16 +130,17 @@
                     <div class="form-group row" *ngIf="isPalletizationEnable && !isNonTrack">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Plt_PalletNo'|translate}}</label>
                         <div class="col-sm-9">
-                            <div class="input-group input-group-sm">
+                            <div class="input-group input-group-sm" >
                                 <input type="text" class="form-control form-control-sm" name="palletValue" [(ngModel)]=palletValue
-                                    (blur)="OnPalletChange()" placeholder="{{'Plt_PalletNo'|translate}}">
+                                    (blur)="OnPalletChange()" placeholder="{{'Plt_PalletNo'|translate}}" [disabled]="showNewPallet">
                                 <div class="input-group-append has-seprate-btn">
-                                    <button class="k-button k-primary btn" type="button" (click)="getPalletList()">
+                                    <button class="k-button k-primary btn" type="button" (click)="getPalletList()" [disabled]="showNewPallet">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
                                 </div>
                                 <div class="ml-1 d-flex">
-                                    <button type="button" id="inboundscanButton" (click)="onPalletScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                    <button type="button" id="inboundscanButton" (click)="onPalletScan()" 
+                                    class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" [disabled]="showNewPallet">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
                                 </div>
@@ -257,12 +258,7 @@
                                     id="display_name" #display_name (change)="updateVendorLot(display_name.value, idx)">
                             </ng-template>
                         </kendo-grid-column>
-                        <!-- <kendo-grid-column *ngIf="isPalletizationEnable" media="(min-width: 768px)" field="palletSBNo" [width]="18" title="{{SRBatchColumnText}}">
-                            <ng-template kendoGridCellTemplate let-dataItem let-idx='rowIndex'>
-                                <input type="text" class="form-control form-control-sm" name="dataItem.palletSBNo" value={{dataItem.palletSBNo}} [disabled]=true
-                                    id="display_name" #display_name >
-                            </ng-template>
-                        </kendo-grid-column> -->
+                        
                         <kendo-grid-column media="(min-width: 768px)" field="LotNumber" [width]="18" title="{{SRBatchColumnText}}">
                             <ng-template kendoGridCellTemplate let-dataItem let-idx='rowIndex'>
                                 <input type="text" class="form-control form-control-sm" name="dataItem.LotNumber" value={{dataItem.LotNumber}}
