@@ -366,7 +366,7 @@ export class InboundGRPOComponent implements OnInit {
       }
     }
   }
-
+ 
   updateLotNumber(value, rowindex, gridData: any) {
     let result = this.recvingQuantityBinArray.find(element => element.LotNumber == value);
     if (result != undefined) {
