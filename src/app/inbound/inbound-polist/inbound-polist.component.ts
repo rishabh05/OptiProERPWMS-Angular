@@ -247,7 +247,7 @@ export class InboundPolistComponent implements OnInit {
   onClickOpenPOLineRowOpenAutoLot(selection) {
     const poline = selection.selectedRows[0].dataItem;
     this.openPOLineModel = poline;
-    this.openPOLineModel.RPTQTY = 0;
+    // this.openPOLineModel.RPTQTY = 0;
     this.openPOLineModel.DocNum = this.poCode;
     this.inboundMasterComponent.setClickedItemDetail(this.openPOLineModel);
     this.getAutoLot(poline.ITEMCODE);

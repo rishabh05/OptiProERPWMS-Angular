@@ -361,8 +361,8 @@ export class InboundGRPOComponent implements OnInit {
       if (i === rowindex) {
         this.recvingQuantityBinArray[i].VendorLot = value;
         if (this.isPalletizationEnable) {
-          this.recvingQuantityBinArray[i].palletSBNo = value + "-" + this.palletValue;
-          this.recvingQuantityBinArray[i].LotNumber = value + "-" + this.palletValue;
+          this.recvingQuantityBinArray[i].palletSBNo = value + "-" + this.recvingQuantityBinArray[i].PalletCode;
+          this.recvingQuantityBinArray[i].LotNumber = value + "-" + this.recvingQuantityBinArray[i].PalletCode;
         }
       }
     }
@@ -442,6 +442,7 @@ export class InboundGRPOComponent implements OnInit {
               this.qty = this.qty - 1;
             }
           } else {
+            this.searlNo = (this.searlNo == "null" || this.searlNo == null) ? "" : this.searlNo;
             this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, 1, this.RecvbBinvalue, this.expiryDate, this.palletValue));
             this.qty = this.qty - 1;
           }
@@ -484,6 +485,7 @@ export class InboundGRPOComponent implements OnInit {
       this.addBatchSerialQty(autoLots, this.qty);
       let result = this.recvingQuantityBinArray.find(element => element.LotNumber == this.searlNo);
       if (result == undefined) {
+        this.searlNo = (this.searlNo == "null" || this.searlNo == null) ? "" : this.searlNo;
         this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, qty, this.RecvbBinvalue, this.expiryDate, this.palletValue));
       } else {
         this.batchCalculation(autoLots, this.qty);
@@ -1982,7 +1984,7 @@ export class InboundGRPOComponent implements OnInit {
     if (this.receiptData.options == '2') type = 1;
 
     this.checkValidateSerialSubs = this.productionService.isSerialExists(this.serialBatchNo,
-      this.receiptData.itemCode, type, this.tracking, this.receiptData.orderNumber, 
+      this.receiptData.itemCode, type, this.tracking, this.receiptData.orderNumber,
       this.fromReceiptProduction).subscribe(
         data => {
           if (data != undefined) {

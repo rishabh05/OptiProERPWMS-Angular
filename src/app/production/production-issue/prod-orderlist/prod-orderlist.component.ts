@@ -29,7 +29,7 @@ export class ProdOrderlistComponent implements OnInit {
   public outbound: OutboundData = new OutboundData();
 
   pagable: boolean = false;
-  pageSize:number = Commonservice.pageSize;
+  pageSize: number = Commonservice.pageSize;
 
   showConfirmDialog: boolean = false;
   constructor(private router: Router, private productionService: ProductionService, public productionIssueComponent: ProductionIssueComponent,
@@ -102,7 +102,7 @@ export class ProdOrderlistComponent implements OnInit {
 
 
   getItemListForOrder(fromIssueProduction: boolean = false, fromsearchButtonClick: boolean = false) {
-    if (fromsearchButtonClick && this.outbound!=null) {
+    if (fromsearchButtonClick && this.outbound != null) {
       let outboundTempData: OutboundData = new OutboundData()
       outboundTempData.OrderData = this.outbound.OrderData;
       localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outboundTempData));
@@ -185,6 +185,8 @@ export class ProdOrderlistComponent implements OnInit {
     localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
     localStorage.setItem("ComingFrom", "ProductionIssue");
     // this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
+
+    this.getItemListForOrder(false, true);
   }
 
   public rowCallback = (context: RowClassArgs) => {
@@ -230,7 +232,7 @@ export class ProdOrderlistComponent implements OnInit {
       this.prodOrderlist = !this.prodOrderlist;
     }
 
-    
+
   }
 
   public calculatePickQty() {
