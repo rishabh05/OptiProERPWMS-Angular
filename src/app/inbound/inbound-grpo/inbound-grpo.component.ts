@@ -412,10 +412,10 @@ export class InboundGRPOComponent implements OnInit {
       this.toastr.error('', this.translate.instant("INVALIDBIN"));
       return;
     }
-    if (this.isPalletizationEnable && (this.palletValue == "" || this.palletValue == undefined)) {
-      this.toastr.error('', this.translate.instant("InValidPalletNo"));
-      return;
-    }
+    // if (this.isPalletizationEnable && (this.palletValue == "" || this.palletValue == undefined)) {
+    //   this.toastr.error('', this.translate.instant("InValidPalletNo"));
+    //   return;
+    // }
     if (!this.validateQuantity()) {
       return;
     }

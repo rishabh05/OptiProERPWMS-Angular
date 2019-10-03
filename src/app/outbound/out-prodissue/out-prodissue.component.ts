@@ -59,6 +59,7 @@ export class OutProdissueComponent implements OnInit {
   public pageTitle: any = "";
   public serviceData: any;
   showPalletLookup: boolean = true;
+  public ScanInputs:string;
   constructor(private ourboundService: OutboundService, private router: Router, private toastr: ToastrService, private translate: TranslateService, private commonservice: Commonservice, private productionService: ProductionService) { 
 
   }
@@ -69,7 +70,9 @@ export class OutProdissueComponent implements OnInit {
   public lookupfor: string;
   public isPalletizationEnable: boolean;
   ngOnInit() {
-    if (localStorage.getItem("PalletizationEnabled") == "True" && localStorage.getItem("PalletizationEnabledForItem") == "True") {
+    this.ScanInputs= "";
+    if (localStorage.getItem("PalletizationEnabled") == "True"
+     && localStorage.getItem("PalletizationEnabledForItem") == "True") {
       this.isPalletizationEnable = true;
     } else {
       this.isPalletizationEnable = false;
@@ -178,7 +181,7 @@ export class OutProdissueComponent implements OnInit {
     // alert("outbound hidden scan click")
     this.onGS1ScanItem();
   }
-  ScanInputs: string = "";
+  
   onGS1ScanItem() {
 
     var inputValue = (<HTMLInputElement>document.getElementById('outboundOrderNoScanInput')).value;
@@ -459,11 +462,13 @@ export class OutProdissueComponent implements OnInit {
     this.ourboundService.getAvaliableMeterial(itemCode, docEntry).subscribe(
       (resp: any) => {
         this.lookupData = resp;
-        this.showLookupLoader = false;
+        
         if (this.lookupData.length > 0) {
+          this.lookupFor = 'out-items';
           this.manageOldSelectedItems();
           this.manageExistingItem();
           this.showLookup = true;
+          this.showLookupLoader = false;
         } else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         }
@@ -473,9 +478,11 @@ export class OutProdissueComponent implements OnInit {
 
   getLookupValue(lookupValue: any, gridSelectedMeterial: any, updateGrid: boolean = true, scan: boolean = false) {
     if (this.lookupfor == "PalletList") {
-
+      this.showLookupLoader = false;
+      this.showPalletLookup = true;
     } else if (lookupValue) {
       this.showLookupLoader = false;
+      this.showLookup = false;
       if (this.OrderType == 'S') {
         let data: any[] = [];
         let tempLookup: any[] = lookupValue;
