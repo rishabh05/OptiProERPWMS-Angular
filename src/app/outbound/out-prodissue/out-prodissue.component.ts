@@ -66,7 +66,7 @@ export class OutProdissueComponent implements OnInit {
   fromProduction = true;
   public currentOrderNo: string;
   public radioSelected: number;
-  public palletValue: string;
+  public palletValue: string = "";
   public lookupfor: string;
   public isPalletizationEnable: boolean;
   ngOnInit() {
@@ -466,13 +466,12 @@ export class OutProdissueComponent implements OnInit {
     this.ourboundService.getAvaliableMeterial(itemCode, docEntry, this.palletValue).subscribe(
       (resp: any) => {
         this.lookupData = resp;
-        
+        this.showLookupLoader = false;
         if (this.lookupData.length > 0) {
           this.lookupFor = 'out-items';
           this.manageOldSelectedItems();
           this.manageExistingItem();
           this.showLookup = true;
-          this.showLookupLoader = false;
         } else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         }
