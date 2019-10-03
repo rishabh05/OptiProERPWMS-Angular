@@ -67,7 +67,6 @@ export class OutProdissueComponent implements OnInit {
   public currentOrderNo: string;
   public radioSelected: number;
   public palletValue: string = "";
-  public lookupfor: string;
   public isPalletizationEnable: boolean;
   ngOnInit() {
     this.ScanInputs= "";
@@ -480,7 +479,7 @@ export class OutProdissueComponent implements OnInit {
   }
 
   getLookupValue(lookupValue: any, gridSelectedMeterial: any, updateGrid: boolean = true, scan: boolean = false) {
-    if (this.lookupfor == "PalletList") {
+    if (this.lookupFor == "PalletList") {
       this.showLookupLoader = false;
       this.showPalletLookup = true;
     } else if (lookupValue) {
@@ -1245,7 +1244,7 @@ export class OutProdissueComponent implements OnInit {
             this.showPalletLookup = false;
             this.serviceData = data;
             this.palletValue = this.serviceData[0].Code;
-            this.lookupfor = "PalletList";
+            this.lookupFor = "PalletList";
           } else {
             this.showPalletLookup = false;
             this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
