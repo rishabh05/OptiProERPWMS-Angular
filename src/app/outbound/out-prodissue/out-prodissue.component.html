@@ -135,7 +135,7 @@
                                 <div class="input-group input-group-sm">
                                     <input type="text" [(ngModel)]=ScanInputs id="outboundOrderNoScanInput" name="orderNumber"
                                     class="form-control form-control-sm" (blur)="onScanInputChange()"
-                                        placeholder="{{'Outbound_SelectScan'|translate}}" [attr.disabled]="palletValue==null || palletValue==''">
+                                        placeholder="{{'Outbound_SelectScan'|translate}}" >
                                     <div class="input-group-append">
                                         <button class="k-button k-primary btn " type="button"
                                             (click)="openAvaliableMeterials()">
@@ -146,7 +146,7 @@
                                 <div class="ml-1 d-flex">
                                     <button id="outBoundDeliverForSOScan" (click)="prodIssueScan()" 
                                     class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
-                                        type="button" [disabled]="palletValue==null || palletValue==''">
+                                        type="button">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
                                 </div>

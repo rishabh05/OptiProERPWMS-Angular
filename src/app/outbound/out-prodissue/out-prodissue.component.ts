@@ -449,6 +449,10 @@ export class OutProdissueComponent implements OnInit {
   }
 
   public openAvaliableMeterials() {
+    // if(this.radioSelected !=2 && this.isPalletizationEnable && (this.palletValue == undefined || this.palletValue == '')){
+    //   this.toastr.error('', this.translate.instant("First you have to select pallet no."));
+    //   return;
+    // }
 
     if (this.needMeterial() == false) {
       this.toastr.error('', this.translate.instant("ProdIssue_PickedAllRequiredItems"));
@@ -459,7 +463,7 @@ export class OutProdissueComponent implements OnInit {
     let itemCode = this.selected.ITEMCODE;
     let docEntry = this.selected.DOCENTRY;
     this.showLookupLoader = true;
-    this.ourboundService.getAvaliableMeterial(itemCode, docEntry).subscribe(
+    this.ourboundService.getAvaliableMeterial(itemCode, docEntry, this.palletValue).subscribe(
       (resp: any) => {
         this.lookupData = resp;
         
@@ -1221,6 +1225,7 @@ export class OutProdissueComponent implements OnInit {
     if ($event.currentTarget.id == "palletOption3") {
       // mfr serial radio selected.
       this.radioSelected = 2;
+      this.palletValue = '';
     }
   }
 
