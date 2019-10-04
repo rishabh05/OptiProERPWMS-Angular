@@ -438,11 +438,20 @@ export class InboundGRPOComponent implements OnInit {
             this.addBatchSerialQty(autoLots, this.qty);
             let result = this.recvingQuantityBinArray.find(element => element.LotNumber == this.searlNo);
             if (result == undefined) {
+              this.searlNo = (this.searlNo == "null" || this.searlNo == null) ? "" : this.searlNo;
+              if (this.searlNo != '' && this.searlNo != undefined && this.palletValue != '') {
+                this.searlNo = this.searlNo + "-" + this.palletValue;
+              }
+
               this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, 1, this.RecvbBinvalue, this.expiryDate, this.palletValue));
               this.qty = this.qty - 1;
             }
           } else {
             this.searlNo = (this.searlNo == "null" || this.searlNo == null) ? "" : this.searlNo;
+            if (this.searlNo != '' && this.searlNo != undefined && this.palletValue != '') {
+              this.searlNo = this.searlNo + "-" + this.palletValue;
+            }
+
             this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, 1, this.RecvbBinvalue, this.expiryDate, this.palletValue));
             this.qty = this.qty - 1;
           }
@@ -486,11 +495,20 @@ export class InboundGRPOComponent implements OnInit {
       let result = this.recvingQuantityBinArray.find(element => element.LotNumber == this.searlNo);
       if (result == undefined) {
         this.searlNo = (this.searlNo == "null" || this.searlNo == null) ? "" : this.searlNo;
+        if (this.searlNo != '' && this.searlNo != undefined && this.palletValue != '') {
+          this.searlNo = this.searlNo + "-" + this.palletValue;
+        }
+
         this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, qty, this.RecvbBinvalue, this.expiryDate, this.palletValue));
       } else {
         this.batchCalculation(autoLots, this.qty);
       }
     } else {
+      this.searlNo = (this.searlNo == "null" || this.searlNo == null) ? "" : this.searlNo;
+      if (this.searlNo != '' && this.searlNo != undefined && this.palletValue != '') {
+        this.searlNo = this.searlNo + "-" + this.palletValue;
+      }
+
       this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, qty, this.RecvbBinvalue, this.expiryDate, this.palletValue));
     }
   }
