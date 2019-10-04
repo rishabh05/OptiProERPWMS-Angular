@@ -194,49 +194,54 @@ export class InventoryEnquiryComponent implements OnInit {
    * @param $event this will return the value on row click of lookup grid.
    */
   getLookupValue($event) {
-    
-    if (this.lookupfor == "LotsList") {
-      //this.lotNo = $event[0];
-      this.isFromLotChange = false;// reset this variable for batch value is not from on change.
-      //this.itemCode = $event[2];
-      this.itemCode = "";
-      this.binNo = $event[3];
-      this.itemNameLabel = $event[8];
-      this.itemName = "";//in case of  item code send itemName = ""
-      this.type = $event[9];
-      if (this.type == "N") {
-        this.lotNo = this.binNo;
-        this.nonTracked = true;
-      } else {
-        this.lotNo = $event[0];
-        this.nonTracked = false;
-      }
-      if (this.lotNo != "" ) 
-        this.GetItemOrBatchDetail();
-
+    if ($event != null && $event == "close") {
+      //nothing to do
+      return;
     }
-    if (this.lookupfor == "ItemsList") {
-      this.isFromItemChange = false;// reset this variable for batch value is not from on change.
-      console.log("value of lots" + $event);
-      this.lotNo = "";  //in case of  item code send lotNo = ""
-      this.itemCode = $event[0];
-      this.itemNameLabel = $event[1];
-      if (this.itemSummary == true) {
-        this.itemName = "summary";
-        this.nonTracked = true;
-      } else {
-        this.type = $event[2];
-        this.itemName = "";
+    else {
+      if (this.lookupfor == "LotsList") {
+        //this.lotNo = $event[0];
+        this.isFromLotChange = false;// reset this variable for batch value is not from on change.
+        //this.itemCode = $event[2];
+        this.itemCode = "";
+        this.binNo = $event[3];
+        this.itemNameLabel = $event[8];
+        this.itemName = "";//in case of  item code send itemName = ""
+        this.type = $event[9];
         if (this.type == "N") {
+          this.lotNo = this.binNo;
           this.nonTracked = true;
         } else {
+          this.lotNo = $event[0];
           this.nonTracked = false;
         }
+        if (this.lotNo != "")
+          this.GetItemOrBatchDetail();
+
       }
-      
-      // we do not need to show lot no. column in case of item summery.
-      if (this.itemCode != "")
-        this.GetItemOrBatchDetail();
+      if (this.lookupfor == "ItemsList") {
+        this.isFromItemChange = false;// reset this variable for batch value is not from on change.
+        console.log("value of lots" + $event);
+        this.lotNo = "";  //in case of  item code send lotNo = ""
+        this.itemCode = $event[0];
+        this.itemNameLabel = $event[1];
+        if (this.itemSummary == true) {
+          this.itemName = "summary";
+          this.nonTracked = true;
+        } else {
+          this.type = $event[2];
+          this.itemName = "";
+          if (this.type == "N") {
+            this.nonTracked = true;
+          } else {
+            this.nonTracked = false;
+          }
+        }
+
+        // we do not need to show lot no. column in case of item summery.
+        if (this.itemCode != "")
+          this.GetItemOrBatchDetail();
+      }
     }
   }
 
@@ -250,7 +255,7 @@ export class InventoryEnquiryComponent implements OnInit {
         
         if (data != undefined && data.length > 0) {
      
-
+ 
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
@@ -330,7 +335,7 @@ export class InventoryEnquiryComponent implements OnInit {
    * Method to get list of inquries from server.
    */
   public getItemList() {
-
+    this.showLookupLoader = true;
    this.showLoader = true; //this.getPIlistSubs = 
     this.itemLabelSubs = this.labelPrintReportsService.getItemCode().subscribe(
       data => {
