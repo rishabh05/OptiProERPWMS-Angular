@@ -65,6 +65,7 @@ export class LookupComponent implements OnInit {
       this.router.navigate(['home/dashboard']);
     } else {
       this.dialogOpened = false;
+      this.lookupvalue.emit('close')
     }
   }
   public state: State = {
