@@ -129,6 +129,7 @@ export class OutCutomerComponent implements OnInit {
           // lsOutbound
           localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
           CurrentOutBoundData.CustomerData = outbound.CustomerData;
+          this.outbound=outbound;
         }
       }
     );
