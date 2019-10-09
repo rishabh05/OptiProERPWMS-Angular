@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, ElementRef, ViewChild } from '@angular/core';
 import { CommonConstants } from 'src/app/const/common-constants';
 import { OutboundService } from 'src/app/services/outbound.service';
 import { OutboundData } from 'src/app/models/outbound/outbound-data';
@@ -60,6 +60,8 @@ export class OutProdissueComponent implements OnInit {
   public serviceData: any;
   showPalletLookup: boolean = true;
   public ScanInputs:string;
+  @ViewChild('VendScanInputField') vendInputScanField:ElementRef;
+
   constructor(private ourboundService: OutboundService, private router: Router, private toastr: ToastrService, private translate: TranslateService, private commonservice: Commonservice, private productionService: ProductionService) { 
 
   }

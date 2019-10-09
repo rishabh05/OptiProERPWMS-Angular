@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { OutboundService } from 'src/app/services/outbound.service';
 import { CommonConstants } from 'src/app/const/common-constants';
 import { Router } from '@angular/router';
@@ -14,7 +14,8 @@ import { SODETAIL, SOHEADER, DeliveryToken } from 'src/app/models/outbound/out-d
   templateUrl: './out-order.component.html',
   styleUrls: ['./out-order.component.scss']
 })
-export class OutOrderComponent implements OnInit {
+export class OutOrderComponent implements OnInit,AfterViewInit {
+  @ViewChild('OrderNo') OrderNo:ElementRef; 
   dialogMsg: string = "Which order you want to deliver?"
   yesButtonText: string = "All";
   noButtonText: string = "Current";
@@ -39,8 +40,14 @@ export class OutOrderComponent implements OnInit {
   public pagable: boolean = false;
   public pageSize:number = Commonservice.pageSize;
   constructor(private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) { }
+ 
+  ngAfterViewInit() {
+    this.OrderNo.nativeElement.focus();
+    // setTimeout(() => {
+    
+    // }, 50);
 
-
+  }
   ngOnInit() {
     // lsOutbound
 

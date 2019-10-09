@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { InboundService } from '../../services/inbound.service';
 import { Commonservice } from '../../services/commonservice.service';
 import { ToastrService } from 'ngx-toastr';
@@ -11,7 +11,9 @@ import { InboundMasterComponent } from '../inbound-master.component';
   templateUrl: './inbound-details.component.html',
   styleUrls: ['./inbound-details.component.scss']
 })
-export class InboundDetailsComponent implements OnInit {
+export class InboundDetailsComponent implements OnInit,AfterViewInit {
+  
+  @ViewChild('VendScanInputField') vendInputScanField:ElementRef;
   public viewLines: boolean;
   showLookupLoader: boolean = true;
   serviceData: any[];
@@ -35,6 +37,9 @@ export class InboundDetailsComponent implements OnInit {
   fileName: string = "";
   displayPDF1: boolean = false;
   detailsAvailable: boolean = false;
+  ngAfterViewInit(): void {
+    this.vendInputScanField.nativeElement.focus();
+  }
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent) {
     let userLang = navigator.language.split('-')[0];

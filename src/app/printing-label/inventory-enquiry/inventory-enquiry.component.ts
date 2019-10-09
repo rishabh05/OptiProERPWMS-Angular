@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer } from '@angular/core';
+import { Component, OnInit, Renderer, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { Commonservice } from '../../services/commonservice.service';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
@@ -12,7 +12,7 @@ import { ISubscription } from 'rxjs/Subscription';
   templateUrl: './inventory-enquiry.component.html',
   styleUrls: ['./inventory-enquiry.component.scss']
 })
-export class InventoryEnquiryComponent implements OnInit {
+export class InventoryEnquiryComponent implements OnInit,AfterViewInit {
   
   itemCode: string = "";
   lotNo: string = "";
@@ -51,15 +51,23 @@ export class InventoryEnquiryComponent implements OnInit {
   //pageSize: number = Commonservice.pageSize;
   pageSize:number = 10;
 
+   @ViewChild('BatchNoInput') BatchNoInput:ElementRef;
+   @ViewChild('itemCodeInput') itemCodeInput:ElementRef;
+   
+
   constructor(private renderer: Renderer, private commonservice: Commonservice, private router: Router, private labelPrintReportsService: LabelPrintReportsService,
     private toastr: ToastrService, private translate: TranslateService) {
     let userLang = navigator.language.split('-')[0];
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
     translate.use(userLang);
     translate.onLangChange.subscribe((event: LangChangeEvent) => {
-    });
+    });    
   }
-
+  ngAfterViewInit(): void {
+    console.log('view after init');
+    this.BatchNoInput.nativeElement.focus();
+   // this.itemCodeInput.nativeElement.focus();
+  } 
   ngOnInit() {
     console.log("PageSize:",this.pageSize);
     this.initialize();
@@ -85,6 +93,10 @@ export class InventoryEnquiryComponent implements OnInit {
         this.itemDetail = false;
         this.disableDescription = true;
         this.disableItemCode = false;
+        setTimeout(() => {
+          this.itemCodeInput.nativeElement.focus(); 
+        }, 200);
+         
         break;
       case ("InventoryEnquiryOptions3"):
         this.batchSerial = false;
@@ -92,6 +104,11 @@ export class InventoryEnquiryComponent implements OnInit {
         this.itemDetail = true;
         this.disableDescription = true;
         this.disableItemCode = false;
+
+        setTimeout(() => {
+          this.itemCodeInput.nativeElement.focus(); 
+        }, 200);
+
         break;
     }
   }

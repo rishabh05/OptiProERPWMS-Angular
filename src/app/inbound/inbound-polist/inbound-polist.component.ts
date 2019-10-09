@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { InboundService } from '../../services/inbound.service';
 import { Commonservice } from '../../services/commonservice.service';
 import { InboundMasterComponent } from '../inbound-master.component';
@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { AutoLot } from '../../models/Inbound/AutoLot';
 import { RowClassArgs } from '@progress/kendo-angular-grid';
 import { bypassSanitizationTrustResourceUrl } from '@angular/core/src/sanitization/bypass';
+import { InventoryTransferService } from 'src/app/services/inventory-transfer.service';
 
 @Component({
   selector: 'app-inbound-polist',
@@ -40,12 +41,12 @@ export class InboundPolistComponent implements OnInit {
   showGRPOButton: boolean = false;
   selectedVendor: string = "";
   disablePO: boolean = false;
-
+  @ViewChild('poScanInputField') poScanInputField:ElementRef; 
   showLoader: boolean = false;
   pagable: boolean = false;
   pageSize:number = Commonservice.pageSize;
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
-    private inboundMasterComponent: InboundMasterComponent) {
+    private inboundMasterComponent: InboundMasterComponent,private inventoryTransferService: InventoryTransferService) {
     let userLang = navigator.language.split('-')[0];
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
     translate.use(userLang);
@@ -63,8 +64,10 @@ export class InboundPolistComponent implements OnInit {
     this.selectedVendor = this.inboundMasterComponent.selectedVernder;
     this.showGRPOButton = false;
   }
+  
   ngAfterViewInit() {
     setTimeout(() => {
+      this.poScanInputField.nativeElement.focus();
       var selectedPO = localStorage.getItem("selectedPO");
       if (selectedPO != undefined && selectedPO != null && selectedPO != "") {
         this.poCode = selectedPO;
@@ -233,15 +236,53 @@ export class InboundPolistComponent implements OnInit {
   }
 
   getLookupValue($event) {
-    if (this.lookupfor == "POList") {
-      this.poCode = $event[0];
-      this.Name = $event[1];
-      this.openPOLines()
+    if ($event != null && $event != undefined && $event == "close") {
+      //nothing to do
+      return;
     }
-    else if (this.lookupfor == "POItemList") {
-      this.itemCode = $event[0];
-      this.openPOLines();
+    else {
+      if (this.lookupfor == "POList") {
+        this.poCode = $event[0];
+        this.Name = $event[1];
+        this.openPOLines()
+      }
+      else if (this.lookupfor == "POItemList") {
+        this.itemCode = $event[0];
+        this.openPOLines();
+      }
     }
+  }
+
+  OnItemCodeChange() {
+    if (this.itemCode == "" || this.itemCode == undefined) {
+      return;
+    }
+    this.showLoader = true;
+    this.inventoryTransferService.getItemInfo(this.itemCode).subscribe(
+      data => {
+        this.showLoader = false;
+        if (data != undefined && data.length > 0) {
+          console.log("" + data);
+          if (data[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
+          this.itemCode = data[0].ITEMCODE;
+         // this.itemName = data[0].ITEMNAME;
+         if(this.itemCode!=null && this.itemCode!=undefined && this.itemCode!=''){
+          this.openPOLines();
+         }
+         
+        } else {
+          this.toastr.error('', this.translate.instant("InvalidItemCode"));
+          this.itemCode = "";
+        }
+      },
+      error => {
+        this.toastr.error('', error);
+      }
+    );
   }
 
   onClickOpenPOLineRowOpenAutoLot(selection) {

@@ -29,7 +29,7 @@
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
                                 <input type="text" id="invEnqBatchNoScanInput" class="form-control form-control-sm" 
-                                [(ngModel)]="lotNo" (blur)="OnLotsChange()"
+                                [(ngModel)]="lotNo" (blur)="OnLotsChange()" #BatchNoInput
                                     name='batchSrNo' placeholder="{{'BatchSrBinNo'|translate}}">
                                 <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" (click)="OnBatchSerialLookupClick()" type="button">
@@ -46,7 +46,7 @@
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'ItemCode'|translate}}</label>
                         <div class="col-sm-9">
-                            <input type="text" id="invEnqItemNoScanInput1" [disabled]="disableItemCode" [(ngModel)]="itemCode" (blur)="OnItemCodeChange()"
+                            <input type="text" #itemCodeInput id="invEnqItemNoScanInput1" [disabled]="disableItemCode" [(ngModel)]="itemCode" (blur)="OnItemCodeChange()"
                              class="form-control form-control-sm" *ngIf="batchSerial"
                                 name='itemCode' placeholder="{{'ItemCode'|translate}}" >
                             <div class="input-group input-group-sm" id="inboundItemNoScanInput" *ngIf="itemSummary || itemDetail">

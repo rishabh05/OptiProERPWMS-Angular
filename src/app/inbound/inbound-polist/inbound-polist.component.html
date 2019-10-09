@@ -23,7 +23,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Inbound_PO#'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" name="poCode" [(ngModel)]=poCode placeholder="{{'Inbound_PO#'|translate}}"
+                                <input #poScanInputField type="text" class="form-control form-control-sm" name="poCode" [(ngModel)]=poCode placeholder="{{'Inbound_PO#'|translate}}"
                                     (blur)="OnPOChange()" [disabled]=disablePO id="poScanInputField">
                                 <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" type="button" (click)="onPOlookupClick()" [disabled]=disablePO>
@@ -46,7 +46,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'ItemCode'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" placeholder="{{'ItemCode'|translate}}" class="form-control form-control-sm" name="itemCode" [(ngModel)]=itemCode id="itemScanInputField">
+                                <input type="text" (blur)="OnItemCodeChange()" placeholder="{{'ItemCode'|translate}}" class="form-control form-control-sm" name="itemCode" [(ngModel)]=itemCode id="itemScanInputField">
                                 <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" type="button" (click)="onItemlookupClick()">
                                         <i class="opti-icon-hammenu"></i>

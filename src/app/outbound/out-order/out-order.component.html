@@ -11,7 +11,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Outbound_SO'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" name="orderNumber" (blur)="onOrderNoBlur()" value='' [(ngModel)]="orderNumber"
+                                <input type="text" #OrderNo name="orderNumber" (blur)="onOrderNoBlur()" value='' [(ngModel)]="orderNumber"
                                     class="form-control form-control-sm" placeholder="{{'Outbound_SO'|translate}}">
                                 <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" (click)="openOrderLookup()" type="button">

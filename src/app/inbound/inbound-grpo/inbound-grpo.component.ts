@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ComponentFactory, Output, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, ComponentFactory, Output, Input, EventEmitter, ElementRef, AfterViewInit } from '@angular/core';
 import { InboundMasterComponent } from 'src/app/inbound/inbound-master.component';
 import { Router } from '../../../../node_modules/@angular/router';
 import { InboundService } from 'src/app/services/inbound.service';
@@ -20,7 +20,7 @@ import { ProductionService } from 'src/app/services/production.service';
   templateUrl: './inbound-grpo.component.html',
   styleUrls: ['./inbound-grpo.component.scss']
 })
-export class InboundGRPOComponent implements OnInit {
+export class InboundGRPOComponent implements OnInit,AfterViewInit {
 
   dialogMsg: string = ""
   yesButtonText: string = "";
@@ -108,6 +108,8 @@ export class InboundGRPOComponent implements OnInit {
   itemsData: any = [];
   autoGenereatePalletEnable: boolean = false;
   checkValidateSerialSubs: ISubscription;
+  @ViewChild('RecBinVal') RecBinVal:ElementRef;
+  
   constructor(private inboundService: InboundService, private commonservice: Commonservice,
     private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent, private productionService: ProductionService) {
@@ -117,7 +119,11 @@ export class InboundGRPOComponent implements OnInit {
     // translate.onLangChange.subscribe((event: LangChangeEvent) => {
     // });
   }
-
+  ngAfterViewInit(): void {
+    console.log('view after init');
+    this.RecBinVal.nativeElement.focus();
+   // this.itemCodeInput.nativeElement.focus();
+  }
 
   ngOnInit() {
     if (localStorage.getItem("AutoPalletIdGenerationChecked") == "True") {

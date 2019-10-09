@@ -13,7 +13,7 @@
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
                                 <input type="text" class="form-control form-control-sm" name="VendCode" [(ngModel)]="VendCode" placeholder="{{'VendorCode'|translate}}"
-                                    (blur)="OnVendorChange()" [disabled]=showGRPOGridAndBtn id="VendScanInputField" >
+                                    (blur)="OnVendorChange()" #VendScanInputField [disabled]=showGRPOGridAndBtn id="VendScanInputField"  >
                                 <div class="input-group-append">
                                     <button class="k-button k-primary btn" type="button" (click)="onVendorLookupClick()" [disabled]=showGRPOGridAndBtn>
                                         <i class="opti-icon-hammenu"></i>
