@@ -25,6 +25,7 @@ import { ChangeWarehouseComponent } from '../change-warehouse/change-warehouse.c
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
 import { GridModule } from '@progress/kendo-angular-grid';
 import { SharedModule } from '../shared-module/shared-module.module';
+import { PalletizationModule } from '../palletization/palletization.module';
 
 @NgModule({
   imports: [
@@ -48,7 +49,8 @@ import { SharedModule } from '../shared-module/shared-module.module';
 
     InboundModule,
     OutboundModule,
-    InventoryTransferModule
+    InventoryTransferModule,
+    PalletizationModule
   ],
   declarations: [PortalHomeComponent, PortalLeftComponent, PortalRightComponent, PortalTopComponent, DashboardComponent, ChangeWarehouseComponent],
   providers:[DashboardComponent ]

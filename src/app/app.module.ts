@@ -19,6 +19,7 @@ import { OutboundModule } from './outbound/outbound.module';
 import { InputsModule } from '@progress/kendo-angular-inputs';
 
 import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { PalletizationModule } from './palletization/palletization.module';
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -48,7 +49,9 @@ export function createTranslateLoader(http: HttpClient) {
     GridModule,
     DialogsModule,
     OutboundModule,
-    InputsModule
+    InputsModule,
+   
+    
   ],
   providers: [],
   bootstrap: [AppComponent] 

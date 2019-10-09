@@ -130,15 +130,15 @@
 
 
 
-                        <div *ngIf="OrderType!='N'" class="col-sm-9">
+                        <div *ngIf="radioSelected!=0 && OrderType!='N'" class="col-sm-9">
                             <div class="d-flex">
                                 <div class="input-group input-group-sm">
                                     <input type="text" [(ngModel)]=ScanInputs id="outboundOrderNoScanInput" name="orderNumber"
                                     class="form-control form-control-sm" (blur)="onScanInputChange()"
-                                        placeholder="{{'Outbound_SelectScan'|translate}}" >
+                                        placeholder="{{'Outbound_SelectScan'|translate}}" [disabled]="radioSelected==0">
                                     <div class="input-group-append">
                                         <button class="k-button k-primary btn " type="button"
-                                            (click)="openAvaliableMeterials()">
+                                            (click)="openAvaliableMeterials()" [disabled]="radioSelected==0">
                                             <i class="opti-icon-hammenu"></i>
                                         </button>
                                     </div>
@@ -210,7 +210,7 @@
 
                         <kendo-grid-column media="(min-width: 768px)" *ngIf="OrderType==='S' || OrderType==='B'" field="LOTNO"
                             title="{{SerialBatchHeaderTitle}}" [width]="30"></kendo-grid-column>
-                        <kendo-grid-column media="(min-width: 768px)" *ngIf="isPalletizationEnable && OrderType!='N'" field="PalletCode"
+                        <kendo-grid-column media="(min-width: 768px)" *ngIf="isPalletizationEnable && OrderType!='N'" field="PALLETNO"
                             title="{{'Plt_PalletNo'|translate}}" [width]="30"></kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="BINNO" title="{{'BinNo'|translate}}"
                             [width]="30"></kendo-grid-column>

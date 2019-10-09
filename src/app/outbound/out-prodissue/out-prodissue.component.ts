@@ -65,7 +65,7 @@ export class OutProdissueComponent implements OnInit {
   }
   fromProduction = true;
   public currentOrderNo: string;
-  public radioSelected: number;
+  public radioSelected: number = 0;
   public palletValue: string = "";
   public isPalletizationEnable: boolean;
   ngOnInit() {
@@ -464,16 +464,25 @@ export class OutProdissueComponent implements OnInit {
     this.showLookupLoader = true;
     this.ourboundService.getAvaliableMeterial(itemCode, docEntry, this.palletValue).subscribe(
       (resp: any) => {
-        this.lookupData = resp;
         this.showLookupLoader = false;
-        if (this.lookupData.length > 0) {
-          this.lookupFor = 'out-items';
-          this.manageOldSelectedItems();
-          this.manageExistingItem();
-          this.showLookup = true;
+        if(this.radioSelected == 0){
+          if (resp.length > 0) {
+            this.selectedMeterials = resp;
+          } else {
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          }
         } else {
-          this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          this.lookupData = resp;
+          if (this.lookupData.length > 0) {
+            this.lookupFor = 'out-items';
+            this.manageOldSelectedItems();
+            this.manageExistingItem();
+            this.showLookup = true;
+          } else {
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          }
         }
+        
       }
     )
   }
@@ -482,6 +491,10 @@ export class OutProdissueComponent implements OnInit {
     if (this.lookupFor == "PalletList") {
       this.showLookupLoader = false;
       this.showPalletLookup = true;
+      this.palletValue = lookupValue[0];
+      if(this.radioSelected == 0){
+        this.openAvaliableMeterials();
+      }
     } else if (lookupValue) {
       this.showLookupLoader = false;
       this.showLookup = false;
@@ -1212,6 +1225,8 @@ export class OutProdissueComponent implements OnInit {
   }
 
   handleCheckChange($event) {
+    this.palletValue = '';
+    this.selectedMeterials = [];
     if ($event.currentTarget.id == "palletOption1") {
       // mfr serial radio selected.
       this.radioSelected = 0;
@@ -1223,7 +1238,6 @@ export class OutProdissueComponent implements OnInit {
     if ($event.currentTarget.id == "palletOption3") {
       // mfr serial radio selected.
       this.radioSelected = 2;
-      this.palletValue = '';
     }
   }
 

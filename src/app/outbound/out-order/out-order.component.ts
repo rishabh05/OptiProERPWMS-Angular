@@ -448,8 +448,8 @@ export class OutOrderComponent implements OnInit {
             hdr.ItemCode = o.Item.ITEMCODE;
             hdr.UOM = -1;
             hdr.UOMName = o.Item.UOM;
-
-            hdr.Line = hdrLineVal;
+            hdr.UOMName = o.Item.UOM;
+            hdr.UsernameForLic = uid;
 
 
             arrSOHEADER.push(hdr);
