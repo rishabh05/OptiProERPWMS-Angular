@@ -7,6 +7,11 @@ import { DashboardComponent } from '../dashboard/dashboard.component';
 import { BinTransferComponent } from '../inventory-transfer/bin-transfer/bin-transfer.component';
 import { WhsTransferComponent } from '../inventory-transfer/whs-transfer/whs-transfer.component';
 import { ChangeWarehouseComponent } from '../change-warehouse/change-warehouse.component';
+import { PalletTransferComponent } from '../inventory-transfer/pallet-transfer/pallet-transfer.component';
+import { SplitTransferComponent } from '../palletization/split-transfer/split-transfer.component';
+import { PalletMergeComponent } from '../palletization/pallet-merge/pallet-merge.component';
+import { DepalletizeComponent } from '../palletization/depalletize/depalletize.component';
+import { PalletizeComponent } from '../palletization/palletize/palletize.component';
 // import { InboundDetailsComponent } from '../inbound/inbound-details/inbound-details.component';
 // import { OutCutomerComponent } from '../outbound/out-cutomer/out-cutomer.component';
 // import { OutOrderComponent } from '../outbound/out-order/out-order.component';
@@ -37,6 +42,12 @@ const routes: Routes = [
       // { path:'outbound/outprodissue', component:OutProdissueComponent },
 
       { path:'outbound', loadChildren: "../outbound/outbound.module#OutboundModule" },
+      { path:'palletTransfer', component:PalletTransferComponent },
+      { path:'palletization', loadChildren: "../palletization/palletization.module#PalletizationModule" },
+      { path:'split-transfer', component:SplitTransferComponent },
+      { path:'pallet-merge', component:PalletMergeComponent },
+      { path:'depalletize', component:DepalletizeComponent },
+      { path:'palletize', component:PalletizeComponent },
     ]
     
   }

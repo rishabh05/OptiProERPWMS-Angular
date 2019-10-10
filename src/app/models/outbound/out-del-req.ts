@@ -15,6 +15,7 @@ export class SOHEADER {
     UOM: number;
     UOMName: string;
     Line: number;
+    UsernameForLic: string;
 }
 
 export class SODETAIL {

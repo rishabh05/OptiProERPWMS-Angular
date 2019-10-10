@@ -129,4 +129,9 @@ export class InventoryTransferService {
     var jObject = { DEFAULTSYSTEMBIN: JSON.stringify([{ ITEMCODE: itemCode, WHSCODE: oToWhs, CompanyDBName: localStorage.getItem("CompID") }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/WhsTrans/GetDefaultBinFromWarehouse", jObject, this.httpOptions);
   }
+
+  GetInventoryDocuments(fromBin: string, oToWhs: string): Observable<any> {
+    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), ItemCode: '', WhsCode: oToWhs, FromBin: fromBin}]) };
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetInventoryDocuments", jObject, this.httpOptions);
+  }
 }
