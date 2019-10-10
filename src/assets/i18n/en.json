@@ -335,5 +335,8 @@
   "Plt_PalletMerge": "Pallet Merge",
   "Plt_Depalletization": "Depalletization",
   "Plt_Palletize": "Palletize",
+  "Plt_SelectedPallets": "Selected Pallets",
+  "Plt_NewPallet": "New Pallet",
+  "Plt_Merge": "Merge",
   "":""
 }
