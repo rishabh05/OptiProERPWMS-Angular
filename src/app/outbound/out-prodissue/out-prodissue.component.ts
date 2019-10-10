@@ -1249,7 +1249,7 @@ export class OutProdissueComponent implements OnInit {
 
   public getPalletList() {
     this.showPalletLookup = true;
-    this.ourboundService.getPalletList(this.selected.ITEMCODE).subscribe(
+    this.commonservice.getPalletList(this.selected.ITEMCODE).subscribe(
       (data: any) => {
         this.showLookup = false;
         console.log(data);

@@ -182,25 +182,5 @@ export class InboundService {
     GUID: localStorage.getItem("GUID"), UsernameForLic: localStorage.getItem("UserId") }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/Printing/WMSPrintingService", jObject, this.httpOptions);
    }
- 
-   getPalletList(itemCode: string): Observable<any> {
-    var jObject = {
-      PalletCode: JSON.stringify([{
-        COMPANYDBNAME: localStorage.getItem("CompID"),
-        ITEMCODE: itemCode
-      }])
-    };
-    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetPalletList", jObject, this.httpOptions);
-  }
-
-  createNewPallet(palletCode: string): Observable<any> {
-    var jObject = {
-      PalletCode: JSON.stringify([{
-        COMPANYDBNAME: localStorage.getItem("CompID"),
-        PalletId: palletCode
-      }])
-    };
-    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/CreateNewPallet", jObject, this.httpOptions);
-  }
 }
 

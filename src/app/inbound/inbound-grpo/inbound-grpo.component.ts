@@ -1780,7 +1780,7 @@ export class InboundGRPOComponent implements OnInit,AfterViewInit {
 
   public getPalletList() {
     this.showLoader = true;
-    this.inboundService.getPalletList(this.openPOLineModel[0].ITEMCODE).subscribe(
+    this.commonservice.getPalletList(this.openPOLineModel[0].ITEMCODE).subscribe(
       (data: any) => {
         this.showLoader = false;
         console.log(data);
@@ -1817,7 +1817,7 @@ export class InboundGRPOComponent implements OnInit,AfterViewInit {
     //   return;
     // }
     // this.showLoader = true;
-    // this.inboundService.palletChange(this.palletValue).subscribe(
+    // this.commonservice.palletChange(this.palletValue).subscribe(
     //   (data: any) => {
     //     this.showLoader = false;
     //     console.log(data);
@@ -1975,7 +1975,7 @@ export class InboundGRPOComponent implements OnInit,AfterViewInit {
 
     console.log("palletId: " + palletId);
     this.showLoader = true;
-    this.inboundService.createNewPallet(palletId).subscribe(
+    this.commonservice.createNewPallet(palletId).subscribe(
       (data: any) => {
         this.showLoader = false;
         console.log(data);
