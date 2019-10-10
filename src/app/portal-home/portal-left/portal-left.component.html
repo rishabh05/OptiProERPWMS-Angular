@@ -144,7 +144,7 @@
                     </li> -->
                 </ul>
             </li>
-            <li class="dropdown" dropdown id="INV">
+            <li class="dropdown" dropdown id="INV" *ngIf="isPalletizationEnable">
                     <a dropdownToggle class="dropdown-toggle">
                         <i class="opti-icon-notes" [style.color]="selectedThemeColor"></i>
                         <span class="text">{{'Plt_Pallelization'|translate}}</span>

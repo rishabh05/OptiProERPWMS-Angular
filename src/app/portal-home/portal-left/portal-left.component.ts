@@ -16,7 +16,8 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class PortalLeftComponent implements OnInit {
 
-  
+  isPalletizationEnable: boolean = false;
+
   constructor(private commonService: Commonservice, private router: Router, private menuService: MenuService,private translate: TranslateService) {
     router.events.subscribe((val) => {
        // get current url with last word
@@ -35,6 +36,11 @@ export class PortalLeftComponent implements OnInit {
   selectedItem: string;
 
   ngOnInit() {
+    if (localStorage.getItem("PalletizationEnabled") == "True") {
+      this.isPalletizationEnable = true;
+    } else {
+      this.isPalletizationEnable = false;
+    }
 
     // get current url with last word
     let partsOfUrl = this.router.url.split('/');
