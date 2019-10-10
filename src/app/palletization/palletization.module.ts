@@ -11,6 +11,7 @@ import { SharedModule } from '../shared-module/shared-module.module';
 import { TrnaslateLazyModule } from 'src/translate-lazy.module';
 import { FormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 
 @NgModule({
   declarations: [SplitTransferComponent, PalletMergeComponent, DepalletizeComponent, PalletizeComponent],
@@ -21,7 +22,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     SharedModule,
     TrnaslateLazyModule,
     FormsModule,
-    
+    PerfectScrollbarModule
   ],
   exports:[SplitTransferComponent,PalletMergeComponent]
 })
