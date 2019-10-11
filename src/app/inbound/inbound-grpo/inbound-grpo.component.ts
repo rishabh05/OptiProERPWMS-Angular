@@ -1498,6 +1498,11 @@ export class InboundGRPOComponent implements OnInit,AfterViewInit {
   * @param $event this will return the value on row click of lookup grid.
   */
   getLookupValue($event) {
+    if ($event != null && $event == "close") {
+      //nothing to do
+      return;
+    }
+    else {
 
     if (this.lookupfor == "RecvBinList") {
       //this.itemCode = $event[0];
@@ -1519,7 +1524,7 @@ export class InboundGRPOComponent implements OnInit,AfterViewInit {
       this.palletValue = $event[0];
     }
   }
-
+ }
   OnTargetBinChange() {
     if (this.targetBin == "") {
       return;

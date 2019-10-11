@@ -656,6 +656,11 @@ export class BinTransferComponent implements OnInit {
 
 
   getLookupValue($event) {
+    if ($event != null && $event == "close") {
+      //nothing to do
+      return;
+    }
+    else {
     if (this.lookupfor == "ItemsList") {
       this.itemCode = $event[0];
       this.itemName = $event[1];
@@ -686,6 +691,7 @@ export class BinTransferComponent implements OnInit {
     }
     this.formatTransferNumbers();
     this.formatOnHandQty();
+  }
   }
 
   CheckTrackingandVisiblity() {

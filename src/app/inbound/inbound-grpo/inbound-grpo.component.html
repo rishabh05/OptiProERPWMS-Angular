@@ -74,7 +74,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Inbound_ReceivingBin'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" name="RecvbBinvalue"
+                                <input type="text" class="form-control form-control-sm" name="RecvbBinvalue" #RecBinVal
                                     [(ngModel)]=RecvbBinvalue placeholder="{{'Inbound_ReceivingBin'|translate}}" (blur)="OnBinChange()">
                                 <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" type="button" (click)="ShowBins()">

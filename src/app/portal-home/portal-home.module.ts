@@ -43,7 +43,7 @@ import { PalletizationModule } from '../palletization/palletization.module';
     FormsModule,
     NgbModule,
 
-    CommonModule,
+    CommonModule, 
     GridModule,
     SharedModule,
 

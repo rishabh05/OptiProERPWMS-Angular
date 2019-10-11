@@ -722,7 +722,11 @@ export class ProductionReceiptComponent implements OnInit {
    * @param $event this will return the value on row click of lookup grid.
    */
   getLookupValue($event) {
-
+    if ($event != null && $event == "close") {
+      //nothing to do
+      return;
+    }
+    else {
     if (this.lookupfor == "OrderList") {
       //this.lotNo = $event[0];
       this.orderNumber = $event[0];
@@ -731,7 +735,7 @@ export class ProductionReceiptComponent implements OnInit {
       this.binNo = $event[0];
       this.whsCode = $event[1];
     }
-
+  }
   }
 
 

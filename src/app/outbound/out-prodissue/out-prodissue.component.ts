@@ -315,6 +315,10 @@ export class OutProdissueComponent implements OnInit {
 
 
   }
+
+  OnPalletChange(){
+    
+  }
   calculateRequeiredMeterial(): boolean {
     let needMeterial: boolean = false;
     let localTotalPickQty: number = this.totalPickQty;

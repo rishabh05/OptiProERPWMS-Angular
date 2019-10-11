@@ -372,6 +372,10 @@ export class PhysicalCountComponent implements OnInit {
   }
 
   getLookupValue($event) {
+    if ($event != null && $event == "close") {
+      //nothing to do
+      return;
+    }else{
     if (this.lookupfor == "PhyCntItemList") {
       this.DocNo = $event[0];
       this.DocEntry = $event[1];
@@ -404,6 +408,7 @@ export class PhysicalCountComponent implements OnInit {
     }
     this.formatCountedQty();
     this.formatOnHandQty();
+  }
   }
 
   formatCountedQty() {

@@ -15,7 +15,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
   
   @ViewChild('VendScanInputField') vendInputScanField:ElementRef;
   public viewLines: boolean;
-  showLookupLoader: boolean = true;
+  showLookupLoader: boolean = true; 
   serviceData: any[];
   lookupfor: string;
   VendCode: string;
@@ -196,10 +196,16 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
   }
 
   getLookupValue($event) {
+    if ($event != null && $event == "close") {
+      //nothing to do
+      return;
+    }
+    else {
     this.VendCode = $event[0];
     this.VendName = $event[1];
     this.showNext = true;
     this.detailsAvailable = true;
+    }
   }
 
   public onNextClick() {

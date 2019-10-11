@@ -158,7 +158,11 @@ export class BinLabelComponent implements OnInit {
   * @param $event this will return the value on row click of lookup grid.
   */
   getLookupValue($event) {
-
+    if ($event != null && $event == "close") {
+      //nothing to do
+      return;
+    }
+    else {
     if (this.lookupfor == "FromBinList") {
       this.fromBin = $event[0];
       //this.whsCode = $event;
@@ -171,6 +175,7 @@ export class BinLabelComponent implements OnInit {
       console.log("selected item:" + this.toBin);
 
     }
+  }
   }
 
   /**

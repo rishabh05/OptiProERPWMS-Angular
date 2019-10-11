@@ -12,9 +12,11 @@ import { TrnaslateLazyModule } from 'src/translate-lazy.module';
 import { FormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { PalSplitComponent } from './pal-split/pal-split.component';
+import { PalTransferComponent } from './pal-transfer/pal-transfer.component';
 
 @NgModule({
-  declarations: [SplitTransferComponent, PalletMergeComponent, DepalletizeComponent, PalletizeComponent],
+  declarations: [SplitTransferComponent, PalletMergeComponent, DepalletizeComponent, PalletizeComponent, PalSplitComponent, PalTransferComponent],
   imports: [
     CommonModule,
     PalletizationRoutingModule,

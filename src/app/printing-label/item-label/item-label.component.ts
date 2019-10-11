@@ -216,7 +216,11 @@ export class ItemLabelComponent implements OnInit {
    * @param $event this will return the value on row click of lookup grid.
    */
   getLookupValue($event) {
-
+    if ($event != null && $event == "close") {
+      //nothing to do
+      return;
+    }
+    else {
     if (this.lookupfor == "ItemsList") {
       this.itemCode = $event[0];
       this.binNo = "";
@@ -227,6 +231,7 @@ export class ItemLabelComponent implements OnInit {
       this.binNo = $event[0];
       this.itemCode = $event[2];
 
+    }
     }
   }
 

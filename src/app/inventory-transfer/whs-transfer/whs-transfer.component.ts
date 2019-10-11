@@ -86,8 +86,14 @@ export class WhsTransferComponent implements OnInit {
   }
 
   getLookupValue($event) {
-    this.toWhse = $event[0];
-    this.showNext = true;
+    if ($event != null && $event == "close") {
+      //nothing to do
+      return;
+    }
+    else {
+      this.toWhse = $event[0];
+      this.showNext = true;
+    }
   }
 
   OnToWarehouseChange () {

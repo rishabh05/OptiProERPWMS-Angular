@@ -335,5 +335,12 @@
   "Plt_PalletMerge": "Pallet Merge",
   "Plt_Depalletization": "Depalletization",
   "Plt_Palletize": "Palletize",
+  "Plt_FromPallet": "From Pallet",
+  "Plt_ToPallet": "To Pallet",
+  "Common_Clear": "Clear",
+  "Plt_CurrentBatch":"Current Batch",
+  "Plt_NewBtSr":"New Batch/Serial",
+  
   "":""
+  
 }
