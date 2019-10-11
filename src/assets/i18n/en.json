@@ -341,6 +341,9 @@
   "Plt_CurrentBatch":"Current Batch",
   "Plt_NewBtSr":"New Batch/Serial",
   
+  "Plt_SelectedPallets": "Selected Pallets",
+  "Plt_NewPallet": "New Pallet",
+  "Plt_Merge": "Merge",
   "":""
   
 }
