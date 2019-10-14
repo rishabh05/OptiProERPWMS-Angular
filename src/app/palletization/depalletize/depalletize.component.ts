@@ -19,6 +19,8 @@ export class DepalletizeComponent implements OnInit {
   public serviceData: any;
   autoGenereatePalletEnable: boolean = false;
   palletNo: string = "";
+  showNewPallet: boolean = false;
+  createdNewPallet: string = "";
 
   constructor(private commonservice: Commonservice,
     private router: Router, private toastr: ToastrService, private translate: TranslateService) {
@@ -101,5 +103,13 @@ export class DepalletizeComponent implements OnInit {
 
   back(fromwhereval: number) {
     this.router.navigateByUrl('home/dashboard', { skipLocationChange: true });
+  }
+
+  onCheckChange() {
+    this.showNewPallet = !this.showNewPallet;
+    if (this.showNewPallet) {
+    } else {
+      this.createdNewPallet = "";
+    }
   }
 }
