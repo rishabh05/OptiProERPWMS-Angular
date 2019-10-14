@@ -21,7 +21,7 @@ export class OutOrderComponent implements OnInit,AfterViewInit {
   noButtonText: string = "Current";
   private customerName: string = "";
   public serviceData: any;
-  public lookupfor: any = 'out-order';
+  public lookupfor: any = '';
   public showLookup: boolean = false;
   public selectedCustomer: any;
   public outbound: OutboundData = new OutboundData();
@@ -36,7 +36,10 @@ export class OutOrderComponent implements OnInit,AfterViewInit {
   showConfirmDialog: boolean;
   showDeleiveryAndAdd: boolean;
 
-
+  showLoader: boolean = false;
+  lookupFor: any = "";
+  palletNo: string = "";
+  
   public pagable: boolean = false;
   public pageSize:number = Commonservice.pageSize;
   constructor(private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) { }
@@ -68,6 +71,35 @@ export class OutOrderComponent implements OnInit,AfterViewInit {
     }
 
   }
+
+  public getPalletList(from: string) {
+    this.showLoader = true;
+    this.commonservice.getPalletList("itemCode").subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        console.log(data);
+        if (data != null) {
+          if (data.length > 0) {
+            console.log(data);
+            this.showLoader = false;
+            this.serviceData = data;
+            this.showLookup = true;
+            this.lookupFor = "PalletList";
+            return;
+          } else {
+            this.showLookup = false;
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          }
+        }
+      },
+      error => {
+        this.showLoader = false;
+        console.log("Error: ", error);
+      }
+    );
+  }
+
+ 
 
   showAddToMeterialAndDelevery() {
     let dBit: boolean = false;
@@ -108,6 +140,7 @@ export class OutOrderComponent implements OnInit,AfterViewInit {
               }
             }
           }
+          this.lookupFor = 'out-order';
           this.showLookupLoader = false;
           this.serviceData = tempData;
           if(this.serviceData.length > 0){
@@ -139,12 +172,30 @@ export class OutOrderComponent implements OnInit,AfterViewInit {
 
   getLookupValue(lookupValue: any) {
 
-    this.outbound.OrderData = lookupValue;
-    this.orderNumber = this.outbound.OrderData.DOCNUM;
-    // lsOutbound
-    localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
-    this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
-    this.openSOOrderList();
+    if (lookupValue != null && lookupValue == "close") {
+      //nothing to do
+      return;
+    } else {
+      if (this.lookupFor == "PalletList") {
+        this.showLoader = false;
+        // this.showPalletLookup = true;
+        this.palletNo = lookupValue.Code;
+        //this.selectedPallets.push(lookupValue);
+      } else {
+        if (this.lookupFor == "PalletList") {
+          this.outbound.OrderData = lookupValue;
+          this.orderNumber = this.outbound.OrderData.DOCNUM;
+          // lsOutbound
+          localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+          this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
+          this.openSOOrderList();
+        } else {
+          if (this.lookupFor == "itemList") {
+
+          }
+        }
+      }
+    }
   }
 
   public openPOByUOM(selection: any) {
