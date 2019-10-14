@@ -41,12 +41,12 @@ export class InboundPolistComponent implements OnInit {
   showGRPOButton: boolean = false;
   selectedVendor: string = "";
   disablePO: boolean = false;
-  @ViewChild('poScanInputField') poScanInputField:ElementRef; 
+  @ViewChild('poScanInputField') poScanInputField: ElementRef;
   showLoader: boolean = false;
   pagable: boolean = false;
-  pageSize:number = Commonservice.pageSize;
+  pageSize: number = Commonservice.pageSize;
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
-    private inboundMasterComponent: InboundMasterComponent,private inventoryTransferService: InventoryTransferService) {
+    private inboundMasterComponent: InboundMasterComponent, private inventoryTransferService: InventoryTransferService) {
     let userLang = navigator.language.split('-')[0];
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
     translate.use(userLang);
@@ -64,7 +64,7 @@ export class InboundPolistComponent implements OnInit {
     this.selectedVendor = this.inboundMasterComponent.selectedVernder;
     this.showGRPOButton = false;
   }
-  
+
   ngAfterViewInit() {
     setTimeout(() => {
       this.poScanInputField.nativeElement.focus();
@@ -159,24 +159,35 @@ export class InboundPolistComponent implements OnInit {
             this.NonItemsDetail = [];
             this.SerialItemsDetail = [];
 
-            if(data.Table.length == 0){
+            if (data.Table.length == 0) {
               this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
               return;
             }
 
             this.openPOLinesModel = data.Table;
-          
+
             // var  unmatchedPOLinesModel = data.Table;
             this.updateReceivedQtyForSavedItems();
-           
+
             if (this.openPOLinesModel.length > 0) {
               this.showSerialTrackItem = true;
-             // this.pagable = true;
+              // this.pagable = true;
             }
             if (this.openPOLinesModel.length > this.pageSize) {
-              
+
               this.pagable = true;
             }
+
+            if (this.itemCode != "" && this.itemCode != undefined
+              && this.poCode != "" && this.poCode != undefined) {
+              const poline = this.openPOLinesModel[0];
+              this.openPOLineModel = poline;
+              // this.openPOLineModel.RPTQTY = 0;
+              // this.openPOLineModel.DocNum = this.poCode;
+              this.inboundMasterComponent.setClickedItemDetail(this.openPOLineModel);
+              this.getAutoLot(this.openPOLineModel.ITEMCODE);
+            }
+
           } else if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
@@ -269,11 +280,11 @@ export class InboundPolistComponent implements OnInit {
             return;
           }
           this.itemCode = data[0].ITEMCODE;
-         // this.itemName = data[0].ITEMNAME;
-         if(this.itemCode!=null && this.itemCode!=undefined && this.itemCode!=''){
-          this.openPOLines();
-         }
-         
+          // this.itemName = data[0].ITEMNAME;
+          if (this.itemCode != null && this.itemCode != undefined && this.itemCode != '') {
+            this.openPOLines();
+          }
+
         } else {
           this.toastr.error('', this.translate.instant("InvalidItemCode"));
           this.itemCode = "";
@@ -314,7 +325,7 @@ export class InboundPolistComponent implements OnInit {
 
         //this.inboundMasterComponent.setAutoLots(this.autoLot);
         localStorage.setItem("primaryAutoLots", JSON.stringify(this.autoLot));
-       // this.openPOLineModel = this.openPOLinesModel.find(e => e.ITEMCODE == itemCode);
+        // this.openPOLineModel = this.openPOLinesModel.find(e => e.ITEMCODE == itemCode);
         if (this.openPOLineModel != null) {
           localStorage.setItem("PalletizationEnabledForItem", "True");
           this.inboundMasterComponent.inboundComponent = 3;
@@ -410,7 +421,7 @@ export class InboundPolistComponent implements OnInit {
               }
             }
 
-            if(!isExist){
+            if (!isExist) {
               this.addToGRPOPONumbers.PONumbers.push({
                 PONumber: this.oSavedPOLotsArray.POReceiptLots[i].PONumber
               });
@@ -559,7 +570,7 @@ export class InboundPolistComponent implements OnInit {
   onGS1ItemScan1() {
     var inputValue = (<HTMLInputElement>document.getElementById('inboundScanInputField')).value;
     if (inputValue.length > 0) {
-      this.itemCode = inputValue;      
+      this.itemCode = inputValue;
     }
   }
 }
