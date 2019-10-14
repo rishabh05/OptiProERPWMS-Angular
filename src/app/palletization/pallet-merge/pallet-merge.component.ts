@@ -68,10 +68,6 @@ export class PalletMergeComponent implements OnInit {
     // alert("scan click");
   }
 
-  enableNewwPallet() {
-    this.showNewPallet = true;
-  }
-
   onPalletChange(from: string) {
     if (this.fromPalletNo == '' && this.toPalletNo == '') {
       return;

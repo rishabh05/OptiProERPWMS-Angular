@@ -1,3 +1,178 @@
-<p>
-  palletize works!
-</p>
+<div class="opti_container position-relative bg-white rounded">
+  <form class="form-with-fix-btnBar">
+    <div class="opti_container_inner" [perfectScrollbar]=" ">
+      <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
+        {{'Plt_Palletize'|translate}}
+      </h3>
+      <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+          <div class="form-group row">
+            <label for="inputPassword" class="col-sm-3 col-form-label">{{'Plt_PalletNo'|translate}}</label>
+            <div class="col-sm-9">
+              <div class="input-group input-group-sm">
+                <input type="text" name="fromPalletNo" (blur)="onPalletChange()" value='' [(ngModel)]="palletNo" class="form-control form-control-sm"
+                  placeholder="{{'Plt_PalletNo'|translate}}">
+                <div class="input-group-append has-seprate-btn">
+                  <button class="k-button k-primary btn" (click)="getPalletList()" type="button">
+                    <i class="opti-icon-hammenu"></i>
+                  </button>
+                  <button type="button" id="palletScanButton" (click)="onPalletScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                    <i class="opti-icon-qr-code fs-24"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Palletization Field For New Create-->
+      <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+          <div class="form-group row mt-2 mt-md-0">
+            <label class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9">
+              <div class="opti_checkbox-container">
+                <input type="checkbox" id="auth-2fa" class="k-checkbox float-left" name="newPallet" (change)="onCheckChange()">
+                <label class="k-checkbox-label" for="auth-2fa">{{'Inbound_NewPallet'|translate}}</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row mt-1 mt-md-0" *ngIf="showNewPallet">
+            <label class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9">
+              <div class="d-flex">
+                <input type="text" class="form-control form-control-sm" id="newPallet" name="newPallet" [(ngModel)]="createdNewPallet"
+                  placeholder="{{'Plt_NewPallet'|translate}}" [disabled]="autoGenereatePalletEnable">
+                <div class="ml-1 d-flex">
+                  <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button"
+                    (click)="createNewPallet(event)">
+                    <i class="opti-icon-add1 fs-24"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+          <div class="form-group row">
+            <label for="inputPassword" class="col-sm-3 col-form-label">{{'ItemCode'|translate}}</label>
+            <div class="col-sm-9">
+              <div class="input-group input-group-sm">
+                <input type="text" class="form-control form-control-sm" placeholder="{{'ItemCode'|translate}}" name="itemCode"
+                  [(ngModel)]="itemCode" (blur)="OnItemCodeChange()">
+                <div class="input-group-append">
+                  <button class="k-button k-primary btn" type="button" (click)="OnItemCodeLookupClick()">
+                    <i class="opti-icon-hammenu"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+          <div class="form-group row">
+            <label for="inputPassword" class="col-sm-3 col-form-label">{{'BatchSerial_No'|translate}}</label>
+            <div class="col-sm-9">
+              <div class="input-group input-group-sm">
+                <input type="text" id="invEnqBatchNoScanInput" class="form-control form-control-sm" [(ngModel)]="lotNo"
+                  (blur)="OnLotsChange()" #BatchNoInput name='batchSrNo' placeholder="{{'BatchSerial_No'|translate}}">
+                <div class="input-group-append has-seprate-btn">
+                  <button class="k-button k-primary btn" (click)="OnBatchSerialLookupClick()" type="button">
+                    <i class="opti-icon-hammenu"></i>
+                  </button>
+                  <button id="printBatchSerialscanButton" (click)="onBatchSerialScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
+                    type="button">
+                    <i class="opti-icon-qr-code fs-24"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+          <div class="form-group row">
+            <label for="inputPassword" class="col-sm-3 col-form-label">{{'Quantity'|translate}}</label>
+            <div class="col-sm-9">
+              <div class="d-flex">
+                <input type="number" class="form-control form-control-sm" #Quantity name="qty" [(ngModel)]=qty
+                  placeholder="{{'Quantity'|translate}}">
+                <div class="ml-1 d-flex">
+                  <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button"
+                    (click)="addQuantity(event)">
+                    <i class="opti-icon-add1 fs-24"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <kendo-grid class="no-shadow" [data]="selectedPallets" [resizable]="true" [sortable]="true">
+
+            <!-- grid for mobile start -->
+            <kendo-grid-column media="(max-width: 767px)" title="{{'Plt_SelectedPallets'|translate}}" class="opti_mobile-grid-td">
+              <ng-template kendoGridCellTemplate let-dataItem let-idx="rowIndex">
+                <dl class="opti_mobile_grid_dl">
+                  <dt>{{'Item'|translate}}</dt>
+                  <dd>{{ dataItem.Code }}</dd>
+                  <dt>{{'Currnt Batch/Serial'|translate}}</dt>
+                  <dd>{{ dataItem.Code }}</dd>
+                </dl>
+                <dl class="opti_mobile_grid_dl">
+                  <dt>{{'New Batch/Serial'|translate}}</dt>
+                  <dd>{{ dataItem.Code }}</dd>
+                  <dt>{{'Quantity'|translate}}</dt>
+                  <dd>{{ dataItem.Code }}</dd>
+                </dl>
+              </ng-template>
+            </kendo-grid-column>
+            <!-- grid for mobile end -->
+
+            <kendo-grid-column media="(min-width: 768px)" field="Code" title="{{'Item'|translate}}" [width]="30"></kendo-grid-column>
+            <kendo-grid-column media="(min-width: 768px)" field="Code" title="{{'Currnt Batch/Serial No.'|translate}}"
+              [width]="30"></kendo-grid-column>
+            <kendo-grid-column media="(min-width: 768px)" field="Code" title="{{'New Batch/Serial No.'|translate}}"
+              [width]="30"></kendo-grid-column>
+            <kendo-grid-column media="(min-width: 768px)" field="Code" title="{{'Quantity'|translate}}" [width]="30"></kendo-grid-column>
+          </kendo-grid>
+        </div>
+      </div>
+    </div>
+
+    <div class="fix-footer-btnBar">
+      <div class="col-sm-12 col-12">
+        <hr />
+      </div>
+      <div class="col-sm-12 col-12">
+        <button type="button" (click)="back(0)" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-close-outline"
+            role="presentation"></span> {{'Cancel'|translate}}</button>
+        <button type="button" *ngIf="palletNo!=''" (click)="depalletize()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
+            class="k-icon k-i-save"></span>
+          {{'Plt_AddToPallet'|translate}}</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<span *ngIf="showLookup==true">
+  <app-lookup [lookupfor]='lookupFor' [serviceData]='serviceData' (lookupkey)="getLookupValue($event)"></app-lookup>
+</span>
+
+<!-- Loader -->
+<div class="opti_loader full-section" *ngIf="showLoader==true">
+  <div class="opti_spinner"></div>
+</div>

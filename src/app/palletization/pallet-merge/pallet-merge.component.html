@@ -34,8 +34,7 @@
             </div>
             <div class="row">
                 <div class="col-12">
-                    <kendo-grid class="no-shadow" [data]="selectedPallets" [resizable]="true" [sortable]="true"
-                        >
+                    <kendo-grid class="no-shadow" [data]="selectedPallets" [resizable]="true" [sortable]="true">
 
                         <!-- grid for mobile start -->
                         <kendo-grid-column media="(max-width: 767px)" title="{{'Plt_SelectedPallets'|translate}}" class="opti_mobile-grid-td">
@@ -94,7 +93,8 @@
                         <div class="col-sm-9">
                             <div class="d-flex">
                                 <input type="text" class="form-control form-control-sm" id="newPallet" name="newPallet"
-                                    [(ngModel)]="createdNewPallet" placeholder="{{'Plt_NewPallet'|translate}}" [disabled]="autoGenereatePalletEnable">
+                                    [(ngModel)]="createdNewPallet" placeholder="{{'Plt_NewPallet'|translate}}"
+                                    [disabled]="autoGenereatePalletEnable">
                                 <div class="ml-1 d-flex">
                                     <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
                                         type="button" (click)="createNewPallet(event)">
@@ -115,8 +115,8 @@
             <div class="col-sm-12 col-12">
                 <button type="button" (click)="back(0)" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
-                <button type="button" *ngIf="selectedPallets && selectedPallets.length>0 && toPalletNo!=''" (click)="mergePallet()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
-                        class="k-icon k-i-save"></span>
+                <button type="button" *ngIf="selectedPallets && selectedPallets.length>0 && toPalletNo!=''" (click)="mergePallet()"
+                    class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-save"></span>
                     {{'Plt_Merge'|translate}}</button>
             </div>
         </div>
