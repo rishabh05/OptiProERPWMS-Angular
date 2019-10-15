@@ -2042,4 +2042,13 @@ export class InboundGRPOComponent implements OnInit,AfterViewInit {
         },
       );
   }
+
+  clearPalletItems(item){
+    console.log(this.palletValue);
+    for(var i=0;i<this.recvingQuantityBinArray.length;i++){
+      if(this.palletValue == this.recvingQuantityBinArray[i].PalletCode){
+        this.recvingQuantityBinArray.splice(i)
+      }
+    }
+  }
 }

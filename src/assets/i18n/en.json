@@ -346,6 +346,8 @@
   "Plt_Merge": "Merge",
   "Plt_Depalletize": "Depalletize",
   "Plt_AddToPallet": "Add To Pallet",
+  "Plt_CurrentBatchSerialNo": "Current Batch/Serial No.",
+  "Plt_NewBatchSerialNo": "New Batch/Serial No.",
   "":""
   
 }
