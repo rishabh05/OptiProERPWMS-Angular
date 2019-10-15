@@ -1231,30 +1231,7 @@ export class InboundGRPOComponent implements OnInit,AfterViewInit {
     }
   }
 
-  GetReceiptSubmitDateFormat(EXPDATE) {
-    if (EXPDATE == "" || EXPDATE == null)
-      return "";
-    else {
-      var d = new Date(EXPDATE);
-      var day;
-
-      if (d.getDate().toString().length < 2) {
-        day = "0" + d.getDate();
-      }
-      else {
-        day = d.getDate();
-      }
-      var mth;
-      if ((d.getMonth() + 1).toString().length < 2) {
-        mth = "0" + (d.getMonth() + 1).toString();
-      }
-      else {
-        mth = d.getMonth() + 1;
-      }
-      return day + ":" + mth + ":" + d.getFullYear();
-      //return mth + "/" + day + "/" + d.getFullYear();
-    }
-  }
+ 
 
 
   removePODetailData() {
@@ -2007,13 +1984,23 @@ export class InboundGRPOComponent implements OnInit,AfterViewInit {
     );
   }
 
-  checkAndValidateSerial() {
-    var type;
-    if (this.receiptData.options == '1') type = 0;
-    if (this.receiptData.options == '2') type = 1;
+  checkAndValidateSerial(){
 
+  }
+  checkAndValidateSerial1() {
+    var type = 0;
+    var itemcode = ""
+    var orderNo = "";
+    if (this.fromReceiptProduction) {
+      orderNo = this.receiptData.OrderNo;
+      itemcode = this.receiptData.ITEMCODE;
+      if (this.receiptData.status == "Accept")
+        type = 0;
+      else
+        type = 1;
+    } 
     this.checkValidateSerialSubs = this.productionService.isSerialExists(this.serialBatchNo,
-      this.receiptData.itemCode, type, this.tracking, this.receiptData.orderNumber,
+      itemcode, type, this.tracking, orderNo,
       this.fromReceiptProduction).subscribe(
         data => {
           if (data != undefined) {
@@ -2041,6 +2028,31 @@ export class InboundGRPOComponent implements OnInit,AfterViewInit {
           this.toastr.error('', error);
         },
       );
+  }
+
+  GetReceiptSubmitDateFormat(EXPDATE) {
+    if (EXPDATE == "" || EXPDATE == null)
+      return "";
+    else {
+      var d = new Date(EXPDATE);
+      var day;
+
+      if (d.getDate().toString().length < 2) {
+        day = "0" + d.getDate();
+      }
+      else {
+        day = d.getDate();
+      }
+      var mth;
+      if ((d.getMonth() + 1).toString().length < 2) {
+        mth = "0" + (d.getMonth() + 1).toString();
+      }
+      else {
+        mth = d.getMonth() + 1;
+      }
+       return day + ":" + mth + ":" + d.getFullYear();
+      //return mth + "/" + day + "/" + d.getFullYear();
+    }
   }
 
   clearPalletItems(item){

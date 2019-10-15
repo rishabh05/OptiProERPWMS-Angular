@@ -8,6 +8,10 @@ import { TranslateService } from '@ngx-translate/core';
 import { OutboundData } from 'src/app/models/outbound/outbound-data';
 import { RowClassArgs } from '@progress/kendo-angular-grid';
 import { SODETAIL, SOHEADER, DeliveryToken } from 'src/app/models/outbound/out-del-req';
+import { InboundService } from 'src/app/services/inbound.service';
+import { LabelPrintReportsService } from 'src/app/services/label-print-reports.service';
+import { Subscriber } from 'rxjs';
+import { ISubscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-out-order',
@@ -21,7 +25,7 @@ export class OutOrderComponent implements OnInit,AfterViewInit {
   noButtonText: string = "Current";
   private customerName: string = "";
   public serviceData: any;
-  public lookupfor: any = 'out-order';
+  public lookupfor: any = '';
   public showLookup: boolean = false;
   public selectedCustomer: any;
   public outbound: OutboundData = new OutboundData();
@@ -35,11 +39,18 @@ export class OutOrderComponent implements OnInit,AfterViewInit {
   showLookupLoader: boolean = false;
   showConfirmDialog: boolean;
   showDeleiveryAndAdd: boolean;
-
-
+  itemLabelSubs:ISubscription;
+  showLoader: boolean = false;
+  lookupFor: any = "";
+  palletNo: string = "";
+  
+  itemCode: string = "";
+  itemTracking: string = "";
+  selectedItem:string  = "";
   public pagable: boolean = false;
   public pageSize:number = Commonservice.pageSize;
-  constructor(private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) { }
+  constructor(private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice,
+     private toastr: ToastrService, private translate: TranslateService,private labelPrintReportsService: LabelPrintReportsService){ }
  
   ngAfterViewInit() {
     this.OrderNo.nativeElement.focus();
@@ -69,6 +80,117 @@ export class OutOrderComponent implements OnInit,AfterViewInit {
 
   }
 
+  public getPalletList() {
+    //this.showLoader = true; //method get pallet by orderNo
+    this.showLookupLoader = true;
+    this.commonservice.getPalletList("itemCode").subscribe(
+      (data: any) => {
+        
+        console.log(data);
+        if (data != null) {
+          if (data.length > 0) {
+            this.showLookupLoader = false;
+            console.log(data);
+      
+            this.serviceData = data;
+            this.lookupfor = "PalletList";
+            this.showLookup = true;
+            return;
+          } else {
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          }
+        }
+      },
+      error => {
+        this.showLookupLoader = false;
+        console.log("Error: ", error);
+      }
+    );
+  }
+ 
+  onPalletChange() {
+    this.showLookupLoader = true;
+    this.commonservice.isPalletValid(this.palletNo).subscribe(
+      (data: any) => {
+        this.showLookupLoader = false; 
+        console.log(data);
+        if (data != null) {
+          if (data.length > 0) {
+            if (data[0].Result == "0") {
+              this.toastr.error('', this.translate.instant("InValidPalletNo"));
+              this.palletNo = "";
+              return;
+            }
+          }
+        }
+        else {
+          this.toastr.error('', this.translate.instant("InValidPalletNo"));
+          this.palletNo = "";
+          return;
+        }
+      },
+      error => {
+        this.showLookupLoader = false;
+        console.log("Error: ", error);
+      }
+    );
+  }
+
+ /**
+   * Method to get list of inquries from server.
+   */
+  public getItemList() {
+    this.showLookupLoader = true;
+    this.itemLabelSubs = this.labelPrintReportsService.getItemCode().subscribe(
+      data => {
+        if (data != undefined && data.length > 0) {
+          if (data[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
+          this.showLookupLoader = false; 
+          this.serviceData = data; 
+          this.lookupfor = "ItemsList";  
+          this.showLookup = true;
+        }
+        else {
+          this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+        }
+
+      },
+      error => {
+        this.toastr.error('', error);
+        this.showLookupLoader = false;
+      },
+    );
+  }
+
+ /**
+   * 
+   * This method will check if entered code is valid or not on field blur event.
+   */
+  OnItemCodeChange() {
+    let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+
+    if (outboundData != undefined && outboundData != '') {
+      this.outbound = JSON.parse(outboundData);
+      var selectedData:any = {ACTUALOPENQTY: 257,CARDCODE: "AM-C1"
+        ,CONTAINERSIZE: ""
+        ,COUNT: 1
+        ,DELIVRDQTY: 1
+        ,DOCDUEDATE: "08/15/2019"
+        ,DOCENTRY: 1
+        ,DOCNUM: 1
+        ,ENABLECONTAINER: "",FACTOR: 1,GTINNO: "",INVENTORYUOM: null,ITEMCODE: "AM-MPS-MAKE111",ITEMCOUNT: 1
+        ,ITEMNAME: "SERIA;L",LINENUM: 0,LINESTATUS: "O",OPENQTY: "   258.000",QUANTITY: 258,REMQTY: 257,ROWNUM: 1,RPTQTY: 0,TRACKING: "S",TREETYPE: "P",UOM: "Manual"
+        ,U_LOTISSUEMETHOD: "",WHSCODE: "01"}
+      this.outbound.SelectedItem = selectedData;
+    localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+      this.router.navigateByUrl('home/outbound/outprodissue', { skipLocationChange: true });
+    }
+  }
+
+
   showAddToMeterialAndDelevery() {
     let dBit: boolean = false;
 
@@ -84,7 +206,7 @@ export class OutOrderComponent implements OnInit,AfterViewInit {
 
 
   onOrderNoBlur() {
-    if (this.orderNumber)
+    if (this.orderNumber) 
       this.openSOOrderList(this.orderNumber);
   }
 
@@ -100,6 +222,7 @@ export class OutOrderComponent implements OnInit,AfterViewInit {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
             return;
           }
+          this.lookupfor = "out-order";
           var tempData = resp;
           for(var i=0;i<this.outbound.DeleiveryCollection.length;i++){
             for(var j=0;j<resp.length;j++){
@@ -108,6 +231,7 @@ export class OutOrderComponent implements OnInit,AfterViewInit {
               }
             }
           }
+         
           this.showLookupLoader = false;
           this.serviceData = tempData;
           if(this.serviceData.length > 0){
@@ -136,15 +260,35 @@ export class OutOrderComponent implements OnInit,AfterViewInit {
     }
   }
 
+  palletListLookup(){
 
+  }
   getLookupValue(lookupValue: any) {
 
-    this.outbound.OrderData = lookupValue;
-    this.orderNumber = this.outbound.OrderData.DOCNUM;
-    // lsOutbound
-    localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
-    this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
-    this.openSOOrderList();
+    if (lookupValue != null && lookupValue == "close") {
+      //nothing to do
+      return;
+    } else {
+      if (this.lookupfor == "PalletList") {
+        this.showLoader = false;
+        // this.showPalletLookup = true;
+        this.palletNo = lookupValue.Code;
+        //this.selectedPallets.push(lookupValue);
+      } else {
+        if (this.lookupfor == "out-order") {
+          this.outbound.OrderData = lookupValue;
+          this.orderNumber = this.outbound.OrderData.DOCNUM;
+          // lsOutbound
+          localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+          this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
+          this.openSOOrderList();
+        } else {
+          if (this.lookupfor == "itemList") {
+              this.selectedItem = lookupValue.ITEMCODE;
+          }
+        }
+      }
+    }
   }
 
   public openPOByUOM(selection: any) {

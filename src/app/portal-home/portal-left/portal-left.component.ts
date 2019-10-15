@@ -120,6 +120,7 @@ export class PortalLeftComponent implements OnInit {
     localStorage.setItem("VendName", "");
     localStorage.setItem("selectedPO", "");
     localStorage.setItem("PONumber", "");
+    localStorage.setItem("primaryAutoLots", "");
   }
 
   onOutboundClick(){

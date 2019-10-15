@@ -7,9 +7,42 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PalSplitComponent implements OnInit {
 
+  fromPallet:any;
+  toPallet: any;
+  itemsData:any;
+  showNewPallet: any = false;
+  isNonTrack: any = false;
+  isPalletizationEnable: any = true;
+  newPalletValue:any;
+  palletValue:string = "";
+  autoGenereatePalletEnable: boolean = false;
+  showLoader: boolean = false;
+  showLookupLoader = true;
+  enteredQty:any = 0;
+  
   constructor() { }
 
   ngOnInit() {
+  }
+  onCheckChange() {
+    this.showNewPallet = !this.showNewPallet;
+    this.newPalletValue = "";
+  }
+
+  onFromLookupClick()
+  {
+
+  }
+  fromPalletChange(){
+
+  }
+
+  onToLookupClick()
+  {
+
+  }
+  toPalletChange(){
+    
   }
 
 }

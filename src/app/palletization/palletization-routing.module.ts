@@ -4,6 +4,8 @@ import { SplitTransferComponent } from './split-transfer/split-transfer.componen
 import { PalletMergeComponent } from './pallet-merge/pallet-merge.component';
 import { DepalletizeComponent } from './depalletize/depalletize.component';
 import { PalletizeComponent } from './palletize/palletize.component';
+import { PalTransferComponent } from './pal-transfer/pal-transfer.component';
+import { PalSplitComponent } from './pal-split/pal-split.component';
 
 const routes: Routes = [
   
@@ -12,6 +14,9 @@ const routes: Routes = [
   { path: 'pallet-merge', component:PalletMergeComponent  },
   { path: 'depalletize', component:DepalletizeComponent  },
   { path: 'palletize', component:PalletizeComponent  },
+  { path: 'plt-split', component:PalSplitComponent  },
+  { path: 'plt-transfer', component:PalTransferComponent  },
+  
 ];
 
 @NgModule({
