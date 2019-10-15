@@ -39,10 +39,10 @@
                             <label for="orderNumber" class="col-sm-3 col-form-label">{{'Plt_PalletNo'|translate}}</label>
                             <div class="col-sm-9">
                                 <div class="input-group input-group-sm">
-                                    <input type="text" #PalletNo name="pltNo" (blur)="onPalletBlur()" value='' [(ngModel)]="palletNo"
+                                    <input type="text" #PalletNo name="pltNo" (blur)="onPalletChange()" value='' [(ngModel)]="palletNo"
                                         class="form-control form-control-sm" placeholder="{{'Plt_PalletNo'|translate}}">
                                     <div class="input-group-append has-seprate-btn">
-                                        <button class="k-button k-primary btn" (click)="palletListLookup()" type="button">
+                                        <button class="k-button k-primary btn" (click)="getPalletList()" type="button">
                                             <i class="opti-icon-hammenu"></i>
                                         </button>
                                         <!-- <button class="k-button k-primary btn separate-btn"
@@ -66,10 +66,10 @@
                                 <label for="orderNumber" class="col-sm-3 col-form-label">{{'Item'|translate}}</label>
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-sm">
-                                        <input type="text" #PalletNo name="itemNo" (blur)="onItemBlur()" value='' [(ngModel)]="item"
+                                        <input type="text" #PalletNo name="itemNo" (blur)="OnItemCodeChange()" value='' [(ngModel)]="selectedItem"
                                             class="form-control form-control-sm" placeholder="{{'Item'|translate}}">
                                         <div class="input-group-append has-seprate-btn">
-                                            <button class="k-button k-primary btn" (click)="ItemListLookup()" type="button">
+                                            <button class="k-button k-primary btn" (click)="getItemList()" type="button">
                                                 <i class="opti-icon-hammenu"></i>
                                             </button>
                                             <!-- <button class="k-button k-primary btn separate-btn"

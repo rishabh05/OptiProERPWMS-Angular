@@ -330,7 +330,7 @@
   "Inbound_TargetWhsBlankErrMsg": "Target Warehouse cannot be blank",
   "Inbound_TargetBinBlankErrMsg": "Target Bin cannot be blank",
   "Plt_EnterPalletNo": "Enter new pallet no.",
-  "Plt_Pallelization": "Palletization",
+  "Plt_Palletization": "Palletization",
   "Plt_SplitTransfer": "Split/Transfer",
   "Plt_PalletMerge": "Pallet Merge",
   "Plt_Depalletization": "Depalletization",
@@ -346,6 +346,8 @@
   "Plt_Merge": "Merge",
   "Plt_Depalletize": "Depalletize",
   "Plt_AddToPallet": "Add To Pallet",
+  "Plt_Split": "Pallet Split",
+  "Plt_Transfer": "Pallet Transfer",
   "":""
   
 }
