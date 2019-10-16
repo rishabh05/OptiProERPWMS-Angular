@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { OutRequest } from '../models/outbound/request-model';
+import { Commonservice } from './commonservice.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,14 +13,14 @@ export class InboundService {
   public config_params: any;
   public outRequest: OutRequest = new OutRequest();
 
-  public httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    })
-  }
+  // public httpOptions = {
+  //   headers: new HttpHeaders({
+  //     'Content-Type': 'application/json',
+  //     'Accept': 'application/json'
+  //   })
+  // }
 
-  constructor(private httpclient: HttpClient) {
+  constructor(private httpclient: HttpClient,private commonService:Commonservice) {
     this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
   }
 
@@ -32,12 +33,12 @@ export class InboundService {
         UsernameForLic: localStorage.getItem("UserId")
       }])
     };
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetVendorList", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetVendorList", jObject, this.commonService.httpOptions);
   }
 
   IsVendorExists(vendor: string): Observable<any> {
     var jObject = { VendorCode: JSON.stringify([{ UserId: '', CompanyDBId: localStorage.getItem("CompID"), VendorCode: vendor }]) };
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsVendorExists", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsVendorExists", jObject, this.commonService.httpOptions);
   }
 
   getItemList(futurepo: boolean, vendercode: string, po: string): Observable<any> {
@@ -49,7 +50,7 @@ export class InboundService {
         FuturePO: futurepo, PO: po
       }])
     };
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetItemList", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetItemList", jObject, this.commonService.httpOptions);
   }
 
   getPOList(futurepo: boolean, vendercode: string, itemcode: string): Observable<any> {
@@ -64,12 +65,12 @@ export class InboundService {
       }])
     };
     console.log("get polist method call api :");
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetPOList", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetPOList", jObject, this.commonService.httpOptions);
   }
 
   IsPOExists(poCode: string, cardCode: string): Observable<any> {
     var jObject = { POCode: JSON.stringify([{ UserId: '', CompanyDBId: localStorage.getItem("CompID"), POCode: poCode, CardCode: cardCode }]) };
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsPOExists", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsPOExists", jObject, this.commonService.httpOptions);
   }
 
   GetOpenPOLines(futurepo: boolean, itemCode: string, po: string): Observable<any> {
@@ -83,7 +84,7 @@ export class InboundService {
         FuturePO: futurepo
       }])
     };
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetOpenPOLines", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetOpenPOLines", jObject, this.commonService.httpOptions);
   }
 
   getAutoLot(itemCode: string): Observable<any> {
@@ -94,7 +95,7 @@ export class InboundService {
         ItemCode: itemCode
       }])
     };
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetAutoLot", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetAutoLot", jObject, this.commonService.httpOptions);
   }
 
   getUOMs(itemCode: string): Observable<any> {
@@ -105,7 +106,7 @@ export class InboundService {
       }])
     };
     console.log("getUOMs API's request:"+JSON.stringify(jObject));
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/getUOM", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/getUOM", jObject, this.commonService.httpOptions);
   }
 
   getRevBins(QCrequired: string): Observable<any> {
@@ -116,17 +117,17 @@ export class InboundService {
         PageId: "GRPO"
       }])
     };
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetBinsForReceiptWithReceivingBin", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetBinsForReceiptWithReceivingBin", jObject, this.commonService.httpOptions);
   }
 
   binChange(binCode: string): Observable<any> {
     var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), BinCode: binCode, ItemCode: '', WhsCode: localStorage.getItem("whseId") }]) };
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsBinExist", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsBinExist", jObject, this.commonService.httpOptions);
   } 
  
   SubmitGoodsReceiptPO(oSubmitPOLots: any): Observable<any> {
     var jObject = { GoodsReceiptToken: JSON.stringify(oSubmitPOLots) };    
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/SubmitGoodsReceiptPO", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/SubmitGoodsReceiptPO", jObject, this.commonService.httpOptions);
   }
 
   // getTargetBins(QCrequired: string): Observable<any> {
@@ -135,7 +136,7 @@ export class InboundService {
   //       CompanyDBId: localStorage.getItem("CompID"), ItemCode: '',
   //       WhsCode: localStorage.getItem("whseId"), QCRequired: QCrequired,ageId: "GRPO"}])
   //   };
-  //   return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetBinsForReceiptWithReceivingBin", jObject, this.httpOptions);
+  //   return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetBinsForReceiptWithReceivingBin", jObject, this.commonService.httpOptions);
   // }
 
   /**
@@ -149,7 +150,7 @@ export class InboundService {
           //Chane dt 2-July-2018
           UserId: localStorage.getItem("UserId")
       }])};
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetWHS", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetWHS", jObject, this.commonService.httpOptions);
   }
 
   /**
@@ -159,7 +160,7 @@ export class InboundService {
   isWHSExists(whsCode:string){
 
     var jObject = { WhsCode: JSON.stringify([{ CompanyDBId:  localStorage.getItem("CompID"), ItemCode: '', WhsCode: whsCode}]) };
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsWhsExist", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsWhsExist", jObject, this.commonService.httpOptions);
   }
   /**
    * check and scan code.
@@ -167,7 +168,7 @@ export class InboundService {
    */
   checkAndScanCode(vendCode:string,scanInputString){
     var jObject = {Gs1Token: JSON.stringify([{Vsvendorid:vendCode,StrScan:scanInputString,CompanyDBId:localStorage.getItem("CompID")}])};
-    return this.httpclient.post(this.config_params.service_url + "/api/Gs1/GS1SETUP", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/Gs1/GS1SETUP", jObject, this.commonService.httpOptions);
   }
 
     /**
@@ -180,7 +181,7 @@ export class InboundService {
     var jObject = { PrintingObject: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"),
     USERID: localStorage.getItem("UserId"), RPTID: 6, DOCNO: psReceiptNo, 
     GUID: localStorage.getItem("GUID"), UsernameForLic: localStorage.getItem("UserId") }]) };
-    return this.httpclient.post(this.config_params.service_url + "/api/Printing/WMSPrintingService", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/Printing/WMSPrintingService", jObject, this.commonService.httpOptions);
    }
 }
 

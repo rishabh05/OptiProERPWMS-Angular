@@ -19,13 +19,14 @@ export class Commonservice {
  
   public href: any = window.location.href;
   public config_params: any;
+  public authTokenstr:string = "The remote server returned an error: (401) Unauthorized.";
 
   public httpOptions = {
     headers: new HttpHeaders({ 
       'Content-Type': 'application/json',
       'Accept': 'application/json'
     })
-  } 
+  }   
 
   constructor(private httpclient: HttpClient, private toastr: ToastrService, private router: Router) {
     this.loadConfig();
@@ -83,7 +84,21 @@ export class Commonservice {
     this.commonData.next(data);
   }
 
+  public unauthorizedToken(Error){
+    if(Error.error.ExceptionMessage == this.authTokenstr ){
+      this.RemoveLicenseAndSignout(this.toastr, this.router, Error.error.ExceptionMessage);    
+    }
+ }
 
+ public updateHeader(){
+  this.httpOptions = {
+    headers: new HttpHeaders({
+    'Content-Type':  'application/json',
+    'Accept':'application/json',
+    'Authorization': localStorage.getItem('accessToken')
+    })
+  };
+}
 
   // for Seeting color of theme.
   private themeData = new BehaviorSubject<any>(opticonstants.DEFAULTTHEMECOLOR);

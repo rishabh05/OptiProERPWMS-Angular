@@ -162,7 +162,17 @@ export class SigninComponent implements OnInit {
     private validateUserLogin() {
         //alert('validateUserLogin: ');
         this.signinService.ValidateUserLogin(this.userName, this.password).subscribe(
-            data => {
+            data => {                
+                if(data != null  && data != undefined){
+                    if(data.AuthenticationDetails.length > 0){
+                        let access_token = data.AuthenticationDetails[0].token_type +" "+data.AuthenticationDetails[0].access_token;            
+                        localStorage.setItem('accessToken', access_token);
+                        this.commonService.updateHeader();
+                    }  
+                    else{
+                      this.showLoader = false;                 
+                    }
+                  } 
                 // alert("data:"+JSON.stringify(data));
                 this.userDetails = data.Table;
                 this.handleValidationUserSuccessResponse();
@@ -171,7 +181,7 @@ export class SigninComponent implements OnInit {
 
                 // alert("error:"+JSON.stringify(error));
                 this.toastr.error('', this.translate.instant("Login_InvalidUnPwdErrMsg"),
-                    this.commonService.toast_config.iconClasses.error);
+                this.commonService.toast_config.iconClasses.error);
                 this.showLoader = false;
             }
         );
@@ -316,6 +326,9 @@ export class SigninComponent implements OnInit {
                 }
             },
             error => {
+                if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+//                    this.commonService.unauthorizedToken(error);               
+                }   
             }
         );
     }
