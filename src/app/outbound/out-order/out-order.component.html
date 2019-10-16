@@ -31,6 +31,60 @@
                 </div>
             </div>
 
+
+           
+            <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+                        <div class="form-group row">
+                            <label for="orderNumber" class="col-sm-3 col-form-label">{{'Plt_PalletNo'|translate}}</label>
+                            <div class="col-sm-9">
+                                <div class="input-group input-group-sm">
+                                    <input type="text" #PalletNo name="pltNo" (blur)="onPalletChange()" value='' [(ngModel)]="palletNo"
+                                        class="form-control form-control-sm" placeholder="{{'Plt_PalletNo'|translate}}">
+                                    <div class="input-group-append has-seprate-btn">
+                                        <button class="k-button k-primary btn" (click)="getPalletList()" type="button">
+                                            <i class="opti-icon-hammenu"></i>
+                                        </button>
+                                        <!-- <button class="k-button k-primary btn separate-btn"
+                                            (click)="openSOOrderList()" type="button">
+                                            <i class="opti-icon-search"></i>
+                                        </button> -->
+                                        <button type="button" id="poscanButton"  (click)="onPalletScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                            <i class="opti-icon-qr-code fs-24"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+                            <div class="form-group row">
+                                <label for="orderNumber" class="col-sm-3 col-form-label">{{'Item'|translate}}</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" #PalletNo name="itemNo" (blur)="OnItemCodeChange()" value='' [(ngModel)]="selectedItem"
+                                            class="form-control form-control-sm" placeholder="{{'Item'|translate}}">
+                                        <div class="input-group-append has-seprate-btn">
+                                            <button class="k-button k-primary btn" (click)="getItemList()" type="button">
+                                                <i class="opti-icon-hammenu"></i>
+                                            </button>
+                                            <!-- <button class="k-button k-primary btn separate-btn"
+                                                (click)="openSOOrderList()" type="button">
+                                                <i class="opti-icon-search"></i>
+                                            </button> -->
+                                            <button type="button" id="poscanButton"  (click)="onItemScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                                <i class="opti-icon-qr-code fs-24"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
             <div *ngIf="showSOIetDetail==true && orderNumber!=undefined">
                 <!-- Serial tracked item -->
                 <div class="row" *ngIf="soItemsDetail!=undefined && soItemsDetail!=null && soItemsDetail.length>0 ">

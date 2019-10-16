@@ -657,7 +657,7 @@ export class ProductionReceiptComponent implements OnInit {
   }
   checkAndValidateSerial(){
     var type;
-    if(this.model.options=='1') type = 0;
+    if(this.model.options=='1') type = 0;  //model.options =1 means actual qty, model.options =2 means reject qty.
     if(this.model.options=='2') type = 1;
     this.checkValidateSerialSubs = this.productionService.isSerialExists(this.serialBatchNo,this.itemCode,type,this.tracking,this.orderNumber, true).subscribe(
       data => {
