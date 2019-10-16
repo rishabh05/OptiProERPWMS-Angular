@@ -159,6 +159,12 @@ export class ProductionReceiptComponent implements OnInit {
       error => {
         console.log("Error: ", error);  
         this.binNo = "";
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
+        this.toastr.error('', error);
+       }
       }
     );
   }
@@ -269,7 +275,12 @@ export class ProductionReceiptComponent implements OnInit {
         }
       },
       error => {
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       },
     );
   }
@@ -685,7 +696,12 @@ export class ProductionReceiptComponent implements OnInit {
         }
       },
       error => {
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       },
     );
   }
@@ -713,7 +729,12 @@ export class ProductionReceiptComponent implements OnInit {
         } 
       },
       error => {
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       },
     );
   }
@@ -770,7 +791,12 @@ export class ProductionReceiptComponent implements OnInit {
       } 
       },
       error => {
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       },
     );
 
@@ -791,7 +817,12 @@ export class ProductionReceiptComponent implements OnInit {
     } 
     },
     error => {
+      if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+        this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+     } 
+     else{
       this.toastr.error('', error);
+     }
     },);
   }
 
@@ -817,7 +848,12 @@ export class ProductionReceiptComponent implements OnInit {
     } 
     },
     error => {
+      if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+        this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+     } 
+     else{
       this.toastr.error('', error);
+     }
     },);
   }
 

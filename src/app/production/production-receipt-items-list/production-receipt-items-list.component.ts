@@ -63,7 +63,12 @@ export class ProductionReceiptItemsListComponent implements OnInit {
         }
       },
       error => {
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       },
     );
 
@@ -84,7 +89,12 @@ export class ProductionReceiptItemsListComponent implements OnInit {
         }
       },
       error => {
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       });
   }
   pagable: boolean = false;
@@ -276,7 +286,12 @@ export class ProductionReceiptItemsListComponent implements OnInit {
         }
       },
       error => {
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       },
     );
   }
@@ -316,7 +331,12 @@ export class ProductionReceiptItemsListComponent implements OnInit {
         }
       },
       error => {
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       },
     );
   }

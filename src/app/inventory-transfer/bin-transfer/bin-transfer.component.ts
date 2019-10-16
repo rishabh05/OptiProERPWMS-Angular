@@ -165,7 +165,12 @@ export class BinTransferComponent implements OnInit {
         }
       },
       error => {
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       }
     );
   }
@@ -204,7 +209,12 @@ export class BinTransferComponent implements OnInit {
         }
       },
       error => {
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       }
     );
   }
@@ -238,7 +248,12 @@ export class BinTransferComponent implements OnInit {
         }
       },
       error => {
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       }
     );
   }
@@ -259,7 +274,12 @@ export class BinTransferComponent implements OnInit {
         }
       },
       error => {
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       }
     );
   }
@@ -287,7 +307,12 @@ export class BinTransferComponent implements OnInit {
         }
       },
       error => {
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       }
     );
   }
@@ -318,7 +343,12 @@ export class BinTransferComponent implements OnInit {
         }
       },
       error => {
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       }
     );
   }
@@ -364,7 +394,12 @@ export class BinTransferComponent implements OnInit {
         }
       },
       error => {
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       }
     );
   }
@@ -400,7 +435,12 @@ export class BinTransferComponent implements OnInit {
         }
       },
       error => {
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       }
     );
   }
@@ -431,7 +471,12 @@ export class BinTransferComponent implements OnInit {
         }
       },
       error => {
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       }
     );
   }
@@ -569,7 +614,12 @@ export class BinTransferComponent implements OnInit {
         }
       },
       error => {
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       }
     );
   }

@@ -129,6 +129,14 @@ export class OutProdissueComponent implements OnInit {
             let el: any = document.getElementById('gridSelectedMeterial');
             this.getLookupValue(mdata, el, true);
             this.manageUOM();
+          },
+          error => {            
+            if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+              this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+           } 
+           else{
+            this.toastr.error('', error);
+           }
           }
         );
       }
@@ -303,17 +311,24 @@ export class OutProdissueComponent implements OnInit {
               },
               error => {
                 console.log("Error when checking availability: ", error);
+                if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+                  this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+               } 
+               else{
+                this.toastr.error('', error);
+               }
               });
         }
       },
       error => {
         console.log("Error: ", error);
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
+        this.toastr.error('', error);
+       }
       });
-
-
-
-
-
   }
 
   OnPalletChange(){
@@ -487,8 +502,15 @@ export class OutProdissueComponent implements OnInit {
           } else {
             this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
           }
-        }
-        
+        }        
+      },
+      error => {            
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
+        this.toastr.error('', error);
+       }
       }
     )
   }
@@ -1169,8 +1191,12 @@ export class OutProdissueComponent implements OnInit {
         },
         error => {
           this.showLookupLoader = false;
-          console.log(
-            error);
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+         } 
+         else{
+          this.toastr.error('', error);
+         }
         }
 
       );
@@ -1225,7 +1251,12 @@ export class OutProdissueComponent implements OnInit {
       },
       error => {
         //this.showLoader = false;
-        console.log("Error: ", error);
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
+        this.toastr.error('', error);
+       }
       }
     );
   }
@@ -1273,7 +1304,12 @@ export class OutProdissueComponent implements OnInit {
       },
       error => {
         this.showLookup = false;
-        console.log("Error: ", error);
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
+        this.toastr.error('', error);
+       }
       }
     );
   }

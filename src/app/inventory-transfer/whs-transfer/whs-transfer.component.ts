@@ -58,7 +58,12 @@ export class WhsTransferComponent implements OnInit {
       },
       error => {
         this.showLoader = false;
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       }
     );
   }
@@ -124,7 +129,12 @@ export class WhsTransferComponent implements OnInit {
       },
       error => {
         this.showLoader = false;
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       }
     );
     if (this.fromWhse == this.toWhse && this.fromWhse != "" && this.toWhse != "") {

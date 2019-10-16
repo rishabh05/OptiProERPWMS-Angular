@@ -104,6 +104,12 @@ export class OutOrderComponent implements OnInit,AfterViewInit {
       error => {
         this.showLookupLoader = false;
         console.log("Error: ", error);
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
+        this.toastr.error('', error);
+       }
       }
     );
   }
@@ -132,6 +138,12 @@ export class OutOrderComponent implements OnInit,AfterViewInit {
       error => {
         this.showLookupLoader = false;
         console.log("Error: ", error);
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
+        this.toastr.error('', error);
+       }
       }
     );
   }
@@ -161,6 +173,12 @@ export class OutOrderComponent implements OnInit,AfterViewInit {
       error => {
         this.toastr.error('', error);
         this.showLookupLoader = false;
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
+        this.toastr.error('', error);
+       }
       },
     );
   }
@@ -247,9 +265,15 @@ export class OutOrderComponent implements OnInit,AfterViewInit {
           
         },
         error => {
-          this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
+         // this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
           this.showLookupLoader = false;
           this.showLookup = false;
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+         } 
+         else{
+          this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
+         }
         }
       );
     }
@@ -370,8 +394,14 @@ export class OutOrderComponent implements OnInit,AfterViewInit {
           this.showLookupLoader = false;
         },
         error => {
-          this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
+         // this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
           this.showLookupLoader = false;
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+         } 
+         else{
+          this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
+         }
         }
       );
     }
@@ -685,8 +715,12 @@ export class OutOrderComponent implements OnInit,AfterViewInit {
         },
         error => {
           this.showLookupLoader = false;
-          console.log(
-            error);
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+         } 
+         else{
+          this.toastr.error('', error);
+         }
         }
 
       );

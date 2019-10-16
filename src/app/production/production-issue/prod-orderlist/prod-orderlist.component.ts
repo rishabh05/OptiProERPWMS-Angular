@@ -82,7 +82,12 @@ export class ProdOrderlistComponent implements OnInit {
       },
       error => {
         this.showLoader = false;
-        console.log("Error: ", error);
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
+        this.toastr.error('', error);
+       }
       }
     );
   }
@@ -155,7 +160,12 @@ export class ProdOrderlistComponent implements OnInit {
       },
       error => {
         this.showLoader = false;
-        console.log("Error: ", error);
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
+        this.toastr.error('', error);
+       }
       }
     );
   }
@@ -489,8 +499,12 @@ export class ProdOrderlistComponent implements OnInit {
         },
         error => {
           this.showLoader = false;
-          console.log(
-            error);
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+         } 
+         else{
+          this.toastr.error('', error);
+         }
         }
 
       );
