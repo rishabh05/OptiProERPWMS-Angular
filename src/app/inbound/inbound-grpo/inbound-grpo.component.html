@@ -284,7 +284,8 @@
                         <kendo-grid-column media="(min-width: 768px)" field="VendorLot" [width]="18" title="{{mfrGridColumnText}}">
                             <ng-template kendoGridCellTemplate let-dataItem let-idx='rowIndex'>
                                 <input type="text" class="form-control form-control-sm" name="dataItem.VendorLot" value={{dataItem.VendorLot}}
-                                    id="display_name" #display_name (change)="updateVendorLot(display_name.value, idx)">
+                                    id="display_name" #display_name (change)="updateVendorLot(display_name.value, idx)"
+                                    [disabled]="dataItem.autoLot == 'true'">
                             </ng-template>
                         </kendo-grid-column>
 

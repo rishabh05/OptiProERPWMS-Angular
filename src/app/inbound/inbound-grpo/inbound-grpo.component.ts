@@ -20,7 +20,7 @@ import { ProductionService } from 'src/app/services/production.service';
   templateUrl: './inbound-grpo.component.html',
   styleUrls: ['./inbound-grpo.component.scss']
 })
-export class InboundGRPOComponent implements OnInit,AfterViewInit {
+export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
   dialogMsg: string = ""
   yesButtonText: string = "";
@@ -108,8 +108,8 @@ export class InboundGRPOComponent implements OnInit,AfterViewInit {
   itemsData: any = [];
   autoGenereatePalletEnable: boolean = false;
   checkValidateSerialSubs: ISubscription;
-  @ViewChild('RecBinVal') RecBinVal:ElementRef;
-  
+  @ViewChild('RecBinVal') RecBinVal: ElementRef;
+
   constructor(private inboundService: InboundService, private commonservice: Commonservice,
     private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent, private productionService: ProductionService) {
@@ -121,8 +121,8 @@ export class InboundGRPOComponent implements OnInit,AfterViewInit {
   }
   ngAfterViewInit(): void {
     console.log('view after init');
-    this.RecBinVal.nativeElement.focus();
-   // this.itemCodeInput.nativeElement.focus();
+    // this.RecBinVal.nativeElement.focus();
+    // this.itemCodeInput.nativeElement.focus();
   }
 
   ngOnInit() {
@@ -363,12 +363,22 @@ export class InboundGRPOComponent implements OnInit,AfterViewInit {
   }
 
   updateVendorLot(value, rowindex) {
+    value = value.trim();
     for (let i = 0; i < this.recvingQuantityBinArray.length; ++i) {
       if (i === rowindex) {
         this.recvingQuantityBinArray[i].VendorLot = value;
         if (this.isPalletizationEnable) {
-          this.recvingQuantityBinArray[i].palletSBNo = value + "-" + this.recvingQuantityBinArray[i].PalletCode;
-          this.recvingQuantityBinArray[i].LotNumber = value + "-" + this.recvingQuantityBinArray[i].PalletCode;
+          if (this.recvingQuantityBinArray[i].PalletCode == "") {
+            this.recvingQuantityBinArray[i].palletSBNo = value;
+          } else {
+            this.recvingQuantityBinArray[i].palletSBNo = value + "-" + this.recvingQuantityBinArray[i].PalletCode;
+          }
+
+          if (this.recvingQuantityBinArray[i].PalletCode == "") {
+            this.recvingQuantityBinArray[i].LotNumber = value;
+          } else {
+            this.recvingQuantityBinArray[i].LotNumber = value + "-" + this.recvingQuantityBinArray[i].PalletCode;
+          }
         }
       }
     }
@@ -418,10 +428,10 @@ export class InboundGRPOComponent implements OnInit,AfterViewInit {
       this.toastr.error('', this.translate.instant("INVALIDBIN"));
       return;
     }
-    // if (this.isPalletizationEnable && (this.palletValue == "" || this.palletValue == undefined)) {
-    //   this.toastr.error('', this.translate.instant("InValidPalletNo"));
-    //   return;
-    // }
+    if (this.isPalletizationEnable && (this.palletValue == "" || this.palletValue == undefined)) {
+      this.toastr.error('', this.translate.instant("Plt_PalletRequired"));
+      return;
+    }
     if (!this.validateQuantity()) {
       return;
     }
@@ -438,6 +448,7 @@ export class InboundGRPOComponent implements OnInit,AfterViewInit {
       let autoLots = JSON.parse(localStorage.getItem("primaryAutoLots"));
       if (this.isSerial) {
         while (this.qty > 0 && this.qty != 0) {
+
           if (autoLots != null && autoLots != null && autoLots.length > 0 && autoLots[0].AUTOLOT == "Y") {
             this.LastSerialNumber = [];
             this.LineId = [];
@@ -445,20 +456,29 @@ export class InboundGRPOComponent implements OnInit,AfterViewInit {
             let result = this.recvingQuantityBinArray.find(element => element.LotNumber == this.searlNo);
             if (result == undefined) {
               this.searlNo = (this.searlNo == "null" || this.searlNo == null) ? "" : this.searlNo;
-              if (this.searlNo != '' && this.searlNo != undefined && this.palletValue != '') {
-                this.searlNo = this.searlNo + "-" + this.palletValue;
+              var plt = (this.palletValue == "Loose") ? "" : this.palletValue;
+              if (this.searlNo != '' && this.searlNo != undefined && plt != '') {
+                this.MfrSerial = this.searlNo;
+                this.searlNo = this.searlNo + "-" + plt;
+              }
+              var autLotFlag = "false";
+              if (this.MfrSerial != '' && this.MfrSerial != undefined) {
+                autLotFlag = "true";
               }
 
-              this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, 1, this.RecvbBinvalue, this.expiryDate, this.palletValue));
+              this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial,
+                this.searlNo, 1, this.RecvbBinvalue, this.expiryDate, plt, autLotFlag));
               this.qty = this.qty - 1;
             }
           } else {
             this.searlNo = (this.searlNo == "null" || this.searlNo == null) ? "" : this.searlNo;
-            if (this.searlNo != '' && this.searlNo != undefined && this.palletValue != '') {
-              this.searlNo = this.searlNo + "-" + this.palletValue;
+            var plt = (this.palletValue == "Loose") ? "" : this.palletValue;
+            if (this.searlNo != '' && this.searlNo != undefined && plt != '') {
+              this.searlNo = this.searlNo + "-" + plt;
             }
 
-            this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, 1, this.RecvbBinvalue, this.expiryDate, this.palletValue));
+            this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial,
+              this.searlNo, 1, this.RecvbBinvalue, this.expiryDate, plt, "false"));
             this.qty = this.qty - 1;
           }
         }
@@ -501,28 +521,39 @@ export class InboundGRPOComponent implements OnInit,AfterViewInit {
       let result = this.recvingQuantityBinArray.find(element => element.LotNumber == this.searlNo);
       if (result == undefined) {
         this.searlNo = (this.searlNo == "null" || this.searlNo == null) ? "" : this.searlNo;
-        if (this.searlNo != '' && this.searlNo != undefined && this.palletValue != '') {
-          this.searlNo = this.searlNo + "-" + this.palletValue;
+        var plt = (this.palletValue == "Loose") ? "" : this.palletValue;
+        if (this.searlNo != '' && this.searlNo != undefined && plt != '') {
+          this.MfrSerial = this.searlNo;
+          this.searlNo = this.searlNo + "-" + plt;
         }
 
-        this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, qty, this.RecvbBinvalue, this.expiryDate, this.palletValue));
+        var autLotFlag = "false";
+        if (this.MfrSerial != '' && this.MfrSerial != undefined) {
+          autLotFlag = "true";
+        }
+
+        this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial,
+          this.searlNo, qty, this.RecvbBinvalue, this.expiryDate, plt, autLotFlag));
       } else {
         this.batchCalculation(autoLots, this.qty);
       }
     } else {
       this.searlNo = (this.searlNo == "null" || this.searlNo == null) ? "" : this.searlNo;
-      if (this.searlNo != '' && this.searlNo != undefined && this.palletValue != '') {
-        this.searlNo = this.searlNo + "-" + this.palletValue;
+      var plt = (this.palletValue == "Loose") ? "" : this.palletValue;
+      if (this.searlNo != '' && this.searlNo != undefined && plt != '') {
+        this.searlNo = this.searlNo + "-" + plt;
       }
 
-      this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial, this.searlNo, qty, this.RecvbBinvalue, this.expiryDate, this.palletValue));
+      this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial,
+        this.searlNo, qty, this.RecvbBinvalue, this.expiryDate, plt, "false"));
     }
   }
 
   addNonTrackQty(qty: any) {
     let result = this.recvingQuantityBinArray.find(element => element.Bin == this.RecvbBinvalue);
     if (result == undefined) {
-      this.recvingQuantityBinArray.push(new RecvingQuantityBin("", "", qty, this.RecvbBinvalue, this.expiryDate, this.palletValue));
+
+      this.recvingQuantityBinArray.push(new RecvingQuantityBin("", "", qty, this.RecvbBinvalue, this.expiryDate, this.palletValue, "false"));
       if (!this.fromReceiptProduction) {
         this.showButton = true;
         this.showRecButton = true;
@@ -703,7 +734,7 @@ export class InboundGRPOComponent implements OnInit,AfterViewInit {
         return;
       }
     }
-
+    
     if (this.fromReceiptProduction) {
       //prepare model for receipt from production
 
@@ -1190,6 +1221,7 @@ export class InboundGRPOComponent implements OnInit,AfterViewInit {
         SuppSerial: this.recvingQuantityBinArray[iBtchIndex].VendorLot,
         ParentLineNo: Number(localStorage.getItem("Line")),
         LotSteelRollId: "",
+        ItemCode: this.openPOLineModel[0].ITEMCODE,
         PalletCode: this.recvingQuantityBinArray[iBtchIndex].PalletCode
       });
     }
@@ -1231,7 +1263,7 @@ export class InboundGRPOComponent implements OnInit,AfterViewInit {
     }
   }
 
- 
+
 
 
   removePODetailData() {
@@ -1481,27 +1513,27 @@ export class InboundGRPOComponent implements OnInit,AfterViewInit {
     }
     else {
 
-    if (this.lookupfor == "RecvBinList") {
-      //this.itemCode = $event[0];
-      if (this.targetBinClick) {
-        this.targetBin = $event[0];
-        this.targetBinClick = false;
-      } else {
-        this.RecvbBinvalue = $event[0];
+      if (this.lookupfor == "RecvBinList") {
+        //this.itemCode = $event[0];
+        if (this.targetBinClick) {
+          this.targetBin = $event[0];
+          this.targetBinClick = false;
+        } else {
+          this.RecvbBinvalue = $event[0];
+        }
+
       }
+      else if (this.lookupfor == "toWhsList") {
+        console.log("value of lots" + $event);
+        console.log("value of lots" + $event.LOTNO);
+        this.targetWhse = $event[0];
+        //this.itemCode = $event[2];
 
-    }
-    else if (this.lookupfor == "toWhsList") {
-      console.log("value of lots" + $event);
-      console.log("value of lots" + $event.LOTNO);
-      this.targetWhse = $event[0];
-      //this.itemCode = $event[2];
-
-    } else if (this.lookupfor == "PalletList") {
-      this.palletValue = $event[0];
+      } else if (this.lookupfor == "PalletList") {
+        this.palletValue = $event[0];
+      }
     }
   }
- }
   OnTargetBinChange() {
     if (this.targetBin == "") {
       return;
@@ -1795,38 +1827,36 @@ export class InboundGRPOComponent implements OnInit,AfterViewInit {
   }
 
   OnPalletChange() {
-    // if (this.palletValue == "") {
-    //   return;
-    // }
-    // this.showLoader = true;
-    // this.commonservice.palletChange(this.palletValue).subscribe(
-    //   (data: any) => {
-    //     this.showLoader = false;
-    //     console.log(data);
-    //     if (data != null) {
-    //       if (data.length > 0) {
-    //         if (data[0].Result == "0") {
-    //           this.toastr.error('', this.translate.instant("InValidPalletNo"));
-    //           this.palletValue = "";
-    //           return;
-    //         }
-    //         else {
-    //           this.palletValue = data[0].Code;
-    //         }
-    //       }
-    //     }
-    //     else {
-    //       this.toastr.error('', this.translate.instant("InValidPalletNo"));
-    //       this.palletValue = "";
-    //       return;
-    //     }
-    //   },
-    //   error => {
-    //     this.showLoader = false;
-    //     console.log("Error: ", error);
-    //     this.RecvbBinvalue = "";
-    //   }
-    // );
+    if (this.palletValue == "" || this.palletValue == undefined) {
+      return;
+    }
+
+    this.showLoader = true;
+    this.commonservice.isPalletValid(this.palletValue).subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        console.log(data);
+        if (data != null) {
+          if (data.length > 0) {
+            this.palletValue = data[0].Code;
+          } else {
+            this.toastr.error('', this.translate.instant("InValidPalletNo"));
+            this.palletValue = "";
+            return;
+          }
+        }
+        else {
+          this.toastr.error('', this.translate.instant("InValidPalletNo"));
+          this.palletValue = "";
+          return;
+        }
+      },
+      error => {
+        this.showLoader = false;
+        console.log("Error: ", error);
+        this.toastr.error('', this.translate.instant("InValidPalletNo"));
+      }
+    );
   }
 
 
@@ -1984,7 +2014,7 @@ export class InboundGRPOComponent implements OnInit,AfterViewInit {
     );
   }
 
-  checkAndValidateSerial(){
+  checkAndValidateSerial() {
 
   }
   checkAndValidateSerial1() {
@@ -1998,7 +2028,7 @@ export class InboundGRPOComponent implements OnInit,AfterViewInit {
         type = 0;
       else
         type = 1;
-    } 
+    }
     this.checkValidateSerialSubs = this.productionService.isSerialExists(this.serialBatchNo,
       itemcode, type, this.tracking, orderNo,
       this.fromReceiptProduction).subscribe(
@@ -2050,15 +2080,15 @@ export class InboundGRPOComponent implements OnInit,AfterViewInit {
       else {
         mth = d.getMonth() + 1;
       }
-       return day + ":" + mth + ":" + d.getFullYear();
+      return day + ":" + mth + ":" + d.getFullYear();
       //return mth + "/" + day + "/" + d.getFullYear();
     }
   }
 
-  clearPalletItems(item){
+  clearPalletItems(item) {
     console.log(this.palletValue);
-    for(var i=0;i<this.recvingQuantityBinArray.length;i++){
-      if(this.palletValue == this.recvingQuantityBinArray[i].PalletCode){
+    for (var i = 0; i < this.recvingQuantityBinArray.length; i++) {
+      if (this.palletValue == this.recvingQuantityBinArray[i].PalletCode) {
         this.recvingQuantityBinArray.splice(i)
       }
     }

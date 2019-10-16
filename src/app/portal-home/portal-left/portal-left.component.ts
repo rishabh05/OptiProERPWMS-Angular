@@ -72,7 +72,9 @@ export class PortalLeftComponent implements OnInit {
 
   displayMenuOptions(menus: any[]){
     menus.forEach(element => {
-      document.getElementById(element.id); 
+      if(document.getElementById(element.id) != null){
+       document.getElementById(element.id).style.display = 'block';
+      }
     });
   }
 

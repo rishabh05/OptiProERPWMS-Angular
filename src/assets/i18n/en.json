@@ -350,6 +350,7 @@
   "Plt_Transfer": "Pallet Transfer",
   "Plt_CurrentBatchSerialNo": "Current Batch/Serial No.",
   "Plt_NewBatchSerialNo": "New Batch/Serial No.",
+  "Plt_PalletRequired": "Pallet number required.",
   "":""
   
 }

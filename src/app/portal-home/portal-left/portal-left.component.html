@@ -103,34 +103,35 @@
                 </a>
             </li> -->
 
-            <li id="PUR" (click)="listClick($event, 'inbound')" [ngClass]="{'active': selectedItem == 'inbound'}">
+            <li id="PUR" (click)="listClick($event, 'inbound')" 
+             [ngClass]="{'active': selectedItem == 'inbound'}" [ngStyle]="{'display':'none'}">
                 <a roterLink="inbound" (click)="onInboundClick()">
                     <i class="opti-icon-inbound-order" [style.color]="selectedThemeColor"></i>
                     <span class="text">{{'Inbound'|translate}}</span>
                 </a>
             </li>
 
-            <li id="SLS" (click)="listClick($event, 'outbound')" [ngClass]="{'active': selectedItem == 'outbound'}">
+            <li id="SLS" (click)="listClick($event, 'outbound')" [ngClass]="{'active': selectedItem == 'outbound'}" [ngStyle]="{'display':'none'}">
                 <a roterLink="outbound" (click)="onOutboundClick()">
                     <i class="opti-icon-outbound-order" [style.color]="selectedThemeColor"></i>
                     <span class="text">{{'Outbound'|translate}}</span>
                 </a>
             </li>
-            <li class="dropdown" dropdown id="INV" >
+            <li class="dropdown" dropdown id="INV" [ngStyle]="{'display':'none'}">
                 <a dropdownToggle class="dropdown-toggle">
                     <i class="opti-icon-inventory-transfer" [style.color]="selectedThemeColor"></i>
                     <span class="text">{{'InventoryTransfer'|translate}}</span>
                 </a>
                 <ul *dropdownMenu class="dropdown-menu" role="menu">
                     <!-- <li id="15108" role="menuitem" (click)="listClick($event, 'inventory-transfer/whsTransfer')" > -->
-                    <li id="15108" role="menuitem" (click)="listClick($event, 'whsTransfer')" >
+                    <li id="15108" role="menuitem" (click)="listClick($event, 'whsTransfer')" [ngStyle]="{'display':'none'}">
                         <a class="dropdown-item" roterLink="whsTransfer">
                             <i class="opti-icon-warehouse-transfer" [style.color]="selectedThemeColor"></i>
                             <span class="text">{{'WarehouseTransfer'|translate}}</span>
                         </a>
                     </li>
                     <!-- <li id="15109" role="menuitem" (click)="listClick($event, 'inventory-transfer/binTransfer')" > -->
-                    <li id="15109" role="menuitem" (click)="listClick($event, 'binTransfer')" >
+                    <li id="15109" role="menuitem" (click)="listClick($event, 'binTransfer')" [ngStyle]="{'display':'none'}">
                         <a class="dropdown-item" roterLink="binTransfer" (click)="binClick()">
                             <i class="opti-icon-bin-transfer" [style.color]="selectedThemeColor"></i>
                             <span class="text">{{'BinTransfer'|translate}}</span>
@@ -144,37 +145,37 @@
                     </li> -->
                 </ul>
             </li>
-            <li class="dropdown" dropdown id="INV" *ngIf="isPalletizationEnable">
+            <li class="dropdown" dropdown id="Pallet" *ngIf="isPalletizationEnable" [ngStyle]="{'display':'none'}">
                     <a dropdownToggle class="dropdown-toggle">
                         <i class="opti-icon-notes" [style.color]="selectedThemeColor"></i>
                         <span class="text">{{'Plt_Palletization'|translate}}</span>
                     </a>
                     <ul *dropdownMenu class="dropdown-menu" role="menu">
-                        <li id="15111" role="menuitem" (click)="listClick($event, 'palletization/plt-split')">
+                        <li id="15111" role="menuitem" (click)="listClick($event, 'palletization/plt-split')" [ngStyle]="{'display':'none'}">
                             <a class="dropdown-item" roterLink="plt-split" >
                                 <i class="opti-icon-time" [style.color]="selectedThemeColor"></i>
                                 <span class="text">{{'Plt_Split'|translate}}</span>
                             </a>
                         </li>
-                        <li id="15111" role="menuitem" (click)="listClick($event, 'palletization/plt-transfer')">
+                        <li id="15111" role="menuitem" (click)="listClick($event, 'palletization/plt-transfer')" [ngStyle]="{'display':'none'}">
                             <a class="dropdown-item" roterLink="plt-transfer" >
                                 <i class="opti-icon-time" [style.color]="selectedThemeColor"></i>
                                 <span class="text">{{'Plt_Transfer'|translate}}</span>
                             </a>
                         </li>
-                        <li id="15112" role="menuitem" (click)="listClick($event, 'palletization/split-transfer')">
+                        <li id="15112" role="menuitem" (click)="listClick($event, 'palletization/split-transfer')" [ngStyle]="{'display':'none'}">
                             <a class="dropdown-item" roterLink="split-transfer" >
                                 <i class="opti-icon-time" [style.color]="selectedThemeColor"></i>
                                 <span class="text">{{'Plt_PalletMerge'|translate}}</span>
                             </a>
                         </li>
-                        <li id="15113" role="menuitem" (click)="listClick($event, 'palletization/depalletize')">
+                        <li id="15113" role="menuitem" (click)="listClick($event, 'palletization/depalletize')" [ngStyle]="{'display':'none'}">
                             <a class="dropdown-item" roterLink="depalletize" >
                                 <i class="opti-icon-time" [style.color]="selectedThemeColor"></i>
                                 <span class="text">{{'Plt_Depalletization'|translate}}</span>
                             </a>
                         </li>
-                        <li id="15114" role="menuitem" (click)="listClick($event, 'palletization/palletize')">
+                        <li id="15114" role="menuitem" (click)="listClick($event, 'palletization/palletize')" [ngStyle]="{'display':'none'}">
                             <a class="dropdown-item" roterLink="palletize" >
                                 <i class="opti-icon-time" [style.color]="selectedThemeColor"></i>
                                 <span class="text">{{'Plt_Palletize'|translate}}</span>
@@ -182,13 +183,13 @@
                         </li>
                     </ul>
                 </li>
-            <li class="dropdown" dropdown id="INV">
+            <li class="dropdown" dropdown id="INVADJ" [ngStyle]="{'display':'none'}">
                 <a dropdownToggle class="dropdown-toggle">
                     <i class="opti-icon-notes" [style.color]="selectedThemeColor"></i>
                     <span class="text">{{'AdjustmentsCounting'|translate}}</span>
                 </a>
                 <ul *dropdownMenu class="dropdown-menu" role="menu">
-                    <li id="15108" role="menuitem" (click)="listClick($event, 'adjustment-counting/physical-count')">
+                    <li id="15112" role="menuitem" (click)="listClick($event, 'adjustment-counting/physical-count')" [ngStyle]="{'display':'none'}">
                         <a class="dropdown-item" roterLink="physical-count" >
                             <i class="opti-icon-time" [style.color]="selectedThemeColor"></i>
                             <span class="text">{{'PhysicalCount'|translate}}</span>
@@ -196,19 +197,19 @@
                     </li>
                 </ul>
             </li>
-            <li class="dropdown" dropdown id="INV">
+            <li class="dropdown" dropdown id="PRO" [ngStyle]="{'display':'none'}">
                 <a dropdownToggle class="dropdown-toggle">
                     <i class="opti-icon-factory" [style.color]="selectedThemeColor"></i>
                     <span class="text">{{'Production'|translate}}</span>
                 </a>
                 <ul *dropdownMenu class="dropdown-menu" role="menu">                    
-                    <li id="15109" role="menuitem" (click)="listClick($event, 'production/production-issue')">
+                    <li id="15117" role="menuitem" (click)="listClick($event, 'production/production-issue')" [ngStyle]="{'display':'none'}">
                         <a class="dropdown-item" roterLink="issue" (click)="onOutboundClick()">
                             <i class="opti-icon-issue" [style.color]="selectedThemeColor"></i>
                             <span class="text">{{'IssueForProduction'|translate}}</span>
                         </a>
                     </li> 
-                    <li id="15108" role="menuitem" (click)="listClick($event, 'production/production-receipt-master')">
+                    <li id="15116" role="menuitem" (click)="listClick($event, 'production/production-receipt-master')" [ngStyle]="{'display':'none'}">
                         <a class="dropdown-item" roterLink="receipt">
                             <i class="opti-icon-customer-purchase-order" [style.color]="selectedThemeColor"></i>
                             <span class="text">{{'ReceiptFromProduction'|translate}}</span>
@@ -216,25 +217,25 @@
                     </li>
                 </ul>
             </li>
-            <li class="dropdown" dropdown id="INV">
+            <li class="dropdown" dropdown id="LBLRPT" [ngStyle]="{'display':'none'}">
                 <a dropdownToggle class="dropdown-toggle">
                     <i class="opti-icon-printer" [style.color]="selectedThemeColor"></i>
                     <span class="text">{{'LabelPrintingandReports'|translate}}</span>
                 </a>
                 <ul *dropdownMenu class="dropdown-menu" role="menu">                    
-                    <li id="15109" role="menuitem" (click)="listClick($event, 'printing-label/item-label')">
+                    <li id="15119" role="menuitem" (click)="listClick($event, 'printing-label/item-label')" [ngStyle]="{'display':'none'}">
                         <a class="dropdown-item" roterLink="item-label">
                             <i class="opti-icon-issue" [style.color]="selectedThemeColor"></i>
                             <span class="text">{{'ItemLabel'|translate}}</span>
                         </a>
                     </li>
-                    <li id="15108" role="menuitem" (click)="listClick($event, 'printing-label/bin-label')">
+                    <li id="15120" role="menuitem" (click)="listClick($event, 'printing-label/bin-label')" [ngStyle]="{'display':'none'}">
                         <a class="dropdown-item" roterLink="bin-label">
                             <i class="opti-icon-sales-order" [style.color]="selectedThemeColor"></i>
                             <span class="text">{{'BinLabel'|translate}}</span>
                         </a>
                     </li>
-                    <li id="15109" role="menuitem" (click)="listClick($event, 'printing-label/inventory-enquiry')">
+                    <li id="15121" role="menuitem" (click)="listClick($event, 'printing-label/inventory-enquiry')" [ngStyle]="{'display':'none'}">
                         <a class="dropdown-item" roterLink="inventory-enquiry">
                             <i class="opti-icon-sales-order" [style.color]="selectedThemeColor"></i>
                             <span class="text">{{'InventoryEnquiry'|translate}}</span>
