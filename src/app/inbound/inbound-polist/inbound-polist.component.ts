@@ -67,7 +67,7 @@ export class InboundPolistComponent implements OnInit {
 
   ngAfterViewInit() {
     setTimeout(() => {
-      this.poScanInputField.nativeElement.focus();
+    //  this.poScanInputField.nativeElement.focus();
       var selectedPO = localStorage.getItem("selectedPO");
       if (selectedPO != undefined && selectedPO != null && selectedPO != "") {
         this.poCode = selectedPO;
@@ -460,6 +460,7 @@ export class InboundPolistComponent implements OnInit {
                 SuppSerial: this.oSavedPOLotsArray.POReceiptLotDetails[j].SuppSerial,
                 ParentLineNo: this.oSavedPOLotsArray.POReceiptLotDetails[j].ParentLineNo,
                 PalletCode: this.oSavedPOLotsArray.POReceiptLotDetails[j].PalletCode,
+                ItemCode: this.oSavedPOLotsArray.POReceiptLotDetails[j].ItemCode,
                 LotSteelRollId: ""
               });
             }
