@@ -307,7 +307,7 @@ export class OutOrderComponent implements OnInit,AfterViewInit {
           this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
           this.openSOOrderList();
         } else {
-          if (this.lookupfor == "itemList") {
+          if (this.lookupfor == "ItemsList") {
               this.selectedItem = lookupValue.ITEMCODE;
           }
         }

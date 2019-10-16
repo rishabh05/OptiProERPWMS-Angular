@@ -20,8 +20,8 @@ export class RecvingQuantityBin{
         if(serial != ""){
             this.palletSBNo = serial +"-"+palletCode;
         }
-        if(this.autoLot == "true"){
-            this.VendorLot = serial;
-        }
+        // if(this.autoLot == "true"){
+        //     this.VendorLot = MfrSerial;
+        // }
     }
 }
