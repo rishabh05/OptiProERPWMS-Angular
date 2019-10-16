@@ -60,7 +60,7 @@
                 <div class="ml-1 d-flex d-sm-flex d-md-flex d-lg-none d-xl-none">
                   <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button"
                     (click)="ClearPalletItems(event)" id="btnClear">
-                    {{'Common_Clear'|translate}}
+                    <small>{{'Common_Clear'|translate}}</small>
                   </button>
                 </div>
               </div>
@@ -75,7 +75,7 @@
           </button>
           <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button"
             (click)="ClearPalletItems(event)" id="btnClear">
-            {{'Common_Clear'|translate}}
+            <small>{{'Common_Clear'|translate}}</small>
           </button>
         </div>
       </div>
@@ -128,65 +128,62 @@
           </div>
 
         </div>
-
-
-
-
-        <kendo-grid class="no-shadow" [kendoGridBinding]="itemsData" [resizable]="true" [sortable]="true"
-          [selectable]="true" #gridItem>
-          <!-- grid for mobile start -->
-          <kendo-grid-column media="(max-width: 767px)" title="List" class="opti_mobile-grid-td">
-            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-              <dl class="opti_mobile_grid_dl">
-                <dt>{{'Item'|translate}}</dt>
-                <dd>{{dataItem.Item}}</dd>
-
-
-                <dt>{{'Plt_CurrentBatch'|translate}}</dt>
-                <dd>{{dataItem.Cyrrebtch}}</dd>
-                <dt>{{'Quantity'|translate}}</dt>
-                <dd>{{dataItem.Qty}}</dd>
-              </dl>
-
-              <dl class="opti_mobile_grid_dl">
-                <dt class="d-flex align-items-center">{{'Plt_NewBtSr'|translate}}
-                  <button type="button" class="btn btn-danger k-button btn-sm btn-icon ml-auto"
-                    (click)="openConfirmForDelete(rowIndex, gridItem)">
-                    <span class="k-icon k-i-delete" role="presentation"></span>
-                  </button>
-                </dt>
-                <dd>{{dataItem.Bin}}</dd>
-              </dl>
-            </ng-template>
-          </kendo-grid-column>
-          <!-- grid for mobile end -->
-
-
-          <kendo-grid-column media="(min-width: 768px)" field="qty" [width]="45" title="{{'Item'|translate}}">
-          </kendo-grid-column>
-          <kendo-grid-column media="(min-width: 768px)" field="Bin" [width]="45"
-            title="{{'Plt_CurrentBatch'|translate}}"></kendo-grid-column>
-          <kendo-grid-column media="(min-width: 768px)" field="Bin" [width]="45" title="{{'Plt_NewBtSr'|translate}}">
-          </kendo-grid-column>
-          <kendo-grid-column media="(min-width: 768px)" field="LotQty" headerClass="text-right" class="text-right"
-            [width]="45" title="{{'Quantity'|translate}}">
-            <ng-template kendoGridCellTemplate let-dataItem>
-              {{dataItem.LotQty |numberFormat}}
-            </ng-template>
-          </kendo-grid-column>
-          <kendo-grid-column media="(min-width: 768px)" headerClass="text-center" class="text-center" field=""
-            [width]="10" title="">
-            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-              <button type="button" class="btn btn-danger k-button btn-sm btn-icon"
-                (click)="openConfirmForDelete(rowIndex, gridItem)">
-                <span class="k-icon k-i-delete" role="presentation"></span>
-              </button>
-            </ng-template>
-          </kendo-grid-column>
-        </kendo-grid>
       </div>
-      <!-- Kendo Table Grid Row end -->
+      <kendo-grid class="no-shadow" [kendoGridBinding]="itemsData" [resizable]="true" [sortable]="true"
+        [selectable]="true" #gridItem>
+        <!-- grid for mobile start -->
+        <kendo-grid-column media="(max-width: 767px)" title="List" class="opti_mobile-grid-td">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <dl class="opti_mobile_grid_dl">
+              <dt>{{'Item'|translate}}</dt>
+              <dd>{{dataItem.Item}}</dd>
 
+
+              <dt>{{'Plt_CurrentBatch'|translate}}</dt>
+              <dd>{{dataItem.Cyrrebtch}}</dd>
+              <dt>{{'Quantity'|translate}}</dt>
+              <dd>{{dataItem.Qty}}</dd>
+            </dl>
+
+            <dl class="opti_mobile_grid_dl">
+              <dt class="d-flex align-items-center">{{'Plt_NewBtSr'|translate}}
+                <button type="button" class="btn btn-danger k-button btn-sm btn-icon ml-auto"
+                  (click)="openConfirmForDelete(rowIndex, gridItem)">
+                  <span class="k-icon k-i-delete" role="presentation"></span>
+                </button>
+              </dt>
+              <dd>{{dataItem.Bin}}</dd>
+            </dl>
+          </ng-template>
+        </kendo-grid-column>
+        <!-- grid for mobile end -->
+
+
+        <kendo-grid-column media="(min-width: 768px)" field="qty" [width]="45" title="{{'Item'|translate}}">
+        </kendo-grid-column>
+        <kendo-grid-column media="(min-width: 768px)" field="Bin" [width]="45"
+          title="{{'Plt_CurrentBatch'|translate}}"></kendo-grid-column>
+        <kendo-grid-column media="(min-width: 768px)" field="Bin" [width]="45" title="{{'Plt_NewBtSr'|translate}}">
+        </kendo-grid-column>
+        <kendo-grid-column media="(min-width: 768px)" field="LotQty" headerClass="text-right" class="text-right"
+          [width]="45" title="{{'Quantity'|translate}}">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            {{dataItem.LotQty |numberFormat}}
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column media="(min-width: 768px)" headerClass="text-center" class="text-center" field=""
+          [width]="10" title="">
+          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+            <button type="button" class="btn btn-danger k-button btn-sm btn-icon"
+              (click)="openConfirmForDelete(rowIndex, gridItem)">
+              <span class="k-icon k-i-delete" role="presentation"></span>
+            </button>
+          </ng-template>
+        </kendo-grid-column>
+      </kendo-grid>
+      
+      <!-- Kendo Table Grid Row end -->
+    </div>
       <div class="fix-footer-btnBar">
           <div class="col-sm-12 col-12">
               <hr />
@@ -205,7 +202,7 @@
                   SB </button>
           </div>
       </div>
-    </div>
+    
   </form>
 </div>
 <span *ngIf="showLookupLoader == false">
