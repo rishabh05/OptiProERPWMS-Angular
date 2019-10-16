@@ -107,7 +107,7 @@ export class SigninComponent implements OnInit {
 
     getPSURL() {
     //    localStorage.setItem("PSURLFORADMIN", "http://139.144.10.220/optiproadmin/");
-    //    localStorage.setItem("PSURLFORADMIN", "http://172.16.6.140/OptiProAdmin/");
+        // localStorage.setItem("PSURLFORADMIN", "http://172.16.6.140/OptiProAdmin/");
         this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
         this.signinService.getPSURL(this.config_params.service_url).subscribe(
             data => {
