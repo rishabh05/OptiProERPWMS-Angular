@@ -161,6 +161,16 @@ export class InboundService {
     var jObject = { WhsCode: JSON.stringify([{ CompanyDBId:  localStorage.getItem("CompID"), ItemCode: '', WhsCode: whsCode}]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsWhsExist", jObject, this.httpOptions);
   }
+
+   /**
+   * check is serial exists or not.
+   * @param whsCode 
+   */
+  isSerialExists(itemCode:string, serialNo:string){
+    var jObject = { SerialNo: JSON.stringify([{ CompanyDBId:  localStorage.getItem("CompID"), ItemCode: itemCode, SerialNo: serialNo}]) };
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/CheckSerialNo", jObject, this.httpOptions);
+  }
+  
   /**
    * check and scan code.
    * @param whsCode 

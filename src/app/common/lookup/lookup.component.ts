@@ -129,7 +129,7 @@ export class LookupComponent implements OnInit {
       this.showAvaliableItems();
     }
 
-    else if (this.lookupfor == 'out-order') {
+    else if (this.lookupfor == "out-order") {
       this.showOutSOList();
     }
     else if (this.lookupfor == "LotsList") {

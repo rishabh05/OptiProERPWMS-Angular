@@ -65,14 +65,18 @@ export class ProductionService {
    * check bin is exists or not.
    * @param item 
    */
-  isSerialExists(serialNo: string, itemCode: string, transType: string, tracking: string, wono: string,
+  isSerialExists(serialNo: string, itemCode: string, transType: number, tracking: string, wono: string,
     fromReceiptProduction: boolean): Observable<any> {
-    var jObject = { SerialNo: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), ItemCode: itemCode, SerialNo: serialNo, TransType: transType, TRACKING: tracking, WONO: wono }]) };
+   
     
     if(fromReceiptProduction){
+      var jObject = { SerialNo: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), ItemCode: itemCode, SerialNo: serialNo,
+       TransType: transType, TRACKING: tracking, WONO: wono }]) };
       return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/CheckSerialNoPROD", jObject, this.httpOptions);
     } else {
-      return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/CheckSerialNoPROD", jObject, this.httpOptions);
+      //return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/CheckSerialNoPROD", jObject, this.httpOptions);
+      var jObject = { SerialNo: JSON.stringify([{ CompanyDBId:  localStorage.getItem("CompID"), ItemCode: itemCode, SerialNo: serialNo}]) };
+      return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/CheckSerialNo", jObject, this.httpOptions);
     }
   }
 

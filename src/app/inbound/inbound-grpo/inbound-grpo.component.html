@@ -93,7 +93,8 @@
                     <div class="form-group row" *ngIf="!isNonTrack">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'ExpiryDate'|translate}}</label>
                         <div class="col-sm-9">
-                            <kendo-datepicker [format]=dateFormat [value]="defaultDateValue" name="expiryDate" [(ngModel)]=expiryDate placeholder={{dateFormat}}></kendo-datepicker>
+                            <kendo-datepicker [format]=dateFormat [value]="defaultDateValue" name="expiryDate"
+                                [(ngModel)]=expiryDate placeholder={{dateFormat}}></kendo-datepicker>
                         </div>
                     </div>
                     <div class="form-group row align-items-center" *ngIf="showScanInput">
@@ -130,28 +131,52 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Palletization Field For Lookup-->
-                    <div class="form-group row" *ngIf="isPalletizationEnable && !isNonTrack">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'Plt_PalletNo'|translate}}</label>
-                        <div class="col-sm-9">
-                            <div class="input-group input-group-sm" >
-                                <input type="text" class="form-control form-control-sm" name="palletValue" [(ngModel)]=palletValue
-                                    (blur)="OnPalletChange()" placeholder="{{'Plt_PalletNo'|translate}}" [disabled]="showNewPallet">
-                                <div class="input-group-append has-seprate-btn">
-                                    <button class="k-button k-primary btn" type="button" (click)="getPalletList()" [disabled]="showNewPallet">
-                                        <i class="opti-icon-hammenu"></i>
-                                    </button>
+                </div>
+            </div>
+            <div class="row ">
+                    <div class="col-12 ">
+                    <!-- Palletization Field -->
+                    <div class="row">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+                            <div class="form-group row" *ngIf="isPalletizationEnable && !isNonTrack">
+                                <label for="inputPassword" class="col-sm-3 col-form-label">{{'Plt_PalletNo'|translate}}</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control form-control-sm" name="palletValue" [(ngModel)]=palletValue
+                                            (blur)="OnPalletChange()" placeholder="{{'Plt_PalletNo'|translate}}" [disabled]="showNewPallet">
+                                        <div class="input-group-append has-seprate-btn">
+                                            <button class="k-button k-primary btn" type="button" (click)="getPalletList()"
+                                                [disabled]="showNewPallet">
+                                                <i class="opti-icon-hammenu"></i>
+                                            </button>
+                                        </div>
+                                        <div class="ml-1 d-flex">
+                                            <button type="button" id="inboundscanButton" (click)="onPalletScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
+                                                [disabled]="showNewPallet">
+                                                <i class="opti-icon-qr-code fs-24"></i>
+                                            </button>
+                                        </div>
+                                        <div class="ml-1 d-flex d-sm-flex d-md-flex d-lg-none d-xl-none">
+                                            <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
+                                                type="button" (click)="clearPalletItems($event)" id="btnClear">
+                                                <small>{{'Common_Clear'|translate}}</small>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="ml-1 d-flex">
-                                    <button type="button" id="inboundscanButton" (click)="onPalletScan()" 
-                                    class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" [disabled]="showNewPallet">
-                                        <i class="opti-icon-qr-code fs-24"></i>
-                                    </button>
-                                </div>
-
                             </div>
                         </div>
+                        <div class="align-items-start col-md-2 col-lg-4 col-xl-6 pl-0 d-none d-sm-none d-md-none d-lg-flex d-xl-flex">
+                            <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button"
+                                (click)="clearPalletItems($event)" id="btnClear">
+                                <small>{{'Common_Clear'|translate}}</small>
+                            </button>
+                        </div>
                     </div>
+                </div>
+            </div>
+            <div class="row mt-2">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
                     <!-- Palletization Field For New Create-->
                     <div class="form-group row mt-1 mt-md-0" *ngIf="isPalletizationEnable && !isNonTrack"son>
                         <label class="col-sm-3 col-form-label"></label>
@@ -168,9 +193,9 @@
                         <label class="col-sm-3 col-form-label"></label>
                         <div class="col-sm-9">
                             <div class="d-flex">
-                                <input type="text" class="form-control form-control-sm" id="inboundNewPallet" 
-                                name="inboundNewPallet" [(ngModel)]="inboundNewPallet"
-                                    placeholder="{{'Inbound_NewPallet'|translate}}" [disabled]="autoGenereatePalletEnable">
+                                <input type="text" class="form-control form-control-sm" id="inboundNewPallet" name="inboundNewPallet"
+                                    [(ngModel)]="inboundNewPallet" placeholder="{{'Inbound_NewPallet'|translate}}"
+                                    [disabled]="autoGenereatePalletEnable">
                                 <div class="ml-1 d-flex">
                                     <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
                                         type="button" (click)="createNewPallet(event)">
@@ -193,8 +218,8 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Quantity'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="d-flex">
-                                <input type="number" class="form-control form-control-sm" #Quantity name="qty"
-                                    [(ngModel)]=qty placeholder="{{'Quantity'|translate}}">
+                                <input type="number" #Quantity name="qty"
+                                    [(ngModel)]=qty placeholder="{{'Quantity'|translate}}" class="text-right form-control form-control-sm">
                                 <div class="ml-1 d-flex">
                                     <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
                                         type="button" (click)="addQuantity(event)">
@@ -242,8 +267,8 @@
                                     </dt>
                                     <dd>
                                         <input type="text" class="form-control form-control-sm" name="dataItem.LotNumber"
-                                            [disabled]=isDisabledScanInput id="display_name1"
-                                            [(ngModel)]=dataItem.LotNumber     #display_name (change)="updateLotNumber(display_name.value, rowIndex, gridItem)">
+                                            [disabled]=isDisabledScanInput id="display_name1" [(ngModel)]=dataItem.LotNumber
+                                            #display_name (change)="updateLotNumber(display_name.value, rowIndex, gridItem)">
                                     </dd>
 
                                     <dt>{{'BinNo'|translate}}</dt>
@@ -262,7 +287,7 @@
                                     id="display_name" #display_name (change)="updateVendorLot(display_name.value, idx)">
                             </ng-template>
                         </kendo-grid-column>
-                        
+
                         <kendo-grid-column media="(min-width: 768px)" field="LotNumber" [width]="18" title="{{SRBatchColumnText}}">
                             <ng-template kendoGridCellTemplate let-dataItem let-idx='rowIndex'>
                                 <input type="text" class="form-control form-control-sm" name="dataItem.LotNumber" value={{dataItem.LotNumber}}

@@ -147,17 +147,23 @@
             <li class="dropdown" dropdown id="INV" *ngIf="isPalletizationEnable">
                     <a dropdownToggle class="dropdown-toggle">
                         <i class="opti-icon-notes" [style.color]="selectedThemeColor"></i>
-                        <span class="text">{{'Plt_Pallelization'|translate}}</span>
+                        <span class="text">{{'Plt_Palletization'|translate}}</span>
                     </a>
                     <ul *dropdownMenu class="dropdown-menu" role="menu">
-                        <li id="15111" role="menuitem" (click)="listClick($event, 'palletization/split-transfer')">
-                            <a class="dropdown-item" roterLink="split-transfer" >
+                        <li id="15111" role="menuitem" (click)="listClick($event, 'palletization/plt-split')">
+                            <a class="dropdown-item" roterLink="plt-split" >
                                 <i class="opti-icon-time" [style.color]="selectedThemeColor"></i>
-                                <span class="text">{{'Plt_SplitTransfer'|translate}}</span>
+                                <span class="text">{{'Plt_Split'|translate}}</span>
                             </a>
                         </li>
-                        <li id="15112" role="menuitem" (click)="listClick($event, 'palletization/pallet-merge')">
-                            <a class="dropdown-item" roterLink="pallet-merge" >
+                        <li id="15111" role="menuitem" (click)="listClick($event, 'palletization/plt-transfer')">
+                            <a class="dropdown-item" roterLink="plt-transfer" >
+                                <i class="opti-icon-time" [style.color]="selectedThemeColor"></i>
+                                <span class="text">{{'Plt_Transfer'|translate}}</span>
+                            </a>
+                        </li>
+                        <li id="15112" role="menuitem" (click)="listClick($event, 'palletization/split-transfer')">
+                            <a class="dropdown-item" roterLink="split-transfer" >
                                 <i class="opti-icon-time" [style.color]="selectedThemeColor"></i>
                                 <span class="text">{{'Plt_PalletMerge'|translate}}</span>
                             </a>

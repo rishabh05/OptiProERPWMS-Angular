@@ -3,7 +3,7 @@
       <div class="opti_container_inner" [perfectScrollbar]=" ">
   
         <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
-          {{'Plt_SplitTransfer'|translate}}
+          {{'Plt_Split'|translate}}
         </h3>
         <div class="row">
           <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
@@ -51,12 +51,12 @@
                       <i class="opti-icon-qr-code fs-24"></i>
                     </button>
                   </div>
-                  <div class="ml-1 d-flex d-sm-flex d-md-flex d-lg-none d-xl-none ">
+                  <!-- <div class="ml-1 d-flex d-sm-flex d-md-flex d-lg-none d-xl-none ">
                     <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button"
                       (click)="AddPalletItems(event)" id="btnAddPalletItems">
                       <i class="opti-icon-add1 fs-24"></i>
                     </button>
-                  </div>
+                  </div> -->
                   <div class="ml-1 d-flex d-sm-flex d-md-flex d-lg-none d-xl-none">
                     <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button"
                       (click)="ClearPalletItems(event)" id="btnClear">
@@ -68,12 +68,12 @@
             </div>
           </div>
           <div class="align-items-start col-md-2 col-lg-4 col-xl-6 pl-0 d-none d-sm-none d-md-none d-lg-flex d-xl-flex">
-            <button style="margin-left: -10px;"
+            <!-- <button style="margin-left: -10px;"
               class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button"
               (click)="AddPalletItems(event)" id="btnAddPalletItems">
               <i class="opti-icon-add1 fs-24"></i>
-            </button>
-            <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button"
+            </button> -->
+            <button style="margin-left: -10px;" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button"
               (click)="ClearPalletItems(event)" id="btnClear">
               <small>{{'Common_Clear'|translate}}</small>
             </button>
@@ -111,7 +111,7 @@
   
             </div>
   
-            <div class="form-group row">
+            <!-- <div class="form-group row">
               <label for="inputPassword" class="col-sm-3 col-form-label">{{'Quantity'|translate}}</label>
               <div class="col-sm-9">
                 <div class="d-flex">
@@ -125,14 +125,15 @@
                   </div>
                 </div>
               </div>
-            </div>
-  
+            </div> 
+   -->
           </div>
         </div>
   
   
-        <!-- Kendo Table Grid Row start -->
-          <kendo-grid class="no-shadow" [kendoGridBinding]="itemsData" [resizable]="true" [sortable]="true"
+  
+  
+          <kendo-grid class="no-shadow  mx-2"  [kendoGridBinding]="itemsData" [resizable]="true" [sortable]="true"
             [selectable]="true" #gridItem>
             <!-- grid for mobile start -->
             <kendo-grid-column media="(max-width: 767px)" title="List" class="opti_mobile-grid-td">
@@ -186,6 +187,7 @@
           </kendo-grid>
         
         <!-- Kendo Table Grid Row end -->
+
       </div>
       <div class="fix-footer-btnBar">
           <div class="col-sm-12 col-12">
@@ -193,16 +195,16 @@
           </div>
           <div class="col-sm-12 col-12">
 
-              <button type="button" *ngIf="showButton" (click)="save($event)" class="btn btn-success k-button btn-sm btn-icon-with-text">
-                  <span class="k-icon k-i-save" role="presentation"></span> {{'Save'|translate}}</button>
-              <button class="k-button k-primary k-button btn-sm btn-icon-with-text" *ngIf="showRecButton" type="button" (click)="receive($event)">
-                  <span class="k-icon k-i-download" role="presentation"></span> {{'Receive'|translate}}</button>
-              <!-- <button class="k-button k-primary" type="button" (click)="cancel($event)">Cancel</button> -->
-              <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="cancel($event)">
-                  <span class="k-icon k-i-close-outline" role="presentation"></span> Cancel</button>
-              <button type="button" id="hiddenScanButton" style="visibility:hidden" (click)="onHiddenScanClick()"
-                  class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
-                  SB </button>
+            <button type="button" *ngIf="showButton" (click)="save($event)" class="btn btn-success k-button btn-sm btn-icon-with-text">
+              <span class="k-icon k-i-save" role="presentation"></span> {{'Save'|translate}}</button>
+            <button class="k-button k-primary k-button btn-sm btn-icon-with-text" *ngIf="showRecButton" type="button" (click)="receive($event)">
+                <span class="k-icon k-i-download" role="presentation"></span> {{'Receive'|translate}}</button>
+            <!-- <button class="k-button k-primary" type="button" (click)="cancel($event)">Cancel</button> -->
+            <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text mx-0.5" (click)="cancel($event)">
+                <span class="k-icon k-i-close-outline" role="presentation"></span> Cancel</button>
+            <button type="button" id="hiddenScanButton" style="visibility:hidden" (click)="onHiddenScanClick()"
+                class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                SB </button>
           </div>
       </div>
       
