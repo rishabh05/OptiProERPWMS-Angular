@@ -94,7 +94,7 @@ export class SigninComponent implements OnInit {
             // alert("serviceURL null:"+JSON.stringify(url));
             this.httpClientSer.get('./assets/config.json').subscribe(
                 data => {
-                    sessionStorage.setItem('ConfigData', JSON.stringify(data));
+                    sessionStorage.setItem('ConfigData', JSON.stringify(data[0]));
                     this.getPSURL();
                 },
                 (err: HttpErrorResponse) => {
@@ -327,7 +327,7 @@ export class SigninComponent implements OnInit {
             },
             error => {
                 if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-//                    this.commonService.unauthorizedToken(error);               
+                   this.commonService.unauthorizedToken(error, this.translate.instant("token_expired"));               
                 }   
             }
         );

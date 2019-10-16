@@ -123,6 +123,12 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
       error => {
         console.log("Error: ", error);
         // alert("fail");
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
+        this.toastr.error('', error);
+       }
       }
     );
   }
@@ -148,8 +154,14 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
       },
       error => {
         this.showLoader = false;
-        console.log("Error: ", error);
-        this.toastr.error('', error);
+        // console.log("Error: ", error);
+        // this.toastr.error('', error);
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       }       
+        else{
+          this.toastr.error('', error);
+        } 
       }
     );
   }
@@ -189,8 +201,14 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
       },
       error => {
         this.showLoader = false;
-        console.log("Error: ", error);
+        // console.log("Error: ", error);
+        // this.toastr.error('', error);
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       }
     );
   }
@@ -398,7 +416,12 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
       },
       error => {
         this.showLoader = false;
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       }
     );
   }

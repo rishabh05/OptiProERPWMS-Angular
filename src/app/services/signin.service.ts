@@ -47,6 +47,7 @@ export class SigninService {
   } 
 
   getWHS(compId: string): Observable<any> {
+     
     let jObject = {
       CompanyName: JSON.stringify([{
         Username: localStorage.getItem("UserId"),

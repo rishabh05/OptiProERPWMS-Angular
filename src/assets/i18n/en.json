@@ -351,6 +351,8 @@
   "Plt_CurrentBatchSerialNo": "Current Batch/Serial No.",
   "Plt_NewBatchSerialNo": "New Batch/Serial No.",
   "Plt_PalletRequired": "Pallet number required.",
-  "":""
+  "":"",
+
+  "token_expired": "The remote server returned an error: (401) Unauthorized."
   
 }

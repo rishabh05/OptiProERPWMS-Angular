@@ -84,9 +84,12 @@ export class Commonservice {
     this.commonData.next(data);
   }
 
-  public unauthorizedToken(Error){
+  public unauthorizedToken(Error, message: string){
     if(Error.error.ExceptionMessage == this.authTokenstr ){
-      this.RemoveLicenseAndSignout(this.toastr, this.router, Error.error.ExceptionMessage);    
+      this.RemoveLicenseAndSignout(this.toastr, this.router, message);    
+      // sessionStorage.clear();
+      // localStorage.clear();
+      // this.router.navigateByUrl('/account');  
     }
  }
 
