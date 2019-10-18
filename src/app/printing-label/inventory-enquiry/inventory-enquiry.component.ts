@@ -157,7 +157,12 @@ export class InventoryEnquiryComponent implements OnInit,AfterViewInit {
       },
       error => {
         this.showLoader = false;
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       },
     );
   }
@@ -200,9 +205,14 @@ export class InventoryEnquiryComponent implements OnInit,AfterViewInit {
         }
       },
       error => {
-        this.showLoader = false;
-        this.toastr.error('', error);
+        this.showLoader = false;       
         this.lotNo = "";
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
+        this.toastr.error('', error);
+       }
       }
     );
   }
@@ -311,7 +321,12 @@ export class InventoryEnquiryComponent implements OnInit,AfterViewInit {
       error => {
         this.pagable =false;
         this.quantityGridData = [];
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       }
     );
   }
@@ -372,7 +387,12 @@ export class InventoryEnquiryComponent implements OnInit,AfterViewInit {
       },
       error => {
         this.showLoader = false;
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       },
     );
   }
@@ -457,7 +477,12 @@ export class InventoryEnquiryComponent implements OnInit,AfterViewInit {
       },
       error => {
         this.showLoader = false;
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       }
     );
   }
@@ -500,7 +525,12 @@ export class InventoryEnquiryComponent implements OnInit,AfterViewInit {
         }
       },
       error => {
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       }
     );
   }

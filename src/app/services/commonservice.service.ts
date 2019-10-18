@@ -40,7 +40,7 @@ export class Commonservice {
 
     this.httpclient.get('./assets/config.json').subscribe(
       data => {
-        sessionStorage.setItem('ConfigData', JSON.stringify(data));
+        sessionStorage.setItem('ConfigData', JSON.stringify(data[0]));
         this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
       },
       (err: HttpErrorResponse) => {

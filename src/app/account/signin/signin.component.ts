@@ -135,6 +135,8 @@ export class SigninComponent implements OnInit {
     public async login() {
         // alert('login:: at login method top');
         // this.isCompleteLoginVisible = true;
+
+        window.localStorage.setItem('IsMenuLoaded' , 'false');
         if (this.userName == "" || this.password == "") {
             this.toastr.error('', this.translate.instant("Login_UnPwdBlankErrorMsg"), this.commonService.toast_config.iconClasses.error);
             return true;

@@ -3,6 +3,8 @@ import { SigninService } from '../services/signin.service';
 import { Router } from '@angular/router';
 import { WHS } from '../models/account/WHS';
 import { Commonservice } from '../services/commonservice.service';
+import { ToastrService } from '../../../node_modules/ngx-toastr';
+import { TranslateService } from '../../../node_modules/@ngx-translate/core';
 
 @Component({
   selector: 'app-change-warehouse',
@@ -14,7 +16,7 @@ export class ChangeWarehouseComponent implements OnInit {
   whsList: WHS[] = [];
   defaultWHS: any;
   
-  constructor( private commonService: Commonservice,private signinService: SigninService, private router: Router) {
+  constructor( private commonService: Commonservice,private signinService: SigninService, private router: Router,private toastr: ToastrService,private translate: TranslateService) {
     this.defaultWHS = { OPTM_WHSE: localStorage.getItem("whseId"), BPLid: 0 };
   }
 
@@ -34,7 +36,12 @@ export class ChangeWarehouseComponent implements OnInit {
        // this.defaultWHS = localStorage.getItem("whseId");
       },
       error => {
-
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonService.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
+        this.toastr.error('', error);
+       }
       }
     );
   }

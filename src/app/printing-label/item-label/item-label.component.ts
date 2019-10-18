@@ -108,9 +108,14 @@ export class ItemLabelComponent implements OnInit {
         }
         this.showLoader = false;
       },
-      error => {
-        this.toastr.error('', error);
+      error => {        
         this.showLoader = false;
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
+        this.toastr.error('', error);
+       }
       },
     );
   }
@@ -156,7 +161,12 @@ export class ItemLabelComponent implements OnInit {
       },
       error => {
         this.showLoader = false;
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       }
     );
   }
@@ -208,7 +218,12 @@ export class ItemLabelComponent implements OnInit {
         }
       },
       error => {
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       }
     );
   }
@@ -258,9 +273,14 @@ export class ItemLabelComponent implements OnInit {
         }
        
       },
-      error => {
-        this.toastr.error('', error);
+      error => {     
         this.showLoader = false;
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
+        this.toastr.error('', error);
+       }
       },
     );
   }
@@ -288,10 +308,15 @@ export class ItemLabelComponent implements OnInit {
           this.binNo = "";
         }
       },
-      error => {
-        this.toastr.error('', error);
+      error => {       
         this.binNo = "";
         this.showLoader = false;
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
+        this.toastr.error('', error);
+       }
       }
     );
   }
@@ -348,9 +373,14 @@ export class ItemLabelComponent implements OnInit {
           this.noOfCopies = "1";
         }
       },
-      error => {
-        this.toastr.error('', error);
+      error => {       
         this.noOfCopies = "1";
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
+        this.toastr.error('', error);
+       }
       }
     );
   }
@@ -403,7 +433,12 @@ export class ItemLabelComponent implements OnInit {
       },
       error => {
         this.showLoader = false;
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       }
     );
   }

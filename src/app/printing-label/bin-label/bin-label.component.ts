@@ -95,7 +95,12 @@ export class BinLabelComponent implements OnInit {
       },
       error => {
         this.showLoader = false;
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       },
     );
   }
@@ -137,7 +142,12 @@ export class BinLabelComponent implements OnInit {
       },
       error => {
         this.showLoader = false;
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       },
     );
   }
@@ -238,9 +248,14 @@ export class BinLabelComponent implements OnInit {
           this.noOfCopies = "1";
         }
       },
-      error => {
-        this.toastr.error('', error);
+      error => {       
         this.noOfCopies = "1";
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
+        this.toastr.error('', error);
+       }
       }
     );
   } 
@@ -291,7 +306,12 @@ export class BinLabelComponent implements OnInit {
       },
       error => {
         this.showLoader = false;
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       }
     );
   }
@@ -339,7 +359,12 @@ export class BinLabelComponent implements OnInit {
       },
       error => {
         this.showLoader = false;
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       }
     );
   }
@@ -376,7 +401,12 @@ export class BinLabelComponent implements OnInit {
       },
       error => {
         this.showLoader = false;
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
         this.toastr.error('', error);
+       }
       }
     );
   }

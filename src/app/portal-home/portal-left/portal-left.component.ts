@@ -8,6 +8,7 @@ import { UIHelper } from '../../helpers/ui.helpers';
 import { CommandName } from 'selenium-webdriver';
 import { CommonConstants } from '../../const/common-constants';
 import { TranslateService } from '@ngx-translate/core';
+import { ToastrService } from '../../../../node_modules/ngx-toastr';
 
 @Component({
   selector: 'app-portal-left',
@@ -17,21 +18,22 @@ import { TranslateService } from '@ngx-translate/core';
 export class PortalLeftComponent implements OnInit {
 
   isPalletizationEnable: boolean = false;
+  WarehouseTransfer: boolean = false;
 
-  constructor(private commonService: Commonservice, private router: Router, private menuService: MenuService,private translate: TranslateService) {
+  constructor(private commonService: Commonservice, private router: Router, private menuService: MenuService, private translate: TranslateService, private toastr: ToastrService) {
     router.events.subscribe((val) => {
-       // get current url with last word
+      // get current url with last word
       let partsOfUrl = this.router.url.split('/');
-      this.selectedItem = partsOfUrl[partsOfUrl.length - 1];   
-      setTimeout(()=>{   
-        if (typeof(document.getElementById('opti_RightPanelID')) != 'undefined' && document.getElementById('opti_RightPanelID') != null){
+      this.selectedItem = partsOfUrl[partsOfUrl.length - 1];
+      setTimeout(() => {
+        if (typeof (document.getElementById('opti_RightPanelID')) != 'undefined' && document.getElementById('opti_RightPanelID') != null) {
           document.getElementById('opti_RightPanelID').classList.remove('opti_menusidebar-mobile-open');
           document.getElementById('opti_LeftPanelID').classList.remove('opti_menusidebar-mobile-open');
-        } 
-      }, 1000);   
-                 
+        }
+      }, 1000);
+
     });
-   }
+  }
   selectedThemeColor: string = 'opticonstants.DEFAULTTHEMECOLOR';
   selectedItem: string;
 
@@ -58,22 +60,38 @@ export class PortalLeftComponent implements OnInit {
   }
 
 
-  getAllMenus(){
+  getAllMenus() {
+    let menuLoaded = window.localStorage.getItem('IsMenuLoaded');
+    //  if(!menuLoaded){
     this.menuService.getAllMenus().subscribe(
       data => {
-        if(data!=null)
-        this.displayMenuOptions(data.Modules);
+        if (data != null)
+          this.displayMenuOptions(data.Modules);
+        window.localStorage.setItem('IsMenuLoaded', 'true');
       },
       error => {
-        alert( this.translate.instant("ReloadPageMsg"));
+        //alert( this.translate.instant("ReloadPageMsg"));
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonService.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
+    //   }    
   }
 
-  displayMenuOptions(menus: any[]){
+  displayMenuOptions(menus: any[]) {
     menus.forEach(element => {
-      if(document.getElementById(element.id) != null){
-       document.getElementById(element.id).style.display = 'block';
+      console.log(element)
+      console.log(element.id)
+      if (document.getElementById(element.id) != null) {
+        document.getElementById(element.id).style.display = 'block';
+
+        if (element.id == 15108) {
+          this.WarehouseTransfer = true;
+        }
       }
     });
   }
@@ -84,16 +102,16 @@ export class PortalLeftComponent implements OnInit {
    * @param event 
    * @param module 
    */
-  listClick(event, module) { 
+  listClick(event, module) {
     this.selectedItem = module;
-    
+
     this.closeRightSidebar();
-    this.router.navigate(['home/' + module]); 
-    
+    this.router.navigate(['home/' + module]);
+
     localStorage.setItem("ProdReceptItem", '');
-    localStorage.setItem("FromReceiptProd",'false');
-    localStorage.setItem("GoodsReceiptModel",'');
-    localStorage.setItem("AvailableRejectQty",0+"");
+    localStorage.setItem("FromReceiptProd", 'false');
+    localStorage.setItem("GoodsReceiptModel", '');
+    localStorage.setItem("AvailableRejectQty", 0 + "");
   }
 
   /** 
@@ -105,15 +123,15 @@ export class PortalLeftComponent implements OnInit {
     this.commonService.setCurrentSideBar(currentSidebarInfo);
   }
 
-  binClick(){
+  binClick() {
     localStorage.setItem("towhseId", localStorage.getItem("whseId"));
   }
 
-  onInboundClick(){
+  onInboundClick() {
     this.clearInboundData();
   }
 
-  clearInboundData(){
+  clearInboundData() {
     localStorage.setItem("GRPOReceieveData", "");
     localStorage.setItem("Line", "0")
     localStorage.setItem("addToGRPOPONumbers", "");
@@ -125,7 +143,7 @@ export class PortalLeftComponent implements OnInit {
     localStorage.setItem("primaryAutoLots", "");
   }
 
-  onOutboundClick(){
+  onOutboundClick() {
     localStorage.setItem(CommonConstants.OutboundData, null);
     localStorage.setItem("ComingFrom", "");
   }
