@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Pallet } from 'src/app/models/Inbound/Pallet';
+import { PalletOperationType } from 'src/app/enums/PalletEnums';
 
 @Component({
   selector: 'app-palletize',
@@ -15,13 +16,24 @@ export class PalletizeComponent implements OnInit {
   showLoader: boolean = false;
   showLookup: boolean = false;
   lookupFor: any = "";
-  selectedPallets: any = Array<Pallet>();
+  savedPalletsArray: any = Array<Pallet>();
   public serviceData: any;
   autoGenereatePalletEnable: boolean = false;
   palletNo: string = "";
   showNewPallet: boolean = false;
   createdNewPallet: string = "";
-  itemCode: string;
+  itemCode: string = "";
+  itemsList: any;
+  showHideGridToggle: boolean = false;
+  showHideBtnTxt: string;
+  batchSerialNo: string = "";
+  qty: number = 0;
+  openQty: string;
+  expDate: string;
+  toBin: string;
+  toWhse: string;
+  whse: string;
+  binNo: string;
 
   constructor(private commonservice: Commonservice,
     private router: Router, private toastr: ToastrService, private translate: TranslateService) {
@@ -35,8 +47,12 @@ export class PalletizeComponent implements OnInit {
   }
 
   public getPalletList(from: string) {
+    if (this.itemCode == '' || this.itemCode == undefined) {
+      return
+    }
+
     this.showLoader = true;
-    this.commonservice.getPalletList("itemCode").subscribe(
+    this.commonservice.getPalletList(1, this.itemCode).subscribe(
       (data: any) => {
         this.showLoader = false;
         console.log(data);
@@ -56,12 +72,12 @@ export class PalletizeComponent implements OnInit {
       },
       error => {
         this.showLoader = false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -71,6 +87,10 @@ export class PalletizeComponent implements OnInit {
   }
 
   onPalletChange() {
+    if (this.palletNo == '' || this.palletNo == undefined) {
+      return
+    }
+
     this.showLoader = true;
     this.commonservice.isPalletValid(this.palletNo).subscribe(
       (data: any) => {
@@ -82,6 +102,9 @@ export class PalletizeComponent implements OnInit {
               this.toastr.error('', this.translate.instant("InValidPalletNo"));
               this.palletNo = "";
               return;
+            } else {
+              //this.palletNo = "";
+              this.showHideBtnTxt = this.translate.instant("showGrid");
             }
           }
         }
@@ -93,22 +116,33 @@ export class PalletizeComponent implements OnInit {
       },
       error => {
         this.showLoader = false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
 
   getLookupValue(lookupValue: any) {
+    this.showLoader = false;
     if (this.lookupFor == "PalletList") {
-      this.showLoader = false;
-      // this.showPalletLookup = true;
       this.palletNo = lookupValue.Code;
-      //this.selectedPallets.push(lookupValue);
+      this.toWhse = lookupValue.U_OPTM_WAREHOUSE_LOC;
+      this.toBin = lookupValue.U_OPTM_BIN;
+      this.showHideBtnTxt = this.translate.instant("showGrid");
+    } else if (this.lookupFor == "ItemsList") {
+      this.itemCode = lookupValue.ITEMCODE;
+      //Reset fields when change itemcode
+      this.resetVariables();
+    } else if (this.lookupFor == "ShowBatachSerList") {
+      this.batchSerialNo = lookupValue.LOTNO;
+      this.expDate = lookupValue.EXPDATE;
+      this.whse = lookupValue.WHSCODE;
+      this.binNo = lookupValue.BINNO;
+      this.openQty = lookupValue.TOTALQTY;
     }
   }
 
@@ -126,17 +160,17 @@ export class PalletizeComponent implements OnInit {
 
   OnItemCodeLookupClick() {
     this.showLoader = true;
-    this.commonservice.getItemCodeList().subscribe(
+    this.commonservice.getItemsToPalletize().subscribe(
       data => {
         this.showLoader = false;
         if (data != undefined && data.length > 0) {
-          // console.log("ItemList - " + data.toString());
+          console.log("getItemsToPalletize - " + JSON.stringify(data));
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
-          this.showLoader = false;
+          this.showLookup = true;
           this.serviceData = data;
           this.lookupFor = "ItemsList";
         } else {
@@ -144,12 +178,13 @@ export class PalletizeComponent implements OnInit {
         }
       },
       error => {
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.showLoader = false;
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -170,77 +205,195 @@ export class PalletizeComponent implements OnInit {
             return;
           }
           this.itemCode = data[0].ITEMCODE;
-          //this.itemName = data[0].ITEMNAME;
-          //this.showItemName = true;
-          // oWhsTransEditLot.Remarks = data[0].getValue();
-          // this.ItemTracking = data[0].TRACKING;
-          // this.transferQty = "0.000";
-          // this.onHandQty = 0.000;
-          this.CheckTrackingandVisiblity();
-          if (localStorage.getItem("whseId") != localStorage.getItem("towhseId")) {
-            this.getDefaultBin();
-          }
+          this.resetVariables();
+          // this.CheckTrackingandVisiblity();
+          // if (localStorage.getItem("whseId") != localStorage.getItem("towhseId")) {
+          //   this.getDefaultBin();
+          // }
         } else {
           this.toastr.error('', this.translate.instant("InvalidItemCode"));
-          // this.showItemName = false;
-          // this.itemCode = "";
-          // this.fromBin = "";
         }
       },
       error => {
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
 
-  CheckTrackingandVisiblity() {
-    // if (this.ItemTracking == "B") {
-    //   this.isItemSerialTrack = false;
-    //   this.showBatchNo = true;
-    //   this.editTransferQty = false;
-    //   this.batchNoPlaceholder = this.translate.instant("BatchNo");
-    //   // oTxtTransferQty.setEnabled(true);
-    // }
-    // else if (this.ItemTracking == "S") {
-    //   this.isItemSerialTrack = true;
-    //   this.showBatchNo = true;
-    //   this.editTransferQty = true;
-    //   this.batchNoPlaceholder = this.translate.instant("SerialNo");
-    // }
-    // else if (this.ItemTracking == "N") {
-    //   this.isItemSerialTrack = false;
-    //   this.showBatchNo = false;
-    //   this.editTransferQty = false;
-    //   // olbllotno.setText("")
-    // }
-    // this.fromBin = "";
-    // this.toBin = "";
-    // this.lotValue = "";
+  clickShowHideGrid() {
+    this.showHideGridToggle = !this.showHideGridToggle;
+    if (this.showHideGridToggle) {
+      this.showHideBtnTxt = this.translate.instant("hideGrid");
+    } else {
+      this.showHideBtnTxt = this.translate.instant("showGrid");
+    }
   }
 
-  getDefaultBin() {
-    // this.inventoryTransferService.getDefaultBin(this.itemCode, localStorage.getItem("towhseId")).subscribe(
-    //   data => {
-    //     this.getDefaultBinFlag = true;
-    //     if (data != null) {
-    //       if (data != this.fromBin) {
-    //         this.toBin = data;
-    //       }
-    //       return;
-    //     }
-    //     else {
-    //       this.ShowToBins();
-    //     }
-    //   },
-    //   error => {
-    //     this.toastr.error('', error);
-    //   }
-    // );
+  showHideGridBtn() {
+    if ((this.itemCode != "" && this.itemCode != undefined)
+      && (this.batchSerialNo != "" && this.batchSerialNo != undefined)
+      && (this.palletNo != "" && this.palletNo != undefined)) {
+      return true;
+    }
+    return false;
   }
 
+  OnBatchSerialLookupClick() {
+    if (this.itemCode == '' || this.itemCode == undefined) {
+      this.toastr.error('', this.translate.instant("Please select item code"));
+      return;
+    }
+
+    this.showLoader = true;
+    this.commonservice.getBatchSerialForItem(this.itemCode).subscribe(
+      data => {
+        this.showLoader = false;
+        if (data != undefined && data.length > 0) {
+          console.log("getItemsToPalletize - " + JSON.stringify(data));
+          if (data[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
+          this.showLookup = true;
+          this.serviceData = data;
+          this.lookupFor = "ShowBatachSerList";
+        } else {
+          this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+        }
+      },
+      error => {
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.showLoader = false;
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
+
+  OnLotsChange() {
+    if (this.batchSerialNo == "" || this.batchSerialNo == undefined) {
+      return;
+    }
+  }
+
+  addQuantity() {
+    if (this.qty == 0 || this.qty == undefined) {
+      this.toastr.error('', this.translate.instant("Inbound_EnterQuantityErrMsg"));
+      return;
+    }
+    if (!Number.isInteger(this.qty)) {
+      this.toastr.error('', this.translate.instant("DecimalQuantity"));
+      return;
+    }
+    if (this.itemCode == "" || this.itemCode == undefined) {
+      this.toastr.error('', this.translate.instant("SelectItemCode"));
+      return;
+    }
+    if (this.batchSerialNo == "" || this.batchSerialNo == undefined) {
+      this.toastr.error('', this.translate.instant("SelectBatchSerial"));
+      return;
+    }
+    if (this.palletNo == "" || this.palletNo == undefined) {
+      this.toastr.error('', this.translate.instant("Plt_PalletRequired"));
+      return;
+    }
+
+    // if (!this.validateQuantity()) {
+    //   return;
+    // }
+
+    var object = {
+      ItemCode: this.itemCode,
+      LotNo: this.batchSerialNo,
+      FinalLotNo: this.batchSerialNo + "-" + this.palletNo,
+      PalletCode: this.palletNo,
+      Quantity: this.qty
+    }
+    this.savedPalletsArray.push(object);
+
+    this.resetVariables();
+
+    //this.updateReceiveQty();
+  }
+
+  validateQuantity(): boolean {
+    let quantitySum: number = 0;
+    for (var i = 0; i < this.savedPalletsArray.length; i++) {
+      quantitySum += Number(this.savedPalletsArray[i].Quantity);
+    }
+    quantitySum = quantitySum + Number(this.qty);
+
+    if (Number(this.openQty) == 0) {
+      this.toastr.error('', this.translate.instant("Inbound_NoOpenQuantity"));
+      this.qty = 0;
+      return false;
+    } else if (quantitySum > Number(this.openQty)) {
+      this.toastr.error('', this.translate.instant("Inbound_NoOpenQuantityValid"));
+      this.qty = 0;
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  palletize() {
+    // if (this.palletNo == '') {
+    //   return
+    // }
+
+    this.showLoader = true;
+    this.commonservice.palletize(this.palletNo).subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        console.log(data);
+        if (data != null) {
+          // if (data.length > 0) {
+          //   if (data[0].Result == "0") {
+          //     this.toastr.error('', this.translate.instant("InValidPalletNo"));
+          //     this.palletNo = "";
+          //     return;
+          //   }
+          // }
+        }
+        else {
+          this.toastr.error('', this.translate.instant("InValidPalletNo"));
+          return;
+        }
+      },
+      error => {
+        this.showLoader = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
+
+  openConfirmForDelete(index: any, item: any) {
+    console.log("index: " + index)
+    console.log("item: " + item)
+    this.savedPalletsArray.splice(index);
+  }
+
+  resetVariables() {
+    this.batchSerialNo = '';
+    this.palletNo = '';
+    this.expDate = "";
+    this.whse = "";
+    this.binNo = "";
+    this.openQty = "0";
+    this.qty = 0;
+  }
 }

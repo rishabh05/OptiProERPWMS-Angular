@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Commonservice } from 'src/app/services/commonservice.service';
 import { TranslateService } from '@ngx-translate/core';
+import { PalletOperationType } from 'src/app/enums/PalletEnums';
 
 @Component({
   selector: 'app-split-transfer',
@@ -54,7 +55,7 @@ export class SplitTransferComponent implements OnInit {
   lookupfor: string;
   public getPalletList() {
     this.showLoader = true;
-    this.commonservice.getPalletList('').subscribe(
+    this.commonservice.getPalletList(PalletOperationType.Split, "").subscribe(
       (data: any) => {
         this.showLoader = false;
         console.log(data);

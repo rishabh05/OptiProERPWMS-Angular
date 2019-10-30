@@ -6,27 +6,28 @@ import { CurrentSidebarInfo } from '../models/sidebar/current-sidebar-info';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { PalletOperationType } from '../enums/PalletEnums';
 
 @Injectable({
   providedIn: 'root'
 })
 export class Commonservice {
 
-  public static pageSize: number = 10;   
+  public static pageSize: number = 10;
   static RemoveLicenseAndSignout(): any {
     throw new Error("Method not implemented.");
   }
- 
+
   public href: any = window.location.href;
   public config_params: any;
-  public authTokenstr:string = "The remote server returned an error: (401) Unauthorized.";
+  public authTokenstr: string = "The remote server returned an error: (401) Unauthorized.";
 
   public httpOptions = {
-    headers: new HttpHeaders({ 
+    headers: new HttpHeaders({
       'Content-Type': 'application/json',
       'Accept': 'application/json'
     })
-  }   
+  }
 
   constructor(private httpclient: HttpClient, private toastr: ToastrService, private router: Router) {
     this.loadConfig();
@@ -84,24 +85,24 @@ export class Commonservice {
     this.commonData.next(data);
   }
 
-  public unauthorizedToken(Error, message: string){
-    if(Error.error.ExceptionMessage == this.authTokenstr ){
-      this.RemoveLicenseAndSignout(this.toastr, this.router, message);    
+  public unauthorizedToken(Error, message: string) {
+    if (Error.error.ExceptionMessage == this.authTokenstr) {
+      this.RemoveLicenseAndSignout(this.toastr, this.router, message);
       // sessionStorage.clear();
       // localStorage.clear();
       // this.router.navigateByUrl('/account');  
     }
- }
+  }
 
- public updateHeader(){
-  this.httpOptions = {
-    headers: new HttpHeaders({
-    'Content-Type':  'application/json',
-    'Accept':'application/json',
-    'Authorization': localStorage.getItem('accessToken')
-    })
-  };
-}
+  public updateHeader() {
+    this.httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': localStorage.getItem('accessToken')
+      })
+    };
+  }
 
   // for Seeting color of theme.
   private themeData = new BehaviorSubject<any>(opticonstants.DEFAULTTHEMECOLOR);
@@ -180,7 +181,7 @@ export class Commonservice {
   RemoveLicenseAndSignout(toastr: ToastrService, router: Router, message: string) {
     var jObject = { GUID: localStorage.getItem("GUID"), LoginId: localStorage.getItem("UserId") };
     this.httpclient.post(this.config_params.service_url + "/api/Login/RemoveLoggedInUser", jObject, this.httpOptions);
-    this.signOut(this.toastr, this.router, message); 
+    this.signOut(this.toastr, this.router, message);
     //return this.httpclient.post(this.config_params.service_url + "/api/Login/RemoveLoggedInUser", jObject, this.httpOptions);
   }
 
@@ -189,8 +190,8 @@ export class Commonservice {
     //JSON Obeject Prepared to be send as a param to API
     let jObject: any = {
       MoveOrder: JSON.stringify([{
-        CompanyDBID: localStorage.getItem("CompID") ,
-        UserID: localStorage.getItem("UserId") 
+        CompanyDBID: localStorage.getItem("CompID"),
+        UserID: localStorage.getItem("UserId")
       }])
     };
     //Return the response form the API  
@@ -233,10 +234,12 @@ export class Commonservice {
     localStorage.setItem("PONumber", "");
   }
 
-  getPalletList(itemCode: string): Observable<any> {
+  getPalletList(opType: number, itemCode: string): Observable<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
         COMPANYDBNAME: localStorage.getItem("CompID"),
+        OPERATIONTYPE: "" + opType,
+        WhseCode: localStorage.getItem("whseId"),
         ITEMCODE: itemCode
       }])
     };
@@ -247,6 +250,7 @@ export class Commonservice {
     var jObject = {
       PalletCode: JSON.stringify([{
         COMPANYDBNAME: localStorage.getItem("CompID"),
+        USER: localStorage.getItem("UserId"),
         PalletId: palletCode
       }])
     };
@@ -257,6 +261,7 @@ export class Commonservice {
     var jObject = {
       PalletCode: JSON.stringify([{
         COMPANYDBNAME: localStorage.getItem("CompID"),
+        WhseCode: localStorage.getItem("whseId"),
         PalletCode: palletCode
       }])
     };
@@ -271,5 +276,138 @@ export class Commonservice {
   getItemInfo(itemCode: string): Observable<any> {
     var jObject = { ITEMCODE: JSON.stringify([{ CompanyDbName: localStorage.getItem("CompID"), ITEMCODE: itemCode, WHSCODE: localStorage.getItem("whseId") }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodsReceipt/GetItemInfo", jObject, this.httpOptions);
+  }
+
+  // Palletization APIs 
+  getPalletsOfSameWarehouse(palletCode: string): Observable<any> {
+    var jObject = {
+      PalletCode: JSON.stringify([{
+        COMPANYDBNAME: localStorage.getItem("CompID"),
+        PalletCode: palletCode,
+        WhseCode: localStorage.getItem("whseId")
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetPalletsOfSameWarehouse", jObject, this.httpOptions);
+  }
+
+  /**
+   * API to get item
+   * @param palletCode
+   */
+  getItemsToPalletize(): Observable<any> {
+    var jObject = {
+      PalletCode: JSON.stringify([{
+        COMPANYDBNAME: localStorage.getItem("CompID"),
+        WhseCode: localStorage.getItem("whseId")
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetItemsToPalletize", jObject, this.httpOptions);
+  }
+
+  /**
+   * API to get pallet details for show grid.
+   * @param palletCode 
+   */
+  GetPalletData(palletCode: string): Observable<any> {
+    var jObject = {
+      PalletCode: JSON.stringify([{
+        COMPANYDBNAME: localStorage.getItem("CompID"),
+        PalletCode: palletCode,
+        WhseCode: localStorage.getItem("whseId")
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetPalletData", jObject, this.httpOptions);
+  }
+
+  /**
+   * API for depalletize
+   * 
+   * @param palletCode
+   */
+  depalletize(fromPallet: string): Observable<any> {
+    var jObject = {
+      PalletCode: JSON.stringify([{
+        COMPANYDBNAME: localStorage.getItem("CompID"),
+        FromPalletCode: fromPallet,
+        ToPalletCode: fromPallet,
+        PALLETOPERATIONTYPE: PalletOperationType.Depalletization,
+        WhseCode: localStorage.getItem("whseId")
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/PalletTransaction", jObject, this.httpOptions);
+  }
+
+  getBatchSerialForItem(itemCode: string): Observable<any> {
+    var jObject = {
+      PalletCode: JSON.stringify([{
+        COMPANYDBNAME: localStorage.getItem("CompID"),
+        ItemCode: itemCode,
+        WhseCode: localStorage.getItem("whseId")
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetBatchSerialForItem", jObject, this.httpOptions);
+  }
+
+  /**
+   * API for depalletize
+   * 
+   * @param palletCode
+   */
+  palletize(palletCode: any): Observable<any> {
+    var jObject = {
+      PalletCode: JSON.stringify([{
+        COMPANYDBNAME: localStorage.getItem("CompID"),
+        FromPalletCode: palletCode,
+        ToPalletCode: palletCode,
+        PALLETOPERATIONTYPE: PalletOperationType.Palletization,
+        WhseCode: localStorage.getItem("whseId")
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/PalletTransaction", jObject, this.httpOptions);
+  }
+
+  /**
+   * API for depalletize
+   * 
+   * @param palletCode
+   */
+  mergePallet(fromPallet: any, toPallet: any): Observable<any> {
+    var jObject = {
+      PalletCode: JSON.stringify([{
+        COMPANYDBNAME: localStorage.getItem("CompID"),
+        FromPalletCode: fromPallet,
+        ToPalletCode: toPallet,
+        PALLETOPERATIONTYPE: PalletOperationType.Palletization,
+        WhseCode: localStorage.getItem("whseId")
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/PalletTransaction", jObject, this.httpOptions);
+  }
+
+  /**
+   * API for transfer Pallet
+   * 
+   * @param palletCode
+   */
+  transferPallet(toWhse: string, toBin: string, fromPallet: string, toPallet: string): Observable<any> {
+    var jObject = {
+      PalletCode: JSON.stringify([{
+        COMPANYDBNAME: localStorage.getItem("CompID"),
+        FromPalletCode: fromPallet,
+        ToPalletCode: toPallet,
+        PALLETOPERATIONTYPE: PalletOperationType.Palletization,
+        WhseCode: localStorage.getItem("whseId"),
+        BIN: "",
+        WHSE: "",
+        TOBIN: toBin,
+        TOWHSE: toWhse,
+        EXPIRYDATE: "",
+        ITEMCODE: "",
+        FINALPALLETNO: "",
+        BATCHNO: "",
+        QTY: ""
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/PalletTransaction", jObject, this.httpOptions);
   }
 }

@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Pallet } from 'src/app/models/Inbound/Pallet';
+import { PalletOperationType } from 'src/app/enums/PalletEnums';
 
 @Component({
   selector: 'app-depalletize',
@@ -21,6 +22,11 @@ export class DepalletizeComponent implements OnInit {
   palletNo: string = "";
   showNewPallet: boolean = false;
   createdNewPallet: string = "";
+  showHideGridToggle: boolean = false;
+  showHideBtnTxt: string;
+  palletData: any;
+  toBin: string;
+  toWhse: string;
 
   constructor(private commonservice: Commonservice,
     private router: Router, private toastr: ToastrService, private translate: TranslateService) {
@@ -35,7 +41,7 @@ export class DepalletizeComponent implements OnInit {
 
   public getPalletList(from: string) {
     this.showLoader = true;
-    this.commonservice.getPalletList("itemCode").subscribe(
+    this.commonservice.getPalletsOfSameWarehouse("").subscribe(
       (data: any) => {
         this.showLoader = false;
         console.log(data);
@@ -55,12 +61,12 @@ export class DepalletizeComponent implements OnInit {
       },
       error => {
         this.showLoader = false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -81,6 +87,11 @@ export class DepalletizeComponent implements OnInit {
               this.toastr.error('', this.translate.instant("InValidPalletNo"));
               this.palletNo = "";
               return;
+            } else {
+              this.showHideGridToggle = false;
+              this.showHideBtnTxt = this.translate.instant("showGrid");
+
+              this.getPalletData();
             }
           }
         }
@@ -92,12 +103,12 @@ export class DepalletizeComponent implements OnInit {
       },
       error => {
         this.showLoader = false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -105,9 +116,11 @@ export class DepalletizeComponent implements OnInit {
   getLookupValue(lookupValue: any) {
     if (this.lookupFor == "PalletList") {
       this.showLoader = false;
-      // this.showPalletLookup = true;
       this.palletNo = lookupValue.Code;
-      //this.selectedPallets.push(lookupValue);
+      this.toWhse = lookupValue.U_OPTM_WAREHOUSE_LOC;
+      this.toBin = lookupValue.U_OPTM_BIN;
+      this.showHideBtnTxt = this.translate.instant("showGrid");
+      this.getPalletData();
     }
   }
 
@@ -115,11 +128,74 @@ export class DepalletizeComponent implements OnInit {
     this.router.navigateByUrl('home/dashboard', { skipLocationChange: true });
   }
 
-  onCheckChange() {
-    this.showNewPallet = !this.showNewPallet;
-    if (this.showNewPallet) {
+  clickShowHideGrid() {
+    this.showHideGridToggle = !this.showHideGridToggle;
+    if (this.showHideGridToggle) {
+      this.showHideBtnTxt = this.translate.instant("hideGrid");
     } else {
-      this.createdNewPallet = "";
+      this.showHideBtnTxt = this.translate.instant("showGrid");
     }
   }
+
+  getPalletData() {
+    this.showHideGridToggle = false;
+    this.showHideBtnTxt = this.translate.instant("showGrid");
+
+    // this.showLoader = true;
+    this.commonservice.GetPalletData(this.palletNo).subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        console.log(data);
+        if (data != null) {
+          this.palletData = data;
+        }
+        else {
+          this.toastr.error('', this.translate.instant("InValidPalletNo"));
+          return;
+        }
+      },
+      error => {
+        this.showLoader = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
+
+  depalletize() {
+    this.showLoader = true;
+    this.commonservice.depalletize(this.palletNo).subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        console.log(data);
+        if (data != null) {
+          // if (data.length > 0) {
+          //   if (data[0].Result == "0") {
+          //     this.toastr.error('', this.translate.instant("InValidPalletNo"));
+          //     this.palletNo = "";
+          //     return;
+          //   }
+          // }
+        }
+        else {
+          this.toastr.error('', this.translate.instant("InValidPalletNo"));
+          return;
+        }
+      },
+      error => {
+        this.showLoader = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
+  
 }

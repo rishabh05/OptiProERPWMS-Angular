@@ -25,23 +25,35 @@
           </div>
         </div>
       </div>
-     
-      <div class="row" *ngIf="false">
-        <div class="col-12">
-          <kendo-grid class="no-shadow" [data]="selectedPallets" [resizable]="true" [sortable]="true">
 
+      <div class="row" *ngIf="showHideGridToggle">
+        <div class="col-12">
+          <kendo-grid class="no-shadow" [data]="palletData" [resizable]="true" [sortable]="true">
             <!-- grid for mobile start -->
-            <kendo-grid-column media="(max-width: 767px)" title="{{'Plt_SelectedPallets'|translate}}" class="opti_mobile-grid-td">
+            <kendo-grid-column media="(max-width: 767px)" title="{{'Plt_PalletDetails'|translate}}" class="opti_mobile-grid-td">
               <ng-template kendoGridCellTemplate let-dataItem let-idx="rowIndex">
                 <dl class="opti_mobile_grid_dl">
-                  <dt>{{'Plt_PalletNo'|translate}}</dt>
-                  <dd>{{ dataItem.Code }}</dd>
+                  <dt>{{'Item'|translate}}</dt>
+                  <dd>{{ dataItem.ITEMID }}</dd>
+                  <dt>{{'BatchSerial_No'|translate}}</dt>
+                  <dd>{{ dataItem.SRLBATCH }}</dd>
+                </dl>
+                <dl class="opti_mobile_grid_dl">
+                  <dt>{{'Quantity'|translate}}</dt>
+                  <dd>{{ dataItem.QTY }}</dd>
                 </dl>
               </ng-template>
             </kendo-grid-column>
             <!-- grid for mobile end -->
 
-            <kendo-grid-column media="(min-width: 768px)" field="Code" title="{{'Plt_PalletNo'|translate}}" [width]="30"></kendo-grid-column>
+            <kendo-grid-column media="(min-width: 768px)" field="ITEMID" title="{{'Item'|translate}}" [width]="18"></kendo-grid-column>
+            <kendo-grid-column media="(min-width: 768px)" field="SRLBATCH" [width]="18" title="{{'BatchSerial_No'|translate}}"></kendo-grid-column>
+            <kendo-grid-column media="(min-width: 768px)" field="QTY" headerClass="text-right" class="text-right"
+              [width]="18" title="{{'Quantity'|translate}}">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                {{dataItem.QTY | numberFormat}}
+              </ng-template>
+            </kendo-grid-column>
           </kendo-grid>
         </div>
       </div>
@@ -54,9 +66,12 @@
       <div class="col-sm-12 col-12">
         <button type="button" (click)="back(0)" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-close-outline"
             role="presentation"></span> {{'Cancel'|translate}}</button>
-        <button type="button" *ngIf="palletNo!=''" (click)="depalletize()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
-            class="k-icon k-i-save"></span>
+        <button type="button" *ngIf="palletNo!=''" (click)="depalletize()" class="btn btn-success k-button btn-sm btn-icon-with-text">
+          <span class="k-icon k-i-save"></span>
           {{'Plt_Depalletize'|translate}}</button>
+        <button type="button" id="showHideGrid" *ngIf="palletNo!=''" (click)="clickShowHideGrid()" class="btn btn-success k-button btn-sm btn-icon-with-text">
+          {{showHideBtnTxt}}
+        </button>
       </div>
     </div>
   </form>

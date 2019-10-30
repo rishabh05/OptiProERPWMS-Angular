@@ -4,6 +4,8 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Pallet } from 'src/app/models/Inbound/Pallet';
+import { PalletOperationType } from 'src/app/enums/PalletEnums';
+import { listLazyRoutes } from '@angular/compiler/src/aot/lazy_routes';
 
 @Component({
   selector: 'app-pallet-merge',
@@ -16,14 +18,16 @@ export class PalletMergeComponent implements OnInit {
   showLookup: boolean = false;
   showNewPallet: boolean = false;
   lookupFor: any = "";
-  selectedPallets: any = Array<Pallet>();
+  selectedFromPallets: any = Array<Pallet>();
   public serviceData: any;
   autoGenereatePalletEnable: boolean = false;
   createdNewPallet: string;
-  toPalletNo: string;
-  fromPalletNo: string;
+  toPalletNo: string = "";
+  fromPalletNo: string = "";
   fromPalletLookup: string;
-
+  toBin: string;
+  toWhse: string;
+  
   constructor(private commonservice: Commonservice,
     private router: Router, private toastr: ToastrService, private translate: TranslateService) {
 
@@ -36,8 +40,15 @@ export class PalletMergeComponent implements OnInit {
   }
 
   public getPalletList(from: string) {
+    var code = "";
+    if (from == "from_pallet") {
+      code = this.toPalletNo;
+    } else if (from == "to_pallet") {
+      code = Array.prototype.map.call(this.selectedFromPallets, function (item) { return "'" + item.Code + "'"; }).join(",");
+      console.log("code: " + code);
+    }
     this.showLoader = true;
-    this.commonservice.getPalletList("itemCode").subscribe(
+    this.commonservice.getPalletsOfSameWarehouse(code).subscribe(
       (data: any) => {
         this.showLoader = false;
         console.log(data);
@@ -47,7 +58,6 @@ export class PalletMergeComponent implements OnInit {
             this.showLoader = false;
             this.serviceData = data;
             this.showLookup = true;
-            // this.palletValue = this.serviceData[0].Code;
             this.lookupFor = "PalletList";
             this.fromPalletLookup = from;
             return;
@@ -59,12 +69,12 @@ export class PalletMergeComponent implements OnInit {
       },
       error => {
         this.showLoader = false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -92,36 +102,42 @@ export class PalletMergeComponent implements OnInit {
         console.log(data);
         if (data != null) {
           if (data.length > 0) {
-            if (data[0].Result == "0") {
-              this.toastr.error('', this.translate.instant("InValidPalletNo"));
-              this.fromPalletNo = "";
-              this.toPalletNo = "";
-              return;
-            }
-            else {
-              if (from == "from_pallet") {
-                this.fromPalletNo = data[0].Code;
-              } else {
-                this.toPalletNo = data[0].Code;
+            if (from == "from_pallet") {
+              this.fromPalletNo = data[0].Code;
+              if (!this.containPallet(this.selectedFromPallets, data[0].Code)) {
+                this.selectedFromPallets.push(data[0]);
               }
+            } else if (from == "to_pallet") {
+              this.toPalletNo = data[0].Code;
             }
+          } else {
+            this.toastr.error('', this.translate.instant("InValidPalletNo"));
+            if (from == "to_pallet") {
+              this.toPalletNo = "";
+            } else if (from == "from_pallet") {
+              this.fromPalletNo = "";
+            }
+            return;
           }
         }
         else {
           this.toastr.error('', this.translate.instant("InValidPalletNo"));
-          this.fromPalletNo = "";
-          this.toPalletNo = "";
+          if (from == "to_pallet") {
+            this.toPalletNo = "";
+          } else if (from == "from_pallet") {
+            this.fromPalletNo = "";
+          }
           return;
         }
       },
       error => {
         this.showLoader = false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -129,12 +145,24 @@ export class PalletMergeComponent implements OnInit {
   getLookupValue(lookupValue: any) {
     if (this.fromPalletLookup == "from_pallet") {
       this.showLoader = false;
-      // this.showPalletLookup = true;
-      // this.palletValue = lookupValue[0];
-      this.selectedPallets.push(lookupValue);
+      this.fromPalletNo = lookupValue.Code;
+      this.toWhse = lookupValue.U_OPTM_WAREHOUSE_LOC;
+      this.toBin = lookupValue.U_OPTM_BIN;
+      if (!this.containPallet(this.selectedFromPallets, lookupValue.Code)) {
+        this.selectedFromPallets.push(lookupValue);
+      }
     } else if (this.fromPalletLookup == "to_pallet") {
       this.toPalletNo = lookupValue.Code;
     }
+  }
+
+  containPallet(list: any, targetPallet: string) {
+    for (let i = 0; i < list.length; i++) {
+      if (list[i].Code == targetPallet) {
+        return true;
+      }
+    }
+    return false;
   }
 
   onCheckChange() {
@@ -151,5 +179,47 @@ export class PalletMergeComponent implements OnInit {
 
   back(fromwhereval: number) {
     this.router.navigateByUrl('home/dashboard', { skipLocationChange: true });
+  }
+
+  mergePallet() {
+    if (this.fromPalletNo == '' || this.toPalletNo == '') {
+      return
+    }
+    var fromPltCode = Array.prototype.map.call(this.selectedFromPallets, function (item) { return "'" + item.Code + "'"; }).join(",");
+    this.showLoader = true;
+    this.commonservice.mergePallet(fromPltCode, this.toPalletNo).subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        console.log(data);
+        if (data != null) {
+          // if (data.length > 0) {
+          //   if (data[0].Result == "0") {
+          //     this.toastr.error('', this.translate.instant("InValidPalletNo"));
+          //     this.palletNo = "";
+          //     return;
+          //   }
+          // }
+        }
+        else {
+          this.toastr.error('', this.translate.instant("InValidPalletNo"));
+          return;
+        }
+      },
+      error => {
+        this.showLoader = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
+
+  openConfirmForDelete(index: any, item: any){
+    console.log("index: "+index)
+    console.log("item: "+item)
+    this.selectedFromPallets.splice(index);
   }
 }

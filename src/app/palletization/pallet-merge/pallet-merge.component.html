@@ -34,14 +34,23 @@
             </div>
             <div class="row">
                 <div class="col-12">
-                    <kendo-grid class="no-shadow" [data]="selectedPallets" [resizable]="true" [sortable]="true">
+                    <kendo-grid class="no-shadow" [data]="selectedFromPallets" [resizable]="true" [sortable]="true">
 
                         <!-- grid for mobile start -->
-                        <kendo-grid-column media="(max-width: 767px)" title="{{'Plt_SelectedPallets'|translate}}" class="opti_mobile-grid-td">
+                        <kendo-grid-column media="(max-width: 767px)" title="{{'List'|translate}}" class="opti_mobile-grid-td">
                             <ng-template kendoGridCellTemplate let-dataItem let-idx="rowIndex">
                                 <dl class="opti_mobile_grid_dl">
                                     <dt>{{'Plt_PalletNo'|translate}}</dt>
                                     <dd>{{ dataItem.Code }}</dd>
+                                    <dt></dt>
+                                    <dd>
+                                        <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                            <button type="button" class="btn btn-danger k-button btn-sm btn-icon"
+                                                (click)="openConfirmForDelete(rowIndex, gridItem)">
+                                                <span class="k-icon k-i-delete" role="presentation"></span>
+                                            </button>
+                                        </ng-template>
+                                    </dd>
                                 </dl>
                             </ng-template>
                         </kendo-grid-column>
@@ -49,6 +58,15 @@
 
                         <kendo-grid-column media="(min-width: 768px)" field="Code" title="{{'Plt_PalletNo'|translate}}"
                             [width]="30"></kendo-grid-column>
+
+                        <kendo-grid-column media="(min-width: 768px)" headerClass="text-center" class="text-center"
+                            field="" [width]="5" title="">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <button type="button" class="btn btn-danger k-button btn-sm btn-icon" (click)="openConfirmForDelete(rowIndex, gridItem)">
+                                    <span class="k-icon k-i-delete" role="presentation"></span>
+                                </button>
+                            </ng-template>
+                        </kendo-grid-column>
                     </kendo-grid>
                 </div>
             </div>
@@ -115,8 +133,8 @@
             <div class="col-sm-12 col-12">
                 <button type="button" (click)="back(0)" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
-                <button type="button" *ngIf="selectedPallets && selectedPallets.length>0 && toPalletNo!=''" (click)="mergePallet()"
-                    class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-save"></span>
+                <button type="button" *ngIf="selectedFromPallets && selectedFromPallets.length>0 && toPalletNo!=''"
+                    (click)="mergePallet()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-save"></span>
                     {{'Plt_Merge'|translate}}</button>
             </div>
         </div>

@@ -84,13 +84,14 @@ export class PortalLeftComponent implements OnInit {
 
   displayMenuOptions(menus: any[]) {
     menus.forEach(element => {
-      console.log(element)
-      console.log(element.id)
-      if (document.getElementById(element.id) != null) {
-        document.getElementById(element.id).style.display = 'block';
-
-        if (element.id == 15108) {
-          this.WarehouseTransfer = true;
+        if (document.getElementById(element.id) != null) {
+          document.getElementById(element.id).style.display = 'flex';
+          if(document.getElementById(element.id).childNodes.length > 0 && document.querySelectorAll('#'+element.id+".dropdown")[0] !=undefined){
+            (<HTMLElement>document.querySelectorAll('#'+element.id+".dropdown")[0].childNodes[0]).onclick = function(){
+            for (var i = 0; i < document.querySelectorAll('#'+element.id+".dropdown")[0].childNodes[2].childNodes.length; i++) {
+              (<HTMLElement>document.querySelectorAll('#'+element.id+".dropdown")[0].childNodes[2].childNodes[i]).style.display = 'flex';
+            }
+          };
         }
       }
     });
