@@ -12,6 +12,7 @@ import { InboundService } from 'src/app/services/inbound.service';
 import { LabelPrintReportsService } from 'src/app/services/label-print-reports.service';
 import { Subscriber } from 'rxjs';
 import { ISubscription } from 'rxjs/Subscription';
+import { PalletOperationType } from 'src/app/enums/PalletEnums';
 
 @Component({
   selector: 'app-out-order',
@@ -83,7 +84,7 @@ export class OutOrderComponent implements OnInit,AfterViewInit {
   public getPalletList() {
     //this.showLoader = true; //method get pallet by orderNo
     this.showLookupLoader = true;
-    this.commonservice.getPalletList("itemCode").subscribe(
+    this.commonservice.getPalletList(PalletOperationType.None, "itemCode").subscribe(
       (data: any) => {
         
         console.log(data);

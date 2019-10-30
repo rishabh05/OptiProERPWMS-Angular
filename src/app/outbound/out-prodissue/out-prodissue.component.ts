@@ -12,6 +12,7 @@ import { Commonservice } from 'src/app/services/commonservice.service';
 
 import { Lot, ProductionIssueModel, Item } from 'src/app/models/Production/IFP';
 import { ProductionService } from 'src/app/services/production.service';
+import { PalletOperationType } from 'src/app/enums/PalletEnums';
 
 
 
@@ -1284,7 +1285,7 @@ export class OutProdissueComponent implements OnInit {
 
   public getPalletList() {
     this.showPalletLookup = true;
-    this.commonservice.getPalletList(this.selected.ITEMCODE).subscribe(
+    this.commonservice.getPalletList(PalletOperationType.None, this.selected.ITEMCODE).subscribe(
       (data: any) => {
         this.showLookup = false;
         console.log(data);

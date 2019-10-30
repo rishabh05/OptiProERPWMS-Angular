@@ -11,6 +11,7 @@ import { RecvingQuantityBin } from 'src/app/models/Inbound/RecvingQuantityBin';
 import { AutoLot } from 'src/app/models/Inbound/AutoLot';
 import { ISubscription } from 'rxjs/Subscription';
 import { ProductionService } from 'src/app/services/production.service';
+import { PalletOperationType } from 'src/app/enums/PalletEnums';
 
 
 
@@ -106,7 +107,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   RejItemsData: any = [];
   UDF: any = [];
   itemsData: any = [];
-  autoGenereatePalletEnable: boolean = false;
+  autoGeneratePalletEnable: boolean = false;
   checkValidateSerialSubs: ISubscription;
   @ViewChild('RecBinVal') RecBinVal: ElementRef;
 
@@ -127,7 +128,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     if (localStorage.getItem("AutoPalletIdGenerationChecked") == "True") {
-      this.autoGenereatePalletEnable = true;
+      this.autoGeneratePalletEnable = true;
     }
 
     if (localStorage.getItem("PalletizationEnabled") == "True" && localStorage.getItem("PalletizationEnabledForItem") == "True") {
@@ -1855,7 +1856,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
   public getPalletList() {
     this.showLoader = true;
-    this.commonservice.getPalletList(this.openPOLineModel[0].ITEMCODE).subscribe(
+    this.commonservice.getPalletList(PalletOperationType.None, this.openPOLineModel[0].ITEMCODE).subscribe(
       (data: any) => {
         this.showLoader = false;
         console.log(data);
@@ -2049,7 +2050,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       palletId = this.inboundNewPallet;
     }
 
-    if (this.autoGenereatePalletEnable) {
+    if (this.autoGeneratePalletEnable) {
       palletId = "";
     } else {
       if (palletId == '' || palletId == undefined) {
@@ -2174,6 +2175,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     for (var i = 0; i < this.recvingQuantityBinArray.length; i++) {
       if (this.palletValue == this.recvingQuantityBinArray[i].PalletCode) {
         this.recvingQuantityBinArray.splice(i)
+        break;
       }
     }
   }
