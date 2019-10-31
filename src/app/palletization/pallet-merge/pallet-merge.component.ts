@@ -191,18 +191,18 @@ export class PalletMergeComponent implements OnInit {
       (data: any) => {
         this.showLoader = false;
         console.log(data);
-        if (data != null) {
-          // if (data.length > 0) {
-          //   if (data[0].Result == "0") {
-          //     this.toastr.error('', this.translate.instant("InValidPalletNo"));
-          //     this.palletNo = "";
-          //     return;
-          //   }
-          // }
+        if (data != null && data.length>0 && data[0].ErrorMsg == "") {
+          
+          this.toastr.success('', this.translate.instant("Plt_Merge_success"));
+          this.resetPageOnSuccess();
+        } else if (data[0].ErrorMsg == "7001") {
+          this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+            this.translate.instant("CommonSessionExpireMsg"));
+          return;
         }
         else {
-          this.toastr.error('', this.translate.instant("InValidPalletNo"));
-          return;
+          // alert(data[0].ErrorMsg);
+          this.toastr.error('', data[0].ErrorMsg);
         }
       },
       error => {
@@ -215,6 +215,15 @@ export class PalletMergeComponent implements OnInit {
         }
       }
     );
+  }
+
+   resetPageOnSuccess(){
+ 
+    this.fromPalletNo = "";
+    this.toWhse = "";
+    this.toBin = "";
+    this.toPalletNo = "";
+    this.selectedFromPallets = [];
   }
 
   openConfirmForDelete(index: any, item: any){

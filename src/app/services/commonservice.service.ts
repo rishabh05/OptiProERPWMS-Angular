@@ -325,16 +325,33 @@ export class Commonservice {
    * @param palletCode
    */
   depalletize(fromPallet: string): Observable<any> {
+    var oPalletReq: any ={};
+    oPalletReq.Header = [];
+    oPalletReq.Header.push({
+      COMPANYDBNAME: localStorage.getItem("CompID"),
+      FromPalletCode: fromPallet,
+      ToPalletCode: fromPallet,
+      PALLETOPERATIONTYPE: PalletOperationType.Depalletization,
+      WhseCode: localStorage.getItem("whseId"),
+      USERID: localStorage.getItem("UserId")
+    });
+    var reqObject = { Header: oPalletReq.Header }
+
     var jObject = {
-      PalletCode: JSON.stringify([{
-        COMPANYDBNAME: localStorage.getItem("CompID"),
-        FromPalletCode: fromPallet,
-        ToPalletCode: fromPallet,
-        PALLETOPERATIONTYPE: PalletOperationType.Depalletization,
-        WhseCode: localStorage.getItem("whseId"),
-        USERID: localStorage.getItem("UserId")
-      }])
+
+      PalletCode: JSON.stringify(reqObject)
     };
+
+    // var jObject = {
+    //   PalletCode: JSON.stringify([{
+    //     COMPANYDBNAME: localStorage.getItem("CompID"),
+    //     FromPalletCode: fromPallet,
+    //     ToPalletCode: fromPallet,
+    //     PALLETOPERATIONTYPE: PalletOperationType.Depalletization,
+    //     WhseCode: localStorage.getItem("whseId"),
+    //     USERID: localStorage.getItem("UserId")
+    //   }])
+    // };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/PalletTransaction", jObject, this.httpOptions);
   }
 
@@ -343,16 +360,23 @@ export class Commonservice {
    * 
    * @param palletCode
    */
-  palletTransfer(fromPallet: string,toPallet): Observable<any> {
+  palletTransfer(fromPallet: string, toPallet): Observable<any> {
+    var oPalletReq: any ={};
+    oPalletReq.Header = [];
+    oPalletReq.Header.push({
+      COMPANYDBNAME: localStorage.getItem("CompID"),
+      FromPalletCode: fromPallet,
+      ToPalletCode: toPallet,
+      PALLETOPERATIONTYPE: PalletOperationType.Transfer,
+      WhseCode: localStorage.getItem("whseId"),
+      USERID: localStorage.getItem("UserId")
+    });
+    var reqObject = { Header: oPalletReq.Header }
+
+
     var jObject = {
-      PalletCode: JSON.stringify([{
-        COMPANYDBNAME: localStorage.getItem("CompID"),
-        FromPalletCode: fromPallet,
-        ToPalletCode: toPallet,
-        PALLETOPERATIONTYPE: PalletOperationType.Transfer,
-        WhseCode: localStorage.getItem("whseId"),
-        USERID: localStorage.getItem("UserId")
-      }])
+
+      PalletCode: JSON.stringify(reqObject)
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/PalletTransaction", jObject, this.httpOptions);
   }
@@ -362,7 +386,7 @@ export class Commonservice {
    * 
    * @param palletCode
    */
-  palletTransfer1(fromPallet: string,toPallet): Observable<any> {
+  palletTransfer1(fromPallet: string, toPallet): Observable<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
         COMPANYDBNAME: localStorage.getItem("CompID"),
@@ -410,15 +434,22 @@ export class Commonservice {
    * @param palletCode
    */
   mergePallet(fromPallet: any, toPallet: any): Observable<any> {
+
+    var oPalletReq: any = {};
+    oPalletReq.Header = [];
+    oPalletReq.Header.push({
+      COMPANYDBNAME: localStorage.getItem("CompID"),
+      FromPalletCode: fromPallet,
+      ToPalletCode: toPallet,
+      PALLETOPERATIONTYPE: PalletOperationType.Merge,
+      WhseCode: localStorage.getItem("whseId"),
+      USERID: localStorage.getItem("UserId")
+    });
+    var reqObject = { Header: oPalletReq.Header }
+
     var jObject = {
-      PalletCode: JSON.stringify([{
-        COMPANYDBNAME: localStorage.getItem("CompID"),
-        FromPalletCode: fromPallet,
-        ToPalletCode: toPallet,
-        PALLETOPERATIONTYPE: PalletOperationType.Palletization,
-        WhseCode: localStorage.getItem("whseId"),
-        USERID: localStorage.getItem("UserId")
-      }])
+
+      PalletCode: JSON.stringify(reqObject)
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/PalletTransaction", jObject, this.httpOptions);
   }
@@ -429,7 +460,7 @@ export class Commonservice {
    * @param palletCode
    */
   palletize(palletCode): Observable<any> {//toWhse: string, toBin: string, fromPallet: string, toPallet: string
-    var requestObject= {PalletCode: JSON.stringify(palletCode)}
+    var requestObject = { PalletCode: JSON.stringify(palletCode) }
     // var jObject = {
     //   PalletCode: JSON.stringify([{
     //     COMPANYDBNAME: localStorage.getItem("CompID"),

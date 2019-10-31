@@ -17,7 +17,7 @@ export class DepalletizeComponent implements OnInit {
   showLookup: boolean = false;
   lookupFor: any = "";
   selectedPallets: any = Array<Pallet>();
-  public serviceData: any;
+  public serviceData: any; 
   autoGenereatePalletEnable: boolean = false;
   palletNo: string = "";
   showNewPallet: boolean = false;
@@ -172,18 +172,18 @@ export class DepalletizeComponent implements OnInit {
       (data: any) => {
         this.showLoader = false;
         console.log(data);
-        if (data != null) {
-          // if (data.length > 0) {
-          //   if (data[0].Result == "0") {
-          //     this.toastr.error('', this.translate.instant("InValidPalletNo"));
-          //     this.palletNo = "";
-          //     return;
-          //   }
-          // }
+        if (data != null && data.length>0 && data[0].ErrorMsg == "") { 
+          this.toastr.success('', this.translate.instant("Plt_DePalletize_success"));
+          this.resetPageOnSuccess();
+        }
+        else if (data[0].ErrorMsg == "7001") {
+          this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+            this.translate.instant("CommonSessionExpireMsg"));
+          return;
         }
         else {
-          this.toastr.error('', this.translate.instant("InValidPalletNo"));
-          return;
+          // alert(data[0].ErrorMsg);
+          this.toastr.error('', data[0].ErrorMsg);
         }
       },
       error => {
@@ -197,5 +197,12 @@ export class DepalletizeComponent implements OnInit {
       }
     );
   }
-  
+  resetPageOnSuccess(){
+    this.palletData = [];
+    this.showHideGridToggle = false;
+    this.toWhse = "";
+    this.toBin = "";
+    this.palletNo = "";
+  }
+
 }

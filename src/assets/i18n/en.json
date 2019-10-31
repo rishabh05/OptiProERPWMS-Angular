@@ -352,6 +352,9 @@
   "Plt_NewBatchSerialNo": "New Batch/Serial No.",
   "Plt_PalletRequired": "Pallet number required.",
   "":"",
+  "Plt_Transfer_success":"Pallet transfer successfully!",
+  "Plt_DePalletize_success":"Depalletize successfully!",
+  "Plt_Merge_success":"Pallet merge successfully!",
 
   "token_expired": "The remote server returned an error: (401) Unauthorized."
   
