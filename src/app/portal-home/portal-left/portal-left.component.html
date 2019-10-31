@@ -145,39 +145,39 @@
                     </li> -->
                 </ul>
             </li>
-            <li class="dropdown" dropdown id="INVADJ" *ngIf="isPalletizationEnable" [ngStyle]="{'display':'none'}">
+            <li class="dropdown" dropdown id="PALLET" *ngIf="isPalletizationEnable">
                     <a dropdownToggle class="dropdown-toggle">
-                        <i class="opti-icon-notes" [style.color]="selectedThemeColor"></i>
+                        <i class="opti-icon-palletize" [style.color]="selectedThemeColor"></i>
                         <span class="text">{{'Plt_Palletization'|translate}}</span>
                     </a>
                     <ul *dropdownMenu class="dropdown-menu" role="menu">
-                        <li id="15122" role="menuitem" (click)="listClick($event, 'palletization/plt-split')" [ngStyle]="{'display':'none'}">
+                        <li id="15122" role="menuitem" (click)="listClick($event, 'palletization/plt-split')">
                             <a class="dropdown-item" roterLink="plt-split" >
-                                <i class="opti-icon-time" [style.color]="selectedThemeColor"></i>
+                                <i class="opti-icon-pallet-split" [style.color]="selectedThemeColor"></i>
                                 <span class="text">{{'Plt_Split'|translate}}</span>
                             </a>
                         </li>
-                        <li id="15123" role="menuitem" (click)="listClick($event, 'palletization/plt-transfer')" [ngStyle]="{'display':'none'}">
+                        <li id="15123" role="menuitem" (click)="listClick($event, 'palletization/plt-transfer')" >
                             <a class="dropdown-item" roterLink="plt-transfer" >
-                                <i class="opti-icon-time" [style.color]="selectedThemeColor"></i>
+                                <i class="opti-icon-pallet-transfer" [style.color]="selectedThemeColor"></i>
                                 <span class="text">{{'Plt_PalletTransfer'|translate}}</span>
                             </a>
                         </li>
-                        <li id="15124" role="menuitem" (click)="listClick($event, 'palletization/pallet-merge')" [ngStyle]="{'display':'none'}">
+                        <li id="15124" role="menuitem" (click)="listClick($event, 'palletization/pallet-merge')" >
                             <a class="dropdown-item" roterLink="pallet-merge" >
-                                <i class="opti-icon-time" [style.color]="selectedThemeColor"></i>
+                                <i class="opti-icon-pallet-marge" [style.color]="selectedThemeColor"></i>
                                 <span class="text">{{'Plt_PalletMerge'|translate}}</span>
                             </a>
                         </li>
-                        <li id="15125" role="menuitem" (click)="listClick($event, 'palletization/depalletize')" [ngStyle]="{'display':'none'}">
+                        <li id="15125" role="menuitem" (click)="listClick($event, 'palletization/depalletize')">
                             <a class="dropdown-item" roterLink="depalletize" >
-                                <i class="opti-icon-time" [style.color]="selectedThemeColor"></i>
+                                <i class="opti-icon-deplletization" [style.color]="selectedThemeColor"></i>
                                 <span class="text">{{'Plt_Depalletization'|translate}}</span>
                             </a>
                         </li>
-                        <li id="15126" role="menuitem" (click)="listClick($event, 'palletization/palletize')" [ngStyle]="{'display':'none'}">
+                        <li id="15126" role="menuitem" (click)="listClick($event, 'palletization/palletize')" >
                             <a class="dropdown-item" roterLink="palletize" >
-                                <i class="opti-icon-time" [style.color]="selectedThemeColor"></i>
+                                <i class="opti-icon-palletize" [style.color]="selectedThemeColor"></i>
                                 <span class="text">{{'Plt_Palletize'|translate}}</span>
                             </a>
                         </li>

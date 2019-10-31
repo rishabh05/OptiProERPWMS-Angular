@@ -28,6 +28,32 @@
   align-items: center;
 }
 
+
+.opti-icon-palletize {
+  &:before {
+    content: $opti-icon-palletize; 
+  }
+}
+.opti-icon-deplletization {
+  &:before {
+    content: $opti-icon-deplletization; 
+  }
+}
+.opti-icon-pallet-marge {
+  &:before {
+    content: $opti-icon-pallet-marge; 
+  }
+}
+.opti-icon-pallet-split {
+  &:before {
+    content: $opti-icon-pallet-split; 
+  }
+}
+.opti-icon-pallet-transfer {
+  &:before {
+    content: $opti-icon-pallet-transfer; 
+  }
+}
 .opti-icon-detail-view {
   &:before {
     content: $opti-icon-detail-view; 

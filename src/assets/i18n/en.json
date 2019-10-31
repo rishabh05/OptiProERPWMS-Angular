@@ -351,11 +351,19 @@
   "Plt_CurrentBatchSerialNo": "Current Batch/Serial No.",
   "Plt_NewBatchSerialNo": "New Batch/Serial No.",
   "Plt_PalletRequired": "Pallet number required.",
-  "":"",
   "Plt_Transfer_success":"Pallet transfer successfully!",
   "Plt_DePalletize_success":"Depalletize successfully!",
   "Plt_Merge_success":"Pallet merge successfully!",
-
-  "token_expired": "The remote server returned an error: (401) Unauthorized."
-  
+  "token_expired": "The remote server returned an error: (401) Unauthorized.",
+  "showGrid": "Show Grid",
+  "hideGrid": "Hide Grid",
+  "SelectItemCode": "Select item code",
+  "SelectBatchSerial": "Select batch/serial",
+  "Plt_AddedPallets": "Added Pallet",
+  "Plt_MoveQty": "Move Quantity",
+  "Plt_RemainQty": "Remaining Quantity",
+  "Plt_FromPalletRequired": "From pallet number required.",
+  "Plt_ToPalletRequired": "To pallet number required.",
+  "Plt_MoveQtyRequired": "Move quantity required.",
+  "Plt_Split_success":"Pallet splitted successfully!"
 }
