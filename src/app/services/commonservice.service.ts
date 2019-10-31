@@ -331,6 +331,44 @@ export class Commonservice {
         FromPalletCode: fromPallet,
         ToPalletCode: fromPallet,
         PALLETOPERATIONTYPE: PalletOperationType.Depalletization,
+        WhseCode: localStorage.getItem("whseId"),
+        USERID: localStorage.getItem("UserId")
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/PalletTransaction", jObject, this.httpOptions);
+  }
+
+  /**
+   * API for palletTransfer
+   * 
+   * @param palletCode
+   */
+  palletTransfer(fromPallet: string,toPallet): Observable<any> {
+    var jObject = {
+      PalletCode: JSON.stringify([{
+        COMPANYDBNAME: localStorage.getItem("CompID"),
+        FromPalletCode: fromPallet,
+        ToPalletCode: toPallet,
+        PALLETOPERATIONTYPE: PalletOperationType.Transfer,
+        WhseCode: localStorage.getItem("whseId"),
+        USERID: localStorage.getItem("UserId")
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/PalletTransaction", jObject, this.httpOptions);
+  }
+
+  /**
+   * API for depalletize
+   * 
+   * @param palletCode
+   */
+  palletTransfer1(fromPallet: string,toPallet): Observable<any> {
+    var jObject = {
+      PalletCode: JSON.stringify([{
+        COMPANYDBNAME: localStorage.getItem("CompID"),
+        FromPalletCode: fromPallet,
+        ToPalletCode: toPallet,
+        PALLETOPERATIONTYPE: PalletOperationType.Transfer,
         WhseCode: localStorage.getItem("whseId")
       }])
     };
@@ -353,7 +391,7 @@ export class Commonservice {
    * 
    * @param palletCode
    */
-  palletize(palletCode: any): Observable<any> {
+  palletizeOld(palletCode: any): Observable<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
         COMPANYDBNAME: localStorage.getItem("CompID"),
@@ -378,36 +416,39 @@ export class Commonservice {
         FromPalletCode: fromPallet,
         ToPalletCode: toPallet,
         PALLETOPERATIONTYPE: PalletOperationType.Palletization,
-        WhseCode: localStorage.getItem("whseId")
+        WhseCode: localStorage.getItem("whseId"),
+        USERID: localStorage.getItem("UserId")
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/PalletTransaction", jObject, this.httpOptions);
   }
 
   /**
-   * API for transfer Pallet
+   * API for transfer Pallet  USE FOR PALATIZE
    * 
    * @param palletCode
    */
-  transferPallet(toWhse: string, toBin: string, fromPallet: string, toPallet: string): Observable<any> {
-    var jObject = {
-      PalletCode: JSON.stringify([{
-        COMPANYDBNAME: localStorage.getItem("CompID"),
-        FromPalletCode: fromPallet,
-        ToPalletCode: toPallet,
-        PALLETOPERATIONTYPE: PalletOperationType.Palletization,
-        WhseCode: localStorage.getItem("whseId"),
-        BIN: "",
-        WHSE: "",
-        TOBIN: toBin,
-        TOWHSE: toWhse,
-        EXPIRYDATE: "",
-        ITEMCODE: "",
-        FINALPALLETNO: "",
-        BATCHNO: "",
-        QTY: ""
-      }])
-    };
-    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/PalletTransaction", jObject, this.httpOptions);
+  palletize(palletCode): Observable<any> {//toWhse: string, toBin: string, fromPallet: string, toPallet: string
+    var requestObject= {PalletCode: JSON.stringify(palletCode)}
+    // var jObject = {
+    //   PalletCode: JSON.stringify([{
+    //     COMPANYDBNAME: localStorage.getItem("CompID"),
+    //     FromPalletCode: fromPallet,
+    //     ToPalletCode: toPallet,
+    //     PALLETOPERATIONTYPE: PalletOperationType.Palletization,
+    //     WhseCode: localStorage.getItem("whseId"),
+    //     BIN: "",
+    //     WHSE: "",
+    //     TOBIN: toBin,
+    //     TOWHSE: toWhse,
+    //     EXPIRYDATE: "",
+    //     ITEMCODE: "",
+    //     FINALPALLETNO: "",
+    //     BATCHNO: "",
+    //     QTY: "",
+    //     USERID: localStorage.getItem("UserId")
+    //   }])
+    // };
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/PalletTransaction", requestObject, this.httpOptions);
   }
 }

@@ -99,9 +99,17 @@ export class PalTransferComponent implements OnInit {
   }
 
   onPalletChange(from: string) {
-    if (this.fromPalletNo == '' || this.toPalletNo == '') {
-      return;
+    if(from == "from_pallet") {
+      if (this.fromPalletNo == '' ){
+        return;
+      }
     }
+    if(from == "to_pallet") {
+      if (this.toPalletNo == '' ){
+        return;
+      }
+    }
+    
 
     var plt;
     if (from == "from_pallet") {
@@ -248,13 +256,13 @@ export class PalTransferComponent implements OnInit {
 
   transfer() {
     this.showLoader = true;
-    this.commonservice.transferPallet(this.toWhse, this.toBin, this.fromPalletNo, this.toPalletNo).subscribe(
+    this.commonservice.palletTransfer( this.fromPalletNo, this.toPalletNo).subscribe(
       (data: any) => {
         this.showLoader = false;
         console.log(data);
         if (data != null) {
           // if (data.length > 0) {
-          //   if (data[0].Result == "0") {
+          //   if (data[0].Result == "0") {F
           //     this.toastr.error('', this.translate.instant("InValidPalletNo"));
           //     this.palletNo = "";
           //     return;

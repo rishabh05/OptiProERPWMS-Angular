@@ -12,7 +12,7 @@ import { PalletOperationType } from 'src/app/enums/PalletEnums';
   styleUrls: ['./palletize.component.scss']
 })
 export class PalletizeComponent implements OnInit {
-
+  showGrid: boolean = false;
   showLoader: boolean = false;
   showLookup: boolean = false;
   lookupFor: any = "";
@@ -20,6 +20,7 @@ export class PalletizeComponent implements OnInit {
   public serviceData: any;
   autoGenereatePalletEnable: boolean = false;
   palletNo: string = "";
+  enableAddPalletBtn: boolean = false;
   showNewPallet: boolean = false;
   createdNewPallet: string = "";
   itemCode: string = "";
@@ -32,8 +33,8 @@ export class PalletizeComponent implements OnInit {
   expDate: string;
   toBin: string;
   toWhse: string;
-  whse: string;
-  binNo: string;
+  fromWhse: string;
+  fromBinNo: string;
 
   constructor(private commonservice: Commonservice,
     private router: Router, private toastr: ToastrService, private translate: TranslateService) {
@@ -140,8 +141,8 @@ export class PalletizeComponent implements OnInit {
     } else if (this.lookupFor == "ShowBatachSerList") {
       this.batchSerialNo = lookupValue.LOTNO;
       this.expDate = lookupValue.EXPDATE;
-      this.whse = lookupValue.WHSCODE;
-      this.binNo = lookupValue.BINNO;
+      this.fromWhse = lookupValue.WHSCODE;
+      this.fromBinNo = lookupValue.BINNO;
       this.openQty = lookupValue.TOTALQTY;
     }
   }
@@ -150,6 +151,9 @@ export class PalletizeComponent implements OnInit {
     this.router.navigateByUrl('home/dashboard', { skipLocationChange: true });
   }
 
+  clickShowGrid(){
+    this.showGrid = true;
+  }
   onCheckChange() {
     this.showNewPallet = !this.showNewPallet;
     if (this.showNewPallet) {
@@ -212,6 +216,7 @@ export class PalletizeComponent implements OnInit {
           // }
         } else {
           this.toastr.error('', this.translate.instant("InvalidItemCode"));
+          this.itemCode="";
         }
       },
       error => {
@@ -307,19 +312,26 @@ export class PalletizeComponent implements OnInit {
       return;
     }
 
-    // if (!this.validateQuantity()) {
-    //   return;
-    // }
+    //  if (!this.validateQuantity()) {
+    //    return;
+    //  }
 
     var object = {
       ItemCode: this.itemCode,
       LotNo: this.batchSerialNo,
       FinalLotNo: this.batchSerialNo + "-" + this.palletNo,
       PalletCode: this.palletNo,
-      Quantity: this.qty
+      Quantity: this.qty,
+      FromBinNo: this.fromBinNo,
+      ToBinNo: this.toBin,
+      FromWhse: this.fromWhse,
+      ToWhse: this.toWhse,
+      ExpiryDate: this.expDate
     }
     this.savedPalletsArray.push(object);
 
+    if(this.savedPalletsArray.length>0){this.enableAddPalletBtn = true;}
+    
     this.resetVariables();
 
     //this.updateReceiveQty();
@@ -346,23 +358,37 @@ export class PalletizeComponent implements OnInit {
   }
 
   palletize() {
-    // if (this.palletNo == '') {
-    //   return
-    // }
-
+   
     this.showLoader = true;
-    this.commonservice.palletize(this.palletNo).subscribe(
+    var oPalletReq: any = {};
+    oPalletReq.Header = [];
+    oPalletReq.Detail = [];
+    oPalletReq.Header.push({CompanyDBId: localStorage.getItem("CompID"),
+      PALLETOPERATIONTYPE:PalletOperationType.Palletization,
+      WhsCode: localStorage.getItem("whseId"),
+      USERID: localStorage.getItem("UserId")}
+    );
+
+    for (var i = 0; i < this.savedPalletsArray.length; i++) {
+      oPalletReq.Detail.push({
+        ItemCode: this.savedPalletsArray[i].ItemCode,
+        LotNo: this.savedPalletsArray[i].LotNo,
+        FinalLotNo: this.savedPalletsArray[i].FinalLotNo,
+        PalletCode: this.savedPalletsArray[i].PalletCode,
+        Quantity: this.savedPalletsArray[i].Quantity,
+        FromBinNo: this.savedPalletsArray[i].FromBinNo,
+        ToBinNo: this.savedPalletsArray[i].ToBinNo,
+        FromWhse: this.savedPalletsArray[i].FromWhse,
+        ToWhse: this.savedPalletsArray[i].ToWhse,
+        ExpiryDate: this.savedPalletsArray[i].ExpiryDate,
+      });
+    }
+    this.commonservice.palletize(oPalletReq).subscribe(
       (data: any) => {
         this.showLoader = false;
         console.log(data);
         if (data != null) {
-          // if (data.length > 0) {
-          //   if (data[0].Result == "0") {
-          //     this.toastr.error('', this.translate.instant("InValidPalletNo"));
-          //     this.palletNo = "";
-          //     return;
-          //   }
-          // }
+        
         }
         else {
           this.toastr.error('', this.translate.instant("InValidPalletNo"));
@@ -391,8 +417,8 @@ export class PalletizeComponent implements OnInit {
     this.batchSerialNo = '';
     this.palletNo = '';
     this.expDate = "";
-    this.whse = "";
-    this.binNo = "";
+    this.fromWhse = "";
+    this.fromBinNo = "";
     this.openQty = "0";
     this.qty = 0;
   }
