@@ -151,7 +151,7 @@ export class PalletizeComponent implements OnInit {
     this.router.navigateByUrl('home/dashboard', { skipLocationChange: true });
   }
 
-  clickShowGrid(){
+  clickShowGrid() {
     this.showGrid = true;
   }
   onCheckChange() {
@@ -216,7 +216,7 @@ export class PalletizeComponent implements OnInit {
           // }
         } else {
           this.toastr.error('', this.translate.instant("InvalidItemCode"));
-          this.itemCode="";
+          this.itemCode = "";
         }
       },
       error => {
@@ -330,8 +330,8 @@ export class PalletizeComponent implements OnInit {
     }
     this.savedPalletsArray.push(object);
 
-    if(this.savedPalletsArray.length>0){this.enableAddPalletBtn = true;}
-    
+    if (this.savedPalletsArray.length > 0) { this.enableAddPalletBtn = true; }
+
     this.resetVariables();
 
     //this.updateReceiveQty();
@@ -358,29 +358,33 @@ export class PalletizeComponent implements OnInit {
   }
 
   palletize() {
-   
+
     this.showLoader = true;
     var oPalletReq: any = {};
     oPalletReq.Header = [];
     oPalletReq.Detail = [];
-    oPalletReq.Header.push({CompanyDBId: localStorage.getItem("CompID"),
-      PALLETOPERATIONTYPE:PalletOperationType.Palletization,
+    oPalletReq.Header.push({
+      COMPANYDBNAME: localStorage.getItem("CompID"),
+      PALLETOPERATIONTYPE: PalletOperationType.Palletization,
       WhsCode: localStorage.getItem("whseId"),
-      USERID: localStorage.getItem("UserId")}
+      FromPalletCode: "",
+      ToPalletCode: "",
+      USERID: localStorage.getItem("UserId")
+    }
     );
 
     for (var i = 0; i < this.savedPalletsArray.length; i++) {
       oPalletReq.Detail.push({
-        ItemCode: this.savedPalletsArray[i].ItemCode,
-        LotNo: this.savedPalletsArray[i].LotNo,
-        FinalLotNo: this.savedPalletsArray[i].FinalLotNo,
-        PalletCode: this.savedPalletsArray[i].PalletCode,
-        Quantity: this.savedPalletsArray[i].Quantity,
-        FromBinNo: this.savedPalletsArray[i].FromBinNo,
-        ToBinNo: this.savedPalletsArray[i].ToBinNo,
-        FromWhse: this.savedPalletsArray[i].FromWhse,
-        ToWhse: this.savedPalletsArray[i].ToWhse,
-        ExpiryDate: this.savedPalletsArray[i].ExpiryDate,
+        ITEMCODE: this.savedPalletsArray[i].ItemCode,
+        BATCHNO: this.savedPalletsArray[i].LotNo,
+        FINALBATCHNO: this.savedPalletsArray[i].FinalLotNo,
+        PALLETNO: this.savedPalletsArray[i].PalletCode,
+        QTY: this.savedPalletsArray[i].Quantity,
+        BIN: this.savedPalletsArray[i].FromBinNo,
+        WHSE: this.savedPalletsArray[i].FromWhse,
+        TOBIN: this.savedPalletsArray[i].ToBinNo,
+        TOWHSE: this.savedPalletsArray[i].ToWhse,
+        EXPIRYDATE: "" + this.savedPalletsArray[i].ExpiryDate,
       });
     }
     this.commonservice.palletize(oPalletReq).subscribe(
@@ -388,7 +392,7 @@ export class PalletizeComponent implements OnInit {
         this.showLoader = false;
         console.log(data);
         if (data != null) {
-        
+
         }
         else {
           this.toastr.error('', this.translate.instant("InValidPalletNo"));

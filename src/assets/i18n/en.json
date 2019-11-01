@@ -365,5 +365,8 @@
   "Plt_FromPalletRequired": "From pallet number required.",
   "Plt_ToPalletRequired": "To pallet number required.",
   "Plt_MoveQtyRequired": "Move quantity required.",
-  "Plt_Split_success":"Pallet splitted successfully!"
+  "Plt_Split_success":"Pallet splitted successfully!",
+  "Plt_SelectFromPallet":"Select from pallet",
+  "Plt_SelectToPallet": "Select to pallet",
+  "Plt_InValidBatchSerial": "In valid batch/serial no"
 }

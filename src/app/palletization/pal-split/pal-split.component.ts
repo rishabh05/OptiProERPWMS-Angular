@@ -4,6 +4,8 @@ import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { Pallet } from 'src/app/models/Inbound/Pallet';
+import { NumberFormatPipe } from 'src/app/common/number-format.pipe';
+import { PalletOperationType } from 'src/app/enums/PalletEnums';
 
 @Component({
   selector: 'app-pal-split',
@@ -16,7 +18,9 @@ export class PalSplitComponent implements OnInit {
   showLookup: boolean = false;
   showNewPallet: boolean = false;
   lookupFor: any = "";
+  enableSplitPalletBtn: boolean = false;
   selectedToPallets: any = Array<Pallet>();
+  savedPalletsArray: any = Array<Pallet>();
   public serviceData: any;
   autoGenereatePalletEnable: boolean = false;
   createdNewPallet: string;
@@ -25,7 +29,20 @@ export class PalSplitComponent implements OnInit {
   fromPalletLookup: string;
   toBin: string;
   toWhse: string;
-  
+  itemCode: string = "";
+  moveQty: number = 0;
+  remainQty: number = 0;
+  itemsList: any;
+  showHideGridToggle: boolean = false;
+  showHideBtnTxt: string;
+  batchSerialNo: string = "";
+  qty: number = 0;
+  openQty: number;
+  expDate: string;
+  fromWhse: string;
+  fromBinNo: string;
+  palletData: any;
+  sumOfQty: number = 0;
   constructor(private commonservice: Commonservice,
     private router: Router, private toastr: ToastrService, private translate: TranslateService) {
 
@@ -36,7 +53,7 @@ export class PalSplitComponent implements OnInit {
       this.autoGenereatePalletEnable = true;
     }
   }
-  
+
   public getPalletList(from: string) {
     var code = "";
     if (from == "from_pallet") {
@@ -57,7 +74,7 @@ export class PalSplitComponent implements OnInit {
             this.showLookup = true;
             this.lookupFor = "PalletList";
             this.fromPalletLookup = from;
-            
+
             return;
           } else {
             this.showLookup = false;
@@ -104,9 +121,9 @@ export class PalSplitComponent implements OnInit {
               this.fromPalletNo = data[0].Code;
             } else if (from == "to_pallet") {
               this.toPalletNo = data[0].Code;
-              if (!this.containPallet(this.selectedToPallets, data[0].Code)) {
-                this.selectedToPallets.push(data[0]);
-              }
+              // if (!this.containPallet(this.selectedToPallets, data[0].Code)) {
+              //   this.selectedToPallets.push(data[0]);
+              // }
             }
           } else {
             this.toastr.error('', this.translate.instant("InValidPalletNo"));
@@ -144,14 +161,26 @@ export class PalSplitComponent implements OnInit {
     if (this.fromPalletLookup == "from_pallet") {
       this.showLoader = false;
       this.fromPalletNo = lookupValue.Code;
+      // this.fromWhse = lookupValue.U_OPTM_WAREHOUSE_LOC
+      this.resetVariables();
+    } else if (this.fromPalletLookup == "to_pallet") {
       this.toWhse = lookupValue.U_OPTM_WAREHOUSE_LOC;
       this.toBin = lookupValue.U_OPTM_BIN;
-    } else if (this.fromPalletLookup == "to_pallet") {
       this.toPalletNo = lookupValue.Code;
       //this.getPalletData(this.toPalletNo);
       if (!this.containPallet(this.selectedToPallets, lookupValue.Code)) {
         this.selectedToPallets.push(lookupValue);
       }
+    } else if (this.lookupFor == "ItemsList") {
+      this.itemCode = lookupValue.ITEMCODE;
+      //this.batchSerialNo = '';
+    } else if (this.lookupFor == "ShowBatachSerList") {
+      this.batchSerialNo = lookupValue.LOTNO;
+      this.expDate = ""+lookupValue.EXPDATE;
+      this.fromWhse = lookupValue.WHSCODE;
+      this.fromBinNo = lookupValue.BINNO;
+      this.openQty = Number.parseInt(lookupValue.TOTALQTY);
+      this.qty = this.openQty;
     }
   }
 
@@ -164,17 +193,16 @@ export class PalSplitComponent implements OnInit {
     return false;
   }
 
-  getPalletData(toPalletNo: string) {
+  getPalletData(fromPalletNo: string) {
     // this.showHideGridToggle = false;
     // this.showHideBtnTxt = this.translate.instant("showGrid");
-
     // this.showLoader = true;
-    this.commonservice.GetPalletData(toPalletNo).subscribe(
+    this.commonservice.GetPalletData(fromPalletNo).subscribe(
       (data: any) => {
         this.showLoader = false;
         console.log(data);
         if (data != null) {
-          //this.palletData = data;
+          this.palletData = data;
         }
         else {
           this.toastr.error('', this.translate.instant("InValidPalletNo"));
@@ -193,18 +221,69 @@ export class PalSplitComponent implements OnInit {
     );
   }
 
-  splitPallet(event:any){
+  splitPallet(event: any) {
+    this.showLoader = true;
+    var oPalletReq: any = {};
+    oPalletReq.Header = [];
+    oPalletReq.Detail = [];
+    oPalletReq.Header.push({
+      COMPANYDBNAME: localStorage.getItem("CompID"),
+      PALLETOPERATIONTYPE: PalletOperationType.Split,
+      WhsCode: localStorage.getItem("whseId"),
+      FromPalletCode: this.fromPalletNo,
+      ToPalletCode: this.fromPalletNo,
+      USERID: localStorage.getItem("UserId")
+    });
 
+    for (var i = 0; i < this.savedPalletsArray.length; i++) {
+      oPalletReq.Detail.push({
+        ITEMCODE: this.savedPalletsArray[i].ItemCode,
+        BATCHNO: this.savedPalletsArray[i].ActualBSNo,
+        FINALBATCHNO: this.savedPalletsArray[i].FinalLotNo,
+        PALLETNO: this.savedPalletsArray[i].PalletCode,
+        QTY: this.savedPalletsArray[i].Quantity,
+        BIN: this.savedPalletsArray[i].FromBinNo,
+        WHSE: this.savedPalletsArray[i].FromWhse,
+        TOBIN: this.savedPalletsArray[i].ToBinNo,
+        TOWHSE: this.savedPalletsArray[i].ToWhse,
+        EXPIRYDATE: ""+this.savedPalletsArray[i].ExpiryDate,
+      });
+    }
+
+    this.commonservice.palletSplit(oPalletReq).subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        console.log(data);
+        if (data != null) {
+          this.savedPalletsArray = [];
+          this.resetVariables();
+          this.toastr.success('', this.translate.instant("Plt_Split_success"));
+        }
+        else {
+          this.toastr.error('', this.translate.instant("InValidPalletNo"));
+          return;
+        }
+      },
+      error => {
+        this.showLoader = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
   }
 
   back(fromwhereval: number) {
     this.router.navigateByUrl('home/dashboard', { skipLocationChange: true });
   }
 
-  openConfirmForDelete(index: any, item: any){
-    console.log("index: "+index)
-    console.log("item: "+item)
-    this.selectedToPallets.splice(index);
+  openConfirmForDelete(index: any, item: any) {
+    console.log("index: " + index)
+    console.log("item: " + item)
+    this.savedPalletsArray.splice(index);
   }
 
   onCheckChange() {
@@ -224,5 +303,262 @@ export class PalSplitComponent implements OnInit {
       }
     }
     this.toPalletNo = '';
+  }
+
+  OnLotsChange() {
+    if (this.fromPalletNo == "" || this.fromPalletNo == undefined) {
+      return;
+    }
+    if (this.itemCode == "" || this.itemCode == undefined) {
+      return;
+    }
+    if (this.batchSerialNo == "" || this.batchSerialNo == undefined) {
+      return;
+    }
+
+    this.showLoader = true;
+    this.commonservice.IsValidBatchandSerialItemsFromPallet(this.batchSerialNo, this.itemCode, 
+      this.fromPalletNo).subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        console.log(data);
+        if (data != null) {
+          if (data.length > 0) {
+            
+          } else {
+            this.toastr.error('', this.translate.instant("Plt_InValidBatchSerial"));
+            return;
+          }
+        }
+        else {
+          this.toastr.error('', this.translate.instant("Plt_InValidBatchSerial"));
+          return;
+        }
+      },
+      error => {
+        this.showLoader = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
+
+  addQuantity() {
+    if (this.fromPalletNo == "" || this.fromPalletNo == undefined) {
+      this.toastr.error('', this.translate.instant("Plt_FromPalletRequired"));
+      return;
+    }
+
+    if (this.toPalletNo == "" || this.toPalletNo == undefined) {
+      this.toastr.error('', this.translate.instant("Plt_ToPalletRequired"));
+      return;
+    }
+
+    // if (this.moveQty == 0) {
+    //   this.toastr.error('', this.translate.instant("Plt_MoveQtyRequired"));
+    //   return;
+    // }
+    if (this.batchSerialNo == "" || this.batchSerialNo == undefined) {
+      this.toastr.error('', this.translate.instant("SelectBatchSerial"));
+      return;
+    }
+
+    if (this.qty == 0 || this.qty == undefined) {
+      this.toastr.error('', this.translate.instant("Inbound_EnterQuantityErrMsg"));
+      return;
+    }
+    if (!Number.isInteger(this.qty)) {
+      this.toastr.error('', this.translate.instant("DecimalQuantity"));
+      return;
+    }
+
+    //  if (!this.validateQuantity()) {
+    //    return;
+    //  }
+
+    var index = this.batchSerialNo.lastIndexOf("-");
+    var finalLotNo = this.batchSerialNo.substring(0, index) + "-" + this.toPalletNo;
+    var object = {
+      ItemCode: this.itemCode,
+      ActualBSNo: this.batchSerialNo.substring(0, index),
+      LotNo: this.batchSerialNo,
+      MoveQty: this.moveQty,
+      RemainQty: this.remainQty,
+      FinalLotNo: finalLotNo,
+      PalletCode: this.toPalletNo,
+      Quantity: this.qty,
+      FromBinNo: this.fromBinNo,
+      ToBinNo: this.toBin,
+      FromWhse: this.fromWhse,
+      ToWhse: this.toWhse,
+      ExpiryDate: this.expDate
+    }
+    this.savedPalletsArray.push(object);
+
+    if (this.savedPalletsArray.length > 0) {
+      this.enableSplitPalletBtn = true;
+    }
+
+    this.resetVariables();
+
+    //this.updateReceiveQty();
+  }
+
+  validateQuantity() {
+    this.sumOfQty = 0;
+    for (let i = 0; i < this.savedPalletsArray.length; i++) {
+      var savedItem = this.savedPalletsArray.ItemCode;
+      var savedLotNo = this.savedPalletsArray.LotNo;
+
+      if (this.itemCode == savedItem && this.batchSerialNo == savedLotNo) {
+        this.sumOfQty = this.sumOfQty + Number(this.savedPalletsArray.Quantity);
+      }
+    }
+
+    if (this.sumOfQty > this.openQty) {
+      this.toastr.error('', this.translate.instant("Inbound_NoOpenQuantityValid"));
+      this.qty = 0;
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  OnBatchSerialLookupClick() {
+    if (this.fromPalletNo == '' || this.fromPalletNo == undefined) {
+      this.toastr.error('', this.translate.instant("Plt_FromPalletRequired"));
+      return;
+    }
+    if (this.itemCode == '' || this.itemCode == undefined) {
+      this.toastr.error('', this.translate.instant("SelectItemCode"));
+      return;
+    }
+    this.fromPalletLookup = '';
+
+
+    this.showLoader = true;
+    this.commonservice.GetBatchandSerialItemsFromPallet(this.fromPalletNo, this.itemCode).subscribe(
+      data => {
+        this.showLoader = false;
+        if (data != undefined && data.length > 0) {
+          console.log("GetBatchandSerialItemsFromPallet - " + JSON.stringify(data));
+          if (data[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
+          this.showLookup = true;
+          this.serviceData = data;
+          this.lookupFor = "ShowBatachSerList";
+        } else {
+          this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+        }
+      },
+      error => {
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.showLoader = false;
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
+
+  onBatchSerialScan() {
+
+  }
+
+  OnItemCodeLookupClick() {
+    if (this.fromPalletNo == '' || this.fromPalletNo == undefined) {
+      this.toastr.error('', this.translate.instant("Plt_SelectFromPallet"));
+      return;
+    }
+    this.fromPalletLookup = '';
+
+    this.showLoader = true;
+    this.commonservice.GetItemsFromPallet(this.fromPalletNo).subscribe(
+      data => {
+        this.showLoader = false;
+        if (data != undefined && data.length > 0) {
+          console.log("GetItemsFromPallet - " + JSON.stringify(data));
+          if (data[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
+          this.showLookup = true;
+          this.serviceData = data;
+          this.lookupFor = "ItemsList";
+        } else {
+          this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+        }
+      },
+      error => {
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.showLoader = false;
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
+
+  OnItemCodeChange() {
+    if (this.fromPalletNo == "" || this.fromPalletNo == undefined) {
+      this.toastr.error('', this.translate.instant("Plt_SelectFromPallet"));
+      return;
+    }
+    if (this.itemCode == "" || this.itemCode == undefined) {
+      this.toastr.error('', this.translate.instant("Plt_InValidItemCode"));
+      return;
+    }
+
+    this.showLoader = true;
+    this.commonservice.IsValidItemsFromPallet(this.fromPalletNo, this.itemCode).subscribe(
+      data => {
+        this.showLoader = false;
+        if (data != undefined && data.length > 0) {
+          console.log("" + data);
+          if (data[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
+          this.itemCode = data[0].ITEMCODE;
+          this.batchSerialNo = '';
+        } else {
+          this.toastr.error('', this.translate.instant("InvalidItemCode"));
+          this.itemCode = "";
+        }
+      },
+      error => {
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
+
+  resetVariables() {
+    this.batchSerialNo = '';
+    this.toPalletNo = '';
+    this.expDate = "";
+    this.fromWhse = "";
+    this.fromBinNo = "";
+    this.openQty = 0;
+    this.qty = 0;
+    this.moveQty = 0;
+    this.toPalletNo;
   }
 }
