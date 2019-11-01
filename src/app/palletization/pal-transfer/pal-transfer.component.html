@@ -3,7 +3,7 @@
     <div class="opti_container_inner" [perfectScrollbar]=" ">
 
       <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
-      {{'Plt_PalletTransfer'|translate}}
+        {{'Plt_PalletTransfer'|translate}}
       </h3>
       <div class="row">
         <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
@@ -175,13 +175,11 @@
           <button class="k-button k-primary k-button btn-sm btn-icon-with-text" *ngIf="fromPalletNo!='' && toPalletNo!=''"
             type="button" (click)="transfer($event)">
             <span class="k-icon k-i-download" role="presentation"></span> {{'Plt_Transfer'|translate}}</button>
-          <button type="button" id="showHideGrid" *ngIf="fromPalletNo!='' && toPalletNo!=''" (click)="clickShowHideGrid()"
-            class="btn btn-success k-button btn-sm btn-icon-with-text">
+          <button type="button" id="showHideGrid" (click)="clickShowHideGrid()" class="btn btn-success k-button btn-sm btn-icon-with-text">
             {{showHideBtnTxt}}
           </button>
           <button type="button" id="hiddenScanButton" style="visibility:hidden" (click)="onHiddenScanClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
             SB </button>
-  
         </div>
       </div>
     </div>

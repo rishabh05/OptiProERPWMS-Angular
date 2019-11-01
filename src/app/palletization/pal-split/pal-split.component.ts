@@ -253,18 +253,16 @@ export class PalSplitComponent implements OnInit {
       (data: any) => {
         this.showLoader = false;
         console.log(data);
-        if (data != null && data.length > 0) {
-          if (data[0].ErrorMsg == "7001") {
-            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
-              this.translate.instant("CommonSessionExpireMsg"));
-            return;
-          }
+        if(data !=null && data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY"){
           this.savedPalletsArray = [];
           this.resetVariables();
           this.toastr.success('', this.translate.instant("Plt_Split_success"));
-        }
-        else {
-          this.toastr.error('', this.translate.instant("InValidPalletNo"));
+        }else if (data[0].ErrorMsg == "7001") {
+          this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+            this.translate.instant("CommonSessionExpireMsg"));
+          return;
+        } else {
+          this.toastr.error('', this.translate.instant("ErrorMsgSomethingWentWrong"));
           return;
         }
       },
@@ -380,14 +378,14 @@ export class PalSplitComponent implements OnInit {
       this.toastr.error('', this.translate.instant("Inbound_EnterQuantityErrMsg"));
       return;
     }
-    if (!Number.isInteger(this.qty)) {
-      this.toastr.error('', this.translate.instant("DecimalQuantity"));
-      return;
-    }
+    // if (!Number.isInteger(this.qty)) {
+    //   this.toastr.error('', this.translate.instant("DecimalQuantity"));
+    //   return;
+    // }
 
-    //  if (!this.validateQuantity()) {
-    //    return;
-    //  }
+     if (!this.validateQuantity()) {
+       return;
+     }
 
     var index = this.batchSerialNo.lastIndexOf("-");
     var finalLotNo = this.batchSerialNo.substring(0, index) + "-" + this.toPalletNo;
@@ -404,7 +402,7 @@ export class PalSplitComponent implements OnInit {
       ToBinNo: this.toBin,
       FromWhse: this.fromWhse,
       ToWhse: this.toWhse,
-      ExpiryDate: this.expDate
+      ExpiryDate: ""+this.expDate
     }
     this.savedPalletsArray.push(object);
 
@@ -420,19 +418,27 @@ export class PalSplitComponent implements OnInit {
   validateQuantity() {
     this.sumOfQty = 0;
     for (let i = 0; i < this.savedPalletsArray.length; i++) {
-      var savedItem = this.savedPalletsArray.ItemCode;
-      var savedLotNo = this.savedPalletsArray.LotNo;
+      var savedItem = this.savedPalletsArray[i].ItemCode;
+      var savedLotNo = this.savedPalletsArray[i].LotNo;
 
       if (this.itemCode == savedItem && this.batchSerialNo == savedLotNo) {
-        this.sumOfQty = this.sumOfQty + Number(this.savedPalletsArray.Quantity);
+        this.sumOfQty = this.sumOfQty + Number(this.savedPalletsArray[i].Quantity);
       }
     }
+
+    this.sumOfQty = this.sumOfQty + this.qty;
 
     if (this.sumOfQty > this.openQty) {
       this.toastr.error('', this.translate.instant("Inbound_NoOpenQuantityValid"));
       this.qty = 0;
       return false;
-    } else {
+    } 
+    // else if(this.sumOfQty > this.openQty && this.savedPalletsArray.length == 0) {
+    //   this.toastr.error('', this.translate.instant("Inbound_NoOpenQuantityValid"));
+    //   this.qty = 0;
+    //   return false;
+    // } 
+    else {
       return true;
     }
   }
@@ -526,7 +532,7 @@ export class PalSplitComponent implements OnInit {
       return;
     }
     if (this.itemCode == "" || this.itemCode == undefined) {
-      this.toastr.error('', this.translate.instant("Plt_InValidItemCode"));
+      this.toastr.error('', this.translate.instant("InvalidItemCode"));
       return;
     }
 

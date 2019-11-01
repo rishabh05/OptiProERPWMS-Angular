@@ -27,7 +27,7 @@ export class PalletMergeComponent implements OnInit {
   fromPalletLookup: string;
   toBin: string;
   toWhse: string;
-  
+
   constructor(private commonservice: Commonservice,
     private router: Router, private toastr: ToastrService, private translate: TranslateService) {
 
@@ -191,9 +191,8 @@ export class PalletMergeComponent implements OnInit {
       (data: any) => {
         this.showLoader = false;
         console.log(data);
-        if(data !=null && data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY"){
-        //  if (data != null && data.length>0 && data[0].ErrorMsg == "") {
-          
+        if (data != null && data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
+          //  if (data != null && data.length>0 && data[0].ErrorMsg == "") {
           this.toastr.success('', this.translate.instant("Plt_Merge_success"));
           this.resetPageOnSuccess();
         } else if (data[0].ErrorMsg == "7001") {
@@ -218,7 +217,7 @@ export class PalletMergeComponent implements OnInit {
     );
   }
 
-   resetPageOnSuccess(){
+  resetPageOnSuccess() {
     this.fromPalletNo = "";
     this.toWhse = "";
     this.toBin = "";
@@ -226,9 +225,9 @@ export class PalletMergeComponent implements OnInit {
     this.selectedFromPallets = [];
   }
 
-  openConfirmForDelete(index: any, item: any){
-    console.log("index: "+index)
-    console.log("item: "+item)
+  openConfirmForDelete(index: any, item: any) {
+    console.log("index: " + index)
+    console.log("item: " + item)
     this.selectedFromPallets.splice(index, 1);
   }
 }

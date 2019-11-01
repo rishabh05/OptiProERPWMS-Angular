@@ -316,7 +316,6 @@
   "Plt_PalletNo":"Pallet No.",
   "Plt_FromPalletNo":"From Pallet No.",
   "Plt_ToPalletNo":"To Pallet No.",
-  "Plt_PalletTransfer":"Pallet Transfer",
   "Plt_PalletList": "Pallet List",
   "InValidPalletNo": "In valid pallet no.",
   "InvTransfer_InvDoc": "Inventory Document",
@@ -346,8 +345,8 @@
   "Plt_Merge": "Merge",
   "Plt_Depalletize": "Depalletize",
   "Plt_AddToPallet": "Add To Pallet",
-  "Plt_Split": "Pallet Split",
-  "Plt_Transfer": "Pallet Transfer",
+  "Plt_PalletSplit": "Pallet Split",
+  "Plt_PalletTransfer": "Pallet Transfer",
   "Plt_CurrentBatchSerialNo": "Current Batch/Serial No.",
   "Plt_NewBatchSerialNo": "New Batch/Serial No.",
   "Plt_PalletRequired": "Pallet number required.",
@@ -369,5 +368,8 @@
   "Plt_Palletized_success":"Item successfully!",
   "Plt_SelectFromPallet":"Select from pallet",
   "Plt_SelectToPallet": "Select to pallet",
-  "Plt_InValidBatchSerial": "In valid batch/serial no"
+  "Plt_InValidBatchSerial": "In valid batch/serial no",
+  "ErrorMsgSomethingWentWrong": "Something went wrong",
+  "Plt_Split": "Split",
+  "Plt_Transfer": "Transfer"
 }

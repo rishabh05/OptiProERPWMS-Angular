@@ -17,7 +17,7 @@ export class DepalletizeComponent implements OnInit {
   showLookup: boolean = false;
   lookupFor: any = "";
   selectedPallets: any = Array<Pallet>();
-  public serviceData: any; 
+  public serviceData: any;
   autoGenereatePalletEnable: boolean = false;
   palletNo: string = "";
   showNewPallet: boolean = false;
@@ -30,7 +30,7 @@ export class DepalletizeComponent implements OnInit {
 
   constructor(private commonservice: Commonservice,
     private router: Router, private toastr: ToastrService, private translate: TranslateService) {
-
+    this.showHideBtnTxt = this.translate.instant("showGrid");
   }
 
   ngOnInit() {
@@ -172,8 +172,8 @@ export class DepalletizeComponent implements OnInit {
       (data: any) => {
         this.showLoader = false;
         console.log(data);
-        if(data !=null && data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY"){
-       // if (data != null && data.length>0 && data[0].ErrorMsg == "") { 
+        if (data != null && data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
+          // if (data != null && data.length>0 && data[0].ErrorMsg == "") { 
           this.toastr.success('', this.translate.instant("Plt_DePalletize_success"));
           this.resetPageOnSuccess();
         }
@@ -198,9 +198,8 @@ export class DepalletizeComponent implements OnInit {
       }
     );
   }
-  resetPageOnSuccess(){
+  resetPageOnSuccess() {
     this.palletData = [];
-    this.showHideGridToggle = false;
     this.toWhse = "";
     this.toBin = "";
     this.palletNo = "";

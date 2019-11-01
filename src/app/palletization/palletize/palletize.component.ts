@@ -12,6 +12,7 @@ import { PalletOperationType } from 'src/app/enums/PalletEnums';
   styleUrls: ['./palletize.component.scss']
 })
 export class PalletizeComponent implements OnInit {
+  //showGridBtn: boolean 
   showGrid: boolean = false;
   showLoader: boolean = false;
   showLookup: boolean = false;
@@ -38,7 +39,7 @@ export class PalletizeComponent implements OnInit {
 
   constructor(private commonservice: Commonservice,
     private router: Router, private toastr: ToastrService, private translate: TranslateService) {
-     // this.showHideBtnTxt = this.translate.instant("showGrid");
+    this.showHideBtnTxt = this.translate.instant("showGrid");
 
   }
 
@@ -156,11 +157,13 @@ export class PalletizeComponent implements OnInit {
   //   this.showGrid = true;
   // }
   clickShowHideGrid() {
-    this.showGrid = true;
+
     this.showHideGridToggle = !this.showHideGridToggle;
     if (this.showHideGridToggle) {
+      this.showGrid = true;
       this.showHideBtnTxt = this.translate.instant("hideGrid");
     } else {
+      this.showGrid = false;
       this.showHideBtnTxt = this.translate.instant("showGrid");
     }
   }
@@ -339,7 +342,9 @@ export class PalletizeComponent implements OnInit {
       ExpiryDate: this.expDate
     }
     this.savedPalletsArray.push(object);
-    if(this.savedPalletsArray.length>0){this.enableAddPalletBtn = true;}
+    if (this.savedPalletsArray.length > 0) {
+    this.enableAddPalletBtn = true;
+    }
     this.resetVariablesOnItemSelect();
 
     //this.updateReceiveQty();
@@ -399,19 +404,17 @@ export class PalletizeComponent implements OnInit {
       (data: any) => {
         this.showLoader = false;
         console.log(data);
-        if(data !=null && data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY"){
+        if (data != null && data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
           //  if (data != null && data.length>0 && data[0].ErrorMsg == "") {
-            
-            this.toastr.success('', this.translate.instant("Plt_Merge_success"));
-            this.resetPageOnSuccess();
-        
-        }else if (data[0].ErrorMsg == "7001") {
+          this.toastr.success('', this.translate.instant("Plt_Merge_success"));
+          this.resetPageOnSuccess();
+        } else if (data[0].ErrorMsg == "7001") {
           this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
             this.translate.instant("CommonSessionExpireMsg"));
           return;
         }
         else {
-          this.toastr.error('', this.translate.instant("InValidPalletNo"));
+          this.toastr.error('', this.translate.instant("ErrorMsgSomethingWentWrong"));
           return;
         }
       },
@@ -427,7 +430,7 @@ export class PalletizeComponent implements OnInit {
     );
   }
 
-  resetPageOnSuccess(){
+  resetPageOnSuccess() {
     this.batchSerialNo = '';
     this.palletNo = '';
     this.expDate = "";
@@ -443,7 +446,7 @@ export class PalletizeComponent implements OnInit {
   openConfirmForDelete(index: any, item: any) {
     console.log("index: " + index)
     console.log("item: " + item)
-    this.savedPalletsArray.splice(index,1);
+    this.savedPalletsArray.splice(index, 1);
   }
 
   resetVariablesOnItemSelect() {

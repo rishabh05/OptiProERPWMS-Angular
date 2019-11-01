@@ -44,7 +44,7 @@ export class PalTransferComponent implements OnInit {
 
   constructor(private commonservice: Commonservice,
     private router: Router, private toastr: ToastrService, private translate: TranslateService) {
-
+    this.showHideBtnTxt = this.translate.instant("showGrid");
   }
 
   ngOnInit() {
@@ -99,17 +99,17 @@ export class PalTransferComponent implements OnInit {
   }
 
   onPalletChange(from: string) {
-    if(from == "from_pallet") {
-      if (this.fromPalletNo == '' ){
+    if (from == "from_pallet") {
+      if (this.fromPalletNo == '') {
         return;
       }
     }
-    if(from == "to_pallet") {
-      if (this.toPalletNo == '' ){
+    if (from == "to_pallet") {
+      if (this.toPalletNo == '') {
         return;
       }
     }
-    
+
 
     var plt;
     if (from == "from_pallet") {
@@ -256,12 +256,12 @@ export class PalTransferComponent implements OnInit {
 
   transfer() {
     this.showLoader = true;
-    this.commonservice.palletTransfer( this.fromPalletNo, this.toPalletNo).subscribe(
+    this.commonservice.palletTransfer(this.fromPalletNo, this.toPalletNo).subscribe(
       (data: any) => {
         this.showLoader = false;
         console.log(data);
-        if(data !=null && data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY"){
-        //if (data != null && data[0].ErrorMsg == ""){
+        if (data != null && data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
+          //if (data != null && data[0].ErrorMsg == ""){
           this.toastr.success('', this.translate.instant("Plt_Transfer_success"));
           this.resetPageOnSuccess();
         }
@@ -287,9 +287,8 @@ export class PalTransferComponent implements OnInit {
     );
   }
 
-  resetPageOnSuccess(){
+  resetPageOnSuccess() {
     this.palletData = [];
-    this.showHideGridToggle = false;
     this.fromPalletNo = "";
     this.toPalletNo = "";
     this.toWhse = "";

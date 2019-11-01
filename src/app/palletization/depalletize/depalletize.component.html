@@ -69,7 +69,7 @@
         <button type="button" *ngIf="palletNo!=''" (click)="depalletize()" class="btn btn-success k-button btn-sm btn-icon-with-text">
           <span class="k-icon k-i-save"></span>
           {{'Plt_Depalletize'|translate}}</button>
-        <button type="button" id="showHideGrid" *ngIf="palletNo!=''" (click)="clickShowHideGrid()" class="btn btn-success k-button btn-sm btn-icon-with-text">
+        <button type="button" id="showHideGrid" (click)="clickShowHideGrid()" class="btn btn-success k-button btn-sm btn-icon-with-text">
           {{showHideBtnTxt}}
         </button>
       </div>
