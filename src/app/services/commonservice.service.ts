@@ -325,7 +325,7 @@ export class Commonservice {
    * @param palletCode
    */
   depalletize(fromPallet: string): Observable<any> {
-    var oPalletReq: any ={};
+    var oPalletReq: any = {};
     oPalletReq.Header = [];
     oPalletReq.Header.push({
       COMPANYDBNAME: localStorage.getItem("CompID"),
@@ -361,7 +361,7 @@ export class Commonservice {
    * @param palletCode
    */
   palletTransfer(fromPallet: string, toPallet): Observable<any> {
-    var oPalletReq: any ={};
+    var oPalletReq: any = {};
     oPalletReq.Header = [];
     oPalletReq.Header.push({
       COMPANYDBNAME: localStorage.getItem("CompID"),
@@ -481,5 +481,66 @@ export class Commonservice {
     //   }])
     // };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/PalletTransaction", requestObject, this.httpOptions);
+  }
+
+  GetBatchandSerialItemsFromPallet(palletCode: string, itemCode: string): Observable<any> {
+    var jObject = {
+      PalletCode: JSON.stringify([{
+        COMPANYDBNAME: localStorage.getItem("CompID"),
+        ITEMCODE: itemCode,
+        PALLETCODE: palletCode,
+        WhseCode: localStorage.getItem("whseId")
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetBatchandSerialItemsFromPallet", jObject, this.httpOptions);
+  }
+
+  /**
+ * API to get item
+ * @param palletCode
+ */
+  GetItemsFromPallet(palletCode: string): Observable<any> {
+    var jObject = {
+      PalletCode: JSON.stringify([{
+        COMPANYDBNAME: localStorage.getItem("CompID"),
+        PALLETCODE: palletCode
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetItemsFromPallet", jObject, this.httpOptions);
+  }
+
+  /**
+   * API for pallet split
+   * 
+   * @param palletCode
+   */
+  palletSplit(palletCode: any): Observable<any> {
+    var jObject = { PalletCode: JSON.stringify(palletCode) }
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/PalletTransaction", jObject, this.httpOptions);
+  }
+
+  IsValidItemsFromPallet(palletCode: string, itemCode: string): Observable<any> {
+    var jObject = {
+      PalletCode: JSON.stringify([{
+        COMPANYDBNAME: localStorage.getItem("CompID"),
+        ITEMCODE: itemCode,
+        PALLETCODE: palletCode,
+        WhseCode: localStorage.getItem("whseId")
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/IsValidItemsFromPallet", jObject, this.httpOptions);
+  }
+
+  IsValidBatchandSerialItemsFromPallet(batchNo: string, itemCode: string, palletCode: string): Observable<any> {
+    var jObject = {
+      PalletCode: JSON.stringify([{
+        COMPANYDBNAME: localStorage.getItem("CompID"),
+        ITEMCODE: itemCode,
+        PALLETCODE: palletCode,
+        BATCHNO: batchNo,
+        WhseCode: localStorage.getItem("whseId")
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/IsValidBatchandSerialItemsFromPallet", jObject, this.httpOptions);
   }
 }

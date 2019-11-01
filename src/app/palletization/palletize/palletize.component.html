@@ -20,9 +20,9 @@
                   </button>
 
                   <button id="itemScanButton" (click)="onItemScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
-                  type="button">
-                  <i class="opti-icon-qr-code fs-24"></i>
-                </button>
+                    type="button">
+                    <i class="opti-icon-qr-code fs-24"></i>
+                  </button>
                 </div>
               </div>
             </div>
@@ -164,6 +164,14 @@
               headerClass="text-right" class="text-right">
               <ng-template kendoGridCellTemplate let-dataItem>
                 {{dataItem.Quantity | numberFormat}}
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column media="(min-width: 768px)" headerClass="text-center" class="text-center" field=""
+              [width]="8" title="">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <button type="button" class="btn btn-danger k-button btn-sm btn-icon" (click)="openConfirmForDelete(rowIndex, gridItem)">
+                  <span class="k-icon k-i-delete" role="presentation"></span>
+                </button>
               </ng-template>
             </kendo-grid-column>
           </kendo-grid>
