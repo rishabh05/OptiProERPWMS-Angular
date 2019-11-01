@@ -162,25 +162,24 @@
         </div>
       </div>
       <!-- Kendo Table Grid Row end -->
-
-      <div class="fix-footer-btnBar">
-        <div class="col-sm-12 col-12">
-          <hr />
-        </div>
-        <div class="col-sm-12 col-12">
-          <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text mx-0.5" (click)="back(0)">
-            <span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
-          <!-- <button type="button" *ngIf="showButton" (click)="save($event)" class="btn btn-success k-button btn-sm btn-icon-with-text">
-                    <span class="k-icon k-i-save" role="presentation"></span> {{'Save'|translate}}</button> -->
-          <button class="k-button k-primary k-button btn-sm btn-icon-with-text" *ngIf="fromPalletNo!='' && toPalletNo!=''"
-            type="button" (click)="transfer($event)">
-            <span class="k-icon k-i-download" role="presentation"></span> {{'Plt_Transfer'|translate}}</button>
-          <button type="button" id="showHideGrid" (click)="clickShowHideGrid()" class="btn btn-success k-button btn-sm btn-icon-with-text">
-            {{showHideBtnTxt}}
-          </button>
-          <button type="button" id="hiddenScanButton" style="visibility:hidden" (click)="onHiddenScanClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
-            SB </button>
-        </div>
+    </div>
+    <div class="fix-footer-btnBar">
+      <div class="col-sm-12 col-12">
+        <hr />
+      </div>
+      <div class="col-sm-12 col-12">
+        <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text mx-0.5" (click)="back(0)">
+          <span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
+        <!-- <button type="button" *ngIf="showButton" (click)="save($event)" class="btn btn-success k-button btn-sm btn-icon-with-text">
+                  <span class="k-icon k-i-save" role="presentation"></span> {{'Save'|translate}}</button> -->
+        <button class="k-button k-primary k-button btn-sm btn-icon-with-text" *ngIf="fromPalletNo!='' && toPalletNo!=''"
+          type="button" (click)="transfer($event)">
+          <span class="k-icon k-i-download" role="presentation"></span> {{'Plt_Transfer'|translate}}</button>
+        <button type="button" id="showHideGrid" (click)="clickShowHideGrid()" class="btn btn-success k-button btn-sm btn-icon-with-text">
+          {{showHideBtnTxt}}
+        </button>
+        <button type="button" id="hiddenScanButton" style="visibility:hidden" (click)="onHiddenScanClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+          SB </button>
       </div>
     </div>
   </form>

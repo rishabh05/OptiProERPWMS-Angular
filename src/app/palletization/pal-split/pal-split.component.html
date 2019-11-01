@@ -190,7 +190,7 @@
         </div>
       </div>
 
-      <!-- Pallet: Kendo Table Grid Row Start -->
+      <!-- Detail: Kendo Table Grid Row Start -->
       <kendo-grid class="no-shadow  mx-2" [kendoGridBinding]="savedPalletsArray" [resizable]="true" [sortable]="true"
         [selectable]="true" #gridItem>
         <!-- grid for mobile start -->
@@ -242,51 +242,9 @@
           </ng-template>
         </kendo-grid-column>
       </kendo-grid>
-      <!-- Pallet: Kendo Table Grid Row end -->
+      <!-- Detail: Kendo Table Grid Row end -->
     </div>
-    <div class="row">
-      <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
-        <!-- Details Grid: Kendo Table Grid Row Start -->
-        <kendo-grid class="no-shadow  mx-2" [kendoGridBinding]="palletData" [resizable]="true" [sortable]="true"
-          [selectable]="true" #gridItem>
-          <!-- grid for mobile start -->
-          <kendo-grid-column media="(max-width: 767px)" title="{{'List'|translate}}" class="opti_mobile-grid-td">
-            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-              <dl class="opti_mobile_grid_dl">
-                <dt>{{'Item'|translate}}</dt>
-                <dd>{{dataItem.ITEMID}}</dd>
-                <dt>{{'Plt_CurrentBatchSerialNo'|translate}}</dt>
-                <dd>{{dataItem.SRLBATCH}}</dd>
-              </dl>
-              <dl class="opti_mobile_grid_dl">
-                <dt class="d-flex align-items-center">{{'Plt_NewBatchSerialNo'|translate}}
-                  <button type="button" class="btn btn-danger k-button btn-sm btn-icon ml-auto" (click)="openConfirmForDelete(rowIndex, gridItem)">
-                    <span class="k-icon k-i-delete" role="presentation"></span>
-                  </button>
-                </dt>
-                <dd>{{dataItem.Bin}}</dd>
-                <dt>{{'Quantity'|translate}}</dt>
-                <dd>{{dataItem.QTY}}</dd>
-              </dl>
-            </ng-template>
-          </kendo-grid-column>
-          <!-- grid for mobile end -->
-
-          <kendo-grid-column media="(min-width: 768px)" field="ITEMID" [width]="45" title="{{'Item'|translate}}">
-          </kendo-grid-column>
-          <kendo-grid-column media="(min-width: 768px)" field="SRLBATCH" [width]="45" title="{{'Plt_CurrentBatch'|translate}}"></kendo-grid-column>
-          <kendo-grid-column media="(min-width: 768px)" field="Bin" [width]="45" title="{{'Plt_NewBatchSerialNo'|translate}}">
-          </kendo-grid-column>
-          <kendo-grid-column media="(min-width: 768px)" field="QTY" headerClass="text-right" class="text-right" [width]="45"
-            title="{{'Quantity'|translate}}">
-            <ng-template kendoGridCellTemplate let-dataItem>
-              {{dataItem.QTY |numberFormat}}
-            </ng-template>
-          </kendo-grid-column>
-        </kendo-grid>
-        <!-- Details Grid: Kendo Table Grid Row end -->
-      </div>
-    </div>
+    
     <div class="fix-footer-btnBar">
       <div class="col-sm-12 col-12">
         <hr />

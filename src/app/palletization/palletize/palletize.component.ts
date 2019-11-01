@@ -30,12 +30,13 @@ export class PalletizeComponent implements OnInit {
   showHideBtnTxt: string;
   batchSerialNo: string = "";
   qty: number = 0;
-  openQty: string;
+  openQty: number;
   expDate: string;
   toBin: string;
   toWhse: string;
   fromWhse: string;
   fromBinNo: string;
+  sumOfQty: number = 0;
 
   constructor(private commonservice: Commonservice,
     private router: Router, private toastr: ToastrService, private translate: TranslateService) {
@@ -145,7 +146,7 @@ export class PalletizeComponent implements OnInit {
       this.expDate = lookupValue.EXPDATE;
       this.fromWhse = lookupValue.WHSCODE;
       this.fromBinNo = lookupValue.BINNO;
-      this.openQty = lookupValue.TOTALQTY;
+      this.openQty = Number.parseInt(lookupValue.TOTALQTY);
     }
   }
 
@@ -325,9 +326,9 @@ export class PalletizeComponent implements OnInit {
       return;
     }
 
-    //  if (!this.validateQuantity()) {
-    //    return;
-    //  }
+    if (!this.validateQuantity()) {
+      return;
+    }
 
     var object = {
       ItemCode: this.itemCode,
@@ -343,29 +344,37 @@ export class PalletizeComponent implements OnInit {
     }
     this.savedPalletsArray.push(object);
     if (this.savedPalletsArray.length > 0) {
-    this.enableAddPalletBtn = true;
+      this.enableAddPalletBtn = true;
     }
     this.resetVariablesOnItemSelect();
 
     //this.updateReceiveQty();
   }
 
-  validateQuantity(): boolean {
-    let quantitySum: number = 0;
-    for (var i = 0; i < this.savedPalletsArray.length; i++) {
-      quantitySum += Number(this.savedPalletsArray[i].Quantity);
-    }
-    quantitySum = quantitySum + Number(this.qty);
+  validateQuantity() {
+    this.sumOfQty = 0;
+    for (let i = 0; i < this.savedPalletsArray.length; i++) {
+      var savedItem = this.savedPalletsArray[i].ItemCode;
+      var savedLotNo = this.savedPalletsArray[i].LotNo;
 
-    if (Number(this.openQty) == 0) {
-      this.toastr.error('', this.translate.instant("Inbound_NoOpenQuantity"));
-      this.qty = 0;
-      return false;
-    } else if (quantitySum > Number(this.openQty)) {
+      if (this.itemCode == savedItem && this.batchSerialNo == savedLotNo) {
+        this.sumOfQty = this.sumOfQty + Number(this.savedPalletsArray[i].Quantity);
+      }
+    }
+
+    this.sumOfQty = this.sumOfQty + this.qty;
+
+    if (this.sumOfQty > this.openQty) {
       this.toastr.error('', this.translate.instant("Inbound_NoOpenQuantityValid"));
       this.qty = 0;
       return false;
-    } else {
+    }
+    // else if(this.sumOfQty > this.openQty && this.savedPalletsArray.length == 0) {
+    //   this.toastr.error('', this.translate.instant("Inbound_NoOpenQuantityValid"));
+    //   this.qty = 0;
+    //   return false;
+    // } 
+    else {
       return true;
     }
   }
@@ -436,7 +445,7 @@ export class PalletizeComponent implements OnInit {
     this.expDate = "";
     this.fromWhse = "";
     this.fromBinNo = "";
-    this.openQty = "0";
+    this.openQty = 0;
     this.qty = 0;
     this.toBin = "";
     this.toWhse = "";
@@ -455,7 +464,7 @@ export class PalletizeComponent implements OnInit {
     this.expDate = "";
     this.fromWhse = "";
     this.fromBinNo = "";
-    this.openQty = "0";
+    this.openQty = 0;
     this.qty = 0;
   }
 }
