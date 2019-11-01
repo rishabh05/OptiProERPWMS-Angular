@@ -20,9 +20,9 @@
                   </button>
 
                   <button id="itemScanButton" (click)="onItemScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
-                  type="button">
-                  <i class="opti-icon-qr-code fs-24"></i>
-                </button>
+                    type="button">
+                    <i class="opti-icon-qr-code fs-24"></i>
+                  </button>
                 </div>
               </div>
             </div>
@@ -166,6 +166,14 @@
                 {{dataItem.Quantity | numberFormat}}
               </ng-template>
             </kendo-grid-column>
+            <kendo-grid-column media="(min-width: 768px)" headerClass="text-center" class="text-center" field=""
+              [width]="8" title="">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <button type="button" class="btn btn-danger k-button btn-sm btn-icon" (click)="openConfirmForDelete(rowIndex, gridItem)">
+                  <span class="k-icon k-i-delete" role="presentation"></span>
+                </button>
+              </ng-template>
+            </kendo-grid-column>
           </kendo-grid>
         </div>
       </div>
@@ -181,8 +189,7 @@
         <button type="button" *ngIf="enableAddPalletBtn" (click)="palletize()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
             class="k-icon k-i-save"></span>
           {{'Plt_AddToPallet'|translate}}</button>
-          <button type="button" id="showHideGrid" (click)="clickShowGrid()"
-          class="btn btn-success k-button btn-sm btn-icon-with-text">
+        <button type="button" id="showHideGrid" (click)="clickShowGrid()" class="btn btn-success k-button btn-sm btn-icon-with-text">
           {{showHideBtnTxt}}
         </button>
         <!-- <button type="button" id="showHideGrid" *ngIf="showHideGridBtn()==true" (click)="clickShowHideGrid()" class="btn btn-success k-button btn-sm btn-icon-with-text">

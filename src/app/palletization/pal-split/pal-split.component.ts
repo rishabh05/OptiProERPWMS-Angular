@@ -161,7 +161,6 @@ export class PalSplitComponent implements OnInit {
     if (this.fromPalletLookup == "from_pallet") {
       this.showLoader = false;
       this.fromPalletNo = lookupValue.Code;
-      // this.fromWhse = lookupValue.U_OPTM_WAREHOUSE_LOC
       this.resetVariables();
     } else if (this.fromPalletLookup == "to_pallet") {
       this.toWhse = lookupValue.U_OPTM_WAREHOUSE_LOC;
@@ -173,10 +172,10 @@ export class PalSplitComponent implements OnInit {
       }
     } else if (this.lookupFor == "ItemsList") {
       this.itemCode = lookupValue.ITEMCODE;
-      //this.batchSerialNo = '';
+      this.batchSerialNo = '';
     } else if (this.lookupFor == "ShowBatachSerList") {
       this.batchSerialNo = lookupValue.LOTNO;
-      this.expDate = ""+lookupValue.EXPDATE;
+      this.expDate = "" + lookupValue.EXPDATE;
       this.fromWhse = lookupValue.WHSCODE;
       this.fromBinNo = lookupValue.BINNO;
       this.openQty = Number.parseInt(lookupValue.TOTALQTY);
@@ -246,7 +245,7 @@ export class PalSplitComponent implements OnInit {
         WHSE: this.savedPalletsArray[i].FromWhse,
         TOBIN: this.savedPalletsArray[i].ToBinNo,
         TOWHSE: this.savedPalletsArray[i].ToWhse,
-        EXPIRYDATE: ""+this.savedPalletsArray[i].ExpiryDate,
+        EXPIRYDATE: "" + this.savedPalletsArray[i].ExpiryDate,
       });
     }
 
@@ -254,7 +253,12 @@ export class PalSplitComponent implements OnInit {
       (data: any) => {
         this.showLoader = false;
         console.log(data);
-        if (data != null) {
+        if (data != null && data.length > 0) {
+          if (data[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
           this.savedPalletsArray = [];
           this.resetVariables();
           this.toastr.success('', this.translate.instant("Plt_Split_success"));
@@ -283,7 +287,7 @@ export class PalSplitComponent implements OnInit {
   openConfirmForDelete(index: any, item: any) {
     console.log("index: " + index)
     console.log("item: " + item)
-    this.savedPalletsArray.splice(index);
+    this.savedPalletsArray.splice(index,1);
   }
 
   onCheckChange() {
@@ -317,34 +321,39 @@ export class PalSplitComponent implements OnInit {
     }
 
     this.showLoader = true;
-    this.commonservice.IsValidBatchandSerialItemsFromPallet(this.batchSerialNo, this.itemCode, 
+    this.commonservice.IsValidBatchandSerialItemsFromPallet(this.batchSerialNo, this.itemCode,
       this.fromPalletNo).subscribe(
-      (data: any) => {
-        this.showLoader = false;
-        console.log(data);
-        if (data != null) {
-          if (data.length > 0) {
-            
-          } else {
+        (data: any) => {
+          this.showLoader = false;
+          console.log(data);
+          if (data != null) {
+            if (data.length > 0) {
+              this.batchSerialNo = data[0].LOTNO;
+              this.expDate = "" + data[0].EXPDATE;
+              this.fromWhse = data[0].WHSCODE;
+              this.fromBinNo = data[0].BINNO;
+              this.openQty = Number.parseInt(data[0].TOTALQTY);
+              this.qty = this.openQty;
+            } else {
+              this.toastr.error('', this.translate.instant("Plt_InValidBatchSerial"));
+              return;
+            }
+          }
+          else {
             this.toastr.error('', this.translate.instant("Plt_InValidBatchSerial"));
             return;
           }
+        },
+        error => {
+          this.showLoader = false;
+          if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+          }
+          else {
+            this.toastr.error('', error);
+          }
         }
-        else {
-          this.toastr.error('', this.translate.instant("Plt_InValidBatchSerial"));
-          return;
-        }
-      },
-      error => {
-        this.showLoader = false;
-        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
-        }
-        else {
-          this.toastr.error('', error);
-        }
-      }
-    );
+      );
   }
 
   addQuantity() {
@@ -551,6 +560,7 @@ export class PalSplitComponent implements OnInit {
   }
 
   resetVariables() {
+    this.itemCode = '';
     this.batchSerialNo = '';
     this.toPalletNo = '';
     this.expDate = "";
@@ -559,6 +569,5 @@ export class PalSplitComponent implements OnInit {
     this.openQty = 0;
     this.qty = 0;
     this.moveQty = 0;
-    this.toPalletNo;
   }
 }

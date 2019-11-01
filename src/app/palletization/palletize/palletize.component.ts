@@ -414,7 +414,7 @@ export class PalletizeComponent implements OnInit {
   openConfirmForDelete(index: any, item: any) {
     console.log("index: " + index)
     console.log("item: " + item)
-    this.savedPalletsArray.splice(index);
+    this.savedPalletsArray.splice(index,1);
   }
 
   resetVariables() {

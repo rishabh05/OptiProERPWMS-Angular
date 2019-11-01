@@ -229,6 +229,6 @@ export class PalletMergeComponent implements OnInit {
   openConfirmForDelete(index: any, item: any){
     console.log("index: "+index)
     console.log("item: "+item)
-    this.selectedFromPallets.splice(index);
+    this.selectedFromPallets.splice(index, 1);
   }
 }
