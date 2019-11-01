@@ -191,7 +191,8 @@ export class PalletMergeComponent implements OnInit {
       (data: any) => {
         this.showLoader = false;
         console.log(data);
-        if (data != null && data.length>0 && data[0].ErrorMsg == "") {
+        if(data !=null && data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY"){
+        //  if (data != null && data.length>0 && data[0].ErrorMsg == "") {
           
           this.toastr.success('', this.translate.instant("Plt_Merge_success"));
           this.resetPageOnSuccess();
@@ -218,7 +219,6 @@ export class PalletMergeComponent implements OnInit {
   }
 
    resetPageOnSuccess(){
- 
     this.fromPalletNo = "";
     this.toWhse = "";
     this.toBin = "";

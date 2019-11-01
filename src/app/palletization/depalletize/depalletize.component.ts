@@ -172,7 +172,8 @@ export class DepalletizeComponent implements OnInit {
       (data: any) => {
         this.showLoader = false;
         console.log(data);
-        if (data != null && data.length>0 && data[0].ErrorMsg == "") { 
+        if(data !=null && data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY"){
+       // if (data != null && data.length>0 && data[0].ErrorMsg == "") { 
           this.toastr.success('', this.translate.instant("Plt_DePalletize_success"));
           this.resetPageOnSuccess();
         }

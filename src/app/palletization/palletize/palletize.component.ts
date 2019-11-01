@@ -38,6 +38,7 @@ export class PalletizeComponent implements OnInit {
 
   constructor(private commonservice: Commonservice,
     private router: Router, private toastr: ToastrService, private translate: TranslateService) {
+     // this.showHideBtnTxt = this.translate.instant("showGrid");
 
   }
 
@@ -137,7 +138,7 @@ export class PalletizeComponent implements OnInit {
     } else if (this.lookupFor == "ItemsList") {
       this.itemCode = lookupValue.ITEMCODE;
       //Reset fields when change itemcode
-      this.resetVariables();
+      this.resetVariablesOnItemSelect();
     } else if (this.lookupFor == "ShowBatachSerList") {
       this.batchSerialNo = lookupValue.LOTNO;
       this.expDate = lookupValue.EXPDATE;
@@ -151,8 +152,17 @@ export class PalletizeComponent implements OnInit {
     this.router.navigateByUrl('home/dashboard', { skipLocationChange: true });
   }
 
-  clickShowGrid(){
+  // clickShowGrid(){
+  //   this.showGrid = true;
+  // }
+  clickShowHideGrid() {
     this.showGrid = true;
+    this.showHideGridToggle = !this.showHideGridToggle;
+    if (this.showHideGridToggle) {
+      this.showHideBtnTxt = this.translate.instant("hideGrid");
+    } else {
+      this.showHideBtnTxt = this.translate.instant("showGrid");
+    }
   }
   onCheckChange() {
     this.showNewPallet = !this.showNewPallet;
@@ -209,7 +219,7 @@ export class PalletizeComponent implements OnInit {
             return;
           }
           this.itemCode = data[0].ITEMCODE;
-          this.resetVariables();
+          this.resetVariablesOnItemSelect();
           // this.CheckTrackingandVisiblity();
           // if (localStorage.getItem("whseId") != localStorage.getItem("towhseId")) {
           //   this.getDefaultBin();
@@ -230,14 +240,14 @@ export class PalletizeComponent implements OnInit {
     );
   }
 
-  clickShowHideGrid() {
-    this.showHideGridToggle = !this.showHideGridToggle;
-    if (this.showHideGridToggle) {
-      this.showHideBtnTxt = this.translate.instant("hideGrid");
-    } else {
-      this.showHideBtnTxt = this.translate.instant("showGrid");
-    }
-  }
+  // clickShowHideGrid() {
+  //   this.showHideGridToggle = !this.showHideGridToggle;
+  //   if (this.showHideGridToggle) {
+  //     this.showHideBtnTxt = this.translate.instant("hideGrid");
+  //   } else {
+  //     this.showHideBtnTxt = this.translate.instant("showGrid");
+  //   }
+  // }
 
   showHideGridBtn() {
     if ((this.itemCode != "" && this.itemCode != undefined)
@@ -332,7 +342,7 @@ export class PalletizeComponent implements OnInit {
 
     if(this.savedPalletsArray.length>0){this.enableAddPalletBtn = true;}
     
-    this.resetVariables();
+    this.resetVariablesOnItemSelect();
 
     //this.updateReceiveQty();
   }
@@ -387,8 +397,16 @@ export class PalletizeComponent implements OnInit {
       (data: any) => {
         this.showLoader = false;
         console.log(data);
-        if (data != null) {
+        if(data !=null && data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY"){
+          //  if (data != null && data.length>0 && data[0].ErrorMsg == "") {
+            
+            this.toastr.success('', this.translate.instant("Plt_Merge_success"));
+            this.resetPageOnSuccess();
         
+        }else if (data[0].ErrorMsg == "7001") {
+          this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+            this.translate.instant("CommonSessionExpireMsg"));
+          return;
         }
         else {
           this.toastr.error('', this.translate.instant("InValidPalletNo"));
@@ -407,13 +425,26 @@ export class PalletizeComponent implements OnInit {
     );
   }
 
+  resetPageOnSuccess(){
+    this.batchSerialNo = '';
+    this.palletNo = '';
+    this.expDate = "";
+    this.fromWhse = "";
+    this.fromBinNo = "";
+    this.openQty = "0";
+    this.qty = 0;
+    this.toBin = "";
+    this.toWhse = "";
+    this.itemCode = "";
+  }
+
   openConfirmForDelete(index: any, item: any) {
     console.log("index: " + index)
     console.log("item: " + item)
     this.savedPalletsArray.splice(index);
   }
 
-  resetVariables() {
+  resetVariablesOnItemSelect() {
     this.batchSerialNo = '';
     this.palletNo = '';
     this.expDate = "";

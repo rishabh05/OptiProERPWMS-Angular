@@ -365,5 +365,6 @@
   "Plt_FromPalletRequired": "From pallet number required.",
   "Plt_ToPalletRequired": "To pallet number required.",
   "Plt_MoveQtyRequired": "Move quantity required.",
-  "Plt_Split_success":"Pallet splitted successfully!"
+  "Plt_Split_success":"Pallet splitted successfully!",
+  "Plt_Palletized_success":"Item successfully!"
 }
