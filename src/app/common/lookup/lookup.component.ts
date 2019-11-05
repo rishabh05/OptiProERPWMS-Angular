@@ -52,7 +52,7 @@ export class LookupComponent implements OnInit {
 
 
   lookupPagable: boolean = false;
-  lookupPageSize: number = 8;
+  lookupPageSize: number = 10;
   constructor(private toastr: ToastrService, private translate: TranslateService, private router: Router) {
     let userLang = navigator.language.split('-')[0];
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
