@@ -16,7 +16,7 @@
                   <button class="k-button k-primary btn" (click)="getPalletList()" type="button">
                     <i class="opti-icon-hammenu"></i>
                   </button>
-                  <button type="button" id="palletScanButton" (click)="onPalletScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                  <button type="button" id="DePal_PalletScanButton" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                     <i class="opti-icon-qr-code fs-24"></i>
                   </button>
                 </div>
@@ -72,6 +72,10 @@
         <button type="button" id="showHideGrid" (click)="clickShowHideGrid()" class="btn btn-success k-button btn-sm btn-icon-with-text">
           {{showHideBtnTxt}}
         </button>
+
+        <button type="button" id="DePal_HiddenScanPltBtn" style="visibility:hidden" (click)="ScanPalletField()"
+                   class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                   SBItemDeP </button>
       </div>
     </div>
   </form>

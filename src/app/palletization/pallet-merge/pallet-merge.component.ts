@@ -79,9 +79,7 @@ export class PalletMergeComponent implements OnInit {
     );
   }
 
-  onPalletScan() {
-    // alert("scan click");
-  }
+
 
   onPalletChange(from: string) {
     if (this.fromPalletNo == '' && this.toPalletNo == '') {
@@ -229,5 +227,12 @@ export class PalletMergeComponent implements OnInit {
     console.log("index: " + index)
     console.log("item: " + item)
     this.selectedFromPallets.splice(index, 1);
+  }
+
+  ScanToPalletField(){
+    this.onPalletChange('to_pallet');
+  }
+  ScanFromPalletField(){
+     this.onPalletChange('from_pallet');
   }
 }

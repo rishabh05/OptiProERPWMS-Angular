@@ -101,7 +101,7 @@ export class DepalletizeComponent implements OnInit {
           return;
         }
       },
-      error => {
+      error => {  
         this.showLoader = false;
         if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
           this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
@@ -203,6 +203,10 @@ export class DepalletizeComponent implements OnInit {
     this.toWhse = "";
     this.toBin = "";
     this.palletNo = "";
+  }
+
+  ScanPalletField(){
+    this.onPalletChange();
   }
 
 }

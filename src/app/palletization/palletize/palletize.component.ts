@@ -110,6 +110,9 @@ export class PalletizeComponent implements OnInit {
               //this.palletNo = "";
               this.showHideBtnTxt = this.translate.instant("showGrid");
             }
+          }else{
+            this.toastr.error('', this.translate.instant("InValidPalletNo"));
+            this.palletNo = "";
           }
         }
         else {
@@ -302,6 +305,7 @@ export class PalletizeComponent implements OnInit {
     if (this.batchSerialNo == "" || this.batchSerialNo == undefined) {
       return;
     }
+    // validation for lot qty.
   }
 
   addQuantity() {
@@ -466,5 +470,15 @@ export class PalletizeComponent implements OnInit {
     this.fromBinNo = "";
     this.openQty = 0;
     this.qty = 0;
+  }
+
+  ScanItemCodeField(){
+    this.OnItemCodeChange();
+  }
+  ScanBatchSerialField(){
+    this.OnLotsChange();
+  }
+  ScanPalletField(){
+    this.onPalletChange();
   }
 }

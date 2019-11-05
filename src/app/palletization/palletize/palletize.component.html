@@ -19,7 +19,7 @@
                     <i class="opti-icon-hammenu"></i>
                   </button>
 
-                  <button id="itemScanButton" (click)="onItemScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
+                  <button id="pal_ItemScanBtn" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
                     type="button">
                     <i class="opti-icon-qr-code fs-24"></i>
                   </button>
@@ -42,7 +42,7 @@
                   <button class="k-button k-primary btn" (click)="OnBatchSerialLookupClick()" type="button">
                     <i class="opti-icon-hammenu"></i>
                   </button>
-                  <button id="printBatchSerialscanButton" (click)="onBatchSerialScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
+                  <button id="pal_BatchSrScanBtn" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
                     type="button">
                     <i class="opti-icon-qr-code fs-24"></i>
                   </button>
@@ -65,7 +65,7 @@
                   <button class="k-button k-primary btn" (click)="getPalletList()" type="button">
                     <i class="opti-icon-hammenu"></i>
                   </button>
-                  <button type="button" id="palletScanButton" (click)="onPalletScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                  <button type="button" id="pal_PalletScanBtn" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                     <i class="opti-icon-qr-code fs-24"></i>
                   </button>
                 </div>
@@ -195,6 +195,15 @@
         <!-- <button type="button" id="showHideGrid" *ngIf="showHideGridBtn()==true" (click)="clickShowHideGrid()" class="btn btn-success k-button btn-sm btn-icon-with-text">
           {{showHideBtnTxt}}
         </button> -->
+        <button type="button" id="Pal_HiddenScanItmBtn" style="visibility:hidden" (click)="ScanItemCodeField()"
+                    class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                    SBItem </button>
+        <button type="button" id="Pal_HiddenScanBatchSerialBtn" style="visibility:hidden" (click)="ScanBatchSerialField()"
+                   class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                   SBItem </button>
+        <button type="button" id="Pal_HiddenScanPltBtn" style="visibility:hidden" (click)="ScanPalletField()"
+                   class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                   SBItem </button>
       </div>
     </div>
   </form>

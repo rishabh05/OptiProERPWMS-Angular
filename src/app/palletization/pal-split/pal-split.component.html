@@ -20,7 +20,7 @@
                   </button>
                 </div>
                 <div class="ml-1 d-flex">
-                  <button type="button" id="fromPalletBtn" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                  <button type="button" id="PalSplit_FromPalletBtn" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                     <i class="opti-icon-qr-code fs-24"></i>
                   </button>
                 </div>
@@ -43,7 +43,7 @@
                   </button>
                 </div>
                 <div class="ml-1 d-flex">
-                  <button type="button" id="toPalletBtn" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                  <button type="button" id="PalSplit_ToPalletBtn" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                     <i class="opti-icon-qr-code fs-24"></i>
                   </button>
                 </div>
@@ -108,7 +108,7 @@
                     <i class="opti-icon-hammenu"></i>
                   </button>
 
-                  <button id="itemScanButton" (click)="onItemScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
+                  <button id="PalSplit_ItemScanButton"  class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
                     type="button">
                     <i class="opti-icon-qr-code fs-24"></i>
                   </button>
@@ -159,7 +159,7 @@
                   <button class="k-button k-primary btn" (click)="OnBatchSerialLookupClick()" type="button">
                     <i class="opti-icon-hammenu"></i>
                   </button>
-                  <button id="printBatchSerialscanButton" (click)="onBatchSerialScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
+                  <button id="PalSplit_BatchSerialscanButton"  class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
                     type="button">
                     <i class="opti-icon-qr-code fs-24"></i>
                   </button>
@@ -257,7 +257,13 @@
         <!-- <button class="k-button k-primary k-button btn-sm btn-icon-with-text" *ngIf="showRecButton" type="button"
           (click)="receive($event)">
           <span class="k-icon k-i-download" role="presentation"></span> {{'Receive'|translate}}</button> -->
-        <button type="button" id="hiddenScanButton" style="visibility:hidden" (click)="onHiddenScanClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+        <button type="button" id="PalSplit_HiddenFromPltScanButton" style="visibility:hidden" (click)="onHiddenFromPltScanClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+          SB </button>
+        <button type="button" id="PalSplit_HiddenToPltScanButton" style="visibility:hidden" (click)="onHiddenToPltScanClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+          SB </button>
+        <button type="button" id="PalSplit_HiddenItemCodeScanButton" style="visibility:hidden" (click)="onHiddenItemScanClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+          SB </button>
+        <button type="button" id="PalSplit_HiddenBatchSerialScanButton" style="visibility:hidden" (click)="onHiddenBatchSerialScanClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
           SB </button>
       </div>
     </div>
