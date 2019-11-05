@@ -51,7 +51,8 @@ export class LookupComponent implements OnInit {
   public mySelection: number[] = [];
 
 
-
+  lookupPagable: boolean = false;
+  lookupPageSize: number = 8;
   constructor(private toastr: ToastrService, private translate: TranslateService, private router: Router) {
     let userLang = navigator.language.split('-')[0];
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
@@ -93,10 +94,14 @@ export class LookupComponent implements OnInit {
     this.clearFilters()
   }
   ngOnInit() {
+    
   }
 
   async ngOnChanges(): Promise<void> {
 
+    if(this.serviceData.length>= this.lookupPageSize){
+        this.lookupPagable = true;
+    }
     if (this.lookupfor == "toWhsList") {
       this.showToWhsList();
     } else if (this.lookupfor == "ItemsList") {
