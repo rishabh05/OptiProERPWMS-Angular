@@ -57,12 +57,12 @@
             </div>
           </div>
         </div>
-        <!-- <div class="align-items-start col-md-2 col-lg-4 col-xl-6 pl-0 d-none d-sm-none d-md-none d-lg-flex d-xl-flex">
+        <div class="align-items-start col-md-2 col-lg-4 col-xl-6 pl-0 d-none d-sm-none d-md-none d-lg-flex d-xl-flex">
           <button style="margin-left: -10px;" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
             type="button" (click)="clearPalletItems(event)" id="btnClear">
             <small>{{'Common_Clear'|translate}}</small>
           </button>
-        </div> -->
+        </div>
       </div>
       <div class="row">
         <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
@@ -102,7 +102,7 @@
             <div class="col-sm-9">
               <div class="input-group input-group-sm">
                 <input type="text" class="form-control form-control-sm" placeholder="{{'ItemCode'|translate}}" name="itemCode"
-                  [(ngModel)]="itemCode" (blur)="OnItemCodeChange()">
+                  [(ngModel)]="itemCode" (blur)="OnItemCodeChange()" >
                 <div class="input-group-append  has-seprate-btn">
                   <button class="k-button k-primary btn" type="button" (click)="OnItemCodeLookupClick()">
                     <i class="opti-icon-hammenu"></i>
@@ -119,7 +119,7 @@
         </div>
       </div>
 
-      <div class="row">
+      <!-- <div class="row">
         <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
           <div class="form-group row">
             <label for="inputPassword" class="col-sm-3 col-form-label">{{'Plt_MoveQty'|translate}}</label>
@@ -131,9 +131,9 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
 
-      <div class="row">
+      <!-- <div class="row">
         <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
           <div class="form-group row">
             <label for="inputPassword" class="col-sm-3 col-form-label">{{'Plt_RemainQty'|translate}}</label>
@@ -145,7 +145,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <div class="row">
         <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
@@ -153,8 +153,8 @@
             <label for="inputPassword" class="col-sm-3 col-form-label">{{'BatchSerial_No'|translate}}</label>
             <div class="col-sm-9">
               <div class="input-group input-group-sm">
-                <input type="text" id="batchSerialNo" name="batchSerialNo" class="form-control form-control-sm" [(ngModel)]="batchSerialNo"
-                  (blur)="OnLotsChange()" placeholder="{{'BatchSerial_No'|translate}}">
+                <input type="text" id="batchSerialNo" name="batchSerialNo" class="form-control form-control-sm"
+                  [(ngModel)]="batchSerialNo" (blur)="OnLotsChange()" placeholder="{{'BatchSerial_No'|translate}}">
                 <div class="input-group-append has-seprate-btn">
                   <button class="k-button k-primary btn" (click)="OnBatchSerialLookupClick()" type="button">
                     <i class="opti-icon-hammenu"></i>
@@ -176,8 +176,8 @@
             <label for="inputPassword" class="col-sm-3 col-form-label">{{'Quantity'|translate}}</label>
             <div class="col-sm-9">
               <div class="input-group input-group-sm">
-                <input type="text" id="qty" class="form-control form-control-sm text-right" [(ngModel)]="qty" name='qty'
-                  placeholder="{{'Quantity'|translate}}">
+                <input type="number" id="qty" class="form-control form-control-sm text-right" [(ngModel)]="qty" name='qty'
+                  placeholder="{{'Quantity'|translate}}" [attr.disabled]="isSerailTrackedItem ? '' : null">
                 <div class="ml-1 d-flex">
                   <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button"
                     (click)="addQuantity(event)">
@@ -189,62 +189,65 @@
           </div>
         </div>
       </div>
+      <div class="row" *ngIf="showHideGridToggle">
+        <div class="col-12">
+          <!-- Detail: Kendo Table Grid Row Start -->
+          <kendo-grid class="no-shadow  mx-2" [kendoGridBinding]="savedPalletsArray" [resizable]="true" [sortable]="true"
+            [selectable]="true" #gridItem>
+            <!-- grid for mobile start -->
+            <kendo-grid-column media="(max-width: 767px)" title="{{'List'|translate}}" class="opti_mobile-grid-td">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <dl class="opti_mobile_grid_dl">
+                  <dt>{{'Item'|translate}}</dt>
+                  <dd>{{ dataItem.ItemCode }}</dd>
+                  <dt>{{'Currnt Batch/Serial'|translate}}</dt>
+                  <dd>{{ dataItem.LotNo }}</dd>
+                </dl>
+                <dl class="opti_mobile_grid_dl">
+                  <dt>{{'New Batch/Serial'|translate}}</dt>
+                  <dd>{{ dataItem.FinalLotNo }}</dd>
+                  <dt>{{'Plt_MoveQty'|translate}}</dt>
+                  <dd>{{ dataItem.MoveQty }}</dd>
+                </dl>
+                <dl class="opti_mobile_grid_dl">
+                  <dt>{{'Quantity'|translate}}</dt>
+                  <dd>{{ dataItem.Quantity }}</dd>
+                </dl>
+              </ng-template>
+            </kendo-grid-column>
+            <!-- grid for mobile end -->
 
-      <!-- Detail: Kendo Table Grid Row Start -->
-      <kendo-grid class="no-shadow  mx-2" [kendoGridBinding]="savedPalletsArray" [resizable]="true" [sortable]="true"
-        [selectable]="true" #gridItem>
-        <!-- grid for mobile start -->
-        <kendo-grid-column media="(max-width: 767px)" title="{{'List'|translate}}" class="opti_mobile-grid-td">
-          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-            <dl class="opti_mobile_grid_dl">
-              <dt>{{'Item'|translate}}</dt>
-              <dd>{{ dataItem.ItemCode }}</dd>
-              <dt>{{'Currnt Batch/Serial'|translate}}</dt>
-              <dd>{{ dataItem.LotNo }}</dd>
-            </dl>
-            <dl class="opti_mobile_grid_dl">
-              <dt>{{'New Batch/Serial'|translate}}</dt>
-              <dd>{{ dataItem.FinalLotNo }}</dd>
-              <dt>{{'Plt_MoveQty'|translate}}</dt>
-              <dd>{{ dataItem.MoveQty }}</dd>
-            </dl>
-            <dl class="opti_mobile_grid_dl">
-              <dt>{{'Quantity'|translate}}</dt>
-              <dd>{{ dataItem.Quantity }}</dd>
-            </dl>
-          </ng-template>
-        </kendo-grid-column>
-        <!-- grid for mobile end -->
-
-        <kendo-grid-column media="(min-width: 768px)" field="ItemCode" title="{{'Item'|translate}}" [width]="30"></kendo-grid-column>
-        <kendo-grid-column media="(min-width: 768px)" field="LotNo" title="{{'Plt_CurrentBatchSerialNo'|translate}}"
-          [width]="30"></kendo-grid-column>
-        <kendo-grid-column media="(min-width: 768px)" field="FinalLotNo" title="{{'Plt_NewBatchSerialNo'|translate}}"
-          [width]="30"></kendo-grid-column>
-        <kendo-grid-column media="(min-width: 768px)" field="MoveQty" title="{{'Plt_MoveQty'|translate}}" [width]="30"
-          headerClass="text-right" class="text-right">
-          <ng-template kendoGridCellTemplate let-dataItem>
-            {{dataItem.MoveQty | numberFormat}}
-          </ng-template>
-        </kendo-grid-column>
-        <kendo-grid-column media="(min-width: 768px)" field="Quantity" title="{{'Quantity'|translate}}" [width]="30"
-          headerClass="text-right" class="text-right">
-          <ng-template kendoGridCellTemplate let-dataItem>
-            {{dataItem.Quantity | numberFormat}}
-          </ng-template>
-        </kendo-grid-column>
-        <kendo-grid-column media="(min-width: 768px)" headerClass="text-center" class="text-center" field="" [width]="8"
-          title="">
-          <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-            <button type="button" class="btn btn-danger k-button btn-sm btn-icon" (click)="openConfirmForDelete(rowIndex, gridItem)">
-              <span class="k-icon k-i-delete" role="presentation"></span>
-            </button>
-          </ng-template>
-        </kendo-grid-column>
-      </kendo-grid>
-      <!-- Detail: Kendo Table Grid Row end -->
+            <kendo-grid-column media="(min-width: 768px)" field="ItemCode" title="{{'Item'|translate}}" [width]="30"></kendo-grid-column>
+            <kendo-grid-column media="(min-width: 768px)" field="LotNo" title="{{'Plt_CurrentBatchSerialNo'|translate}}"
+              [width]="30"></kendo-grid-column>
+            <kendo-grid-column media="(min-width: 768px)" field="FinalLotNo" title="{{'Plt_NewBatchSerialNo'|translate}}"
+              [width]="30"></kendo-grid-column>
+            <!-- <kendo-grid-column media="(min-width: 768px)" field="MoveQty" title="{{'Plt_MoveQty'|translate}}" [width]="30"
+              headerClass="text-right" class="text-right">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                {{dataItem.MoveQty | numberFormat}}
+              </ng-template>
+            </kendo-grid-column> -->
+            <kendo-grid-column media="(min-width: 768px)" field="Quantity" title="{{'Quantity'|translate}}" [width]="30"
+              headerClass="text-right" class="text-right">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                {{dataItem.Quantity | numberFormat}}
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column media="(min-width: 768px)" headerClass="text-center" class="text-center" field=""
+              [width]="8" title="">
+              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <button type="button" class="btn btn-danger k-button btn-sm btn-icon" (click)="openConfirmForDelete(rowIndex, gridItem)">
+                  <span class="k-icon k-i-delete" role="presentation"></span>
+                </button>
+              </ng-template>
+            </kendo-grid-column>
+          </kendo-grid>
+          <!-- Detail: Kendo Table Grid Row end -->
+        </div>
+      </div>
     </div>
-    
+
     <div class="fix-footer-btnBar">
       <div class="col-sm-12 col-12">
         <hr />
@@ -253,10 +256,10 @@
         <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text mx-0.5" (click)="back(0)">
           <span class="k-icon k-i-close-outline" role="presentation"></span> Cancel</button>
         <button type="button" *ngIf="enableSplitPalletBtn" (click)="splitPallet($event)" class="btn btn-success k-button btn-sm btn-icon-with-text">
-          <span class="opti-icon-pallet-split" role="presentation"></span> {{'Plt_Split'|translate}}</button>
-        <!-- <button class="k-button k-primary k-button btn-sm btn-icon-with-text" *ngIf="showRecButton" type="button"
-          (click)="receive($event)">
-          <span class="k-icon k-i-download" role="presentation"></span> {{'Receive'|translate}}</button> -->
+          <span class="k-icon opti-icon-pallet-split" role="presentation"></span> {{'Plt_Split'|translate}}</button>
+        <button type="button" id="showHideGrid" (click)="clickShowHideGrid()" class="btn btn-success k-button btn-sm btn-icon-with-text">
+          {{showHideBtnTxt}}
+        </button>
         <button type="button" id="hiddenScanButton" style="visibility:hidden" (click)="onHiddenScanClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
           SB </button>
       </div>

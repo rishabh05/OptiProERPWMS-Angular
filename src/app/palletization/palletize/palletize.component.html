@@ -113,7 +113,7 @@
             <div class="col-sm-9">
               <div class="d-flex">
                 <input type="number" class="form-control form-control-sm text-right" #Quantity name="qty" [(ngModel)]=qty
-                  placeholder="{{'Quantity'|translate}}" headerClass="text-right">
+                  placeholder="{{'Quantity'|translate}}" headerClass="text-right"  [attr.disabled]="isSerailTrackedItem ? '' : null"  >
                 <div class="ml-1 d-flex">
                   <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button"
                     (click)="addQuantity(event)">
@@ -161,7 +161,7 @@
             <kendo-grid-column media="(min-width: 768px)" field="PalletCode" title="{{'Plt_PalletNo'|translate}}"
               [width]="30"></kendo-grid-column>
             <kendo-grid-column media="(min-width: 768px)" field="Quantity" title="{{'Quantity'|translate}}" [width]="30"
-              headerClass="text-right" class="text-right">
+              headerClass="text-right" class="text-right" >
               <ng-template kendoGridCellTemplate let-dataItem>
                 {{dataItem.Quantity | numberFormat}}
               </ng-template>
@@ -187,7 +187,7 @@
         <button type="button" (click)="back(0)" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-close-outline"
             role="presentation"></span> {{'Cancel'|translate}}</button>
         <button type="button" *ngIf="enableAddPalletBtn" (click)="palletize()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
-            class="k-icon k-i-save"></span>
+            class="k-icon opti-icon-palletize"></span>
           {{'Plt_AddToPallet'|translate}}</button>
         <button type="button" id="showHideGrid" (click)="clickShowHideGrid()" class="btn btn-success k-button btn-sm btn-icon-with-text">
           {{showHideBtnTxt}}

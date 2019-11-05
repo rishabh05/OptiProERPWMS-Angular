@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Pallet } from 'src/app/models/Inbound/Pallet';
 import { PalletOperationType } from 'src/app/enums/PalletEnums';
+import { LabelPrintReportsService } from 'src/app/services/label-print-reports.service';
 
 @Component({
   selector: 'app-palletize',
@@ -37,9 +38,12 @@ export class PalletizeComponent implements OnInit {
   fromWhse: string;
   fromBinNo: string;
   sumOfQty: number = 0;
+  itemType: string = "";
+  isSerailTrackedItem: boolean = false;
 
   constructor(private commonservice: Commonservice,
-    private router: Router, private toastr: ToastrService, private translate: TranslateService) {
+    private router: Router, private toastr: ToastrService, private translate: TranslateService,
+    private labelPrintReportsService: LabelPrintReportsService) {
     this.showHideBtnTxt = this.translate.instant("showGrid");
 
   }
@@ -52,6 +56,7 @@ export class PalletizeComponent implements OnInit {
 
   public getPalletList(from: string) {
     if (this.itemCode == '' || this.itemCode == undefined) {
+      this.toastr.error('', this.translate.instant("SelectItemCode"));
       return
     }
 
@@ -107,9 +112,12 @@ export class PalletizeComponent implements OnInit {
               this.palletNo = "";
               return;
             } else {
-              //this.palletNo = "";
+              this.palletNo = data[0].Code;
               this.showHideBtnTxt = this.translate.instant("showGrid");
             }
+          } else {
+            this.palletNo = "";
+            this.toastr.error('', this.translate.instant("InValidPalletNo"));
           }
         }
         else {
@@ -139,6 +147,12 @@ export class PalletizeComponent implements OnInit {
       this.showHideBtnTxt = this.translate.instant("showGrid");
     } else if (this.lookupFor == "ItemsList") {
       this.itemCode = lookupValue.ITEMCODE;
+      this.itemType = lookupValue.ITEMTYPE;
+      if (this.itemType == "S") {
+        this.isSerailTrackedItem = true;
+      } else {
+        this.isSerailTrackedItem = false;
+      }
       //Reset fields when change itemcode
       this.resetVariablesOnItemSelect();
     } else if (this.lookupFor == "ShowBatachSerList") {
@@ -147,6 +161,7 @@ export class PalletizeComponent implements OnInit {
       this.fromWhse = lookupValue.WHSCODE;
       this.fromBinNo = lookupValue.BINNO;
       this.openQty = Number.parseInt(lookupValue.TOTALQTY);
+      this.validateRemainigQuantity();
     }
   }
 
@@ -209,6 +224,7 @@ export class PalletizeComponent implements OnInit {
 
   OnItemCodeChange() {
     if (this.itemCode == "" || this.itemCode == undefined) {
+      this.savedPalletsArray = [];
       return;
     }
     this.showLoader = true;
@@ -223,14 +239,19 @@ export class PalletizeComponent implements OnInit {
             return;
           }
           this.itemCode = data[0].ITEMCODE;
+          this.itemType = data[0].TRACKING;
+          this.savedPalletsArray = [];
           this.resetVariablesOnItemSelect();
-          // this.CheckTrackingandVisiblity();
-          // if (localStorage.getItem("whseId") != localStorage.getItem("towhseId")) {
-          //   this.getDefaultBin();
-          // }
+
+          if (this.itemType == "S") {
+            this.isSerailTrackedItem = true;
+          } else {
+            this.isSerailTrackedItem = false;
+          }
         } else {
+          this.savedPalletsArray = [];
+          this.resetVariablesOnItemSelect();
           this.toastr.error('', this.translate.instant("InvalidItemCode"));
-          this.itemCode = "";
         }
       },
       error => {
@@ -264,7 +285,7 @@ export class PalletizeComponent implements OnInit {
 
   OnBatchSerialLookupClick() {
     if (this.itemCode == '' || this.itemCode == undefined) {
-      this.toastr.error('', this.translate.instant("Please select item code"));
+      this.toastr.error('', this.translate.instant("SelectItemCode"));
       return;
     }
 
@@ -299,10 +320,51 @@ export class PalletizeComponent implements OnInit {
   }
 
   OnLotsChange() {
+    if (this.itemCode == '' || this.itemCode == undefined) {
+      this.toastr.error('', this.translate.instant("SelectItemCode"));
+      this.batchSerialNo = "";
+      return;
+    }
+
     if (this.batchSerialNo == "" || this.batchSerialNo == undefined) {
       return;
     }
+
+    this.showLoader = true;
+    this.labelPrintReportsService.getLotScanListWithoutWhseBinAndItemWise(this.itemCode, this.batchSerialNo).subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        if (data != undefined && data.length > 0) {
+          console.log("" + data);
+          if (data[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
+          if (data == "0" || data[0] == "0") {
+            this.toastr.error('', this.translate.instant("InvalidBatch"));
+            this.batchSerialNo = "";
+            return;
+          }
+          this.batchSerialNo = data[0].LOTNO; //check this code.
+          this.expDate = data[0].EXPDATE;
+          this.fromWhse = data[0].WHSCODE;
+          this.fromBinNo = data[0].BINNO;
+          this.openQty = Number.parseInt(data[0].TOTALQTY);
+          this.validateRemainigQuantity();
+        } else {
+          this.toastr.error('', this.translate.instant("InvalidBatch"));
+          this.batchSerialNo = "";
+        }
+      },
+      error => {
+        this.toastr.error('', error);
+        this.batchSerialNo = "";
+        this.showLoader = false;
+      }
+    );
   }
+
 
   addQuantity() {
     if (this.qty == 0 || this.qty == undefined) {
@@ -323,6 +385,11 @@ export class PalletizeComponent implements OnInit {
     }
     if (this.palletNo == "" || this.palletNo == undefined) {
       this.toastr.error('', this.translate.instant("Plt_PalletRequired"));
+      return;
+    }
+
+    if (this.qty < 0) {
+      this.toastr.error('', this.translate.instant("ProdReceipt_QtyGraterThenZero"));
       return;
     }
 
@@ -358,11 +425,11 @@ export class PalletizeComponent implements OnInit {
       var savedLotNo = this.savedPalletsArray[i].LotNo;
 
       if (this.itemCode == savedItem && this.batchSerialNo == savedLotNo) {
-        this.sumOfQty = this.sumOfQty + Number(this.savedPalletsArray[i].Quantity);
+        this.sumOfQty = this.sumOfQty + Number.parseInt(this.savedPalletsArray[i].Quantity);
       }
     }
 
-    this.sumOfQty = this.sumOfQty + this.qty;
+    this.sumOfQty = this.sumOfQty + Number.parseInt("" + this.qty);
 
     if (this.sumOfQty > this.openQty) {
       this.toastr.error('', this.translate.instant("Inbound_NoOpenQuantityValid"));
@@ -415,7 +482,7 @@ export class PalletizeComponent implements OnInit {
         console.log(data);
         if (data != null && data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
           //  if (data != null && data.length>0 && data[0].ErrorMsg == "") {
-          this.toastr.success('', this.translate.instant("Plt_Merge_success"));
+          this.toastr.success('', this.translate.instant("Plt_PalletizedSuccess"));
           this.resetPageOnSuccess();
         } else if (data[0].ErrorMsg == "7001") {
           this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
@@ -440,6 +507,7 @@ export class PalletizeComponent implements OnInit {
   }
 
   resetPageOnSuccess() {
+    this.savedPalletsArray = [];
     this.batchSerialNo = '';
     this.palletNo = '';
     this.expDate = "";
@@ -466,5 +534,19 @@ export class PalletizeComponent implements OnInit {
     this.fromBinNo = "";
     this.openQty = 0;
     this.qty = 0;
+  }
+
+  validateRemainigQuantity() {
+    this.sumOfQty = 0;
+    for (let i = 0; i < this.savedPalletsArray.length; i++) {
+      var savedItem = this.savedPalletsArray[i].ItemCode;
+      var savedLotNo = this.savedPalletsArray[i].LotNo;
+
+      if (this.itemCode == savedItem && this.batchSerialNo == savedLotNo) {
+        this.sumOfQty = this.sumOfQty + Number.parseInt(this.savedPalletsArray[i].Quantity);
+      }
+    }
+
+    this.qty = this.openQty - this.sumOfQty;
   }
 }

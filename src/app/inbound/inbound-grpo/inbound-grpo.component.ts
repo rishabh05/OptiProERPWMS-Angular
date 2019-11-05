@@ -260,12 +260,12 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       error => {
         this.showLoader = false;
         console.log("Error: ", error);
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -303,12 +303,12 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         this.showLoader = false;
         console.log("Error: ", error);
         this.RecvbBinvalue = "";
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -340,12 +340,12 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       },
       error => {
         console.log("Error: ", error);
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -447,7 +447,8 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       this.toastr.error('', this.translate.instant("INVALIDBIN"));
       return;
     }
-    if (this.isPalletizationEnable && (this.palletValue == "" || this.palletValue == undefined)) {
+    if (this.isPalletizationEnable && (this.palletValue == "" || this.palletValue == undefined)
+      && this.openPOLineModel[0].TRACKING != "N") {
       this.toastr.error('', this.translate.instant("Plt_PalletRequired"));
       return;
     }
@@ -753,7 +754,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         return;
       }
     }
-    
+
     if (this.fromReceiptProduction) {
       //prepare model for receipt from production
 
@@ -870,12 +871,12 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         }
       },
       error => {
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       },
     );
   }
@@ -1421,12 +1422,12 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       },
       error => {
         this.showLoader = false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -1492,12 +1493,12 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       },
       error => {
         this.showLoader = false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       },
     );
   }
@@ -1532,12 +1533,12 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       },
       error => {
         this.showLoader = false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -1605,12 +1606,12 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         this.showLoader = false;
         console.log("Error: ", error);
         this.targetBin = "";
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -1647,12 +1648,12 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         this.showLoader = false;
         console.log("Error: ", error);
         this.targetWhse = "";
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -1756,12 +1757,12 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       error => {
         console.log("Error: ", error);
         this.targetWhse = "";
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       });
   }
 
@@ -1802,12 +1803,12 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       },
       error => {
         this.showLoader = false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -1876,12 +1877,12 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       error => {
         this.showLoader = false;
         console.log("Error: ", error);
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -1923,12 +1924,12 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         this.showLoader = false;
         console.log("Error: ", error);
         //this.toastr.error('', this.translate.instant("InValidPalletNo"));
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', this.translate.instant("InValidPalletNo"));
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', this.translate.instant("InValidPalletNo"));
+        }
       }
     );
   }
@@ -2084,12 +2085,12 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       error => {
         this.showLoader = false;
         console.log("Error: ", error);
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -2135,12 +2136,12 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
           }
         },
         error => {
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-         } 
-         else{
-          this.toastr.error('', error);
-         }
+          if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+          }
+          else {
+            this.toastr.error('', error);
+          }
         },
       );
   }

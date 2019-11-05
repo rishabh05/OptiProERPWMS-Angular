@@ -58,7 +58,7 @@ export class PalTransferComponent implements OnInit {
     if (from == "from_pallet") {
       code = this.toPalletNo;
     } else if (from == "to_pallet") {
-      code = this.fromPalletNo;//Array.prototype.map.call(this.selectedPallets, function (item) { return "'"+item.Code+"'"; }).join(",");
+      code = this.fromPalletNo;
       console.log("code: " + code);
     }
 
@@ -100,12 +100,15 @@ export class PalTransferComponent implements OnInit {
 
   onPalletChange(from: string) {
     if (from == "from_pallet") {
-      if (this.fromPalletNo == '') {
+      if (this.fromPalletNo == '' || this.fromPalletNo == undefined) {
+        this.palletData = [];
+        // this.toPalletNo = '';
         return;
       }
     }
     if (from == "to_pallet") {
-      if (this.toPalletNo == '') {
+      if (this.toPalletNo == '' || this.toPalletNo == undefined) {
+        this.palletData = [];
         return;
       }
     }
@@ -127,10 +130,23 @@ export class PalTransferComponent implements OnInit {
           if (data.length > 0) {
             if (from == "from_pallet") {
               this.fromPalletNo = data[0].Code;
+              this.palletData = [];
+              this.toPalletNo = '';
+              // if (this.fromPalletNo == this.toPalletNo) {
+              //   this.toPalletNo = "";
+              // }
             } else if (from == "to_pallet") {
               this.toPalletNo = data[0].Code;
+              //  if(this.fromPalletNo == this.toPalletNo) this.toPalletNo = "";
+            }
+            //Reset grid data.
+            if (this.fromPalletNo != '' && this.toPalletNo != '') {
+              // this.showHideGridToggle = false;
+              // this.showHideBtnTxt = this.translate.instant("showGrid");
+              this.getPalletData();
             }
           } else {
+            this.palletData = [];
             this.toastr.error('', this.translate.instant("InValidPalletNo"));
             if (from == "to_pallet") {
               this.toPalletNo = "";
@@ -141,6 +157,7 @@ export class PalTransferComponent implements OnInit {
           }
         }
         else {
+          this.palletData = [];
           this.toastr.error('', this.translate.instant("InValidPalletNo"));
           if (from == "to_pallet") {
             this.toPalletNo = "";
@@ -166,11 +183,13 @@ export class PalTransferComponent implements OnInit {
     this.showLoader = false;
     if (this.fromPalletLookup == "from_pallet") {
       this.showLoader = false;
-      if (!this.containPallet(this.selectedPallets, lookupValue.Code)) {
+      // if (!this.containPallet(this.selectedPallets, lookupValue.Code)) {
         this.fromPalletNo = lookupValue.Code;
         this.toWhse = lookupValue.U_OPTM_WAREHOUSE_LOC;
         this.toBin = lookupValue.U_OPTM_BIN;
-      }
+      // }
+      this.palletData = [];
+      this.toPalletNo = '';
     } else if (this.fromPalletLookup == "to_pallet") {
       this.toPalletNo = lookupValue.Code;
     }
@@ -255,6 +274,21 @@ export class PalTransferComponent implements OnInit {
   }
 
   transfer() {
+    if (this.fromPalletNo == '' || this.fromPalletNo == undefined) {
+      this.toastr.error('', this.translate.instant("Plt_SelectFromPallet"));
+      return;
+    }
+    if (this.toPalletNo == '' || this.toPalletNo == undefined) {
+      this.toastr.error('', this.translate.instant("Plt_SelectToPallet"));
+      return;
+    }
+    if (this.toPalletNo == this.fromPalletNo) {
+      this.toastr.error('', this.translate.instant("Plt_PalletShouldNotSame"));
+      this.toPalletNo = '';
+      this.palletData = [];
+      return;
+    }
+
     this.showLoader = true;
     this.commonservice.palletTransfer(this.fromPalletNo, this.toPalletNo).subscribe(
       (data: any) => {

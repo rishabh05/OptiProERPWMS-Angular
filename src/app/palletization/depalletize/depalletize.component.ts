@@ -76,6 +76,11 @@ export class DepalletizeComponent implements OnInit {
   }
 
   onPalletChange() {
+    if(this.palletNo=='' || this.palletNo == undefined){
+      this.palletData = [];
+      return
+    }
+    
     this.showLoader = true;
     this.commonservice.isPalletValid(this.palletNo).subscribe(
       (data: any) => {
@@ -86,13 +91,19 @@ export class DepalletizeComponent implements OnInit {
             if (data[0].Result == "0") {
               this.toastr.error('', this.translate.instant("InValidPalletNo"));
               this.palletNo = "";
+              this.palletData = [];
               return;
             } else {
-              this.showHideGridToggle = false;
-              this.showHideBtnTxt = this.translate.instant("showGrid");
+              this.palletNo = data[0].Code;
+              // this.showHideGridToggle = false;
+              // this.showHideBtnTxt = this.translate.instant("showGrid");
 
               this.getPalletData();
             }
+          } else{
+            this.palletNo = "";
+            this.palletData = [];
+            this.toastr.error('', this.translate.instant("InValidPalletNo"));
           }
         }
         else {
@@ -138,8 +149,8 @@ export class DepalletizeComponent implements OnInit {
   }
 
   getPalletData() {
-    this.showHideGridToggle = false;
-    this.showHideBtnTxt = this.translate.instant("showGrid");
+    // this.showHideGridToggle = false;
+    // this.showHideBtnTxt = this.translate.instant("showGrid");
 
     // this.showLoader = true;
     this.commonservice.GetPalletData(this.palletNo).subscribe(
