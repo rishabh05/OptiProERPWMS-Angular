@@ -549,4 +549,13 @@ export class PalletizeComponent implements OnInit {
 
     this.qty = this.openQty - this.sumOfQty;
   }
+  ScanItemCodeField(){
+    this.OnItemCodeChange();
+  }
+  ScanBatchSerialField(){
+    this.OnLotsChange();
+  }
+  ScanPalletField(){
+    this.onPalletChange();
+  }
 }

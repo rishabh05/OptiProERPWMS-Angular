@@ -396,4 +396,11 @@ export class PalTransferComponent implements OnInit {
     // this.fromPalletNo = '';
     this.toPalletNo = '';
   }
+
+  onHiddenToPltScanClick(){
+    this.onPalletChange('to_pallet');
+  }
+  onHiddenFromPltScanClick(){
+    this.onPalletChange('from_pallet');
+  }
 }

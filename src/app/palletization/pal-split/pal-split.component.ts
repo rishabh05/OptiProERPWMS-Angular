@@ -646,4 +646,17 @@ export class PalSplitComponent implements OnInit {
 
     this.qty = this.openQty - this.sumOfQty;
   }
+  onHiddenFromPltScanClick() {
+    this.onPalletChange('from_pallet');
+  }
+
+  onHiddenToPltScanClick() {
+    this.onPalletChange('to_pallet');
+  }
+  onHiddenItemScanClick() {
+    this.OnItemCodeChange();
+  }
+  onHiddenBatchSerialScanClick() {
+    this.OnLotsChange();
+  }
 }
