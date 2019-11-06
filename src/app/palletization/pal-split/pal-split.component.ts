@@ -419,6 +419,13 @@ export class PalSplitComponent implements OnInit {
       return;
     }
 
+    if(this.itemType == 'S'){
+      if(this.validateSerialItem()){
+        this.toastr.error('', this.translate.instant("SerialAlreadyExist"));
+        return;
+      }
+    }
+
     if (!this.validateQuantity()) {
       return;
     }
@@ -658,5 +665,17 @@ export class PalSplitComponent implements OnInit {
   }
   onHiddenBatchSerialScanClick() {
     this.OnLotsChange();
+  }
+
+  validateSerialItem() {
+    this.sumOfQty = 0;
+    for (let i = 0; i < this.savedPalletsArray.length; i++) {
+      var savedItem = this.savedPalletsArray[i].ItemCode;
+      var savedLotNo = this.savedPalletsArray[i].LotNo;
+      if (this.itemCode == savedItem && this.batchSerialNo == savedLotNo) {
+        return true;
+      }
+    }
+    return false;
   }
 }
