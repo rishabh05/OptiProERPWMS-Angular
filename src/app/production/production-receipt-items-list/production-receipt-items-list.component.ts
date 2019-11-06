@@ -5,6 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ProductionService } from 'src/app/services/production.service';
 import { Commonservice } from 'src/app/services/commonservice.service';
 import { Router } from '@angular/router';
+import { AutoLot } from 'src/app/models/Inbound/AutoLot';
 
 @Component({
   selector: 'app-production-receipt-items-list',
@@ -209,7 +210,10 @@ export class ProductionReceiptItemsListComponent implements OnInit {
   onGridItemClick(selection) {
     // yaha data all parameter nikalne padenge or same model kark vaha bhejna padega.
     var selectedData:any =this.gridDataNew[selection.index];
-    
+    let autoLot: any[] =[];
+   
+    autoLot.push(new AutoLot("N", selectedData.ITEMCODE, "", "", "", ""));
+    localStorage.setItem("primaryAutoLots", JSON.stringify(autoLot));
     var selected= {
             "ACCTDEFECTQTY": selectedData.ACCTDEFECTQTY, "ITEMCODE": selectedData.ITEMCODE,
             "ITEMNAME": selectedData.ITEMNAME, "ORIGINALACTUALQUANTITY": selectedData.ORIGINALACTUALQUANTITY, "OrderNo":selectedData.OrderNo
