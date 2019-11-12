@@ -373,5 +373,10 @@
   "Plt_Split": "Split",
   "Plt_Transfer": "Transfer",
   "Plt_PalletizedSuccess": "Palletized successfully",
-  "Plt_PalletShouldNotSame": "From and To pallet should not same"
+  "Plt_PalletShouldNotSame": "From and To pallet should not same",
+  "Plt_ByPallet": "By Pallet",
+  "Plt_ByItem": "By Item",
+  "Plt_Pallets": "Pallet",
+  "Plt_PalletAlreadySelected": "Pallet already selected",
+  "Plt_DataDeleteMsg": "Data will be loss, do you want to continue?"
 }

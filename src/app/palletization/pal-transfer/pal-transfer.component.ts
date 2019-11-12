@@ -229,8 +229,8 @@ export class PalTransferComponent implements OnInit {
           this.finalPalletData = [];
           this.palletData = data;
           for (let i = 0; i < this.palletData.length; i++) {
-            var index = this.palletData[i].SRLBATCH.lastIndexOf("-");
-            var finalBS = this.palletData[i].SRLBATCH.substring(0, index) + "-" + this.toPalletNo;
+            var index = this.palletData[i].SRLBATCH.lastIndexOf(this.fromPalletNo);
+            var finalBS = this.palletData[i].SRLBATCH.substring(0, index) + this.toPalletNo;
             var object = {
               ITEMID: this.palletData[i].ITEMID,
               SRLBATCH: this.palletData[i].SRLBATCH,

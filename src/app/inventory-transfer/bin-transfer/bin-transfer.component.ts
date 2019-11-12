@@ -55,13 +55,21 @@ export class BinTransferComponent implements OnInit {
   dialogMsg: string;
 
   pagable: boolean = false;
-  pageSize:number = Commonservice.pageSize;
+  pageSize: number = Commonservice.pageSize;
   operationType: string = "";
   itemIndex: number = -1;
+  radioSelected: number = 0;
+  palletNo: string = "";
+  palletData: any = [];
+  actualLotNo: any;
+  public isPalletizationEnable: boolean;
+  dialogOpened: boolean = false;
+  selectedPallets: any = [];
+  checkChangeEvent: any;
   constructor(private commonservice: Commonservice, private activatedRoute: ActivatedRoute,
     private router: Router, private inventoryTransferService: InventoryTransferService,
     private toastr: ToastrService, private translate: TranslateService,
-    private modalService: BsModalService, private _location: Location) {
+    private modalService: BsModalService, private _location: Location, ) {
     let userLang = navigator.language.split('-')[0];
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
     translate.use(userLang);
@@ -85,6 +93,12 @@ export class BinTransferComponent implements OnInit {
   // End UI Section
 
   ngOnInit() {
+    if (localStorage.getItem("PalletizationEnabled") == "True") {
+      this.isPalletizationEnable = true;
+    } else {
+      this.isPalletizationEnable = false;
+    }
+    localStorage.setItem("radioSelection", "0");
     // apply grid height
     this.gridHeight = UIHelper.getMainContentHeight();
 
@@ -108,6 +122,8 @@ export class BinTransferComponent implements OnInit {
 
   /** Simple method to toggle element visibility */
   public ShowSavedData(): void {
+    console.log("TransferedItemsDetail length " + this.TransferedItemsDetail.length)
+    console.log("TransferedItemsDetail " + JSON.stringify(this.TransferedItemsDetail))
     this.operationType = "viewlines";
     if (this.TransferedItemsDetail.length > 0) {
       this.viewLines = !this.viewLines;
@@ -165,12 +181,12 @@ export class BinTransferComponent implements OnInit {
         }
       },
       error => {
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -209,12 +225,12 @@ export class BinTransferComponent implements OnInit {
         }
       },
       error => {
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -248,12 +264,12 @@ export class BinTransferComponent implements OnInit {
         }
       },
       error => {
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -274,12 +290,12 @@ export class BinTransferComponent implements OnInit {
         }
       },
       error => {
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -307,12 +323,12 @@ export class BinTransferComponent implements OnInit {
         }
       },
       error => {
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -343,12 +359,12 @@ export class BinTransferComponent implements OnInit {
         }
       },
       error => {
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -394,12 +410,12 @@ export class BinTransferComponent implements OnInit {
         }
       },
       error => {
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -435,12 +451,12 @@ export class BinTransferComponent implements OnInit {
         }
       },
       error => {
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -471,12 +487,12 @@ export class BinTransferComponent implements OnInit {
         }
       },
       error => {
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -515,7 +531,9 @@ export class BinTransferComponent implements OnInit {
         Tracking: this.ItemTracking,
         WhsCode: localStorage.getItem("whseId"),
         OnHandQty: this.onHandQty,
-        Remarks: this.Remarks
+        Remarks: this.Remarks,
+        PalletCode: this.palletNo,
+        MfrNo: this.actualLotNo
       });
       this.clearDataForAddMore();
     } else {
@@ -527,13 +545,13 @@ export class BinTransferComponent implements OnInit {
       }
     }
 
-    if(this.TransferedItemsDetail.length>this.pageSize){
+    if (this.TransferedItemsDetail.length > this.pageSize) {
       this.pagable = true;
-    } else{
+    } else {
       this.pagable = false;
     }
 
-    if(this.itemIndex == -1){
+    if (this.itemIndex == -1) {
       return true;
     } else {
       return false;
@@ -541,21 +559,29 @@ export class BinTransferComponent implements OnInit {
   }
 
   SubmitPutAway() {
-    this.showValidation = true;
-    if (this.TransferedItemsDetail.length > 0) {
-      this.showValidation = false;
-    }
-    
-    var _is = this.AddLineLots();
-    this.operationType = "submit";
+    console.log("radio selection: " + this.radioSelected);
+    if (this.radioSelected == 1) { // radio selection == 1 for by pallet
+      if (this.TransferedItemsDetail.length == 0) {
+        return;
+      }
+      this.SubmitFinally();
+    } else {
+      this.showValidation = true;
+      if (this.TransferedItemsDetail.length > 0) {
+        this.showValidation = false;
+      }
 
-    if(!_is) {
-      return;
+      var _is = this.AddLineLots();
+      this.operationType = "submit";
+
+      if (!_is) {
+        return;
+      }
+      this.SubmitFinally();
     }
-    this.SubmitFinally();
   }
 
-  SubmitFinally(){
+  SubmitFinally() {
     var oWhsTransAddLot: any = {};
     oWhsTransAddLot.Header = [];
     oWhsTransAddLot.Detail = [];
@@ -599,7 +625,7 @@ export class BinTransferComponent implements OnInit {
             }
             //-----------------------------------End for the Function Check for Licence--------------------------------
             if (data[0].ErrorMsg == "") {
-              this.toastr.success('', this.translate.instant("InvTransfer_ItemsTranSuccessfully") +" "+ data[0].SuccessNo);
+              this.toastr.success('', this.translate.instant("InvTransfer_ItemsTranSuccessfully") + " " + data[0].SuccessNo);
               oWhsTransAddLot = {};
               oWhsTransAddLot.Header = [];
               oWhsTransAddLot.Detail = [];
@@ -614,19 +640,19 @@ export class BinTransferComponent implements OnInit {
         }
       },
       error => {
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
 
-  showOverwriteConfirmDailog(){
+  showOverwriteConfirmDailog() {
     this.showDialog("overwriteQty", this.translate.instant("yes"), this.translate.instant("no"),
-    this.translate.instant("InvTransfer_Overwrite"));
+      this.translate.instant("InvTransfer_Overwrite"));
   }
 
   clearData() {
@@ -639,6 +665,8 @@ export class BinTransferComponent implements OnInit {
     this.fromBin = "";
     this.onHandQty = "";
     this.Remarks = "";
+    this.actualLotNo = "";
+    this.palletNo = "";
   }
 
   clearDataForAddMore() {
@@ -710,38 +738,49 @@ export class BinTransferComponent implements OnInit {
       //nothing to do
       return;
     }
-    else {
-    if (this.lookupfor == "ItemsList") {
-      this.itemCode = $event[0];
-      this.itemName = $event[1];
-      this.ItemTracking = $event[2];
-      this.showItemName = true;
-      this.transferQty = this.translate.instant("InvTransfer_zero");
-      this.onHandQty = 0.000;
-      if (localStorage.getItem("whseId") != localStorage.getItem("towhseId")) {
-        this.getDefaultBin();
-      }
-      this.CheckTrackingandVisiblity();
-    } else if (this.lookupfor == "BatchNoList") {
-      this.lotValue = $event[0];
-      this.fromBin = $event[6];
-      this.transferQty = $event[7];
-      this.onHandQty = $event[7];
-      this.SysNumber = $event[9];
-    } else if (this.lookupfor == "SBTrackFromBin") {
-      this.fromBin = $event[3];
-      this.transferQty = $event[6];
-      this.onHandQty = $event[6];
-    } else if (this.lookupfor == "NTrackFromBin") {
-      this.fromBin = $event[3];
-      this.transferQty = $event[6];
-      this.onHandQty = $event[6];
-    } else if (this.lookupfor == "toBinsList") {
-      this.toBin = $event[0];
+    else if (this.lookupfor == "PalletList") {
+      this.palletNo = $event[0];
+      // var obj = {
+      //   Code: $event[0]
+      // }
+      // this.selectedPallets.push(obj);
+      // this.getPalletData();
     }
-    this.formatTransferNumbers();
-    this.formatOnHandQty();
-  }
+    else {
+      if (this.lookupfor == "ItemsList") {
+        this.itemCode = $event[0];
+        this.itemName = $event[1];
+        this.ItemTracking = $event[2];
+        this.showItemName = true;
+        this.transferQty = this.translate.instant("InvTransfer_zero");
+        this.onHandQty = 0.000;
+        if (localStorage.getItem("whseId") != localStorage.getItem("towhseId")) {
+          this.getDefaultBin();
+        }
+        this.CheckTrackingandVisiblity();
+      } else if (this.lookupfor == "BatchNoList") {
+        this.lotValue = $event[0];
+        this.fromBin = $event[6];
+        this.transferQty = $event[7];
+        this.onHandQty = $event[7];
+        this.SysNumber = $event[9];
+        this.palletNo = $event[12];
+        this.actualLotNo = $event[13];
+      } else if (this.lookupfor == "SBTrackFromBin") {
+        this.fromBin = $event[3];
+        this.transferQty = $event[6];
+        this.onHandQty = $event[6];
+      } else if (this.lookupfor == "NTrackFromBin") {
+        this.fromBin = $event[3];
+        this.transferQty = $event[6];
+        this.onHandQty = $event[6];
+      } else if (this.lookupfor == "toBinsList") {
+        this.toBin = $event[0];
+        //this.prepareByPalletData();
+      }
+      this.formatTransferNumbers();
+      this.formatOnHandQty();
+    }
   }
 
   CheckTrackingandVisiblity() {
@@ -773,17 +812,26 @@ export class BinTransferComponent implements OnInit {
   gridDataRow: any;
   ViewLinesRowDeleteClick(rowindex, gridData: any) {
     this.showDialog("delete", this.translate.instant("yes"), this.translate.instant("no"),
-    this.translate.instant("DeleteRecordsMsg"));
+      this.translate.instant("DeleteRecordsMsg"));
     this.rowindex = rowindex;
     this.gridDataRow = gridData;
   }
 
   OnOKClick() {
+    var rs = localStorage.getItem("radioSelection");
+    if (rs != undefined && rs.length > 0) {
+      this.radioSelected = Number.parseInt(rs);
+    }
     this.viewLines = false;
   }
 
   deleteAllOkClick() {
+    var rs = localStorage.getItem("radioSelection");
+    if (rs != undefined && rs.length > 0) {
+      this.radioSelected = Number.parseInt(rs);
+    }
     this.TransferedItemsDetail = [];
+    this.clearData();
     document.getElementById("modalCloseBtn").click();
   }
 
@@ -804,9 +852,9 @@ export class BinTransferComponent implements OnInit {
     }
   }
 
-  deleteAll(){
+  deleteAll() {
     this.showDialog("deleteAll", this.translate.instant("yes"), this.translate.instant("no"),
-    this.translate.instant("DeleteAllLines"));
+      this.translate.instant("DeleteAllLines"));
   }
 
   showDialog(dialogFor: string, yesbtn: string, nobtn: string, msg: string) {
@@ -826,17 +874,32 @@ export class BinTransferComponent implements OnInit {
           this.gridDataRow.data = this.TransferedItemsDetail;
           console.log(this.TransferedItemsDetail.length);
           break;
+        case ("DeletePallet"):
+          var tempList: any = [];
+          for (let i = 0; i < this.TransferedItemsDetail.length; i++) {
+            if (this.selectedPallets[this.rowindex].Code != this.TransferedItemsDetail[i].PalletCode) {
+              tempList.push(this.TransferedItemsDetail[i]);
+            }
+          }
+          this.TransferedItemsDetail = tempList;
+          this.selectedPallets.splice(this.rowindex, 1);
+          break;
         case ("deleteAll"):
           this.deleteAllOkClick();
           break;
         case ("overwriteQty"):
           this.TransferedItemsDetail[this.itemIndex].Qty = this.transferQty;
-          if(this.operationType == "submit"){
+          if (this.operationType == "submit") {
             this.SubmitFinally();
             this.clearData();
-          } else if(this.operationType == "add"){
+          } else if (this.operationType == "add") {
             this.clearDataForAddMore();
           }
+          break;
+        case ("RadioBtnChange"):
+          this.manageCheckChange();
+          this.TransferedItemsDetail = [];
+          this.clearData();
           break;
       }
     } else {
@@ -851,5 +914,209 @@ export class BinTransferComponent implements OnInit {
         }
       }
     }
+  }
+
+  handleCheckChange(event) {
+    if (event.currentTarget.id == "byItem") {
+      // mfr serial radio selected.
+      this.radioSelected = 0;
+      localStorage.setItem("radioSelection", "0");
+    }
+    if (event.currentTarget.id == "byPallet") {
+      // mfr serial radio selected.
+      this.radioSelected = 1;
+      localStorage.setItem("radioSelection", "1");
+    }
+    this.clearData();
+    this.TransferedItemsDetail = [];
+    // this.checkChangeEvent = event;
+    // if (this.TransferedItemsDetail.length == 0) {
+    //   this.clearData();
+    //   this.manageCheckChange();
+    // } else {
+    //   this.checkChangeEvent.preventDefault();
+    //   this.showDialog("RadioBtnChange", this.translate.instant("yes"), this.translate.instant("no"),
+    //     this.translate.instant("Plt_DataDeleteMsg"));
+    // }
+  }
+
+  manageCheckChange() {
+    
+    if (this.checkChangeEvent.currentTarget.id == "byItem") {
+      // mfr serial radio selected.
+      this.radioSelected = 0;
+      localStorage.setItem("radioSelection", "0");
+    }
+    if (this.checkChangeEvent.currentTarget.id == "byPallet") {
+      // mfr serial radio selected.
+      this.radioSelected = 1;
+      localStorage.setItem("radioSelection", "1");
+    }
+  }
+
+  public getPalletList() {
+    this.showLookupLoader = true;
+    this.commonservice.getPalletsOfSameWarehouse("").subscribe(
+      (data: any) => {
+        this.showLookupLoader = false;
+        console.log(data);
+        if (data != null) {
+          if (data.length > 0) {
+            this.serviceData = data;
+            this.lookupfor = "PalletList";
+            return;
+          } else {
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          }
+        }
+      },
+      error => {
+        this.showLookupLoader = false;
+        console.log("Error: ", error);
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
+
+  onPalletChange() {
+    if (this.palletNo == undefined || this.palletNo == "") {
+      return;
+    }
+    this.commonservice.isPalletValid(this.palletNo).subscribe(
+      (data: any) => {
+        console.log(data);
+        if (data != null) {
+          if (data.length > 0) {
+            this.palletNo = data[0].Code;
+            //this.selectedPallets.push(data[0]);
+            //this.getPalletData();
+          } else {
+            this.toastr.error('', this.translate.instant("InValidPalletNo"));
+            this.palletNo = "";
+            return;
+          }
+        }
+        else {
+          this.toastr.error('', this.translate.instant("InValidPalletNo"));
+          this.palletNo = "";
+          return;
+        }
+      },
+      error => {
+        this.showLookupLoader = false;
+        console.log("Error: ", error);
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
+
+  getPalletData() {
+    this.commonservice.GetPalletDataForWhseTrns(this.palletNo).subscribe(
+      (data: any) => {
+        console.log(data);
+        if (data != null) {
+          this.palletData = data;
+          this.prepareByPalletData();
+        }
+        else {
+          this.toastr.error('', this.translate.instant("InValidPalletNo"));
+          return;
+        }
+      },
+      error => {
+        this.showLoader = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
+
+  prepareByPalletData() {
+    if (this.radioSelected != 1) {
+      return;
+    }
+    if (this.selectedPallets == undefined || this.selectedPallets == null || this.selectedPallets.length == 0) {
+      return;
+    }
+    if (this.toBin == undefined || this.toBin == "") {
+      return;
+    }
+    //this.TransferedItemsDetail = [];
+    //Prepare transfer item details list by pallet
+    for (let i = 0; i < this.palletData.length; i++) {
+      this.TransferedItemsDetail.push({
+        LineNum: '01',
+        LotNo: this.palletData[i].SRLBATCH,
+        MfrNo: this.palletData[i].ACTLOTNO,
+        PalletCode: this.palletData[i].PALLETNO,
+        ItemCode: this.palletData[i].ITEMID,
+        ItemName: this.palletData[i].ITEMNAME,
+        Qty: this.palletData[i].QTY,
+        SysNumber: this.palletData[i].SYSNUMBER,
+        BinNo: this.palletData[i].BINNO,
+        ToBin: this.toBin,
+        Tracking: this.palletData[i].ITEMTYPE,
+        WhsCode: this.palletData[i].WHSCODE,
+        OnHandQty: this.palletData[i].QTY,
+        Remarks: this.Remarks
+      });
+    }
+    //this.SubmitFinally();
+  }
+
+  showSelectedPallets() {
+    this.dialogOpened = !this.dialogOpened;
+  }
+
+  public close(component) {
+    this[component + 'Opened'] = false;
+  }
+
+  PalletDeleteClick(rowindex, gridData: any) {
+    this.gridData = gridData;
+    this.rowindex = rowindex;
+    this.showDialog("DeletePallet", this.translate.instant("yes"), this.translate.instant("no"),
+      this.translate.instant("DeleteRecordsMsg"));
+  }
+
+  onAddPalletClick() {
+    if (this.palletNo == undefined || this.palletNo == "") {
+      this.toastr.error('', this.translate.instant("Plt_PalletRequired"));
+      return;
+    }
+
+    if (this.toBin == undefined || this.toBin == "") {
+      this.toastr.error('', this.translate.instant("InvTransfer_ToBinMsg"));
+      return;
+    }
+
+    for (let i = 0; i < this.selectedPallets.length; i++) {
+      if (this.palletNo == this.selectedPallets[i].Code) {
+        this.palletNo = "";
+        this.toastr.error('', this.translate.instant("Plt_PalletAlreadySelected"));
+        return
+      }
+    }
+    this.getPalletData();
+    var obj = {
+      Code: this.palletNo
+    }
+    this.selectedPallets.push(obj);
+    this.palletNo = "";
+    // this.toBin = "";
   }
 }

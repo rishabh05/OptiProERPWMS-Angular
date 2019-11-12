@@ -558,4 +558,45 @@ export class PalletizeComponent implements OnInit {
   ScanPalletField(){
     this.onPalletChange();
   }
+
+  public createNewPallet() {
+    if (this.createdNewPallet == '' || this.createdNewPallet == undefined) {
+      this.toastr.error('', this.translate.instant("Plt_EnterPalletNo"));
+      return;
+    }
+
+    //console.log("palletId: " + palletId);
+    this.showLoader = true;
+    this.commonservice.createNewPallet(this.createdNewPallet).subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        console.log(data);
+        if (data != null) {
+          if (data.length > 0) {
+            console.log(data);
+            this.showLoader = false;
+            // this.serviceData = data;
+            if (this.showNewPallet) {
+              
+            } else {
+              this.palletNo = data;
+            }
+            return;
+          } else {
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          }
+        }
+      },
+      error => {
+        this.showLoader = false;
+        console.log("Error: ", error);
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
 }

@@ -430,8 +430,8 @@ export class PalSplitComponent implements OnInit {
       return;
     }
 
-    var index = this.batchSerialNo.lastIndexOf("-");
-    var finalLotNo = this.batchSerialNo.substring(0, index) + "-" + this.toPalletNo;
+    var index = this.batchSerialNo.lastIndexOf(this.fromPalletNo);
+    var finalLotNo = this.batchSerialNo.substring(0, index) + this.toPalletNo;
     var object = {
       ItemCode: this.itemCode,
       ActualBSNo: this.batchSerialNo.substring(0, index),
