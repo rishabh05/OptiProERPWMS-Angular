@@ -631,6 +631,7 @@ export class BinTransferComponent implements OnInit {
               oWhsTransAddLot.Detail = [];
               oWhsTransAddLot.UDF = [];
               this.TransferedItemsDetail = [];
+              this.selectedPallets = [];
               this.clearData();
             }
             else {
@@ -831,6 +832,7 @@ export class BinTransferComponent implements OnInit {
       this.radioSelected = Number.parseInt(rs);
     }
     this.TransferedItemsDetail = [];
+    this.selectedPallets = [];
     this.clearData();
     document.getElementById("modalCloseBtn").click();
   }
@@ -899,6 +901,7 @@ export class BinTransferComponent implements OnInit {
         case ("RadioBtnChange"):
           this.manageCheckChange();
           this.TransferedItemsDetail = [];
+          this.selectedPallets = [];
           this.clearData();
           break;
       }
@@ -929,6 +932,7 @@ export class BinTransferComponent implements OnInit {
     }
     this.clearData();
     this.TransferedItemsDetail = [];
+    this.selectedPallets = [];
     // this.checkChangeEvent = event;
     // if (this.TransferedItemsDetail.length == 0) {
     //   this.clearData();
@@ -1055,7 +1059,6 @@ export class BinTransferComponent implements OnInit {
     if (this.toBin == undefined || this.toBin == "") {
       return;
     }
-    //this.TransferedItemsDetail = [];
     //Prepare transfer item details list by pallet
     for (let i = 0; i < this.palletData.length; i++) {
       this.TransferedItemsDetail.push({
