@@ -83,7 +83,7 @@
                                     <button class="k-button k-primary btn" (click)="getPalletList('to_pallet')" type="button">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
-                                    <button type="button" id="PalMerge_ToPltScanBtn"  class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                    <button type="button" id="PalMerge_ToPltScanBtn" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
                                 </div>
@@ -133,8 +133,8 @@
             <div class="col-sm-12 col-12">
                 <button type="button" (click)="back(0)" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
-                <button type="button" *ngIf="selectedFromPallets && selectedFromPallets.length>0 && toPalletNo!=''"
-                    (click)="mergePallet()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon opti-icon-pallet-marge"></span>
+                <button type="button" *ngIf="selectedFromPallets.length>0 && toPalletNo!=''" (click)="mergePallet()"
+                    class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon opti-icon-pallet-marge"></span>
                     {{'Plt_Merge'|translate}}</button>
 
                 <button type="button" id="Pal_MergeHiddenToPltBtn" style="visibility:hidden" (click)="ScanToPalletField()"

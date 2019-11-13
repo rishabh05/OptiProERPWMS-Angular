@@ -76,11 +76,11 @@ export class DepalletizeComponent implements OnInit {
   }
 
   onPalletChange() {
-    if(this.palletNo=='' || this.palletNo == undefined){
+    if (this.palletNo == '' || this.palletNo == undefined) {
       this.palletData = [];
       return
     }
-    
+
     this.showLoader = true;
     this.commonservice.isPalletValid(this.palletNo).subscribe(
       (data: any) => {
@@ -100,7 +100,7 @@ export class DepalletizeComponent implements OnInit {
 
               this.getPalletData();
             }
-          } else{
+          } else {
             this.palletNo = "";
             this.palletData = [];
             this.toastr.error('', this.translate.instant("InValidPalletNo"));
@@ -112,7 +112,7 @@ export class DepalletizeComponent implements OnInit {
           return;
         }
       },
-      error => {  
+      error => {
         this.showLoader = false;
         if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
           this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
@@ -183,19 +183,19 @@ export class DepalletizeComponent implements OnInit {
       (data: any) => {
         this.showLoader = false;
         console.log(data);
-        if (data != null && data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
-          // if (data != null && data.length>0 && data[0].ErrorMsg == "") { 
-          this.toastr.success('', this.translate.instant("Plt_DePalletize_success"));
-          this.resetPageOnSuccess();
-        }
-        else if (data[0].ErrorMsg == "7001") {
-          this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
-            this.translate.instant("CommonSessionExpireMsg"));
-          return;
-        }
-        else {
-          // alert(data[0].ErrorMsg);
-          this.toastr.error('', data[0].ErrorMsg);
+        if (data != null && data != undefined && data.length > 0) {
+          if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
+            this.toastr.success('', this.translate.instant("Plt_DePalletize_success"));
+            this.resetPageOnSuccess();
+          } else if (data[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          } else {
+            this.toastr.error('', data[0].ErrorMsg);
+          }
+        } else {
+          this.toastr.error('', this.translate.instant("ErrorMsgSomethingWentWrong"));
         }
       },
       error => {
@@ -216,7 +216,7 @@ export class DepalletizeComponent implements OnInit {
     this.palletNo = "";
   }
 
-  ScanPalletField(){
+  ScanPalletField() {
     this.onPalletChange();
   }
 
