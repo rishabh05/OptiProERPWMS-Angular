@@ -516,6 +516,7 @@ export class BinTransferComponent implements OnInit {
     if (!this.CheckValidation()) {
       return;
     }
+
     this.itemIndex = this.IsInvTransferDetailLineExists(this.itemCode,
       this.lotValue, this.fromBin, this.toBin, this.Remarks, "");
     if (this.itemIndex == -1) {
@@ -574,7 +575,7 @@ export class BinTransferComponent implements OnInit {
       var _is = this.AddLineLots();
       this.operationType = "submit";
 
-      if (!_is) {
+      if (_is != undefined && !_is) {
         return;
       }
       this.SubmitFinally();
@@ -900,6 +901,7 @@ export class BinTransferComponent implements OnInit {
           break;
         case ("RadioBtnChange"):
           this.manageCheckChange();
+          this.checkChangeEvent.target.checked = true;
           this.TransferedItemsDetail = [];
           this.selectedPallets = [];
           this.clearData();
@@ -920,38 +922,26 @@ export class BinTransferComponent implements OnInit {
   }
 
   handleCheckChange(event) {
-    if (event.currentTarget.id == "byItem") {
-      // mfr serial radio selected.
-      this.radioSelected = 0;
-      localStorage.setItem("radioSelection", "0");
+    this.checkChangeEvent = event;
+    console.log(this.checkChangeEvent);
+    if (this.TransferedItemsDetail.length == 0) {
+      this.selectedPallets = [];
+      this.clearData();
+      this.manageCheckChange();
+    } else {
+      this.checkChangeEvent.preventDefault();
+      this.showDialog("RadioBtnChange", this.translate.instant("yes"), this.translate.instant("no"),
+        this.translate.instant("Plt_DataDeleteMsg"));
     }
-    if (event.currentTarget.id == "byPallet") {
-      // mfr serial radio selected.
-      this.radioSelected = 1;
-      localStorage.setItem("radioSelection", "1");
-    }
-    this.clearData();
-    this.TransferedItemsDetail = [];
-    this.selectedPallets = [];
-    // this.checkChangeEvent = event;
-    // if (this.TransferedItemsDetail.length == 0) {
-    //   this.clearData();
-    //   this.manageCheckChange();
-    // } else {
-    //   this.checkChangeEvent.preventDefault();
-    //   this.showDialog("RadioBtnChange", this.translate.instant("yes"), this.translate.instant("no"),
-    //     this.translate.instant("Plt_DataDeleteMsg"));
-    // }
   }
 
   manageCheckChange() {
-    
-    if (this.checkChangeEvent.currentTarget.id == "byItem") {
+    if (this.checkChangeEvent.target.id == "byItem") {
       // mfr serial radio selected.
       this.radioSelected = 0;
       localStorage.setItem("radioSelection", "0");
     }
-    if (this.checkChangeEvent.currentTarget.id == "byPallet") {
+    if (this.checkChangeEvent.target.id == "byPallet") {
       // mfr serial radio selected.
       this.radioSelected = 1;
       localStorage.setItem("radioSelection", "1");

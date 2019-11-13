@@ -13,12 +13,12 @@
                             <fieldset class="d-block w-100">
                                 <div class="d-flex align-items-center w-100">
                                     <div class="d-flex align-items-center">
-                                        <input type="radio" name="group" (change)="handleCheckChange($event)" id="byItem"
+                                        <input type="radio" name="group" (click)="handleCheckChange($event)" id="byItem"
                                             class="k-radio" [checked]="radioSelected == 0" />
                                         <label class="k-radio-label" for="byItem">{{'Plt_ByItem'|translate}}</label>
                                     </div>
                                     <div class="d-flex align-items-center ml-3">
-                                        <input type="radio" name="group" (change)="handleCheckChange($event)" id="byPallet"
+                                        <input type="radio" name="group" (click)="handleCheckChange($event)" id="byPallet"
                                             class="k-radio" [checked]="radioSelected == 1" />
                                         <label class="k-radio-label" for="byPallet">{{'Plt_ByPallet'|translate}}</label>
                                     </div>
@@ -156,16 +156,14 @@
                             <div class="input-group input-group-sm">
                                 <input type="text" class="form-control form-control-sm" placeholder="{{'InvTransfer_ToBin'|translate}}"
                                     name="toBin" [(ngModel)]="toBin" (blur)="OnToBinChange()">
-                                <div class="input-group-append">
+                                <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" type="button" (click)="ShowToBins()">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
-                                    <div class="input-group-append">
-                                        <button class="k-button k-primary btn" type="button" *ngIf="!isNonTrack"
-                                            (click)="onAddPalletClick()">
-                                            <span class="k-icon k-i-plus-outline mr-1"></span>{{'Plt_Pallets'|translate}}
-                                        </button>
-                                    </div>
+                                    <button class="k-button k-primary btn separate-btn" type="button" *ngIf="!isNonTrack"
+                                        (click)="onAddPalletClick()">
+                                        <span class="k-icon k-i-plus-outline mr-1 fs-12"></span>{{'Plt_Pallets'|translate}}
+                                    </button>
                                 </div>
                             </div>
                         </div>

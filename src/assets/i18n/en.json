@@ -195,7 +195,7 @@
   "LotNo": "Lot No.",
   "TOTALQTY": "Total Qty.",
   "BinNo": "Bin No.",
-  "INVALIDBIN": "INVALID BIN",
+  "INVALIDBIN": "Invalid bin",
   "FrmNToBinCantSame": "From Bin and To Bin can not be Same",
   "UOM": "UOM",
   "Manual": "Manual",
@@ -378,5 +378,5 @@
   "Plt_ByItem": "By Item",
   "Plt_Pallets": "Pallet",
   "Plt_PalletAlreadySelected": "Pallet already selected",
-  "Plt_DataDeleteMsg": "Data will be loss, do you want to continue?"
+  "Plt_DataDeleteMsg": "Your data will be loss, do you want to continue?"
 }

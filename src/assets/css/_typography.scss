@@ -55,6 +55,10 @@ h6{
     @include font($size: $font-size-small, $weight: $font-weight-regular,  $lh: false);
 }
 
+
+.fs-12{
+    font-size: 12px;
+}
 .fs-18{
     font-size: 18px;
 }
