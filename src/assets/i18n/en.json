@@ -373,5 +373,8 @@
   "Plt_Split": "Split",
   "Plt_Transfer": "Transfer",
   "Plt_PalletizedSuccess": "Palletized successfully",
-  "Plt_PalletShouldNotSame": "From and To pallet should not same"
+  "Plt_PalletShouldNotSame": "From and To pallet should not same",
+  "Plt_OrderNoRequired": "Order number required",
+  "Plt_AlreadySelected": "Pallet already selected",
+  "Plt_PalletNotValid": "This pallet is not valid for selected SO"
 }
