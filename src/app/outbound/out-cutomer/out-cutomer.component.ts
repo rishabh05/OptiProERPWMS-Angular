@@ -247,7 +247,12 @@ export class OutCutomerComponent implements OnInit {
 
 
   prepareDeleiveryCollection() {
+    let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
 
+    if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
+      this.outbound = JSON.parse(outboundData);
+    }
+  
     if (this.outbound != null && this.outbound != undefined
       && this.outbound.DeleiveryCollection != null && this.outbound.DeleiveryCollection != undefined
       && this.outbound.DeleiveryCollection.length > 0

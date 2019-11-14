@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { CommonConstants } from 'src/app/const/common-constants';
 import { OutboundService } from 'src/app/services/outbound.service';
 import { OutboundData } from 'src/app/models/outbound/outbound-data';
@@ -12,7 +12,6 @@ import { Commonservice } from 'src/app/services/commonservice.service';
 
 import { Lot, ProductionIssueModel, Item } from 'src/app/models/Production/IFP';
 import { ProductionService } from 'src/app/services/production.service';
-import { PalletOperationType } from 'src/app/enums/PalletEnums';
 
 
 
@@ -29,7 +28,7 @@ export class OutProdissueComponent implements OnInit {
   public selected: any = null;
   public step: number = 0.001;
   public lookupData: any;
-  public lookupFor: any = "";
+  public lookupFor: any = 'out-items';
   public showLookup: boolean = false;
   public selectedItems: any;
   public totalPickQty: number = 0.000;
@@ -45,6 +44,7 @@ export class OutProdissueComponent implements OnInit {
   public OrderType: string = '';
   public oldSelectedMeterials: any = Array<MeterialModel>();
   public OperationType: any;
+  public scanInputPlaceholder = "Select/Scan"
   public SerialBatchHeaderTitle: string = "";
   showConfirmDialog: boolean;
   rowindexForDelete: any;
@@ -58,27 +58,11 @@ export class OutProdissueComponent implements OnInit {
   public pagable: boolean = false;
   public pageSize: number = Commonservice.pageSize;
   public pageTitle: any = "";
-  public serviceData: any;
-  showPalletLookup: boolean = true;
-  public ScanInputs:string;
-  @ViewChild('VendScanInputField') vendInputScanField:ElementRef;
-
-  constructor(private ourboundService: OutboundService, private router: Router, private toastr: ToastrService, private translate: TranslateService, private commonservice: Commonservice, private productionService: ProductionService) { 
-
-  }
+  constructor(private ourboundService: OutboundService, private router: Router, private toastr: ToastrService, private translate: TranslateService, private commonservice: Commonservice, private productionService: ProductionService) { }
   fromProduction = true;
   public currentOrderNo: string;
-  public radioSelected: number = 0;
-  public palletValue: string = "";
-  public isPalletizationEnable: boolean;
+
   ngOnInit() {
-    this.ScanInputs= "";
-    if (localStorage.getItem("PalletizationEnabled") == "True"
-     && localStorage.getItem("PalletizationEnabledForItem") == "True") {
-      this.isPalletizationEnable = true;
-    } else {
-      this.isPalletizationEnable = false;
-    }
 
     //lsOutbound
     let outboundData = localStorage.getItem(CommonConstants.OutboundData);
@@ -130,14 +114,6 @@ export class OutProdissueComponent implements OnInit {
             let el: any = document.getElementById('gridSelectedMeterial');
             this.getLookupValue(mdata, el, true);
             this.manageUOM();
-          },
-          error => {            
-            if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-              this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-           } 
-           else{
-            this.toastr.error('', error);
-           }
           }
         );
       }
@@ -149,15 +125,25 @@ export class OutProdissueComponent implements OnInit {
   }
 
   manageOldCollection() {
-    let itemMeterials
+    let itemMeterials:any = []; 
     if (this.outbound.TempMeterials !== undefined
       && this.outbound.TempMeterials !== null
       && this.outbound.TempMeterials.length > 0) {
 
-      itemMeterials = this.outbound.TempMeterials.filter(
-        (m: any) => m.Item.ITEMCODE
-          === this.outbound.SelectedItem.ITEMCODE && m.Item.ROWNUM
-          === this.outbound.SelectedItem.ROWNUM && this.outbound.OrderData.DOCNUM === m.Item.DOCNUM);
+      //  itemMeterials = this.outbound.TempMeterials.filter(
+      //  (m: any) => m.Item.ITEMCODE
+      //      == this.outbound.SelectedItem.ITEMCODE && m.Item.ROWNUM
+      //      == this.outbound.SelectedItem.ROWNUM && this.outbound.OrderData.DOCNUM == m.Item.DOCNUM);
+
+      for (let i = 0; i < this.outbound.TempMeterials.length; i++) {
+        // for (let j = 0; j < this.outbound.TempMeterials[j].Item.length; j++) {
+          if(this.outbound.TempMeterials[i].Item.ITEMCODE == this.outbound.SelectedItem.ITEMCODE 
+            && this.outbound.TempMeterials[i].Item.ROWNUM == this.outbound.SelectedItem.ROWNUM 
+            && this.outbound.TempMeterials[i].Item.DOCNUM == this.outbound.OrderData.DOCNUM){
+              itemMeterials.push(this.outbound.TempMeterials[i]);
+         }
+        // }
+      }
     }
     if (itemMeterials !== undefined && itemMeterials !== null
       && itemMeterials.length > 0) {
@@ -191,7 +177,7 @@ export class OutProdissueComponent implements OnInit {
     // alert("outbound hidden scan click")
     this.onGS1ScanItem();
   }
-  
+  ScanInputs: string = "";
   onGS1ScanItem() {
 
     var inputValue = (<HTMLInputElement>document.getElementById('outboundOrderNoScanInput')).value;
@@ -312,28 +298,17 @@ export class OutProdissueComponent implements OnInit {
               },
               error => {
                 console.log("Error when checking availability: ", error);
-                if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-                  this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-               } 
-               else{
-                this.toastr.error('', error);
-               }
               });
         }
       },
       error => {
         console.log("Error: ", error);
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
       });
-  }
 
-  OnPalletChange(){
-    
+
+
+
+
   }
   calculateRequeiredMeterial(): boolean {
     let needMeterial: boolean = false;
@@ -470,10 +445,6 @@ export class OutProdissueComponent implements OnInit {
   }
 
   public openAvaliableMeterials() {
-    // if(this.radioSelected !=2 && this.isPalletizationEnable && (this.palletValue == undefined || this.palletValue == '')){
-    //   this.toastr.error('', this.translate.instant("First you have to select pallet no."));
-    //   return;
-    // }
 
     if (this.needMeterial() == false) {
       this.toastr.error('', this.translate.instant("ProdIssue_PickedAllRequiredItems"));
@@ -484,49 +455,24 @@ export class OutProdissueComponent implements OnInit {
     let itemCode = this.selected.ITEMCODE;
     let docEntry = this.selected.DOCENTRY;
     this.showLookupLoader = true;
-    this.ourboundService.getAvaliableMeterial(itemCode, docEntry, this.palletValue).subscribe(
+    this.ourboundService.getAvaliableMeterial(itemCode, docEntry).subscribe(
       (resp: any) => {
+        this.lookupData = resp;
         this.showLookupLoader = false;
-        if(this.radioSelected == 0){
-          if (resp.length > 0) {
-            this.selectedMeterials = resp;
-          } else {
-            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
-          }
+        if (this.lookupData.length > 0) {
+          this.manageOldSelectedItems();
+          this.manageExistingItem();
+          this.showLookup = true;
         } else {
-          this.lookupData = resp;
-          if (this.lookupData.length > 0) {
-            this.lookupFor = 'out-items';
-            this.manageOldSelectedItems();
-            this.manageExistingItem();
-            this.showLookup = true;
-          } else {
-            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
-          }
-        }        
-      },
-      error => {            
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+          this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+        }
       }
     )
   }
 
   getLookupValue(lookupValue: any, gridSelectedMeterial: any, updateGrid: boolean = true, scan: boolean = false) {
-    if (this.lookupFor == "PalletList") {
+    if (lookupValue) {
       this.showLookupLoader = false;
-      this.showPalletLookup = true;
-      this.palletValue = lookupValue[0];
-      if(this.radioSelected == 0){
-        this.openAvaliableMeterials();
-      }
-    } else if (lookupValue) {
-      this.showLookupLoader = false;
-      this.showLookup = false;
       if (this.OrderType == 'S') {
         let data: any[] = [];
         let tempLookup: any[] = lookupValue;
@@ -1192,12 +1138,8 @@ export class OutProdissueComponent implements OnInit {
         },
         error => {
           this.showLookupLoader = false;
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-         } 
-         else{
-          this.toastr.error('', error);
-         }
+          console.log(
+            error);
         }
 
       );
@@ -1252,66 +1194,15 @@ export class OutProdissueComponent implements OnInit {
       },
       error => {
         //this.showLoader = false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        console.log("Error: ", error);
       }
     );
   }
 
-  handleCheckChange($event) {
-    this.palletValue = '';
-    this.selectedMeterials = [];
-    if ($event.currentTarget.id == "palletOption1") {
-      // mfr serial radio selected.
-      this.radioSelected = 0;
-    }
-    if ($event.currentTarget.id == "palletOption2") {
-      // mfr serial radio selected.
-      this.radioSelected = 1;
-    }
-    if ($event.currentTarget.id == "palletOption3") {
-      // mfr serial radio selected.
-      this.radioSelected = 2;
-    }
-  }
+
 
   //this.addMetToCollection();
   // this.addToDeleiver(false);
   // this.prepareDeleiveryCollectionAndDeliver(orderId);
 
-  public getPalletList() {
-    this.showPalletLookup = true;
-    this.commonservice.getPalletList(PalletOperationType.None, this.selected.ITEMCODE).subscribe(
-      (data: any) => {
-        this.showLookup = false;
-        console.log(data);
-        if (data != null) {
-          if (data.length > 0) {
-            console.log(data);
-            //this.showLookup = true;
-            this.showPalletLookup = false;
-            this.serviceData = data;
-            this.palletValue = this.serviceData[0].Code;
-            this.lookupFor = "PalletList";
-          } else {
-            this.showPalletLookup = false;
-            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
-          }
-        }
-      },
-      error => {
-        this.showLookup = false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
-      }
-    );
-  }
 }

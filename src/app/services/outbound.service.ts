@@ -64,14 +64,14 @@ export class OutboundService {
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/getUOM", body, this.commonService.httpOptions);
   }
 
-  public getAvaliableMeterial(itemCode: string, docentry: string, palletCode: string) {
+  public getAvaliableMeterial(itemCode: string, docentry: string) {
     var body: any = {
       DeliveryToken: JSON.stringify([{
         COMPANYDBNAME: localStorage.getItem("CompID"),
         WHSCODE: localStorage.getItem("whseId"), 
         ITEMCODE: itemCode, 
         DocEntry: docentry,
-        PalletCode: palletCode
+        PalletCode: ""
       }])
     };
 

@@ -320,6 +320,22 @@ export class Commonservice {
   }
 
   /**
+   * API to get pallet details for show grid.
+   * @param palletCode 
+   */
+  GetPalletDataForOutBound(palletCode: string): Observable<any> {
+    var jObject = {
+      PalletCode: JSON.stringify([{
+        COMPANYDBNAME: localStorage.getItem("CompID"),
+        PalletCode: palletCode,
+        WhseCode: localStorage.getItem("whseId")
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetPalletDataForOutBound", jObject, this.httpOptions);
+  }
+  
+
+  /**
    * API for depalletize
    * 
    * @param palletCode
@@ -542,5 +558,29 @@ export class Commonservice {
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/IsValidBatchandSerialItemsFromPallet", jObject, this.httpOptions);
+  }
+
+
+  GetPalletListForOutBound(itemCode: string): Observable<any> {
+    var jObject = {
+      PalletCode: JSON.stringify([{
+        COMPANYDBNAME: localStorage.getItem("CompID"),
+        WHSECODE: localStorage.getItem("whseId"),
+        ITEMCODE: itemCode
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetPalletListForOutBound", jObject, this.httpOptions);
+  }
+
+  IsPalletValidForOutBound(palletCode: string, itemCodeArray: string): Observable<any> {
+    var jObject = {
+      PalletCode: JSON.stringify([{
+        COMPANYDBNAME: localStorage.getItem("CompID"),
+        WHSECODE: localStorage.getItem("whseId"),
+        ITEMCODE: itemCodeArray,
+        PALLETCODE: palletCode
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/IsPalletValidForOutBound", jObject, this.httpOptions);
   }
 }

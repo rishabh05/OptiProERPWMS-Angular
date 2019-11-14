@@ -211,7 +211,7 @@ export class ProductionReceiptItemsListComponent implements OnInit {
     // yaha data all parameter nikalne padenge or same model kark vaha bhejna padega.
     var selectedData:any =this.gridDataNew[selection.index];
     let autoLot: any[] =[];
-   
+    
     autoLot.push(new AutoLot("N", selectedData.ITEMCODE, "", "", "", ""));
     localStorage.setItem("primaryAutoLots", JSON.stringify(autoLot));
     var selected= {

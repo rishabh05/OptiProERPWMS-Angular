@@ -6,6 +6,7 @@ export class OutboundData {
     TempSavedData: Array<any> = [];
     DeleiveryCollection: Array<any> = [];
     TempMeterials:Array<any>=[];
+    PalletItems:Array<any> = [];
 }
 
 export class CurrentOutBoundData {
