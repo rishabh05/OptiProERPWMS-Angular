@@ -381,5 +381,6 @@
   "Plt_ByItem": "By Item",
   "Plt_Pallets": "Pallet",
   "Plt_PalletAlreadySelected": "Pallet already selected",
-  "Plt_DataDeleteMsg": "Your data will be loss, do you want to continue?"
+  "Plt_DataDeleteMsg": "Your data will be loss, do you want to continue?",
+  "Outbond_DeliveryMsg": "Which order you want to deliver?"
 }

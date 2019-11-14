@@ -1050,14 +1050,15 @@ export class OutOrderComponent implements OnInit {
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
     if (outboundData != undefined && outboundData != '') {
       this.outbound = JSON.parse(outboundData);
-      for (let i = 0; i < this.selectedPallets.length; i++) {
+      for (let i = 0; i < this.outbound.PalletItems.length; i++) {
         if (!this.isPalletExistInPalletList(this.outbound.PalletItems[i].Pallet)) {
           this.palletList.push({
-            Code: this.outbound.PalletItems[i].Pallet
+            Pallet: this.outbound.PalletItems[i].Pallet
           });
         }
       }
     }
+    console.log("pallet list: "+JSON.stringify(this.palletList));
   }
 
   DeliveryClick(rowindex, gridData: any) {
@@ -1134,7 +1135,7 @@ export class OutOrderComponent implements OnInit {
 
   isPalletExistInPalletList(pallet: String) {
     for (let i = 0; i < this.palletList.length; i++) {
-      if (this.palletList[i].Code == pallet) {
+      if (this.palletList[i].Pallet == pallet) {
         return true;
       }
     }
