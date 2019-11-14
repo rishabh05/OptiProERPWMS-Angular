@@ -9,6 +9,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { SharedModule } from '../shared-module/shared-module.module';
 import { FormsModule } from '@angular/forms';
 import { InventoryTransferRoutingModule } from './inventory-transfer-routing.module';
+import { DialogsModule } from '@progress/kendo-angular-dialog';
 
 @NgModule({
   declarations: [WhsTransferComponent, BinTransferComponent],
@@ -20,6 +21,7 @@ import { InventoryTransferRoutingModule } from './inventory-transfer-routing.mod
     PerfectScrollbarModule,
     FormsModule,
     InventoryTransferRoutingModule,
+    DialogsModule,
     ModalModule.forRoot()
   ]
 })

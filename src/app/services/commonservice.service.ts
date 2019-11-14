@@ -560,7 +560,6 @@ export class Commonservice {
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/IsValidBatchandSerialItemsFromPallet", jObject, this.httpOptions);
   }
 
-
   GetPalletListForOutBound(itemCode: string): Observable<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
@@ -582,5 +581,16 @@ export class Commonservice {
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/IsPalletValidForOutBound", jObject, this.httpOptions);
+  }
+
+  GetPalletDataForWhseTrns(palletCode: string): Observable<any> {
+    var jObject = {
+      PalletCode: JSON.stringify([{
+        COMPANYDBNAME: localStorage.getItem("CompID"),
+        PalletCode: palletCode,
+        WhseCode: localStorage.getItem("whseId")
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetPalletDataForWhseTrns", jObject, this.httpOptions);
   }
 }

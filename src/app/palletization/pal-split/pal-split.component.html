@@ -102,13 +102,13 @@
             <div class="col-sm-9">
               <div class="input-group input-group-sm">
                 <input type="text" class="form-control form-control-sm" placeholder="{{'ItemCode'|translate}}" name="itemCode"
-                  [(ngModel)]="itemCode" (blur)="OnItemCodeChange()" >
+                  [(ngModel)]="itemCode" (blur)="OnItemCodeChange()">
                 <div class="input-group-append  has-seprate-btn">
                   <button class="k-button k-primary btn" type="button" (click)="OnItemCodeLookupClick()">
                     <i class="opti-icon-hammenu"></i>
                   </button>
 
-                  <button id="PalSplit_ItemScanButton"  class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
+                  <button id="PalSplit_ItemScanButton" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
                     type="button">
                     <i class="opti-icon-qr-code fs-24"></i>
                   </button>
@@ -159,7 +159,7 @@
                   <button class="k-button k-primary btn" (click)="OnBatchSerialLookupClick()" type="button">
                     <i class="opti-icon-hammenu"></i>
                   </button>
-                  <button id="PalSplit_BatchSerialscanButton"  class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
+                  <button id="PalSplit_BatchSerialscanButton" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
                     type="button">
                     <i class="opti-icon-qr-code fs-24"></i>
                   </button>
@@ -256,21 +256,25 @@
         <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text mx-0.5" (click)="back(0)">
           <span class="k-icon k-i-close-outline" role="presentation"></span> Cancel
         </button>
-        <button type="button" *ngIf="enableSplitPalletBtn" (click)="splitPallet($event)" class="btn btn-success k-button btn-sm btn-icon-with-text">
+        <button type="button" *ngIf="savedPalletsArray.length > 0" (click)="splitPallet($event)" class="btn btn-success k-button btn-sm btn-icon-with-text">
           <span class="k-icon opti-icon-pallet-split" role="presentation"></span> {{'Plt_Split'|translate}}
         </button>
-      
+
         <button type="button" id="showHideGrid" (click)="clickShowHideGrid()" class="btn btn-success k-button btn-sm btn-icon-with-text">
           {{showHideBtnTxt}}
         </button>
-      
-        <button type="button" id="PalSplit_HiddenFromPltScanButton" style="visibility:hidden" (click)="onHiddenFromPltScanClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+
+        <button type="button" id="PalSplit_HiddenFromPltScanButton" style="visibility:hidden" (click)="onHiddenFromPltScanClick()"
+          class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
           SB </button>
-        <button type="button" id="PalSplit_HiddenToPltScanButton" style="visibility:hidden" (click)="onHiddenToPltScanClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+        <button type="button" id="PalSplit_HiddenToPltScanButton" style="visibility:hidden" (click)="onHiddenToPltScanClick()"
+          class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
           SB </button>
-        <button type="button" id="PalSplit_HiddenItemCodeScanButton" style="visibility:hidden" (click)="onHiddenItemScanClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+        <button type="button" id="PalSplit_HiddenItemCodeScanButton" style="visibility:hidden" (click)="onHiddenItemScanClick()"
+          class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
           SB </button>
-        <button type="button" id="PalSplit_HiddenBatchSerialScanButton" style="visibility:hidden" (click)="onHiddenBatchSerialScanClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+        <button type="button" id="PalSplit_HiddenBatchSerialScanButton" style="visibility:hidden" (click)="onHiddenBatchSerialScanClick()"
+          class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
           SB </button>
       </div>
     </div>

@@ -18,7 +18,6 @@ export class PalSplitComponent implements OnInit {
   showLookup: boolean = false;
   showNewPallet: boolean = false;
   lookupFor: any = "";
-  enableSplitPalletBtn: boolean = false;
   selectedToPallets: any = Array<Pallet>();
   savedPalletsArray: any = Array<Pallet>();
   public serviceData: any;
@@ -275,17 +274,20 @@ export class PalSplitComponent implements OnInit {
       (data: any) => {
         this.showLoader = false;
         console.log(data);
-        if (data != null && data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
-          this.savedPalletsArray = [];
-          this.resetVariables();
-          this.toastr.success('', this.translate.instant("Plt_Split_success"));
-        } else if (data[0].ErrorMsg == "7001") {
-          this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
-            this.translate.instant("CommonSessionExpireMsg"));
-          return;
+        if (data != null && data != undefined && data.length > 0) {
+          if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
+            this.savedPalletsArray = [];
+            this.resetVariables();
+            this.toastr.success('', this.translate.instant("Plt_Split_success"));
+          } else if (data[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          } else {
+            this.toastr.error('', data[0].ErrorMsg);
+          }
         } else {
           this.toastr.error('', this.translate.instant("ErrorMsgSomethingWentWrong"));
-          return;
         }
       },
       error => {
@@ -419,8 +421,8 @@ export class PalSplitComponent implements OnInit {
       return;
     }
 
-    if(this.itemType == 'S'){
-      if(this.validateSerialItem()){
+    if (this.itemType == 'S') {
+      if (this.validateSerialItem()) {
         this.toastr.error('', this.translate.instant("SerialAlreadyExist"));
         return;
       }
@@ -430,11 +432,11 @@ export class PalSplitComponent implements OnInit {
       return;
     }
 
-    var index = this.batchSerialNo.lastIndexOf("-");
-    var finalLotNo = this.batchSerialNo.substring(0, index) + "-" + this.toPalletNo;
+    var index = this.batchSerialNo.lastIndexOf(this.fromPalletNo);
+    var finalLotNo = this.batchSerialNo.substring(0, index) + this.toPalletNo;
     var object = {
       ItemCode: this.itemCode,
-      ActualBSNo: this.batchSerialNo.substring(0, index),
+      ActualBSNo: this.batchSerialNo.substring(0, index - 1),
       LotNo: this.batchSerialNo,
       MoveQty: this.moveQty,
       RemainQty: this.remainQty,
@@ -448,10 +450,6 @@ export class PalSplitComponent implements OnInit {
       ExpiryDate: "" + this.expDate
     }
     this.savedPalletsArray.push(object);
-
-    if (this.savedPalletsArray.length > 0) {
-      this.enableSplitPalletBtn = true;
-    }
 
     // this.resetVariables();
     this.qty = 0;

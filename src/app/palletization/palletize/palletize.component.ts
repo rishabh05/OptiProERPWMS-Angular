@@ -22,7 +22,6 @@ export class PalletizeComponent implements OnInit {
   public serviceData: any;
   autoGenereatePalletEnable: boolean = false;
   palletNo: string = "";
-  enableAddPalletBtn: boolean = false;
   showNewPallet: boolean = false;
   createdNewPallet: string = "";
   itemCode: string = "";
@@ -169,17 +168,12 @@ export class PalletizeComponent implements OnInit {
     this.router.navigateByUrl('home/dashboard', { skipLocationChange: true });
   }
 
-  // clickShowGrid(){
-  //   this.showGrid = true;
-  // }
   clickShowHideGrid() {
 
     this.showHideGridToggle = !this.showHideGridToggle;
     if (this.showHideGridToggle) {
-      this.showGrid = true;
       this.showHideBtnTxt = this.translate.instant("hideGrid");
     } else {
-      this.showGrid = false;
       this.showHideBtnTxt = this.translate.instant("showGrid");
     }
   }
@@ -410,12 +404,7 @@ export class PalletizeComponent implements OnInit {
       ExpiryDate: this.expDate
     }
     this.savedPalletsArray.push(object);
-    if (this.savedPalletsArray.length > 0) {
-      this.enableAddPalletBtn = true;
-    }
     this.resetVariablesOnItemSelect();
-
-    //this.updateReceiveQty();
   }
 
   validateQuantity() {
@@ -480,18 +469,19 @@ export class PalletizeComponent implements OnInit {
       (data: any) => {
         this.showLoader = false;
         console.log(data);
-        if (data != null && data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
-          //  if (data != null && data.length>0 && data[0].ErrorMsg == "") {
-          this.toastr.success('', this.translate.instant("Plt_PalletizedSuccess"));
-          this.resetPageOnSuccess();
-        } else if (data[0].ErrorMsg == "7001") {
-          this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
-            this.translate.instant("CommonSessionExpireMsg"));
-          return;
-        }
-        else {
+        if (data != null && data != undefined && data.length > 0) {
+          if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
+            this.toastr.success('', this.translate.instant("Plt_PalletizedSuccess"));
+            this.resetPageOnSuccess();
+          } else if (data[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          } else {
+            this.toastr.error('', data[0].ErrorMsg);
+          }
+        } else {
           this.toastr.error('', this.translate.instant("ErrorMsgSomethingWentWrong"));
-          return;
         }
       },
       error => {
@@ -549,13 +539,54 @@ export class PalletizeComponent implements OnInit {
 
     this.qty = this.openQty - this.sumOfQty;
   }
-  ScanItemCodeField(){
+  ScanItemCodeField() {
     this.OnItemCodeChange();
   }
-  ScanBatchSerialField(){
+  ScanBatchSerialField() {
     this.OnLotsChange();
   }
-  ScanPalletField(){
+  ScanPalletField() {
     this.onPalletChange();
+  }
+
+  public createNewPallet() {
+    if (this.createdNewPallet == '' || this.createdNewPallet == undefined) {
+      this.toastr.error('', this.translate.instant("Plt_EnterPalletNo"));
+      return;
+    }
+
+    //console.log("palletId: " + palletId);
+    this.showLoader = true;
+    this.commonservice.createNewPallet(this.createdNewPallet).subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        console.log(data);
+        if (data != null) {
+          if (data.length > 0) {
+            console.log(data);
+            this.showLoader = false;
+            // this.serviceData = data;
+            if (this.showNewPallet) {
+
+            } else {
+              this.palletNo = data;
+            }
+            return;
+          } else {
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          }
+        }
+      },
+      error => {
+        this.showLoader = false;
+        console.log("Error: ", error);
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
   }
 }

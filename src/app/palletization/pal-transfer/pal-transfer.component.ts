@@ -229,8 +229,8 @@ export class PalTransferComponent implements OnInit {
           this.finalPalletData = [];
           this.palletData = data;
           for (let i = 0; i < this.palletData.length; i++) {
-            var index = this.palletData[i].SRLBATCH.lastIndexOf("-");
-            var finalBS = this.palletData[i].SRLBATCH.substring(0, index) + "-" + this.toPalletNo;
+            var index = this.palletData[i].SRLBATCH.lastIndexOf(this.fromPalletNo);
+            var finalBS = this.palletData[i].SRLBATCH.substring(0, index) + this.toPalletNo;
             var object = {
               ITEMID: this.palletData[i].ITEMID,
               SRLBATCH: this.palletData[i].SRLBATCH,
@@ -294,19 +294,19 @@ export class PalTransferComponent implements OnInit {
       (data: any) => {
         this.showLoader = false;
         console.log(data);
-        if (data != null && data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
-          //if (data != null && data[0].ErrorMsg == ""){
-          this.toastr.success('', this.translate.instant("Plt_Transfer_success"));
-          this.resetPageOnSuccess();
-        }
-        else if (data[0].ErrorMsg == "7001") {
-          this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
-            this.translate.instant("CommonSessionExpireMsg"));
-          return;
-        }
-        else {
-          // alert(data[0].ErrorMsg);
-          this.toastr.error('', data[0].ErrorMsg);
+        if (data != null && data != undefined && data.length > 0) {
+          if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
+            this.toastr.success('', this.translate.instant("Plt_Transfer_success"));
+            this.resetPageOnSuccess();
+          } else if (data[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          } else {
+            this.toastr.error('', data[0].ErrorMsg);
+          }
+        } else {
+          this.toastr.error('', this.translate.instant("ErrorMsgSomethingWentWrong"));
         }
       },
       error => {
