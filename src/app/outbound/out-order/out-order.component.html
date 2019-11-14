@@ -60,7 +60,7 @@
             </div>
 
 
-            <div class="row">
+            <div *ngIf ="temoraryHideItemLookupRow" class="row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
                     <div class="form-group row">
                         <label for="orderNumber" class="col-sm-3 col-form-label">{{'Item'|translate}}</label>
@@ -91,7 +91,7 @@
                 <!-- temporary grid for show selected pallet -->
             <div class="row">
                 <div class="col-sm-12">
-                    <kendo-grid  *ngIf="showPalletGrid" class="no-shadow" [data]="savedPalletItems" [resizable]="true" [pageSize]="pageSize"
+                    <kendo-grid  *ngIf="showTemporaryViews&& showPalletGrid" class="no-shadow" [data]="savedPalletItems" [resizable]="true" [pageSize]="pageSize"
                         [pageable]="pagable" [sortable]="true" [selectable]="true" id="newGrid"
                         #newGrid>
                         <!-- grid for mobile start -->
@@ -187,7 +187,7 @@
                 <button type="button" *ngIf="showDeleiveryAndAdd" (click)="deliveryConfirmation()"
                     class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-check"
                         role="presentation"></span> {{'Deleiver'|translate}}</button>
-                <button type="button"  (click)="showPalletsList()"
+                <button *ngIf="showTemporaryViews"  type="button"  (click)="showPalletsList()"
                    class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-check"
                      role="presentation"></span>{{btnText}}</button>
             </div>

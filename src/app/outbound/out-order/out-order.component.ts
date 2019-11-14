@@ -49,6 +49,9 @@ export class OutOrderComponent implements OnInit {
   constructor(private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) { }
 
   savedPalletItems: any ;
+
+  showTemporaryViews: boolean = false;
+  temoraryHideItemLookupRow: boolean = false;
   ngOnInit() {
     // lsOutbound
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
@@ -520,7 +523,7 @@ export class OutOrderComponent implements OnInit {
         deliveryToken.SODETAIL = arrSODETAIL;
         deliveryToken.UDF = [];
       }
-      this.showLookupLoader = false;
+      
       //==delivery submit final code===
       this.outboundservice.addDeleivery(deliveryToken).subscribe(
         data => {
@@ -540,7 +543,7 @@ export class OutOrderComponent implements OnInit {
             this.toastr.error('', data[0].ErrorMsg);
           }
 
-
+          this.showLookupLoader = false;
         },
         error => {
           this.showLookupLoader = false;
