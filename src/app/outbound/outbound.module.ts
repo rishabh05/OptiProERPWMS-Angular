@@ -13,6 +13,7 @@ import { FormsModule } from '@angular/forms';
 import { GridModule } from '@progress/kendo-angular-grid';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
 import { InputsModule } from '@progress/kendo-angular-inputs';
+import { DialogModule } from '@progress/kendo-angular-dialog';
 
 @NgModule({
   declarations: [ OutCutomerComponent, OutOrderComponent, OutProdissueComponent],
@@ -25,6 +26,7 @@ import { InputsModule } from '@progress/kendo-angular-inputs';
     OutboundRoutingModule,
     SharedModule,
     DropDownsModule,
+    DialogModule,
     InputsModule
   ],
   exports:[OutCutomerComponent,OutOrderComponent,OutProdissueComponent]

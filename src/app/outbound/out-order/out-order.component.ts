@@ -16,7 +16,8 @@ import { MeterialModel } from 'src/app/models/outbound/meterial-model';
   styleUrls: ['./out-order.component.scss']
 })
 export class OutOrderComponent implements OnInit {
-  dialogMsg: string = "Which order you want to deliver?"
+  dialogFor: string;
+  dialogMsg: string = "";
   yesButtonText: string = "All";
   noButtonText: string = "Current";
   private customerName: string = "";
@@ -41,11 +42,15 @@ export class OutOrderComponent implements OnInit {
   openQty: number = 0;
   palletNo: string = "";
   itemsByPallet: any;
-
-  showPalletGrid:boolean = false;
-
+  dialogOpened: boolean = false;
+  showPalletGrid: boolean = false;
+  rowindex: any;
+  gridData: any;
   public pagable: boolean = false;
   public pageSize: number = Commonservice.pageSize;
+  currentSelectedMaterialsByPallets: any = [];
+  tempSOCalculationDataSet: any = [];
+  palletList: any = [];
   constructor(private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) { }
 
   savedPalletItems: any ;
@@ -558,24 +563,6 @@ export class OutOrderComponent implements OnInit {
     }
   }
 
-  getConfirmDialogValue($event) {
-    this.showConfirmDialog = false;
-
-    // Yes
-    if ($event.Status === 'yes') {
-      this.deleiver();
-    }
-    // No
-    else if ($event.Status === 'no') {
-
-      this.deleiver(this.outbound.OrderData.DOCNUM);
-    }
-    // Cross
-    else {
-
-    }
-  }
-
   deliveryConfirmation() {
     this.showConfirmDialog = true;
   }
@@ -723,8 +710,7 @@ export class OutOrderComponent implements OnInit {
     }
     return false;
   }
-  currentSelectedMaterialsByPallets: any=[];
-  tempSOCalculationDataSet: any = [];
+
   managePickQuantity() {
     var rollbackPallet;
     var isRollbackPalletSelected = false;
@@ -989,6 +975,9 @@ export class OutOrderComponent implements OnInit {
   }
 
   onPalletChange() {
+    if (this.palletNo == undefined || this.palletNo == "") {
+      return;
+    }
     var itemCodeArray = Array.prototype.map.call(this.soItemsDetail, function (item) { return "'" + item.ITEMCODE + "'"; }).join(",");
     this.commonservice.IsPalletValidForOutBound(this.palletNo, itemCodeArray).subscribe(
       (data: any) => {
@@ -1021,4 +1010,112 @@ export class OutOrderComponent implements OnInit {
       }
     );
   }
+
+  showSelectedPallets() {
+    this.dialogOpened = true;
+    this.palletList = [];
+    let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+    if (outboundData != undefined && outboundData != '') {
+      this.outbound = JSON.parse(outboundData);
+      for (let i = 0; i < this.outbound.PalletItems.length; i++) {
+        if (!this.isPalletExistInPalletList(this.outbound.PalletItems[i].Pallet)) {
+          this.palletList.push({
+            Pallet: this.outbound.PalletItems[i].Pallet
+          });
+        }
+      }
+    }
+    console.log("pallet list: "+JSON.stringify(this.palletList));
+  }
+
+  DeliveryClick(rowindex, gridData: any) {
+    this.gridData = gridData;
+    this.rowindex = rowindex;
+    this.showDialog("Delivery", this.translate.instant("yes"), this.translate.instant("no"),
+      this.translate.instant("Outbond_DeliveryMsg"));
+  }
+
+  PalletDeleteClick(rowindex, gridData: any) {
+    this.gridData = gridData;
+    this.rowindex = rowindex;
+    this.showDialog("DeletePallet", this.translate.instant("yes"), this.translate.instant("no"),
+      this.translate.instant("DeleteRecordsMsg"));
+  }
+
+  deleteAll() {
+    this.showDialog("deleteAll", this.translate.instant("yes"), this.translate.instant("no"),
+      this.translate.instant("DeleteAllLines"));
+  }
+
+  showDialog(dialogFor: string, yesbtn: string, nobtn: string, msg: string) {
+    this.dialogFor = dialogFor;
+    this.yesButtonText = yesbtn;
+    this.noButtonText = nobtn;
+    this.showConfirmDialog = true;
+    this.dialogMsg = msg;
+  }
+
+  getConfirmDialogValue($event) {
+    this.showConfirmDialog = false;
+    if ($event.Status == "yes") {
+      switch ($event.From) {
+        case ("delete"):
+          // this.palletList.splice(this.rowindex, 1);
+          break;
+        case ("DeletePallet"):
+          var tempList: any = [];
+          let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+          if (outboundData != undefined && outboundData != '') {
+            this.outbound = JSON.parse(outboundData);
+            for (let i = 0; i < this.selectedPallets.length; i++) {
+              // if (!this.isPalletExistInPalletList(this.outbound.PalletItems[i].Pallet)) {
+              //   tempList = this.outbound.PalletItems[i];
+              // }
+            }
+            this.outbound.PalletItems = tempList;
+            localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+          }
+          // this.setSavedPelletDataToGrid();
+          // this.palletList.splice(this.rowindex, 1);
+          break;
+        case ("deleteAll"):
+          this.deleteAllOkClick();
+          break;
+        case ("DeliveryClick"):
+          this.deleiver();
+          break;
+      }
+    } else {
+      if ($event.Status == "no") {
+        switch ($event.From) {
+          case ("delete"):
+            break;
+          case ("deleteAll"):
+            break;
+          case ("DeliveryClick"):
+            this.deleiver(this.outbound.OrderData.DOCNUM);
+            break;
+        }
+      }
+    }
+  }
+
+  isPalletExistInPalletList(pallet: String) {
+    for (let i = 0; i < this.palletList.length; i++) {
+      if (this.palletList[i].Pallet == pallet) {
+        return true;
+      }
+    }
+  }
+
+  deleteAllOkClick() {
+    // this.palletList = [];
+    document.getElementById("modalCloseBtn").click();
+  }
+
+  public close(component) {
+    this[component + 'Opened'] = false;
+  }
+
+
 }
