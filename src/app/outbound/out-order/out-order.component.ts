@@ -293,20 +293,26 @@ export class OutOrderComponent implements OnInit {
   }
 
   public addToDeleiver(goToCustomer: boolean = true) {
+    
+    this.callPrepareDeleiveryTempCollectionMethod()
+    let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+    if (outboundData != undefined && outboundData != '') {
+      if (goToCustomer == true)
+        this.openOutboundCustomer();
+      }
+  }
+
+  public callPrepareDeleiveryTempCollectionMethod() {
     this.showLookupLoader = true;
     //lsOutbound
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
     if (outboundData != undefined && outboundData != '') {
       this.outbound = JSON.parse(outboundData);
-      this.prepareDeleiveryTempCollection(); 
+      this.prepareDeleiveryTempCollection();
       localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
-      if (goToCustomer == true)
-        this.openOutboundCustomer();
-
       this.showLookupLoader = false;
     }
   }
-
   prepareDeleiveryTempCollection() {
     if (this.outbound) {
       let tempMeterialCollection: any[] = this.outbound.TempMeterials;
@@ -344,7 +350,8 @@ export class OutOrderComponent implements OnInit {
 
   public deleiver(orderId: any = null) {
     //this.showLookupLoader = true;
-    this.addToDeleiver(false);
+    this.callPrepareDeleiveryTempCollectionMethod();
+    //this.addToDeleiver(false);
     this.prepareDeleiveryCollectionAndDeliver(orderId);
     //this.showLookupLoader = false;
   }
@@ -387,18 +394,16 @@ export class OutOrderComponent implements OnInit {
   prepareDeleiveryCollectionAndDeliver(orderId: any) {
 
     if (this.outbound != null && this.outbound != undefined
-      && this.outbound.DeleiveryCollection != null && this.outbound.DeleiveryCollection != undefined
-      && this.outbound.DeleiveryCollection.length > 0
-    ) {
+      && this.outbound.DeleiveryCollection != null
+      && this.outbound.DeleiveryCollection != undefined
+      && this.outbound.DeleiveryCollection.length > 0) {
 
       if (orderId !== undefined && orderId !== null) {
         this.outbound.DeleiveryCollection = this.outbound.DeleiveryCollection.filter(d => d.Order.DOCNUM === orderId);
       }
-
       let arrSOHEADER: SOHEADER[] = [];
       let arrSODETAIL: SODETAIL[] = [];
       let deliveryToken: DeliveryToken = new DeliveryToken();
-
       // Hdr
       let comDbId = localStorage.getItem('CompID');
       let token = localStorage.getItem('Token');
@@ -407,69 +412,46 @@ export class OutOrderComponent implements OnInit {
       let hdrLine: number = 0;
       let limit = -1;
       let hdrLineVal = 0;
+      let headerLineArray:any =[];
 
       this.showLookupLoader = true;
       // Loop through delivery collection 
       for (let index = 0; index < this.outbound.DeleiveryCollection.length; index++) {
 
-        // // break when item processed.
-        // if (limit >= this.outbound.DeleiveryCollection.length) {
-        //   break;
-        // }
-        //get first item from collection        
-        const element = this.outbound.DeleiveryCollection[index];
-
-
-        // let coll=Get all Item for Item.Lineno===i
+        var selectedDelivery = this.outbound.DeleiveryCollection[index];
+        //=========filter  collection docnum, docentry, tracking wise.
         let lineDeleiveryCollection = this.outbound.DeleiveryCollection.filter(d =>
-          //d.Item.LINENUM === element.Item.LINENUM
-          element.Order.DOCNUM === d.Order.DOCNUM &&
-          element.Item.DOCENTRY === d.Item.DOCENTRY &&
-          element.Item.TRACKING === d.Item.TRACKING
+          selectedDelivery.Order.DOCNUM === d.Order.DOCNUM &&
+          selectedDelivery.Item.DOCENTRY === d.Item.DOCENTRY &&
+          selectedDelivery.Item.TRACKING === d.Item.TRACKING
         );
-
-        // Process Order Item and Tracking collection
+        //=========filter  collection docnum, docentry, tracking wise.
+        
+        //=============== Adding header and Detail Objects logic==================
         for (let hIdx = 0; hIdx < lineDeleiveryCollection.length; hIdx++) {
-          const o = lineDeleiveryCollection[hIdx];
-
-          // check hdr exists
+          let o = lineDeleiveryCollection[hIdx];
+          
+          //============================start check header exist or not then add ========
           let existHdr = false;
           for (let index = 0; index < arrSOHEADER.length; index++) {
-            const h = arrSOHEADER[index];
-            if (h.SONumber === o.Order.DOCNUM
-              && h.ItemCode === o.Item.ITEMCODE
-              && h.Tracking === o.Item.TRACKING) {
+            let h = arrSOHEADER[index];
+            if (h.SONumber === o.Order.DOCNUM   && h.ItemCode === o.Item.ITEMCODE && 
+              h.Tracking === o.Item.TRACKING) {
               existHdr = true;
               break;
             }
           }
 
-          if (existHdr == false) {
-            // Add Header here and then add 
+          if (existHdr == false) {   // Add Header here and then add 
             hdrLineVal = hdrLineVal + 1;
+            headerLineArray.push(hdrLineVal);
             let hdr: SOHEADER = new SOHEADER();
-            // "DiServerToken":"66F7E7A4-D2AE-4E37-91E8-8BE390F2D32F",
-            // "SONumber":165,
-            // "CompanyDBId":"BUILD128SRC12X",
-            // "LineNo":0,
-            // "ShipQty":"2",
-            // "DocNum":165,
-            // "OpenQty":" 12.000",
-            // "WhsCode":"01",
-            // "Tracking":"S",
-            // "ItemCode":"Serial",
-            // "UOM":-1,
-            // "Line":0
             hdr.DiServerToken = token;
             hdr.SONumber = o.Item.DOCENTRY;
             hdr.CompanyDBId = comDbId;
             hdr.LineNo = o.Item.LINENUM;
-            //hdr.tShipQty = lineDeleiveryCollection.map(i => i.Meterial.MeterialPickQty).reduce((sum, c) => sum + c);
-            //hdr.ShipQty = 
-            //let metQty = 
             let metQty = lineDeleiveryCollection.map(i => i.Meterial.MeterialPickQty).reduce((sum, c) => sum + c);
             hdr.ShipQty = metQty.toString();
-            // hdr.ShipQty = hdr.ShipQty.toString();
             hdr.DocNum = o.Order.DOCNUM;
             hdr.OpenQty = o.Item.OPENQTY;
             hdr.WhsCode = o.Item.WHSCODE;
@@ -480,27 +462,25 @@ export class OutOrderComponent implements OnInit {
             hdr.Line = hdrLineVal;
             arrSOHEADER.push(hdr);
           }
-
-          // check weather item existe or not 
+          //============================start check header exist or not then add ========
+          //============================start check detail exist or not then add ========
           let hasDetail = false;
-          for (let index = 0; index < arrSODETAIL.length; index++) {
-            const element = arrSODETAIL[index];
-            if (element.LotNumber === o.Meterial.LOTNO && element.Bin === o.Meterial.BINNO && element.parentLine === hdrLineVal) {
-              hasDetail = true;
-              break;
-            }
+          both:
+          for (let dIdx = 0; dIdx < arrSODETAIL.length; dIdx++) {
+            let selectedDetl = arrSODETAIL[dIdx];
+            if (selectedDetl.LotNumber === o.Meterial.LOTNO && selectedDetl.Bin === o.Meterial.BINNO){
+             
+              for(let headerIndex = 0; headerIndex<headerLineArray.length;headerIndex++){
+              if(selectedDetl.parentLine === headerLineArray[headerIndex]){
+                hasDetail = true;
+                break both;
+              }
+             }  
+            } 
           }
 
           if (hasDetail == false) {
-            // Add Detail here 
             let dtl: SODETAIL = new SODETAIL();
-            // "Bin":"01-SYSTEM-BIN-LOCATION",
-            // "LotNumber":"08JANS000011",
-            // "LotQty":"1",
-            // "SysSerial":231,
-            // "parentLine":0,
-            // "GUID":"6d92d887-23bb-4390-85df-75e4caa7e328",
-            // "UsernameForLic":"Rishabh"
             dtl.Bin = o.Meterial.BINNO;
             dtl.LotNumber = o.Meterial.LOTNO;
             dtl.LotQty = o.Meterial.MeterialPickQty;
@@ -511,19 +491,15 @@ export class OutOrderComponent implements OnInit {
             arrSODETAIL.push(dtl);
           }
           limit = limit + lineDeleiveryCollection.length;
-        }
+        } 
       }
-      console.log("Dtl", arrSODETAIL);
-      console.log("hdr", arrSOHEADER);
-      // this.manageLineNo(arrSOHEADER, arrSODETAIL);
-      // arrSOHEADER=await this.manageShipQty(arrSOHEADER);
-
+  
       if (arrSOHEADER.length > 0 && arrSODETAIL.length > 0) {
         deliveryToken.SOHEADER = arrSOHEADER;
         deliveryToken.SODETAIL = arrSODETAIL;
         deliveryToken.UDF = [];
-      }
-      
+      } 
+     // this.showLookupLoader = false;
       //==delivery submit final code===
       this.outboundservice.addDeleivery(deliveryToken).subscribe(
         data => {
@@ -534,15 +510,13 @@ export class OutOrderComponent implements OnInit {
           } else if (data[0].ErrorMsg == "7001") {
             this.showLookupLoader = false;
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
-              this.translate.instant("CommonSessionExpireMsg"));
-
+            this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
           else {
             this.showLookupLoader = false;
             this.toastr.error('', data[0].ErrorMsg);
           }
-
           this.showLookupLoader = false;
         },
         error => {
@@ -550,17 +524,10 @@ export class OutOrderComponent implements OnInit {
           console.log(
             error);
         }
-
       );
-
-//==delivery submit final code===
-
+     //==delivery submit final code===
       console.log("shdr", arrSOHEADER);
-
-
     }
-
-
   }
 
   clearOutbound() {
