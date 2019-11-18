@@ -1047,19 +1047,16 @@ export class OutOrderComponent implements OnInit {
   showSelectedPallets() {
     this.dialogOpened = true;
     this.palletList = [];
-    let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
-    if (outboundData != undefined && outboundData != '') {
-      this.outbound = JSON.parse(outboundData);
-      for (let i = 0; i < this.outbound.PalletItems.length; i++) {
-        if (!this.isPalletExistInPalletList(this.outbound.PalletItems[i].Pallet)) {
+
+    for (let i = 0; i < this.savedPalletItems.length; i++) {
+      if (!this.isPalletExistInPalletList(this.savedPalletItems[i].Pallet)) {
           this.palletList.push({
-            Pallet: this.outbound.PalletItems[i].Pallet
+          Pallet: this.savedPalletItems[i].Pallet
           });
         }
       }
+    console.log("pallet list: " + JSON.stringify(this.palletList));
     }
-    console.log("pallet list: "+JSON.stringify(this.palletList));
-  }
 
   DeliveryClick(rowindex, gridData: any) {
     this.gridData = gridData;
@@ -1093,23 +1090,78 @@ export class OutOrderComponent implements OnInit {
     if ($event.Status == "yes") {
       switch ($event.From) {
         case ("delete"):
-          // this.palletList.splice(this.rowindex, 1);
+          this.palletList.splice(this.rowindex, 1);
           break;
         case ("DeletePallet"):
           var tempList: any = [];
+          var tempList1: any = [];
+          var removedPallet = this.palletList[this.rowindex].Pallet;
+          this.palletList.splice(this.rowindex, 1);
           let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
           if (outboundData != undefined && outboundData != '') {
             this.outbound = JSON.parse(outboundData);
-            for (let i = 0; i < this.selectedPallets.length; i++) {
-              // if (!this.isPalletExistInPalletList(this.outbound.PalletItems[i].Pallet)) {
-              //   tempList = this.outbound.PalletItems[i];
+            var tempTempMaterialList: any = [];
+            // var itemListOfDeletedPallet: any = [];
+            // itemListOfDeletedPallet = this.outbound.PalletItems.filter(p => removedPallet === p.Pallet);
+            // for (let i = 0; i < itemListOfDeletedPallet.length; i++) {
+            //   for (let j = 0; j < this.outbound.TempMeterials[j].length; j++) {
+            //     if (this.orderNumber == this.outbound.TempMeterials[j].Item.DocNum &&
+            //       itemListOfDeletedPallet[i].ITEMCODE == this.outbound.TempMeterials[j].ITEMCODE)
+            //       tempTempMaterialList.push(this.outbound.TempMeterials[j]);
+            //   }
               // }
+            // console.log("list:", JSON.stringify(tempTempMaterialList));
+
+            var itemListOfDeletedPallet = this.outbound.PalletItems.filter(p => removedPallet === p.Pallet);
+            for(let i = 0; i < itemListOfDeletedPallet.length; i++){
+              var deletedItem = itemListOfDeletedPallet[i];
+              tempTempMaterialList = this.outbound.TempMeterials.filter(d =>
+                d.Item.ITEMCODE !== deletedItem.ITEMCODE &&
+                d.Meterial.PALLETNO !== deletedItem.Pallet &&
+                d.Meterial.LOTNO !== deletedItem.LOTNO &&
+                d.Meterial.BINNO !== deletedItem.BINNO
+              );
+            }
+            console.log("list:", JSON.stringify(tempTempMaterialList));
+            this.outbound.TempMeterials = tempTempMaterialList;
+            localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+            // d.Item.DOCENTRY === deletedItem.Item.DOCENTRY &&
+            //     d.Item.TRACKING === deletedItem.Item.TRACKING &&
+            //     d.Order.DOCNUM === deletedItem.Order.DOCNUM &&
+            //     d.Meterial.LOTNO === deletedItem.Meterial.LOTNO &&
+            //     d.Meterial.BINNO === deletedItem.Meterial.BINNO
+
+            // update PalletItems
+            for (let i = 0; i < this.outbound.PalletItems.length; i++) {
+              if (this.isPalletExistInPalletList(this.outbound.PalletItems[i].Pallet)) {
+                tempList.push(this.outbound.PalletItems[i]);
+              }
             }
             this.outbound.PalletItems = tempList;
             localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+
+            // update SelectedMeterials
+            for (let i = 0; i < this.outbound.SelectedMeterials.length; i++) {
+              if (this.isPalletExistInPalletList(this.outbound.SelectedMeterials[i].PALLETNO)) {
+                tempList1.push(this.outbound.SelectedMeterials[i]);
+              }
+            }
+            this.outbound.SelectedMeterials = tempList1;
+            localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
           }
-          // this.setSavedPelletDataToGrid();
-          // this.palletList.splice(this.rowindex, 1);
+
+          let sameItemList = this.selectedPallets.filter(i => removedPallet == i.Pallet);
+          for (let i = 0; i < this.soItemsDetail.length; i++) {
+            for (let j = 0; j < sameItemList.length; j++) {
+              if (this.soItemsDetail[i].ITEMCODE == sameItemList[j].ITEMCODE) {
+                var pickQty = Number.parseInt(this.soItemsDetail[i].RPTQTY) - Number.parseInt(sameItemList[j].QTY);
+                this.soItemsDetail[i].RPTQTY = pickQty;
+              }
+            }
+          }
+          // remove pallet which is not compitable.
+          this.removePallet(removedPallet);
+          // this.palletNo = "";
           break;
         case ("deleteAll"):
           this.deleteAllOkClick();
@@ -1139,6 +1191,7 @@ export class OutOrderComponent implements OnInit {
         return true;
       }
     }
+    return false;
   }
 
   deleteAllOkClick() {
