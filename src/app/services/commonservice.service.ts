@@ -251,6 +251,7 @@ export class Commonservice {
       PalletCode: JSON.stringify([{
         COMPANYDBNAME: localStorage.getItem("CompID"),
         USER: localStorage.getItem("UserId"),
+        WHSCODE: localStorage.getItem("whseId"),
         PalletId: palletCode
       }])
     };

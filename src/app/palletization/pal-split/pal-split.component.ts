@@ -21,8 +21,7 @@ export class PalSplitComponent implements OnInit {
   selectedToPallets: any = Array<Pallet>();
   savedPalletsArray: any = Array<Pallet>();
   public serviceData: any;
-  autoGenereatePalletEnable: boolean = false;
-  createdNewPallet: string;
+  autoGeneratePalletEnable: boolean = false;
   toPalletNo: string = "";
   fromPalletNo: string = "";
   fromPalletLookup: string;
@@ -44,6 +43,7 @@ export class PalSplitComponent implements OnInit {
   sumOfQty: number = 0;
   itemType: string = "";
   isSerailTrackedItem: boolean = false;
+  newCreatedPalletNo: string;
 
   constructor(private commonservice: Commonservice,
     private router: Router, private toastr: ToastrService, private translate: TranslateService) {
@@ -52,7 +52,7 @@ export class PalSplitComponent implements OnInit {
 
   ngOnInit() {
     if (localStorage.getItem("AutoPalletIdGenerationChecked") == "True") {
-      this.autoGenereatePalletEnable = true;
+      this.autoGeneratePalletEnable = true;
     }
   }
 
@@ -314,10 +314,7 @@ export class PalSplitComponent implements OnInit {
 
   onCheckChange() {
     this.showNewPallet = !this.showNewPallet;
-    if (this.showNewPallet) {
-    } else {
-      this.createdNewPallet = "";
-    }
+    this.newCreatedPalletNo = "";
   }
 
   clearPalletItems(item) {
@@ -675,5 +672,53 @@ export class PalSplitComponent implements OnInit {
       }
     }
     return false;
+  }
+
+  public createNewPallet() {
+    var palletId = this.newCreatedPalletNo;
+    if (this.autoGeneratePalletEnable) {
+      palletId = "";
+    } else {
+      if (palletId == '' || palletId == undefined) {
+        this.toastr.error('', this.translate.instant("Plt_EnterPalletNo"));
+        return;
+      }
+    }
+
+    console.log("palletId: " + palletId);
+    this.showLoader = true;
+    this.commonservice.createNewPallet(palletId).subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        console.log(data);
+        if (data != null) {
+          if (data.length > 0) {
+            this.newCreatedPalletNo = data;
+            this.toPalletNo = this.newCreatedPalletNo;
+            return;
+          } else {
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          }
+        }
+      },
+      error => {
+        this.showLoader = false;
+        console.log("Error: ", error);
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
+
+  showInputDialog(dialogFor: string, yesbtn: string, nobtn: string, msg: string) {
+    // this.dialogFor = dialogFor;
+    // this.doneBtnText = yesbtn;
+    // this.cancelBtnText = nobtn;
+    // this.showConfirmDialog = true;
+    // this.dialogMsg = msg;
   }
 }

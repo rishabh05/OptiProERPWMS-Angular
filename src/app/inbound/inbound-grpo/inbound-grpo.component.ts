@@ -110,7 +110,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   autoGeneratePalletEnable: boolean = false;
   checkValidateSerialSubs: ISubscription;
   @ViewChild('RecBinVal') RecBinVal: ElementRef;
-
+  newCreatedPalletNo: string; 
   constructor(private inboundService: InboundService, private commonservice: Commonservice,
     private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent, private productionService: ProductionService) {
@@ -2046,11 +2046,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   }
 
   public createNewPallet() {
-    var palletId;
-    if (this.showNewPallet) {
-      palletId = this.inboundNewPallet;
-    }
-
+    var palletId = this.newCreatedPalletNo;
     if (this.autoGeneratePalletEnable) {
       palletId = "";
     } else {
@@ -2068,14 +2064,8 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         console.log(data);
         if (data != null) {
           if (data.length > 0) {
-            console.log(data);
-            this.showLookupLoader = false;
-            // this.serviceData = data;
-            if (this.showNewPallet) {
-              this.inboundNewPallet = data;
-            } else {
-              this.palletValue = data;
-            }
+            this.newCreatedPalletNo = data;
+            this.palletValue = this.newCreatedPalletNo;
             return;
           } else {
             this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));

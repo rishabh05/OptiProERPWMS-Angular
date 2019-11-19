@@ -20,13 +20,14 @@ export class PalletMergeComponent implements OnInit {
   lookupFor: any = "";
   selectedFromPallets: any = Array<Pallet>();
   public serviceData: any;
-  autoGenereatePalletEnable: boolean = false;
+  autoGeneratePalletEnable: boolean = false;
   createdNewPallet: string;
   toPalletNo: string = "";
   fromPalletNo: string = "";
   fromPalletLookup: string;
   toBin: string;
   toWhse: string;
+  newCreatedPalletNo: string;
 
   constructor(private commonservice: Commonservice,
     private router: Router, private toastr: ToastrService, private translate: TranslateService) {
@@ -35,7 +36,7 @@ export class PalletMergeComponent implements OnInit {
 
   ngOnInit() {
     if (localStorage.getItem("AutoPalletIdGenerationChecked") == "True") {
-      this.autoGenereatePalletEnable = true;
+      this.autoGeneratePalletEnable = true;
     }
   }
 
@@ -235,5 +236,45 @@ export class PalletMergeComponent implements OnInit {
   }
   ScanFromPalletField() {
     this.onPalletChange('from_pallet');
+  }
+
+  public createNewPallet() {
+    var palletId = this.newCreatedPalletNo;
+    if (this.autoGeneratePalletEnable) {
+      palletId = "";
+    } else {
+      if (palletId == '' || palletId == undefined) {
+        this.toastr.error('', this.translate.instant("Plt_EnterPalletNo"));
+        return;
+      }
+    }
+
+    console.log("palletId: " + palletId);
+    this.showLoader = true;
+    this.commonservice.createNewPallet(palletId).subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        console.log(data);
+        if (data != null) {
+          if (data.length > 0) {
+            this.newCreatedPalletNo = data;
+            this.toPalletNo = this.newCreatedPalletNo;
+            return;
+          } else {
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          }
+        }
+      },
+      error => {
+        this.showLoader = false;
+        console.log("Error: ", error);
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
   }
 }

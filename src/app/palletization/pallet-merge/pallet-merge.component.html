@@ -111,8 +111,8 @@
                         <div class="col-sm-9">
                             <div class="d-flex">
                                 <input type="text" class="form-control form-control-sm" id="newPallet" name="newPallet"
-                                    [(ngModel)]="createdNewPallet" placeholder="{{'Plt_NewPallet'|translate}}"
-                                    [disabled]="autoGenereatePalletEnable">
+                                    [(ngModel)]="newCreatedPalletNo" placeholder="{{'Plt_NewPallet'|translate}}"
+                                    [disabled]="autoGeneratePalletEnable">
                                 <div class="ml-1 d-flex">
                                     <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
                                         type="button" (click)="createNewPallet(event)">

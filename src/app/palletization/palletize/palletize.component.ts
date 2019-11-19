@@ -20,10 +20,10 @@ export class PalletizeComponent implements OnInit {
   lookupFor: any = "";
   savedPalletsArray: any = Array<Pallet>();
   public serviceData: any;
-  autoGenereatePalletEnable: boolean = false;
+  autoGeneratePalletEnable: boolean = false;
   palletNo: string = "";
   showNewPallet: boolean = false;
-  createdNewPallet: string = "";
+  newCreatedPalletNo: string = "";
   itemCode: string = "";
   itemsList: any;
   showHideGridToggle: boolean = false;
@@ -49,7 +49,7 @@ export class PalletizeComponent implements OnInit {
 
   ngOnInit() {
     if (localStorage.getItem("AutoPalletIdGenerationChecked") == "True") {
-      this.autoGenereatePalletEnable = true;
+      this.autoGeneratePalletEnable = true;
     }
   }
 
@@ -179,10 +179,7 @@ export class PalletizeComponent implements OnInit {
   }
   onCheckChange() {
     this.showNewPallet = !this.showNewPallet;
-    if (this.showNewPallet) {
-    } else {
-      this.createdNewPallet = "";
-    }
+    this.newCreatedPalletNo;
   }
 
   OnItemCodeLookupClick() {
@@ -550,27 +547,26 @@ export class PalletizeComponent implements OnInit {
   }
 
   public createNewPallet() {
-    if (this.createdNewPallet == '' || this.createdNewPallet == undefined) {
-      this.toastr.error('', this.translate.instant("Plt_EnterPalletNo"));
-      return;
+    var plt = this.newCreatedPalletNo;
+    if (this.autoGeneratePalletEnable) {
+      plt = "";
+    } else {
+      if (plt == '' || plt == undefined) {
+        this.toastr.error('', this.translate.instant("Plt_EnterPalletNo"));
+        return;
+      }
     }
 
-    //console.log("palletId: " + palletId);
+    console.log("palletId: " + plt);
     this.showLoader = true;
-    this.commonservice.createNewPallet(this.createdNewPallet).subscribe(
+    this.commonservice.createNewPallet(plt).subscribe(
       (data: any) => {
         this.showLoader = false;
         console.log(data);
         if (data != null) {
           if (data.length > 0) {
-            console.log(data);
-            this.showLoader = false;
-            // this.serviceData = data;
-            if (this.showNewPallet) {
-
-            } else {
-              this.palletNo = data;
-            }
+            this.newCreatedPalletNo = data;
+            this.palletNo = this.newCreatedPalletNo;
             return;
           } else {
             this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));

@@ -382,5 +382,7 @@
   "Plt_Pallets": "Pallet",
   "Plt_PalletAlreadySelected": "Pallet already selected",
   "Plt_DataDeleteMsg": "Your data will be loss, do you want to continue?",
-  "Outbond_DeliveryMsg": "Which order you want to deliver?"
+  "Outbond_DeliveryMsg": "Which order you want to deliver?",
+  "Done": "Done",
+  "Plt_CreateNewPallet": "Create New Pallet"
 }
