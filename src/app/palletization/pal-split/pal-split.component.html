@@ -259,8 +259,10 @@
         <button type="button" *ngIf="savedPalletsArray.length > 0" (click)="splitPallet($event)" class="btn btn-success k-button btn-sm btn-icon-with-text">
           <span class="k-icon opti-icon-pallet-split" role="presentation"></span> {{'Plt_Split'|translate}}
         </button>
-
-        <button type="button" id="showHideGrid" (click)="clickShowHideGrid()" class="btn btn-success k-button btn-sm btn-icon-with-text">
+      
+        <button type="button" id="showHideGrid" (click)="clickShowHideGrid()"
+         class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
+         <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>
           {{showHideBtnTxt}}
         </button>
 

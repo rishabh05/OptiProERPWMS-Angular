@@ -138,12 +138,14 @@ export class DepalletizeComponent implements OnInit {
   back(fromwhereval: number) {
     this.router.navigateByUrl('home/dashboard', { skipLocationChange: true });
   }
-
+  public manageEyeIcon: boolean = true;
   clickShowHideGrid() {
     this.showHideGridToggle = !this.showHideGridToggle;
     if (this.showHideGridToggle) {
       this.showHideBtnTxt = this.translate.instant("hideGrid");
+      this.manageEyeIcon = false;
     } else {
+      this.manageEyeIcon = true;
       this.showHideBtnTxt = this.translate.instant("showGrid");
     }
   }

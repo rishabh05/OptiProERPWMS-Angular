@@ -31,7 +31,16 @@
 .k-icon.fs-12{
   font-size: 12px;
 }
-
+.opti-icon-eye {
+  &:before {
+    content: $opti-icon-eye; 
+  }
+}
+.opti-icon-eye-off {
+  &:before {
+    content: $opti-icon-eye-off; 
+  }
+}
 .opti-icon-palletize {
   &:before {
     content: $opti-icon-palletize; 

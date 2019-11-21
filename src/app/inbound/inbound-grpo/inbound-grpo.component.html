@@ -411,14 +411,14 @@
                 <hr />
             </div>
             <div class="col-sm-12 col-12">
-
-                <button type="button" *ngIf="showButton" (click)="save($event)" class="btn btn-success k-button btn-sm btn-icon-with-text">
+                    <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="cancel($event)">
+                            <span class="k-icon k-i-close-outline" role="presentation"></span> Cancel</button>
+                <button type="button" *ngIf="showButton" (click)="save($event)"  class="k-button k-primary k-button btn-sm btn-icon-with-text" >
                     <span class="k-icon k-i-save" role="presentation"></span> {{'Save'|translate}}</button>
-                <button class="k-button k-primary k-button btn-sm btn-icon-with-text" *ngIf="showRecButton" type="button" (click)="receive($event)">
+                <button class="btn btn-success k-button btn-sm btn-icon-with-text" *ngIf="showRecButton" type="button" (click)="receive($event)">
                     <span class="k-icon k-i-download" role="presentation"></span> {{'Receive'|translate}}</button>
                 <!-- <button class="k-button k-primary" type="button" (click)="cancel($event)">Cancel</button> -->
-                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="cancel($event)">
-                    <span class="k-icon k-i-close-outline" role="presentation"></span> Cancel</button>
+                
                 <button type="button" id="hiddenScanButton" style="visibility:hidden" (click)="onHiddenScanClick()"
                     class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                     SB </button>

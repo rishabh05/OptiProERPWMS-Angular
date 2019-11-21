@@ -626,12 +626,15 @@ export class PalSplitComponent implements OnInit {
     this.moveQty = 0;
   }
 
+  manageEyeIcon: boolean =true;
   clickShowHideGrid() {
     this.showHideGridToggle = !this.showHideGridToggle;
     if (this.showHideGridToggle) {
       this.showHideBtnTxt = this.translate.instant("hideGrid");
+      this.manageEyeIcon = false;
     } else {
       this.showHideBtnTxt = this.translate.instant("showGrid");
+      this.manageEyeIcon = true;
     }
   }
 

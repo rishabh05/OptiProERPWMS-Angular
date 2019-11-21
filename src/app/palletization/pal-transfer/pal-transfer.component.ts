@@ -208,13 +208,15 @@ export class PalTransferComponent implements OnInit {
     }
     return false;
   }
-
+  manageEyeIcon: boolean =true;
   clickShowHideGrid() {
     this.showHideGridToggle = !this.showHideGridToggle;
     if (this.showHideGridToggle) {
       this.showHideBtnTxt = this.translate.instant("hideGrid");
+       this.manageEyeIcon = false;
     } else {
       this.showHideBtnTxt = this.translate.instant("showGrid");
+      this.manageEyeIcon = true;
     }
   }
 

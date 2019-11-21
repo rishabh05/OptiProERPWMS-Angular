@@ -1143,7 +1143,7 @@ export class OutOrderComponent implements OnInit {
         case ("deleteAll"):
           this.deleteAllOkClick();
           break;
-        case ("DeliveryClick"):
+        case ("Delivery"):
           this.deleiver();
           break;
       }
@@ -1154,7 +1154,7 @@ export class OutOrderComponent implements OnInit {
             break;
           case ("deleteAll"):
             break;
-          case ("DeliveryClick"):
+          case ("Delivery"):
             this.deleiver(this.outbound.OrderData.DOCNUM);
             break;
         }

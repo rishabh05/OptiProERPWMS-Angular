@@ -168,13 +168,16 @@ export class PalletizeComponent implements OnInit {
     this.router.navigateByUrl('home/dashboard', { skipLocationChange: true });
   }
 
+  manageEyeIcon: boolean =true;
   clickShowHideGrid() {
 
     this.showHideGridToggle = !this.showHideGridToggle;
     if (this.showHideGridToggle) {
       this.showHideBtnTxt = this.translate.instant("hideGrid");
+      this.manageEyeIcon = false;
     } else {
       this.showHideBtnTxt = this.translate.instant("showGrid");
+      this.manageEyeIcon = true;
     }
   }
   onCheckChange() {
