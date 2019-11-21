@@ -37,7 +37,7 @@ export class OutCutomerComponent implements OnInit {
   showLookupLoader: boolean = false;
   public uomList: any = [];
   pagable: boolean = false;
-  pageSize:number = 10;
+  pageSize: number = 10;
 
   constructor(private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) { }
 
@@ -129,16 +129,16 @@ export class OutCutomerComponent implements OnInit {
           // lsOutbound
           localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
           CurrentOutBoundData.CustomerData = outbound.CustomerData;
-          this.outbound=outbound;
+          this.outbound = outbound;
         }
       },
       error => {
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -153,8 +153,8 @@ export class OutCutomerComponent implements OnInit {
     // lsOutbound
     localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
     CurrentOutBoundData.CustomerData = outbound.CustomerData;
-    this.outbound=outbound;
-    
+    this.outbound = outbound;
+
   }
 
   public openCustomerLookup() {
@@ -170,7 +170,7 @@ export class OutCutomerComponent implements OnInit {
           //this.showLookup = true;
           this.serviceData = resp;
           this.showLookupLoader = false;
-          if(this.serviceData.length > 0){
+          if (this.serviceData.length > 0) {
             this.showLookup = true;
           } else {
             this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
@@ -186,12 +186,12 @@ export class OutCutomerComponent implements OnInit {
       error => {
         console.log("Error:", error);
         //this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
+        }
         this.showLookupLoader = false;
         this.showLookup = false;
       },
@@ -202,13 +202,13 @@ export class OutCutomerComponent implements OnInit {
     )
   }
 
-  public openCustSO(clearOrder:boolean=false) {
-   
+  public openCustSO(clearOrder: boolean = false) {
+
     // Clear otred data
-    if(this.outbound)
-    this.outbound.OrderData=null;
-    if(clearOrder==true)
-    localStorage.setItem(CommonConstants.OutboundData,JSON.stringify( this.outbound));
+    if (this.outbound)
+      this.outbound.OrderData = null;
+    if (clearOrder == true)
+      localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
     this.router.navigateByUrl('home/outbound/outorder', { skipLocationChange: true });
   }
 
@@ -252,7 +252,7 @@ export class OutCutomerComponent implements OnInit {
     // if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
     //   this.outbound = JSON.parse(outboundData);
     // }
-  
+
     if (this.outbound != null && this.outbound != undefined
       && this.outbound.DeleiveryCollection != null && this.outbound.DeleiveryCollection != undefined
       && this.outbound.DeleiveryCollection.length > 0
@@ -312,7 +312,7 @@ export class OutCutomerComponent implements OnInit {
 
 
             let hdr: SOHEADER = new SOHEADER();
-            
+
             // "DiServerToken":"66F7E7A4-D2AE-4E37-91E8-8BE390F2D32F",
             // "SONumber":165,
             // "CompanyDBId":"BUILD128SRC12X",
@@ -329,9 +329,9 @@ export class OutCutomerComponent implements OnInit {
             hdr.DiServerToken = token;
             hdr.SONumber = o.Item.DOCENTRY;
             hdr.CompanyDBId = comDbId;
-            hdr.LineNo = o.Item.LINENUM;           
+            hdr.LineNo = o.Item.LINENUM;
             let metQty = lineDeleiveryCollection.map(i => i.Meterial.MeterialPickQty).reduce((sum, c) => sum + c);
-            hdr.ShipQty = metQty.toString();            
+            hdr.ShipQty = metQty.toString();
             hdr.DocNum = o.Order.DOCNUM;
             hdr.OpenQty = o.Item.OPENQTY;
             hdr.WhsCode = o.Item.WHSCODE;
@@ -384,7 +384,7 @@ export class OutCutomerComponent implements OnInit {
 
         }
       }
-     
+
       if (arrSOHEADER.length > 0 && arrSODETAIL.length > 0) {
 
         deliveryToken.SOHEADER = arrSOHEADER;
@@ -415,12 +415,12 @@ export class OutCutomerComponent implements OnInit {
         },
         error => {
           this.showLookupLoader = false;
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-         } 
-         else{
-          this.toastr.error('', error);
-         }
+          if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+          }
+          else {
+            this.toastr.error('', error);
+          }
         }
 
       );
@@ -494,7 +494,7 @@ export class OutCutomerComponent implements OnInit {
     let order = this.orderCollection[idx];
     this.outbound.DeleiveryCollection = this.outbound.DeleiveryCollection.filter(d => d.Order.DOCNUM !== order.DOCNUM);
     this.outbound.TempMeterials = this.outbound.TempMeterials.filter(d => d.Order.DOCNUM !== order.DOCNUM);
-    localStorage.setItem(CommonConstants.OutboundData,JSON.stringify(this.outbound));
+    localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
   }
 
   openOrderScreen(selection: any) {
@@ -504,6 +504,127 @@ export class OutCutomerComponent implements OnInit {
       this.outbound.OrderData = orderList[0].Order;
       localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
       this.openCustSO();
+    }
+  }
+
+  //--------------------add So field--
+
+  public orderNumber: string;
+  public soItemsDetail: any = null;
+  public showSOIetDetail = false;
+  public selectedCustomer: any;
+
+  public openSOOrderList(orderNumber: any = null) {
+    if (!this.orderNumber) {
+      this.toastr.error('', this.translate.instant("OValidation"));
+      return;
+    }
+    // if ((this.outbound.OrderData && this.outbound.OrderData != '' && this.outbound.OrderData != null) || orderNumber) {
+      // let tempOrderData: any = this.outbound.OrderData;
+      // if (orderNumber) {
+      //   tempOrderData = {
+      //     CARDCODE: this.outbound.CustomerData.CustomerCode,
+      //     CARDNAME: this.outbound.CustomerData.customerName,
+      //     CUSTREFNO: "",
+      //     DOCDUEDATE: "04/24/2019",
+      //     DOCNUM: orderNumber.toString(),
+      //     SHIPPINGTYPE: "",
+      //     SHIPTOCODE: ""
+      //   };
+      //   //this.outbound.OrderData = tempOrderData;
+      // }
+      // else {
+      //   this.outbound.OrderData.DOCNUM = tempOrderData.DOCNUM = this.orderNumber;
+      // }
+      //    this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
+
+      //lsOutbound
+      let whseId = localStorage.getItem("whseId");
+      this.showLookup = false;
+      this.showLookupLoader = true;
+      this.outboundservice.getSOItemList("", "", whseId).subscribe(
+        resp => {
+          if (resp != null && resp != undefined)
+            if (resp.ErrorMsg == "7001") {
+              this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
+              this.showLookupLoader = false;
+              return;
+            }
+
+          // When order num from text box.
+          // this.outbound.OrderData = tempOrderData;
+          this.soItemsDetail = resp.RDR1;
+          if (this.soItemsDetail.length > this.pageSize) {
+            this.pagable = true;
+          }
+          this.showLookupLoader = false;
+          if (this.soItemsDetail.length === 0) {
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+            this.showLookupLoader = false;
+          }
+          //     this.calculatePickQty();
+
+
+          localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+
+          this.showSOIetDetail = true;
+          this.showLookupLoader = false;
+        },
+        error => {
+          this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
+          this.showLookupLoader = false;
+        }
+      );
+    // }
+    // else {
+    //   this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+    //   this.showLookupLoader = false;
+    // }
+  }
+
+  public openOrderLookup() {
+    let whseId = localStorage.getItem("whseId");
+    this.outboundservice.getCustomerSOList("", "", whseId).subscribe(
+      resp => {
+        if (resp != null) {
+          if (resp[0].ErrorMsg == "7001") { 
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
+            return;
+          }
+          var tempData = resp;
+          for (var i = 0; i < this.outbound.DeleiveryCollection.length; i++) {
+            for (var j = 0; j < resp.length; j++) {
+              if (this.outbound.DeleiveryCollection[i].Order.DOCNUM == resp[j].DOCNUM) {
+                tempData.splice(j, 1);
+              }
+            }
+          }
+          this.lookupfor = "out-order";
+          this.showLookupLoader = false;
+          this.serviceData = tempData;
+          if (this.serviceData.length > 0) {
+            this.showLookup = true;
+          } else {
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+            this.showLookupLoader = false;
+            this.showLookup = false;
+          }
+        } else {
+          this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
+        }
+
+      },
+      error => {
+        this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
+        this.showLookupLoader = false;
+        this.showLookup = false;
+      }
+    );
+  }
+
+  onOrderNoBlur() {
+    if (this.orderNumber) {
+      this.openSOOrderList(this.orderNumber);
     }
   }
 

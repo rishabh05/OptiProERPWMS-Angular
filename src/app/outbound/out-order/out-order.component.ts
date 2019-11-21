@@ -53,7 +53,7 @@ export class OutOrderComponent implements OnInit {
   palletList: any = [];
   constructor(private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) { }
 
-  savedPalletItems: any ;
+  savedPalletItems: any;
 
   showTemporaryViews: boolean = false;
   temoraryHideItemLookupRow: boolean = false;
@@ -74,11 +74,12 @@ export class OutOrderComponent implements OnInit {
     }
 
     this.setSavedPelletDataToGrid();
+    document.getElementById("itemcodeid").focus();
   }
 
   /* this method set the update data to array to display in grid.
   */
-  setSavedPelletDataToGrid(){
+  setSavedPelletDataToGrid() {
     this.savedPalletItems = [];
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
     console.log("Order:data", outboundData);
@@ -167,6 +168,7 @@ export class OutOrderComponent implements OnInit {
   selectedPallets: any = [];
   getLookupValue(lookupValue: any) {
     this.selectedPallets = [];
+    this.ItemCode ="";
     if (lookupValue != null && lookupValue == "close") {
       //nothing to do
       return;
@@ -198,7 +200,7 @@ export class OutOrderComponent implements OnInit {
     if (outboundData != undefined && outboundData != '') {
       this.outbound = JSON.parse(outboundData);
       this.outbound.SelectedItem = selectdeData;
-      if(this.soItemsDetail.length>0){
+      if (this.soItemsDetail.length > 0) {
         this.outbound.SelectedItem = this.soItemsDetail[selection.index];
       }
       // this.outbound.TempMeterials = [];
@@ -208,7 +210,18 @@ export class OutOrderComponent implements OnInit {
       localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
       this.router.navigateByUrl('home/outbound/outprodissue', { skipLocationChange: true });
     }
+  }
 
+  public openNextScreen(index: any) {
+    let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+    if (outboundData != undefined && outboundData != '') {
+      this.outbound = JSON.parse(outboundData);
+      if (this.soItemsDetail.length > 0) {
+        this.outbound.SelectedItem = this.soItemsDetail[index];
+      }
+      localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+      this.router.navigateByUrl('home/outbound/outprodissue', { skipLocationChange: true });
+    }
   }
 
   public openSOOrderList(orderNumber: any = null) {
@@ -417,7 +430,7 @@ export class OutOrderComponent implements OnInit {
       let hdrLine: number = 0;
       let limit = -1;
       let hdrLineVal = 0;
-      let headerLineArray:any =[];
+      let headerLineArray: any = [];
 
       this.showLookupLoader = true;
       // Loop through delivery collection 
@@ -440,8 +453,8 @@ export class OutOrderComponent implements OnInit {
           let existHdr = false;
           for (let index = 0; index < arrSOHEADER.length; index++) {
             let h = arrSOHEADER[index];
-             if (h.SONumber === o.Order.DOCNUM && h.ItemCode === o.Item.ITEMCODE &&
-                            h.Tracking === o.Item.TRACKING) {
+            if (h.SONumber === o.Order.DOCNUM && h.ItemCode === o.Item.ITEMCODE &&
+              h.Tracking === o.Item.TRACKING) {
               existHdr = true;
               break;
             }
@@ -473,10 +486,10 @@ export class OutOrderComponent implements OnInit {
           both:
           for (let dIdx = 0; dIdx < arrSODETAIL.length; dIdx++) {
             let selectedDetl = arrSODETAIL[dIdx];
-            if (selectedDetl.LotNumber === o.Meterial.LOTNO && selectedDetl.Bin === o.Meterial.BINNO){
+            if (selectedDetl.LotNumber === o.Meterial.LOTNO && selectedDetl.Bin === o.Meterial.BINNO) {
 
-              for(let headerIndex = 0; headerIndex<headerLineArray.length;headerIndex++){
-                if(selectedDetl.parentLine === headerLineArray[headerIndex]){
+              for (let headerIndex = 0; headerIndex < headerLineArray.length; headerIndex++) {
+                if (selectedDetl.parentLine === headerLineArray[headerIndex]) {
                   hasDetail = true;
                   break both;
                 }
@@ -617,8 +630,8 @@ export class OutOrderComponent implements OnInit {
     this.managePickQuantity()
 
   }
-  fromProduction:boolean = false;
-  addMetToTempCollection(outboundData: any,fromIFPSave: boolean = false) {
+  fromProduction: boolean = false;
+  addMetToTempCollection(outboundData: any, fromIFPSave: boolean = false) {
     //lsOutbound
     // let outboundData = localStorage.getItem(CommonConstants.OutboundData);
     if (outboundData != undefined && outboundData != '') {
@@ -671,20 +684,20 @@ export class OutOrderComponent implements OnInit {
   }
 
   addMetToTempCollectionRe() {
-    this.outbound =  JSON.parse(localStorage.getItem(CommonConstants.OutboundData));
-    if(this.outbound!=null && this.outbound!=undefined && this.outbound.TempMeterials !== undefined
-      && this.outbound.TempMeterials !== null &&  this.outbound.TempMeterials.length > 0){
+    this.outbound = JSON.parse(localStorage.getItem(CommonConstants.OutboundData));
+    if (this.outbound != null && this.outbound != undefined && this.outbound.TempMeterials !== undefined
+      && this.outbound.TempMeterials !== null && this.outbound.TempMeterials.length > 0) {
       for (let i = 0; i < this.soItemsDetail.length; i++) {
         for (let j = 0; j < this.currentSelectedMaterialsByPallets.length; j++) {
           if (this.soItemsDetail[i].ITEMCODE == this.currentSelectedMaterialsByPallets[j].ITEMCODE) {
             //   var material = { this.currentSelectedMaterialsByPallets[j]}
-            let item = { Order: this.outbound.OrderData, Item: this.soItemsDetail[i], Meterial: this.currentSelectedMaterialsByPallets[j]}
+            let item = { Order: this.outbound.OrderData, Item: this.soItemsDetail[i], Meterial: this.currentSelectedMaterialsByPallets[j] }
             this.outbound.TempMeterials.push(item)
           }
         }
       }
 
-    }else{
+    } else {
       this.outbound.TempMeterials = [];
       for (let i = 0; i < this.soItemsDetail.length; i++) {
         for (let j = 0; j < this.currentSelectedMaterialsByPallets.length; j++) {
@@ -702,7 +715,7 @@ export class OutOrderComponent implements OnInit {
 
   containPallet() {
     this.setSavedPelletDataToGrid();
-    if(this.savedPalletItems!=null)
+    if (this.savedPalletItems != null)
       for (let i = 0; i < this.savedPalletItems.length; i++) {
         if (this.savedPalletItems[i].Pallet == this.palletNo) {
           return true;
@@ -760,13 +773,13 @@ export class OutOrderComponent implements OnInit {
     this.currentSelectedMaterialsByPallets = this.outbound.SelectedMeterials;
     localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
 
-    if(!isRollbackPalletSelected){ //agar rollback pallet nahi hai to hi add karvana hai.
+    if (!isRollbackPalletSelected) { //agar rollback pallet nahi hai to hi add karvana hai.
       this.addMetToTempCollectionRe();
     }
 
     this.outbound = JSON.parse(localStorage.getItem(CommonConstants.OutboundData));
     // this.showPalletGrid = true;
-    if(!isRollbackPalletSelected){
+    if (!isRollbackPalletSelected) {
       this.saveSelectedPallet();
     }
     this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
@@ -774,25 +787,25 @@ export class OutOrderComponent implements OnInit {
 
   }
 
-  saveSelectedPallet(){ // this method will save the final selected pallet data to local storage.
+  saveSelectedPallet() { // this method will save the final selected pallet data to local storage.
 
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
-    if (outboundData != undefined && outboundData != '' && this.selectedPallets!= null
-      && this.selectedPallets!= undefined  && this.selectedPallets.length>0) {
+    if (outboundData != undefined && outboundData != '' && this.selectedPallets != null
+      && this.selectedPallets != undefined && this.selectedPallets.length > 0) {
       this.outbound = JSON.parse(outboundData);
-      for(let i = 0; i< this.selectedPallets.length;i++){
+      for (let i = 0; i < this.selectedPallets.length; i++) {
         this.outbound.PalletItems.push(this.selectedPallets[i]);
       }
       localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
     }
     this.setSavedPelletDataToGrid();
   }
-  btnText: string ='Show Pallet Grid';
-  showPalletsList(){
+  btnText: string = 'Show Pallet Grid';
+  showPalletsList() {
     this.showPalletGrid = !this.showPalletGrid;
 
-    if(this.showPalletGrid) {this.btnText = 'Hide Pallet Grid';}
-    else{ this.btnText = 'Show Pallet Grid'; }
+    if (this.showPalletGrid) { this.btnText = 'Hide Pallet Grid'; }
+    else { this.btnText = 'Show Pallet Grid'; }
 
   }
   //selectedPallets me bhi I hope current vale hona chaiyea or jab naya aai to vo apn last me add kar de usme.
@@ -1108,29 +1121,29 @@ export class OutOrderComponent implements OnInit {
                 dbPalletItems.splice(a, 1);
                 a--;
               }
-            } 
+            }
             this.outbound.PalletItems = dbPalletItems;
             this.savedPalletItems = this.outbound.PalletItems;
-            
+
             localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
             //this.palletList.splice(this.rowindex, 1);
-           // this.palletList = this.savedPalletItems;
+            // this.palletList = this.savedPalletItems;
             this.showSelectedPallets();
             //==========remove the deleted items from tempArray start============
             var SavedTempItemsList = this.outbound.TempMeterials;
-            
-              for (let index = 0; index < deletedTempObjectsList.length; index++) {
-                for (let index1 = 0; index1 < SavedTempItemsList.length; index1++) {
-                  if (SavedTempItemsList[index1].Meterial.ITEMCODE == deletedTempObjectsList[index].Meterial.ITEMCODE &&
-                    SavedTempItemsList[index1].Meterial.LOTNO == deletedTempObjectsList[index].Meterial.LOTNO &&
-                    SavedTempItemsList[index1].Meterial.BINNO == deletedTempObjectsList[index].Meterial.BINNO &&
-                    SavedTempItemsList[index1].Order.DOCNUM == this.orderNumber) {
-                    SavedTempItemsList.splice(index1, 1);
-                     index1--;//if(index1>0)
-                    
-                  }
+
+            for (let index = 0; index < deletedTempObjectsList.length; index++) {
+              for (let index1 = 0; index1 < SavedTempItemsList.length; index1++) {
+                if (SavedTempItemsList[index1].Meterial.ITEMCODE == deletedTempObjectsList[index].Meterial.ITEMCODE &&
+                  SavedTempItemsList[index1].Meterial.LOTNO == deletedTempObjectsList[index].Meterial.LOTNO &&
+                  SavedTempItemsList[index1].Meterial.BINNO == deletedTempObjectsList[index].Meterial.BINNO &&
+                  SavedTempItemsList[index1].Order.DOCNUM == this.orderNumber) {
+                  SavedTempItemsList.splice(index1, 1);
+                  index1--;//if(index1>0)
+
                 }
               }
+            }
             //==========remove the deleted items from tempArray end ============
             this.outbound.TempMeterials = SavedTempItemsList;
             localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
@@ -1183,5 +1196,48 @@ export class OutOrderComponent implements OnInit {
     this[component + 'Opened'] = false;
   }
 
+  //--------------------------item scanning-----
+
+  ItemCode: string;
+  public onItemChange() {
+    if (this.selectedCustomer != null && this.selectedCustomer != undefined
+      && this.selectedCustomer.CustomerCode != '' && this.selectedCustomer.CustomerCode != null) {
+
+      if (this.orderNumber != null && this.ItemCode != null) {
+        this.outboundservice.GetItemCode(this.ItemCode).subscribe(
+          resp => {
+            if (resp != null && resp.length > 0) {
+              this.ItemCode = resp[0].ItemCode;
+
+              var index = -1;
+              for(var i=0; i<this.soItemsDetail.length; i++){
+                if(this.ItemCode == this.soItemsDetail[i].ITEMCODE){
+                  index = i;
+                }
+              }
+              if(index == -1){
+                this.toastr.error('', this.translate.instant("Outbound_NoDataFound"));
+              }else{
+                document.getElementById("itemcodeid").focus();
+                this.openNextScreen(index);
+              }
+            } else {
+              this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+            }
+          },
+          error => {
+            this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
+            this.showLookupLoader = false;
+            this.showLookup = false;
+          }
+        );
+      }
+    }
+    else {
+      this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+      this.showLookupLoader = false;
+      this.showLookup = false;
+    }
+  }
 
 }

@@ -34,6 +34,24 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'Outbound_SO'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input (blur)="onOrderNoBlur()" 
+                                    type="text" class="form-control form-control-sm" name='orderNumber' [(ngModel)]="orderNumber"
+                                    placeholder="{{'Outbound_SO'|translate}}" >
+                                <div class="input-group-append">
+                                    <button 
+                                        class="k-button k-primary btn" (click)="openOrderLookup()" type="button">
+                                        <i class="opti-icon-hammenu"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
@@ -88,6 +106,10 @@
                         class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
                 <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" [disabled]="!customerCode"
                     (click)="openCustSO(true)" roterLink="binTransfer" skipLocationChange><i class="opti-icon-arrow-next"></i></button>
+
+                    <button type="button" id="outbound1_sohiddenScanButton" style="visibility:hidden" (click)="outbound1_sohiddenScanButton()"
+                    class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                    SB </button>                    
 
             </div> 
         </div>
