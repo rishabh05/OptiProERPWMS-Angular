@@ -80,13 +80,16 @@ export class PalletMergeComponent implements OnInit {
     );
   }
 
-
-
   onPalletChange(from: string) {
     var plt;
     if (from == "from_pallet") {
       plt = this.fromPalletNo;
     } else {
+      // if (this.containPallet(this.selectedFromPallets, this.toPalletNo)) {
+      //   this.toastr.error('', this.translate.instant("Plt_AlreadySelected"));
+      //   this.toPalletNo = '';
+      //   return;
+      // }
       plt = this.toPalletNo;
     }
 
@@ -102,12 +105,18 @@ export class PalletMergeComponent implements OnInit {
         if (data != null) {
           if (data.length > 0) {
             if (from == "from_pallet") {
-              this.fromPalletNo = data[0].Code;
+              // this.fromPalletNo = data[0].Code;
+              this.fromPalletNo = "";
               if (!this.containPallet(this.selectedFromPallets, data[0].Code)) {
                 this.selectedFromPallets.push(data[0]);
               }
             } else if (from == "to_pallet") {
               this.toPalletNo = data[0].Code;
+              if (this.containPallet(this.selectedFromPallets, this.toPalletNo)) {
+                this.toastr.error('', this.translate.instant("Plt_AlreadySelected"));
+                this.toPalletNo = '';
+                return;
+              }
             }
           } else {
             this.toastr.error('', this.translate.instant("InValidPalletNo"));
@@ -144,7 +153,7 @@ export class PalletMergeComponent implements OnInit {
   getLookupValue(lookupValue: any) {
     if (this.fromPalletLookup == "from_pallet") {
       this.showLoader = false;
-      this.fromPalletNo = lookupValue.Code;
+      this.fromPalletNo = "";//lookupValue.Code;
       this.toWhse = lookupValue.U_OPTM_WAREHOUSE_LOC;
       this.toBin = lookupValue.U_OPTM_BIN;
       if (!this.containPallet(this.selectedFromPallets, lookupValue.Code)) {
@@ -152,6 +161,11 @@ export class PalletMergeComponent implements OnInit {
       }
     } else if (this.fromPalletLookup == "to_pallet") {
       this.toPalletNo = lookupValue.Code;
+      if (this.containPallet(this.selectedFromPallets, this.toPalletNo)) {
+        this.toastr.error('', this.translate.instant("Plt_AlreadySelected"));
+        this.toPalletNo = '';
+        return;
+      }
     }
   }
 

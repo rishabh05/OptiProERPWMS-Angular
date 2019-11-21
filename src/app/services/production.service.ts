@@ -59,7 +59,10 @@ export class ProductionService {
   }
 
   submitProductionRecepit(submitReceiptProdData: any): Observable<any> {
-    var jObject = { GoodsReceiptModel: JSON.stringify(submitReceiptProdData) };
+    var jObject = { 
+      GoodsReceiptModel: JSON.stringify(submitReceiptProdData),
+      UsernameForLic: localStorage.getItem("UserId")
+    };
     return this.httpclient.post(this.config_params.service_url + "/api/ProductionReceipt/SubmitProductionReceipt", jObject, this.commonService.httpOptions);
   }
   /**
@@ -98,7 +101,10 @@ export class ProductionService {
 
 
   public submitProduction(req: any) {
-    var body: any = { ProductionIssueModel: JSON.stringify(req) };
+    var body: any = { 
+      ProductionIssueModel: JSON.stringify(req),
+      UsernameForLic: localStorage.getItem("UserId")
+    };
     return this.httpclient.post(this.config_params.service_url + "/api/ProductionIssue/SubmitProductionIssue", body, this.commonService.httpOptions);
   }
 

@@ -92,7 +92,10 @@ export class PhysicalcountService {
   }
 
   SubmitPhysicalCount(oAddPhysicalCountData: any): Observable<any> {
-    var jObject = { DeliveryToken: JSON.stringify(oAddPhysicalCountData) };
+    var jObject = { 
+      DeliveryToken: JSON.stringify(oAddPhysicalCountData),
+      UsernameForLic: localStorage.getItem("UserId")
+    };
     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/SubmitPhysicalCount", jObject, this.commonService.httpOptions);
   }
 
