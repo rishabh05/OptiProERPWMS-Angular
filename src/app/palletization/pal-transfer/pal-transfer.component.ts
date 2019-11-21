@@ -119,6 +119,12 @@ export class PalTransferComponent implements OnInit {
     } else {
       plt = this.toPalletNo;
     }
+    if (this.toPalletNo == this.fromPalletNo) {
+      this.toastr.error('', this.translate.instant("Plt_PalletShouldNotSame"));
+      this.toPalletNo = '';
+      this.palletData = [];
+      return;
+    }
 
     this.showLoader = true;
     this.commonservice.isPalletValid(plt).subscribe(
@@ -131,17 +137,11 @@ export class PalTransferComponent implements OnInit {
               this.fromPalletNo = data[0].Code;
               this.palletData = [];
               this.toPalletNo = '';
-              // if (this.fromPalletNo == this.toPalletNo) {
-              //   this.toPalletNo = "";
-              // }
             } else if (from == "to_pallet") {
               this.toPalletNo = data[0].Code;
-              //  if(this.fromPalletNo == this.toPalletNo) this.toPalletNo = "";
             }
             //Reset grid data.
             if (this.fromPalletNo != '' && this.toPalletNo != '') {
-              // this.showHideGridToggle = false;
-              // this.showHideBtnTxt = this.translate.instant("showGrid");
               this.getPalletData();
             }
           } else {

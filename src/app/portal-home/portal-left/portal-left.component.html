@@ -171,16 +171,16 @@
                     <span class="text">{{'Plt_Palletization'|translate}}</span>
                 </a>
                 <ul *dropdownMenu class="dropdown-menu" role="menu">
-                    <li id="15122" role="menuitem" (click)="listClick($event, 'palletization/plt-split')" [ngStyle]="{'display':'none'}">
-                        <a class="dropdown-item" roterLink="plt-split">
-                            <i class="opti-icon-pallet-split" [style.color]="selectedThemeColor"></i>
-                            <span class="text">{{'Plt_PalletSplit'|translate}}</span>
-                        </a>
-                    </li>
                     <li id="15123" role="menuitem" (click)="listClick($event, 'palletization/plt-transfer')" [ngStyle]="{'display':'none'}">
                         <a class="dropdown-item" roterLink="plt-transfer">
                             <i class="opti-icon-pallet-transfer" [style.color]="selectedThemeColor"></i>
                             <span class="text">{{'Plt_PalletTransfer'|translate}}</span>
+                        </a>
+                    </li>
+                    <li id="15122" role="menuitem" (click)="listClick($event, 'palletization/plt-split')" [ngStyle]="{'display':'none'}">
+                        <a class="dropdown-item" roterLink="plt-split">
+                            <i class="opti-icon-pallet-split" [style.color]="selectedThemeColor"></i>
+                            <span class="text">{{'Plt_PalletSplit'|translate}}</span>
                         </a>
                     </li>
                     <li id="15124" role="menuitem" (click)="listClick($event, 'palletization/pallet-merge')" [ngStyle]="{'display':'none'}">
@@ -189,16 +189,16 @@
                             <span class="text">{{'Plt_PalletMerge'|translate}}</span>
                         </a>
                     </li>
-                    <li id="15125" role="menuitem" (click)="listClick($event, 'palletization/depalletize')" [ngStyle]="{'display':'none'}">
-                        <a class="dropdown-item" roterLink="depalletize">
-                            <i class="opti-icon-deplletization" [style.color]="selectedThemeColor"></i>
-                            <span class="text">{{'Plt_Depalletization'|translate}}</span>
-                        </a>
-                    </li>
                     <li id="15126" role="menuitem" (click)="listClick($event, 'palletization/palletize')" [ngStyle]="{'display':'none'}">
                         <a class="dropdown-item" roterLink="palletize">
                             <i class="opti-icon-palletize" [style.color]="selectedThemeColor"></i>
                             <span class="text">{{'Plt_Palletize'|translate}}</span>
+                        </a>
+                    </li>
+                    <li id="15125" role="menuitem" (click)="listClick($event, 'palletization/depalletize')" [ngStyle]="{'display':'none'}">
+                        <a class="dropdown-item" roterLink="depalletize">
+                            <i class="opti-icon-deplletization" [style.color]="selectedThemeColor"></i>
+                            <span class="text">{{'Plt_Depalletization'|translate}}</span>
                         </a>
                     </li>
                 </ul>

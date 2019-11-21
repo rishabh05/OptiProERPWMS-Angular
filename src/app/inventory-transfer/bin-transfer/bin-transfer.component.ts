@@ -612,8 +612,10 @@ export class BinTransferComponent implements OnInit {
       //------------------End for the Licence Parameter------------------------------------------------------
     });
 
+    this.showLoader = true;
     this.inventoryTransferService.submitBinTransfer(oWhsTransAddLot).subscribe(
       data => {
+        this.showLoader = false;
         if (data != null) {
           if (data.length > 0) {
             //--------------------------------------Function to Check for the Licence---------------------------------------
@@ -642,6 +644,7 @@ export class BinTransferComponent implements OnInit {
         }
       },
       error => {
+        this.showLoader = false;
         if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
           this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
         }
@@ -949,9 +952,11 @@ export class BinTransferComponent implements OnInit {
   }
 
   public getPalletList() {
+    this.showLoader = true;
     this.showLookupLoader = true;
     this.commonservice.getPalletsOfSameWarehouse("").subscribe(
       (data: any) => {
+        this.showLoader = false;
         this.showLookupLoader = false;
         console.log(data);
         if (data != null) {
@@ -965,6 +970,7 @@ export class BinTransferComponent implements OnInit {
         }
       },
       error => {
+        this.showLoader = false;
         this.showLookupLoader = false;
         console.log("Error: ", error);
         if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
@@ -981,8 +987,10 @@ export class BinTransferComponent implements OnInit {
     if (this.palletNo == undefined || this.palletNo == "") {
       return;
     }
+    this.showLoader = true;
     this.commonservice.isPalletValid(this.palletNo).subscribe(
       (data: any) => {
+        this.showLoader = false;
         console.log(data);
         if (data != null) {
           if (data.length > 0) {
@@ -1002,6 +1010,7 @@ export class BinTransferComponent implements OnInit {
         }
       },
       error => {
+        this.showLoader = false;
         this.showLookupLoader = false;
         console.log("Error: ", error);
         if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
@@ -1015,8 +1024,10 @@ export class BinTransferComponent implements OnInit {
   }
 
   getPalletData() {
+    this.showLoader = true;
     this.commonservice.GetPalletDataForWhseTrns(this.palletNo).subscribe(
       (data: any) => {
+        this.showLoader = false;
         console.log(data);
         if (data != null) {
           this.palletData = data;
