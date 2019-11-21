@@ -111,9 +111,6 @@
 // if left panel close
 #opti_RightPanelID.opti_sidebar-minimize{ // .opti_sidebar-minimize can't access this class in top.component that's why we are using here
     #sidebarCollapse{
-        .opti_backarrow{
-            display: none;
-        }
         .opti_hamburger{
             display: block;
         }

@@ -24,16 +24,13 @@
  }
  
  // if left panel open
- #sidebarCollapse {
-     .opti_backarrow {
+ #sidebarCollapse {     
+     .opti_hamburger {
          display: block;
      }
      .opti_mobile-menu-icon {
-         display: none;
-     }
-     .opti_hamburger {
-         display: none;
-     }
+        display: none;
+    }
  }
  
  // end left panel open
