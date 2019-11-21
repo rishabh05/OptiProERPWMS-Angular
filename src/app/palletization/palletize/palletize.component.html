@@ -189,8 +189,8 @@
         <button type="button" *ngIf="savedPalletsArray.length > 0" (click)="palletize()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
             class="k-icon opti-icon-palletize"></span>
           {{'Plt_AddToPallet'|translate}}</button>
-        <button type="button" id="showHideGrid" (click)="clickShowHideGrid()" class="btn btn-success k-button btn-sm btn-icon-with-text">
-          {{showHideBtnTxt}}
+        <button type="button" id="showHideGrid" (click)="clickShowHideGrid()" class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
+            <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>{{showHideBtnTxt}}
         </button>
         <!-- <button type="button" id="showHideGrid" *ngIf="showHideGridBtn()==true" (click)="clickShowHideGrid()" class="btn btn-success k-button btn-sm btn-icon-with-text">
           {{showHideBtnTxt}}

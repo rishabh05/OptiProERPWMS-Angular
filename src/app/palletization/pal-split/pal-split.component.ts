@@ -102,7 +102,7 @@ export class PalSplitComponent implements OnInit {
   }
 
   onPalletChange(from: string) {
-
+    
     var plt;
     if (from == "from_pallet") {
       if (this.fromPalletNo == undefined || this.fromPalletNo == '') {
@@ -114,6 +114,12 @@ export class PalSplitComponent implements OnInit {
         return;
       }
       plt = this.toPalletNo;
+    }
+
+    if (this.toPalletNo == this.fromPalletNo) {
+      this.toastr.error('', this.translate.instant("Plt_PalletShouldNotSame"));
+      this.toPalletNo = '';
+      return;
     }
 
     this.showLoader = true;
@@ -315,6 +321,10 @@ export class PalSplitComponent implements OnInit {
   onCheckChange() {
     this.showNewPallet = !this.showNewPallet;
     this.newCreatedPalletNo = "";
+    // if(this.showNewPallet){
+    //   this.showInputDialog("NewPallet", this.translate.instant("Done"), this.translate.instant("Cancel"),
+    //   "Create New Pallet");
+    // }
   }
 
   clearPalletItems(item) {
@@ -626,12 +636,15 @@ export class PalSplitComponent implements OnInit {
     this.moveQty = 0;
   }
 
+  manageEyeIcon: boolean =true;
   clickShowHideGrid() {
     this.showHideGridToggle = !this.showHideGridToggle;
     if (this.showHideGridToggle) {
       this.showHideBtnTxt = this.translate.instant("hideGrid");
+      this.manageEyeIcon = false;
     } else {
       this.showHideBtnTxt = this.translate.instant("showGrid");
+      this.manageEyeIcon = true;
     }
   }
 
@@ -714,11 +727,20 @@ export class PalSplitComponent implements OnInit {
     );
   }
 
+  inputDialogFor:any;
+  yesButtonText: any;
+  noButtonText: any;
+  titleMessage: any;
+  showInputDialogFlag: boolean = false;
   showInputDialog(dialogFor: string, yesbtn: string, nobtn: string, msg: string) {
-    // this.dialogFor = dialogFor;
-    // this.doneBtnText = yesbtn;
-    // this.cancelBtnText = nobtn;
-    // this.showConfirmDialog = true;
-    // this.dialogMsg = msg;
+    this.inputDialogFor = dialogFor;
+    this.yesButtonText = yesbtn;
+    this.noButtonText = nobtn;
+    this.showInputDialogFlag = true;
+    this.titleMessage = msg;
+  }
+
+  getInputDialogValue(){
+    this.showInputDialogFlag = false;
   }
 }

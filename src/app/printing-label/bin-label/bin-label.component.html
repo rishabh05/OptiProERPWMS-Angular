@@ -51,10 +51,11 @@
             <hr />
         </div>
         <div class="col-sm-12 col-12">
+                <button type="button" (click)="OnCancelClick()" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-close-outline"
+                    role="presentation"></span> {{'Cancel'|translate}}</button>
             <button type="button"  (click)="OnPrintClick()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-printer"
               role="presentation"></span> {{'Print'|translate}}</button>
-            <button type="button" (click)="OnCancelClick()" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-close-outline"
-              role="presentation"></span> {{'Cancel'|translate}}</button>
+          
         </div>
     </div>
   </form>

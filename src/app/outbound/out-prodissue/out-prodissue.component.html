@@ -183,8 +183,10 @@
 
                         <kendo-grid-column headerClass="text-center" class="text-center" media="(min-width: 768px)" *ngIf="OrderType!='N'" field="LOTNO" title=""
                             width="10">
-                            <ng-template kendoGridCellTemplate let-idx="rowIndex">
-                                <button id="removeSelectedMeterial" (click)="removeMeterial(idx,gridSelectedMeterial)"
+
+                            <ng-template kendoGridCellTemplate let-idx="rowIndex" >
+                                
+                                <button *ngIf="gridSelectedMeterial.data[idx].PALLETNO==''" id="removeSelectedMeterial" class="align-items-center" (click)="removeMeterial(idx,gridSelectedMeterial)"
                                     class="btn btn-danger k-button btn-sm btn-icon">
                                     <span class="k-icon k-i-delete" role="presentation"></span></button>
                             </ng-template>
@@ -201,6 +203,8 @@
             </div>
             <div class="col-sm-12 col-12">
                 <!-- *ngIf="selectedMeterials && selectedMeterials.length>0" -->
+                <button type="button" (click)="back(0)" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
+                    class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
                 <button type="button" *ngIf="selectedMeterials && selectedMeterials.length>0 && !fromProduction"
                     (click)="addMetToCollection()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-save" role="presentation"></span> {{'Save'|translate}}</button>
@@ -210,11 +214,10 @@
                     {{'Save'|translate}}</button>
                 <button type="button" *ngIf="selectedMeterials && selectedMeterials.length>0 && fromProduction"  (click)="submitProduction()"
                  class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-check"></span>
-                            {{'Issue'|translate}}</button>
+                    {{'Issue'|translate}}</button>
                 <!-- <div class="clearfix mt-1 d-block d-sm-none"></div> -->
 
-                <button type="button" (click)="back(0)" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
-                        class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
+                
                 <button type="button" id="outBoundHiddenScanButton" style="visibility:hidden" (click)="onHiddenScanClick()"
                     class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                     SB </button>
