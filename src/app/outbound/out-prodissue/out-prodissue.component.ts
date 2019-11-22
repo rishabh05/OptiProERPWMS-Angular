@@ -608,7 +608,7 @@ export class OutProdissueComponent implements OnInit {
         }
 
         //code only for non tracked item
-        //fixed issue: save&remaing items showing 
+        //fixed issue: save&remaing items showing  
         if (this.OrderType == 'N') {
           let itemMeterials
           if (this.outbound.TempMeterials !== undefined
@@ -648,7 +648,26 @@ export class OutProdissueComponent implements OnInit {
 
     this.oldSelectedMeterials = JSON.parse(JSON.stringify(this.selectedMeterials));
     this.pagable = this.selectedMeterials.length > this.pageSize;
+    //sort selected material list.
+    //this.sortSelectedMaterials();
 
+    
+  }   
+  /**
+   * this method will sort all the loose items first then palletitems.
+   */
+  sortSelectedMaterials(){
+    var looseMaterial:any[] = this.selectedMeterials.filter((s:any)=>s.PALLETNO=='');
+    var palletMaterial:any[] = this.selectedMeterials.filter((s:any)=>s.PALLETNO!='');
+    
+    var sortedList: any[]=[];
+    for(let i =0; i<looseMaterial.length;i++){
+       sortedList.push(looseMaterial[i]);
+    }
+    for(let j =0; j<palletMaterial.length;j++){
+      sortedList.push(palletMaterial[j]);
+   }
+   this.selectedMeterials = sortedList;
   }
 
   // Save click
@@ -716,6 +735,10 @@ export class OutProdissueComponent implements OnInit {
     } else if (this.fromProduction == false) {
       this.back(-1);
     }
+
+  }
+
+  sortMeterials(){
 
   }
 

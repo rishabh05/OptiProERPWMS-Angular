@@ -179,11 +179,9 @@ export class PalletMergeComponent implements OnInit {
   }
 
   onCheckChange() {
-    this.showNewPallet = !this.showNewPallet;
-    if (this.showNewPallet) {
-    } else {
-      this.createdNewPallet = "";
-    }
+    this.newCreatedPalletNo = "";
+    this.showInputDialog("NewPallet", this.translate.instant("Done"), this.translate.instant("Cancel"),
+      "Create New Pallet");
   }
 
   depalletize() {
@@ -252,20 +250,9 @@ export class PalletMergeComponent implements OnInit {
     this.onPalletChange('from_pallet');
   }
 
-  public createNewPallet() {
-    var palletId = this.newCreatedPalletNo;
-    if (this.autoGeneratePalletEnable) {
-      palletId = "";
-    } else {
-      if (palletId == '' || palletId == undefined) {
-        this.toastr.error('', this.translate.instant("Plt_EnterPalletNo"));
-        return;
-      }
-    }
-
-    console.log("palletId: " + palletId);
+  public createNewPallet(palletNo: string, binNo: string) {
     this.showLoader = true;
-    this.commonservice.createNewPallet(palletId).subscribe(
+    this.commonservice.createNewPallet(palletNo, binNo).subscribe(
       (data: any) => {
         this.showLoader = false;
         console.log(data);
@@ -290,5 +277,30 @@ export class PalletMergeComponent implements OnInit {
         }
       }
     );
+  }
+
+  inputDialogFor: any;
+  yesButtonText: any;
+  noButtonText: any;
+  titleMessage: any;
+  showInputDialogFlag: boolean = false;
+  showInputDialog(dialogFor: string, yesbtn: string, nobtn: string, msg: string) {
+    this.inputDialogFor = dialogFor;
+    this.yesButtonText = yesbtn;
+    this.noButtonText = nobtn;
+    this.showInputDialogFlag = true;
+    this.titleMessage = msg;
+  }
+
+  getInputDialogValue($event) {
+    console.log("getInputDialogValue " + event)
+    this.showInputDialogFlag = false;
+    if ($event.Status == "yes") {
+      switch ($event.From) {
+        case ("NewPallet"):
+          this.createNewPallet($event.PalletNo, $event.BinNo);
+          break
+      }
+    }
   }
 }

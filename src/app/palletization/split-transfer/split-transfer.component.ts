@@ -101,7 +101,7 @@ export class SplitTransferComponent implements OnInit {
 
     console.log("palletId: " + palletId);
     this.showLoader = true;
-    this.commonservice.createNewPallet(palletId).subscribe(
+    this.commonservice.createNewPallet(palletId, "").subscribe(
       (data: any) => {
         this.showLoader = false;
         console.log(data);

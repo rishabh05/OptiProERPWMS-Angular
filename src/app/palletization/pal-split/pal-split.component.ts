@@ -102,7 +102,7 @@ export class PalSplitComponent implements OnInit {
   }
 
   onPalletChange(from: string) {
-    
+
     var plt;
     if (from == "from_pallet") {
       if (this.fromPalletNo == undefined || this.fromPalletNo == '') {
@@ -319,12 +319,9 @@ export class PalSplitComponent implements OnInit {
   }
 
   onCheckChange() {
-    this.showNewPallet = !this.showNewPallet;
     this.newCreatedPalletNo = "";
-    // if(this.showNewPallet){
-    //   this.showInputDialog("NewPallet", this.translate.instant("Done"), this.translate.instant("Cancel"),
-    //   "Create New Pallet");
-    // }
+    this.showInputDialog("NewPallet", this.translate.instant("Done"), this.translate.instant("Cancel"),
+      "Create New Pallet");
   }
 
   clearPalletItems(item) {
@@ -481,11 +478,6 @@ export class PalSplitComponent implements OnInit {
       this.qty = 0;
       return false;
     }
-    // else if(this.sumOfQty > this.openQty && this.savedPalletsArray.length == 0) {
-    //   this.toastr.error('', this.translate.instant("Inbound_NoOpenQuantityValid"));
-    //   this.qty = 0;
-    //   return false;
-    // } 
     else {
       return true;
     }
@@ -636,7 +628,7 @@ export class PalSplitComponent implements OnInit {
     this.moveQty = 0;
   }
 
-  manageEyeIcon: boolean =true;
+  manageEyeIcon: boolean = true;
   clickShowHideGrid() {
     this.showHideGridToggle = !this.showHideGridToggle;
     if (this.showHideGridToggle) {
@@ -687,20 +679,9 @@ export class PalSplitComponent implements OnInit {
     return false;
   }
 
-  public createNewPallet() {
-    var palletId = this.newCreatedPalletNo;
-    if (this.autoGeneratePalletEnable) {
-      palletId = "";
-    } else {
-      if (palletId == '' || palletId == undefined) {
-        this.toastr.error('', this.translate.instant("Plt_EnterPalletNo"));
-        return;
-      }
-    }
-
-    console.log("palletId: " + palletId);
+  public createNewPallet(palletNo: string, binNo: string) {
     this.showLoader = true;
-    this.commonservice.createNewPallet(palletId).subscribe(
+    this.commonservice.createNewPallet(palletNo, binNo).subscribe(
       (data: any) => {
         this.showLoader = false;
         console.log(data);
@@ -727,7 +708,7 @@ export class PalSplitComponent implements OnInit {
     );
   }
 
-  inputDialogFor:any;
+  inputDialogFor: any;
   yesButtonText: any;
   noButtonText: any;
   titleMessage: any;
@@ -740,7 +721,15 @@ export class PalSplitComponent implements OnInit {
     this.titleMessage = msg;
   }
 
-  getInputDialogValue(){
+  getInputDialogValue($event) {
+    console.log("getInputDialogValue " + event)
     this.showInputDialogFlag = false;
+    if ($event.Status == "yes") {
+      switch ($event.From) {
+        case ("NewPallet"):
+          this.createNewPallet($event.PalletNo, $event.BinNo);
+          break
+      }
+    }
   }
 }

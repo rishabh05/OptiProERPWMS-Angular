@@ -70,14 +70,15 @@
           <div class="form-group row mt-1 mt-md-0">
             <label class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9">
-              <div class="opti_checkbox-container">
+              <!-- <div class="opti_checkbox-container">
                 <input type="checkbox" id="auth-2fa" class="k-checkbox float-left" name="newPallet" (change)="onCheckChange()">
                 <label class="k-checkbox-label" for="auth-2fa">{{'Inbound_NewPallet'|translate}}</label>
-              </div>
+              </div> -->
+              <label (click)="onCheckChange()">{{'Inbound_NewPallet'|translate}}</label>
             </div>
           </div>
 
-          <div class="form-group row mt-1 mt-md-0" *ngIf="showNewPallet ">
+          <!-- <div class="form-group row mt-1 mt-md-0" *ngIf="showNewPallet ">
             <label class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9">
               <div class="d-flex">
@@ -91,7 +92,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
 
@@ -293,7 +294,7 @@
   <div class="opti_spinner"></div>
 </div>
 
-<!-- <span *ngIf="showInputDialogFlag">
+<span *ngIf="showInputDialogFlag">
     <app-input-dialog [titleMessage]="titleMessage" [yesButtonText]="yesButtonText" [fromWhere]="inputDialogFor"
         [noButtonText]="noButtonText" (isYesClick)="getInputDialogValue($event)"></app-input-dialog>
-</span> -->
+</span>

@@ -1,0 +1,137 @@
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
+import { InventoryTransferService } from 'src/app/services/inventory-transfer.service';
+import { Commonservice } from 'src/app/services/commonservice.service';
+
+@Component({
+  selector: 'app-input-dialog',
+  templateUrl: './input-dialog.component.html',
+  styleUrls: ['./input-dialog.component.scss']
+})
+export class InputDialogComponent implements OnInit {
+
+  palletNo: string = "";
+  @Input() titleMessage: any;
+  @Input() yesButtonText: any;
+  @Input() noButtonText: any;
+  @Input() fromWhere: any;
+  @Output() isYesClick = new EventEmitter();
+  showNoButton: boolean = true;
+  showLoader: boolean = false;
+  showLookup: boolean = true;
+  serviceData: any[];
+  lookupfor: string;
+  binNo: string = "";
+  constructor(private commonservice: Commonservice, private translate: TranslateService, private toastr: ToastrService,
+    private inventoryTransferService: InventoryTransferService) { }
+
+  ngOnInit() {
+    this.showLookup = true;
+    this.showNoButton = true;
+    if (this.noButtonText == undefined || this.noButtonText == "") {
+      this.showNoButton = false;
+    }
+  }
+
+  public opened: boolean = true;
+
+  public close(status) {
+    if (status == "yes") {
+      if (this.palletNo == undefined || this.palletNo == '') {
+        this.toastr.error('', this.translate.instant("Plt_PalletRequired"));
+        return
+      }
+
+      if (this.binNo == undefined || this.binNo == '') {
+        this.toastr.error('', this.translate.instant("BinNoRequired"));
+        return
+      }
+    }
+
+    this.isYesClick.emit({
+      Status: status,
+      From: this.fromWhere,
+      BinNo: this.binNo,
+      PalletNo: this.palletNo
+    });
+    this.opened = false;
+  }
+
+  public open() {
+    this.opened = true;
+  }
+
+  OnBinLookupClick() {
+    this.showLoader = true;
+    this.inventoryTransferService.getToBin(this.binNo, localStorage.getItem("towhseId")).subscribe(
+      data => {
+        this.showLoader = false;
+        if (data != null) {
+          if (data.length > 0) {
+            this.showLookup = false;
+            this.serviceData = data;
+            this.lookupfor = "toBinsList";
+          }
+          else {
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          }
+        }
+      },
+      error => {
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
+
+  OnBinChange() {
+    if (this.binNo == "" || this.binNo == undefined) {
+      return;
+    }
+    this.showLoader = true;
+    this.inventoryTransferService.isToBinExist(this.binNo, localStorage.getItem("towhseId")).subscribe(
+      data => {
+        this.showLoader = false;
+        if (data != null) {
+          if (data.length > 0) {
+            if (data[0].Result == "0") {
+              this.toastr.error('', this.translate.instant("INVALIDBIN"));
+              return;
+            }
+            else {
+              this.binNo = data[0].ID;
+            }
+          }
+          else {
+            this.binNo = "";
+            this.toastr.error('', this.translate.instant("INVALIDBIN"));
+            return;
+          }
+        }
+      },
+      error => {
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
+
+  getLookupValue($event) {
+    if ($event != null && $event == "close") {
+      //nothing to do
+      return;
+    }
+    else if (this.lookupfor == "toBinsList") {
+      this.binNo = $event[0];
+    }
+  }
+}
