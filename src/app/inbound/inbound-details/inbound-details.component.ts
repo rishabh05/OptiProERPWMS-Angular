@@ -38,7 +38,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
   displayPDF1: boolean = false;
   detailsAvailable: boolean = false;
   ngAfterViewInit(): void {
-    this.vendInputScanField.nativeElement.focus();
+    //this.vendInputScanField.nativeElement.focus();
   }
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent) {

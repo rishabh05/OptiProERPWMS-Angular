@@ -11,6 +11,7 @@ import {DisplayPdfComponent} from '../printing-label/display-pdf/display-pdf.com
 import {PdfpipePipe} from '../printing-label/pdfpipe.pipe';
 import {NumberFormatPipe} from '../common/number-format.pipe';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { InputDialogComponent } from '../common/input-dialog/input-dialog.component';
 
 @NgModule({  
   imports: [ CommonModule, 
@@ -19,9 +20,9 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
     DialogsModule,PdfViewerModule],
     providers:[ ConfirmdialogService],
   declarations: [ LookupComponent,ConfirmDialogComponent,ComonConfirmDialogComponent,DisplayPdfComponent,
-    PdfpipePipe,NumberFormatPipe ],
-  entryComponents: [ ConfirmDialogComponent,DisplayPdfComponent ],
+    PdfpipePipe,NumberFormatPipe, InputDialogComponent ],
+  entryComponents: [ ConfirmDialogComponent,DisplayPdfComponent, InputDialogComponent],
   exports:      [ LookupComponent,ConfirmDialogComponent,ComonConfirmDialogComponent,
-    DisplayPdfComponent,PdfpipePipe,NumberFormatPipe ]
+    DisplayPdfComponent,PdfpipePipe,NumberFormatPipe, InputDialogComponent ]
 })
 export class SharedModule { }

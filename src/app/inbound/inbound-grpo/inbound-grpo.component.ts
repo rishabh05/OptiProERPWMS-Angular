@@ -110,7 +110,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   autoGeneratePalletEnable: boolean = false;
   checkValidateSerialSubs: ISubscription;
   @ViewChild('RecBinVal') RecBinVal: ElementRef;
-  newCreatedPalletNo: string; 
+  newCreatedPalletNo: string;
   constructor(private inboundService: InboundService, private commonservice: Commonservice,
     private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent, private productionService: ProductionService) {
@@ -218,6 +218,10 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     this.mfrGridColumnText = this.translate.instant("Inbound_MfrBatchNo");
     this.SRBatchColumnText = this.translate.instant("BatchNo");
     this.ActualSRBatchColumnText = this.translate.instant("Inbound_ActualBatchNo");
+    if(this.isPalletizationEnable){
+      this.mfrGridColumnText = this.translate.instant("Inbound_ActualBatchNo");
+      this.mfrRadioText = this.translate.instant("Inbound_ActualBatchNo");
+    }
   }
   setLocalStringForSerial() {
     this.serialNoTitle = this.translate.instant("SerialNo");
@@ -227,6 +231,10 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     this.mfrGridColumnText = this.translate.instant("MfrSerialNo");
     this.SRBatchColumnText = this.translate.instant("SerialNo");
     this.ActualSRBatchColumnText = this.translate.instant("Inbound_ActualSerialNo");
+    if(this.isPalletizationEnable){
+      this.mfrRadioText = this.translate.instant("Inbound_ActualSerialNo");
+      this.mfrGridColumnText = this.translate.instant("Inbound_ActualSerialNo");
+    }
   }
 
   /**
@@ -1866,7 +1874,8 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
             console.log(data);
             this.showLookupLoader = false;
             this.serviceData = data;
-            this.palletValue = this.serviceData[0].Code;
+            this.recreatePalletList();
+            //this.palletValue = this.serviceData[0].Code;
             this.lookupfor = "PalletList";
             return;
           } else {
@@ -1885,6 +1894,25 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         }
       }
     );
+  }
+
+  recreatePalletList() {
+    var looseObj;
+    var tempArr: any = [];
+    for (let i = 0; i < this.serviceData.length; i++) {
+      if (this.serviceData[i].Code == "Loose") {
+        looseObj = this.serviceData[i];
+        break;
+      }
+    }
+
+    tempArr.push(looseObj);
+    for (let i = 0; i < this.serviceData.length; i++) {
+      if (this.serviceData[i].Code != "Loose") {
+        tempArr.push(this.serviceData[i]);
+      }
+    }
+    this.serviceData = tempArr;
   }
 
   onPalletScan() {
@@ -2037,28 +2065,17 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   }
 
   onCheckChange() {
-    this.showNewPallet = !this.showNewPallet;
-    if (this.showNewPallet) {
-      this.palletValue = "";
-    } else {
-      this.inboundNewPallet = "";
-    }
+    // this.showNewPallet = !this.showNewPallet;
+    this.newCreatedPalletNo = "";
+    // if (this.showNewPallet) {
+      this.showInputDialog("NewPallet", this.translate.instant("Done"), this.translate.instant("Cancel"),
+        "Create New Pallet");
+    // }
   }
 
-  public createNewPallet() {
-    var palletId = this.newCreatedPalletNo;
-    if (this.autoGeneratePalletEnable) {
-      palletId = "";
-    } else {
-      if (palletId == '' || palletId == undefined) {
-        this.toastr.error('', this.translate.instant("Plt_EnterPalletNo"));
-        return;
-      }
-    }
-
-    console.log("palletId: " + palletId);
+  public createNewPallet(palletNo: string, binNo: string) {
     this.showLoader = true;
-    this.commonservice.createNewPallet(palletId).subscribe(
+    this.commonservice.createNewPallet(palletNo, binNo).subscribe(
       (data: any) => {
         this.showLoader = false;
         console.log(data);
@@ -2167,6 +2184,29 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       if (this.palletValue == this.recvingQuantityBinArray[i].PalletCode) {
         this.recvingQuantityBinArray.splice(i)
         break;
+      }
+    }
+  }
+
+  inputDialogFor: any;
+  titleMessage: any;
+  showInputDialogFlag: boolean = false;
+  showInputDialog(dialogFor: string, yesbtn: string, nobtn: string, msg: string) {
+    this.inputDialogFor = dialogFor;
+    this.yesButtonText = yesbtn;
+    this.noButtonText = nobtn;
+    this.showInputDialogFlag = true;
+    this.titleMessage = msg;
+  }
+
+  getInputDialogValue($event) {
+    console.log("getInputDialogValue " + event)
+    this.showInputDialogFlag = false;
+    if ($event.Status == "yes") {
+      switch ($event.From) {
+        case ("NewPallet"):
+          this.createNewPallet($event.PalletNo, $event.BinNo);
+          break
       }
     }
   }

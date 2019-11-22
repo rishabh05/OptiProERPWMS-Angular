@@ -246,13 +246,14 @@ export class Commonservice {
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetPalletList", jObject, this.httpOptions);
   }
 
-  createNewPallet(palletCode: string): Observable<any> {
+  createNewPallet(palletCode: string, binNo: string): Observable<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
         COMPANYDBNAME: localStorage.getItem("CompID"),
         USER: localStorage.getItem("UserId"),
         WHSCODE: localStorage.getItem("whseId"),
-        PalletId: palletCode
+        PalletId: palletCode,
+        BINCODE: binNo
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/CreateNewPallet", jObject, this.httpOptions);

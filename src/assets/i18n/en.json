@@ -384,5 +384,6 @@
   "Plt_DataDeleteMsg": "Your data will be lost. Do you want to continue?",
   "Outbond_DeliveryMsg": "Which order you want to deliver?",
   "Done": "Done",
-  "Plt_CreateNewPallet": "Create New Pallet"
+  "Plt_CreateNewPallet": "Create New Pallet",
+  "BinNoRequired": "Bin no cannot be blank"
 }

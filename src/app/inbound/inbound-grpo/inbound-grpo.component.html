@@ -143,16 +143,14 @@
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-sm">
                                         <input type="text" class="form-control form-control-sm" name="palletValue" [(ngModel)]=palletValue
-                                            (blur)="OnPalletChange()" placeholder="{{'Plt_PalletNo'|translate}}" [disabled]="showNewPallet">
+                                            (blur)="OnPalletChange()" placeholder="{{'Plt_PalletNo'|translate}}">
                                         <div class="input-group-append has-seprate-btn">
-                                            <button class="k-button k-primary btn" type="button" (click)="getPalletList()"
-                                                [disabled]="showNewPallet">
+                                            <button class="k-button k-primary btn" type="button" (click)="getPalletList()">
                                                 <i class="opti-icon-hammenu"></i>
                                             </button>
                                         </div>
                                         <div class="ml-1 d-flex">
-                                            <button type="button" id="inboundscanButton" (click)="onPalletScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
-                                                [disabled]="showNewPallet">
+                                            <button type="button" id="inboundscanButton" (click)="onPalletScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                                 <i class="opti-icon-qr-code fs-24"></i>
                                             </button>
                                         </div>
@@ -175,21 +173,22 @@
                     </div>
                 </div>
             </div>
-            <div class="row mt-2">
+            <div class="row">
                     <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
                     <!-- Palletization Field For New Create-->
-                    <div class="form-group row mt-1 mt-md-0" *ngIf="isPalletizationEnable && !isNonTrack"son>
+                    <div class="form-group row mt-md-0" *ngIf="isPalletizationEnable && !isNonTrack"son>
                         <label class="col-sm-3 col-form-label"></label>
                         <div class="col-sm-9">
-                            <div class="opti_checkbox-container">
+                            <!-- <div class="opti_checkbox-container">
                                 <input type="checkbox" id="auth-2fa" class="k-checkbox float-left" name="newPallet"
                                     (change)="onCheckChange()">
                                 <label class="k-checkbox-label" for="auth-2fa">{{'Inbound_NewPallet'|translate}}</label>
-                            </div>
+                            </div> -->
+                            <label (click)="onCheckChange()">{{'Inbound_NewPallet'|translate}}</label>
                         </div>
                     </div>
 
-                    <div class="form-group row mt-1 mt-md-0" *ngIf="showNewPallet && !isNonTrack">
+                    <!-- <div class="form-group row mt-1 mt-md-0" *ngIf="showNewPallet && !isNonTrack">
                         <label class="col-sm-3 col-form-label"></label>
                         <div class="col-sm-9">
                             <div class="d-flex">
@@ -204,7 +203,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
                     <!-- <div class="form-group row" *ngIf="!isNonTrack">
                         <div class="col-sm-3"></div>
@@ -443,3 +442,8 @@
 <div class="opti_loader full-section" *ngIf="showLoader">
     <div class="opti_spinner"></div>
 </div>
+
+<span *ngIf="showInputDialogFlag">
+        <app-input-dialog [titleMessage]="titleMessage" [yesButtonText]="yesButtonText" [fromWhere]="inputDialogFor"
+            [noButtonText]="noButtonText" (isYesClick)="getInputDialogValue($event)"></app-input-dialog>
+    </span>
