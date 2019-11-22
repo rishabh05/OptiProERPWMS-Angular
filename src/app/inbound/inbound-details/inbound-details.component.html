@@ -36,14 +36,14 @@
                         </div>
                     </div>
 
-                    <div class="form-group row" *ngIf="false">
+                    <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Inbound_PO#'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
                                 <input type="text" class="form-control form-control-sm" name="poCode" [(ngModel)]="poCode" placeholder="{{'Inbound_PO#'|translate}}"
                                     (blur)="OnPOChange()" #poScanInputField id="poScanInputField">
                                 <div class="input-group-append">
-                                    <button class="k-button k-primary btn" type="button" (click)="onPOLookupClick()">
+                                    <button class="k-button k-primary btn" type="button" (click)="onPOlookupClick()">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
                                 </div>

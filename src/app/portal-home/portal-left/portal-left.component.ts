@@ -116,6 +116,12 @@ export class PortalLeftComponent implements OnInit {
 
     if(module == "outbound"){
       this.onOutboundClick();
+    }else if(module == "inbound"){
+      this.onInboundClick();
+    }else if(module == "whsTransfer"){
+      localStorage.setItem("fromscreen", "WhsTransfer");
+    }else if(module == "InventoryTransferRequest"){
+      localStorage.setItem("fromscreen", "InventoryTransferRequest");
     }
   }
 
@@ -129,7 +135,7 @@ export class PortalLeftComponent implements OnInit {
   }
 
   binClick() {
-    localStorage.setItem("towhseId", localStorage.getItem("whseId"));
+    // localStorage.setItem("towhseId", localStorage.getItem("whseId"));
   }
 
   onInboundClick() {

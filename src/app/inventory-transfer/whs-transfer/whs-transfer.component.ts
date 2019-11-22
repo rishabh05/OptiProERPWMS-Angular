@@ -25,6 +25,9 @@ export class WhsTransferComponent implements OnInit {
   showNext: boolean = false;
   fromScreen: any = "";
   showLoader: boolean = false;
+  pageHeading: string; 
+  isfromWhsDisabled: boolean;
+
   constructor(private commonservice: Commonservice, private router: Router, private inventoryTransferService: InventoryTransferService, private toastr: ToastrService, private translate: TranslateService) {
     let userLang = navigator.language.split('-')[0];
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
@@ -34,8 +37,45 @@ export class WhsTransferComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.fromWhse = localStorage.getItem("whseId");
-    
+    if(localStorage.getItem("fromscreen") == "WhsTransfer"){
+      this.fromWhse = localStorage.getItem("whseId");
+      this.pageHeading = this.translate.instant("WarehouseTransfer");
+      this.isfromWhsDisabled = true;
+    }else{
+      this.toWhse = localStorage.getItem("whseId");
+      this.pageHeading = this.translate.instant("InventoryTransferRequest");
+      this.isfromWhsDisabled = false;
+    }
+  }
+
+  getFromWhse(){
+    this.showLoader = true;
+    this.inventoryTransferService.getToWHS().subscribe(
+      data => {
+        this.showLoader = false;
+        if(data != undefined && data.length > 0){
+          if (data[0].ErrorMsg == "7001") {
+              this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
+              return;
+          } 
+          console.log(data);
+          this.showLookupLoader = false;
+          this.serviceData = data;
+          this.lookupfor = "fromWhsList";
+        }else{
+          this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+        }
+      },
+      error => {
+        this.showLoader = false;
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
+        this.toastr.error('', error);
+       }
+      }
+    );
   }
 
   getToWhse(){
@@ -96,8 +136,13 @@ export class WhsTransferComponent implements OnInit {
       return;
     }
     else {
-      this.toWhse = $event[0];
-      this.showNext = true;
+      if(this.lookupfor == "fromWhsList"){
+        this.fromWhse = $event[0];
+        this.showNext = true;
+      }else{
+        this.toWhse = $event[0];
+        this.showNext = true;
+      }
     }
   }
 
@@ -112,7 +157,7 @@ export class WhsTransferComponent implements OnInit {
         if(data != undefined && data.length > 0){
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, 
-              this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
+              this.translate.instant("CommonSessionExpireMsg"));
               return;
           } 
           console.log(data);
@@ -147,9 +192,16 @@ export class WhsTransferComponent implements OnInit {
       this.toastr.error('', this.translate.instant("InvTransfer_ToWhsBlankErrMsg"));
       return;
     }
-    localStorage.setItem("towhseId", this.toWhse);
+
     this.whsView = !this.whsView;
-    this.fromScreen = "WhsTransfer";
+    this.fromScreen = localStorage.getItem("fromscreen");//"WhsTransfer";
+    if(localStorage.getItem("fromscreen") == "WhsTransfer"){
+      localStorage.setItem("towhseId", this.toWhse);
+      localStorage.setItem("fromwhseId", localStorage.getItem("whseId"));
+    }else{
+      localStorage.setItem("fromwhseId", this.fromWhse);
+      localStorage.setItem("towhseId", localStorage.getItem("whseId"));
+    }
   }
 
   onCancelClick() {

@@ -188,10 +188,12 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
             this.showNext = false;
             return;
           } else {
+            if(this.VendCode != data[0].ID){
+              this.poCode = "";
+            }
             this.VendCode = data[0].ID;
             this.VendName = data[0].Name;
             this.showNext = true;
-
           }
         } else {
           this.toastr.error('', this.translate.instant("Inbound_VendorExistMessge"));
@@ -222,8 +224,13 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
 
       if (this.lookupfor == "POList") {
         this.poCode = $event[0];
-        this.Name = $event[1];
+        // this.Name = $event[1];
+        this.VendCode = $event[1];
+        this.VendName = $event[2];
       }else{
+        if(this.VendCode != $event[0]){
+          this.poCode = "";
+        }
         this.VendCode = $event[0];
         this.VendName = $event[1];
         this.showNext = true;
@@ -239,7 +246,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
       localStorage.setItem("VendCode", this.VendCode);
       localStorage.setItem("VendName", this.VendName);
       localStorage.setItem("selectedPO", "");
-      localStorage.setItem("PONumber", "");
+      localStorage.setItem("PONumber", this.poCode);
     }
     else {
       this.toastr.error('', this.translate.instant("Inbound_SelectVendorValidateMsg"));
@@ -471,6 +478,8 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
         this.showLoader = false;
         if (data != null) {
           if (data.length > 0) {
+            this.VendCode = data[0].CODE
+            this.VendName = data[0].NAME
           }
           else {
             this.poCode = "";
@@ -500,7 +509,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
     console.log("item POlookup click :");
     this.showLoader = true;
     this.inboundService.getPOList(false,
-      this.inboundMasterComponent.selectedVernder, "").subscribe(
+      this.VendCode, "").subscribe(
         (data: any) => {
           this.showLoader = false;
           console.log("get polist response:");

@@ -9,6 +9,7 @@ const routes: Routes = [
   { path: 'binTransfer', component:BinTransferComponent  },
   { path: 'whsTransfer', component:WhsTransferComponent  },
   
+  
 ];
 
 @NgModule({

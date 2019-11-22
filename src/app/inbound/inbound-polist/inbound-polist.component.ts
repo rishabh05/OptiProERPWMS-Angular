@@ -59,7 +59,8 @@ export class InboundPolistComponent implements OnInit {
     var ponumber = localStorage.getItem("PONumber");
     if (ponumber != undefined && ponumber != null && ponumber != "") {
       this.poCode = ponumber;
-      this.openPOLines();
+     // this.openPOLines();
+      this.OnPOChange();
     }
     this.selectedVendor = this.inboundMasterComponent.selectedVernder;
     this.showGRPOButton = false;

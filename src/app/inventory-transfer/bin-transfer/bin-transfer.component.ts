@@ -66,6 +66,8 @@ export class BinTransferComponent implements OnInit {
   dialogOpened: boolean = false;
   selectedPallets: any = [];
   checkChangeEvent: any;
+  showBinFields: boolean=true;
+
   constructor(private commonservice: Commonservice, private activatedRoute: ActivatedRoute,
     private router: Router, private inventoryTransferService: InventoryTransferService,
     private toastr: ToastrService, private translate: TranslateService,
@@ -108,11 +110,23 @@ export class BinTransferComponent implements OnInit {
     //  this.getViewLineList();
     this.viewLines = false;
 
-    if (localStorage.getItem("towhseId") == localStorage.getItem("whseId")) {
-      this.PageTitle = this.translate.instant("BinTransfer");
-    } else {
+    this.showBinFields = true;
+    if(localStorage.getItem("fromscreen") == "WhsTransfer"){
       this.PageTitle = this.translate.instant("WarehouseTransfer") + this.translate.instant("InvTransfer_From") + localStorage.getItem("whseId") + this.translate.instant("InvTransfer_To") + localStorage.getItem("towhseId");
+    }else if(localStorage.getItem("fromscreen") == "InventoryTransferRequest"){
+      this.PageTitle = this.translate.instant("InventoryTransferRequest") + this.translate.instant("InvTransfer_From") + localStorage.getItem("fromwhseId") + this.translate.instant("InvTransfer_To") + localStorage.getItem("towhseId");
+      this.showBinFields = false;
+    }else{
+      this.PageTitle = this.translate.instant("BinTransfer");
     }
+
+
+
+    // if (localStorage.getItem("towhseId") == localStorage.getItem("whseId")) {
+    //   this.PageTitle = this.translate.instant("BinTransfer");
+    // } else {
+    //   this.PageTitle = this.translate.instant("WarehouseTransfer") + this.translate.instant("InvTransfer_From") + localStorage.getItem("whseId") + this.translate.instant("InvTransfer_To") + localStorage.getItem("towhseId");
+    // }
     this.formatTransferNumbers();
     this.formatOnHandQty();
     this.zero = this.onHandQty;
@@ -214,9 +228,12 @@ export class BinTransferComponent implements OnInit {
           this.transferQty = "0.000";
           this.onHandQty = 0.000;
           this.CheckTrackingandVisiblity();
-          if (localStorage.getItem("whseId") != localStorage.getItem("towhseId")) {
+          if(localStorage.getItem("fromscreen") == "WhsTransfer"){
             this.getDefaultBin();
           }
+          // if (localStorage.getItem("whseId") != localStorage.getItem("towhseId")) {
+          //   this.getDefaultBin();
+          // }
         } else {
           this.toastr.error('', this.translate.instant("InvalidItemCode"));
           this.showItemName = false;
@@ -592,12 +609,22 @@ export class BinTransferComponent implements OnInit {
     }
     oWhsTransAddLot.Detail = this.TransferedItemsDetail;
     let type;
-    if (localStorage.getItem("whseId") == localStorage.getItem("towhseId")) {
+
+    if(localStorage.getItem("fromscreen") == "WhsTransfer"){
+      type = "Items";
+    }else if(localStorage.getItem("fromscreen") == "InventoryTransferRequest"){
+      type = "Items";
+    }else{
       type = "";
     }
-    else {
-      type = "Items";
-    }
+
+
+    // if (localStorage.getItem("whseId") == localStorage.getItem("towhseId")) {
+    //   type = "";
+    // }
+    // else {
+    //   type = "Items";
+    // }
 
     oWhsTransAddLot.Header.push({
       WhseCode: localStorage.getItem("whseId"),
@@ -745,11 +772,6 @@ export class BinTransferComponent implements OnInit {
     }
     else if (this.lookupfor == "PalletList") {
       this.palletNo = $event[0];
-      // var obj = {
-      //   Code: $event[0]
-      // }
-      // this.selectedPallets.push(obj);
-      // this.getPalletData();
     }
     else {
       if (this.lookupfor == "ItemsList") {
@@ -759,7 +781,10 @@ export class BinTransferComponent implements OnInit {
         this.showItemName = true;
         this.transferQty = this.translate.instant("InvTransfer_zero");
         this.onHandQty = 0.000;
-        if (localStorage.getItem("whseId") != localStorage.getItem("towhseId")) {
+        // if (localStorage.getItem("whseId") != localStorage.getItem("towhseId")) {
+        //   this.getDefaultBin();
+        // }
+        if(localStorage.getItem("fromscreen") == "WhsTransfer"){
           this.getDefaultBin();
         }
         this.CheckTrackingandVisiblity();
@@ -851,10 +876,18 @@ export class BinTransferComponent implements OnInit {
 
   goBack() {
     this.operationType = "back";
-    if (localStorage.getItem("towhseId") == localStorage.getItem("whseId")) {
-      this.router.navigate(['home/dashboard']);
-    } else {
+    // if (localStorage.getItem("towhseId") == localStorage.getItem("whseId")) {
+    //   this.router.navigate(['home/dashboard']);
+    // } else {
+    //   this.cancelevent.emit(true);
+    // }
+
+    if(localStorage.getItem("fromscreen") == "WhsTransfer"){
       this.cancelevent.emit(true);
+    }else if(localStorage.getItem("fromscreen") == "InventoryTransferRequest"){
+      this.cancelevent.emit(true);
+    }else{
+      this.router.navigate(['home/dashboard']);
     }
   }
 

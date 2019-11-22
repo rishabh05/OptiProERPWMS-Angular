@@ -12,7 +12,7 @@ export class InboundMasterComponent implements OnInit {
   constructor() { }
 
   public inboundComponent: number = 1;
-  public selectedVernder: string;
+  public selectedVernder: string="";
   //public autoLots: AutoLot[];
   public openPOmodel: any;
   public oSubmitPOLotsArray: any[] = []; 

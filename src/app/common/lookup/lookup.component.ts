@@ -102,7 +102,7 @@ export class LookupComponent implements OnInit {
     if(this.serviceData.length>= this.lookupPageSize){
         this.lookupPagable = true;
     }
-    if (this.lookupfor == "toWhsList") {
+    if (this.lookupfor == "toWhsList" || this.lookupfor == "fromWhsList") {
       this.showToWhsList();
     } else if (this.lookupfor == "ItemsList") {
       this.showItemCodeList();

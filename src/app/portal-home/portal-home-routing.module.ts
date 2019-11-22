@@ -29,6 +29,7 @@ const routes: Routes = [
       //{ path: 'form', component:FormFieldComponent },
       { path:'binTransfer', component:BinTransferComponent },
       { path:'whsTransfer', component:WhsTransferComponent },
+      { path: 'InventoryTransferRequest', component:WhsTransferComponent  },
       { path:'changeWarehouse', component:ChangeWarehouseComponent },
       { path:'inbound', loadChildren:"../inbound/inbound.module#InboundModule"},     
       { path: 'adjustment-counting', loadChildren: "../adjustments-counting/adjustments-counting.module#AdjustmentsCountingModule" }, 

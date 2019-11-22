@@ -2,15 +2,22 @@
   <form class="form-with-fix-btnBar">
     <div class="opti_container_inner" [perfectScrollbar]=" ">
       <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
-        {{'WarehouseTransfer'|translate}}
+        {{pageHeading}}
       </h3>
       <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-8 col-xl-6">
           <div class="form-group row">
             <label for="inputPassword" class="col-sm-3 col-form-label">{{'InvTransfer_FromWhse'|translate}}</label>
             <div class="col-sm-9">
-              <input id="fromWhse" name="fromWhse" [(ngModel)]="fromWhse" type="text" class="form-control form-control-sm" placeholder="{{'InvTransfer_FromWhse'|translate}}"
-                disabled>
+              <div class="input-group input-group-sm">
+                <input id="fromWhse" name="fromWhse" [(ngModel)]="fromWhse" type="text" class="form-control form-control-sm" placeholder="{{'InvTransfer_FromWhse'|translate}}"
+                  [disabled]="isfromWhsDisabled">
+                <div class="input-group-append">
+                  <button class="k-button k-primary btn" type="button" (click)="getFromWhse()" [disabled]="isfromWhsDisabled">
+                    <i class="opti-icon-hammenu"></i>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
           <div class="form-group row">
@@ -18,9 +25,9 @@
             <div class="col-sm-9">
               <div class="input-group input-group-sm">
                 <input type="text" name="toWhse" [(ngModel)]="toWhse" class="form-control form-control-sm" placeholder="{{'InvTransfer_ToWhse'|translate}}"
-                  (blur)="OnToWarehouseChange()">
+                  (blur)="OnToWarehouseChange()" [disabled]="!isfromWhsDisabled">
                 <div class="input-group-append">
-                  <button class="k-button k-primary btn" type="button" (click)="getToWhse()">
+                  <button class="k-button k-primary btn" type="button" (click)="getToWhse()" [disabled]="!isfromWhsDisabled">
                     <i class="opti-icon-hammenu"></i>
                   </button>
                 </div>
@@ -39,7 +46,7 @@
       <div class="col-sm-12 col-12">
         <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="onCancelClick()">
           <span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
-        <!-- <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" (click)="listClick($event, 'binTransfer')" roterLink="binTransfer" skipLocationChange><i class="opti-icon-arrow-next"></i></button> -->
+
         <button type="button" *ngIf="showNext" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" (click)="viewSwitch()">
           <i class="opti-icon-arrow-next"></i>
         </button>
