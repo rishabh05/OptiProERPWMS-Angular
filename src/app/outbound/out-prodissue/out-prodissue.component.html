@@ -164,17 +164,15 @@
 
                             <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.TOTALQTY | numberFormat}}</ng-template>
                         </kendo-grid-column>
-
+ 
 
                         <kendo-grid-column media="(min-width: 768px)" *ngIf="OrderType!='S'" headerClass="text-right"
                             class="text-right" field="MeterialPickQty" width="50" editor="numeric" title="{{'PickQty'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem="dataItem" class="text-right" let-idx="rowIndex">
-                                
                                     <!-- <input [ngModel]="dataItem.MeterialPickQty | numberFormat"  (blur)="onIssueMeterialQtyChange(idx,txtMet, e)"
                                     (ngModelChange)="dataItem.MeterialPickQty=$event" 
                                     #display_name (change)="updatePickQty(display_name.value, idx)" class="text-right" name="inputField" type="number" /> -->
-
-                                <kendo-numerictextbox #txtMet name="data" (blur)="onIssueMeterialQtyChange(idx,txtMet)"
+                                <kendo-numerictextbox [attr.disabled]="gridSelectedMeterial.data[idx].PALLETNO ? '' : null" #txtMet name="data" (blur)="onIssueMeterialQtyChange(idx,txtMet)"
                                     class="form-control text-right form-control-sm text-right!important" [format]="'n3'"
                                     [(value)]="dataItem.MeterialPickQty" [step]="step"
                                    ></kendo-numerictextbox>
