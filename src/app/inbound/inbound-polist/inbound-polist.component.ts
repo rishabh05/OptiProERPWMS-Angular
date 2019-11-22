@@ -195,7 +195,7 @@ export class InboundPolistComponent implements OnInit {
               const poline = this.openPOLinesModel[0];
               this.openPOLineModel = poline;
               // this.openPOLineModel.RPTQTY = 0;
-              // this.openPOLineModel.DocNum = this.poCode;
+              this.openPOLineModel.DocNum = this.poCode;
               this.inboundMasterComponent.setClickedItemDetail(this.openPOLineModel);
               this.getAutoLot(this.openPOLineModel.ITEMCODE);
             }

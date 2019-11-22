@@ -87,6 +87,7 @@
   "Outbound_SO": "SO #",
   "Outbound_CustomerName": "Customer Name",
   "Outbound_OrderNo": "Order No.",
+  "Outbound_NoDataFound": "Item doesn't belongs to selected so#",
   
   "6":"Inventory Transfer",
   "InvTransfer_FromBin": "From Bin No.",

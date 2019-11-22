@@ -113,5 +113,17 @@ export class OutboundService {
       DocEntry: docEntry }]) };
       return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetAllPickPackAndOtherSerialBatchWithoutBin", jObject, this.commonService.httpOptions);
   }
+
+  public GetItemCode(itemcode: string): Observable<any> {
+    var jObject = {
+      ITEMCODE: JSON.stringify([{
+          ITEMCODE: itemcode, COMPANYDBNAME: localStorage.getItem("CompID"),
+          GUID: localStorage.getItem("GUID"),
+        UsernameForLic: localStorage.getItem("UserId")
+      }])
+    };
+
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodsReceipt/GetItemCode", jObject, this.commonService.httpOptions);
+  }
 }
 

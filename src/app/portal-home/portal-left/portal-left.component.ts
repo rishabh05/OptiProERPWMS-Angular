@@ -113,6 +113,10 @@ export class PortalLeftComponent implements OnInit {
     localStorage.setItem("FromReceiptProd", 'false');
     localStorage.setItem("GoodsReceiptModel", '');
     localStorage.setItem("AvailableRejectQty", 0 + "");
+
+    if(module == "outbound"){
+      this.onOutboundClick();
+    }
   }
 
   /** 

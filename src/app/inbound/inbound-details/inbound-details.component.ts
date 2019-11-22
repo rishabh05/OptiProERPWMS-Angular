@@ -219,10 +219,16 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
       return;
     }
     else {
-    this.VendCode = $event[0];
-    this.VendName = $event[1];
-    this.showNext = true;
-    this.detailsAvailable = true;
+
+      if (this.lookupfor == "POList") {
+        this.poCode = $event[0];
+        this.Name = $event[1];
+      }else{
+        this.VendCode = $event[0];
+        this.VendName = $event[1];
+        this.showNext = true;
+        this.detailsAvailable = true;
+      }
     }
   }
 
@@ -441,4 +447,89 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
       this.OnVendorChange();
     }
   }
+
+  //------Add PO Scan---
+
+  poCode: string = "";
+  Name: string;
+
+  inbound1_pohiddenScanButton() {
+    var inputValue = (<HTMLInputElement>document.getElementById('inboundScanInputField')).value;
+    if (inputValue.length > 0) {
+      this.poCode = inputValue;
+      this.OnPOChange();
+    }
+  }
+
+  OnPOChange() {
+    if (this.poCode == "" || this.poCode == undefined) {
+      return;
+    }
+    this.showLoader = true;
+    this.inboundService.IsPOExists(this.poCode, "").subscribe(
+      data => {
+        this.showLoader = false;
+        if (data != null) {
+          if (data.length > 0) {
+          }
+          else {
+            this.poCode = "";
+            this.toastr.error('', this.translate.instant("Inbound_POExistMessage"));
+
+            return;
+          }
+        } else {
+          this.poCode = "";
+          this.toastr.error('', this.translate.instant("Inbound_POExistMessage"));
+        }
+      },
+      error => {
+        this.showLoader = false;
+        this.toastr.error('', error);
+        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+       } 
+       else{
+        this.toastr.error('', error);
+       }
+      }
+    );
+  }
+
+  onPOlookupClick() {
+    console.log("item POlookup click :");
+    this.showLoader = true;
+    this.inboundService.getPOList(false,
+      this.inboundMasterComponent.selectedVernder, "").subscribe(
+        (data: any) => {
+          this.showLoader = false;
+          console.log("get polist response:");
+          if (data != undefined) {
+            if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+              this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+                this.translate.instant("CommonSessionExpireMsg"));
+              return;
+            }
+            this.showLookupLoader = false;
+            this.serviceData = data.Table;
+            console.log("get polist response serviceData:", this.serviceData);
+            this.lookupfor = "POList";
+          } else {
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          }
+        },
+        error => {
+          this.showLoader = false;
+          console.log("Error: ", error);
+          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+         } 
+         else{
+          this.toastr.error('', error);
+         }
+        }
+      );
+  }
+
+
 }
