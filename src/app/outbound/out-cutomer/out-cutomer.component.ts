@@ -21,7 +21,7 @@ export class OutCutomerComponent implements OnInit {
   yesButtonText: string = "Yes";
   noButtonText: string = "No";
   public serviceData: any;
-  public lookupfor: any = 'out-customer';
+  public lookupfor: any = '';
   public showLookup: boolean = false;
   public selectedCustomerElement: any;
   public customerName: string = '';
@@ -121,7 +121,7 @@ export class OutCutomerComponent implements OnInit {
           this.customerName = ''
         }
         else {
-          if(this.customerCode != resp[0].CARDCODE){
+          if (this.customerCode != resp[0].CUSTCODE) {
             this.orderNumber = "";
           }
           let outbound: OutboundData = new OutboundData();
@@ -147,19 +147,26 @@ export class OutCutomerComponent implements OnInit {
   }
 
   getLookupValue(lookupValue: any) {
-    this.selectedCustomerElement = lookupValue;
-    if(this.customerCode != this.selectedCustomerElement[0]){
-      this.orderNumber = "";
-    }
-    let outbound: OutboundData = new OutboundData();
-    this.customerCode = this.selectedCustomerElement[0];
-    this.customerName = this.selectedCustomerElement[1];
 
-    outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
-    // lsOutbound
-    localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
-    CurrentOutBoundData.CustomerData = outbound.CustomerData;
-    this.outbound = outbound;
+    if (lookupValue != null && lookupValue == "close") {
+      //nothing to do
+      return;
+    }
+    else {
+      this.selectedCustomerElement = lookupValue;
+      if (this.customerCode != this.selectedCustomerElement[0]) {
+        this.orderNumber = "";
+      }
+      let outbound: OutboundData = new OutboundData();
+      this.customerCode = this.selectedCustomerElement[0];
+      this.customerName = this.selectedCustomerElement[1];
+
+      outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
+      // lsOutbound
+      localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
+      CurrentOutBoundData.CustomerData = outbound.CustomerData;
+      this.outbound = outbound;
+    }
   }
 
   public openCustomerLookup() {
@@ -176,6 +183,7 @@ export class OutCutomerComponent implements OnInit {
           this.serviceData = resp;
           this.showLookupLoader = false;
           if (this.serviceData.length > 0) {
+            this.lookupfor = 'out-customer';
             this.showLookup = true;
           } else {
             this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
@@ -212,7 +220,7 @@ export class OutCutomerComponent implements OnInit {
     // Clear otred data
     // if (this.outbound)
     //   this.outbound.OrderData = null;
-    if (clearOrder == true){
+    if (clearOrder == true) {
       localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
     }
     this.router.navigateByUrl('home/outbound/outorder', { skipLocationChange: true });
@@ -521,6 +529,7 @@ export class OutCutomerComponent implements OnInit {
   public selectedCustomer: any;
 
   public onOrderNoBlur() {
+    this.showLookup = false;
     if (this.orderNumber == "" || this.orderNumber == undefined) {
       return;
     }
@@ -535,7 +544,7 @@ export class OutCutomerComponent implements OnInit {
             this.showLookupLoader = false;
             return;
           }
-
+          
           let outbound: OutboundData = new OutboundData();
           this.customerCode = resp[0].CARDCODE
           this.customerName = resp[0].CARDNAME

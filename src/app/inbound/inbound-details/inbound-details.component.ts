@@ -227,6 +227,8 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
         // this.Name = $event[1];
         this.VendCode = $event[1];
         this.VendName = $event[2];
+        this.showNext = true;
+        this.detailsAvailable = true;
       }else{
         if(this.VendCode != $event[0]){
           this.poCode = "";
@@ -480,6 +482,8 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
           if (data.length > 0) {
             this.VendCode = data[0].CODE
             this.VendName = data[0].NAME
+            this.showNext = true;
+            this.detailsAvailable = true;
           }
           else {
             this.poCode = "";
