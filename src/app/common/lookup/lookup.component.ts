@@ -99,7 +99,7 @@ export class LookupComponent implements OnInit {
 
   async ngOnChanges(): Promise<void> {
 
-    if(this.serviceData.length>= this.lookupPageSize){
+    if(this.serviceData != undefined && this.serviceData.length>= this.lookupPageSize){
         this.lookupPagable = true;
     }
     if (this.lookupfor == "toWhsList") {

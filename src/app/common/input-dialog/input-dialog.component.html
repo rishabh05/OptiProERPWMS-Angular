@@ -6,7 +6,7 @@
         <div class="form-group row">
             <div class="input-group input-group-sm">
                 <input type="text" id="newPallet" name="newPallet" class="form-control form-control-sm" [(ngModel)]="palletNo"
-                    placeholder="{{'Pallet No.'}}">
+                    placeholder="{{'Pallet No.'}}" [disabled]="autoGeneratePalletEnable">
                 <!-- <div class="input-group-append  has-seprate-btn ml-1">
                     <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button"
                         (click)="createNewPallet(event)">

@@ -23,15 +23,30 @@ export class InputDialogComponent implements OnInit {
   serviceData: any[];
   lookupfor: string;
   binNo: string = "";
+  autoGeneratePalletEnable: boolean = false;
+  isPalletizationEnable: boolean = false;
+
   constructor(private commonservice: Commonservice, private translate: TranslateService, private toastr: ToastrService,
     private inventoryTransferService: InventoryTransferService) { }
 
   ngOnInit() {
+    if (localStorage.getItem("AutoPalletIdGenerationChecked") == "True") {
+      this.autoGeneratePalletEnable = true;
+    }
+
+    // if (localStorage.getItem("PalletizationEnabled") == "True" && localStorage.getItem("PalletizationEnabledForItem") == "True") {
+    //   this.isPalletizationEnable = true;
+    // } else {
+    //   this.isPalletizationEnable = false;
+    // }
+
     this.showLookup = true;
     this.showNoButton = true;
     if (this.noButtonText == undefined || this.noButtonText == "") {
       this.showNoButton = false;
     }
+
+    this.autoGeneratePallet();
   }
 
   public opened: boolean = true;
@@ -133,5 +148,31 @@ export class InputDialogComponent implements OnInit {
     else if (this.lookupfor == "toBinsList") {
       this.binNo = $event[0];
     }
+  }
+
+  autoGeneratePallet() {
+    this.showLoader = true;
+    this.commonservice.autoGeneratePallet().subscribe(
+      data => {
+        console.log(data);
+        this.showLoader = false;
+        if (data != null) {
+          if (data.length > 0) {
+            this.showLookup = false;
+          }
+          else {
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          }
+        }
+      },
+      error => {
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
   }
 }
