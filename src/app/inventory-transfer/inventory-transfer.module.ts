@@ -10,9 +10,12 @@ import { SharedModule } from '../shared-module/shared-module.module';
 import { FormsModule } from '@angular/forms';
 import { InventoryTransferRoutingModule } from './inventory-transfer-routing.module';
 import { DialogsModule } from '@progress/kendo-angular-dialog';
+import { InventoryTransferbyITRMasterComponent } from './inventory-transferby-itrmaster/inventory-transferby-itrmaster.component';
+import { ITRLIstComponent } from './itrlist/itrlist.component';
+import { ITRCalculationComponent } from './itr-calculation/itr-calculation.component';
 
 @NgModule({
-  declarations: [WhsTransferComponent, BinTransferComponent],
+  declarations: [WhsTransferComponent, BinTransferComponent, InventoryTransferbyITRMasterComponent, ITRLIstComponent, ITRCalculationComponent],
   imports: [
     CommonModule,
     GridModule,

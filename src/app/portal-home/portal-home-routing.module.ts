@@ -11,6 +11,7 @@ import { SplitTransferComponent } from '../palletization/split-transfer/split-tr
 import { PalletMergeComponent } from '../palletization/pallet-merge/pallet-merge.component';
 import { DepalletizeComponent } from '../palletization/depalletize/depalletize.component';
 import { PalletizeComponent } from '../palletization/palletize/palletize.component';
+import { InventoryTransferbyITRMasterComponent } from 'src/app/inventory-transfer/inventory-transferby-itrmaster/inventory-transferby-itrmaster.component';
 // import { InboundDetailsComponent } from '../inbound/inbound-details/inbound-details.component';
 // import { OutCutomerComponent } from '../outbound/out-cutomer/out-cutomer.component';
 // import { OutOrderComponent } from '../outbound/out-order/out-order.component';
@@ -30,6 +31,7 @@ const routes: Routes = [
       { path:'binTransfer', component:BinTransferComponent },
       { path:'whsTransfer', component:WhsTransferComponent },
       { path: 'InventoryTransferRequest', component:WhsTransferComponent  },
+      { path: 'InventoryTransferbyITR', component:InventoryTransferbyITRMasterComponent  },
       { path:'changeWarehouse', component:ChangeWarehouseComponent },
       { path:'inbound', loadChildren:"../inbound/inbound.module#InboundModule"},     
       { path: 'adjustment-counting', loadChildren: "../adjustments-counting/adjustments-counting.module#AdjustmentsCountingModule" }, 
