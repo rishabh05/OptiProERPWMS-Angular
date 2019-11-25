@@ -158,7 +158,7 @@ export class InputDialogComponent implements OnInit {
         this.showLoader = false;
         if (data != null) {
           if (data.length > 0) {
-            this.showLookup = false;
+            this.palletNo = data;
           }
           else {
             this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
@@ -166,6 +166,7 @@ export class InputDialogComponent implements OnInit {
         }
       },
       error => {
+        this.showLoader = false;
         if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
           this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
         }

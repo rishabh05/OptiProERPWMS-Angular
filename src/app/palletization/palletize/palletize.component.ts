@@ -168,7 +168,7 @@ export class PalletizeComponent implements OnInit {
     this.router.navigateByUrl('home/dashboard', { skipLocationChange: true });
   }
 
-  manageEyeIcon: boolean =true;
+  manageEyeIcon: boolean = true;
   clickShowHideGrid() {
 
     this.showHideGridToggle = !this.showHideGridToggle;
@@ -180,7 +180,7 @@ export class PalletizeComponent implements OnInit {
       this.manageEyeIcon = true;
     }
   }
-  
+
   onCheckChange() {
     this.newCreatedPalletNo = "";
     this.showInputDialog("NewPallet", this.translate.instant("Done"), this.translate.instant("Cancel"),
@@ -599,6 +599,8 @@ export class PalletizeComponent implements OnInit {
     if ($event.Status == "yes") {
       switch ($event.From) {
         case ("NewPallet"):
+          this.toBin = $event.BinNo;
+          this.toWhse = localStorage.getItem("whseId");
           this.createNewPallet($event.PalletNo, $event.BinNo);
           break
       }
