@@ -112,7 +112,7 @@ export class BinTransferComponent implements OnInit {
 
     this.showBinFields = true;
     if(localStorage.getItem("fromscreen") == "WhsTransfer"){
-      this.PageTitle = this.translate.instant("WarehouseTransfer") + this.translate.instant("InvTransfer_From") + localStorage.getItem("whseId") + this.translate.instant("InvTransfer_To") + localStorage.getItem("towhseId");
+      this.PageTitle = this.translate.instant("WarehouseTransfer") + this.translate.instant("InvTransfer_From") + localStorage.getItem("fromwhseId") + this.translate.instant("InvTransfer_To") + localStorage.getItem("towhseId");
     }else if(localStorage.getItem("fromscreen") == "InventoryTransferRequest"){
       this.PageTitle = this.translate.instant("InventoryTransferRequest") + this.translate.instant("InvTransfer_From") + localStorage.getItem("fromwhseId") + this.translate.instant("InvTransfer_To") + localStorage.getItem("towhseId");
       this.showBinFields = false;
@@ -530,8 +530,14 @@ export class BinTransferComponent implements OnInit {
   AddLineLots() {
     this.operationType = "add";
 
-    if (!this.CheckValidation()) {
-      return;
+    if(localStorage.getItem("fromscreen") == "InventoryTransferRequest"){
+      if (!this.ITRValidation()) {
+        return;
+      }
+    }else{
+      if (!this.CheckValidation()) {
+        return;
+      }
     }
 
     this.itemIndex = this.IsInvTransferDetailLineExists(this.itemCode,
@@ -617,17 +623,8 @@ export class BinTransferComponent implements OnInit {
     }else{
       type = "";
     }
-
-
-    // if (localStorage.getItem("whseId") == localStorage.getItem("towhseId")) {
-    //   type = "";
-    // }
-    // else {
-    //   type = "Items";
-    // }
-
     oWhsTransAddLot.Header.push({
-      WhseCode: localStorage.getItem("whseId"),
+      WhseCode: localStorage.getItem("fromwhseId"),
       ToWhsCode: localStorage.getItem("towhseId"), //oToWhs,
       Type: type,
       DiServerToken: localStorage.getItem("Token"), //companyDBObject.DIServerToken,
@@ -639,47 +636,91 @@ export class BinTransferComponent implements OnInit {
       //------------------End for the Licence Parameter------------------------------------------------------
     });
 
+
     this.showLoader = true;
-    this.inventoryTransferService.submitBinTransfer(oWhsTransAddLot).subscribe(
-      data => {
-        this.showLoader = false;
-        if (data != null) {
-          if (data.length > 0) {
-            //--------------------------------------Function to Check for the Licence---------------------------------------
-            if (data[0].ErrorMsg != undefined) {
-              if (data[0].ErrorMsg == "7001") {
-                this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
-                  this.translate.instant("CommonSessionExpireMsg"));
-                return;
+    if(localStorage.getItem("fromscreen") == "InventoryTransferRequest"){
+      this.inventoryTransferService.CreateITR(oWhsTransAddLot).subscribe(
+        data => {
+          this.showLoader = false;
+          if (data != null) {
+            if (data.length > 0) {
+              //--------------------------------------Function to Check for the Licence---------------------------------------
+              if (data[0].ErrorMsg != undefined) {
+                if (data[0].ErrorMsg == "7001") {
+                  this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+                    this.translate.instant("CommonSessionExpireMsg"));
+                  return;
+                }
+              }
+              //-----------------------------------End for the Function Check for Licence--------------------------------
+              if (data[0].ErrorMsg == "") {
+                this.toastr.success('', this.translate.instant("InvTransfer_ItemsTranSuccessfully") + " " + data[0].SuccessNo);
+                oWhsTransAddLot = {};
+                oWhsTransAddLot.Header = [];
+                oWhsTransAddLot.Detail = [];
+                oWhsTransAddLot.UDF = [];
+                this.TransferedItemsDetail = [];
+                this.selectedPallets = [];
+                this.clearData();
+              }
+              else {
+                this.toastr.error('', data[0].ErrorMsg);
               }
             }
-            //-----------------------------------End for the Function Check for Licence--------------------------------
-            if (data[0].ErrorMsg == "") {
-              this.toastr.success('', this.translate.instant("InvTransfer_ItemsTranSuccessfully") + " " + data[0].SuccessNo);
-              oWhsTransAddLot = {};
-              oWhsTransAddLot.Header = [];
-              oWhsTransAddLot.Detail = [];
-              oWhsTransAddLot.UDF = [];
-              this.TransferedItemsDetail = [];
-              this.selectedPallets = [];
-              this.clearData();
-            }
-            else {
-              this.toastr.error('', data[0].ErrorMsg);
-            }
+          }
+        },
+        error => {
+          this.showLoader = false;
+          if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+          }
+          else {
+            this.toastr.error('', error);
           }
         }
-      },
-      error => {
-        this.showLoader = false;
-        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+      );
+    }else{
+      this.inventoryTransferService.submitBinTransfer(oWhsTransAddLot).subscribe(
+        data => {
+          this.showLoader = false;
+          if (data != null) {
+            if (data.length > 0) {
+              //--------------------------------------Function to Check for the Licence---------------------------------------
+              if (data[0].ErrorMsg != undefined) {
+                if (data[0].ErrorMsg == "7001") {
+                  this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+                    this.translate.instant("CommonSessionExpireMsg"));
+                  return;
+                }
+              }
+              //-----------------------------------End for the Function Check for Licence--------------------------------
+              if (data[0].ErrorMsg == "") {
+                this.toastr.success('', this.translate.instant("InvTransfer_ItemsTranSuccessfully") + " " + data[0].SuccessNo);
+                oWhsTransAddLot = {};
+                oWhsTransAddLot.Header = [];
+                oWhsTransAddLot.Detail = [];
+                oWhsTransAddLot.UDF = [];
+                this.TransferedItemsDetail = [];
+                this.selectedPallets = [];
+                this.clearData();
+              }
+              else {
+                this.toastr.error('', data[0].ErrorMsg);
+              }
+            }
+          }
+        },
+        error => {
+          this.showLoader = false;
+          if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+          }
+          else {
+            this.toastr.error('', error);
+          }
         }
-        else {
-          this.toastr.error('', error);
-        }
-      }
-    );
+      );
+    }
   }
 
   showOverwriteConfirmDailog() {
@@ -764,6 +805,57 @@ export class BinTransferComponent implements OnInit {
     return true;
   }
 
+  ITRValidation() {
+    if (this.itemCode == "") {
+      if (this.showValidation) {
+        this.toastr.error('', this.translate.instant("ItemCannotbeBlank"));
+      }
+      return false;
+    }
+    // if (this.ItemTracking == "B") {
+    //   if (this.lotValue == "") {
+    //     if (this.showValidation) {
+    //       this.toastr.error('', this.translate.instant("Lotcannotbeblank"));
+    //     }
+    //     return false;
+    //   }
+    // }
+    // if (this.ItemTracking == "S") {
+    //   if (this.lotValue == "") {
+    //     if (this.showValidation) {
+    //       this.toastr.error('', this.translate.instant("SerialNoCantBlank"));
+    //     }
+    //     return false;
+    //   }
+
+    // }
+    //-----------------------------------------------
+    // else {
+    //   if (Number(this.transferQty) <= 0) {
+    //     if (this.showValidation) {
+    //       this.toastr.error('', this.translate.instant("InvTransfer_Enterquantitygreaterthanzero"));
+    //     }
+    //     return false;
+    //   }
+    // }
+    // if (this.fromBin == "") {
+    //   this.toastr.error('', this.translate.instant("InvTransfer_FromBinMsg"));
+    //   return false;
+    // }
+    // if (this.toBin == "") {
+    //   if (this.showValidation) {
+    //     this.toastr.error('', this.translate.instant("InvTransfer_ToBinMsg"));
+    //   }
+    //   return false;
+    // }
+    // if (this.transferQty == "") {
+    //   if (this.showValidation) {
+    //     this.toastr.error('', this.translate.instant("EnterLotQuantity"));
+    //   }
+    //   return false;
+    // }
+    return true;
+  }
 
   getLookupValue($event) {
     if ($event != null && $event == "close") {

@@ -46,6 +46,11 @@ export class InventoryTransferService {
     return this.httpclient.post(this.config_params.service_url + "/api/BinTransfer/PutAway", jObject, this.commonService.httpOptions);
   }
 
+  CreateITR(oWhsTransAddLot: any): Observable<any> {
+    var jObject = { DEFAULTSYSTEMBIN: JSON.stringify(oWhsTransAddLot) };
+    return this.httpclient.post(this.config_params.service_url + "/api/WhsTrans/SubmitWhsTransRequest", jObject, this.commonService.httpOptions);
+  }
+
   isWHsExists(toWhs: string): Observable<any> {
     var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), ItemCode: '', WhsCode: toWhs }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsWhsExist", jObject, this.commonService.httpOptions);

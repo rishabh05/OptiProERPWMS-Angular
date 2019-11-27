@@ -186,6 +186,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
             this.toastr.error('', this.translate.instant("Inbound_VendorExistMessge"));
             this.VendCode = "";
             this.showNext = false;
+            this.poCode = "";
             return;
           } else {
             if(this.VendCode != data[0].ID){

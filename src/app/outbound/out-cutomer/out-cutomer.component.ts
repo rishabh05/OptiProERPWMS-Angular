@@ -119,6 +119,7 @@ export class OutCutomerComponent implements OnInit {
         if (resp.length == 0) {
           this.customerCode = null
           this.customerName = ''
+          this.orderNumber = "";
         }
         else {
           if (this.customerCode != resp[0].CUSTCODE) {

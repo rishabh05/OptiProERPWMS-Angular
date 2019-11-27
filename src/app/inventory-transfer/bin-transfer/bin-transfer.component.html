@@ -6,7 +6,7 @@
                 {{PageTitle}}
             </h3>
             <div class="row" *ngIf="isPalletizationEnable">
-                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6" *ngIf="showBinFields">
                     <div class="row mt-3">
                         <!-- <label for="inputPassword" class="col-sm-3 col-form-label">{{'ScanInputs'|translate}}</label> -->
                         <div class="col-sm-9">

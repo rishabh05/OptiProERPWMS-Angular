@@ -122,6 +122,8 @@ export class PortalLeftComponent implements OnInit {
       localStorage.setItem("fromscreen", "WhsTransfer");
     }else if(module == "InventoryTransferRequest"){
       localStorage.setItem("fromscreen", "InventoryTransferRequest");
+    }else if(module == "binTransfer"){
+      localStorage.setItem("fromscreen", "");
     }
   }
 
