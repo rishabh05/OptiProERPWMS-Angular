@@ -154,19 +154,43 @@ export class OutCutomerComponent implements OnInit {
       return;
     }
     else {
-      this.selectedCustomerElement = lookupValue;
-      if (this.customerCode != this.selectedCustomerElement[0]) {
-        this.orderNumber = "";
-      }
-      let outbound: OutboundData = new OutboundData();
-      this.customerCode = this.selectedCustomerElement[0];
-      this.customerName = this.selectedCustomerElement[1];
 
-      outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
-      // lsOutbound
-      localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
-      CurrentOutBoundData.CustomerData = outbound.CustomerData;
-      this.outbound = outbound;
+      if(this.lookupfor == "out-order"){
+        this.selectedCustomerElement = lookupValue;
+        let outbound: OutboundData = new OutboundData();
+        this.orderNumber = this.selectedCustomerElement[0];
+        this.customerCode = this.selectedCustomerElement[2];
+        this.customerName = this.selectedCustomerElement[1];
+  
+        outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
+
+        CurrentOutBoundData.CustomerData = outbound.CustomerData;
+        this.outbound = outbound;
+
+
+        // this.outbound.OrderData = lookupValue;
+        // this.orderNumber = this.outbound.OrderData.DOCNUM;
+        // // lsOutbound
+        // localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+        // this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
+        // this.openSOOrderList();
+
+
+      }else{
+        this.selectedCustomerElement = lookupValue;
+        if (this.customerCode != this.selectedCustomerElement[0]) {
+          this.orderNumber = "";
+        }
+        let outbound: OutboundData = new OutboundData();
+        this.customerCode = this.selectedCustomerElement[0];
+        this.customerName = this.selectedCustomerElement[1];
+  
+        outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
+        // lsOutbound
+        localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
+        CurrentOutBoundData.CustomerData = outbound.CustomerData;
+        this.outbound = outbound;
+      }
     }
   }
 
@@ -219,8 +243,12 @@ export class OutCutomerComponent implements OnInit {
   public openCustSO(clearOrder: boolean = false) {
 
     // Clear otred data
-    // if (this.outbound)
-    //   this.outbound.OrderData = null;
+    if (this.outbound)
+      this.outbound.OrderData = null;
+    // if(this.orderNumber != null){
+    //   localStorage.setItem("IsSOAvailable", "True");
+    // }
+
     if (clearOrder == true) {
       localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
     }
@@ -550,8 +578,12 @@ export class OutCutomerComponent implements OnInit {
           this.customerCode = resp[0].CARDCODE
           this.customerName = resp[0].CARDNAME
           outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
-          this.outbound.OrderData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
-          this.outbound.OrderData.DOCNUM = this.orderNumber;
+          outbound.OrderData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
+          outbound.OrderData.DOCNUM = this.orderNumber;
+
+          localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
+          CurrentOutBoundData.CustomerData = outbound.CustomerData;
+          this.outbound = outbound;
         } else {
           this.toastr.error('', this.translate.instant("Outbound_InvalidSO"));
           this.orderNumber = "";
@@ -567,24 +599,17 @@ export class OutCutomerComponent implements OnInit {
 
   public openOrderLookup() {
     let whseId = localStorage.getItem("whseId");
-    this.outboundservice.getCustomerSOList("C1", "", whseId).subscribe(
+    this.outboundservice.getCustomerSOList("", "", whseId).subscribe(
       resp => {
         if (resp != null) {
           if (resp[0].ErrorMsg == "7001") {
-            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
-          var tempData = resp;
-          for (var i = 0; i < this.outbound.DeleiveryCollection.length; i++) {
-            for (var j = 0; j < resp.length; j++) {
-              if (this.outbound.DeleiveryCollection[i].Order.DOCNUM == resp[j].DOCNUM) {
-                tempData.splice(j, 1);
-              }
-            }
-          }
+         
           this.lookupfor = "out-order";
           this.showLookupLoader = false;
-          this.serviceData = tempData;
+          this.serviceData = resp;
           if (this.serviceData.length > 0) {
             this.showLookup = true;
           } else {

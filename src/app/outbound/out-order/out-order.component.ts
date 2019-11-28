@@ -67,7 +67,15 @@ export class OutOrderComponent implements OnInit {
       if (this.outbound.OrderData !== undefined && this.outbound.OrderData !== null
         && this.outbound.OrderData.DOCNUM !== undefined && this.outbound.OrderData.DOCNUM !== null) {
         this.orderNumber = this.outbound.OrderData.DOCNUM;
-        this.openSOOrderList(this.orderNumber);
+        this.openSOOrderList(); 
+        // if(localStorage.getItem("IsSOAvailable") == "True"){
+        //   this.openSOOrderList(this.orderNumber);
+        //   localStorage.setItem("IsSOAvailable", "False");
+        //   this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
+        // }else{ 
+        //   this.openSOOrderList(); 
+        // }
+         
         this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
       }
       this.calculatePickQty();

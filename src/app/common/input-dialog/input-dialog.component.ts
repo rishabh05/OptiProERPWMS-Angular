@@ -79,7 +79,7 @@ export class InputDialogComponent implements OnInit {
 
   OnBinLookupClick() {
     this.showLoader = true;
-    this.inventoryTransferService.getToBin(this.binNo, localStorage.getItem("towhseId")).subscribe(
+    this.inventoryTransferService.getToBin(this.binNo, localStorage.getItem("whseId")).subscribe(
       data => {
         this.showLoader = false;
         if (data != null) {
@@ -109,7 +109,7 @@ export class InputDialogComponent implements OnInit {
       return;
     }
     this.showLoader = true;
-    this.inventoryTransferService.isToBinExist(this.binNo, localStorage.getItem("towhseId")).subscribe(
+    this.inventoryTransferService.isToBinExist(this.binNo, localStorage.getItem("whseId")).subscribe(
       data => {
         this.showLoader = false;
         if (data != null) {
