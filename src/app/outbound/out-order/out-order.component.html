@@ -5,7 +5,7 @@
             <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
                 {{'Outbound_DeleiveryToCustomer'|translate}}: {{selectedCustomer.CustomerName}}
             </h3>
-            <div class="row">
+            <div class="row" *ngIf="fromWhere!='itr'">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Outbound_SO'|translate}}</label>
@@ -29,7 +29,29 @@
                 </div>
             </div>
 
-
+            <div class="row" *ngIf="fromWhere=='itr'">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+                        <div class="form-group row">
+                                <label for="inputPassword" class="col-sm-3 col-form-label">{{'InvTransfer_ITR'|translate}}</label>
+                                <div class="col-sm-9">
+                                  <div class="input-group input-group-sm">
+                                    <input #DocEntry type="text" class="form-control form-control-sm" name="itrCode" [(ngModel)]=itrCode
+                                      placeholder="{{'InvTransfer_ITR'|translate}}" (blur)="onITRChange()" id="itrCode">
+                                    <div class="input-group-append has-seprate-btn">
+                                      <button class="k-button k-primary btn" type="button" (click)="onITRlookupClick()">
+                                        <i class="opti-icon-hammenu"></i>
+                                      </button>
+                                    </div>
+                                    <div class="ml-1 d-flex">
+                                      <button type="button" id="poscanButton" (click)="onInboundScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                        <i class="opti-icon-qr-code fs-24"></i>
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                </div>
+            </div>
 
             <div class="row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
@@ -81,6 +103,30 @@
                                         <i class="opti-icon-view-batch mr-1"></i>{{'Plt_Pallets'|translate}}
                                     </button> -->
                                     <button type="button" id="itemcodescanButton" (click)="onItemScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                        <i class="opti-icon-qr-code fs-24"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row" *ngIf="fromWhere=='itr'">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'InvTransfer_ToBin'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input type="text" (blur)="OnBinChange()" placeholder="{{'InvTransfer_ToBin'|translate}}"
+                                    class="form-control form-control-sm" name="toBinNo" [(ngModel)]=toBinNo id="toBinNo">
+                                <div class="input-group-append has-seprate-btn">
+                                    <button class="k-button k-primary btn" type="button" (click)="OnBinLookupClick()">
+                                        <i class="opti-icon-hammenu"></i>
+                                    </button>
+                                </div>
+                                <div class="ml-1 d-flex">
+                                    <button type="button" id="itemscanButton" (click)="onInboundScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
                                 </div>
