@@ -449,7 +449,8 @@ export class PalletizeComponent implements OnInit {
       WhsCode: localStorage.getItem("whseId"),
       FromPalletCode: "",
       ToPalletCode: "",
-      USERID: localStorage.getItem("UserId")
+      USERID: localStorage.getItem("UserId"),
+      DIServerToken: localStorage.getItem("Token")
     }
     );
 

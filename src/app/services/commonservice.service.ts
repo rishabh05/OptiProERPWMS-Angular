@@ -351,7 +351,8 @@ export class Commonservice {
       ToPalletCode: fromPallet,
       PALLETOPERATIONTYPE: PalletOperationType.Depalletization,
       WhseCode: localStorage.getItem("whseId"),
-      USERID: localStorage.getItem("UserId")
+      USERID: localStorage.getItem("UserId"),
+      DIServerToken: localStorage.getItem("Token")
     });
     var reqObject = { Header: oPalletReq.Header }
 
@@ -387,7 +388,8 @@ export class Commonservice {
       ToPalletCode: toPallet,
       PALLETOPERATIONTYPE: PalletOperationType.Transfer,
       WhseCode: localStorage.getItem("whseId"),
-      USERID: localStorage.getItem("UserId")
+      USERID: localStorage.getItem("UserId"),
+      DIServerToken: localStorage.getItem("Token")
     });
     var reqObject = { Header: oPalletReq.Header }
 
@@ -411,7 +413,8 @@ export class Commonservice {
         FromPalletCode: fromPallet,
         ToPalletCode: toPallet,
         PALLETOPERATIONTYPE: PalletOperationType.Transfer,
-        WhseCode: localStorage.getItem("whseId")
+        WhseCode: localStorage.getItem("whseId"),
+        DIServerToken: localStorage.getItem("Token")
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/PalletTransaction", jObject, this.httpOptions);
@@ -440,7 +443,8 @@ export class Commonservice {
         FromPalletCode: palletCode,
         ToPalletCode: palletCode,
         PALLETOPERATIONTYPE: PalletOperationType.Palletization,
-        WhseCode: localStorage.getItem("whseId")
+        WhseCode: localStorage.getItem("whseId"),
+        DIServerToken: localStorage.getItem("Token")
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/PalletTransaction", jObject, this.httpOptions);
@@ -461,7 +465,8 @@ export class Commonservice {
       ToPalletCode: toPallet,
       PALLETOPERATIONTYPE: PalletOperationType.Merge,
       WhseCode: localStorage.getItem("whseId"),
-      USERID: localStorage.getItem("UserId")
+      USERID: localStorage.getItem("UserId"),
+      DIServerToken: localStorage.getItem("Token")
     });
     var reqObject = { Header: oPalletReq.Header }
 

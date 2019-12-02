@@ -258,7 +258,8 @@ export class PalSplitComponent implements OnInit {
       WhsCode: localStorage.getItem("whseId"),
       FromPalletCode: this.fromPalletNo,
       ToPalletCode: this.fromPalletNo,
-      USERID: localStorage.getItem("UserId")
+      USERID: localStorage.getItem("UserId"),
+      DIServerToken: localStorage.getItem("Token")
     });
 
     for (var i = 0; i < this.savedPalletsArray.length; i++) {
