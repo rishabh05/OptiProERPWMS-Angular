@@ -140,4 +140,42 @@ export class InventoryTransferService {
     var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), ItemCode: '', WhsCode: oToWhs, FromBin: fromBin}]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetInventoryDocuments", jObject, this.commonService.httpOptions);
   }
+
+  GetITRList(): Observable<any> {
+    var jObject = { 
+      DEFAULTSYSTEMBIN: JSON.stringify([
+        { 
+          CompanyDBId: localStorage.getItem("CompID"), 
+          USERCODE: localStorage.getItem("UserId"), 
+          WHSCODE: localStorage.getItem("whseId")
+        }]) 
+      };
+    return this.httpclient.post(this.config_params.service_url + "/api/WhsTrans/GetITRList", jObject, this.commonService.httpOptions);
+  }
+
+  IsValidITR(entryDoc: string): Observable<any> {
+    var jObject = { 
+      DEFAULTSYSTEMBIN: JSON.stringify([
+        { 
+          CompanyDBId: localStorage.getItem("CompID"), 
+          USERCODE: localStorage.getItem("UserId"), 
+          WHSCODE: localStorage.getItem("whseId"),
+          DocEntry: entryDoc
+        }]) 
+      };
+    return this.httpclient.post(this.config_params.service_url + "/api/WhsTrans/IsValidITR", jObject, this.commonService.httpOptions);
+  }
+
+  GetITRItemList(itrCode: string): Observable<any> {
+    var jObject = { 
+      DEFAULTSYSTEMBIN: JSON.stringify([
+        { 
+          CompanyDBId: localStorage.getItem("CompID"), 
+          USERCODE: localStorage.getItem("UserId"), 
+          WHSCODE: localStorage.getItem("whseId"),
+          DocEntry: itrCode
+        }]) 
+      };
+    return this.httpclient.post(this.config_params.service_url + "/api/WhsTrans/GetITRItemList", jObject, this.commonService.httpOptions);
+  }
 }

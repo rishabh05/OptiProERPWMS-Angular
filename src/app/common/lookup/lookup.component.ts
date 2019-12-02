@@ -158,6 +158,8 @@ export class LookupComponent implements OnInit {
       this.orderList();
     } else if(this.lookupfor == "PalletList"){
       this.palletList();
+    } else if(this.lookupfor == "ITRList"){
+      this.showITRList();
     }
 
     this.clearFilters();
@@ -770,6 +772,22 @@ export class LookupComponent implements OnInit {
     }
   }
 
+  showITRList(){
+    this.table_head = [
+      {
+        field: 'DocEntry',
+        title: this.translate.instant("InvTransfer_ITRRequestNo"),
+        type: 'text',
+        width: '100'
+      }
+    ];
+    this.lookupTitle = this.translate.instant("InvTransfer_ITRList");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
 
   Done() {
     this.lookupkey.emit(this.selectedValues);

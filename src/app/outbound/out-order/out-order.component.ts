@@ -9,6 +9,7 @@ import { OutboundData } from 'src/app/models/outbound/outbound-data';
 import { RowClassArgs } from '@progress/kendo-angular-grid';
 import { SODETAIL, SOHEADER, DeliveryToken } from 'src/app/models/outbound/out-del-req';
 import { MeterialModel } from 'src/app/models/outbound/meterial-model';
+import { InventoryTransferService } from 'src/app/services/inventory-transfer.service';
 
 
 @Component({
@@ -37,7 +38,8 @@ export class OutOrderComponent implements OnInit {
   showLookupLoader: boolean = false;
   showConfirmDialog: boolean;
   showDeleiveryAndAdd: boolean;
-
+  itrCode: string = "";
+  toBinNo: string = "";
   @Input() fromWhere;
   @Output() screenBackEvent = new EventEmitter();
 
@@ -55,7 +57,9 @@ export class OutOrderComponent implements OnInit {
   currentSelectedMaterialsByPallets: any = [];
   tempSOCalculationDataSet: any = [];
   palletList: any = [];
-  constructor(private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) { }
+  itrItemsList: any = [];
+  constructor(private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService,
+    private inventoryTransferService: InventoryTransferService) { }
 
   savedPalletItems: any;
 
@@ -207,6 +211,15 @@ export class OutOrderComponent implements OnInit {
           localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
           this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
           this.openSOOrderList();
+        }  else if (this.lookupfor == "ITRList") {
+          this.itrCode = lookupValue.DocEntry
+          // this.invTransITRData.ITRData = { DocEntry: this.itrCode };
+          // localStorage.setItem(CommonConstants.InvTransITRData, JSON.stringify(this.invTransITRData));
+          // this.getITRItemList();
+        } else if (this.lookupfor == "toBinsList") {
+          this.toBinNo = lookupValue[0];
+          // this.invTransITRData.DefaultToBin = { ToBin: this.toBinNo };
+          // localStorage.setItem(CommonConstants.InvTransITRData, JSON.stringify(this.invTransITRData));
         } else {
           if (this.lookupfor == "ItemsList") {
             this.selectedItem = lookupValue.ITEMCODE;
@@ -1262,4 +1275,98 @@ export class OutOrderComponent implements OnInit {
     }
   }
 
+  onITRlookupClick() {
+    console.log("item docEntry click :");
+    this.showLookupLoader = true;
+    this.inventoryTransferService.GetITRList().subscribe(
+      (data: any) => {
+        this.showLookupLoader = false;
+        console.log("get ITR response:");
+        if (data != undefined) {
+          if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
+          this.serviceData = data.Table;
+          console.log("get polist response serviceData:", this.serviceData);
+          this.lookupfor = "ITRList";
+          this.showLookup = true;
+        } else {
+          this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+        }
+      },
+      error => {
+        this.showLookupLoader = false;
+        console.log("Error: ", error);
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
+
+  onITRChange() {
+    console.log("onITRChange :");
+    this.showLookupLoader = true;
+    this.inventoryTransferService.IsValidITR(this.itrCode).subscribe(
+      (data: any) => {
+        this.showLookupLoader = false;
+        console.log("get ITR response:");
+        if (data != undefined) {
+          if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
+          this.itrCode = data.Table[0].DocEntry;
+          //this.invTransITRData.ITRData = { DocEntry: this.itrCode };
+          //localStorage.setItem(CommonConstants.InvTransITRData, JSON.stringify(this.invTransITRData));
+          //this.getITRItemList();
+        } else {
+          this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+        }
+      },
+      error => {
+        this.showLookupLoader = false;
+        console.log("Error: ", error);
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+    }
+
+    getITRItemList() {
+      this.showLookupLoader = true;
+      this.inventoryTransferService.GetITRItemList(this.itrCode).subscribe(
+        data => {
+          this.showLookupLoader = false;
+          if (data != null && data != undefined) {
+            data = data["Table"];
+            if (data.length > 0) {
+              //this.itrItemsList = data;
+              this.soItemsDetail = data;
+            }
+            else {
+              this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+            }
+          }
+        },
+        error => {
+          if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+          }
+          else {
+            this.toastr.error('', error);
+          }
+        }
+      );
+    }
 }
