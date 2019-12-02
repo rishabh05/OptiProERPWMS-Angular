@@ -2069,7 +2069,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     this.newCreatedPalletNo = "";
     // if (this.showNewPallet) {
       this.showInputDialog("NewPallet", this.translate.instant("Done"), this.translate.instant("Cancel"),
-        "Create New Pallet");
+      this.translate.instant("Plt_CreateNewPallet"));
     // }
   }
 

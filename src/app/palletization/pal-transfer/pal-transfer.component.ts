@@ -333,7 +333,7 @@ export class PalTransferComponent implements OnInit {
   onCheckChange() {
     this.newCreatedPalletNo = "";
     this.showInputDialog("NewPallet", this.translate.instant("Done"), this.translate.instant("Cancel"),
-      "Create New Pallet");
+    this.translate.instant("Plt_CreateNewPallet"));
   }
 
   public createNewPallet(palletNo: string, binNo: string) {

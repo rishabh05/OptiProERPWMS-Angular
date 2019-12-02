@@ -184,7 +184,7 @@ export class PalletizeComponent implements OnInit {
   onCheckChange() {
     this.newCreatedPalletNo = "";
     this.showInputDialog("NewPallet", this.translate.instant("Done"), this.translate.instant("Cancel"),
-      "Create New Pallet");
+    this.translate.instant("Plt_CreateNewPallet"));
   }
 
   OnItemCodeLookupClick() {
