@@ -63,7 +63,16 @@ export class OutOrderComponent implements OnInit {
   temoraryHideItemLookupRow: boolean = false;
   ngOnInit() {
     // lsOutbound
-    console.log("from where",this.fromWhere);   
+    console.log("from where",this.fromWhere);  
+    if(this.fromWhere="itr"){
+      let outbound: OutboundData = new OutboundData();
+      var customerCode = "";
+      var customerName = "";
+      outbound.CustomerData = { CustomerCode:customerCode, CustomerName: customerName };
+      localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
+    } else{
+
+    }
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
     console.log("Order:data", outboundData);
     if (outboundData != null && outboundData != undefined && outboundData != '' && outboundData != 'null') {
