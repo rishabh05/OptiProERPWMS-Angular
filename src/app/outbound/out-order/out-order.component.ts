@@ -64,7 +64,7 @@ export class OutOrderComponent implements OnInit {
   ngOnInit() {
     // lsOutbound
     console.log("from where",this.fromWhere);  
-    if(this.fromWhere="itr"){
+    if(this.fromWhere=="itr"){
       let outbound: OutboundData = new OutboundData();
       var customerCode = "";
       var customerName = "";
