@@ -194,6 +194,7 @@ export class OutOrderComponent implements OnInit {
   // }
   selectedPallets: any = [];
   getLookupValue(lookupValue: any) {
+    this.showLookup = false;
     this.selectedPallets = [];
     this.ItemCode ="";
     if (lookupValue != null && lookupValue == "close") {
@@ -212,11 +213,11 @@ export class OutOrderComponent implements OnInit {
           localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
           this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
           this.openSOOrderList();
-        }  else if (this.lookupfor == "ITRList") {
+        } else if (this.lookupfor == "ITRList") {
           this.itrCode = lookupValue.DocEntry
           // this.invTransITRData.ITRData = { DocEntry: this.itrCode };
           // localStorage.setItem(CommonConstants.InvTransITRData, JSON.stringify(this.invTransITRData));
-          // this.getITRItemList();
+          this.getITRItemList();
         } else if (this.lookupfor == "toBinsList") {
           this.toBinNo = lookupValue[0];
           // this.invTransITRData.DefaultToBin = { ToBin: this.toBinNo };
@@ -300,7 +301,7 @@ export class OutOrderComponent implements OnInit {
 
           // When order num from text box.
           this.outbound.OrderData = tempOrderData;
-          this.soItemsDetail = resp.RDR1;
+          this.soItemsDetail = resp.Table;
           if (this.soItemsDetail.length > this.pageSize) {
             this.pagable = true;
           }
@@ -1326,7 +1327,7 @@ export class OutOrderComponent implements OnInit {
           this.itrCode = data.Table[0].DocEntry;
           //this.invTransITRData.ITRData = { DocEntry: this.itrCode };
           //localStorage.setItem(CommonConstants.InvTransITRData, JSON.stringify(this.invTransITRData));
-          //this.getITRItemList();
+          this.getITRItemList();
         } else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         }
@@ -1352,8 +1353,26 @@ export class OutOrderComponent implements OnInit {
           if (data != null && data != undefined) {
             data = data["Table"];
             if (data.length > 0) {
-              //this.itrItemsList = data;
+              // this.itrItemsList = data;
+              // When order num from text box.
+              // this.outbound.OrderData = tempOrderData;
+              this.orderNumber = this.itrCode;
               this.soItemsDetail = data;
+              if (this.soItemsDetail.length > this.pageSize) {
+                this.pagable = true;
+              }
+              this.showLookupLoader = false;
+              if (this.soItemsDetail.length === 0) {
+                this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+                this.showLookupLoader = false;
+              }
+              this.calculatePickQty();
+
+
+              localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+
+              this.showSOIetDetail = true;
+              this.showLookupLoader = false;
             }
             else {
               this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
