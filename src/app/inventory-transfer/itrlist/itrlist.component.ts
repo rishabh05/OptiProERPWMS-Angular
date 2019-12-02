@@ -7,9 +7,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ITRLIstComponent implements OnInit {
 
+  fromwhere: any = "itr";
   constructor() { }
 
   ngOnInit() {
   }
 
+  backFromOutOrderScreen(event){
+
+  }
 }

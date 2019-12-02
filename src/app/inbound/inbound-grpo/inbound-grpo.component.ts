@@ -86,13 +86,13 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   base64String: string = "";
   fileName: string = "";
   UOMentry: any = "";
+  @Input() fromWhere;
   @Output() screenBackEvent = new EventEmitter();
   isPalletizationEnable: boolean = false;
   palletValue: any = "";
   inboundNewPallet: string;
   ActualSRBatchColumnText: string = "";
   showNewPallet: boolean = false;
-  @Input() fromWhere;
   pageSize: number = Commonservice.pageSize;
   @ViewChild('Quantity') QuantityField;
   serialBatchNo: string = "";

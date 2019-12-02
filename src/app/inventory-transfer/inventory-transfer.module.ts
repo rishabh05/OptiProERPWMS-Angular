@@ -13,6 +13,7 @@ import { DialogsModule } from '@progress/kendo-angular-dialog';
 import { InventoryTransferbyITRMasterComponent } from './inventory-transferby-itrmaster/inventory-transferby-itrmaster.component';
 import { ITRLIstComponent } from './itrlist/itrlist.component';
 import { ITRCalculationComponent } from './itr-calculation/itr-calculation.component';
+import { OutboundModule } from '../outbound/outbound.module';
 
 @NgModule({
   declarations: [WhsTransferComponent, BinTransferComponent, InventoryTransferbyITRMasterComponent, ITRLIstComponent, ITRCalculationComponent],
@@ -25,6 +26,7 @@ import { ITRCalculationComponent } from './itr-calculation/itr-calculation.compo
     FormsModule,
     InventoryTransferRoutingModule,
     DialogsModule,
+    OutboundModule,
     ModalModule.forRoot()
   ]
 })

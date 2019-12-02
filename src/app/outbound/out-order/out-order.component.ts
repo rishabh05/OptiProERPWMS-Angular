@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { OutboundService } from 'src/app/services/outbound.service';
 import { CommonConstants } from 'src/app/const/common-constants';
 import { Router } from '@angular/router';
@@ -9,6 +9,7 @@ import { OutboundData } from 'src/app/models/outbound/outbound-data';
 import { RowClassArgs } from '@progress/kendo-angular-grid';
 import { SODETAIL, SOHEADER, DeliveryToken } from 'src/app/models/outbound/out-del-req';
 import { MeterialModel } from 'src/app/models/outbound/meterial-model';
+
 
 @Component({
   selector: 'app-out-order',
@@ -37,6 +38,9 @@ export class OutOrderComponent implements OnInit {
   showConfirmDialog: boolean;
   showDeleiveryAndAdd: boolean;
 
+  @Input() fromWhere;
+  @Output() screenBackEvent = new EventEmitter();
+
   selectedItem: any;
   sumOfPickQty: number = 0;
   openQty: number = 0;
@@ -59,6 +63,7 @@ export class OutOrderComponent implements OnInit {
   temoraryHideItemLookupRow: boolean = false;
   ngOnInit() {
     // lsOutbound
+    console.log("from where",this.fromWhere);   
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
     console.log("Order:data", outboundData);
     if (outboundData != null && outboundData != undefined && outboundData != '' && outboundData != 'null') {
@@ -82,7 +87,7 @@ export class OutOrderComponent implements OnInit {
     }
 
     this.setSavedPelletDataToGrid();
-    document.getElementById("itemcodeid").focus();
+   // document.getElementById("itemcodeid").focus();
   }
 
   /* this method set the update data to array to display in grid.
