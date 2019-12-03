@@ -301,7 +301,7 @@ export class OutOrderComponent implements OnInit {
 
           // When order num from text box.
           this.outbound.OrderData = tempOrderData;
-          this.soItemsDetail = resp.Table;
+          this.soItemsDetail = resp.RDR1;
         
           this.showLookupLoader = false;
           if (this.soItemsDetail.length === 0) {
@@ -311,7 +311,7 @@ export class OutOrderComponent implements OnInit {
           if (this.soItemsDetail!=null && this.soItemsDetail.length > this.pageSize) {
             this.pagable = true;
           }
-          this.calculatePickQty();
+          this.calculatePickQty();  
 
 
           localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
