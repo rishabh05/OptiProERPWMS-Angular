@@ -189,7 +189,11 @@ body .k-grid tbody tr.none{
 body .k-grid tbody tr.none:hover{
     background-color: #a1eab0
 }
-
+.textunderline {
+    font-size: 12px;
+    color: #1FA2FF;
+    text-decoration: underline;
+}
 @media all and (max-width: 240px) {
 .toast-container .toast.div {
 padding: 8px 8px 8px 50px;
