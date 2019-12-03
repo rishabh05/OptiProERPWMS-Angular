@@ -75,7 +75,6 @@ export class OutProdissueComponent implements OnInit {
     let outboundData = localStorage.getItem(CommonConstants.OutboundData);
     if (outboundData != undefined && outboundData != '') {
       this.outbound = JSON.parse(outboundData);
-      this.toBinNo = this.outbound.ITRToBinNo.ToBin;
       this.selected = this.outbound.SelectedItem;
       this.OrderType = this.selected.TRACKING;
       this.currentOrderNo = this.outbound.OrderData["Order No"]
@@ -89,7 +88,7 @@ export class OutProdissueComponent implements OnInit {
         this.manageOldCollection();
       }
       if (localStorage.getItem("ComingFrom") == "itr") {
-
+        this.toBinNo = this.outbound.ITRToBinNo.ToBin;
         this.fromProduction = false;
         this.fromITR =true;
         this.OpenQtylbl = this.translate.instant("BalanceQty");
