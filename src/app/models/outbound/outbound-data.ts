@@ -7,6 +7,7 @@ export class OutboundData {
     DeleiveryCollection: Array<any> = [];
     TempMeterials:Array<any>=[];
     PalletItems:Array<any> = [];
+    ITRToBinNo: any;
 }
 
 export class CurrentOutBoundData {

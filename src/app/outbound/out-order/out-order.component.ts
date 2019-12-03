@@ -58,6 +58,7 @@ export class OutOrderComponent implements OnInit {
   tempSOCalculationDataSet: any = [];
   palletList: any = [];
   itrItemsList: any = [];
+  
   constructor(private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService,
     private inventoryTransferService: InventoryTransferService) { }
 

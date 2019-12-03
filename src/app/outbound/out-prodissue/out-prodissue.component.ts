@@ -15,6 +15,7 @@ import { ProductionService } from 'src/app/services/production.service';
 import { LabelPrintReportsService } from 'src/app/services/label-print-reports.service';
 import { ISubscription } from 'rxjs/Subscription';
 import { InboundService } from 'src/app/services/inbound.service';
+import { InventoryTransferService } from 'src/app/services/inventory-transfer.service';
 
 
 
@@ -62,11 +63,12 @@ export class OutProdissueComponent implements OnInit {
   public pageSize: number = Commonservice.pageSize;
   public pageTitle: any = "";
   constructor(private ourboundService: OutboundService, private router: Router, 
-    private toastr: ToastrService, private translate: TranslateService,private inboundService: InboundService,
+    private toastr: ToastrService, private translate: TranslateService, private inventoryTransferService: InventoryTransferService,
      private commonservice: Commonservice, private productionService: ProductionService) { }
   fromProduction = true;
   public currentOrderNo: string;
   fromITR:any = false;
+  toBinNo: string = "";
   ngOnInit() {
 
     //lsOutbound
@@ -86,7 +88,7 @@ export class OutProdissueComponent implements OnInit {
         this.manageOldCollection();
       }
       if (localStorage.getItem("ComingFrom") == "itr") {
-
+        this.toBinNo = this.outbound.ITRToBinNo.ToBin;
         this.fromProduction = false;
         this.fromITR =true;
         this.OpenQtylbl = this.translate.instant("BalanceQty");
@@ -484,8 +486,11 @@ export class OutProdissueComponent implements OnInit {
   }
 
   getLookupValue(lookupValue: any, gridSelectedMeterial: any, updateGrid: boolean = true, scan: boolean = false) {
-    if (lookupValue) {
-      this.showLookupLoader = false;
+    this.showLookupLoader = false;
+    this.showLookup = false;
+    if(this.lookupFor == "toBinsList") {
+      this.toBinNo = lookupValue.BINNO;
+    } else if (lookupValue) {
       if (this.OrderType == 'S') {
         let data: any[] = [];
         let tempLookup: any[] = lookupValue;
@@ -1246,51 +1251,26 @@ export class OutProdissueComponent implements OnInit {
     );
   }
 
-
-
   //this.addMetToCollection();
   // this.addToDeleiver(false);
   // this.prepareDeleiveryCollectionAndDeliver(orderId);
-
-
-
-
-
-
-  OnBinLookupClick(){
-    this.ShowBins();
-  }
-
-  toBinListSubs :ISubscription;
-  toBinvalue:any;
-  /**
-    * Method to get list of inquries from server.
-   */
-  public ShowBins() {
-   // this.targetBinClick = false;
-    this.showLookupLoader = true; 
-    this.toBinListSubs =  this.inboundService.getRevBins("").subscribe(
-      (data: any) => {
+  OnBinLookupClick() {
+    this.showLookupLoader = true;
+    this.inventoryTransferService.getToBin("", localStorage.getItem("whseId")).subscribe(
+      data => {
         this.showLookupLoader = false;
-        console.log(data);
         if (data != null) {
           if (data.length > 0) {
-              this.toBinvalue = data[0].BINNO;
-            }
-            else {
-              console.log(data);
-              this.showLookupLoader = false;
-              this.lookupData = data;
-              this.lookupFor = "RecvBinList";
-              return;
-            }
-          } else {
-            this.toastr.error('', this.translate.instant("Inbound_NoBinsAvailableMsg"));
+            this.showLookup = true;
+            this.lookupData = data;
+            this.lookupFor = "toBinsList";
           }
+          else {
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          }
+        }
       },
       error => {
-        this.showLookupLoader = false;
-        console.log("Error: ", error);
         if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
           this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
         }
@@ -1301,39 +1281,32 @@ export class OutProdissueComponent implements OnInit {
     );
   }
 
-
   OnBinChange() {
-    if (this.toBinvalue == "") {
+    if (this.toBinNo == "" || this.toBinNo == undefined) {
       return;
     }
     this.showLookupLoader = true;
-    this.inboundService.binChange(this.toBinvalue).subscribe(
-      (data: any) => {
+    this.inventoryTransferService.isToBinExist(this.toBinNo, localStorage.getItem("whseId")).subscribe(
+      data => {
         this.showLookupLoader = false;
-        console.log(data);
         if (data != null) {
           if (data.length > 0) {
             if (data[0].Result == "0") {
               this.toastr.error('', this.translate.instant("INVALIDBIN"));
-              this.toBinvalue = "";
               return;
             }
             else {
-              this.toBinvalue = data[0].ID;
-              // oCurrentController.isReCeivingBinExist();
+              this.toBinNo = data[0].ID;
             }
           }
-        }
-        else {
-          this.toastr.error('', this.translate.instant("INVALIDBIN"));
-          this.toBinvalue = "";
-          return;
+          else {
+            this.toBinNo = "";
+            this.toastr.error('', this.translate.instant("INVALIDBIN"));
+            return;
+          }
         }
       },
       error => {
-        this.showLookupLoader= false;
-        console.log("Error: ", error);
-        this.toBinvalue = "";
         if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
           this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
         }
@@ -1341,7 +1314,10 @@ export class OutProdissueComponent implements OnInit {
           this.toastr.error('', error);
         }
       }
-     );
-    }
+    );
+  }
 
+  onBinNoScan(){
+
+  }
 } 
