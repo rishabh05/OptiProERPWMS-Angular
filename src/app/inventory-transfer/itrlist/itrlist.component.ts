@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { OutboundData } from 'src/app/models/outbound/outbound-data';
+import { CommonConstants } from 'src/app/const/common-constants';
 
 @Component({
   selector: 'app-itrlist',
@@ -11,6 +13,13 @@ export class ITRLIstComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    localStorage.setItem("ComingFrom","itr");
+
+     let outbound: OutboundData = new OutboundData();
+      var customerCode = "";
+      var customerName = "";
+      outbound.CustomerData = { CustomerCode:customerCode, CustomerName: customerName };
+      localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
   }
 
   backFromOutOrderScreen(event){
