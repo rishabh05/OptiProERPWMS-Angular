@@ -62,22 +62,30 @@ export class OutOrderComponent implements OnInit {
   savedPalletItems: any;
   showTemporaryViews: boolean = false;
   temoraryHideItemLookupRow: boolean = false;
-
+  pagetitle: any ="";
   constructor(private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService,
     private inventoryTransferService: InventoryTransferService) { }
 
   ngOnInit() {
     // lsOutbound
-  //  console.log("from where",this.fromWhere);  
-    if(this.fromWhere=="itr"){
-      localStorage.setItem("ComingFrom","itr");
+   // console.log("from where",this.fromWhere);  
+    if(localStorage.getItem("ComingFrom")=="itr"){
+      // localStorage.setItem("ComingFrom","itr");
+      this.pagetitle= this.translate.instant("InvTransfer_ByITR");
       let outbound: OutboundData = new OutboundData();
-      var customerCode = "";
-      var customerName = "";
-      outbound.CustomerData = { CustomerCode:customerCode, CustomerName: customerName };
+      outbound.ITRToBinNo = { ToBin: this.toBinNo };
       localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
-    } else{
-
+    } else {
+      let companyName = '';
+      let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+      if (outboundData != null && outboundData != undefined && outboundData != '' 
+      && outboundData != 'null'){
+        this.outbound = JSON.parse(outboundData);
+        this.selectedCustomer = this.outbound.CustomerData;
+        companyName =this.selectedCustomer.CustomerCode;
+      }
+      this.pagetitle= this.translate.instant("Outbound_DeleiveryToCustomer")+": "+ companyName;
+       // means from outbound
     }
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
    // console.log("Order:data", outboundData);
