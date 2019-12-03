@@ -72,9 +72,8 @@ export class OutOrderComponent implements OnInit {
     if(this.fromWhere=="itr"){
       localStorage.setItem("ComingFrom","itr");
       let outbound: OutboundData = new OutboundData();
-      var customerCode = "";
-      var customerName = "";
-      outbound.CustomerData = { CustomerCode:customerCode, CustomerName: customerName };
+      outbound.ITRToBinNo = { ToBin: this.toBinNo };
+      outbound.CustomerData = { CustomerCode: "", CustomerName: "" };
       localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
     } else{
 
