@@ -1345,7 +1345,25 @@ export class OutOrderComponent implements OnInit {
     }
 
     getITRItemList() {
-      this.showLookupLoader = true;
+      if ((this.outbound.OrderData && this.outbound.OrderData != '' && this.outbound.OrderData != null) || this.itrCode) {
+        let tempOrderData: any = this.outbound.OrderData;
+        if (this.itrCode) {
+          tempOrderData = {
+            CARDCODE: this.outbound.CustomerData.CustomerCode,
+            CARDNAME: this.outbound.CustomerData.customerName,
+            CUSTREFNO: "",
+            DOCDUEDATE: "04/24/2019",
+            DOCNUM: ""+this.itrCode,
+            SHIPPINGTYPE: "",
+            SHIPTOCODE: ""
+          };
+          //this.outbound.OrderData = tempOrderData;
+        }
+        else {
+          this.outbound.OrderData.DOCNUM = tempOrderData.DOCNUM = this.orderNumber;
+        }
+
+        this.showLookupLoader = true;
       this.inventoryTransferService.GetITRItemList(this.itrCode).subscribe(
         data => {
           this.showLookupLoader = false;
@@ -1354,7 +1372,7 @@ export class OutOrderComponent implements OnInit {
             if (data.length > 0) {
               // this.itrItemsList = data;
               // When order num from text box.
-              // this.outbound.OrderData = tempOrderData;
+              this.outbound.OrderData = tempOrderData;
               this.orderNumber = this.itrCode;
               this.soItemsDetail = data;
               if (this.soItemsDetail.length > this.pageSize) {
@@ -1387,5 +1405,6 @@ export class OutOrderComponent implements OnInit {
           }
         }
       );
+      }
     }
 }
