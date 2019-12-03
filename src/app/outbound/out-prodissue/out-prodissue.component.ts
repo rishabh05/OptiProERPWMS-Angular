@@ -293,7 +293,7 @@ export class OutProdissueComponent implements OnInit {
           this.ourboundService.getAllPickPackAndOtherSerialBatchWithoutBin(itemCode, "", serialNo,
             this.outbound.SelectedItem.DOCENTRY).subscribe(
               (data: any) => {
-                console.log("data:" + data)
+              //  console.log("data:" + data)
                 if (data != null && data != undefined && data.length > 0) {
                   var binno = data[0].BINNO;
                   var totalQty = data[0].TOTALQTY;
@@ -505,7 +505,7 @@ export class OutProdissueComponent implements OnInit {
       }
 
       this.manageMeterial(scan);
-      console.log("SelectedMeterial", this.selectedMeterials);
+      //console.log("SelectedMeterial", this.selectedMeterials);
       if (updateGrid == true)
         gridSelectedMeterial.data = this.selectedMeterials;
       //lsOutbound
@@ -713,8 +713,8 @@ export class OutProdissueComponent implements OnInit {
             var tempItems= this.outbound.TempMeterials;
             var OtherTempItems:any =[];
             for(let i=0; i< tempItems.length;i++){
-              if(tempItems[i].Item.ROWNUM !== this.outbound.SelectedItem.ROWNUM && tempItems[i].Item.ITEMCODE !== this.outbound.SelectedItem.ITEMCODE ||
-                tempItems[i].Item.DOCNUM !== this.outbound.OrderData.DOCNUM){
+              if(tempItems[i].Item.ROWNUM !== this.outbound.SelectedItem.ROWNUM && (tempItems[i].Item.ITEMCODE !== this.outbound.SelectedItem.ITEMCODE ||
+                tempItems[i].Item.DOCNUM !== this.outbound.OrderData.DOCNUM)){
                 OtherTempItems.push(tempItems[i]);
                 }
             }
@@ -1158,8 +1158,8 @@ export class OutProdissueComponent implements OnInit {
 
 
 
-      console.log("Dtl", arrLots);
-      console.log("hdr", arrIssues);
+     // console.log("Dtl", arrLots);
+    //  console.log("hdr", arrIssues);
 
 
       if (arrIssues.length > 0 && arrLots.length > 0) {
@@ -1195,7 +1195,7 @@ export class OutProdissueComponent implements OnInit {
         }
 
       );
-      console.log("shdr", arrIssues);
+    //  console.log("shdr", arrIssues);
     }
   }
 

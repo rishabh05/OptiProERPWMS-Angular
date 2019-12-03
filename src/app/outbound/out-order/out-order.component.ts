@@ -68,7 +68,7 @@ export class OutOrderComponent implements OnInit {
 
   ngOnInit() {
     // lsOutbound
-    console.log("from where",this.fromWhere);  
+  //  console.log("from where",this.fromWhere);  
     if(this.fromWhere=="itr"){
       localStorage.setItem("ComingFrom","itr");
       let outbound: OutboundData = new OutboundData();
@@ -80,21 +80,21 @@ export class OutOrderComponent implements OnInit {
 
     }
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
-    console.log("Order:data", outboundData);
+   // console.log("Order:data", outboundData);
     if (outboundData != null && outboundData != undefined && outboundData != '' && outboundData != 'null') {
       this.outbound = JSON.parse(outboundData);
       this.selectedCustomer = this.outbound.CustomerData;
       if (this.outbound.OrderData !== undefined && this.outbound.OrderData !== null
         && this.outbound.OrderData.DOCNUM !== undefined && this.outbound.OrderData.DOCNUM !== null) {
         this.orderNumber = this.outbound.OrderData.DOCNUM;
-        this.openSOOrderList(); 
-        // if(localStorage.getItem("IsSOAvailable") == "True"){
-        //   this.openSOOrderList(this.orderNumber);
-        //   localStorage.setItem("IsSOAvailable", "False");
-        //   this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
-        // }else{ 
-        //   this.openSOOrderList(); 
-        // }
+        // this.openSOOrderList(); 
+        if(localStorage.getItem("IsSOAvailable") == "True"){
+          this.openSOOrderList(this.orderNumber);
+          localStorage.setItem("IsSOAvailable", "False");
+          this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
+        }else{ 
+          this.openSOOrderList(); 
+        }
          
         this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
       }
@@ -110,7 +110,7 @@ export class OutOrderComponent implements OnInit {
   setSavedPelletDataToGrid() {
     this.savedPalletItems = [];
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
-    console.log("Order:data", outboundData);
+  // console.log("Order:data", outboundData);
     if (outboundData != null && outboundData != undefined && outboundData != '' && outboundData != 'null') {
       this.outbound = JSON.parse(outboundData);
       this.savedPalletItems = this.outbound.PalletItems;
@@ -418,7 +418,7 @@ export class OutOrderComponent implements OnInit {
           for (let j = 0; j < this.outbound.TempMeterials.length; j++) {
 
             const element = this.outbound.TempMeterials[j];
-            console.log("My Element", element);
+        //    console.log("My Element", element);
             if (soelement.ROWNUM === element.Item.ROWNUM && soelement.ITEMCODE === element.Item.ITEMCODE && this.outbound.OrderData.DOCNUM === element.Order.DOCNUM) {
               totalPickQty = totalPickQty + element.Meterial.MeterialPickQty;
             }
@@ -574,7 +574,7 @@ export class OutOrderComponent implements OnInit {
         }
       );
       //==delivery submit final code===
-      console.log("shdr", arrSOHEADER);
+    //  console.log("shdr", arrSOHEADER);
     }
   }
 
@@ -618,7 +618,7 @@ export class OutOrderComponent implements OnInit {
     }
     this.commonservice.GetPalletDataForOutBound(this.palletNo).subscribe(
       (data: any) => {
-        console.log(data);
+       // console.log(data);
         if (data != null) {
           this.itemsByPallet = data;
           this.addPalletData()
@@ -989,11 +989,11 @@ export class OutOrderComponent implements OnInit {
     var itemCodeArray = Array.prototype.map.call(this.soItemsDetail, function (item) { return "'" + item.ITEMCODE + "'"; }).join(",");
     this.commonservice.GetPalletListForOutBound(itemCodeArray).subscribe(
       (data: any) => {
-        console.log(data);
+       // console.log(data);
         if (data != null) {
           if (data.length > 0) {
             this.showLookupLoader = false;
-            console.log(data);
+          //  console.log(data);
             this.serviceData = data;
             this.lookupfor = "PalletList";
             this.showLookup = true;
@@ -1024,7 +1024,7 @@ export class OutOrderComponent implements OnInit {
     var itemCodeArray = Array.prototype.map.call(this.soItemsDetail, function (item) { return "'" + item.ITEMCODE + "'"; }).join(",");
     this.commonservice.IsPalletValidForOutBound(this.palletNo, itemCodeArray).subscribe(
       (data: any) => {
-        console.log(data);
+     //   console.log(data);
         if (data != null) {
           if (data.length > 0) {
             this.palletNo = data[0].Code;
@@ -1068,7 +1068,7 @@ export class OutOrderComponent implements OnInit {
         });
       }
     }
-    console.log("pallet list: " + JSON.stringify(this.palletList));
+   // console.log("pallet list: " + JSON.stringify(this.palletList));
   }
 
   DeliveryClick(rowindex, gridData: any) {
@@ -1271,12 +1271,12 @@ export class OutOrderComponent implements OnInit {
   }
 
   onITRlookupClick() {
-    console.log("item docEntry click :");
+  //  console.log("item docEntry click :");
     this.showLookupLoader = true;
     this.inventoryTransferService.GetITRList().subscribe(
       (data: any) => {
         this.showLookupLoader = false;
-        console.log("get ITR response:");
+      //  console.log("get ITR response:");
         if (data != undefined) {
           if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
@@ -1284,7 +1284,7 @@ export class OutOrderComponent implements OnInit {
             return;
           }
           this.serviceData = data.Table;
-          console.log("get polist response serviceData:", this.serviceData);
+        //  console.log("get polist response serviceData:", this.serviceData);
           this.lookupfor = "ITRList";
           this.showLookup = true;
         } else {
@@ -1305,12 +1305,12 @@ export class OutOrderComponent implements OnInit {
   }
 
   onITRChange() {
-    console.log("onITRChange :");
+   // console.log("onITRChange :");
     this.showLookupLoader = true;
     this.inventoryTransferService.IsValidITR(this.itrCode).subscribe(
       (data: any) => {
         this.showLookupLoader = false;
-        console.log("get ITR response:");
+     //   console.log("get ITR response:");
         if (data != undefined) {
           if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,

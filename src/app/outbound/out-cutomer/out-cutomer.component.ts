@@ -168,10 +168,10 @@ export class OutCutomerComponent implements OnInit {
         this.outbound = outbound;
 
 
-        // this.outbound.OrderData = lookupValue;
-        // this.orderNumber = this.outbound.OrderData.DOCNUM;
-        // // lsOutbound
-        // localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+        this.outbound.OrderData = lookupValue;
+        this.orderNumber = this.outbound.OrderData.DOCNUM;
+        // lsOutbound
+        localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
         // this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
         // this.openSOOrderList();
 
@@ -243,11 +243,11 @@ export class OutCutomerComponent implements OnInit {
   public openCustSO(clearOrder: boolean = false) {
 
     // Clear otred data
-    if (this.outbound)
-      this.outbound.OrderData = null;
-    // if(this.orderNumber != null){
-    //   localStorage.setItem("IsSOAvailable", "True");
-    // }
+    // if (this.outbound)
+    //   this.outbound.OrderData = null;
+    if(this.orderNumber != null){
+      localStorage.setItem("IsSOAvailable", "True");
+    }
 
     if (clearOrder == true) {
       localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
