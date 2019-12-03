@@ -4,10 +4,10 @@
             <h3 class="border-bottom d-flex pt-1 pb-3 mb-4" *ngIf="!fromProduction">
                 {{pageTitle}}: {{outbound.OrderData.DOCNUM}}
             </h3>
-            
+
             <h3 class="border-bottom d-flex pt-1 pb-3 mb-4" *ngIf="fromProduction">
-                    {{pageTitle}}: {{currentOrderNo}}
-                </h3>
+                {{pageTitle}}: {{currentOrderNo}}
+            </h3>
             <div class="row">
                 <div class="col-12">
 
@@ -15,7 +15,8 @@
                         [pageable]="false" [sortable]="true" [selectable]="true" #gridItem>
 
                         <!-- grid for mobile start -->
-                        <kendo-grid-column media="(max-width: 767px)" title="{{'ItemDetails'|translate}}" class="opti_mobile-grid-td">
+                        <kendo-grid-column media="(max-width: 767px)" title="{{'ItemDetails'|translate}}"
+                            class="opti_mobile-grid-td">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                 <dl class="opti_mobile_grid_dl">
                                     <dt>{{'ItemCode'|translate}}</dt>
@@ -30,8 +31,9 @@
 
                                     <dt *ngIf="!fromProduction">{{'UoM'|translate}}</dt>
                                     <dd *ngIf="!fromProduction">
-                                        <kendo-dropdownlist class="form-control input-sm" (valueChange)="valueChange($event)"
-                                            [data]="uomList" [textField]="'UomName'" [valueField]="'UomCode'" [value]="uomList[0]"></kendo-dropdownlist>
+                                        <kendo-dropdownlist class="form-control input-sm"
+                                            (valueChange)="valueChange($event)" [data]="uomList" [textField]="'UomName'"
+                                            [valueField]="'UomCode'" [value]="uomList[0]"></kendo-dropdownlist>
                                     </dd>
                                 </dl>
                             </ng-template>
@@ -40,21 +42,24 @@
 
                         <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE" title="{{'ItemCode'|translate}}"
                             [width]="160"></kendo-grid-column>
-                        <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" headerClass="text-right" class=" text-right"
-                            title="{{OpenQtylbl}}" [width]="160">
-                            <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.OPENQTY|numberFormat}}</ng-template>
+                        <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" headerClass="text-right"
+                            class=" text-right" title="{{OpenQtylbl}}" [width]="160">
+                            <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.OPENQTY|numberFormat}}
+                            </ng-template>
                         </kendo-grid-column>
 
-                        <kendo-grid-column media="(min-width: 768px)" field="RPTQTY" headerClass="text-right" class="text-right"
-                            [width]="160" title="{{PickQtylbl}}">
-                            <ng-template kendoGridCellTemplate let-dataItem>{{_pickedMeterialQty|numberFormat}}</ng-template>
+                        <kendo-grid-column media="(min-width: 768px)" field="RPTQTY" headerClass="text-right"
+                            class="text-right" [width]="160" title="{{PickQtylbl}}">
+                            <ng-template kendoGridCellTemplate let-dataItem>{{_pickedMeterialQty|numberFormat}}
+                            </ng-template>
                             <!-- <ng-template kendoGridCellTemplate format="{0:n3}">{{_pickedMeterialQty|number:'1.3-3'}}</ng-template> -->
                         </kendo-grid-column>
-                        <kendo-grid-column *ngIf="!fromProduction" media="(min-width: 768px)" field="Delete" title="{{'UoM'|translate}}"
-                            width="120">
+                        <kendo-grid-column *ngIf="!fromProduction" media="(min-width: 768px)" field="Delete"
+                            title="{{'UoM'|translate}}" width="120">
                             <ng-template kendoGridCellTemplate let-dataItem>
                                 <kendo-dropdownlist class="form-control input-sm" (valueChange)="valueChange($event)"
-                                    [data]="uomList" [textField]="'UomName'" [valueField]="'UomCode'" [value]="selectedUOM"></kendo-dropdownlist>
+                                    [data]="uomList" [textField]="'UomName'" [valueField]="'UomCode'"
+                                    [value]="selectedUOM"></kendo-dropdownlist>
                             </ng-template>
                         </kendo-grid-column>
 
@@ -78,36 +83,68 @@
                                 </div>
                             </div>
                         </div> -->
-
+                        <label 
+                        class="col-sm-3 col-form-label">{{scanInputPlaceholder}}</label>
                         <div *ngIf="OrderType!='N'" class="col-sm-9">
+                            
                             <div class="d-flex">
                                 <div class="input-group input-group-sm">
-                                    <input type="text" [(ngModel)]=ScanInputs id="outboundOrderNoScanInput" name="orderNumber"
-                                        value='' class="form-control form-control-sm" (blur)="onScanInputChange()"
-                                        placeholder="{{scanInputPlaceholder}}">
+                                    <input type="text" [(ngModel)]=ScanInputs id="outboundOrderNoScanInput"
+                                        name="orderNumber" value='' class="form-control form-control-sm"
+                                        (blur)="onScanInputChange()" placeholder="{{scanInputPlaceholder}}">
                                     <div class="input-group-append">
-                                        <button class="k-button k-primary btn " type="button" [disabled]="selected==null || selected==''"
+                                        <button class="k-button k-primary btn " type="button"
+                                            [disabled]="selected==null || selected==''"
                                             (click)="openAvaliableMeterials()">
                                             <i class="opti-icon-hammenu"></i>
                                         </button>
                                     </div>
                                 </div>
                                 <div class="ml-1 d-flex">
-                                    <button id="outBoundDeliverForSOScan" (click)="prodIssueScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
+                                    <button id="outBoundDeliverForSOScan" (click)="prodIssueScan()"
+                                        class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
                                         type="button">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
                                 </div>
-
                             </div>
                         </div>
                     </div>
+                    <div class="row  mt-3" *ngIf="fromITR">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+                                <div class="form-group row">
+                                    <label for="inputPassword"
+                                        class="col-sm-3 col-form-label">{{'InvTransfer_ToBin'|translate}}</label>
+                                    <div class="col-sm-9">
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" (blur)="OnBinChange()"
+                                                placeholder="{{'InvTransfer_ToBin'|translate}}"
+                                                class="form-control form-control-sm" name="toBinNo" [(ngModel)]=toBinNo
+                                                id="toBinNo">
+                                            <div class="input-group-append has-seprate-btn">
+                                                <button class="k-button k-primary btn" type="button"
+                                                    (click)="OnBinLookupClick()">
+                                                    <i class="opti-icon-hammenu"></i>
+                                                </button>
+                                            </div>
+                                            <div class="ml-1 d-flex">
+                                                <button type="button" id="itemscanButton" (click)="onInboundScan()"
+                                                    class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                                    <i class="opti-icon-qr-code fs-24"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-12">
                     <div class="d-none d-sm-flex d-md-flex d-xl-flex row align-items-center">
-                        <h5 class="h5 col-12 col-sm-6 mb-2 col-md-6 col-lg-9">{{'ProdIssue_SelectedMaterials'|translate}}</h5>
+                        <h5 class="h5 col-12 col-sm-6 mb-2 col-md-6 col-lg-9">
+                            {{'ProdIssue_SelectedMaterials'|translate}}</h5>
                     </div>
                 </div>
             </div>
@@ -120,20 +157,22 @@
                         #gridSelectedMeterial>
 
                         <!-- grid for mobile start -->
-                        <kendo-grid-column media="(max-width: 767px)" title="{{'ProdIssue_SelectedMaterials'|translate}}" class="opti_mobile-grid-td">
+                        <kendo-grid-column media="(max-width: 767px)"
+                            title="{{'ProdIssue_SelectedMaterials'|translate}}" class="opti_mobile-grid-td">
                             <ng-template kendoGridCellTemplate let-dataItem let-idx="rowIndex">
                                 <dl class="opti_mobile_grid_dl">
                                     <dt *ngIf="OrderType==='S' || OrderType==='B'">{{SerialBatchHeaderTitle}}</dt>
                                     <dd *ngIf="OrderType==='S' || OrderType==='B'">{{ dataItem.LOTNO }}</dd>
 
                                     <dt>{{'BinNo'|translate}}</dt>
-                                    <dd>{{ dataItem.BINNO }}</dd>  
+                                    <dd>{{ dataItem.BINNO }}</dd>
                                 </dl>
 
                                 <dl class="opti_mobile_grid_dl">
                                     <dt class="d-flex align-items-center">{{'TOTALQTY'|translate}}
 
-                                        <button *ngIf="OrderType!='N'" id="removeSelectedMeterial" (click)="removeSelectedMeterial(idx,gridSelectedMeterial)"
+                                        <button *ngIf="OrderType!='N'" id="removeSelectedMeterial"
+                                            (click)="removeSelectedMeterial(idx,gridSelectedMeterial)"
                                             class="btn btn-danger k-button btn-sm btn-icon ml-auto">
                                             <span class="k-icon k-i-delete" role="presentation"></span></button>
                                     </dt>
@@ -143,8 +182,7 @@
                                         <kendo-numerictextbox #txtMet name="data"
                                             class="form-control form-control-sm text-right!important" [format]="'n3'"
                                             [(value)]="dataItem.MeterialPickQty" [step]="step"
-                                            (blur)="onIssueMeterialQtyChange(idx,txtMet)"
-                                            ></kendo-numerictextbox>
+                                            (blur)="onIssueMeterialQtyChange(idx,txtMet)"></kendo-numerictextbox>
 
                                         <!-- <input [ngModel]="dataItem.MeterialPickQty | numberFormat"(ngModelChange)="dataItem.MeterialPickQty=$event"
                                             name="inputField" type="text"
@@ -155,36 +193,41 @@
                         </kendo-grid-column>
                         <!-- grid for mobile end -->
 
-                        <kendo-grid-column media="(min-width: 768px)" *ngIf="OrderType==='S' || OrderType==='B'" field="LOTNO"
-                            title="{{SerialBatchHeaderTitle}}" [width]="30"></kendo-grid-column>
+                        <kendo-grid-column media="(min-width: 768px)" *ngIf="OrderType==='S' || OrderType==='B'"
+                            field="LOTNO" title="{{SerialBatchHeaderTitle}}" [width]="30"></kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="BINNO" title="{{'BinNo'|translate}}"
                             [width]="30"></kendo-grid-column>
-                        <kendo-grid-column media="(min-width: 768px)" field="TOTALQTY" headerClass="text-right" class=" text-right"
-                            title="{{'TOTALQTY'|translate}}" [width]="10">
+                        <kendo-grid-column media="(min-width: 768px)" field="TOTALQTY" headerClass="text-right"
+                            class=" text-right" title="{{'TOTALQTY'|translate}}" [width]="10">
 
-                            <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.TOTALQTY | numberFormat}}</ng-template>
-                        </kendo-grid-column>
- 
-
-                        <kendo-grid-column media="(min-width: 768px)" *ngIf="OrderType!='S'" headerClass="text-right"
-                            class="text-right" field="MeterialPickQty" width="50" editor="numeric" title="{{'PickQty'|translate}}">
-                            <ng-template kendoGridCellTemplate let-dataItem="dataItem" class="text-right" let-idx="rowIndex">
-                                    <!-- <input [ngModel]="dataItem.MeterialPickQty | numberFormat"  (blur)="onIssueMeterialQtyChange(idx,txtMet, e)"
-                                    (ngModelChange)="dataItem.MeterialPickQty=$event" 
-                                    #display_name (change)="updatePickQty(display_name.value, idx)" class="text-right" name="inputField" type="number" /> -->
-                                <kendo-numerictextbox [attr.disabled]="gridSelectedMeterial.data[idx].PALLETNO ? '' : null" #txtMet name="data" (blur)="onIssueMeterialQtyChange(idx,txtMet)"
-                                    class="form-control text-right form-control-sm text-right!important" [format]="'n3'"
-                                    [(value)]="dataItem.MeterialPickQty" [step]="step"
-                                   ></kendo-numerictextbox>
+                            <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.TOTALQTY | numberFormat}}
                             </ng-template>
                         </kendo-grid-column>
 
-                        <kendo-grid-column headerClass="text-center" class="text-center" media="(min-width: 768px)" *ngIf="OrderType!='N'" field="LOTNO" title=""
-                            width="10">
 
-                            <ng-template kendoGridCellTemplate let-idx="rowIndex" >
-                                
-                                <button *ngIf="gridSelectedMeterial.data[idx].PALLETNO==''" id="removeSelectedMeterial" class="align-items-center" (click)="removeMeterial(idx,gridSelectedMeterial)"
+                        <kendo-grid-column media="(min-width: 768px)" *ngIf="OrderType!='S'" headerClass="text-right"
+                            class="text-right" field="MeterialPickQty" width="50" editor="numeric"
+                            title="{{'PickQty'|translate}}">
+                            <ng-template kendoGridCellTemplate let-dataItem="dataItem" class="text-right"
+                                let-idx="rowIndex">
+                                <!-- <input [ngModel]="dataItem.MeterialPickQty | numberFormat"  (blur)="onIssueMeterialQtyChange(idx,txtMet, e)"
+                                    (ngModelChange)="dataItem.MeterialPickQty=$event" 
+                                    #display_name (change)="updatePickQty(display_name.value, idx)" class="text-right" name="inputField" type="number" /> -->
+                                <kendo-numerictextbox
+                                    [attr.disabled]="gridSelectedMeterial.data[idx].PALLETNO ? '' : null" #txtMet
+                                    name="data" (blur)="onIssueMeterialQtyChange(idx,txtMet)"
+                                    class="form-control text-right form-control-sm text-right!important" [format]="'n3'"
+                                    [(value)]="dataItem.MeterialPickQty" [step]="step"></kendo-numerictextbox>
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-column headerClass="text-center" class="text-center" media="(min-width: 768px)"
+                            *ngIf="OrderType!='N'" field="LOTNO" title="" width="10">
+
+                            <ng-template kendoGridCellTemplate let-idx="rowIndex">
+
+                                <button *ngIf="gridSelectedMeterial.data[idx].PALLETNO==''" id="removeSelectedMeterial"
+                                    class="align-items-center" (click)="removeMeterial(idx,gridSelectedMeterial)"
                                     class="btn btn-danger k-button btn-sm btn-icon">
                                     <span class="k-icon k-i-delete" role="presentation"></span></button>
                             </ng-template>
@@ -202,21 +245,24 @@
             <div class="col-sm-12 col-12">
                 <!-- *ngIf="selectedMeterials && selectedMeterials.length>0" -->
                 <button type="button" (click)="back(0)" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
-                    class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
+                        class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
                 <button type="button" *ngIf="selectedMeterials && selectedMeterials.length>0 && !fromProduction"
                     (click)="addMetToCollection()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-save" role="presentation"></span> {{'Save'|translate}}</button>
 
-                <button type="button" *ngIf="selectedMeterials && selectedMeterials.length>0 && fromProduction" (click)="addMetToCollection(true)"
-                    class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-save"></span>
+                <button type="button" *ngIf="selectedMeterials && selectedMeterials.length>0 && fromProduction"
+                    (click)="addMetToCollection(true)" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
+                        class="k-icon k-i-save"></span>
                     {{'Save'|translate}}</button>
-                <button type="button" *ngIf="selectedMeterials && selectedMeterials.length>0 && fromProduction"  (click)="submitProduction()"
-                 class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-check"></span>
+                <button type="button" *ngIf="selectedMeterials && selectedMeterials.length>0 && fromProduction"
+                    (click)="submitProduction()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
+                        class="k-icon k-i-check"></span>
                     {{'Issue'|translate}}</button>
                 <!-- <div class="clearfix mt-1 d-block d-sm-none"></div> -->
 
-                
-                <button type="button" id="outBoundHiddenScanButton" style="visibility:hidden" (click)="onHiddenScanClick()"
+
+                <button type="button" id="outBoundHiddenScanButton" style="visibility:hidden"
+                    (click)="onHiddenScanClick()"
                     class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                     SB </button>
             </div>
@@ -225,7 +271,8 @@
 </div>
 
 <span *ngIf="showLookup==true">
-    <app-lookup [lookupfor]='lookupFor' [serviceData]='lookupData' (lookupkey)="getLookupValue($event,gridSelectedMeterial)"></app-lookup>
+    <app-lookup [lookupfor]='lookupFor' [serviceData]='lookupData'
+        (lookupkey)="getLookupValue($event,gridSelectedMeterial)"></app-lookup>
 </span>
 
 <!-- Loader -->

@@ -12,6 +12,9 @@ import { Commonservice } from 'src/app/services/commonservice.service';
 
 import { Lot, ProductionIssueModel, Item } from 'src/app/models/Production/IFP';
 import { ProductionService } from 'src/app/services/production.service';
+import { LabelPrintReportsService } from 'src/app/services/label-print-reports.service';
+import { ISubscription } from 'rxjs/Subscription';
+import { InboundService } from 'src/app/services/inbound.service';
 
 
 
@@ -58,10 +61,12 @@ export class OutProdissueComponent implements OnInit {
   public pagable: boolean = false;
   public pageSize: number = Commonservice.pageSize;
   public pageTitle: any = "";
-  constructor(private ourboundService: OutboundService, private router: Router, private toastr: ToastrService, private translate: TranslateService, private commonservice: Commonservice, private productionService: ProductionService) { }
+  constructor(private ourboundService: OutboundService, private router: Router, 
+    private toastr: ToastrService, private translate: TranslateService,private inboundService: InboundService,
+     private commonservice: Commonservice, private productionService: ProductionService) { }
   fromProduction = true;
   public currentOrderNo: string;
-
+  fromITR:any = false;
   ngOnInit() {
 
     //lsOutbound
@@ -80,19 +85,27 @@ export class OutProdissueComponent implements OnInit {
         }
         this.manageOldCollection();
       }
+      if (localStorage.getItem("ComingFrom") == "itr") {
 
-      if (localStorage.getItem("ComingFrom") == "ProductionIssue") {
+        this.fromProduction = false;
+        this.fromITR =true;
+        this.OpenQtylbl = this.translate.instant("BalanceQty");
+        this.PickQtylbl = this.translate.instant("IssuedQty");
+        this.pageTitle = this.translate.instant("ProdIssue_IssueForPO");
+      }else if (localStorage.getItem("ComingFrom") == "ProductionIssue") {
 
         this.fromProduction = true;
-
+        this.fromITR = false;
         this.OpenQtylbl = this.translate.instant("BalanceQty");
         this.PickQtylbl = this.translate.instant("IssuedQty");
         this.pageTitle = this.translate.instant("ProdIssue_IssueForPO");
       } else {
         this.fromProduction = false;
+        this.fromITR = false;
         this.PickQtylbl = this.translate.instant("PickQty");
         this.OpenQtylbl = this.translate.instant("OpenQty");
         this.pageTitle = this.translate.instant("ProdIssue_DeleiveryForSO");
+      }
 
         this.ourboundService.getUOMList(this.selected.ITEMCODE).subscribe(
           data => {
@@ -101,7 +114,7 @@ export class OutProdissueComponent implements OnInit {
             this.selectedUOM = this.selectedUOM[0];
           }
         )
-      }
+      //}
 
       this._requiredMeterialQty = parseFloat(this.selected.OPENQTY);
       this._remainingMeterial = this._requiredMeterialQty - this._pickedMeterialQty;
@@ -688,8 +701,19 @@ export class OutProdissueComponent implements OnInit {
             t.Item.RefLineNo !== this.outbound.SelectedItem.RefLineNo && t.Item.ITEMCODE !== this.outbound.SelectedItem.ITEMCODE || t.Order["Order No"] !== this.outbound.OrderData["Order No"]);
         }
         else {
-          this.outbound.TempMeterials = this.outbound.TempMeterials.filter((t: any) =>
-            t.Item.ROWNUM !== this.outbound.SelectedItem.ROWNUM && t.Item.ITEMCODE !== this.outbound.SelectedItem.ITEMCODE || t.Item.DOCNUM !== this.outbound.OrderData.DOCNUM);
+          // this.outbound.TempMeterials = this.outbound.TempMeterials.filter((t: any) =>
+          //   (t.Item.ROWNUM !== this.outbound.SelectedItem.ROWNUM && 
+          //     t.Item.ITEMCODE !== this.outbound.SelectedItem.ITEMCODE )|| 
+          //     t.Item.DOCNUM !== this.outbound.OrderData.DOCNUM);
+            var tempItems= this.outbound.TempMeterials;
+            var OtherTempItems:any =[];
+            for(let i=0; i< tempItems.length;i++){
+              if(tempItems[i].Item.ROWNUM !== this.outbound.SelectedItem.ROWNUM && tempItems[i].Item.ITEMCODE !== this.outbound.SelectedItem.ITEMCODE ||
+                tempItems[i].Item.DOCNUM !== this.outbound.OrderData.DOCNUM){
+                OtherTempItems.push(tempItems[i]);
+                }
+            }
+            this.outbound.TempMeterials =OtherTempItems;
         }
         // loop selected Items
         for (let index = 0; index < this.selectedMeterials.length; index++) {
@@ -1228,4 +1252,96 @@ export class OutProdissueComponent implements OnInit {
   // this.addToDeleiver(false);
   // this.prepareDeleiveryCollectionAndDeliver(orderId);
 
-}
+
+
+
+
+
+  OnBinLookupClick(){
+    this.ShowBins();
+  }
+
+  toBinListSubs :ISubscription;
+  toBinvalue:any;
+  /**
+    * Method to get list of inquries from server.
+   */
+  public ShowBins() {
+   // this.targetBinClick = false;
+    this.showLookupLoader = true; 
+    this.toBinListSubs =  this.inboundService.getRevBins("").subscribe(
+      (data: any) => {
+        this.showLookupLoader = false;
+        console.log(data);
+        if (data != null) {
+          if (data.length > 0) {
+              this.toBinvalue = data[0].BINNO;
+            }
+            else {
+              console.log(data);
+              this.showLookupLoader = false;
+              this.lookupData = data;
+              this.lookupFor = "RecvBinList";
+              return;
+            }
+          } else {
+            this.toastr.error('', this.translate.instant("Inbound_NoBinsAvailableMsg"));
+          }
+      },
+      error => {
+        this.showLookupLoader = false;
+        console.log("Error: ", error);
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
+
+
+  OnBinChange() {
+    if (this.toBinvalue == "") {
+      return;
+    }
+    this.showLookupLoader = true;
+    this.inboundService.binChange(this.toBinvalue).subscribe(
+      (data: any) => {
+        this.showLookupLoader = false;
+        console.log(data);
+        if (data != null) {
+          if (data.length > 0) {
+            if (data[0].Result == "0") {
+              this.toastr.error('', this.translate.instant("INVALIDBIN"));
+              this.toBinvalue = "";
+              return;
+            }
+            else {
+              this.toBinvalue = data[0].ID;
+              // oCurrentController.isReCeivingBinExist();
+            }
+          }
+        }
+        else {
+          this.toastr.error('', this.translate.instant("INVALIDBIN"));
+          this.toBinvalue = "";
+          return;
+        }
+      },
+      error => {
+        this.showLookupLoader= false;
+        console.log("Error: ", error);
+        this.toBinvalue = "";
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+     );
+    }
+
+} 
