@@ -72,9 +72,7 @@ export class OutOrderComponent implements OnInit {
     if(localStorage.getItem("ComingFrom")=="itr"){
       // localStorage.setItem("ComingFrom","itr");
       this.pagetitle= this.translate.instant("InvTransfer_ByITR");
-      let outbound: OutboundData = new OutboundData();
-      outbound.ITRToBinNo = { ToBin: this.toBinNo };
-      localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
+     
     } else {
       let companyName = '';
       let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);

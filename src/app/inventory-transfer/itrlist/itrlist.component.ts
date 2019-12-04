@@ -14,8 +14,8 @@ export class ITRLIstComponent implements OnInit {
 
   ngOnInit() {
     localStorage.setItem("ComingFrom","itr");
-
      let outbound: OutboundData = new OutboundData();
+      outbound.ITRToBinNo = { ToBin: "" };
       var customerCode = "";
       var customerName = "";
       outbound.CustomerData = { CustomerCode:customerCode, CustomerName: customerName };
