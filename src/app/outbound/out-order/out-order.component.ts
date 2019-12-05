@@ -40,6 +40,7 @@ export class OutOrderComponent implements OnInit {
   showDeleiveryAndAdd: boolean;
   itrCode: string = "";
   toBinNo: string = "";
+  toWhse: string = "";
   @Input() fromWhere;
   @Output() screenBackEvent = new EventEmitter();
 
@@ -70,7 +71,7 @@ export class OutOrderComponent implements OnInit {
     // lsOutbound
    // console.log("from where",this.fromWhere);  
     if(localStorage.getItem("ComingFrom")=="itr"){
-      // localStorage.setItem("ComingFrom","itr");
+      this.fromWhere = "itr";
       this.pagetitle= this.translate.instant("InvTransfer_ByITR");
      
     } else {
@@ -93,7 +94,11 @@ export class OutOrderComponent implements OnInit {
       if (this.outbound.OrderData !== undefined && this.outbound.OrderData !== null
         && this.outbound.OrderData.DOCNUM !== undefined && this.outbound.OrderData.DOCNUM !== null) {
         this.orderNumber = this.outbound.OrderData.DOCNUM;
+        this.itrCode = this.orderNumber;
         // this.openSOOrderList(); 
+        if(localStorage.getItem("ComingFrom")=="itr"){
+          this.getITRItemList();
+        } else {
         if(localStorage.getItem("IsSOAvailable") == "True"){
           this.openSOOrderList(this.orderNumber);
           localStorage.setItem("IsSOAvailable", "False");
@@ -101,7 +106,7 @@ export class OutOrderComponent implements OnInit {
         }else{ 
           this.openSOOrderList(); 
         }
-         
+        }
         this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
       }
       this.calculatePickQty();
@@ -213,7 +218,8 @@ export class OutOrderComponent implements OnInit {
           this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
           this.openSOOrderList();
         } else if (this.lookupfor == "ITRList") {
-          this.itrCode = lookupValue.DocEntry
+          this.toWhse = lookupValue.ToWhsCode;
+          this.itrCode = lookupValue.DocEntry;
           this.orderNumber = this.itrCode;
           this.getITRItemList();
         } else if (this.lookupfor == "toBinsList") {
@@ -489,7 +495,7 @@ export class OutOrderComponent implements OnInit {
           let existHdr = false;
           for (let index = 0; index < arrSOHEADER.length; index++) {
             let h = arrSOHEADER[index];
-            if (h.SONumber === o.Order.DOCNUM && h.ItemCode === o.Item.ITEMCODE &&
+            if (h.SONumber.toString() === o.Order.DOCNUM && h.ItemCode === o.Item.ITEMCODE &&
               h.Tracking === o.Item.TRACKING) {
               existHdr = true;
               break;
@@ -553,7 +559,7 @@ export class OutOrderComponent implements OnInit {
         deliveryToken.SODETAIL = arrSODETAIL;
         deliveryToken.UDF = [];
       }
-      // this.showLookupLoader = false;
+     
       //==delivery submit final code===
       this.outboundservice.addDeleivery(deliveryToken).subscribe(
         data => {
@@ -1323,7 +1329,10 @@ export class OutOrderComponent implements OnInit {
               this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
+          this.toWhse = data.Table[0].ToWhsCode;
           this.itrCode = data.Table[0].DocEntry;
+          this.orderNumber = this.itrCode;
+
           //this.invTransITRData.ITRData = { DocEntry: this.itrCode };
           //localStorage.setItem(CommonConstants.InvTransITRData, JSON.stringify(this.invTransITRData));
           this.getITRItemList();
@@ -1353,7 +1362,7 @@ export class OutOrderComponent implements OnInit {
             CARDNAME: this.outbound.CustomerData.customerName,
             CUSTREFNO: "",
             DOCDUEDATE: "04/24/2019",
-            DOCNUM: ""+this.itrCode,
+            DOCNUM: this.itrCode,
             SHIPPINGTYPE: "",
             SHIPTOCODE: ""
           };
@@ -1363,7 +1372,8 @@ export class OutOrderComponent implements OnInit {
           this.outbound.OrderData.DOCNUM = tempOrderData.DOCNUM = this.orderNumber;
         }
 
-        this.showLookupLoader = true;
+      this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
+      this.showLookupLoader = true;
       this.inventoryTransferService.GetITRItemList(this.itrCode).subscribe(
         data => {
           this.showLookupLoader = false;
@@ -1410,7 +1420,8 @@ export class OutOrderComponent implements OnInit {
 
     OnBinLookupClick() {
       this.showLookupLoader = true;
-      this.inventoryTransferService.getToBin("", localStorage.getItem("whseId")).subscribe(
+      this.showLookup = false;
+      this.inventoryTransferService.getToBin("", this.toWhse).subscribe(
         data => {
           this.showLookupLoader = false;
           if (data != null) {
@@ -1440,7 +1451,7 @@ export class OutOrderComponent implements OnInit {
         return;
       }
       this.showLookupLoader = true;
-      this.inventoryTransferService.isToBinExist(this.toBinNo, localStorage.getItem("whseId")).subscribe(
+      this.inventoryTransferService.isToBinExist(this.toBinNo, this.toWhse).subscribe(
         data => {
           this.showLookupLoader = false;
           if (data != null) {
@@ -1472,4 +1483,61 @@ export class OutOrderComponent implements OnInit {
         }
       );
     }
+  
+  submitITR(){
+    var oWhsTransAddLot: any = {};
+    oWhsTransAddLot.Header = [];
+    oWhsTransAddLot.Detail = [];
+    //oWhsTransAddLot.UDF = [];
+    for (var i = 0; i < this.soItemsDetail.length; i++) {
+      this.soItemsDetail[i].LineNum = i;
+    }
+    oWhsTransAddLot.Detail = this.soItemsDetail;
+    oWhsTransAddLot.Header.push({
+      WhseCode: localStorage.getItem("fromwhseId"),
+      ToWhsCode: localStorage.getItem("towhseId"), //oToWhs,
+      Type: "Items",
+      DiServerToken: localStorage.getItem("Token"), //companyDBObject.DIServerToken,
+      CompanyDBId: localStorage.getItem("CompID"), //companyDBObject.CompanyDbName,
+      TransType: "WHS",
+      //--------------------Adding Parameters for the Licence--------------------------------------------
+      GUID: localStorage.getItem("GUID"),
+      UsernameForLic: localStorage.getItem("UserId")
+      //------------------End for the Licence Parameter------------------------------------------------------
+    });
+
+    this.inventoryTransferService.submitBinTransfer(oWhsTransAddLot).subscribe(
+      data => {
+        this.showLookupLoader = false;
+        if (data != null) {
+          if (data.length > 0) {
+            //--------------------------------------Function to Check for the Licence---------------------------------------
+            if (data[0].ErrorMsg != undefined) {
+              if (data[0].ErrorMsg == "7001") {
+                this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+                  this.translate.instant("CommonSessionExpireMsg"));
+                return;
+              }
+            }
+            //-----------------------------------End for the Function Check for Licence--------------------------------
+            if (data[0].ErrorMsg == "") {
+              this.toastr.success('', this.translate.instant("InvTransfer_ItemsTranSuccessfully") + " " + data[0].SuccessNo);
+            }
+            else {
+              this.toastr.error('', data[0].ErrorMsg);
+            }
+          }
+        }
+      },
+      error => {
+        this.showLookupLoader = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
 }

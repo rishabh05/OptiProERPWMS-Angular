@@ -315,6 +315,7 @@ export class OutCutomerComponent implements OnInit {
       let hdrLine: number = 0;
       let limit = -1;
       let hdrLineVal = 0;
+      let headerLineArray: any = [];
       // Loop through delivery collection 
       for (let index = 0; index < this.outbound.DeleiveryCollection.length; index++) {
 
@@ -335,12 +336,12 @@ export class OutCutomerComponent implements OnInit {
 
           const o = lineDeleiveryCollection[hIdx];
 
-
+   
           // check hdr exists
           let existHdr = false;
           for (let index = 0; index < arrSOHEADER.length; index++) {
             const h = arrSOHEADER[index];
-            if (h.SONumber === o.Order.DOCNUM
+            if (h.SONumber.toString() === o.Order.DOCNUM
               && h.ItemCode === o.Item.ITEMCODE
               && h.Tracking === o.Item.TRACKING) {
               existHdr = true;
@@ -351,24 +352,8 @@ export class OutCutomerComponent implements OnInit {
           if (existHdr == false) {
             // Add Header here and then add 
             hdrLineVal = hdrLineVal + 1;
-
-
-
+            headerLineArray.push(hdrLineVal);
             let hdr: SOHEADER = new SOHEADER();
-
-            // "DiServerToken":"66F7E7A4-D2AE-4E37-91E8-8BE390F2D32F",
-            // "SONumber":165,
-            // "CompanyDBId":"BUILD128SRC12X",
-            // "LineNo":0,
-            // "ShipQty":"2",
-            // "DocNum":165,
-            // "OpenQty":" 12.000",
-            // "WhsCode":"01",
-            // "Tracking":"S",
-            // "ItemCode":"Serial",
-            // "UOM":-1,
-            // "Line":0
-
             hdr.DiServerToken = token;
             hdr.SONumber = o.Item.DOCENTRY;
             hdr.CompanyDBId = comDbId;
@@ -388,9 +373,16 @@ export class OutCutomerComponent implements OnInit {
 
           // check weather item existe or not 
           let hasDetail = false;
+          both:
           for (let index = 0; index < arrSODETAIL.length; index++) {
             const element = arrSODETAIL[index];
-            if (element.LotNumber === o.Meterial.LOTNO && element.Bin === o.Meterial.BINNO && element.parentLine === hdrLineVal) {
+            if (element.LotNumber === o.Meterial.LOTNO && element.Bin === o.Meterial.BINNO ) {
+              for (let headerIndex = 0; headerIndex < headerLineArray.length; headerIndex++) {
+                if (element.parentLine === headerLineArray[headerIndex]) {
+                  hasDetail = true;
+                  break both;
+                }
+              }
               hasDetail = true;
               break;
             }
@@ -401,13 +393,6 @@ export class OutCutomerComponent implements OnInit {
             // Add Detail here 
             let dtl: SODETAIL = new SODETAIL();
 
-            // "Bin":"01-SYSTEM-BIN-LOCATION",
-            // "LotNumber":"08JANS000011",
-            // "LotQty":"1",
-            // "SysSerial":231,
-            // "parentLine":0,
-            // "GUID":"6d92d887-23bb-4390-85df-75e4caa7e328",
-            // "UsernameForLic":"Rishabh"
 
             dtl.Bin = o.Meterial.BINNO;
             dtl.LotNumber = o.Meterial.LOTNO;
@@ -424,7 +409,7 @@ export class OutCutomerComponent implements OnInit {
 
           limit = limit + lineDeleiveryCollection.length;
 
-
+          
         }
       }
 
@@ -435,7 +420,7 @@ export class OutCutomerComponent implements OnInit {
         deliveryToken.UDF = [];
       }
 
-      this.showLookupLoader = true;
+     this.showLookupLoader = true;
       this.outboundservice.addDeleivery(deliveryToken).subscribe(
         data => {
           if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {

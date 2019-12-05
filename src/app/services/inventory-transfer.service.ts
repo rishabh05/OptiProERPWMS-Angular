@@ -147,7 +147,8 @@ export class InventoryTransferService {
         { 
           CompanyDBId: localStorage.getItem("CompID"), 
           USERCODE: localStorage.getItem("UserId"), 
-          WHSCODE: localStorage.getItem("whseId")
+          WHSCODE: localStorage.getItem("whseId"),
+          DocEntry: ""
         }]) 
       };
     return this.httpclient.post(this.config_params.service_url + "/api/WhsTrans/GetITRList", jObject, this.commonService.httpOptions);
