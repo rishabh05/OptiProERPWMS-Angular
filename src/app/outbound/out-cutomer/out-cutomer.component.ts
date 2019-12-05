@@ -658,9 +658,6 @@ export class OutCutomerComponent implements OnInit {
       }
     );
   }
-
-
-
 }
 
 

@@ -535,7 +535,6 @@ export class OutProdissueComponent implements OnInit {
   removeMeterial(idx: any, grd: any) {
     this.delGrd = grd;
     this.delIdx = idx;
-
     this.showConfirmDialog = true;
   }
 
