@@ -378,11 +378,11 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
     if (Number(this.OpenQty) == 0) {
       this.toastr.error('', this.translate.instant("Inbound_NoOpenQuantity"));
-      this.qty = 0;
+      this.qty = undefined;
       return false;
     } else if (quantitySum > Number(this.OpenQty)) {
       this.toastr.error('', this.translate.instant("Inbound_NoOpenQuantityValid"));
-      this.qty = 0;
+      this.qty = undefined;
       return false;
     } else {
       return true;
@@ -490,7 +490,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
                 this.searlNo = this.searlNo + "-" + plt;
               }
               var autLotFlag = "false";
-              if (this.MfrSerial != '' && this.MfrSerial != undefined) {
+              if (autoLots[0].AUTOLOT == "Y") {
                 autLotFlag = "true";
               }
 
@@ -556,7 +556,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         }
 
         var autLotFlag = "false";
-        if (this.MfrSerial != '' && this.MfrSerial != undefined) {
+        if (autoLots[0].AUTOLOT == "Y") {
           autLotFlag = "true";
         }
 
@@ -578,9 +578,14 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   }
 
   addNonTrackQty(qty: any) {
-    let result = this.recvingQuantityBinArray.find(element => element.Bin == this.RecvbBinvalue);
-    if (result == undefined) {
+   // let sum;
+    // let result = this.recvingQuantityBinArray.find(element => element.Bin == this.RecvbBinvalue);
+    // if(this.recvingQuantityBinArray.length > 1){
+    //   sum = this.recvingQuantityBinArray.map(item => item.LotQty).reduce((prev, next) => prev + next);
+    // }
+    
 
+   // if (result == undefined) {
       this.recvingQuantityBinArray.push(new RecvingQuantityBin("", "", qty, this.RecvbBinvalue, this.expiryDate, this.palletValue, "false"));
       if (!this.fromReceiptProduction) {
         this.showButton = true;
@@ -589,11 +594,10 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         this.showButton = true;
         this.showRecButton = false;
       }
-
-    } else {
-      this.toastr.error('', this.translate.instant("Inbound_BinValidation"));
-      return;
-    }
+    // } else {
+    //   this.toastr.error('', this.translate.instant("Inbound_BinValidation"));
+    //   return;
+    // }
 
   }
   /**
@@ -721,6 +725,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
   submitCurrentGRPO() {
     var oSubmitPOLotsObj: any = {};
+    oSubmitPOLotsObj.Header = [];
     oSubmitPOLotsObj.POReceiptLots = [];
     oSubmitPOLotsObj.POReceiptLotDetails = [];
     oSubmitPOLotsObj.UDF = [];
@@ -894,6 +899,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     var oSubmitPOLotsObj: any = {};
     var dataModel = localStorage.getItem("GRPOReceieveData");
     if (dataModel == null || dataModel == undefined || dataModel == "") {
+      oSubmitPOLotsObj.Header = [];
       oSubmitPOLotsObj.POReceiptLots = [];
       oSubmitPOLotsObj.POReceiptLotDetails = [];
       oSubmitPOLotsObj.UDF = [];
@@ -909,6 +915,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     var oSubmitPOLotsObj: any = {};
     var dataModel = localStorage.getItem("AddToGRPO");
     if (dataModel == null || dataModel == undefined || dataModel == "") {
+      oSubmitPOLotsObj.Header = [];
       oSubmitPOLotsObj.POReceiptLots = [];
       oSubmitPOLotsObj.POReceiptLotDetails = [];
       oSubmitPOLotsObj.UDF = [];
@@ -1204,6 +1211,8 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       localStorage.getItem("Line") == "") {
       localStorage.setItem("Line", "0");
     }
+
+
     oSubmitPOLotsObj.POReceiptLots.push({
       DiServerToken: localStorage.getItem("Token"),
       PONumber: this.openPOLineModel[0].DOCENTRY,
@@ -1267,6 +1276,10 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       });
     }
     localStorage.setItem("Line", "" + (Number(localStorage.getItem("Line")) + 1));
+
+    oSubmitPOLotsObj.Header.push({
+      NumAtCard: localStorage.getItem("VendRefNo")
+    });
     return oSubmitPOLotsObj;
   }
 

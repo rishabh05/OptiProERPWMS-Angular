@@ -45,6 +45,8 @@ export class InboundPolistComponent implements OnInit {
   showLoader: boolean = false;
   pagable: boolean = false;
   pageSize: number = Commonservice.pageSize;
+  showConfirmDialog = false;
+
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent, private inventoryTransferService: InventoryTransferService) {
     let userLang = navigator.language.split('-')[0];
@@ -82,7 +84,7 @@ export class InboundPolistComponent implements OnInit {
   }
 
   onPOlookupClick() {
-    console.log("item POlookup click :");
+    this.openConfirmationDialog();
     this.showLoader = true;
     this.inboundService.getPOList(this.futurepo,
       this.inboundMasterComponent.selectedVernder, this.itemCode).subscribe(
@@ -195,7 +197,7 @@ export class InboundPolistComponent implements OnInit {
               && this.poCode != "" && this.poCode != undefined) {
               const poline = this.openPOLinesModel[0];
               this.openPOLineModel = poline;
-              // this.openPOLineModel.RPTQTY = 0;
+              // this.openPOLineModel.RPTQTY = poline.OPENQTY;
               this.openPOLineModel.DocNum = this.poCode;
               this.inboundMasterComponent.setClickedItemDetail(this.openPOLineModel);
               this.getAutoLot(this.openPOLineModel.ITEMCODE);
@@ -421,9 +423,31 @@ export class InboundPolistComponent implements OnInit {
   }
 
   onCancelClick() {
-    this.inboundMasterComponent.inboundComponent = 1;
-    localStorage.setItem("PONumber", "");
+    if(this.checkDataDiff()){
+      this.openConfirmationDialog();
+    }else{
+      this.inboundMasterComponent.inboundComponent = 1;
+      localStorage.setItem("PONumber", "");
+    }
   }
+
+  checkDataDiff(): boolean{
+    let addToGRPOArrayCount=0, oSavedPOLotsArrayCount=0;
+    if(localStorage.getItem("AddToGRPO") != ""){
+      this.addToGRPOArray = JSON.parse(localStorage.getItem("AddToGRPO"));
+      addToGRPOArrayCount = this.addToGRPOArray.POReceiptLots.length ;
+    }
+    if(localStorage.getItem("GRPOReceieveData") != ""){
+      this.oSavedPOLotsArray = JSON.parse(localStorage.getItem("GRPOReceieveData"));
+      oSavedPOLotsArrayCount = this.oSavedPOLotsArray.POReceiptLots.length;
+    }
+    
+    if(addToGRPOArrayCount !=  oSavedPOLotsArrayCount){
+      return true
+    }
+    return false;
+  }
+
 
   onAddtoGRPOClick() {
     this.oSavedPOLotsArray = JSON.parse(localStorage.getItem("GRPOReceieveData"));
@@ -432,6 +456,7 @@ export class InboundPolistComponent implements OnInit {
         this.addToGRPOArray = JSON.parse(localStorage.getItem("AddToGRPO"));
         this.manageGRPOData();
       } else {
+        this.addToGRPOArray.Header = [];
         this.addToGRPOArray.POReceiptLots = [];
         this.addToGRPOArray.POReceiptLotDetails = [];
         this.addToGRPOArray.UDF = [];
@@ -533,6 +558,10 @@ export class InboundPolistComponent implements OnInit {
               });
             }
           }
+
+          this.addToGRPOArray.Header.push({
+            NumAtCard: localStorage.getItem("VendRefNo")
+          });
         }
       }
       localStorage.setItem("AddToGRPO", JSON.stringify(this.addToGRPOArray));
@@ -608,6 +637,38 @@ export class InboundPolistComponent implements OnInit {
     var inputValue = (<HTMLInputElement>document.getElementById('inboundScanInputField')).value;
     if (inputValue.length > 0) {
       this.itemCode = inputValue;
+    }
+  }
+
+  dialogFor: string = "";
+  dialogMsg: string = ""
+  yesButtonText: string = "";
+  noButtonText: string = "";
+
+  public openConfirmationDialog() {
+    this.dialogFor = "Confirmation";
+    this.dialogMsg = this.translate.instant("Inbound_AddToGRPOMsg");
+    this.yesButtonText = this.translate.instant("yes");
+    this.noButtonText = this.translate.instant("no");
+    this.showConfirmDialog = true;
+  }
+
+  getConfirmDialogValue($event) {
+    this.showConfirmDialog = false;
+    if ($event.Status == "yes") {
+      switch ($event.From) {
+        case ("Confirmation"):
+          this.onAddtoGRPOClick();
+          break;
+       
+      }
+    } else {
+      switch ($event.From) {
+        case ("Confirmation"):
+          
+          break;
+       
+      }
     }
   }
 }
