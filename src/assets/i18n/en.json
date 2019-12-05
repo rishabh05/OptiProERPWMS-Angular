@@ -81,6 +81,9 @@
   "Inbound_ActualBatchNo": "Actual Batch No.",
   "Inbound_ActualSerialNo": "Actual Serial No.",
   "Inbound_NewPallet": "New Pallet",
+  "Inbound_VendRefNo": "Vendor Ref. No.",
+  "Inbound_MaxLength": "Length cannot be greater than 100 characters.",
+  "Inbound_AddToGRPOMsg":"Do you want to add your data to GRPO?",
   
   "5":"Outbound",
   "Outbound_Delivery": "Delivery",
