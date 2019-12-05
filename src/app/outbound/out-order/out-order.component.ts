@@ -511,7 +511,6 @@ export class OutOrderComponent implements OnInit {
           selectedDelivery.Item.TRACKING === d.Item.TRACKING
         );
         //=========filter  collection docnum, docentry, tracking wise.
-
         //=============== Adding header and Detail Objects logic==================
         for (let hIdx = 0; hIdx < lineDeleiveryCollection.length; hIdx++) {
           let o = lineDeleiveryCollection[hIdx];
