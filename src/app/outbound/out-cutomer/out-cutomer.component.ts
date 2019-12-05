@@ -38,7 +38,8 @@ export class OutCutomerComponent implements OnInit {
   public uomList: any = [];
   pagable: boolean = false;
   pageSize: number = 10;
-
+  public trackingId: any = "";
+  public CustRefNo: any = "";
   constructor(private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) { }
 
   ngOnInit() {
@@ -55,6 +56,8 @@ export class OutCutomerComponent implements OnInit {
           && this.outbound.CustomerData !== undefined && this.outbound.CustomerData !== null) {
           this.customerCode = this.outbound.CustomerData.CustomerCode;
           this.customerName = this.outbound.CustomerData.CustomerName;
+          this.CustRefNo = this.outbound.CustomerData.CustRefNo;
+          this.trackingId = this.outbound.CustomerData.TrackingId;
         }
 
         if (this.outbound.DeleiveryCollection !== undefined && this.outbound.DeleiveryCollection !== null && this.outbound.DeleiveryCollection.length > 0) {
@@ -128,8 +131,9 @@ export class OutCutomerComponent implements OnInit {
           let outbound: OutboundData = new OutboundData();
           this.customerCode = resp[0].CUSTCODE;
           this.customerName = resp[0].CUSTNAME;
+          outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName, TrackingId:this.trackingId,
+            CustRefNo:this.CustRefNo};
 
-          outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
           // lsOutbound
           localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
           CurrentOutBoundData.CustomerData = outbound.CustomerData;
@@ -161,8 +165,9 @@ export class OutCutomerComponent implements OnInit {
         this.orderNumber = this.selectedCustomerElement[0];
         this.customerCode = this.selectedCustomerElement[2];
         this.customerName = this.selectedCustomerElement[1];
-  
-        outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
+
+        outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName, TrackingId:this.trackingId,
+         CustRefNo:this.CustRefNo};
 
         CurrentOutBoundData.CustomerData = outbound.CustomerData;
         this.outbound = outbound;
@@ -184,8 +189,10 @@ export class OutCutomerComponent implements OnInit {
         let outbound: OutboundData = new OutboundData();
         this.customerCode = this.selectedCustomerElement[0];
         this.customerName = this.selectedCustomerElement[1];
-  
-        outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
+
+        //outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
+        outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName,
+          TrackingId:this.trackingId, CustRefNo:this.CustRefNo};
         // lsOutbound
         localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
         CurrentOutBoundData.CustomerData = outbound.CustomerData;
@@ -255,8 +262,43 @@ export class OutCutomerComponent implements OnInit {
     this.router.navigateByUrl('home/outbound/outorder', { skipLocationChange: true });
   }
 
+
+  customerRefNoBlur(){
+    let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+    if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
+      this.outbound = JSON.parse(outboundData);
+      if (this.outbound != undefined && this.outbound != null && this.outbound
+          && this.outbound.CustomerData !== undefined && this.outbound.CustomerData !== null) {
+          var customerCode = this.outbound.CustomerData.CustomerCode;
+          var  customerName = this.outbound.CustomerData.CustomerName;
+          var CustRefNo = this.CustRefNo;
+          var trackingId = this.outbound.CustomerData.TrackingId;
+          this.outbound.CustomerData = { CustomerCode: customerCode, CustomerName: customerName,
+             TrackingId:trackingId, CustRefNo:CustRefNo};
+          localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+        }
+      }
+
+  }
+  trackingIdBlur(){
+    let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+    if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
+      this.outbound = JSON.parse(outboundData);
+      if (this.outbound != undefined && this.outbound != null && this.outbound
+          && this.outbound.CustomerData !== undefined && this.outbound.CustomerData !== null) {
+          var customerCode = this.outbound.CustomerData.CustomerCode;
+          var  customerName = this.outbound.CustomerData.CustomerName;
+          var CustRefNo = this.outbound.CustomerData.CustRefNo;
+          var trackingId = this.trackingId;
+          this.outbound.CustomerData = { CustomerCode: customerCode, CustomerName: customerName,
+             TrackingId:trackingId, CustRefNo:CustRefNo};
+          localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+        }
+      }
+
+  }
   public cancel() {
-    // lsOutbound   
+    // lsOutbound
     localStorage.setItem(CommonConstants.OutboundData, null)
     CurrentOutBoundData.CustomerData = null;
     this.router.navigateByUrl('home/dashboard');
@@ -315,10 +357,10 @@ export class OutCutomerComponent implements OnInit {
       let hdrLine: number = 0;
       let limit = -1;
       let hdrLineVal = 0;
-      // Loop through delivery collection 
+      // Loop through delivery collection
       for (let index = 0; index < this.outbound.DeleiveryCollection.length; index++) {
 
-        //get first item from collection        
+        //get first item from collection
         const element = this.outbound.DeleiveryCollection[index];
 
 
@@ -349,7 +391,7 @@ export class OutCutomerComponent implements OnInit {
           }
 
           if (existHdr == false) {
-            // Add Header here and then add 
+            // Add Header here and then add
             hdrLineVal = hdrLineVal + 1;
 
 
@@ -383,10 +425,12 @@ export class OutCutomerComponent implements OnInit {
             hdr.UOM = -1;
             hdr.UOMName = o.Item.UOM;
             hdr.Line = hdrLineVal;
+            hdr.NumAtCard = this.outbound.CustomerData.CustRefNo;
+            hdr.TrackingNumber = this.outbound.CustomerData.TrackingId;
             arrSOHEADER.push(hdr);
           }
 
-          // check weather item existe or not 
+          // check weather item existe or not
           let hasDetail = false;
           for (let index = 0; index < arrSODETAIL.length; index++) {
             const element = arrSODETAIL[index];
@@ -398,7 +442,7 @@ export class OutCutomerComponent implements OnInit {
 
 
           if (hasDetail == false) {
-            // Add Detail here 
+            // Add Detail here
             let dtl: SODETAIL = new SODETAIL();
 
             // "Bin":"01-SYSTEM-BIN-LOCATION",
@@ -556,7 +600,7 @@ export class OutCutomerComponent implements OnInit {
   public soItemsDetail: any = null;
   public showSOIetDetail = false;
   public selectedCustomer: any;
-
+ 
   public onOrderNoBlur() {
     this.showLookup = false;
     if (this.orderNumber == "" || this.orderNumber == undefined) {
@@ -573,7 +617,7 @@ export class OutCutomerComponent implements OnInit {
             this.showLookupLoader = false;
             return;
           }
-          
+
           let outbound: OutboundData = new OutboundData();
           this.customerCode = resp[0].CARDCODE
           this.customerName = resp[0].CARDNAME
@@ -606,7 +650,7 @@ export class OutCutomerComponent implements OnInit {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
-         
+
           this.lookupfor = "out-order";
           this.showLookupLoader = false;
           this.serviceData = resp;
