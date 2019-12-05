@@ -151,13 +151,14 @@ export class OutOrderComponent implements OnInit {
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
     if (outboundData != undefined && outboundData != '') {
       this.outbound = JSON.parse(outboundData);
-    }
-    if(this.outbound.TempMeterials.length>0){
+    
+    if(this.outbound.TempMeterials!=null && this.outbound.TempMeterials!=undefined && this.outbound.TempMeterials.length>0){
       this.showDialog("ClearTempArray", this.translate.instant("yes"), this.translate.instant("no"),
       this.translate.instant("Plt_DataDeleteMsg"));
       this.fromEvent = "lookup";
       return;
     }
+  }
     
 
     if (this.selectedCustomer != null && this.selectedCustomer != undefined
@@ -611,7 +612,7 @@ export class OutOrderComponent implements OnInit {
             error);
         }
       );
-      //==delivery submit final code===
+    //==delivery submit final code===
     //  console.log("shdr", arrSOHEADER);
     }
   }
