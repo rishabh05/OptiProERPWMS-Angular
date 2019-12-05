@@ -16,6 +16,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
   @ViewChild('VendScanInputField') vendInputScanField:ElementRef;
   public viewLines: boolean;
   showLookupLoader: boolean = true; 
+  VendRefNo: string="";
   serviceData: any[];
   lookupfor: string;
   VendCode: string;
@@ -511,13 +512,11 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
   }
 
   onPOlookupClick() {
-    console.log("item POlookup click :");
     this.showLoader = true;
     this.inboundService.getPOList(false,
       this.VendCode, "").subscribe(
         (data: any) => {
           this.showLoader = false;
-          console.log("get polist response:");
           if (data != undefined) {
             if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
               this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
@@ -526,7 +525,6 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
             }
             this.showLookupLoader = false;
             this.serviceData = data.Table;
-            console.log("get polist response serviceData:", this.serviceData);
             this.lookupfor = "POList";
           } else {
             this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
@@ -546,4 +544,11 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
   }
 
 
+  OnVendRefNoChange() {
+    if(this.VendRefNo.length <= 100){
+      localStorage.setItem("VendRefNo", this.VendRefNo);
+    }else{
+      this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+    }
+  }
 }

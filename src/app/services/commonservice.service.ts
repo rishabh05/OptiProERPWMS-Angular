@@ -179,11 +179,27 @@ export class Commonservice {
   }
 
   RemoveLicenseAndSignout(toastr: ToastrService, router: Router, message: string) {
-    var jObject = { GUID: localStorage.getItem("GUID"), LoginId: localStorage.getItem("UserId") };
-    this.httpclient.post(this.config_params.service_url + "/api/Login/RemoveLoggedInUser", jObject, this.httpOptions);
-    this.signOut(this.toastr, this.router, message);
-    //return this.httpclient.post(this.config_params.service_url + "/api/Login/RemoveLoggedInUser", jObject, this.httpOptions);
+    this.RemoveLicense().subscribe(
+      (data: any) => {
+        console.log(data);
+        this.signOut(this.toastr, this.router, message);
+      },
+      error => {
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
   }
+
+
+  RemoveLicense(): Observable<any> {
+    var jObject = { GUID: localStorage.getItem("GUID"), LoginId: localStorage.getItem("UserId") };
+    return this.httpclient.post(this.config_params.service_url + "/api/WMSLogin/RemoveLoggedInUser", jObject, this.httpOptions);
+  }
+
 
   //Get Setting from DB
   getSettingOnSAP(): Observable<any> {
@@ -232,6 +248,8 @@ export class Commonservice {
     localStorage.setItem("VendName", "");
     localStorage.setItem("selectedPO", "");
     localStorage.setItem("PONumber", "");
+    localStorage.setItem("primaryAutoLots", "");
+    localStorage.setItem("VendRefNo", "");
   }
 
   getPalletList(opType: number, itemCode: string): Observable<any> {
@@ -335,7 +353,7 @@ export class Commonservice {
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetPalletDataForOutBound", jObject, this.httpOptions);
   }
-  
+
 
   /**
    * API for depalletize

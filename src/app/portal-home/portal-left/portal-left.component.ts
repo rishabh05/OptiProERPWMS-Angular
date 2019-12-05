@@ -141,19 +141,7 @@ export class PortalLeftComponent implements OnInit {
   }
 
   onInboundClick() {
-    this.clearInboundData();
-  }
-
-  clearInboundData() {
-    localStorage.setItem("GRPOReceieveData", "");
-    localStorage.setItem("Line", "0")
-    localStorage.setItem("addToGRPOPONumbers", "");
-    localStorage.setItem("AddToGRPO", "");
-    localStorage.setItem("VendCode", "");
-    localStorage.setItem("VendName", "");
-    localStorage.setItem("selectedPO", "");
-    localStorage.setItem("PONumber", "");
-    localStorage.setItem("primaryAutoLots", "");
+    this.commonService.clearInboundData();
   }
 
   onOutboundClick() {
