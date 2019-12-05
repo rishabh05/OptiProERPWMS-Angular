@@ -392,5 +392,9 @@
   "InvTransfer_ByITR": "Inventory Transfer By ITR",
   "InvTransfer_ITRList": "ITR List",
   "InvTransfer_ITR": "ITR#",
-  "InvTransfer_ITRRequestNo": "Request No."
+  "InvTransfer_ITRRequestNo": "Request No.",
+  "TrackingId": "Tracking No.",
+  "EnterTrackingId": "Enter Tracking No.",
+  "CustomerRefNo": "Customer Ref. No.",
+  "EnterCustomerRefNo": "Enter Customer Ref. No. "
 }
