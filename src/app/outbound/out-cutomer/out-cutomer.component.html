@@ -9,14 +9,17 @@
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
 
                     <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'Outbound_Customer'|translate}}</label>
+                        <label for="inputPassword"
+                            class="col-sm-3 col-form-label">{{'Outbound_Customer'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input (blur)="onCustomerCodeBlur()" [disabled]='orderCollection!=undefined && orderCollection!=null && orderCollection.length>0'
-                                    type="text" class="form-control form-control-sm" name='customerCode' [(ngModel)]="customerCode"
-                                    placeholder="{{'Outbound_Customer'|translate}}" >
+                                <input (blur)="onCustomerCodeBlur()"
+                                    [disabled]='orderCollection!=undefined && orderCollection!=null && orderCollection.length>0'
+                                    type="text" class="form-control form-control-sm" name='customerCode'
+                                    [(ngModel)]="customerCode" placeholder="{{'Outbound_Customer'|translate}}">
                                 <div class="input-group-append">
-                                    <button [disabled]='orderCollection!=undefined && orderCollection!=null && orderCollection.length>0'
+                                    <button
+                                        [disabled]='orderCollection!=undefined && orderCollection!=null && orderCollection.length>0'
                                         class="k-button k-primary btn" (click)="openCustomerLookup()" type="button">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
@@ -29,22 +32,43 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Name'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" name="customerName" value="{{customerName}}"
+                                <input type="text" class="form-control form-control-sm" name="customerName"
+                                    value="{{customerName}}" placeholder="{{'Outbound_CustomerName'|translate}}"
                                     [disabled]="true">
                             </div>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'TrackingId'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input (blur)="trackingIdBlur()" type="text" class="form-control form-control-sm" name="trackingId"
+                                    [(ngModel)]="trackingId" placeholder="{{'EnterTrackingId'|translate}}"
+                                    >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'CustomerRefNo'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input type="text" (blur)="customerRefNoBlur()" class="form-control form-control-sm" name="custRefNo"
+                                    [(ngModel)]="CustRefNo" placeholder="{{'EnterCustomerRefNo'|translate}}"
+                                   >
+                            </div>
+                        </div>
+                    </div>
+
 
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Outbound_SO'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input (blur)="onOrderNoBlur()" 
-                                    type="text" class="form-control form-control-sm" name='orderNumber' [(ngModel)]="orderNumber"
-                                    placeholder="{{'Outbound_SO'|translate}}" >
+                                <input (blur)="onOrderNoBlur()" type="text" class="form-control form-control-sm"
+                                    name='orderNumber' [(ngModel)]="orderNumber"
+                                    placeholder="{{'Outbound_SO'|translate}}">
                                 <div class="input-group-append">
-                                    <button 
-                                        class="k-button k-primary btn" (click)="openOrderLookup()" type="button" >
+                                    <button class="k-button k-primary btn" (click)="openOrderLookup()" type="button">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
                                 </div>
@@ -55,14 +79,15 @@
                 </div>
             </div>
 
-            <div class="row" *ngIf='(orderCollection!==undefined && orderCollection!==null && orderCollection.length>0)'>
+            <div class="row"
+                *ngIf='(orderCollection!==undefined && orderCollection!==null && orderCollection.length>0)'>
                 <div class="col-12">
 
                     <div>
                         <!-- (selectionChange)="openPOByUOM($event,soItemsDetail.ITEMCODE)" -->
                         <kendo-grid class="no-shadow" [kendoGridBinding]="orderCollection" [resizable]="true"
-                            [pageSize]="pageSize" [pageable]="pagable" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
-                            [height]=gridHeight (selectionChange)="openOrderScreen($event)"
+                            [pageSize]="pageSize" [pageable]="pagable" [sortable]="true" [filterable]=isColumnFilter
+                            [groupable]=isColumnGroup [height]=gridHeight (selectionChange)="openOrderScreen($event)"
                             [selectable]="true" #gridItem>
 
                             <!-- grid for mobile start -->
@@ -70,7 +95,7 @@
                                 <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                     <dl class="opti_mobile_grid_dl w-100">
                                         <dt class="d-flex align-items-center">{{'Outbound_OrderNo'|translate}}
-                                            <button id="removeSelectedMeterial" (click)="removeOrder(idx,gridItem)" 
+                                            <button id="removeSelectedMeterial" (click)="removeOrder(idx,gridItem)"
                                                 class="btn btn-danger k-button btn-sm btn-icon ml-auto">
                                                 <span class="k-icon k-i-delete" role="presentation"></span></button>
                                         </dt>
@@ -80,10 +105,13 @@
                             </kendo-grid-column>
                             <!-- grid for mobile end -->
 
-                            <kendo-grid-column media="(min-width: 768px)"  field="DOCNUM" title="Order No"></kendo-grid-column>
-                            <kendo-grid-column headerClass="text-center" class="text-center" media="(min-width: 768px)"  field="DOCNUM" [width]="80" title="{{'Delete'|translate}}">
+                            <kendo-grid-column media="(min-width: 768px)" field="DOCNUM" title="Order No">
+                            </kendo-grid-column>
+                            <kendo-grid-column headerClass="text-center" class="text-center" media="(min-width: 768px)"
+                                field="DOCNUM" [width]="80" title="{{'Delete'|translate}}">
                                 <ng-template kendoGridCellTemplate let-idx="rowIndex">
-                                    <button id="removeSelectedMeterial" (click)="removeOrder(idx,gridItem)" class="btn btn-danger k-button btn-sm btn-icon">
+                                    <button id="removeSelectedMeterial" (click)="removeOrder(idx,gridItem)"
+                                        class="btn btn-danger k-button btn-sm btn-icon">
                                         <span class="k-icon k-i-delete" role="presentation"></span></button>
                                 </ng-template>
                             </kendo-grid-column>
@@ -99,19 +127,23 @@
                 <hr />
             </div>
             <div class="col-sm-12 col-12">
-                <button type="button" [hidden]='!(orderCollection!==undefined && orderCollection!==null && orderCollection.length>0)'
-                    (click)="prepareDeleiveryCollection()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
-                        class="k-icon k-i-check" role="presentation"></span> {{'Deleiver'|translate}}</button>
+                <button type="button"
+                    [hidden]='!(orderCollection!==undefined && orderCollection!==null && orderCollection.length>0)'
+                    (click)="prepareDeleiveryCollection()"
+                    class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-check"
+                        role="presentation"></span> {{'Deleiver'|translate}}</button>
                 <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="cancel()"><span
                         class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
-                <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" [disabled]="!customerCode"
-                    (click)="openCustSO(true)" roterLink="binTransfer" skipLocationChange><i class="opti-icon-arrow-next"></i></button>
+                <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon"
+                    [disabled]="!customerCode" (click)="openCustSO(true)" roterLink="binTransfer" skipLocationChange><i
+                        class="opti-icon-arrow-next"></i></button>
 
-                    <button type="button" id="outbound1_sohiddenScanButton" style="visibility:hidden" (click)="outbound1_sohiddenScanButton()"
+                <button type="button" id="outbound1_sohiddenScanButton" style="visibility:hidden"
+                    (click)="outbound1_sohiddenScanButton()"
                     class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
-                    SB </button>                    
+                    SB </button>
 
-            </div> 
+            </div>
         </div>
     </form>
 

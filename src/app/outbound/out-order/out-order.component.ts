@@ -141,13 +141,25 @@ export class OutOrderComponent implements OnInit {
     return dBit;
   }
 
-
+  fromEvent: any = ""
   onOrderNoBlur() {
     if (this.orderNumber)
       this.openSOOrderList(this.orderNumber);
   }
-
+  
   public openOrderLookup() {
+    let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+    if (outboundData != undefined && outboundData != '') {
+      this.outbound = JSON.parse(outboundData);
+    }
+    if(this.outbound.TempMeterials.length>0){
+      this.showDialog("ClearTempArray", this.translate.instant("yes"), this.translate.instant("no"),
+      this.translate.instant("Plt_DataDeleteMsg"));
+      this.fromEvent = "lookup";
+      return;
+    }
+    
+
     if (this.selectedCustomer != null && this.selectedCustomer != undefined
       && this.selectedCustomer.CustomerCode != '' && this.selectedCustomer.CustomerCode != null) {
 
@@ -349,9 +361,19 @@ export class OutOrderComponent implements OnInit {
   }
 
   public openOutboundCustomer() {
-    this.router.navigateByUrl("home/outbound/outcustomer", { skipLocationChange: true })
-  }
-
+    
+    let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+    if (outboundData != undefined && outboundData != '') {
+      this.outbound = JSON.parse(outboundData);
+    }
+    if(this.outbound.TempMeterials.length>0){
+      this.showDialog("ClearTempArray", this.translate.instant("yes"), this.translate.instant("no"),
+      this.translate.instant("Plt_DataDeleteMsg"));
+      this.fromEvent = "backArrow"
+    }else{
+      this.router.navigateByUrl("home/outbound/outcustomer", { skipLocationChange: true })
+    }
+   }
   public addToDeleiver(goToCustomer: boolean = true) {
 
     this.callPrepareDeleiveryTempCollectionMethod()
@@ -406,6 +428,8 @@ export class OutOrderComponent implements OnInit {
         }
       }
     }
+     // after we create delivery collection clear temp collection.
+     this.outbound.TempMeterials =[];
   }
 
   public deleiver(orderId: any = null) {
@@ -474,7 +498,7 @@ export class OutOrderComponent implements OnInit {
       let hdrLineVal = 0;
       let headerLineArray: any = [];
 
-      this.showLookupLoader = true;
+    this.showLookupLoader = true;
       // Loop through delivery collection 
       for (let index = 0; index < this.outbound.DeleiveryCollection.length; index++) {
 
@@ -520,6 +544,8 @@ export class OutOrderComponent implements OnInit {
             hdr.UOM = -1;
             hdr.UOMName = o.Item.UOM;
             hdr.Line = hdrLineVal;
+            hdr.NumAtCard = this.outbound.CustomerData.CustRefNo;
+            hdr.TrackingNumber = this.outbound.CustomerData.TrackingId;
             arrSOHEADER.push(hdr);
           }
           //============================start check header exist or not then add ========
@@ -1201,6 +1227,23 @@ export class OutOrderComponent implements OnInit {
         case ("Delivery"):
           this.deleiver();
           break;
+        case ("ClearTempArray"):
+
+             let obd = localStorage.getItem(CommonConstants.OutboundData);
+            if (obd != undefined && obd != '') {
+              this.outbound = JSON.parse(obd);
+              // clear temp data if user do not want to save it or add to deliver it.
+              this.outbound.TempMeterials =[];
+              localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+            }
+            if(this.fromEvent =="backArrow"){
+              this.router.navigateByUrl("home/outbound/outcustomer", { skipLocationChange: true })  
+            }else if(this.fromEvent =="backArrow"){
+
+            }
+            
+            this.fromEvent =  "";
+            break;
       }
     } else {
       if ($event.Status == "no") {
@@ -1212,6 +1255,9 @@ export class OutOrderComponent implements OnInit {
           case ("Delivery"):
             this.deleiver(this.outbound.OrderData.DOCNUM);
             break;
+            case ("ClearTempArray"):
+                this.fromEvent =  "";
+                break;
         }
       }
     }

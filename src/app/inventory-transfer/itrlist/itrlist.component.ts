@@ -18,7 +18,7 @@ export class ITRLIstComponent implements OnInit {
       outbound.ITRToBinNo = { ToBin: "" };
       var customerCode = "";
       var customerName = "";
-      outbound.CustomerData = { CustomerCode:customerCode, CustomerName: customerName };
+      outbound.CustomerData = { CustomerCode:customerCode, CustomerName: customerName, TrackingId:"",CustRefNo:"" };
       localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
   }
 

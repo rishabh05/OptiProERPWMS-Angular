@@ -16,6 +16,8 @@ export class SOHEADER {
     UOMName: string;
     Line: number;
     UsernameForLic: string;
+    NumAtCard: string;
+    TrackingNumber: string;
 }
 
 export class SODETAIL {
