@@ -172,9 +172,13 @@ export class OutCutomerComponent implements OnInit {
         CurrentOutBoundData.CustomerData = outbound.CustomerData;
         this.outbound = outbound;
 
+        // outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
+        outbound.OrderData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
+        outbound.OrderData.DOCNUM = this.orderNumber;
 
-        this.outbound.OrderData = lookupValue;
-        this.orderNumber = this.outbound.OrderData.DOCNUM;
+        // localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
+        // this.outbound.OrderData = lookupValue;
+        // this.outbound.OrderData.DOCNUM = this.orderNumber;
         // lsOutbound
         localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
         // this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
