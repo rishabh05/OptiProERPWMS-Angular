@@ -78,11 +78,12 @@ export class InputDialogComponent implements OnInit {
     this.opened = true;
   }
 
-  OnBinLookupClick() {
+  public ShowAllBins() {
     this.showLoader = true;
-    this.inboundService.getRevBins('N').subscribe(
-      data => {
+    this.inboundService.getAllBins('N', localStorage.getItem("whseId")).subscribe(
+      (data: any) => {
         this.showLoader = false;
+        console.log(data);
         if (data != null) {
           if (data.length > 0) {
             this.showLookup = false;
@@ -90,11 +91,13 @@ export class InputDialogComponent implements OnInit {
             this.lookupfor = "toBinsList";
           }
           else {
-            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+            this.toastr.error('', this.translate.instant("Inbound_NoBinsAvailableMsg"));
           }
         }
       },
       error => {
+        this.showLoader = false;
+        console.log("Error: ", error);
         if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
           this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
         }
@@ -103,6 +106,38 @@ export class InputDialogComponent implements OnInit {
         }
       }
     );
+  }
+
+
+  OnBinLookupClick() {
+    if (localStorage.getItem('FromReceiptProd') == 'true') {
+      this.ShowAllBins();
+    } else {
+      this.showLoader = true;
+      this.inboundService.getRevBins('N').subscribe(
+        data => {
+          this.showLoader = false;
+          if (data != null) {
+            if (data.length > 0) {
+              this.showLookup = false;
+              this.serviceData = data;
+              this.lookupfor = "toBinsList";
+            }
+            else {
+              this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+            }
+          }
+        },
+        error => {
+          if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+          }
+          else {
+            this.toastr.error('', error);
+          }
+        }
+      );
+    }
   }
 
   OnBinChange() {

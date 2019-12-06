@@ -106,7 +106,7 @@ export class LookupComponent implements OnInit {
       this.showToWhsList();
     } else if (this.lookupfor == "ItemsList") {
       this.showItemCodeList();
-    } else if (this.lookupfor == "BatchNoList") {
+    } else if (this.lookupfor == "BatchNoList" || this.lookupfor == "BatchNoList2") {
       this.showBatchNoList();
     } else if (this.lookupfor == "NTrackFromBin") {
       this.showNTrackFromBinList();

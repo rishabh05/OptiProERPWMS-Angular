@@ -61,7 +61,7 @@ export class InboundPolistComponent implements OnInit {
     var ponumber = localStorage.getItem("PONumber");
     if (ponumber != undefined && ponumber != null && ponumber != "") {
       this.poCode = ponumber;
-     // this.openPOLines();
+      // this.openPOLines();
       this.OnPOChange();
     }
     this.selectedVendor = this.inboundMasterComponent.selectedVernder;
@@ -70,7 +70,7 @@ export class InboundPolistComponent implements OnInit {
 
   ngAfterViewInit() {
     setTimeout(() => {
-    //  this.poScanInputField.nativeElement.focus();
+      //  this.poScanInputField.nativeElement.focus();
       var selectedPO = localStorage.getItem("selectedPO");
       if (selectedPO != undefined && selectedPO != null && selectedPO != "") {
         this.poCode = selectedPO;
@@ -108,12 +108,12 @@ export class InboundPolistComponent implements OnInit {
         error => {
           this.showLoader = false;
           console.log("Error: ", error);
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-         } 
-         else{
-          this.toastr.error('', error);
-         }
+          if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+          }
+          else {
+            this.toastr.error('', error);
+          }
         }
       );
   }
@@ -142,12 +142,12 @@ export class InboundPolistComponent implements OnInit {
         error => {
           this.showLoader = false;
           console.log("Error: ", error);
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-         } 
-         else{
-          this.toastr.error('', error);
-         }
+          if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+          }
+          else {
+            this.toastr.error('', error);
+          }
         }
       );
   }
@@ -213,12 +213,12 @@ export class InboundPolistComponent implements OnInit {
         error => {
           this.showLoader = false;
           console.log("Error: ", error);
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-         } 
-         else{
-          this.toastr.error('', error);
-         }
+          if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+          }
+          else {
+            this.toastr.error('', error);
+          }
         }
       );
 
@@ -263,12 +263,12 @@ export class InboundPolistComponent implements OnInit {
       error => {
         this.showLoader = false;
         this.toastr.error('', error);
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -296,7 +296,7 @@ export class InboundPolistComponent implements OnInit {
       return;
     }
     this.showLoader = true;
-    this.inventoryTransferService.getItemInfo(this.itemCode).subscribe(
+    this.inventoryTransferService.GetItemCode(this.itemCode).subscribe(
       data => {
         this.showLoader = false;
         if (data != undefined && data.length > 0) {
@@ -306,8 +306,7 @@ export class InboundPolistComponent implements OnInit {
               this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
-          this.itemCode = data[0].ITEMCODE;
-          // this.itemName = data[0].ITEMNAME; TRACKING
+          this.itemCode = data[0].ItemCode;
           if (this.itemCode != null && this.itemCode != undefined && this.itemCode != '') {
             this.openPOLines();
           }
@@ -318,12 +317,12 @@ export class InboundPolistComponent implements OnInit {
         }
       },
       error => {
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -334,10 +333,10 @@ export class InboundPolistComponent implements OnInit {
     // this.openPOLineModel.RPTQTY = 0;
     this.openPOLineModel.DocNum = this.poCode;
     this.inboundMasterComponent.setClickedItemDetail(this.openPOLineModel);
-    if(this.openPOLineModel.TRACKING == 'N'){
+    if (this.openPOLineModel.TRACKING == 'N') {
       localStorage.setItem("PalletizationEnabledForItem", "True");
       this.inboundMasterComponent.inboundComponent = 3;
-    }else{
+    } else {
       this.getAutoLot(poline.ITEMCODE);
     }
   }
@@ -364,10 +363,12 @@ export class InboundPolistComponent implements OnInit {
         localStorage.setItem("primaryAutoLots", JSON.stringify(this.autoLot));
         // this.openPOLineModel = this.openPOLinesModel.find(e => e.ITEMCODE == itemCode);
         if (this.openPOLineModel != null) {
-          if(this.openPOLineModel.TRACKING == 'N'){
-            this.openPOLineModel.RPTQTY = this.openPOLineModel.OPENQTY;
-            this.prepareCommonData();
-          }else{
+          if (this.openPOLineModel.TRACKING == 'N') {
+            if(Number(this.openPOLineModel.RPTQTY) != Number(this.openPOLineModel.OPENQTY)){
+              this.openPOLineModel.RPTQTY = this.openPOLineModel.OPENQTY;
+              this.ShowBins();
+            }
+          } else {
             localStorage.setItem("PalletizationEnabledForItem", "True");
             this.inboundMasterComponent.inboundComponent = 3;
           }
@@ -375,12 +376,12 @@ export class InboundPolistComponent implements OnInit {
       },
       error => {
         console.log("Error: ", error);
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -436,23 +437,23 @@ export class InboundPolistComponent implements OnInit {
     // if(this.checkDataDiff()){
     //   this.openConfirmationDialog();
     // }else{
-      this.inboundMasterComponent.inboundComponent = 1;
-      localStorage.setItem("PONumber", "");
+    this.inboundMasterComponent.inboundComponent = 1;
+    localStorage.setItem("PONumber", "");
     // }
   }
 
-  checkDataDiff(): boolean{
-    let addToGRPOArrayCount=0, oSavedPOLotsArrayCount=0;
-    if(localStorage.getItem("AddToGRPO") != ""){
+  checkDataDiff(): boolean {
+    let addToGRPOArrayCount = 0, oSavedPOLotsArrayCount = 0;
+    if (localStorage.getItem("AddToGRPO") != "") {
       this.addToGRPOArray = JSON.parse(localStorage.getItem("AddToGRPO"));
-      addToGRPOArrayCount = this.addToGRPOArray.POReceiptLots.length ;
+      addToGRPOArrayCount = this.addToGRPOArray.POReceiptLots.length;
     }
-    if(localStorage.getItem("GRPOReceieveData") != ""){
+    if (localStorage.getItem("GRPOReceieveData") != "") {
       this.oSavedPOLotsArray = JSON.parse(localStorage.getItem("GRPOReceieveData"));
       oSavedPOLotsArrayCount = this.oSavedPOLotsArray.POReceiptLots.length;
     }
-    
-    if(addToGRPOArrayCount !=  oSavedPOLotsArrayCount){
+
+    if (addToGRPOArrayCount != oSavedPOLotsArrayCount) {
       return true
     }
     return false;
@@ -670,15 +671,15 @@ export class InboundPolistComponent implements OnInit {
         case ("Confirmation"):
           this.onAddtoGRPOClick();
           break;
-       
+
       }
     } else {
       switch ($event.From) {
         case ("Confirmation"):
-        this.inboundMasterComponent.inboundComponent = 1;
-        localStorage.setItem("PONumber", "");
+          this.inboundMasterComponent.inboundComponent = 1;
+          localStorage.setItem("PONumber", "");
           break;
-       
+
       }
     }
   }
@@ -697,6 +698,66 @@ export class InboundPolistComponent implements OnInit {
     }
     var oSubmitPOLotsObj = this.prepareSubmitPurchaseOrder(oSubmitPOLotsObj);
     localStorage.setItem("GRPOReceieveData", JSON.stringify(oSubmitPOLotsObj));
+  }
+
+  RecvbBinvalue: string;
+  public ShowBins() {
+    this.inboundService.getRevBins('N').subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        console.log(data);
+        if (data != null) {
+          if (data.length > 0) {
+            this.RecvbBinvalue = data[0].BINNO;
+          }
+          this.prepareCommonData();
+        }
+      },
+      error => {
+        this.showLoader = false;
+        console.log("Error: ", error);
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
+
+  getDefaultFromBin() {
+    this.inventoryTransferService.GetDefaultBinOrBinWithQty(this.itemCode, 
+      localStorage.getItem("towhseId")).subscribe(
+      data => {
+       // this.getDefaultBinFlag = true;
+        if (data != null) {
+          let resultV = data.find(element => element.BINTYPE == 'V');
+          if (resultV != undefined) {
+            this.RecvbBinvalue = resultV.BINNO;
+          }
+          let resultD = data.find(element => element.BINTYPE == 'D');
+          if (resultD != undefined) {
+            this.RecvbBinvalue = resultD.BINNO;
+          }
+          let resultQ = data.find(element => element.BINTYPE == 'Q');
+          if (resultQ != undefined) {
+            this.RecvbBinvalue = resultQ.BINNO;
+          }
+          this.prepareCommonData();
+          return;
+        }
+
+      },
+      error => {
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
   }
 
 
@@ -736,25 +797,25 @@ export class InboundPolistComponent implements OnInit {
     });
 
 
-   // for (var iBtchIndex = 0; iBtchIndex < this.recvingQuantityBinArray.length; iBtchIndex++) {
-      oSubmitPOLotsObj.POReceiptLotDetails.push({
-        // POItemCode: this.Ponumber+this.openPOLineModel.ITEMCODE,
-        Bin: "",
-        LineNo: this.openPOLineModel.LINENUM,
-        LotNumber: "", //getUpperTableData.GoodsReceiptLineRow[iBtchIndex].SysSerNo,
-        LotQty: this.openPOLineModel.RPTQTY.toString(),
-        SysSerial: "0",
-        ExpireDate: "",//GetSubmitDateFormat(getUpperTableData.GoodsReceiptLineRow[iBtchIndex].EXPDATE), // oCurrentController.GetSubmitDateFormat(oActualGRPOModel.PoDetails[iIndex].ExpireDate),//oActualGRPOModel.PoDetails[iIndex].ExpireDate,
-        VendorLot: "",
-        //NoOfLabels: oActualGRPOModel.PoDetails[iIndex].NoOfLabels,
-        //Containers: piContainers,
-        SuppSerial: "",
-        ParentLineNo: Number(localStorage.getItem("Line")),
-        LotSteelRollId: "",
-        ItemCode: this.openPOLineModel.ITEMCODE,
-        PalletCode: ""
-      });
-  //  }
+    // for (var iBtchIndex = 0; iBtchIndex < this.recvingQuantityBinArray.length; iBtchIndex++) {
+    oSubmitPOLotsObj.POReceiptLotDetails.push({
+      // POItemCode: this.Ponumber+this.openPOLineModel.ITEMCODE,
+      Bin: this.RecvbBinvalue,
+      LineNo: this.openPOLineModel.LINENUM,
+      LotNumber: "", //getUpperTableData.GoodsReceiptLineRow[iBtchIndex].SysSerNo,
+      LotQty: this.openPOLineModel.RPTQTY.toString(),
+      SysSerial: "0",
+      ExpireDate: "",//GetSubmitDateFormat(getUpperTableData.GoodsReceiptLineRow[iBtchIndex].EXPDATE), // oCurrentController.GetSubmitDateFormat(oActualGRPOModel.PoDetails[iIndex].ExpireDate),//oActualGRPOModel.PoDetails[iIndex].ExpireDate,
+      VendorLot: "",
+      //NoOfLabels: oActualGRPOModel.PoDetails[iIndex].NoOfLabels,
+      //Containers: piContainers,
+      SuppSerial: "",
+      ParentLineNo: Number(localStorage.getItem("Line")),
+      LotSteelRollId: "",
+      ItemCode: this.openPOLineModel.ITEMCODE,
+      PalletCode: ""
+    });
+    //  }
 
     // for (var iLastIndexNumber = 0; iLastIndexNumber < this.LastSerialNumber.length; iLastIndexNumber++) {
     //   oSubmitPOLotsObj.LastSerialNumber.push({
