@@ -91,9 +91,9 @@ export class OutProdissueComponent implements OnInit {
         this.toBinNo = this.outbound.ITRToBinNo.ToBin;
         this.fromProduction = false;
         this.fromITR =true;
-        this.OpenQtylbl = this.translate.instant("BalanceQty");
-        this.PickQtylbl = this.translate.instant("IssuedQty");
-        this.pageTitle = this.translate.instant("ProdIssue_IssueForPO");
+        this.PickQtylbl = this.translate.instant("PickQty");
+        this.OpenQtylbl = this.translate.instant("OpenQty");
+        this.pageTitle = this.translate.instant("InvTransfer_ITR");
       }else if (localStorage.getItem("ComingFrom") == "ProductionIssue") {
 
         this.fromProduction = true;
@@ -535,7 +535,6 @@ export class OutProdissueComponent implements OnInit {
   removeMeterial(idx: any, grd: any) {
     this.delGrd = grd;
     this.delIdx = idx;
-
     this.showConfirmDialog = true;
   }
 

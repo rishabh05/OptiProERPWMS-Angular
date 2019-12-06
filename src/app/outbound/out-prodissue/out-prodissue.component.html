@@ -68,7 +68,7 @@
             </div>
 
             <div class="row mt-3">
-                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6" *ngIf="OrderType!='N'" >
                     <div class="form-group row">
                         <!-- <label for="inputPassword" class="col-sm-3 col-form-label"></label> -->
                         <!-- <div class="col-sm-9">
@@ -83,10 +83,8 @@
                                 </div>
                             </div>
                         </div> -->
-                        <label 
-                        class="col-sm-3 col-form-label">{{scanInputPlaceholder}}</label>
-                        <div *ngIf="OrderType!='N'" class="col-sm-9">
-                            
+                        <label class="col-sm-3 col-form-label">{{scanInputPlaceholder}}</label>
+                        <div class="col-sm-9">
                             <div class="d-flex">
                                 <div class="input-group input-group-sm">
                                     <input type="text" [(ngModel)]=ScanInputs id="outboundOrderNoScanInput"
@@ -110,35 +108,34 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row  mt-3" *ngIf="fromITR">
-                            <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
-                                <div class="form-group row">
-                                    <label for="inputPassword"
-                                        class="col-sm-3 col-form-label">{{'InvTransfer_ToBin'|translate}}</label>
-                                    <div class="col-sm-9">
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" (blur)="OnBinChange()"
-                                                placeholder="{{'InvTransfer_ToBin'|translate}}"
-                                                class="form-control form-control-sm" name="toBinNo" [(ngModel)]=toBinNo
-                                                id="toBinNo">
-                                            <div class="input-group-append has-seprate-btn">
-                                                <button class="k-button k-primary btn" type="button"
-                                                    (click)="OnBinLookupClick()">
-                                                    <i class="opti-icon-hammenu"></i>
-                                                </button>
-                                            </div>
-                                            <div class="ml-1 d-flex">
-                                                <button type="button" id="itemscanButton" (click)="onBinNoScan()"
-                                                    class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
-                                                    <i class="opti-icon-qr-code fs-24"></i>
-                                                </button>
-                                            </div>
-                                        </div>
+                </div>
+            </div>
+            <div class="row mt-3" *ngIf="fromITR && OrderType!='N'">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">{{'InvTransfer_ToBin'|translate}}</label>
+                            <div class="col-sm-9">
+                                <div class="input-group input-group-sm">
+                                    <input type="text" (blur)="OnBinChange()"
+                                        placeholder="{{'InvTransfer_ToBin'|translate}}"
+                                        class="form-control form-control-sm" name="toBinNo" [(ngModel)]=toBinNo
+                                        id="toBinNo">
+                                    <div class="input-group-append has-seprate-btn">
+                                        <button class="k-button k-primary btn" type="button"
+                                            (click)="OnBinLookupClick()">
+                                            <i class="opti-icon-hammenu"></i>
+                                        </button>
+                                    </div>
+                                    <div class="ml-1 d-flex">
+                                        <button type="button" id="itemscanButton" (click)="onBinNoScan()"
+                                            class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                            <i class="opti-icon-qr-code fs-24"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                </div>
+                    </div>
             </div>
             <div class="row">
                 <div class="col-12">
