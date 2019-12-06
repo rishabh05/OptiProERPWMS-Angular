@@ -70,6 +70,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   targetWhseSubs: ISubscription;
   showScanInput: boolean = true;
   showUOM: boolean = true;
+  showScanAndInputRadio: boolean = true;
   targetBinClick: boolean = false;
   public primaryAutoLots: AutoLot[];
   radioSelected: any = 0;
@@ -141,6 +142,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       this.fromReceiptProduction = true;
       this.initModelDataFromReceipt();
       this.showUOM = false;
+      this.showScanAndInputRadio = false;
       if (this.openPOLineModel != undefined && this.openPOLineModel != null) {
         this.Ponumber = this.receiptData.OrderNo;
         this.tracking = this.openPOLineModel[0].TRACKING;
@@ -159,6 +161,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       } else {
         this.isDisabledScanInput = false;
       }
+      this.showScanAndInputRadio = true;
       this.showUOM = true;
       this.getUOMList();
       this.LastSerialNumber = [];
@@ -202,6 +205,9 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         this.defaultRecvBin = true;
         this.ShowBins();
       }
+    }
+    if(this.fromReceiptProduction){
+      this.showScanInput = false;
     }
 
   }

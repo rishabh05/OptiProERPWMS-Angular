@@ -603,16 +603,48 @@ export class OutCutomerComponent implements OnInit {
             return;
           }
 
-          let outbound: OutboundData = new OutboundData();
+         
           this.customerCode = resp[0].CARDCODE
           this.customerName = resp[0].CARDNAME
-          outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
-          outbound.OrderData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
-          outbound.OrderData.DOCNUM = this.orderNumber;
+         
+          // let outbound: OutboundData = new OutboundData();
+          // outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
+          // outbound.OrderData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
+          // outbound.OrderData.DOCNUM = this.orderNumber;
+          // localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
+       
+          //===================================
+        let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+        if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
+          this.outbound = JSON.parse(outboundData);
+          if (this.outbound != undefined && this.outbound != null && this.outbound.OrderData!=null 
+            && this.outbound.OrderData!=undefined   && this.outbound.CustomerData !== undefined && 
+            this.outbound.CustomerData !== null) {
+              
+              this.outbound.OrderData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
+              this.outbound.OrderData.DOCNUM = this.orderNumber;
+              localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+            }else{
+             //if order is not present first time case.
+             let outbound: OutboundData = new OutboundData();
+             outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
+             outbound.OrderData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
+             outbound.OrderData.DOCNUM = this.orderNumber;
+             localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
+            }
+          }else{
+            // if first time.
+            let outbound: OutboundData = new OutboundData();
+            outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
+            outbound.OrderData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
+            outbound.OrderData.DOCNUM = this.orderNumber;
+            localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
+          }
+          //===================================
 
-          localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
-          CurrentOutBoundData.CustomerData = outbound.CustomerData;
-          this.outbound = outbound;
+
+
+
         } else {
           this.toastr.error('', this.translate.instant("Outbound_InvalidSO"));
           this.orderNumber = "";

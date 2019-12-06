@@ -96,16 +96,16 @@ export class OutOrderComponent implements OnInit {
         this.orderNumber = this.outbound.OrderData.DOCNUM;
         this.itrCode = this.orderNumber;
         // this.openSOOrderList(); 
-        if(localStorage.getItem("ComingFrom")=="itr"){
+        if (localStorage.getItem("ComingFrom") == "itr") {
           this.getITRItemList();
         } else {
-        if(localStorage.getItem("IsSOAvailable") == "True"){
-          this.openSOOrderList(this.orderNumber);
-          localStorage.setItem("IsSOAvailable", "False");
-          this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
-        }else{ 
-          this.openSOOrderList(); 
-        }
+          if (localStorage.getItem("IsSOAvailable") == "True") {
+            this.openSOOrderList(this.orderNumber);
+            localStorage.setItem("IsSOAvailable", "False");
+            this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
+          } else {
+            this.openSOOrderList();
+          }
         }
         this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
       }
@@ -321,7 +321,7 @@ export class OutOrderComponent implements OnInit {
           this.soItemsDetail = resp.RDR1;
         
           this.showLookupLoader = false;
-          if (this.soItemsDetail.length === 0) {
+          if (this.soItemsDetail.length === 0) { 
             this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
             this.showLookupLoader = false;
           }
@@ -518,7 +518,7 @@ export class OutOrderComponent implements OnInit {
           //============================start check header exist or not then add ========
           let existHdr = false;
           for (let index = 0; index < arrSOHEADER.length; index++) {
-            let h = arrSOHEADER[index];
+            let h = arrSOHEADER[index]; 
             if (h.SONumber.toString() === o.Order.DOCNUM && h.ItemCode === o.Item.ITEMCODE &&
               h.Tracking === o.Item.TRACKING) {
               existHdr = true;

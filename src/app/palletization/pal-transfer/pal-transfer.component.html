@@ -173,13 +173,14 @@
           <span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
         <!-- <button type="button" *ngIf="showButton" (click)="save($event)" class="btn btn-success k-button btn-sm btn-icon-with-text">
                   <span class="k-icon k-i-save" role="presentation"></span> {{'Save'|translate}}</button> -->
-        <button class="btn btn-success k-button btn-sm btn-icon-with-text" *ngIf="fromPalletNo!='' && toPalletNo!=''"
-          type="button" (click)="transfer($event)">
-          <span class="k-icon opti-icon-pallet-transfer" role="presentation"></span> {{'Plt_Transfer'|translate}}</button>
+       
         <button type="button" id="showHideGrid" (click)="clickShowHideGrid()" class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
           <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>
           {{showHideBtnTxt}}
         </button>
+        <button class="btn btn-success k-button btn-sm btn-icon-with-text" *ngIf="fromPalletNo!='' && toPalletNo!=''"
+        type="button" (click)="transfer($event)">
+        <span class="k-icon opti-icon-pallet-transfer" role="presentation"></span> {{'Plt_Transfer'|translate}}</button>
         <button type="button" id="PalTrans_HiddenToPltScanButton" style="visibility:hidden" (click)="onHiddenToPltScanClick()"
           class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
           SB </button>
