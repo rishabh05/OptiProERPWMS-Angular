@@ -56,6 +56,12 @@ export class InventoryTransferService {
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsWhsExist", jObject, this.commonService.httpOptions);
   }
 
+  GetItemCode(itemCode: string): Observable<any> {
+    var jObject = { ITEMCODE: JSON.stringify([{ COMPANYDBNAME: localStorage.getItem("CompID"), ITEMCODE: itemCode, WHSCODE: localStorage.getItem("whseId"),
+    GUID: localStorage.getItem("GUID"), UsernameForLic: localStorage.getItem("UserId") }]) };
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodsReceipt/GetItemCode", jObject, this.commonService.httpOptions);
+  }
+
   getItemInfo(itemCode: string): Observable<any> {
     var jObject = { ITEMCODE: JSON.stringify([{ CompanyDbName: localStorage.getItem("CompID"), ITEMCODE: itemCode, WHSCODE: localStorage.getItem("whseId") }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodsReceipt/GetItemInfo", jObject, this.commonService.httpOptions);

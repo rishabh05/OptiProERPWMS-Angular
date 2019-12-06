@@ -210,6 +210,42 @@ export class BinTransferComponent implements OnInit {
       return;
     }
     this.showLoader = true;
+    this.inventoryTransferService.GetItemCode(this.itemCode).subscribe(
+      data => {
+        this.showLoader = false;
+        if (data != undefined && data.length > 0) {
+          console.log("" + data);
+          if (data[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
+          this.itemCode = data[0].ItemCode;
+          if (this.itemCode != null && this.itemCode != undefined && this.itemCode != '') {
+            this.getItemInfo();
+          }
+
+        } else {
+          this.toastr.error('', this.translate.instant("InvalidItemCode"));
+          this.itemCode = "";
+        }
+      },
+      error => {
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
+
+  getItemInfo() {
+    if (this.itemCode == "" || this.itemCode == undefined) {
+      return;
+    }
+    this.showLoader = true;
     this.inventoryTransferService.getItemInfo(this.itemCode).subscribe(
       data => {
         this.showLoader = false;
@@ -276,7 +312,13 @@ export class BinTransferComponent implements OnInit {
             this.formatTransferNumbers();
             this.formatOnHandQty();
             this.SysNumber = data[0].SYSNUMBER;
-            this.fromBin = data[0].BINNO;
+            if(data.length > 1){
+              this.lookupfor = "BatchNoList2";
+              this.serviceData = data;
+              this.showLookupLoader = false;
+            }else{
+              this.fromBin = data[0].BINNO;
+            }
           }
         }
       },
@@ -295,14 +337,28 @@ export class BinTransferComponent implements OnInit {
     this.inventoryTransferService.GetDefaultBinOrBinWithQty(this.itemCode, 
       localStorage.getItem("towhseId")).subscribe(
       data => {
-       // this.getDefaultBinFlag = true;
         if (data != null) {
-          this.fromBin = data[0].BINNO;
-          return;
+          let resultV = data.find(element => element.BINTYPE == 'V');
+          if (resultV != undefined) {
+            this.fromBin = resultV.BINNO;
+            return;
+          }
+          let resultD = data.find(element => element.BINTYPE == 'D');
+          if (resultD != undefined) {
+            this.fromBin = resultD.BINNO;
+            return;
+          }
+          let resultI = data.find(element => element.BINTYPE == 'I');
+          if (resultI != undefined) {
+            this.fromBin = resultI.BINNO;
+            return;
+          }
+          let resultQ = data.find(element => element.BINTYPE == 'Q');
+          if (resultQ != undefined) {
+            this.fromBin = resultQ.BINNO;
+            return;
+          }
         }
-        // else {
-        //   this.ShowToBins();
-        // }
       },
       error => {
         if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
@@ -912,7 +968,20 @@ export class BinTransferComponent implements OnInit {
         this.SysNumber = $event[9];
         this.palletNo = $event[12];
         this.actualLotNo = $event[13];
-      } else if (this.lookupfor == "SBTrackFromBin") {
+      } 
+      else if (this.lookupfor == "BatchNoList2") {
+        this.lotValue = $event[0];
+        this.fromBin = $event[5];
+        this.transferQty = $event[7];
+        this.onHandQty = $event[7];
+        this.SysNumber = $event[9];
+        this.palletNo = ""
+        this.actualLotNo = $event[0];
+        // this.palletNo = $event[12];
+        // this.actualLotNo = $event[13];
+      } 
+      
+      else if (this.lookupfor == "SBTrackFromBin") {
         this.fromBin = $event[3];
         this.transferQty = $event[6];
         this.onHandQty = $event[6];

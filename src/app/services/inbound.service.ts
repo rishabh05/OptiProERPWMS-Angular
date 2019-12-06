@@ -120,7 +120,7 @@ export class InboundService {
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetBinsForReceiptWithReceivingBin", jObject, this.commonService.httpOptions);
   }
 
-  getTargetBins(QCrequired: string, targetWHS: string): Observable<any> {
+  getAllBins(QCrequired: string, targetWHS: string): Observable<any> {
     var jObject = {
       WhsCode: JSON.stringify([{
         CompanyDBId: localStorage.getItem("CompID"), ItemCode: '',
