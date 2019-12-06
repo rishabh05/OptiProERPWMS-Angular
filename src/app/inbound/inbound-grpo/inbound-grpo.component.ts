@@ -290,7 +290,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       return;
     }
     this.showLoader = true;
-    this.inboundService.binChange(this.RecvbBinvalue).subscribe(
+    this.inboundService.binChange(localStorage.getItem("whseId"), this.RecvbBinvalue).subscribe(
       (data: any) => {
         this.showLoader = false;
         console.log(data);
@@ -1539,7 +1539,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     this.targetBinClick = true;
     //this.showLoader = true; this.getPIlistSubs =
     this.showLoader = true;
-    this.targetBinSubs = this.inboundService.getRevBins("N").subscribe(
+    this.targetBinSubs = this.inboundService.getTargetBins("N",this.targetWhse).subscribe(
       (data: any) => {
         this.showLoader = false;
         console.log(data);
@@ -1606,7 +1606,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       return;
     }
     this.showLoader = true;
-    this.inboundService.binChange(this.targetBin).subscribe(
+    this.inboundService.binChange(this.targetWhse, this.targetBin).subscribe(
       (data: any) => {
         this.showLoader = false;
         console.log(data);

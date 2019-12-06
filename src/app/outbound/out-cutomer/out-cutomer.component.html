@@ -128,13 +128,16 @@
                 <hr />
             </div>
             <div class="col-sm-12 col-12">
+
+                    <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="cancel()"><span
+                        class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
+
                 <button type="button"
                     [hidden]='!(orderCollection!==undefined && orderCollection!==null && orderCollection.length>0)'
                     (click)="prepareDeleiveryCollection()"
                     class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-check"
                         role="presentation"></span> {{'Deleiver'|translate}}</button>
-                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="cancel()"><span
-                        class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
+
                 <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon"
                     [disabled]="!customerCode" (click)="openCustSO(true)" roterLink="binTransfer" skipLocationChange><i
                         class="opti-icon-arrow-next"></i></button>

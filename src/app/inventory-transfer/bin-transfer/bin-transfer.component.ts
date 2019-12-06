@@ -291,6 +291,30 @@ export class BinTransferComponent implements OnInit {
     );
   }
 
+  getDefaultFromBin() {
+    this.inventoryTransferService.GetDefaultBinOrBinWithQty(this.itemCode, 
+      localStorage.getItem("towhseId")).subscribe(
+      data => {
+       // this.getDefaultBinFlag = true;
+        if (data != null) {
+          this.fromBin = data[0].BINNO;
+          return;
+        }
+        // else {
+        //   this.ShowToBins();
+        // }
+      },
+      error => {
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
+
 
   getDefaultBin() {
     this.inventoryTransferService.getDefaultBin(this.itemCode, localStorage.getItem("towhseId")).subscribe(
@@ -873,9 +897,9 @@ export class BinTransferComponent implements OnInit {
         this.showItemName = true;
         this.transferQty = this.translate.instant("InvTransfer_zero");
         this.onHandQty = 0.000;
-        // if (localStorage.getItem("whseId") != localStorage.getItem("towhseId")) {
-        //   this.getDefaultBin();
-        // }
+        if (this.ItemTracking == 'N') {
+          this.getDefaultFromBin();
+        }
         if(localStorage.getItem("fromscreen") == "WhsTransfer"){
           this.getDefaultBin();
         }

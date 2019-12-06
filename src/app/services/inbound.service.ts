@@ -120,8 +120,20 @@ export class InboundService {
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetBinsForReceiptWithReceivingBin", jObject, this.commonService.httpOptions);
   }
 
-  binChange(binCode: string): Observable<any> {
-    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), BinCode: binCode, ItemCode: '', WhsCode: localStorage.getItem("whseId") }]) };
+  getTargetBins(QCrequired: string, targetWHS: string): Observable<any> {
+    var jObject = {
+      WhsCode: JSON.stringify([{
+        CompanyDBId: localStorage.getItem("CompID"), ItemCode: '',
+        WhsCode: targetWHS, QCRequired: QCrequired,
+        GUID: localStorage.getItem("GUID"),
+        UsernameForLic: localStorage.getItem("UserId")
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetBins", jObject, this.commonService.httpOptions);
+  }
+
+  binChange(targetWhs: string, binCode: string): Observable<any> {
+    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), BinCode: binCode, ItemCode: '', WhsCode: targetWhs }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsBinExist", jObject, this.commonService.httpOptions);
   } 
  

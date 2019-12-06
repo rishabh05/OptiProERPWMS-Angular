@@ -3,6 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { InventoryTransferService } from 'src/app/services/inventory-transfer.service';
 import { Commonservice } from 'src/app/services/commonservice.service';
+import { InboundService } from 'src/app/services/inbound.service';
 
 @Component({
   selector: 'app-input-dialog',
@@ -27,7 +28,7 @@ export class InputDialogComponent implements OnInit {
   isPalletizationEnable: boolean = false;
 
   constructor(private commonservice: Commonservice, private translate: TranslateService, private toastr: ToastrService,
-    private inventoryTransferService: InventoryTransferService) { }
+    private inboundService: InboundService) { }
 
   ngOnInit() {
     if (localStorage.getItem("AutoPalletIdGenerationChecked") == "True") {
@@ -79,7 +80,7 @@ export class InputDialogComponent implements OnInit {
 
   OnBinLookupClick() {
     this.showLoader = true;
-    this.inventoryTransferService.getToBin(this.binNo, localStorage.getItem("whseId")).subscribe(
+    this.inboundService.getRevBins('N').subscribe(
       data => {
         this.showLoader = false;
         if (data != null) {
@@ -109,13 +110,14 @@ export class InputDialogComponent implements OnInit {
       return;
     }
     this.showLoader = true;
-    this.inventoryTransferService.isToBinExist(this.binNo, localStorage.getItem("whseId")).subscribe(
+    this.inboundService.binChange(localStorage.getItem("whseId"), this.binNo).subscribe(
       data => {
         this.showLoader = false;
         if (data != null) {
           if (data.length > 0) {
             if (data[0].Result == "0") {
               this.toastr.error('', this.translate.instant("INVALIDBIN"));
+              this.binNo = '';
               return;
             }
             else {

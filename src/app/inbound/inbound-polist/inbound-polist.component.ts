@@ -307,7 +307,7 @@ export class InboundPolistComponent implements OnInit {
             return;
           }
           this.itemCode = data[0].ITEMCODE;
-          // this.itemName = data[0].ITEMNAME;
+          // this.itemName = data[0].ITEMNAME; TRACKING
           if (this.itemCode != null && this.itemCode != undefined && this.itemCode != '') {
             this.openPOLines();
           }
@@ -334,7 +334,12 @@ export class InboundPolistComponent implements OnInit {
     // this.openPOLineModel.RPTQTY = 0;
     this.openPOLineModel.DocNum = this.poCode;
     this.inboundMasterComponent.setClickedItemDetail(this.openPOLineModel);
-    this.getAutoLot(poline.ITEMCODE);
+    if(this.openPOLineModel.TRACKING == 'N'){
+      localStorage.setItem("PalletizationEnabledForItem", "True");
+      this.inboundMasterComponent.inboundComponent = 3;
+    }else{
+      this.getAutoLot(poline.ITEMCODE);
+    }
   }
 
   getAutoLot(itemCode: string) {
@@ -359,8 +364,13 @@ export class InboundPolistComponent implements OnInit {
         localStorage.setItem("primaryAutoLots", JSON.stringify(this.autoLot));
         // this.openPOLineModel = this.openPOLinesModel.find(e => e.ITEMCODE == itemCode);
         if (this.openPOLineModel != null) {
-          localStorage.setItem("PalletizationEnabledForItem", "True");
-          this.inboundMasterComponent.inboundComponent = 3;
+          if(this.openPOLineModel.TRACKING == 'N'){
+            this.openPOLineModel.RPTQTY = this.openPOLineModel.OPENQTY;
+            this.prepareCommonData();
+          }else{
+            localStorage.setItem("PalletizationEnabledForItem", "True");
+            this.inboundMasterComponent.inboundComponent = 3;
+          }
         }
       },
       error => {
@@ -423,12 +433,12 @@ export class InboundPolistComponent implements OnInit {
   }
 
   onCancelClick() {
-    if(this.checkDataDiff()){
-      this.openConfirmationDialog();
-    }else{
+    // if(this.checkDataDiff()){
+    //   this.openConfirmationDialog();
+    // }else{
       this.inboundMasterComponent.inboundComponent = 1;
       localStorage.setItem("PONumber", "");
-    }
+    // }
   }
 
   checkDataDiff(): boolean{
@@ -665,10 +675,99 @@ export class InboundPolistComponent implements OnInit {
     } else {
       switch ($event.From) {
         case ("Confirmation"):
-          
+        this.inboundMasterComponent.inboundComponent = 1;
+        localStorage.setItem("PONumber", "");
           break;
        
       }
     }
+  }
+
+  prepareCommonData() {
+    var oSubmitPOLotsObj: any = {};
+    var dataModel = localStorage.getItem("GRPOReceieveData");
+    if (dataModel == null || dataModel == undefined || dataModel == "") {
+      oSubmitPOLotsObj.Header = [];
+      oSubmitPOLotsObj.POReceiptLots = [];
+      oSubmitPOLotsObj.POReceiptLotDetails = [];
+      oSubmitPOLotsObj.UDF = [];
+      oSubmitPOLotsObj.LastSerialNumber = [];
+    } else {
+      oSubmitPOLotsObj = JSON.parse(dataModel);
+    }
+    var oSubmitPOLotsObj = this.prepareSubmitPurchaseOrder(oSubmitPOLotsObj);
+    localStorage.setItem("GRPOReceieveData", JSON.stringify(oSubmitPOLotsObj));
+  }
+
+
+  prepareSubmitPurchaseOrder(oSubmitPOLotsObj: any): any {
+    oSubmitPOLotsObj.POReceiptLots.push({
+      DiServerToken: localStorage.getItem("Token"),
+      PONumber: this.openPOLineModel.DOCENTRY,
+      CompanyDBId: localStorage.getItem("CompID"),
+      LineNo: this.openPOLineModel.LINENUM,
+      ShipQty: this.openPOLineModel.RPTQTY.toString(),
+      OpenQty: this.openPOLineModel.OPENQTY.toString(),
+      WhsCode: localStorage.getItem("whseId"),
+      Tracking: this.openPOLineModel.TRACKING,
+      ItemCode: this.openPOLineModel.ITEMCODE,
+      LastSerialNumber: 0,
+      Line: Number(localStorage.getItem("Line")),
+      GUID: localStorage.getItem("GUID"),
+      UOM: "",
+      UsernameForLic: localStorage.getItem("UserId")
+
+      //------end Of parameter For License----
+    });
+    // oSubmitPOLotsObj.UDF = [];
+    oSubmitPOLotsObj.UDF.push({
+      Key: "OPTM_TARGETWHS",//UDF[iIndex].Key,
+      Value: "",
+      //LotNo: UDF[iIndex].LotNo,
+      Flag: 'D', // D = Line, H= Header, L = Lots
+      LineNo: Number(localStorage.getItem("Line"))
+    });
+    oSubmitPOLotsObj.UDF.push({
+      Key: "OPTM_TARGETBIN",//UDF[iIndex].Key,
+      Value: "",
+      //LotNo: UDF[iIndex].LotNo,
+      Flag: 'D', // D = Line, H= Header, L = Lots
+      LineNo: Number(localStorage.getItem("Line"))
+    });
+
+
+   // for (var iBtchIndex = 0; iBtchIndex < this.recvingQuantityBinArray.length; iBtchIndex++) {
+      oSubmitPOLotsObj.POReceiptLotDetails.push({
+        // POItemCode: this.Ponumber+this.openPOLineModel.ITEMCODE,
+        Bin: "",
+        LineNo: this.openPOLineModel.LINENUM,
+        LotNumber: "", //getUpperTableData.GoodsReceiptLineRow[iBtchIndex].SysSerNo,
+        LotQty: this.openPOLineModel.RPTQTY.toString(),
+        SysSerial: "0",
+        ExpireDate: "",//GetSubmitDateFormat(getUpperTableData.GoodsReceiptLineRow[iBtchIndex].EXPDATE), // oCurrentController.GetSubmitDateFormat(oActualGRPOModel.PoDetails[iIndex].ExpireDate),//oActualGRPOModel.PoDetails[iIndex].ExpireDate,
+        VendorLot: "",
+        //NoOfLabels: oActualGRPOModel.PoDetails[iIndex].NoOfLabels,
+        //Containers: piContainers,
+        SuppSerial: "",
+        ParentLineNo: Number(localStorage.getItem("Line")),
+        LotSteelRollId: "",
+        ItemCode: this.openPOLineModel.ITEMCODE,
+        PalletCode: ""
+      });
+  //  }
+
+    // for (var iLastIndexNumber = 0; iLastIndexNumber < this.LastSerialNumber.length; iLastIndexNumber++) {
+    //   oSubmitPOLotsObj.LastSerialNumber.push({
+    //     LastSerialNumber: this.LastSerialNumber[iLastIndexNumber],
+    //     LineId: this.LineId[iLastIndexNumber],
+    //     ItemCode: this.openPOLineModel.ITEMCODE
+    //   });
+    // }
+    localStorage.setItem("Line", "" + (Number(localStorage.getItem("Line")) + 1));
+
+    oSubmitPOLotsObj.Header.push({
+      NumAtCard: localStorage.getItem("VendRefNo")
+    });
+    return oSubmitPOLotsObj;
   }
 }
