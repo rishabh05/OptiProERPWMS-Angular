@@ -2045,7 +2045,8 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         IsPalletExist: this.isPalletizationEnable,
         LoginId: localStorage.getItem("UserId"),
         GUID: localStorage.getItem("GUID"),
-        UsernameForLic: localStorage.getItem("UserId")
+        UsernameForLic: localStorage.getItem("UserId"),
+        WONO:this.receiptData.OrderNo
       });
     }
     return itemsData;
@@ -2078,6 +2079,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         RejectQTY: this.receiptData.OPENQTY,
         RecRjctedQty: "Y",
         Quantity: totalAcceptedRejectedQty,
+        WONO:this.receiptData.OrderNo
       });
     }
     return rejectItemsData;
