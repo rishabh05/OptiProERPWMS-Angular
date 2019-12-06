@@ -64,10 +64,17 @@ export class OutOrderComponent implements OnInit {
   showTemporaryViews: boolean = false;
   temoraryHideItemLookupRow: boolean = false;
   pagetitle: any ="";
+  isPalletizationEnable: boolean = false
   constructor(private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService,
     private inventoryTransferService: InventoryTransferService) { }
 
   ngOnInit() {
+    if (localStorage.getItem("PalletizationEnabled") == "True") {
+      this.isPalletizationEnable = true;
+    } else {
+      this.isPalletizationEnable = false;
+    }
+
     // lsOutbound
    // console.log("from where",this.fromWhere);  
     if(localStorage.getItem("ComingFrom")=="itr"){
@@ -94,9 +101,11 @@ export class OutOrderComponent implements OnInit {
       if (this.outbound.OrderData !== undefined && this.outbound.OrderData !== null
         && this.outbound.OrderData.DOCNUM !== undefined && this.outbound.OrderData.DOCNUM !== null) {
         this.orderNumber = this.outbound.OrderData.DOCNUM;
-        this.itrCode = this.orderNumber;
+        
         // this.openSOOrderList(); 
         if(localStorage.getItem("ComingFrom")=="itr"){
+          this.itrCode = this.orderNumber;
+          this.toBinNo = this.outbound.ITRToBinNo.ToBin
           this.getITRItemList();
         } else {
         if(localStorage.getItem("IsSOAvailable") == "True"){
@@ -231,6 +240,8 @@ export class OutOrderComponent implements OnInit {
           this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
           this.openSOOrderList();
         } else if (this.lookupfor == "ITRList") {
+          this.resetITRFields();
+          //
           this.toWhse = lookupValue.ToWhsCode;
           this.itrCode = lookupValue.DocEntry;
           this.orderNumber = this.itrCode;
@@ -437,7 +448,11 @@ export class OutOrderComponent implements OnInit {
     //this.showLookupLoader = true;
     this.callPrepareDeleiveryTempCollectionMethod();
     //this.addToDeleiver(false);
+    if(localStorage.getItem("ComingFrom")=="itr"){
+      this.submitITR();
+    } else {
     this.prepareDeleiveryCollectionAndDeliver(orderId);
+    }
     //this.showLookupLoader = false;
   }
 
@@ -654,9 +669,10 @@ export class OutOrderComponent implements OnInit {
       this.toastr.error('', this.translate.instant("Plt_AlreadySelected"));
       return;
     }
+    this.showLookupLoader = true;
     this.commonservice.GetPalletDataForOutBound(this.palletNo).subscribe(
       (data: any) => {
-       // console.log(data);
+        this.showLookupLoader = false;
         if (data != null) {
           this.itemsByPallet = data;
           this.addPalletData()
@@ -666,7 +682,6 @@ export class OutOrderComponent implements OnInit {
           this.toastr.error('', this.translate.instant("InValidPalletNo"));
           return;
         }
-        this.showLookupLoader = false;
       },
       error => {
         this.showLookupLoader = false;
@@ -1107,6 +1122,10 @@ export class OutOrderComponent implements OnInit {
       }
     }
    // console.log("pallet list: " + JSON.stringify(this.palletList));
+
+    if(this.palletList.length == 0){
+      this.palletNo = "";
+    }
   }
 
   DeliveryClick(rowindex, gridData: any) {
@@ -1225,6 +1244,9 @@ export class OutOrderComponent implements OnInit {
           this.deleteAllOkClick();
           break;
         case ("Delivery"):
+          this.deleiver();
+          break;
+        case ("Transfer ITR"):
           this.deleiver();
           break;
         case ("ClearTempArray"):
@@ -1375,12 +1397,11 @@ export class OutOrderComponent implements OnInit {
               this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
+          this.resetITRFields();
+          //
           this.toWhse = data.Table[0].ToWhsCode;
           this.itrCode = data.Table[0].DocEntry;
           this.orderNumber = this.itrCode;
-
-          //this.invTransITRData.ITRData = { DocEntry: this.itrCode };
-          //localStorage.setItem(CommonConstants.InvTransITRData, JSON.stringify(this.invTransITRData));
           this.getITRItemList();
         } else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
@@ -1400,7 +1421,8 @@ export class OutOrderComponent implements OnInit {
     }
 
     getITRItemList() {
-      if ((this.outbound.OrderData && this.outbound.OrderData != '' && this.outbound.OrderData != null) || this.itrCode) {
+      if (this.itrCode) {
+        
         let tempOrderData: any = this.outbound.OrderData;
         if (this.itrCode) {
           tempOrderData = {
@@ -1412,10 +1434,6 @@ export class OutOrderComponent implements OnInit {
             SHIPPINGTYPE: "",
             SHIPTOCODE: ""
           };
-          //this.outbound.OrderData = tempOrderData;
-        }
-        else {
-          this.outbound.OrderData.DOCNUM = tempOrderData.DOCNUM = this.orderNumber;
         }
 
       this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
@@ -1426,7 +1444,6 @@ export class OutOrderComponent implements OnInit {
           if (data != null && data != undefined) {
             data = data["Table"];
             if (data.length > 0) {
-              // this.itrItemsList = data;
               // When order num from text box.
               this.outbound.OrderData = tempOrderData;
               this.orderNumber = this.itrCode;
@@ -1531,33 +1548,89 @@ export class OutOrderComponent implements OnInit {
     }
   
   submitITR(){
+    if (this.outbound != null && this.outbound != undefined
+      && this.outbound.DeleiveryCollection != null
+      && this.outbound.DeleiveryCollection != undefined
+      && this.outbound.DeleiveryCollection.length > 0) {
+
+      if (this.itrCode !== undefined && this.itrCode !== null) {
+        this.outbound.DeleiveryCollection = this.outbound.DeleiveryCollection.filter(d => d.Order.DOCNUM === this.itrCode);
+      }
     var oWhsTransAddLot: any = {};
     oWhsTransAddLot.Header = [];
     oWhsTransAddLot.Detail = [];
-    //oWhsTransAddLot.UDF = [];
-    for (var i = 0; i < this.soItemsDetail.length; i++) {
-      this.soItemsDetail[i].LineNum = i;
+      oWhsTransAddLot.UDF = [];
+
+      let limit = -1;
+
+      this.showLookupLoader = true;
+      // Loop through delivery collection 
+      for (let index = 0; index < this.outbound.DeleiveryCollection.length; index++) {
+
+        var selectedDelivery = this.outbound.DeleiveryCollection[index];
+        //=========filter  collection docnum, docentry, tracking wise.
+        let lineDeleiveryCollection = this.outbound.DeleiveryCollection.filter(d =>
+          selectedDelivery.Order.DOCNUM === d.Order.DOCNUM &&
+          selectedDelivery.Item.DOCENTRY === d.Item.DOCENTRY &&
+          selectedDelivery.Item.TRACKING === d.Item.TRACKING
+        );
+        //=========filter  collection docnum, docentry, tracking wise.
+        //=============== Adding Detail Objects logic==================
+        for (let hIdx = 0; hIdx < lineDeleiveryCollection.length; hIdx++) {
+          let o = lineDeleiveryCollection[hIdx];
+          let hasDetail = false;
+          for (let dIdx = 0; dIdx < oWhsTransAddLot.Detail.length; dIdx++) {
+            let selectedDetl = oWhsTransAddLot.Detail[dIdx];
+            if (selectedDetl.LotNo === o.Meterial.LOTNO && selectedDetl.BinNo === o.Meterial.BINNO) {
+              hasDetail = true;
+            }
+          }
+          
+          if (hasDetail == false) {
+            var ind = o.Meterial.LOTNO.lastIndexOf(o.Meterial.PALLETNO)
+            var dtl = {
+            UsernameForLic: localStorage.getItem("UserId"),
+            LineNo: o.Item.LINENUM,
+            LotNo: o.Meterial.LOTNO,
+            ItemCode: o.Item.ITEMCODE,
+            ItemName: o.Item.ITEMNAME,
+            Qty: o.Meterial.MeterialPickQty,
+            SysNumber: o.Meterial.SYSNUMBER,
+            BinNo: o.Meterial.BINNO,
+            ToBin: this.toBinNo,
+            Tracking: o.Item.TRACKING,
+            WhsCode: o.Item.WHSCODE,
+            OnHandQty: o.Item.QUANTITY,
+            Remarks: "",
+            PalletCode: o.Meterial.PALLETNO,
+            MfrNo: o.Meterial.LOTNO.substring(0, ind-1)
+            };
+            // dtl.parentLine = o.Item.LineNo;
+            oWhsTransAddLot.Detail.push(dtl);
+          }
+          limit = limit + lineDeleiveryCollection.length;
+        }
     }
-    oWhsTransAddLot.Detail = this.soItemsDetail;
-    oWhsTransAddLot.Header.push({
+
+      let hdr = {
       WhseCode: localStorage.getItem("fromwhseId"),
-      ToWhsCode: localStorage.getItem("towhseId"), //oToWhs,
-      Type: "Items",
-      DiServerToken: localStorage.getItem("Token"), //companyDBObject.DIServerToken,
-      CompanyDBId: localStorage.getItem("CompID"), //companyDBObject.CompanyDbName,
+        ToWhsCode: this.toWhse,
+        Type: "",
+        DiServerToken: localStorage.getItem("Token"),
+        CompanyDBId: localStorage.getItem("CompID"),
       TransType: "WHS",
-      //--------------------Adding Parameters for the Licence--------------------------------------------
       GUID: localStorage.getItem("GUID"),
       UsernameForLic: localStorage.getItem("UserId")
-      //------------------End for the Licence Parameter------------------------------------------------------
-    });
+      };
+      oWhsTransAddLot.Header.push(hdr);
 
+      console.log("itrTransferToken: "+JSON.stringify(oWhsTransAddLot));
+
+      // Transfer ITR
     this.inventoryTransferService.submitBinTransfer(oWhsTransAddLot).subscribe(
       data => {
         this.showLookupLoader = false;
-        if (data != null) {
           if (data.length > 0) {
-            //--------------------------------------Function to Check for the Licence---------------------------------------
             if (data[0].ErrorMsg != undefined) {
               if (data[0].ErrorMsg == "7001") {
                 this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
@@ -1565,25 +1638,52 @@ export class OutOrderComponent implements OnInit {
                 return;
               }
             }
-            //-----------------------------------End for the Function Check for Licence--------------------------------
-            if (data[0].ErrorMsg == "") {
-              this.toastr.success('', this.translate.instant("InvTransfer_ItemsTranSuccessfully") + " " + data[0].SuccessNo);
-            }
-            else {
+
+            if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
+              this.toastr.success('', this.translate.instant("InvTransfer_ITRTransferSuccess") + " : " + data[0].SuccessNo);
+              localStorage.setItem(CommonConstants.OutboundData, null);
+              this.resetITRFields();
+            } else {
               this.toastr.error('', data[0].ErrorMsg);
             }
           }
-        }
       },
       error => {
         this.showLookupLoader = false;
-        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+          console.log(error);
         }
-        else {
-          this.toastr.error('', error);
+      );
+    }
         }
+
+  resetITRFields(){
+    //Due to single ITR, we reset ITR related local storage collection
+    this.itemsByPallet = [];
+    this.selectedPallets = [];
+    this.palletList = [];
+    this.soItemsDetail = [];
+    this.savedPalletItems = [];
+    this.palletNo = '';
+    // this.toBinNo = '';
+    this.ItemCode = '';
+        
+    let outbound: OutboundData = new OutboundData();
+    outbound.ITRToBinNo = { ToBin: "" };
+    var customerCode = "";
+    var customerName = "";
+    outbound.CustomerData = { CustomerCode: customerCode, CustomerName: customerName, TrackingId: "", CustRefNo: "" };
+    localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
+        }
+
+  itrClick(rowindex, gridData: any) {
+    this.gridData = gridData;
+    this.rowindex = rowindex;
+    this.showDialog("Transfer ITR", this.translate.instant("yes"), this.translate.instant("no"),
+      this.translate.instant("InvTransfer_SubmitITRMsg"));
       }
-    );
+
+  cancel(){
+    localStorage.setItem(CommonConstants.OutboundData, null)
+    this.router.navigate(['home/dashboard']);
   }
 }

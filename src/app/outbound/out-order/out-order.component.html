@@ -53,7 +53,7 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row" *ngIf="isPalletizationEnable">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
                     <div class="form-group row">
                         <label for="orderNumber" class="col-sm-3 col-form-label">{{'Plt_PalletNo'|translate}}</label>
@@ -112,7 +112,7 @@
                 </div>
             </div>
             
-            <div class="row" *ngIf="fromWhere=='itr'">
+            <!-- <div class="row" *ngIf="fromWhere=='itr'">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'InvTransfer_ToBin'|translate}}</label>
@@ -134,7 +134,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <div *ngIf ="temoraryHideItemLookupRow" class="row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
@@ -250,7 +250,7 @@
             </div>
             <div class="col-sm-12 col-12">
 
-                <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon mr-1"
+                <button type="button" *ngIf="fromWhere!='itr'" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon mr-1"
                     (click)="openOutboundCustomer()" roterLink="binTransfer" skipLocationChange><i
                         class="opti-icon-arrow-back"></i></button>
 
@@ -263,7 +263,10 @@
                 <button type="button" *ngIf="showDeleiveryAndAdd && fromWhere!='itr'" (click)="DeliveryClick()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-check" role="presentation"></span> {{'Deleiver'|translate}}</button>
                 
-                <button type="button" *ngIf="showDeleiveryAndAdd && fromWhere=='itr'" (click)="submitITR()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
+                <button type="button" *ngIf="fromWhere=='itr'" (click)="cancel()" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
+                        class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
+
+                <button type="button" *ngIf="showDeleiveryAndAdd && fromWhere=='itr'" (click)="itrClick()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-check" role="presentation"></span> {{'Submit'|translate}}</button>
                 <!-- <button type="button" (click)="showPalletsList()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-check" role="presentation"></span>{{btnText}}</button> -->

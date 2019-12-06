@@ -478,6 +478,7 @@ export class OutProdissueComponent implements OnInit {
           this.manageOldSelectedItems();
           this.manageExistingItem();
           this.showLookup = true;
+          this.lookupFor = "SelectScan"
         } else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         }
@@ -1255,7 +1256,7 @@ export class OutProdissueComponent implements OnInit {
   // this.prepareDeleiveryCollectionAndDeliver(orderId);
   OnBinLookupClick() {
     this.showLookupLoader = true;
-    this.inventoryTransferService.getToBin("", localStorage.getItem("whseId")).subscribe(
+    this.inventoryTransferService.getToBin("", this.selected.WHSCODE).subscribe(
       data => {
         this.showLookupLoader = false;
         if (data != null) {
@@ -1285,7 +1286,7 @@ export class OutProdissueComponent implements OnInit {
       return;
     }
     this.showLookupLoader = true;
-    this.inventoryTransferService.isToBinExist(this.toBinNo, localStorage.getItem("whseId")).subscribe(
+    this.inventoryTransferService.isToBinExist(this.toBinNo, this.selected.WHSCODE).subscribe(
       data => {
         this.showLookupLoader = false;
         if (data != null) {
