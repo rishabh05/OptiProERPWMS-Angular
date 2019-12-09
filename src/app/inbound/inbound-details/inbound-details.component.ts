@@ -20,6 +20,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
   serviceData: any[];
   lookupfor: string;
   VendCode: string;
+  VendCode1: string;
   VendName: string;
   showLoader: boolean = false;
   showGRPOGridAndBtn: boolean = false;
@@ -30,7 +31,6 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
   rowindexForDelete: any;
   gridDataAfterDelete: any[];
   showNext: boolean = false;
-
   yesButtonText: string = "";
   noButtonText: string = "";
   showPDF: boolean = false;
@@ -188,14 +188,16 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
             this.VendCode = "";
             this.showNext = false;
             this.poCode = "";
+            this.VendCode1= this.VendCode;
             return;
           } else {
-            if(this.VendCode != data[0].ID){
+            if(this.VendCode1 != data[0].ID){
               this.poCode = "";
             }
             this.VendCode = data[0].ID;
             this.VendName = data[0].Name;
             this.showNext = true;
+            this.VendCode1= this.VendCode;
           }
         } else {
           this.toastr.error('', this.translate.instant("Inbound_VendorExistMessge"));
@@ -231,12 +233,14 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
         this.VendName = $event[2];
         this.showNext = true;
         this.detailsAvailable = true;
+        this.VendCode1= this.VendCode;
       }else{
-        if(this.VendCode != $event[0]){
+        if(this.VendCode1 != $event[0]){
           this.poCode = "";
         }
         this.VendCode = $event[0];
         this.VendName = $event[1];
+        this.VendCode1= this.VendCode;
         this.showNext = true;
         this.detailsAvailable = true;
       }
@@ -486,6 +490,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
             this.VendName = data[0].NAME
             this.showNext = true;
             this.detailsAvailable = true;
+            this.VendCode1= this.VendCode;
           }
           else {
             this.poCode = "";
