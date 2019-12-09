@@ -202,7 +202,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       if (localStorage.getItem('FromReceiptProd') == 'true') {
         if (this.RecvbBinvalue == "") {
           this.defaultRecvBin = true;
-          this.ShowAllBins();
+          this.getDefaultFromBin();
         }
       } else {
         if (this.RecvbBinvalue == "") {
@@ -211,7 +211,47 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         }
       }
     }
+  }
 
+  getDefaultFromBin() {
+    this.commonservice.GetDefaultBinOrBinWithQty(this.ItemCode, 
+      localStorage.getItem("towhseId")).subscribe(
+      data => {
+        if (data != null) {
+
+          let resultV = data.find(element => element.BINTYPE == '1');
+          if (resultV != undefined) {
+            this.RecvbBinvalue = resultV.BINNO;
+            return;
+          }
+          let resultD = data.find(element => element.BINTYPE == '2');
+          if (resultD != undefined) {
+            this.RecvbBinvalue = resultD.BINNO;
+            return;
+          }
+          // this.formatTransferNumbers();
+          // this.formatOnHandQty();
+          // let resultI = data.find(element => element.BINTYPE == 'I');
+          // if (resultI != undefined) {
+          //   this.fromBin = resultI.BINNO;
+          //   return;
+          // }
+          // let resultQ = data.find(element => element.BINTYPE == 'Q');
+          // if (resultQ != undefined) {
+          //   this.fromBin = resultQ.BINNO;
+          //   return;
+          // }
+        }
+      },
+      error => {
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
   }
 
   onInboundScan() {
