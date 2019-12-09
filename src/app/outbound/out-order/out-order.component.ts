@@ -105,7 +105,7 @@ export class OutOrderComponent implements OnInit {
             this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
           } else {
             this.openSOOrderList();
-          }
+          } 
         }
         this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
       }
@@ -367,7 +367,8 @@ export class OutOrderComponent implements OnInit {
     if (outboundData != undefined && outboundData != '') {
       this.outbound = JSON.parse(outboundData);
     }
-    if(this.outbound.TempMeterials.length>0){
+    if(this.outbound.TempMeterials!=null && this.outbound.TempMeterials!=undefined && 
+      this.outbound.TempMeterials.length>0){
       this.showDialog("ClearTempArray", this.translate.instant("yes"), this.translate.instant("no"),
       this.translate.instant("Plt_DataDeleteMsg"));
       this.fromEvent = "backArrow"

@@ -160,30 +160,54 @@ export class OutCutomerComponent implements OnInit {
     else {
 
       if(this.lookupfor == "out-order"){
-        this.selectedCustomerElement = lookupValue;
-        let outbound: OutboundData = new OutboundData();
-        this.orderNumber = this.selectedCustomerElement[0];
-        this.customerCode = this.selectedCustomerElement[2];
-        this.customerName = this.selectedCustomerElement[1];
+          this.selectedCustomerElement = lookupValue;
+          let outbound: OutboundData = new OutboundData();
+          this.orderNumber = this.selectedCustomerElement[0];
+          this.customerCode = this.selectedCustomerElement[2];
+          this.customerName = this.selectedCustomerElement[1];
+          // old code =======================
+          // outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName, TrackingId:this.trackingId,
+          //  CustRefNo:this.CustRefNo};
+          // CurrentOutBoundData.CustomerData = outbound.CustomerData;
+          // this.outbound = outbound;
+          // outbound.OrderData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
+          // outbound.OrderData.DOCNUM = this.orderNumber;
+          // localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+          // old code =======================
 
-        outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName, TrackingId:this.trackingId,
-         CustRefNo:this.CustRefNo};
 
-        CurrentOutBoundData.CustomerData = outbound.CustomerData;
-        this.outbound = outbound;
+      //===================================
+      let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+      if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
+        this.outbound = JSON.parse(outboundData);
+        if (this.outbound != undefined && this.outbound != null && this.outbound.OrderData!=null 
+          && this.outbound.OrderData!=undefined   && this.outbound.CustomerData !== undefined && 
+          this.outbound.CustomerData !== null) {
+              console.log("outbound","Outbound not null if...")
+            this.outbound.OrderData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
+            this.outbound.OrderData.DOCNUM = this.orderNumber;
+            localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+          }else{
+            console.log("outbound","Outbound ka else...")
+            //if order is not present first time case.
+            let outbound: OutboundData = new OutboundData();
+            outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
+            outbound.OrderData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
+            outbound.OrderData.DOCNUM = this.orderNumber;
+            localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
+          }
+        }else{
+          // if first time.
+          let outbound: OutboundData = new OutboundData();
+          outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
+          outbound.OrderData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
+          outbound.OrderData.DOCNUM = this.orderNumber;
+          localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
+          console.log("outbound","OutboundData null case....")
+        }
+        //===================================
 
-        // outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
-        outbound.OrderData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
-        outbound.OrderData.DOCNUM = this.orderNumber;
-
-        // localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
-        // this.outbound.OrderData = lookupValue;
-        // this.outbound.OrderData.DOCNUM = this.orderNumber;
-        // lsOutbound
-        localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
-        // this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
-        // this.openSOOrderList();
-
+ 
 
       }else{
         this.selectedCustomerElement = lookupValue;
@@ -261,7 +285,13 @@ export class OutCutomerComponent implements OnInit {
     }
 
     if (clearOrder == true) {
-      localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+      let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+      if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
+        this.outbound = JSON.parse(outboundData);
+        if (this.outbound != undefined && this.outbound != null ){
+          localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));  
+        }
+      }
     }
     this.router.navigateByUrl('home/outbound/outorder', { skipLocationChange: true });
   }
@@ -624,11 +654,12 @@ export class OutCutomerComponent implements OnInit {
           if (this.outbound != undefined && this.outbound != null && this.outbound.OrderData!=null 
             && this.outbound.OrderData!=undefined   && this.outbound.CustomerData !== undefined && 
             this.outbound.CustomerData !== null) {
-              
+                console.log("outbound","Outbound not null if...")
               this.outbound.OrderData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
               this.outbound.OrderData.DOCNUM = this.orderNumber;
               localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
             }else{
+              console.log("outbound","Outbound ka else...")
              //if order is not present first time case.
              let outbound: OutboundData = new OutboundData();
              outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
@@ -643,6 +674,7 @@ export class OutCutomerComponent implements OnInit {
             outbound.OrderData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
             outbound.OrderData.DOCNUM = this.orderNumber;
             localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
+            console.log("outbound","OutboundData null case....")
           }
           //===================================
 
