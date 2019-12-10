@@ -82,8 +82,8 @@ export class InboundPolistComponent implements OnInit {
     }, 100);
 
   }
-
-  onPOlookupClick() {
+    
+  onPOlookupClick() { 
    // this.openConfirmationDialog();
     this.showLoader = true;
     this.inboundService.getPOList(this.futurepo,
@@ -117,7 +117,10 @@ export class InboundPolistComponent implements OnInit {
         }
       );
   }
+  toggleVisibility(e){
+    //console.log("checkuncheck:",this.futurepo);
 
+  }
   onItemlookupClick() {
     console.log("item lookup click :");
     this.showLoader = true;
@@ -378,7 +381,7 @@ export class InboundPolistComponent implements OnInit {
         }
       }
     );
-  }
+  } 
 
   getAutoLot(itemCode: string) {
     this.inboundService.getAutoLot(itemCode).subscribe(
