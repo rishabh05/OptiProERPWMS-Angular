@@ -1283,7 +1283,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
     oSubmitPOLotsObj.POReceiptLots.push({
       DiServerToken: localStorage.getItem("Token"),
-      PONumber: this.openPOLineModel[0].DOCENTRY,
+      PONumber: this.Ponumber,
       CompanyDBId: localStorage.getItem("CompID"),
       LineNo: this.openPOLineModel[0].LINENUM,
       ShipQty: this.openPOLineModel[0].RPTQTY.toString(),
