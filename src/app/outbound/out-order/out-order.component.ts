@@ -246,10 +246,18 @@ export class OutOrderComponent implements OnInit {
           this.toWhse = lookupValue.ToWhsCode;
           this.itrCode = lookupValue.DocEntry;
           this.orderNumber = this.itrCode;
+          this.outbound.ITRToBinNo = { 
+            ToBin: this.toBinNo,
+            ToWhse: this.toWhse
+          };
+          localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
           this.getITRItemList();
         } else if (this.lookupfor == "toBinsList") {
           this.toBinNo = lookupValue.BINNO;
-          this.outbound.ITRToBinNo = { ToBin: this.toBinNo };
+          this.outbound.ITRToBinNo = { 
+            ToBin: this.toBinNo,
+            ToWhse: this.toWhse
+          };
           localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
         } else {
           if (this.lookupfor == "ItemsList") {
@@ -698,22 +706,39 @@ export class OutOrderComponent implements OnInit {
   }
   addPalletData() {
     for (let i = 0; i < this.itemsByPallet.length; i++) {
-      this.selectedPallets.push({
-        BINNO: this.itemsByPallet[i].BINNO,
-        ACTLOTNO: this.itemsByPallet[i].ACTLOTNO,
-        EXPDATE: this.itemsByPallet[i].EXPDATE,
-        ITEMCODE: this.itemsByPallet[i].ITEMCODE,
-        ITEMNAME: this.itemsByPallet[i].ITEMNAME,
-        LOTNO: this.itemsByPallet[i].LOTNO,
-        Pallet: this.itemsByPallet[i].PALLETNO,
-        SYSNUMBER: this.itemsByPallet[i].SYSNUMBER,
-        QTY: this.itemsByPallet[i].TOTALQTY,
-        WHSCODE: this.itemsByPallet[i].WHSCODE,
-        SRLBATCH: this.itemsByPallet[i].SRLBATCH
-      })
+      if(localStorage.getItem("ComingFrom")=="itr"){
+        this.selectedPallets.push({
+          BINNO: this.itemsByPallet[i].BINNO,
+          ACTLOTNO: this.itemsByPallet[i].ACTLOTNO,
+          EXPDATE: this.itemsByPallet[i].EXPDATE,
+          ITEMCODE: this.itemsByPallet[i].ITEMCODE,
+          ITEMNAME: this.itemsByPallet[i].ITEMNAME,
+          LOTNO: this.itemsByPallet[i].LOTNO,
+          Pallet: this.itemsByPallet[i].PALLETNO,
+          SYSNUMBER: this.itemsByPallet[i].SYSNUMBER,
+          QTY: this.itemsByPallet[i].TOTALQTY,
+          WHSCODE: this.itemsByPallet[i].WHSCODE,
+          SRLBATCH: this.itemsByPallet[i].SRLBATCH,
+          ToBin: this.toBinNo
+        })
+      } else {
+        this.selectedPallets.push({
+          BINNO: this.itemsByPallet[i].BINNO,
+          ACTLOTNO: this.itemsByPallet[i].ACTLOTNO,
+          EXPDATE: this.itemsByPallet[i].EXPDATE,
+          ITEMCODE: this.itemsByPallet[i].ITEMCODE,
+          ITEMNAME: this.itemsByPallet[i].ITEMNAME,
+          LOTNO: this.itemsByPallet[i].LOTNO,
+          Pallet: this.itemsByPallet[i].PALLETNO,
+          SYSNUMBER: this.itemsByPallet[i].SYSNUMBER,
+          QTY: this.itemsByPallet[i].TOTALQTY,
+          WHSCODE: this.itemsByPallet[i].WHSCODE,
+          SRLBATCH: this.itemsByPallet[i].SRLBATCH
+        })
+      }
+      
     }
     this.managePickQuantity()
-
   }
   fromProduction: boolean = false;
   addMetToTempCollection(outboundData: any, fromIFPSave: boolean = false) {
@@ -899,19 +924,36 @@ export class OutOrderComponent implements OnInit {
     for (let i = 0; i < this.soItemsDetail.length; i++) {
       for (let j = 0; j < this.selectedPallets.length; j++) {
         if (this.soItemsDetail[i].ITEMCODE == this.selectedPallets[j].ITEMCODE) {
-          var obj = {
-            BINNO: this.selectedPallets[j].BINNO,
-            EXPDATE: this.selectedPallets[j].EXPDATE,
-            ITEMCODE: this.selectedPallets[j].ITEMCODE,
-            LOTNO: this.selectedPallets[j].LOTNO,
-            MeterialPickQty: this.selectedPallets[j].QTY,
-            PALLETNO: this.selectedPallets[j].Pallet,
-            SYSNUMBER: this.selectedPallets[j].SYSNUMBER,
-            TOTALQTY: this.selectedPallets[j].QTY,
-            WHSCODE: this.selectedPallets[j].WHSCODE,
-            isFromPallet: true
+          if(localStorage.getItem("ComingFrom")=="itr"){
+            var obj1 = {
+              BINNO: this.selectedPallets[j].BINNO,
+              EXPDATE: this.selectedPallets[j].EXPDATE,
+              ITEMCODE: this.selectedPallets[j].ITEMCODE,
+              LOTNO: this.selectedPallets[j].LOTNO,
+              MeterialPickQty: this.selectedPallets[j].QTY,
+              PALLETNO: this.selectedPallets[j].Pallet,
+              SYSNUMBER: this.selectedPallets[j].SYSNUMBER,
+              TOTALQTY: this.selectedPallets[j].QTY,
+              WHSCODE: this.selectedPallets[j].WHSCODE,
+              isFromPallet: true,
+              ToBin: this.selectedPallets[j].ToBin
+            }
+            selectedMeterialItems.push(obj1);
+          } else {
+            var obj = {
+              BINNO: this.selectedPallets[j].BINNO,
+              EXPDATE: this.selectedPallets[j].EXPDATE,
+              ITEMCODE: this.selectedPallets[j].ITEMCODE,
+              LOTNO: this.selectedPallets[j].LOTNO,
+              MeterialPickQty: this.selectedPallets[j].QTY,
+              PALLETNO: this.selectedPallets[j].Pallet,
+              SYSNUMBER: this.selectedPallets[j].SYSNUMBER,
+              TOTALQTY: this.selectedPallets[j].QTY,
+              WHSCODE: this.selectedPallets[j].WHSCODE,
+              isFromPallet: true
+            }
+            selectedMeterialItems.push(obj);
           }
-          selectedMeterialItems.push(obj);
         }
       }
     }
@@ -1076,6 +1118,7 @@ export class OutOrderComponent implements OnInit {
     if (this.palletNo == undefined || this.palletNo == "") {
       return;
     }
+    this.showLookup = false;
     var itemCodeArray = Array.prototype.map.call(this.soItemsDetail, function (item) { return "'" + item.ITEMCODE + "'"; }).join(",");
     this.commonservice.IsPalletValidForOutBound(this.palletNo, itemCodeArray).subscribe(
       (data: any) => {
@@ -1388,6 +1431,7 @@ export class OutOrderComponent implements OnInit {
 
   onITRChange() {
    // console.log("onITRChange :");
+    this.showLookup = false;
     this.showLookupLoader = true;
     this.inventoryTransferService.IsValidITR(this.itrCode).subscribe(
       (data: any) => {
@@ -1404,6 +1448,11 @@ export class OutOrderComponent implements OnInit {
           this.toWhse = data.Table[0].ToWhsCode;
           this.itrCode = data.Table[0].DocEntry;
           this.orderNumber = this.itrCode;
+          this.outbound.ITRToBinNo = {
+            ToBin: this.toBinNo,
+            ToWhse: this.toWhse
+          };
+          localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
           this.getITRItemList();
         } else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
@@ -1527,7 +1576,10 @@ export class OutOrderComponent implements OnInit {
               }
               else {
                 this.toBinNo = data[0].ID;
-                this.outbound.ITRToBinNo = { ToBin: this.toBinNo };
+                this.outbound.ITRToBinNo = { 
+                  ToBin: this.toBinNo,
+                  ToWhse: this.toWhse
+                };
                 localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
               }
             }
@@ -1548,7 +1600,7 @@ export class OutOrderComponent implements OnInit {
         }
       );
     }
-  
+    
   submitITR(){
     if (this.outbound != null && this.outbound != undefined
       && this.outbound.DeleiveryCollection != null
@@ -1590,6 +1642,13 @@ export class OutOrderComponent implements OnInit {
           
           if (hasDetail == false) {
             var ind = o.Meterial.LOTNO.lastIndexOf(o.Meterial.PALLETNO)
+            var toBinNo = "";
+            if(o.Item.ToBin == undefined || o.Item.ToBin == null || o.Item.ToBin == ""){
+              toBinNo = o.Meterial.ToBin;
+            } else {
+              toBinNo = o.Item.ToBin;
+            }
+            
             var dtl = {
             UsernameForLic: localStorage.getItem("UserId"),
             LineNo: o.Item.LINENUM,
@@ -1599,13 +1658,14 @@ export class OutOrderComponent implements OnInit {
             Qty: o.Meterial.MeterialPickQty,
             SysNumber: o.Meterial.SYSNUMBER,
             BinNo: o.Meterial.BINNO,
-            ToBin: this.toBinNo,
+            ToBin: toBinNo,
             Tracking: o.Item.TRACKING,
             WhsCode: o.Item.WHSCODE,
             OnHandQty: o.Item.QUANTITY,
             Remarks: "",
             PalletCode: o.Meterial.PALLETNO,
-            MfrNo: o.Meterial.LOTNO.substring(0, ind-1)
+            MfrNo: o.Meterial.LOTNO.substring(0, ind),
+            BaseLine: o.Item.LINENUM
             };
             // dtl.parentLine = o.Item.LineNo;
             oWhsTransAddLot.Detail.push(dtl);
@@ -1615,16 +1675,20 @@ export class OutOrderComponent implements OnInit {
     }
 
       let hdr = {
-      WhseCode: localStorage.getItem("fromwhseId"),
+        WhseCode: localStorage.getItem("fromwhseId"),
         ToWhsCode: this.toWhse,
         Type: "",
         DiServerToken: localStorage.getItem("Token"),
         CompanyDBId: localStorage.getItem("CompID"),
-      TransType: "WHS",
-      GUID: localStorage.getItem("GUID"),
-      UsernameForLic: localStorage.getItem("UserId")
+        TransType: "WHS",
+        GUID: localStorage.getItem("GUID"),
+        UsernameForLic: localStorage.getItem("UserId"),
+        BaseEntry: this.itrCode,
+        BaseType: "1250000001"
       };
       oWhsTransAddLot.Header.push(hdr);
+
+      console.log("itrTransferToken: "+JSON.stringify(oWhsTransAddLot));
 
       console.log("itrTransferToken: "+JSON.stringify(oWhsTransAddLot));
 
@@ -1655,8 +1719,9 @@ export class OutOrderComponent implements OnInit {
           console.log(error);
         }
       );
-    }
-        }
+  }
+}
+  
 
   resetITRFields(){
     //Due to single ITR, we reset ITR related local storage collection
@@ -1675,14 +1740,14 @@ export class OutOrderComponent implements OnInit {
     var customerName = "";
     outbound.CustomerData = { CustomerCode: customerCode, CustomerName: customerName, TrackingId: "", CustRefNo: "" };
     localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
-        }
+  }
 
   itrClick(rowindex, gridData: any) {
     this.gridData = gridData;
     this.rowindex = rowindex;
     this.showDialog("Transfer ITR", this.translate.instant("yes"), this.translate.instant("no"),
       this.translate.instant("InvTransfer_SubmitITRMsg"));
-      }
+  }
 
   cancel(){
     localStorage.setItem(CommonConstants.OutboundData, null)

@@ -62,6 +62,7 @@ export class OutProdissueComponent implements OnInit {
   public pagable: boolean = false;
   public pageSize: number = Commonservice.pageSize;
   public pageTitle: any = "";
+  showOtherLookup: boolean = false;
   constructor(private ourboundService: OutboundService, private router: Router, 
     private toastr: ToastrService, private translate: TranslateService, private inventoryTransferService: InventoryTransferService,
      private commonservice: Commonservice, private productionService: ProductionService) { }
@@ -69,6 +70,8 @@ export class OutProdissueComponent implements OnInit {
   public currentOrderNo: string;
   fromITR:any = false;
   toBinNo: string = "";
+  toWhse: string = "";
+  showSaveButton: boolean = false;
   ngOnInit() {
 
     //lsOutbound
@@ -88,12 +91,14 @@ export class OutProdissueComponent implements OnInit {
         this.manageOldCollection();
       }
       if (localStorage.getItem("ComingFrom") == "itr") {
-        this.toBinNo = this.outbound.ITRToBinNo.ToBin;
+        this.toBinNo = this.selected.ToBin;//this.outbound.ITRToBinNo.ToBin;
+        this.toWhse = this.outbound.ITRToBinNo.ToWhse;
         this.fromProduction = false;
         this.fromITR =true;
         this.PickQtylbl = this.translate.instant("PickQty");
         this.OpenQtylbl = this.translate.instant("OpenQty");
         this.pageTitle = this.translate.instant("InvTransfer_ITR");
+        this.getDefaultToBin();
       }else if (localStorage.getItem("ComingFrom") == "ProductionIssue") {
 
         this.fromProduction = true;
@@ -173,6 +178,7 @@ export class OutProdissueComponent implements OnInit {
 
     }
 
+    
   }
 
   onScanInputChange() {
@@ -477,8 +483,9 @@ export class OutProdissueComponent implements OnInit {
         if (this.lookupData.length > 0) {
           this.manageOldSelectedItems();
           this.manageExistingItem();
+          this.lookupFor = "out-items"
           this.showLookup = true;
-          this.lookupFor = "SelectScan"
+          this.showOtherLookup = false;
         } else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         }
@@ -487,22 +494,68 @@ export class OutProdissueComponent implements OnInit {
   }
 
   getLookupValue(lookupValue: any, gridSelectedMeterial: any, updateGrid: boolean = true, scan: boolean = false) {
-    this.showLookupLoader = false;
     this.showLookup = false;
+    this.showOtherLookup = false;
+    
     if(this.lookupFor == "toBinsList") {
       this.toBinNo = lookupValue.BINNO;
     } else if (lookupValue) {
       if (this.OrderType == 'S') {
         let data: any[] = [];
         let tempLookup: any[] = lookupValue;
-        for (let index = 0; index < this._remainingMeterial; index++) {
-          if (index < tempLookup.length) {
-            data.push(tempLookup[index]);
+        for (let i = 0; i < this._remainingMeterial; i++) {
+          if (i < tempLookup.length) {
+            if(this.fromITR){
+              if(lookupValue[i].ToBin==null || lookupValue[i].ToBin==undefined || lookupValue[i].ToBin==""){
+                data.push({
+                  ACTLOTNO:lookupValue[i].ACTLOTNO,
+                  BINNO:lookupValue[i].BINNO,
+                  EXPDATE:lookupValue[i].EXPDATE,
+                  ITEMCODE:lookupValue[i].ITEMCODE,
+                  LOTNO:lookupValue[i].LOTNO,
+                  PALLETNO:lookupValue[i].PALLETNO,
+                  SYSNUMBER:lookupValue[i].SYSNUMBER,
+                  TOTALQTY:lookupValue[i].TOTALQTY,
+                  WHSCODE:lookupValue[i].WHSCODE,
+                  ToBin:this.toBinNo
+                })
+              }else{
+                data.push(lookupValue[i]);
+              }
+            } else {
+              data.push(tempLookup[i]);
+            }
           }
         }
         this.comingSelectedMeterials = data;
       } else {
-        this.comingSelectedMeterials = lookupValue;
+        if(this.fromITR){
+          this.comingSelectedMeterials = [];
+          for(let i = 0; i<lookupValue.length; i++){
+            if(lookupValue[i].ToBin==null || lookupValue[i].ToBin==undefined || lookupValue[i].ToBin==""){
+              this.comingSelectedMeterials.push({
+                ACTLOTNO:lookupValue[i].ACTLOTNO,
+                BINNO:lookupValue[i].BINNO,
+                EXPDATE:lookupValue[i].EXPDATE,
+                ITEMCODE:lookupValue[i].ITEMCODE,
+                LOTNO:lookupValue[i].LOTNO,
+                PALLETNO:lookupValue[i].PALLETNO,
+                SYSNUMBER:lookupValue[i].SYSNUMBER,
+                TOTALQTY:lookupValue[i].TOTALQTY,
+                WHSCODE:lookupValue[i].WHSCODE,
+                ToBin:this.toBinNo
+              })
+            }else{
+              this.comingSelectedMeterials.push(lookupValue[i]);
+            }
+                       
+          }
+        }else{
+          this.comingSelectedMeterials = lookupValue;
+        }
+        
+
+        //
       }
 
       this.manageMeterial(scan);
@@ -526,9 +579,14 @@ export class OutProdissueComponent implements OnInit {
   }
 
   removeSelectedMeterial(idx: any, grd: any) {
+
     this.selectedMeterials.splice(idx, 1);
     grd.data = this.selectedMeterials;
     this.calculateTotalAndRemainingQty();
+    if(this.selectedMeterials!=undefined && this.selectedMeterials!=null && this.selectedMeterials.length>=0) 
+    {
+      this.showSaveButton = true;
+    }
     //setting paging..
     this.pagable = this.selectedMeterials.length > this.pageSize;
   }
@@ -585,7 +643,6 @@ export class OutProdissueComponent implements OnInit {
           }
           meterial.MeterialPickQty = meterial.TOTALQTY - meterial.PickQty
         }
-
 
         this.selectedMeterials.push(meterial);
         //apply paging..
@@ -668,7 +725,10 @@ export class OutProdissueComponent implements OnInit {
     this.pagable = this.selectedMeterials.length > this.pageSize;
     //sort selected material list.
     //this.sortSelectedMaterials();
-
+    if(this.selectedMeterials!=null && this.selectedMeterials!=undefined &&
+      this.selectedMeterials.length>0) {
+        this.showSaveButton = true;
+      }
     
   }   
   /**
@@ -1261,7 +1321,8 @@ export class OutProdissueComponent implements OnInit {
         this.showLookupLoader = false;
         if (data != null) {
           if (data.length > 0) {
-            this.showLookup = true;
+            this.showLookup = false;
+            this.showOtherLookup = true;
             this.lookupData = data;
             this.lookupFor = "toBinsList";
           }
@@ -1319,5 +1380,45 @@ export class OutProdissueComponent implements OnInit {
 
   onBinNoScan(){
 
+  }
+
+  getDefaultToBin() {    
+    this.showLookupLoader = true;
+    this.inventoryTransferService.GetToBinForWhsTrnsfr(this.selected.ITEMCODE, this.toWhse).subscribe(
+      data => {
+        this.showLookupLoader = false;
+        if (data != null) {
+          let resultV = data.find(element => element.BINTYPE == '1');
+          if (resultV != undefined) {
+            this.toBinNo = resultV.BinCode;
+            return;
+          }
+          let resultD = data.find(element => element.BINTYPE == '2');
+          if (resultD != undefined) {
+            this.toBinNo = resultD.BinCode;
+            return;
+          }
+          let resultI = data.find(element => element.BINTYPE == '3');
+          if (resultI != undefined) {
+            this.toBinNo = resultI.BinCode;
+            return;
+          }
+          let resultQ = data.find(element => element.BINTYPE == '4');
+          if (resultQ != undefined) {
+            this.toBinNo = resultQ.BinCode;
+            return;
+          }
+        }
+      },
+      error => {
+        this.showLookupLoader = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
   }
 } 
