@@ -84,7 +84,7 @@ export class InboundPolistComponent implements OnInit {
   }
 
   onPOlookupClick() {
-   // this.openConfirmationDialog();
+    this.openConfirmationDialog();
     this.showLoader = true;
     this.inboundService.getPOList(this.futurepo,
       this.inboundMasterComponent.selectedVernder, this.itemCode).subscribe(
@@ -334,50 +334,11 @@ export class InboundPolistComponent implements OnInit {
     this.openPOLineModel.DocNum = this.poCode;
     this.inboundMasterComponent.setClickedItemDetail(this.openPOLineModel);
     if (this.openPOLineModel.TRACKING == 'N') {
-      // localStorage.setItem("PalletizationEnabledForItem", "True");
-      // this.inboundMasterComponent.inboundComponent = 3;
-      this.getAutoLotForN(poline.ITEMCODE);
+      localStorage.setItem("PalletizationEnabledForItem", "True");
+      this.inboundMasterComponent.inboundComponent = 3;
     } else {
       this.getAutoLot(poline.ITEMCODE);
     }
-  }
-
-  getAutoLotForN(itemCode: string) {
-    this.inboundService.getAutoLot(itemCode).subscribe(
-      (data: any) => {
-        console.log(data);
-        if (data.Table != undefined) {
-          this.autoLot = data.Table;
-          console.log("autolot value from polist:" + this.autoLot);
-        } else if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
-          this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
-            this.translate.instant("CommonSessionExpireMsg"));
-          return;
-        }
-        if (this.autoLot.length > 0) {
-        }
-        else {
-          this.autoLot.push(new AutoLot("N", itemCode, "", "", "", ""));
-        }
-
-        //this.inboundMasterComponent.setAutoLots(this.autoLot);
-        localStorage.setItem("primaryAutoLots", JSON.stringify(this.autoLot));
-        // this.openPOLineModel = this.openPOLinesModel.find(e => e.ITEMCODE == itemCode);
-        if (this.openPOLineModel != null) {
-          localStorage.setItem("PalletizationEnabledForItem", "True");
-          this.inboundMasterComponent.inboundComponent = 3;
-        }
-      },
-      error => {
-        console.log("Error: ", error);
-        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
-        }
-        else {
-          this.toastr.error('', error);
-        }
-      }
-    );
   }
 
   getAutoLot(itemCode: string) {
@@ -800,54 +761,7 @@ export class InboundPolistComponent implements OnInit {
   }
 
 
-  manageRecords(oSubmitPOLotsObj: any): any {
-    var size = oSubmitPOLotsObj.POReceiptLots.length;
-    for (var i = 0; i < oSubmitPOLotsObj.POReceiptLots.length; i++) {
-      if (oSubmitPOLotsObj.POReceiptLots[i].PONumber == this.poCode &&
-        oSubmitPOLotsObj.POReceiptLots[i].ItemCode == this.openPOLineModel[0].ITEMCODE &&
-        oSubmitPOLotsObj.POReceiptLots[i].LineNo == this.openPOLineModel[0].LINENUM) {
-        var s = oSubmitPOLotsObj.POReceiptLotDetails.length;
-        for (var j = 0; j < oSubmitPOLotsObj.POReceiptLotDetails.length; j++) {
-          if (oSubmitPOLotsObj.POReceiptLotDetails[j].ParentLineNo == oSubmitPOLotsObj.POReceiptLots[i].Line) {
-            oSubmitPOLotsObj.POReceiptLotDetails.splice(j, 1);
-            j = -1;
-          }
-        }
-
-        for (var k = 0; k < oSubmitPOLotsObj.UDF.length; k++) {
-          if (oSubmitPOLotsObj.UDF[k].Key == "OPTM_TARGETWHS" &&
-            oSubmitPOLotsObj.UDF[k].LineNo == oSubmitPOLotsObj.POReceiptLots[i].Line) {
-            oSubmitPOLotsObj.UDF.splice(k, 1);
-          }
-
-          if (oSubmitPOLotsObj.UDF[k].Key == "OPTM_TARGETBIN" &&
-            oSubmitPOLotsObj.UDF[k].LineNo == oSubmitPOLotsObj.POReceiptLots[i].Line) {
-            oSubmitPOLotsObj.UDF.splice(k, 1);
-          }
-        }
-
-        // oSubmitPOLotsObj.UDF.splice(i, 1);
-        for (var m = 0; m < oSubmitPOLotsObj.LastSerialNumber.length; m++) {
-          if (oSubmitPOLotsObj.LastSerialNumber[m].ItemCode == oSubmitPOLotsObj.POReceiptLots[i].ItemCode) {
-            oSubmitPOLotsObj.LastSerialNumber.splice(m, 1);
-            m = -1;
-          }
-        }
-        // oSubmitPOLotsObj.LastSerialNumber.splice(i, 1);
-        oSubmitPOLotsObj.POReceiptLots.splice(i, 1);
-      }
-    }
-    return oSubmitPOLotsObj;
-  }
-
-
   prepareSubmitPurchaseOrder(oSubmitPOLotsObj: any): any {
-    oSubmitPOLotsObj = this.manageRecords(oSubmitPOLotsObj);
-    if (localStorage.getItem("Line") == null || localStorage.getItem("Line") == undefined ||
-      localStorage.getItem("Line") == "") {
-      localStorage.setItem("Line", "0");
-    }
-
     oSubmitPOLotsObj.POReceiptLots.push({
       DiServerToken: localStorage.getItem("Token"),
       PONumber: this.openPOLineModel.DOCENTRY,

@@ -108,10 +108,12 @@ export class ProdOrderlistComponent implements OnInit {
 
   getItemListForOrder(fromIssueProduction: boolean = false, fromsearchButtonClick: boolean = false) {
     if (fromsearchButtonClick && this.outbound != null) {
+      
       let outboundTempData: OutboundData = new OutboundData()
       outboundTempData.OrderData = this.outbound.OrderData;
       localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outboundTempData));
-    }
+    } 
+    this.soItemsDetail = []; 
 
     this.showLoader = true;
     this.productionService.GetBOMItemForProductionIssue(this.orderNo).subscribe(

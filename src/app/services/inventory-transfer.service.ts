@@ -142,10 +142,6 @@ export class InventoryTransferService {
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetDefaultBinOrBinWithQty", jObject, this.commonService.httpOptions);
   }  
 
-  GetToBinForWhsTrnsfr(itemCode: string, oToWhs: string): Observable<any> {
-    var jObject = { WhsCode: JSON.stringify([{ ItemCode: itemCode, WhseCode: oToWhs, CompanyDBId: localStorage.getItem("CompID") }]) };
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetToBinForWhsTrnsfr", jObject, this.commonService.httpOptions);
-  }  
 
   getDefaultBin(itemCode: string, oToWhs: string): Observable<any> {
     var jObject = { DEFAULTSYSTEMBIN: JSON.stringify([{ ITEMCODE: itemCode, WHSCODE: oToWhs, CompanyDBName: localStorage.getItem("CompID") }]) };

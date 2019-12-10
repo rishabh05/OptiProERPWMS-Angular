@@ -70,6 +70,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   targetWhseSubs: ISubscription;
   showScanInput: boolean = true;
   showUOM: boolean = true;
+  showScanAndInputRadio: boolean = true;
   targetBinClick: boolean = false;
   public primaryAutoLots: AutoLot[];
   radioSelected: any = 0;
@@ -141,6 +142,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       this.fromReceiptProduction = true;
       this.initModelDataFromReceipt();
       this.showUOM = false;
+      this.showScanAndInputRadio = false;
       if (this.openPOLineModel != undefined && this.openPOLineModel != null) {
         this.Ponumber = this.receiptData.OrderNo;
         this.tracking = this.openPOLineModel[0].TRACKING;
@@ -159,6 +161,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       } else {
         this.isDisabledScanInput = false;
       }
+      this.showScanAndInputRadio = true;
       this.showUOM = true;
       this.getUOMList();
       this.LastSerialNumber = [];
@@ -202,7 +205,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       if (localStorage.getItem('FromReceiptProd') == 'true') {
         if (this.RecvbBinvalue == "") {
           this.defaultRecvBin = true;
-          this.getDefaultFromBin();
+          this.ShowAllBins();
         }
       } else {
         if (this.RecvbBinvalue == "") {
@@ -211,47 +214,10 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         }
       }
     }
-  }
+    if(this.fromReceiptProduction){
+      this.showScanInput = false;
+    }
 
-  getDefaultFromBin() {
-    this.commonservice.GetDefaultBinOrBinWithQty(this.ItemCode, 
-      localStorage.getItem("towhseId")).subscribe(
-      data => {
-        if (data != null) {
-
-          let resultV = data.find(element => element.BINTYPE == '1');
-          if (resultV != undefined) {
-            this.RecvbBinvalue = resultV.BINNO;
-            return;
-          }
-          let resultD = data.find(element => element.BINTYPE == '2');
-          if (resultD != undefined) {
-            this.RecvbBinvalue = resultD.BINNO;
-            return;
-          }
-          // this.formatTransferNumbers();
-          // this.formatOnHandQty();
-          // let resultI = data.find(element => element.BINTYPE == 'I');
-          // if (resultI != undefined) {
-          //   this.fromBin = resultI.BINNO;
-          //   return;
-          // }
-          // let resultQ = data.find(element => element.BINTYPE == 'Q');
-          // if (resultQ != undefined) {
-          //   this.fromBin = resultQ.BINNO;
-          //   return;
-          // }
-        }
-      },
-      error => {
-        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
-        }
-        else {
-          this.toastr.error('', error);
-        }
-      }
-    );
   }
 
   onInboundScan() {
@@ -2131,7 +2097,8 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         IsPalletExist: this.isPalletizationEnable,
         LoginId: localStorage.getItem("UserId"),
         GUID: localStorage.getItem("GUID"),
-        UsernameForLic: localStorage.getItem("UserId")
+        UsernameForLic: localStorage.getItem("UserId"),
+        WONO:this.receiptData.OrderNo
       });
     }
     return itemsData;
@@ -2164,6 +2131,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         RejectQTY: this.receiptData.OPENQTY,
         RecRjctedQty: "Y",
         Quantity: totalAcceptedRejectedQty,
+        WONO:this.receiptData.OrderNo
       });
     }
     return rejectItemsData;

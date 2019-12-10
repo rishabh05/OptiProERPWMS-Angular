@@ -82,7 +82,7 @@
                                     </button>
 
                                 </div>
-                                <div class="ml-1 d-flex">
+                                <div class="ml-1 d-flex" *ngIf="showScanInput">
                                     <button type="button" id="scanRecBin" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
@@ -270,7 +270,7 @@
                                             #display_name (change)="updateLotNumber(display_name.value, rowIndex, gridItem)">
                                     </dd>
 
-                                    <dt>{{'BinNo'|translate}}</dt>
+                                    <dt>{{'BinNo'|translate}}</dt> 
                                     <dd>{{dataItem.Bin}}</dd>
 
                                     <dt>{{'Plt_PalletNo'|translate}}</dt>

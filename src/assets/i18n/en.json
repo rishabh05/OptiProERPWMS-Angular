@@ -400,7 +400,5 @@
   "EnterTrackingId": "Enter Tracking No.",
   "CustomerRefNo": "Customer Ref. No.",
   "EnterCustomerRefNo": "Enter Customer Ref. No. ",
-  "InvTransfer_SubmitITRMsg": "Do you want to submit ITR.",
-  "InvTransfer_ITRTransferSuccess": "Submitted successfully",
   "Dummy": "Dummy"
 }

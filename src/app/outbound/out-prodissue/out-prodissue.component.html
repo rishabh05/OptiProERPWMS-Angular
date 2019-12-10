@@ -248,9 +248,11 @@
                         class="k-icon k-i-save" role="presentation"></span> {{'Save'|translate}}</button>
 
                 <button type="button" *ngIf="selectedMeterials && selectedMeterials.length>0 && fromProduction"
-                    (click)="addMetToCollection(true)" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
+                    (click)="addMetToCollection(true)" class="btn  k-primary k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-save"></span>
                     {{'Save'|translate}}</button>
+
+                  
                 <button type="button" *ngIf="selectedMeterials && selectedMeterials.length>0 && fromProduction"
                     (click)="submitProduction()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-check"></span>
