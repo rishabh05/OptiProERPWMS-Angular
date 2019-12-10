@@ -110,7 +110,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row mt-3" *ngIf="fromITR && OrderType!='N'">
+            <div class="row " *ngIf="fromITR && OrderType!='N'">
                     <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label">{{'InvTransfer_ToBin'|translate}}</label>
@@ -243,7 +243,7 @@
                 <!-- *ngIf="selectedMeterials && selectedMeterials.length>0" -->
                 <button type="button" (click)="back(0)" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
-                <button type="button" *ngIf="selectedMeterials && selectedMeterials.length>0 && !fromProduction"
+                <button type="button" *ngIf="showSaveButton && !fromProduction"
                     (click)="addMetToCollection()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-save" role="presentation"></span> {{'Save'|translate}}</button>
 
@@ -267,9 +267,14 @@
     </form>
 </div>
 
-<span *ngIf="showLookup==true">
+<span *ngIf="showLookup==true && showOtherLookup==false">
     <app-lookup [lookupfor]='lookupFor' [serviceData]='lookupData'
         (lookupkey)="getLookupValue($event,gridSelectedMeterial)"></app-lookup>
+</span>
+
+<span *ngIf="showLookup==false && showOtherLookup==true">
+    <app-lookup [lookupfor]='lookupFor' [serviceData]='lookupData' 
+        (lookupkey)="getLookupValue($event)"></app-lookup>
 </span>
 
 <!-- Loader -->

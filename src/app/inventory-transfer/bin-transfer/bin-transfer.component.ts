@@ -687,7 +687,8 @@ export class BinTransferComponent implements OnInit {
         OnHandQty: this.onHandQty,
         Remarks: this.Remarks,
         PalletCode: this.palletNo,
-        MfrNo: this.actualLotNo
+        MfrNo: this.actualLotNo,
+        BaseLine: ""
       });
       this.clearDataForAddMore();
     } else {
@@ -762,7 +763,9 @@ export class BinTransferComponent implements OnInit {
       TransType: "WHS",
       //--------------------Adding Parameters for the Licence--------------------------------------------
       GUID: localStorage.getItem("GUID"),
-      UsernameForLic: localStorage.getItem("UserId")
+      UsernameForLic: localStorage.getItem("UserId"),
+      BaseEntry: "",
+      BaseType: "0"
       //------------------End for the Licence Parameter------------------------------------------------------
     });
 
@@ -1345,7 +1348,8 @@ export class BinTransferComponent implements OnInit {
         Tracking: this.palletData[i].ITEMTYPE,
         WhsCode: this.palletData[i].WHSCODE,
         OnHandQty: this.palletData[i].QTY,
-        Remarks: this.Remarks
+        Remarks: this.Remarks,
+        BaseLine: ""
       });
     }
     //this.SubmitFinally();
