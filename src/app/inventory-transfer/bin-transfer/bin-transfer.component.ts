@@ -267,6 +267,11 @@ export class BinTransferComponent implements OnInit {
           if(localStorage.getItem("fromscreen") == "WhsTransfer"){
             this.getDefaultBin();
           }
+
+          if (this.ItemTracking == 'N') {
+            this.getDefaultFromBin();
+            this.getDefaultToBin();
+          }
           // if (localStorage.getItem("whseId") != localStorage.getItem("towhseId")) {
           //   this.getDefaultBin();
           // }
@@ -338,24 +343,69 @@ export class BinTransferComponent implements OnInit {
       localStorage.getItem("towhseId")).subscribe(
       data => {
         if (data != null) {
-          let resultV = data.find(element => element.BINTYPE == 'V');
+
+          let resultV = data.find(element => element.BINTYPE == '1');
           if (resultV != undefined) {
             this.fromBin = resultV.BINNO;
+            this.transferQty = resultV.TOTALQTY;
+            this.onHandQty = resultV.TOTALQTY;
             return;
           }
-          let resultD = data.find(element => element.BINTYPE == 'D');
+          let resultD = data.find(element => element.BINTYPE == '2');
           if (resultD != undefined) {
             this.fromBin = resultD.BINNO;
+            this.transferQty = resultD.TOTALQTY;
+            this.onHandQty = resultD.TOTALQTY;
             return;
           }
-          let resultI = data.find(element => element.BINTYPE == 'I');
+          this.formatTransferNumbers();
+          this.formatOnHandQty();
+          // let resultI = data.find(element => element.BINTYPE == 'I');
+          // if (resultI != undefined) {
+          //   this.fromBin = resultI.BINNO;
+          //   return;
+          // }
+          // let resultQ = data.find(element => element.BINTYPE == 'Q');
+          // if (resultQ != undefined) {
+          //   this.fromBin = resultQ.BINNO;
+          //   return;
+          // }
+        }
+      },
+      error => {
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
+
+  getDefaultToBin() {
+    this.inventoryTransferService.GetToBinForWhsTrnsfr(this.itemCode, 
+      localStorage.getItem("towhseId")).subscribe(
+      data => {
+        if (data != null) {
+          let resultV = data.find(element => element.BINTYPE == '1');
+          if (resultV != undefined) {
+            this.toBin = resultV.BinCode;
+            return;
+          }
+          let resultD = data.find(element => element.BINTYPE == '2');
+          if (resultD != undefined) {
+            this.toBin = resultD.BinCode;
+            return;
+          }
+          let resultI = data.find(element => element.BINTYPE == '3');
           if (resultI != undefined) {
-            this.fromBin = resultI.BINNO;
+            this.toBin = resultI.BinCode;
             return;
           }
-          let resultQ = data.find(element => element.BINTYPE == 'Q');
+          let resultQ = data.find(element => element.BINTYPE == '4');
           if (resultQ != undefined) {
-            this.fromBin = resultQ.BINNO;
+            this.toBin = resultQ.BinCode;
             return;
           }
         }
@@ -955,6 +1005,7 @@ export class BinTransferComponent implements OnInit {
         this.onHandQty = 0.000;
         if (this.ItemTracking == 'N') {
           this.getDefaultFromBin();
+          this.getDefaultToBin();
         }
         if(localStorage.getItem("fromscreen") == "WhsTransfer"){
           this.getDefaultBin();
