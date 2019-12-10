@@ -195,4 +195,15 @@ export class InventoryTransferService {
       };
     return this.httpclient.post(this.config_params.service_url + "/api/WhsTrans/GetITRItemList", jObject, this.commonService.httpOptions);
   }
+
+  GetItemListForWhseTrnsfr(): Observable<any> {
+      var jObject = { 
+        GETITEMS: JSON.stringify([
+          { 
+            WHSECODE: localStorage.getItem("whseId"), 
+            CompanyDBId: localStorage.getItem("CompID") 
+          }]) 
+        };
+    return this.httpclient.post(this.config_params.service_url + "/api/WhsTrans/GetItemListForWhseTrnsfr", jObject, this.commonService.httpOptions);
+  }
 }

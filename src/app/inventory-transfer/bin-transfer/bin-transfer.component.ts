@@ -177,7 +177,7 @@ export class BinTransferComponent implements OnInit {
 
   OnItemCodeLookupClick() {
     this.showLoader = true;
-    this.inventoryTransferService.getItemCodeList().subscribe(
+    this.inventoryTransferService.GetItemListForWhseTrnsfr().subscribe(
       data => {
         this.showLoader = false;
         if (data != undefined && data.length > 0) {
@@ -1226,7 +1226,7 @@ export class BinTransferComponent implements OnInit {
   public getPalletList() {
     this.showLoader = true;
     this.showLookupLoader = true;
-    this.commonservice.getPalletsOfSameWarehouse("").subscribe(
+    this.commonservice.GetPalletsWithRowsPresent().subscribe(
       (data: any) => {
         this.showLoader = false;
         this.showLookupLoader = false;

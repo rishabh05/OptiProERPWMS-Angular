@@ -106,7 +106,8 @@ export class OutOrderComponent implements OnInit {
         
         if(localStorage.getItem("ComingFrom")=="itr"){
           this.itrCode = this.orderNumber;
-          this.toBinNo = this.outbound.ITRToBinNo.ToBin
+          //this.toBinNo = this.outbound.ITRToBinNo.ToBin
+          this.toWhse = this.outbound.ITRToBinNo.ToWhse;
           this.getITRItemList();
         } else {
           if (localStorage.getItem("IsSOAvailable") == "True") {
@@ -1641,12 +1642,25 @@ export class OutOrderComponent implements OnInit {
           }
           
           if (hasDetail == false) {
-            var ind = o.Meterial.LOTNO.lastIndexOf(o.Meterial.PALLETNO)
+            var ind = 0;
+            if(o.Meterial.PALLETNO == null || o.Meterial.PALLETNO == undefined || o.Meterial.PALLETNO == ""){
+
+            } else {
+              ind = o.Meterial.LOTNO.lastIndexOf(o.Meterial.PALLETNO)
+              console.log("pallet index "+o.Meterial.PALLETNO+" ind="+ind);
+            }
+            
             var toBinNo = "";
             if(o.Item.ToBin == undefined || o.Item.ToBin == null || o.Item.ToBin == ""){
               toBinNo = o.Meterial.ToBin;
             } else {
               toBinNo = o.Item.ToBin;
+            }
+            var mfrno="";
+            if(ind != 0){
+              mfrno = o.Meterial.LOTNO.substring(0, ind);
+            } else {
+              mfrno = o.Meterial.LOTNO;
             }
             
             var dtl = {
@@ -1664,7 +1678,7 @@ export class OutOrderComponent implements OnInit {
             OnHandQty: o.Item.QUANTITY,
             Remarks: "",
             PalletCode: o.Meterial.PALLETNO,
-            MfrNo: o.Meterial.LOTNO.substring(0, ind),
+            MfrNo: mfrno,
             BaseLine: o.Item.LINENUM
             };
             // dtl.parentLine = o.Item.LineNo;
@@ -1690,13 +1704,12 @@ export class OutOrderComponent implements OnInit {
 
       console.log("itrTransferToken: "+JSON.stringify(oWhsTransAddLot));
 
-      console.log("itrTransferToken: "+JSON.stringify(oWhsTransAddLot));
 
       // Transfer ITR
     this.inventoryTransferService.submitBinTransfer(oWhsTransAddLot).subscribe(
       data => {
         this.showLookupLoader = false;
-          if (data.length > 0) {
+          if (data!=null && data.length > 0) {
             if (data[0].ErrorMsg != undefined) {
               if (data[0].ErrorMsg == "7001") {
                 this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
