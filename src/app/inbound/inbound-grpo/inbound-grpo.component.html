@@ -291,7 +291,7 @@
                         <kendo-grid-column media="(min-width: 768px)" field="LotNumber" [width]="18" title="{{SRBatchColumnText}}">
                             <ng-template kendoGridCellTemplate let-dataItem let-idx='rowIndex'>
                                 <input type="text" class="form-control form-control-sm" name="dataItem.LotNumber" value={{dataItem.LotNumber}}
-                                    [disabled]="isPalletizationEnable" id="display_name" #display_name (change)="updateLotNumber(display_name.value, idx, gridItem)"
+                                    [disabled]="dataItem.autoLot == 'true'" id="display_name" #display_name (change)="updateLotNumber(display_name.value, idx, gridItem)"
                                     (blur)="checkAndValidateSerial()">
                             </ng-template>
                         </kendo-grid-column>

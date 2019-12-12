@@ -151,6 +151,7 @@ export class PalletMergeComponent implements OnInit {
   }
 
   getLookupValue(lookupValue: any) {
+    this.showLookup = false;
     if (this.fromPalletLookup == "from_pallet") {
       this.showLoader = false;
       this.fromPalletNo = "";//lookupValue.Code;
@@ -302,5 +303,48 @@ export class PalletMergeComponent implements OnInit {
           break
       }
     }
+  }
+
+  viewPalletClick(index: any, item: any) {
+    var code = this.selectedFromPallets[index].Code;
+    this.getPalletData(code);
+  }
+
+  itemList: any = [];
+
+  getPalletData(pallet: any) {
+    // this.showLoader = true;
+    this.commonservice.GetPalletData(pallet).subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        console.log(data);
+        if (data != null && data.length > 0) {
+          // this.serviceData = data;
+          var tempList: any = [];
+          for(let i=0;i<data.length;i++){
+            tempList.push({
+              ITEMCODE: data[i].ITEMID,
+              ITEMNAME: data[i].ITEMNAME
+            });
+          }
+          this.serviceData = tempList;
+          this.lookupFor = "ItemsList";
+          this.showLookup = true;
+        }
+        else {
+          this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          return;
+        }
+      },
+      error => {
+        this.showLoader = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
   }
 }
