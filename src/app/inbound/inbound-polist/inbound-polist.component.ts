@@ -6,9 +6,13 @@ import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { AutoLot } from '../../models/Inbound/AutoLot';
-import { RowClassArgs } from '@progress/kendo-angular-grid';
+import { RowClassArgs, GridComponent } from '@progress/kendo-angular-grid';
 import { bypassSanitizationTrustResourceUrl } from '@angular/core/src/sanitization/bypass';
 import { InventoryTransferService } from 'src/app/services/inventory-transfer.service';
+import { StatePersistingServiceService } from 'src/app/services/state-persisting-service.service';
+import { GridSettings } from 'src/app/interface/grid-settings.interface';
+import { ColumnSettings } from 'src/app/interface/column-settings.interface';
+import { process } from '@progress/kendo-data-query';
 
 @Component({
   selector: 'app-inbound-polist',
@@ -32,7 +36,7 @@ export class InboundPolistComponent implements OnInit {
   showNonTrackItem: boolean = false;
   autoLot: any[];
   openPOLineModel: any;
-  openPOLinesModel: any[];
+  openPOLinesModel: any[] = [];
   unmatchedPOLinesModel: any[];
   viewLines: any[];
   public oSavedPOLotsArray: any = {};
@@ -46,9 +50,35 @@ export class InboundPolistComponent implements OnInit {
   pagable: boolean = false;
   pageSize: number = Commonservice.pageSize;
   showConfirmDialog = false;
+  defaultPageSize:number = 10;
+
+
+
+
+  public gridSettings: GridSettings = {
+    state: {
+      skip: 0,
+      take: this.defaultPageSize,
+
+      // Initial filter descriptor
+      filter: {
+        logic: 'and',
+        filters: []
+      }
+    },
+    columnsConfig: [
+   ],
+   gridData:{ "data":[], "total":0}
+  };
+
+  public get savedStateExists(): boolean {
+    return !!this.persistingService.get('gridSettings');
+  }
+
 
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
-    private inboundMasterComponent: InboundMasterComponent, private inventoryTransferService: InventoryTransferService) {
+    private inboundMasterComponent: InboundMasterComponent, private inventoryTransferService: InventoryTransferService,
+    private persistingService: StatePersistingServiceService) {
     let userLang = navigator.language.split('-')[0];
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
     translate.use(userLang);
@@ -66,6 +96,14 @@ export class InboundPolistComponent implements OnInit {
     }
     this.selectedVendor = this.inboundMasterComponent.selectedVernder;
     this.showGRPOButton = false;
+
+    if(this.savedStateExists){
+      console.log("default setting","grid settings available");
+      this.gridSettings = this.mapGridSettings(this.persistingService.get('gridSettings'))
+    }else{
+      console.log("default setting","grid settings not available");
+      //load with default settings.s
+    }
   }
 
   ngAfterViewInit() {
@@ -183,6 +221,11 @@ export class InboundPolistComponent implements OnInit {
             }
 
             this.openPOLinesModel = data.Table;
+            this.gridSettings.gridData = process(this.openPOLinesModel, {
+              skip: 0,
+              take: this.defaultPageSize
+              // Initial filter descriptor 
+            });
 
             // var  unmatchedPOLinesModel = data.Table;
             this.updateReceivedQtyForSavedItems();
@@ -244,6 +287,7 @@ export class InboundPolistComponent implements OnInit {
     if (this.poCode == "" || this.poCode == undefined) {
       return;
     }
+     
     this.showLoader = true;
     this.inboundService.IsPOExists(this.poCode, "").subscribe(
       data => {
@@ -286,6 +330,9 @@ export class InboundPolistComponent implements OnInit {
         this.poCode = $event[0];
         this.Name = $event[1];
         this.openPOLines()
+        //reset grid setting to null
+        this.persistingService.set('gridSettings',null);
+
       }
       else if (this.lookupfor == "POItemList") {
         this.itemCode = $event[0];
@@ -330,7 +377,7 @@ export class InboundPolistComponent implements OnInit {
     );
   }
 
-  onClickOpenPOLineRowOpenAutoLot(selection) {
+  onClickOpenPOLineRowOpenAutoLot(selection,grid: GridComponent) {
     const poline = selection.selectedRows[0].dataItem;
     this.openPOLineModel = poline;
     // this.openPOLineModel.RPTQTY = 0;
@@ -343,6 +390,7 @@ export class InboundPolistComponent implements OnInit {
     } else {
       this.getAutoLot(poline.ITEMCODE);
     }
+    this.saveGridSettings(grid); 
   }
 
   getAutoLotForN(itemCode: string) {
@@ -920,4 +968,49 @@ export class InboundPolistComponent implements OnInit {
     });
     return oSubmitPOLotsObj;
   }
+  
+  dataStateChange(state){
+    this.gridSettings.state = state;
+      this.gridSettings.gridData = process(this.openPOLinesModel, state);
+  }
+  
+  public saveGridSettings(grid: GridComponent): void {
+    const columns = grid.columns;
+
+    const gridConfig = {
+      state: this.gridSettings.state,
+      columnsConfig: columns.toArray().map(item => {
+        return Object.keys(item)
+          .filter(propName => !propName.toLowerCase()
+            .includes('template'))
+            .reduce((acc, curr) => ({...acc, ...{[curr]: item[curr]}}), <ColumnSettings> {});
+      })
+    };
+
+    this.persistingService.set('gridSettings',gridConfig);
+  }
+
+  public mapGridSettings(gridSettings: GridSettings): GridSettings {
+    
+    const state = gridSettings.state;
+   
+
+    return {
+      state,
+      columnsConfig: gridSettings.columnsConfig.sort((a, b) => a.orderIndex - b.orderIndex),
+      gridData: process(this.openPOLinesModel, state)
+    };
+  }
+  private mapDateFilter = (descriptor: any) => {
+    const filters = descriptor.filters || [];
+
+    filters.forEach(filter => {
+        if (filter.filters) {
+            this.mapDateFilter(filter);
+        } else if (filter.field === 'FirstOrderedOn' && filter.value) {
+            filter.value = new Date(filter.value);
+        }
+    });
+  }
+
 }

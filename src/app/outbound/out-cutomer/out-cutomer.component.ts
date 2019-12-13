@@ -444,8 +444,16 @@ export class OutCutomerComponent implements OnInit {
             hdr.UOM = -1;
             hdr.UOMName = o.Item.UOM;
             hdr.Line = hdrLineVal;
-            hdr.NumAtCard = this.outbound.CustomerData.CustRefNo;
-            hdr.TrackingNumber = this.outbound.CustomerData.TrackingId;
+            if(this.outbound.CustomerData.CustRefNo!=null && this.outbound.CustomerData.CustRefNo!=undefined){
+              hdr.NumAtCard = this.outbound.CustomerData.CustRefNo;
+            }else{
+              hdr.NumAtCard = "";
+            }
+            if(this.outbound.CustomerData.TrackingId!=null && this.outbound.CustomerData.TrackingId!=undefined){
+              hdr.NumAtCard = this.outbound.CustomerData.TrackingId;
+            }else{
+              hdr.TrackingNumber= "";
+            }
             arrSOHEADER.push(hdr);
           }
 

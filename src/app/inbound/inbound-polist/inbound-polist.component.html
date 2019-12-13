@@ -84,12 +84,15 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="col-12 mb-2 border-bottom"></div>
-                        <kendo-grid class="no-shadow" [kendoGridBinding]="openPOLinesModel" [resizable]="true" 
-                          [pageSize]="pageSize" [pageable]="pagable" [sortable]="true"
+                      
+                        <kendo-grid class="no-shadow" [data]="gridSettings.gridData" [resizable]="true" 
+                          [pageSize]="gridSettings.state.take" [skip]="gridSettings.state.skip" [pageable]="pagable" [sortable]="true" 
                             [filterable]=isColumnFilter [groupable]=isColumnGroup [height]=gridHeight [selectable]="true" [rowClass]="rowCallback"
-                            (selectionChange)="onClickOpenPOLineRowOpenAutoLot($event)" #gridItem>
-
+                            (selectionChange)="onClickOpenPOLineRowOpenAutoLot($event,grid)"  (dataStateChange)="dataStateChange($event)" #grid="kendoGrid">
+                            <!-- <ng-template kendoGridToolbarTemplate>
+                                    <button class="k-button" (click)="saveGridSettings(grid)">Save current state</button>
+                                    <button class="k-button" (click)="gridSettings = mapGridSettings(persistingService.get('gridSettings'))">Load saved state</button>
+                            </ng-template>  -->
                             <!-- grid for mobile start -->
                             <kendo-grid-column media="(max-width: 767px)" title="{{'Items'|translate}}" class="opti_mobile-grid-td">
                                 <ng-template kendoGridCellTemplate let-dataItem>
@@ -139,7 +142,7 @@
                 <button class="btn btn-outline-secondary btn-sm btn-transparent btn-icon mr-1" (click)="onCancelClick()" type="button">
                     <i class="opti-icon-arrow-back"></i>
                 </button>
-
+               
                 <button type="button" *ngIf="showGRPOButton" class="btn btn-primary k-button btn-sm btn-icon-with-text" (click)="onAddtoGRPOClick()">
                     <span class="k-icon k-i-plus-outline" role="presentation"></span>{{'AddToGRPO'|translate}} </button>
 
