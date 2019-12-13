@@ -453,7 +453,7 @@ export class InboundPolistComponent implements OnInit {
         localStorage.setItem("primaryAutoLots", JSON.stringify(this.autoLot));
         // this.openPOLineModel = this.openPOLinesModel.find(e => e.ITEMCODE == itemCode);
         if (this.openPOLinesModel != null && this.openPOLinesModel.length > 0) {
-          if (this.openPOLinesModel[0].TRACKING == 'N') {
+          if (this.openPOLineModel.TRACKING == 'N') {
             // for(var i=0; i<this.openPOLinesModel.length; i++){
             //   if(Number(this.openPOLinesModel[i].RPTQTY) != Number(this.openPOLinesModel[i].OPENQTY)){
             //     this.openPOLinesModel[i].RPTQTY = this.openPOLinesModel[i].OPENQTY;
