@@ -112,31 +112,7 @@
                 </div>
             </div>
             
-            <!-- <div class="row" *ngIf="fromWhere=='itr'">
-                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
-                    <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'InvTransfer_ToBin'|translate}}</label>
-                        <div class="col-sm-9">
-                            <div class="input-group input-group-sm">
-                                <input type="text" (blur)="OnBinChange()" placeholder="{{'InvTransfer_ToBin'|translate}}"
-                                    class="form-control form-control-sm" name="toBinNo" [(ngModel)]=toBinNo id="toBinNo">
-                                <div class="input-group-append has-seprate-btn">
-                                    <button class="k-button k-primary btn" type="button" (click)="OnBinLookupClick()">
-                                        <i class="opti-icon-hammenu"></i>
-                                    </button>
-                                </div>
-                                <div class="ml-1 d-flex">
-                                    <button type="button" id="itemscanButton" (click)="onInboundScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
-                                        <i class="opti-icon-qr-code fs-24"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-
-            <div *ngIf ="temoraryHideItemLookupRow" class="row">
+                   <div *ngIf ="temoraryHideItemLookupRow" class="row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
                     <div class="form-group row">
                         <label for="orderNumber" class="col-sm-3 col-form-label">{{'Item'|translate}}</label>
@@ -218,6 +194,11 @@
                                                 class="opti_arrow-grid-detail float-right text-center opti_vertical-align ml-auto">›</span>
                                         </dt>
                                         <dd>{{ dataItem.OPENQTY|numberFormat }}</dd>
+
+                                        <dt class="d-flex align-items-center">{{'LINENUM'|translate}} <span
+                                            class="opti_arrow-grid-detail float-right text-center opti_vertical-align ml-auto">›</span>
+                                    </dt>
+                                    <dd>{{ dataItem.ROWNUM|numberFormat }}</dd>
                                      </dl>
                                 </ng-template>
                             </kendo-grid-column>
@@ -236,7 +217,8 @@
                                 <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.RPTQTY | numberFormat}}
                                 </ng-template>
                             </kendo-grid-column>
-
+                            <kendo-grid-column media="(min-width: 768px)" field="ROWNUM"
+                            title="{{'LINENUM'|translate}}" [width]="6"></kendo-grid-column>
 
                         </kendo-grid>
                     </div>

@@ -106,11 +106,16 @@
                                             <span class="opti_arrow-grid-detail ml-auto text-center opti_vertical-align">›</span>
                                         </dt>
                                         <dd>{{dataItem.OPENQTY | numberFormat}}</dd>
+                                        <dt class="d-flex align-items-center">{{'LINENUM'|translate}}
+                                            <span class="opti_arrow-grid-detail ml-auto text-center opti_vertical-align">›</span>
+                                        </dt>
+                                        <dd>{{dataItem.ROWNUM | numberFormat}}</dd>
                                     </dl>
                                 </ng-template>
                             </kendo-grid-column>
                             <!-- grid for mobile end -->
 
+                            
                             <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE" title="{{'ItemCode'|translate}}"></kendo-grid-column>
                             <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" title="{{'OpenQty'|translate}}" headerClass="text-right" class="text-right">
                                 <ng-template kendoGridCellTemplate let-dataItem>
@@ -122,7 +127,7 @@
                                     {{dataItem.RPTQTY |numberFormat}}
                                 </ng-template>
                             </kendo-grid-column>
-
+                            <kendo-grid-column media="(min-width: 768px)" field="ROWNUM" title="{{'LINENUM'|translate}}"></kendo-grid-column>
                         </kendo-grid>
                     </div>
                 </div>

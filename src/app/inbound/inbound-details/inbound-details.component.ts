@@ -26,7 +26,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
   showGRPOGridAndBtn: boolean = false;
   public Polist: any[] = [];
   dialogFor: string = "";
-  dialogMsg: string = ""
+  dialogMsg: string = "";
   showConfirmDialog: boolean;
   rowindexForDelete: any;
   gridDataAfterDelete: any[];
