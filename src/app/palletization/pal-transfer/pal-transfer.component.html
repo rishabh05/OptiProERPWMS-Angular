@@ -9,11 +9,11 @@
         <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
 
           <div class="form-group row">
-            <label for="fromPalletNo" class="col-sm-3 col-form-label">{{'Plt_FromPallet'|translate}}</label>
+            <label for="fromPalletNo" class="col-sm-3 col-form-label">{{'Plt_FromPalletNo'|translate}}</label>
             <div class="col-sm-9">
               <div class="input-group input-group-sm">
                 <input type="text" class="form-control form-control-sm" name="fromPalletNo" [(ngModel)]="fromPalletNo"
-                  placeholder="{{'Plt_FromPallet'|translate}}" (blur)="onPalletChange('from_pallet')" #fromPalletInput
+                  placeholder="{{'Plt_FromPalletNo'|translate}}" (blur)="onPalletChange('from_pallet')" #fromPalletInput
                   id="fromPalletNo">
                 <div class="input-group-append">
                   <button class="k-button k-primary btn" type="button" (click)="getPalletList('from_pallet')">
@@ -33,11 +33,11 @@
       <div class="row">
         <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
           <div class="form-group row">
-            <label for="toPalletNo" class="col-sm-3 col-form-label">{{'Plt_ToPallet'|translate}}</label>
+            <label for="toPalletNo" class="col-sm-3 col-form-label">{{'Plt_ToPalletNo'|translate}}</label>
             <div class="col-sm-9">
               <div class="input-group input-group-sm">
                 <input type="text" class="form-control form-control-sm" name="toPalletNo" [(ngModel)]="toPalletNo"
-                  placeholder="{{'Plt_ToPallet'|translate}}" (blur)="onPalletChange('to_pallet')" #toPalletInputs id="toPalletNo">
+                  placeholder="{{'Plt_ToPalletNo'|translate}}" (blur)="onPalletChange('to_pallet')" #toPalletInputs id="toPalletNo">
                 <div class="input-group-append">
                   <button class="k-button k-primary btn" type="button" (click)="getPalletList('to_pallet')">
                     <i class="opti-icon-hammenu"></i>

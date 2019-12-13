@@ -9,11 +9,11 @@
         <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
 
           <div class="form-group row">
-            <label for="fromPalletInput" class="col-sm-3 col-form-label">{{'Plt_FromPallet'|translate}}</label>
+            <label for="fromPalletInput" class="col-sm-3 col-form-label">{{'Plt_FromPalletNo'|translate}}</label>
             <div class="col-sm-9">
               <div class="input-group input-group-sm">
                 <input type="text" class="form-control form-control-sm" name="fromPalletIp" [(ngModel)]="fromPallet"
-                  placeholder="{{'Plt_FromPallet'|translate}}" (blur)="fromPalletChange()" #fromPalletInput
+                  placeholder="{{'Plt_FromPalletNo'|translate}}" (blur)="fromPalletChange()" #fromPalletInput
                   id="fromPalletInput">
                 <div class="input-group-append">
                   <button class="k-button k-primary btn" type="button" (click)="onFromLookupClick()">
@@ -34,11 +34,11 @@
       <div class="row">
         <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
           <div class="form-group row">
-            <label for="toPalletInput" class="col-sm-3 col-form-label">{{'Plt_ToPallet'|translate}}</label>
+            <label for="toPalletInput" class="col-sm-3 col-form-label">{{'Plt_ToPalletNo'|translate}}</label>
             <div class="col-sm-9">
               <div class="input-group input-group-sm">
                 <input type="text" class="form-control form-control-sm" name="toPalletIn" [(ngModel)]="toPallet"
-                  placeholder="{{'Plt_ToPallet'|translate}}" (blur)="toPalletChange()" #toPalletInputs
+                  placeholder="{{'Plt_ToPalletNo'|translate}}" (blur)="toPalletChange()" #toPalletInputs
                   id="toPalletInput">
                 <div class="input-group-append">
                   <button class="k-button k-primary btn" type="button" (click)="onToLookupClick()">

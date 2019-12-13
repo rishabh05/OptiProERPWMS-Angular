@@ -1185,7 +1185,10 @@ export class OutOrderComponent implements OnInit {
   DeliveryClick(rowindex, gridData: any) {
     this.gridData = gridData;
     this.rowindex = rowindex;
-    this.showDialog("Delivery", this.translate.instant("yes"), this.translate.instant("no"),
+    // this.dialogMsg = "Which order you want to deliver?"
+    // this.yesButtonText = "All";
+    // this.noButtonText = "Current";
+    this.showDialog("Delivery", this.translate.instant("All"), this.translate.instant("Current"),
       this.translate.instant("Outbond_DeliveryMsg"));
   }
 
@@ -1331,7 +1334,7 @@ export class OutOrderComponent implements OnInit {
           case ("Delivery"):
             this.deleiver(this.outbound.OrderData.DOCNUM);
             break;
-            case ("ClearTempArray"):
+          case ("ClearTempArray"):
                 this.fromEvent =  "";
                 break;
         }

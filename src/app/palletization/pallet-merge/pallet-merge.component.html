@@ -7,11 +7,11 @@
             <div class="row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
                     <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'Plt_FromPalletNo'|translate}}</label>
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'Plt_PalletNo'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
                                 <input type="text" name="fromPalletNo" (blur)="onPalletChange('from_pallet')" value=''
-                                    [(ngModel)]="fromPalletNo" class="form-control form-control-sm" placeholder="{{'Plt_FromPalletNo'|translate}}">
+                                    [(ngModel)]="fromPalletNo" class="form-control form-control-sm" placeholder="{{'Plt_PalletNo'|translate}}">
                                 <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" (click)="getPalletList('from_pallet')" type="button">
                                         <i class="opti-icon-hammenu"></i>
@@ -58,6 +58,18 @@
 
                         <kendo-grid-column media="(min-width: 768px)" field="Code" title="{{'Plt_PalletNo'|translate}}"
                             [width]="30"></kendo-grid-column>
+
+                        <kendo-grid-column media="(min-width: 768px)" headerClass="text-center" class="text-center"
+                            field="" [width]="10" title="">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <button type="button" class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5"
+                                    (click)="viewPalletClick(rowIndex, gridItem)">
+                                    <!-- <span class="opti-icon-eye mr-2" role="presentation">{{'View'}}</span> -->
+                                    <i [ngClass]="'opti-icon-eye mr-2'"></i>
+                                    {{'View Items'}}
+                                </button>
+                            </ng-template>
+                        </kendo-grid-column>
 
                         <kendo-grid-column media="(min-width: 768px)" headerClass="text-center" class="text-center"
                             field="" [width]="5" title="">
