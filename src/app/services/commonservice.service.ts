@@ -638,7 +638,7 @@ export class Commonservice {
   GetPalletsWithRowsPresent(): Observable<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
-        COMPANYDBNAME: localStorage.getItem("CompID"),
+        COMPANYDBNAME: localStorage.getItem("CompID"), 
         WhseCode: localStorage.getItem("whseId")
       }])
     };
