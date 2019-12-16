@@ -18,17 +18,18 @@
                                     <button class="k-button k-primary btn" (click)="openOrderLookup()" type="button">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
-                                    <div class="ml-1 d-flex">
+                                    
                                         <button type="button" id="outOrderSOScan" 
                                             class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                             <i class="opti-icon-qr-code fs-24"></i>
                                         </button>
-                                    </div>
-                                    <button class="k-button k-primary btn separate-btn" 
-                                     (click)="openSOOrderList()"
+                                        <button class="k-button k-primary btn separate-btn" 
+                                         (click)="openSOOrderList()"
                                         type="button">
                                         <i class="opti-icon-search"></i>
                                     </button>
+                              
+                                    
                                 </div>
                             </div>
                         </div>
@@ -43,20 +44,20 @@
                                 <div class="col-sm-9">
                                   <div class="input-group input-group-sm">
                                     <input #DocEntry type="text" class="form-control form-control-sm" name="itrCode" [(ngModel)]=itrCode
-                                      placeholder="{{'InvTransfer_ITR'|translate}}" (blur)="onITRChange()" id="itrCode">
+                                      placeholder="{{'InvTransfer_ITR'|translate}}" (blur)="onITRChange()" id="outOrderItrCodeInput">
                                     <div class="input-group-append has-seprate-btn">
                                       <button class="k-button k-primary btn" type="button" (click)="onITRlookupClick()">
                                         <i class="opti-icon-hammenu"></i>
                                       </button>
                                     </div>
                                     <div class="ml-1 d-flex">
-                                      <button type="button" id="poscanButton" (click)="onInboundScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                      <button type="button" id="OutOrderItrCodeScanBtn" (click)="onOrderScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                       </button>
                                     </div>
                                   </div>
                                 </div>
-                              </div>
+                         </div>
                 </div>
             </div>
 
@@ -81,7 +82,7 @@
                                         *ngIf="savedPalletItems.length>0">
                                         <i class="opti-icon-view-batch mr-1"></i>{{'Plt_Pallets'|translate}}
                                     </button>
-                                    <button type="button" id="poscanButton" (click)="onPalletScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                    <button type="button" id="outOrderPalletScanButton" (click)="onPalletScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
                                 </div>
@@ -109,7 +110,7 @@
                                         *ngIf="savedPalletItems.length>0">
                                         <i class="opti-icon-view-batch mr-1"></i>{{'Plt_Pallets'|translate}}
                                     </button> -->
-                                    <button type="button" id="itemcodescanButton" (click)="onItemScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                    <button type="button" id="OutOrderItemCodeScanButton" (click)="onItemScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
                                 </div>
@@ -136,7 +137,7 @@
                                                 (click)="openSOOrderList()" type="button">
                                                 <i class="opti-icon-search"></i>
                                             </button> -->
-                                    <button type="button" id="poscanButton" (click)="onItemScan()"
+                                    <button type="button" id="OutOrderItemscanButton" (click)="onItemScan()"
                                         class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>

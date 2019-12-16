@@ -1458,6 +1458,11 @@ export class OutOrderComponent implements OnInit {
   }
 
   onITRChange() {
+    var inputValue = (<HTMLInputElement>document.getElementById('outOrderItrCodeInput')).value;
+    if (inputValue.length > 0) {
+      this.orderNumber = inputValue;
+    }
+
    // console.log("onITRChange :");
     this.showLookup = false;
     this.showLookupLoader = true;
@@ -1807,5 +1812,9 @@ export class OutOrderComponent implements OnInit {
   onHiddenOutOrderSOScanClick(){
 
     this.onOrderNoBlur();
+  }
+
+  onHiddenITRScanClick(){
+    this.onITRChange();
   }
 }

@@ -115,7 +115,10 @@ export class OutCutomerComponent implements OnInit {
   }
 
   onCustomerCodeBlur() {
-
+    var inputValue = (<HTMLInputElement>document.getElementById('outCustomerCustomerCodeInput')).value;
+    if (inputValue.length > 0) {
+      this.customerCode = inputValue;
+    }
 
     this.outboundservice.getCustomer(this.customerCode).subscribe(
       resp => {
@@ -629,6 +632,12 @@ export class OutCutomerComponent implements OnInit {
   public selectedCustomer: any;
  
   public onOrderNoBlur() {
+
+    var inputValue = (<HTMLInputElement>document.getElementById('outCustomerSOInput')).value;
+    if (inputValue.length > 0) {
+      this.orderNumber = inputValue;
+    }
+
     this.showLookup = false;
     if (this.orderNumber == "" || this.orderNumber == undefined) {
       return;
@@ -733,6 +742,15 @@ export class OutCutomerComponent implements OnInit {
         this.showLookup = false;
       }
     );
+  }
+
+
+  hiddenScanSoBtn(){
+    this.onOrderNoBlur();
+    }
+
+  hiddenScanCustCodeBtn(){
+    this.onCustomerCodeBlur();
   }
 }
 
