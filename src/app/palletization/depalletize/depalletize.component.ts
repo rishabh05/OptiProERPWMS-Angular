@@ -76,6 +76,12 @@ export class DepalletizeComponent implements OnInit {
   }
 
   onPalletChange() {
+
+    
+    var inputValue = (<HTMLInputElement>document.getElementById('Depalletize_PalletNoInput')).value;
+    if (inputValue.length > 0) {
+      this.palletNo = inputValue;
+    }
     if (this.palletNo == '' || this.palletNo == undefined) {
       this.palletData = [];
       return

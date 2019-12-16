@@ -14,7 +14,7 @@
               <div class="input-group input-group-sm">
                 <input type="text" class="form-control form-control-sm" name="fromPalletNo" [(ngModel)]="fromPalletNo"
                   placeholder="{{'Plt_FromPalletNo'|translate}}" (blur)="onPalletChange('from_pallet')" #fromPalletInput
-                  id="fromPalletNo">
+                  id="palXfer_fromPalletNoInput">
                 <div class="input-group-append">
                   <button class="k-button k-primary btn" type="button" (click)="getPalletList('from_pallet')">
                     <i class="opti-icon-hammenu"></i>
@@ -37,7 +37,7 @@
             <div class="col-sm-9">
               <div class="input-group input-group-sm">
                 <input type="text" class="form-control form-control-sm" name="toPalletNo" [(ngModel)]="toPalletNo"
-                  placeholder="{{'Plt_ToPalletNo'|translate}}" (blur)="onPalletChange('to_pallet')" #toPalletInputs id="toPalletNo">
+                  placeholder="{{'Plt_ToPalletNo'|translate}}" (blur)="onPalletChange('to_pallet')" #toPalletInputs id="PalXferToPalletNoInput">
                 <div class="input-group-append">
                   <button class="k-button k-primary btn" type="button" (click)="getPalletList('to_pallet')">
                     <i class="opti-icon-hammenu"></i>

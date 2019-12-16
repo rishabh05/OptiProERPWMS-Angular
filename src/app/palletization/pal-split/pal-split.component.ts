@@ -572,7 +572,6 @@ export class PalSplitComponent implements OnInit {
       // this.toastr.error('', this.translate.instant("InvalidItemCode"));
       return;
     }
-
     if (this.fromPalletNo == "" || this.fromPalletNo == undefined) {
       this.itemCode = "";
       this.toastr.error('', this.translate.instant("Plt_SelectFromPallet"));
@@ -655,16 +654,32 @@ export class PalSplitComponent implements OnInit {
     this.qty = this.openQty - this.sumOfQty;
   }
   onHiddenFromPltScanClick() {
+    var inputValue = (<HTMLInputElement>document.getElementById('PalSplitFromPltInput')).value;
+    if (inputValue.length > 0) {
+      this.fromPalletNo = inputValue;
+    }
     this.onPalletChange('from_pallet');
   }
 
   onHiddenToPltScanClick() {
+    var inputValue = (<HTMLInputElement>document.getElementById('PalSplitToPltInput')).value;
+    if (inputValue.length > 0) {
+      this.toPalletNo = inputValue;
+    }
     this.onPalletChange('to_pallet');
   }
   onHiddenItemScanClick() {
+    var inputValue = (<HTMLInputElement>document.getElementById('PalSplitItemCodeInput')).value;
+    if (inputValue.length > 0) {
+      this.itemCode = inputValue;
+    }
     this.OnItemCodeChange();
   }
   onHiddenBatchSerialScanClick() {
+    var inputValue = (<HTMLInputElement>document.getElementById('PalSplitBatchSrInput')).value;
+    if (inputValue.length > 0) {
+      this.batchSerialNo = inputValue;
+    }
     this.OnLotsChange();
   }
 

@@ -12,7 +12,7 @@
             <label for="fromPalletNo" class="col-sm-3 col-form-label">{{'Plt_FromPalletNo'|translate}}</label>
             <div class="col-sm-9">
               <div class="input-group input-group-sm">
-                <input type="text" class="form-control form-control-sm" name="fromPalletNo" [(ngModel)]="fromPalletNo"
+                <input type="text" id="PalSplitFromPltInput" class="form-control form-control-sm" name="fromPalletNo" [(ngModel)]="fromPalletNo"
                   placeholder="{{'Plt_FromPalletNo'|translate}}" (blur)="onPalletChange('from_pallet')">
                 <div class="input-group-append">
                   <button class="k-button k-primary btn" type="button" (click)="getPalletList('from_pallet')">
@@ -20,7 +20,7 @@
                   </button>
                 </div>
                 <div class="ml-1 d-flex">
-                  <button type="button" id="PalSplit_FromPalletBtn" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                  <button type="button" id="PalSplit_FromPalletScanBtn" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                     <i class="opti-icon-qr-code fs-24"></i>
                   </button>
                 </div>
@@ -35,7 +35,7 @@
             <label for="toPalletNo" class="col-sm-3 col-form-label">{{'Plt_ToPalletNo'|translate}}</label>
             <div class="col-sm-9">
               <div class="input-group input-group-sm">
-                <input type="text" class="form-control form-control-sm" name="toPalletNo" [(ngModel)]="toPalletNo"
+                <input type="text" id="PalSplitToPltInput" class="form-control form-control-sm" name="toPalletNo" [(ngModel)]="toPalletNo"
                   placeholder="{{'Plt_ToPalletNo'|translate}}" (blur)="onPalletChange('to_pallet')">
                 <div class="input-group-append">
                   <button class="k-button k-primary btn" type="button" (click)="getPalletList('to_pallet')">
@@ -43,7 +43,7 @@
                   </button>
                 </div>
                 <div class="ml-1 d-flex">
-                  <button type="button" id="PalSplit_ToPalletBtn" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                  <button type="button" id="PalSplit_ToPalletScanBtn" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                     <i class="opti-icon-qr-code fs-24"></i>
                   </button>
                 </div>
@@ -70,29 +70,12 @@
           <div class="form-group row mt-1 mt-md-0">
             <label class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9">
-              <!-- <div class="opti_checkbox-container">
-                <input type="checkbox" id="auth-2fa" class="k-checkbox float-left" name="newPallet" (change)="onCheckChange()">
-                <label class="k-checkbox-label" for="auth-2fa">{{'Inbound_NewPallet'|translate}}</label>
-              </div> -->
+            
               <label class="textunderline" (click)="onCheckChange()">{{'Inbound_NewPallet'|translate}}</label>
             </div>
           </div>
 
-          <!-- <div class="form-group row mt-1 mt-md-0" *ngIf="showNewPallet ">
-            <label class="col-sm-3 col-form-label"></label>
-            <div class="col-sm-9">
-              <div class="d-flex">
-                <input type="text" class="form-control form-control-sm" id="newPallet" name="newPallet"
-                  [(ngModel)]="newCreatedPalletNo" placeholder="{{'Inbound_NewPallet'|translate}}" [disabled]="autoGeneratePalletEnable">
-                <div class="ml-1 d-flex">
-                  <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button"
-                    (click)="createNewPallet(event)">
-                    <i class="opti-icon-add1 fs-24"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div> -->
+        
         </div>
       </div>
 
@@ -102,7 +85,7 @@
             <label for="inputPassword" class="col-sm-3 col-form-label">{{'ItemCode'|translate}}</label>
             <div class="col-sm-9">
               <div class="input-group input-group-sm">
-                <input type="text" class="form-control form-control-sm" placeholder="{{'ItemCode'|translate}}" name="itemCode"
+                <input id="PalSplitItemCodeInput" type="text" class="form-control form-control-sm" placeholder="{{'ItemCode'|translate}}" name="itemCode"
                   [(ngModel)]="itemCode" (blur)="OnItemCodeChange()">
                 <div class="input-group-append  has-seprate-btn">
                   <button class="k-button k-primary btn" type="button" (click)="OnItemCodeLookupClick()">
@@ -120,33 +103,7 @@
         </div>
       </div>
 
-      <!-- <div class="row">
-        <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
-          <div class="form-group row">
-            <label for="inputPassword" class="col-sm-3 col-form-label">{{'Plt_MoveQty'|translate}}</label>
-            <div class="col-sm-9">
-              <div class="input-group input-group-sm">
-                <input type="text" id="moveQty" class="form-control form-control-sm text-right" [(ngModel)]="moveQty"
-                  name='moveQty' placeholder="{{'Plt_MoveQty'|translate}}">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> -->
-
-      <!-- <div class="row">
-        <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
-          <div class="form-group row">
-            <label for="inputPassword" class="col-sm-3 col-form-label">{{'Plt_RemainQty'|translate}}</label>
-            <div class="col-sm-9">
-              <div class="input-group input-group-sm">
-                <input type="text" id="remainQty" class="form-control form-control-sm text-right" [(ngModel)]="remainQty"
-                  name='remainQty' placeholder="{{'Plt_RemainQty'|translate}}" disabled>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> -->
+  
 
       <div class="row">
         <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
@@ -154,13 +111,13 @@
             <label for="inputPassword" class="col-sm-3 col-form-label">{{'BatchSerial_No'|translate}}</label>
             <div class="col-sm-9">
               <div class="input-group input-group-sm">
-                <input type="text" id="batchSerialNo" name="batchSerialNo" class="form-control form-control-sm"
+                <input type="text" id="PalSplitBatchSrInput" name="batchSerialNo" class="form-control form-control-sm"
                   [(ngModel)]="batchSerialNo" (blur)="OnLotsChange()" placeholder="{{'BatchSerial_No'|translate}}">
                 <div class="input-group-append has-seprate-btn">
                   <button class="k-button k-primary btn" (click)="OnBatchSerialLookupClick()" type="button">
                     <i class="opti-icon-hammenu"></i>
                   </button>
-                  <button id="PalSplit_BatchSerialscanButton" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
+                  <button id="PalSplit_BatchSerialScanButton" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
                     type="button">
                     <i class="opti-icon-qr-code fs-24"></i>
                   </button>
