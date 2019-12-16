@@ -31,7 +31,7 @@ const routes: Routes = [
       //{ path: 'form', component:FormFieldComponent },
       { path:'binTransfer', component:BinTransferComponent },
       { path:'whsTransfer', component:WhsTransferComponent },
-      { path: 'InventoryTransferRequest', component:ITRLIstComponent  },
+      { path: 'InventoryTransferRequest', component:WhsTransferComponent  },
       { path: 'InventoryTransferbyITR', component:InventoryTransferbyITRMasterComponent  },
       { path:'changeWarehouse', component:ChangeWarehouseComponent },
       { path:'inbound', loadChildren:"../inbound/inbound.module#InboundModule"},     

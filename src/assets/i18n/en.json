@@ -402,5 +402,6 @@
   "EnterCustomerRefNo": "Enter Customer Ref. No. ",
   "InvTransfer_SubmitITRMsg": "Do you want to submit ITR?",
   "InvTransfer_ITRTransferSuccess": "Submitted successfully",
+  "ViewItems": "View Items",
   "Dummy": "Dummy"
 }

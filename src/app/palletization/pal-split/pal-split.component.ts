@@ -56,8 +56,41 @@ export class PalSplitComponent implements OnInit {
     }
   }
 
-  public getPalletList(from: string) {
+  public getFromPalletList(from: string) {
+    this.showLoader = true;
+    this.commonservice.GetPalletsWithRowsPresent().subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        console.log(data);
+        if (data != null) {
+          if (data.length > 0) {
+            console.log(data);
+            this.showLoader = false;
+            this.serviceData = data;
+            this.showLookup = true;
+            this.lookupFor = "PalletList";
+            this.fromPalletLookup = from;
+            return;
+          } else {
+            this.showLookup = false;
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          }
+        }
+      },
+      error => {
+        this.showLoader = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
 
+  public getPalletList(from: string) {
+    //This code will work for to pallet... fro FromPallet now we are calling seperate API.
     var code = "";
     if (from == "from_pallet") {
       code = Array.prototype.map.call(this.selectedToPallets, function (item) { return "'" + item.Code + "'"; }).join(",");

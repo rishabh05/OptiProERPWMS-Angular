@@ -41,7 +41,8 @@ export class DepalletizeComponent implements OnInit {
 
   public getPalletList(from: string) {
     this.showLoader = true;
-    this.commonservice.getPalletsOfSameWarehouse("").subscribe(
+    this.commonservice.GetPalletsWithRowsPresent().subscribe(
+    // this.commonservice.getPalletsOfSameWarehouse("").subscribe(
       (data: any) => {
         this.showLoader = false;
         console.log(data);

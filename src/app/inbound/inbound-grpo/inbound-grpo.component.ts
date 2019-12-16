@@ -578,8 +578,14 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
                 this.searlNo = this.searlNo + "-" + plt;
               }
               var autLotFlag = "false";
-              if (autoLots[0].AUTOLOT == "Y") {
+              // if (autoLots[0].AUTOLOT == "Y") {
+              //   autLotFlag = "true";
+              // }
+              if (autoLots != null && autoLots != undefined && autoLots.length > 0 && autoLots[0].AUTOLOT == "Y") {
                 autLotFlag = "true";
+                this.isDisabledScanInput = true;
+              } else {
+                this.isDisabledScanInput = false;
               }
 
               this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial,
@@ -692,8 +698,14 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         }
 
         var autLotFlag = "false";
-        if (autoLots[0].AUTOLOT == "Y") {
+        // if (autoLots[0].AUTOLOT == "Y") {
+        //   autLotFlag = "true";
+        // }
+        if (autoLots != null && autoLots != undefined && autoLots.length > 0 && autoLots[0].AUTOLOT == "Y") {
           autLotFlag = "true";
+          this.isDisabledScanInput = true;
+        } else {
+          this.isDisabledScanInput = false;
         }
 
         this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial,
@@ -1642,7 +1654,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     }
     this.recvingQuantityBinArray.splice(rowindex, 1);
     gridData.data = this.recvingQuantityBinArray;
-    if (this.recvingQuantityBinArray.length > 0) {
+    if (this.recvingQuantityBinArray.length >= 0) {
       if (!this.fromReceiptProduction) {
         this.showButton = true;
         this.showRecButton = true;
@@ -1701,18 +1713,23 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     this.targetBinClick = true;
     //this.showLoader = true; this.getPIlistSubs =
     this.showLoader = true;
-    this.targetBinSubs = this.inboundService.getAllBins("N", this.targetWhse).subscribe(
+    this.targetBinSubs = this.inboundService.GetTargetBins("N", this.targetWhse).subscribe(
       (data: any) => {
         this.showLoader = false;
         console.log(data);
         if (data != null) {
 
           if (data.length > 0) {
-            console.log(data);
-            this.showLookupLoader = false;
-            this.serviceData = data;
-            this.lookupfor = "RecvBinList";
-
+            if (data[0].ErrorMsg == "7001") {
+              this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+                this.translate.instant("CommonSessionExpireMsg"));
+              return;
+            }else{
+              console.log(data);
+              this.showLookupLoader = false;
+              this.serviceData = data;
+              this.lookupfor = "RecvBinList";
+            }
             return;
           }
           else {
