@@ -6,9 +6,13 @@ import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { AutoLot } from '../../models/Inbound/AutoLot';
-import { RowClassArgs } from '@progress/kendo-angular-grid';
+import { RowClassArgs, GridComponent } from '@progress/kendo-angular-grid';
 import { bypassSanitizationTrustResourceUrl } from '@angular/core/src/sanitization/bypass';
 import { InventoryTransferService } from 'src/app/services/inventory-transfer.service';
+import { StatePersistingServiceService } from 'src/app/services/state-persisting-service.service';
+import { GridSettings } from 'src/app/interface/grid-settings.interface';
+import { ColumnSettings } from 'src/app/interface/column-settings.interface';
+import { process } from '@progress/kendo-data-query';
 
 @Component({
   selector: 'app-inbound-polist',
@@ -16,7 +20,7 @@ import { InventoryTransferService } from 'src/app/services/inventory-transfer.se
   styleUrls: ['./inbound-polist.component.scss']
 })
 export class InboundPolistComponent implements OnInit {
-
+  RecvbBinvalue: string;
   futurepo: boolean = false;
   poCode: string = "";
   showLookupLoader: boolean = true;
@@ -24,15 +28,15 @@ export class InboundPolistComponent implements OnInit {
   lookupfor: string;
   itemCode: string = "";
   Name: string;
-  NonItemsDetail: any[];
-  BatchItemsDetail: any[];
-  SerialItemsDetail: any[];
+  // NonItemsDetail: any[];
+  // BatchItemsDetail: any[];
+  // SerialItemsDetail: any[];
   showSerialTrackItem: boolean = false;
   showBatchTrackItem: boolean = false;
   showNonTrackItem: boolean = false;
   autoLot: any[];
   openPOLineModel: any;
-  openPOLinesModel: any[];
+  openPOLinesModel: any[] = [];
   unmatchedPOLinesModel: any[];
   viewLines: any[];
   public oSavedPOLotsArray: any = {};
@@ -46,9 +50,35 @@ export class InboundPolistComponent implements OnInit {
   pagable: boolean = false;
   pageSize: number = Commonservice.pageSize;
   showConfirmDialog = false;
+  defaultPageSize:number = 10;
+
+
+
+
+  public gridSettings: GridSettings = {
+    state: {
+      skip: 0,
+      take: this.defaultPageSize,
+
+      // Initial filter descriptor
+      filter: {
+        logic: 'and',
+        filters: []
+      }
+    },
+    columnsConfig: [
+   ],
+   gridData:{ "data":[], "total":0}
+  };
+
+  public get savedStateExists(): boolean {
+    return !!this.persistingService.get('gridSettings');
+  }
+
 
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
-    private inboundMasterComponent: InboundMasterComponent, private inventoryTransferService: InventoryTransferService) {
+    private inboundMasterComponent: InboundMasterComponent, private inventoryTransferService: InventoryTransferService,
+    private persistingService: StatePersistingServiceService) {
     let userLang = navigator.language.split('-')[0];
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
     translate.use(userLang);
@@ -66,6 +96,14 @@ export class InboundPolistComponent implements OnInit {
     }
     this.selectedVendor = this.inboundMasterComponent.selectedVernder;
     this.showGRPOButton = false;
+
+    if(this.savedStateExists){
+      console.log("default setting","grid settings available");
+      this.gridSettings = this.mapGridSettings(this.persistingService.get('gridSettings'))
+    }else{
+      console.log("default setting","grid settings not available");
+      //load with default settings.s
+    }
   }
 
   ngAfterViewInit() {
@@ -173,9 +211,9 @@ export class InboundPolistComponent implements OnInit {
           this.showSerialTrackItem = false;
           if (data.Table != undefined && data.Table != null) {
             this.openPOLinesModel = [];
-            this.BatchItemsDetail = [];
-            this.NonItemsDetail = [];
-            this.SerialItemsDetail = [];
+            // this.BatchItemsDetail = [];
+            // this.NonItemsDetail = [];
+            // this.SerialItemsDetail = [];
 
             if (data.Table.length == 0) {
               this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
@@ -183,6 +221,11 @@ export class InboundPolistComponent implements OnInit {
             }
 
             this.openPOLinesModel = data.Table;
+            this.gridSettings.gridData = process(this.openPOLinesModel, {
+              skip: 0,
+              take: this.defaultPageSize
+              // Initial filter descriptor 
+            });
 
             // var  unmatchedPOLinesModel = data.Table;
             this.updateReceivedQtyForSavedItems();
@@ -241,9 +284,15 @@ export class InboundPolistComponent implements OnInit {
   }
 
   OnPOChange() {
+    
+    var inputValue = (<HTMLInputElement>document.getElementById('inboundPOScanPOInputField')).value;
+    if (inputValue.length > 0) {
+      this.poCode = inputValue;
+    }
     if (this.poCode == "" || this.poCode == undefined) {
       return;
     }
+     
     this.showLoader = true;
     this.inboundService.IsPOExists(this.poCode, "").subscribe(
       data => {
@@ -286,6 +335,9 @@ export class InboundPolistComponent implements OnInit {
         this.poCode = $event[0];
         this.Name = $event[1];
         this.openPOLines()
+        //reset grid setting to null
+        this.persistingService.set('gridSettings',null);
+
       }
       else if (this.lookupfor == "POItemList") {
         this.itemCode = $event[0];
@@ -295,6 +347,10 @@ export class InboundPolistComponent implements OnInit {
   }
 
   OnItemCodeChange() {
+    var inputValue = (<HTMLInputElement>document.getElementById('InboundPO_ItemCodeScanInputField')).value;
+    if (inputValue.length > 0) {
+      this.itemCode = inputValue;
+    }
     if (this.itemCode == "" || this.itemCode == undefined) {
       return;
     }
@@ -330,7 +386,7 @@ export class InboundPolistComponent implements OnInit {
     );
   }
 
-  onClickOpenPOLineRowOpenAutoLot(selection) {
+  onClickOpenPOLineRowOpenAutoLot(selection,grid: GridComponent) {
     const poline = selection.selectedRows[0].dataItem;
     this.openPOLineModel = poline;
     // this.openPOLineModel.RPTQTY = 0;
@@ -343,6 +399,7 @@ export class InboundPolistComponent implements OnInit {
     } else {
       this.getAutoLot(poline.ITEMCODE);
     }
+    this.saveGridSettings(grid); 
   }
 
   getAutoLotForN(itemCode: string) {
@@ -404,12 +461,15 @@ export class InboundPolistComponent implements OnInit {
         //this.inboundMasterComponent.setAutoLots(this.autoLot);
         localStorage.setItem("primaryAutoLots", JSON.stringify(this.autoLot));
         // this.openPOLineModel = this.openPOLinesModel.find(e => e.ITEMCODE == itemCode);
-        if (this.openPOLineModel != null) {
+        if (this.openPOLinesModel != null && this.openPOLinesModel.length > 0) {
           if (this.openPOLineModel.TRACKING == 'N') {
-            if(Number(this.openPOLineModel.RPTQTY) != Number(this.openPOLineModel.OPENQTY)){
-              this.openPOLineModel.RPTQTY = this.openPOLineModel.OPENQTY;
-              this.ShowBins();
-            }
+            // for(var i=0; i<this.openPOLinesModel.length; i++){
+            //   if(Number(this.openPOLinesModel[i].RPTQTY) != Number(this.openPOLinesModel[i].OPENQTY)){
+            //     this.openPOLinesModel[i].RPTQTY = this.openPOLinesModel[i].OPENQTY;
+            //     this.ShowBins();
+            //   }
+            // }
+            this.ShowBins();
           } else {
             localStorage.setItem("PalletizationEnabledForItem", "True");
             this.inboundMasterComponent.inboundComponent = 3;
@@ -670,21 +730,16 @@ export class InboundPolistComponent implements OnInit {
     // alert("scan click");
   }
 
-  onHiddenScanClick() {
-    this.onGS1ItemScan();
+  
+
+  onItemHiddenScanClick(){
+    this.OnItemCodeChange();
   }
 
-  onGS1ItemScan() {
-    var inputValue = (<HTMLInputElement>document.getElementById('inboundScanInputField')).value;
-    if (inputValue.length > 0) {
-      this.poCode = inputValue;
-      this.OnPOChange();
-    }
+  onHiddenPOScanClick(){
+    this.OnPOChange();
   }
-
-  onItemHiddenScanClick() {
-    this.onGS1ItemScan1();
-  }
+  
 
   onGS1ItemScan1() {
     var inputValue = (<HTMLInputElement>document.getElementById('inboundScanInputField')).value;
@@ -742,9 +797,9 @@ export class InboundPolistComponent implements OnInit {
     localStorage.setItem("GRPOReceieveData", JSON.stringify(oSubmitPOLotsObj));
   }
 
-  RecvbBinvalue: string;
+
   public ShowBins() {
-    this.inboundService.getRevBins('N').subscribe(
+    this.inboundService.getRevBins(this.openPOLinesModel[0].QCREQUIRED).subscribe(
       (data: any) => {
         this.showLoader = false;
         console.log(data);
@@ -752,7 +807,18 @@ export class InboundPolistComponent implements OnInit {
           if (data.length > 0) {
             this.RecvbBinvalue = data[0].BINNO;
           }
-          this.prepareCommonData();
+
+          // if(this.openPOLinesModel[0].QCREQUIRED == 'Y'){
+
+          // }else{
+            for(var i=0; i<this.openPOLinesModel.length; i++){
+              if(Number(this.openPOLinesModel[i].RPTQTY) != Number(this.openPOLinesModel[i].OPENQTY)){
+                this.openPOLinesModel[i].RPTQTY = this.openPOLinesModel[i].OPENQTY;
+                this.openPOLineModel = this.openPOLinesModel[i];
+                this.prepareCommonData();
+              }
+            }
+          // }
         }
       },
       error => {
@@ -807,8 +873,8 @@ export class InboundPolistComponent implements OnInit {
     var size = oSubmitPOLotsObj.POReceiptLots.length;
     for (var i = 0; i < oSubmitPOLotsObj.POReceiptLots.length; i++) {
       if (oSubmitPOLotsObj.POReceiptLots[i].PONumber == this.poCode &&
-        oSubmitPOLotsObj.POReceiptLots[i].ItemCode == this.openPOLineModel[0].ITEMCODE &&
-        oSubmitPOLotsObj.POReceiptLots[i].LineNo == this.openPOLineModel[0].LINENUM) {
+        oSubmitPOLotsObj.POReceiptLots[i].ItemCode == this.openPOLineModel.ITEMCODE &&
+        oSubmitPOLotsObj.POReceiptLots[i].LineNo == this.openPOLineModel.LINENUM) {
         var s = oSubmitPOLotsObj.POReceiptLotDetails.length;
         for (var j = 0; j < oSubmitPOLotsObj.POReceiptLotDetails.length; j++) {
           if (oSubmitPOLotsObj.POReceiptLotDetails[j].ParentLineNo == oSubmitPOLotsObj.POReceiptLots[i].Line) {
@@ -853,7 +919,7 @@ export class InboundPolistComponent implements OnInit {
 
     oSubmitPOLotsObj.POReceiptLots.push({
       DiServerToken: localStorage.getItem("Token"),
-      PONumber: this.openPOLineModel.DOCENTRY,
+      PONumber: this.poCode,
       CompanyDBId: localStorage.getItem("CompID"),
       LineNo: this.openPOLineModel.LINENUM,
       ShipQty: this.openPOLineModel.RPTQTY.toString(),
@@ -920,4 +986,49 @@ export class InboundPolistComponent implements OnInit {
     });
     return oSubmitPOLotsObj;
   }
+  
+  dataStateChange(state){
+    this.gridSettings.state = state;
+      this.gridSettings.gridData = process(this.openPOLinesModel, state);
+  }
+  
+  public saveGridSettings(grid: GridComponent): void {
+    const columns = grid.columns;
+
+    const gridConfig = {
+      state: this.gridSettings.state,
+      columnsConfig: columns.toArray().map(item => {
+        return Object.keys(item)
+          .filter(propName => !propName.toLowerCase()
+            .includes('template'))
+            .reduce((acc, curr) => ({...acc, ...{[curr]: item[curr]}}), <ColumnSettings> {});
+      })
+    };
+
+    this.persistingService.set('gridSettings',gridConfig);
+  }
+
+  public mapGridSettings(gridSettings: GridSettings): GridSettings {
+    
+    const state = gridSettings.state;
+   
+
+    return {
+      state,
+      columnsConfig: gridSettings.columnsConfig.sort((a, b) => a.orderIndex - b.orderIndex),
+      gridData: process(this.openPOLinesModel, state)
+    };
+  }
+  private mapDateFilter = (descriptor: any) => {
+    const filters = descriptor.filters || [];
+
+    filters.forEach(filter => {
+        if (filter.filters) {
+            this.mapDateFilter(filter);
+        } else if (filter.field === 'FirstOrderedOn' && filter.value) {
+            filter.value = new Date(filter.value);
+        }
+    });
+  }
+
 }

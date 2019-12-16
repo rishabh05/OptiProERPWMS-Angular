@@ -115,7 +115,10 @@ export class OutCutomerComponent implements OnInit {
   }
 
   onCustomerCodeBlur() {
-
+    var inputValue = (<HTMLInputElement>document.getElementById('outCustomerCustomerCodeInput')).value;
+    if (inputValue.length > 0) {
+      this.customerCode = inputValue;
+    }
 
     this.outboundservice.getCustomer(this.customerCode).subscribe(
       resp => {
@@ -444,8 +447,16 @@ export class OutCutomerComponent implements OnInit {
             hdr.UOM = -1;
             hdr.UOMName = o.Item.UOM;
             hdr.Line = hdrLineVal;
-            hdr.NumAtCard = this.outbound.CustomerData.CustRefNo;
-            hdr.TrackingNumber = this.outbound.CustomerData.TrackingId;
+            if(this.outbound.CustomerData.CustRefNo!=null && this.outbound.CustomerData.CustRefNo!=undefined){
+              hdr.NumAtCard = this.outbound.CustomerData.CustRefNo;
+            }else{
+              hdr.NumAtCard = "";
+            }
+            if(this.outbound.CustomerData.TrackingId!=null && this.outbound.CustomerData.TrackingId!=undefined){
+              hdr.NumAtCard = this.outbound.CustomerData.TrackingId;
+            }else{
+              hdr.TrackingNumber= "";
+            }
             arrSOHEADER.push(hdr);
           }
 
@@ -621,6 +632,12 @@ export class OutCutomerComponent implements OnInit {
   public selectedCustomer: any;
  
   public onOrderNoBlur() {
+
+    var inputValue = (<HTMLInputElement>document.getElementById('outCustomerSOInput')).value;
+    if (inputValue.length > 0) {
+      this.orderNumber = inputValue;
+    }
+
     this.showLookup = false;
     if (this.orderNumber == "" || this.orderNumber == undefined) {
       return;
@@ -725,6 +742,15 @@ export class OutCutomerComponent implements OnInit {
         this.showLookup = false;
       }
     );
+  }
+
+
+  hiddenScanSoBtn(){
+    this.onOrderNoBlur();
+    }
+
+  hiddenScanCustCodeBtn(){
+    this.onCustomerCodeBlur();
   }
 }
 

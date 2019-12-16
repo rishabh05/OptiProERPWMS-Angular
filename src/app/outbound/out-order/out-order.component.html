@@ -11,17 +11,25 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Outbound_SO'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" name="orderNumber" (blur)="onOrderNoBlur()" value=''
+                                <input type="text" name="orderNumber" id="OutOrderOrderNoInput" (blur)="onOrderNoBlur()" value=''
                                     [(ngModel)]="orderNumber" class="form-control form-control-sm"
                                     placeholder="{{'Outbound_SO'|translate}}">
                                 <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" (click)="openOrderLookup()" type="button">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
-                                    <button class="k-button k-primary btn separate-btn" (click)="openSOOrderList()"
+                                    
+                                        <button type="button" id="outOrderSOScan" 
+                                            class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                            <i class="opti-icon-qr-code fs-24"></i>
+                                        </button>
+                                        <button class="k-button k-primary btn separate-btn" 
+                                         (click)="openSOOrderList()"
                                         type="button">
                                         <i class="opti-icon-search"></i>
                                     </button>
+                              
+                                    
                                 </div>
                             </div>
                         </div>
@@ -36,20 +44,20 @@
                                 <div class="col-sm-9">
                                   <div class="input-group input-group-sm">
                                     <input #DocEntry type="text" class="form-control form-control-sm" name="itrCode" [(ngModel)]=itrCode
-                                      placeholder="{{'InvTransfer_ITR'|translate}}" (blur)="onITRChange()" id="itrCode">
+                                      placeholder="{{'InvTransfer_ITR'|translate}}" (blur)="onITRChange()" id="outOrderItrCodeInput">
                                     <div class="input-group-append has-seprate-btn">
                                       <button class="k-button k-primary btn" type="button" (click)="onITRlookupClick()">
                                         <i class="opti-icon-hammenu"></i>
                                       </button>
                                     </div>
                                     <div class="ml-1 d-flex">
-                                      <button type="button" id="poscanButton" (click)="onInboundScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                      <button type="button" id="OutOrderItrCodeScanBtn" (click)="onOrderScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                       </button>
                                     </div>
                                   </div>
                                 </div>
-                              </div>
+                         </div>
                 </div>
             </div>
 
@@ -60,7 +68,7 @@
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
                                 <input type="text" #PalletNo name="pltNo" (blur)="onPalletChange()" value=''
-                                    [(ngModel)]="palletNo" class="form-control form-control-sm"
+                                    [(ngModel)]="palletNo" class="form-control form-control-sm" id="outOrderPalletNoInput"
                                     placeholder="{{'Plt_PalletNo'|translate}}">
                                 <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" (click)="getPalletList()" type="button">
@@ -74,7 +82,7 @@
                                         *ngIf="savedPalletItems.length>0">
                                         <i class="opti-icon-view-batch mr-1"></i>{{'Plt_Pallets'|translate}}
                                     </button>
-                                    <button type="button" id="poscanButton" (click)="onPalletScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                    <button type="button" id="outOrderPalletScanButton" (click)="onPalletScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
                                 </div>
@@ -90,7 +98,7 @@
                         <label for="orderNumber" class="col-sm-3 col-form-label">{{'ItemCode'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" id="itemcodeid" name="ItemCode" (blur)="onItemChange()" value=''
+                                <input type="text" id="outOrderItemcodeinput" name="ItemCode" (blur)="onItemChange()" value=''
                                     [(ngModel)]="ItemCode" class="form-control form-control-sm"
                                     placeholder="{{'ItemCode'|translate}}">
                                 <div class="input-group-append has-seprate-btn ml-1">
@@ -102,7 +110,7 @@
                                         *ngIf="savedPalletItems.length>0">
                                         <i class="opti-icon-view-batch mr-1"></i>{{'Plt_Pallets'|translate}}
                                     </button> -->
-                                    <button type="button" id="itemcodescanButton" (click)="onItemScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                    <button type="button" id="OutOrderItemCodeScanButton" (click)="onItemScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
                                 </div>
@@ -112,31 +120,7 @@
                 </div>
             </div>
             
-            <!-- <div class="row" *ngIf="fromWhere=='itr'">
-                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
-                    <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'InvTransfer_ToBin'|translate}}</label>
-                        <div class="col-sm-9">
-                            <div class="input-group input-group-sm">
-                                <input type="text" (blur)="OnBinChange()" placeholder="{{'InvTransfer_ToBin'|translate}}"
-                                    class="form-control form-control-sm" name="toBinNo" [(ngModel)]=toBinNo id="toBinNo">
-                                <div class="input-group-append has-seprate-btn">
-                                    <button class="k-button k-primary btn" type="button" (click)="OnBinLookupClick()">
-                                        <i class="opti-icon-hammenu"></i>
-                                    </button>
-                                </div>
-                                <div class="ml-1 d-flex">
-                                    <button type="button" id="itemscanButton" (click)="onInboundScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
-                                        <i class="opti-icon-qr-code fs-24"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-
-            <div *ngIf ="temoraryHideItemLookupRow" class="row">
+                   <div *ngIf ="temoraryHideItemLookupRow" class="row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
                     <div class="form-group row">
                         <label for="orderNumber" class="col-sm-3 col-form-label">{{'Item'|translate}}</label>
@@ -153,7 +137,7 @@
                                                 (click)="openSOOrderList()" type="button">
                                                 <i class="opti-icon-search"></i>
                                             </button> -->
-                                    <button type="button" id="poscanButton" (click)="onItemScan()"
+                                    <button type="button" id="OutOrderItemscanButton" (click)="onItemScan()"
                                         class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
@@ -207,22 +191,31 @@
                                 class="opti_mobile-grid-td">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <dl class="opti_mobile_grid_dl">
+                                            <dt class="d-flex align-items-center">{{'LINENUM'|translate}} <span
+                                                class="opti_arrow-grid-detail float-right text-center opti_vertical-align ml-auto">›</span>
+                                        </dt>
+                                        <dd>{{ dataItem.ROWNUM|numberFormat }}</dd>
+
                                         <dt>{{'ItemCode'|translate}}</dt>
                                         <dd>{{ dataItem.ITEMCODE }}</dd>
 
-                                        <dt>{{'PickQty'|translate}}</dt>
-                                        <dd>{{ dataItem.RPTQTY|numberFormat }}</dd>
+                                   
                                     </dl>
                                     <dl class="opti_mobile_grid_dl">
                                         <dt class="d-flex align-items-center">{{'OpenQty'|translate}} <span
                                                 class="opti_arrow-grid-detail float-right text-center opti_vertical-align ml-auto">›</span>
                                         </dt>
                                         <dd>{{ dataItem.OPENQTY|numberFormat }}</dd>
+
+                                        <dt>{{'PickQty'|translate}}</dt>
+                                        <dd>{{ dataItem.RPTQTY|numberFormat }}</dd>
                                      </dl>
                                 </ng-template>
                             </kendo-grid-column>
                             <!-- grid for mobile end -->
 
+                            <kendo-grid-column media="(min-width: 768px)" field="ROWNUM"
+                            title="{{'LINENUM'|translate}}" [width]="6"></kendo-grid-column>
                             <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE"
                                 title="{{'ItemCode'|translate}}" [width]="6"></kendo-grid-column>
                             <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" headerClass="text-right"
@@ -236,7 +229,7 @@
                                 <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.RPTQTY | numberFormat}}
                                 </ng-template>
                             </kendo-grid-column>
-
+                          
 
                         </kendo-grid>
                     </div>
@@ -276,6 +269,31 @@
                 <button *ngIf="showTemporaryViews"  type="button"  (click)="showPalletsList()"
                    class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-check"
                      role="presentation"></span>{{btnText}}</button>
+
+
+
+                     <button type="button" id="hid_btnOutOrderSoScanScanBtn" style="visibility:hidden"
+                     (click)="onHiddenOutOrderSOScanClick()"
+                     class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
+                     <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn
+                 </button> 
+                 <button type="button" id="hid_btnOutOrderPalletScanScanBtn" style="visibility:hidden"
+                     (click)="onHiddenOutOrderPalletScanClick()"
+                     class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
+                     <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn
+                 </button>
+                 <button type="button" id="hid_btnOutOrderItemCodeScanScanBtn" style="visibility:hidden"
+                     (click)="onHiddenOutOrderItemCodeScanClick()"
+                     class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
+                     <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn
+                 </button>
+                 
+                 <!--for ITR-->
+                 <button type="button" id="hid_btnITRScanBtn" style="visibility:hidden"
+                 (click)="onHiddenITRScanClick()"
+                 class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
+                 <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn
+             </button>
             </div>
         </div>
     </form>

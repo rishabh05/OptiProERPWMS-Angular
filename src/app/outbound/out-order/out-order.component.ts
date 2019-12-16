@@ -154,6 +154,11 @@ export class OutOrderComponent implements OnInit {
 
   fromEvent: any = ""
   onOrderNoBlur() {
+    var inputValue = (<HTMLInputElement>document.getElementById('OutOrderOrderNoInput')).value;
+    if (inputValue.length > 0) {
+      this.orderNumber = inputValue;
+    }
+
     if (this.orderNumber)
       this.openSOOrderList(this.orderNumber);
   }
@@ -570,8 +575,16 @@ export class OutOrderComponent implements OnInit {
             hdr.UOM = -1;
             hdr.UOMName = o.Item.UOM;
             hdr.Line = hdrLineVal;
-            hdr.NumAtCard = this.outbound.CustomerData.CustRefNo;
-            hdr.TrackingNumber = this.outbound.CustomerData.TrackingId;
+            if(this.outbound.CustomerData.CustRefNo!=null && this.outbound.CustomerData.CustRefNo!=undefined){
+              hdr.NumAtCard = this.outbound.CustomerData.CustRefNo;
+            }else{
+              hdr.NumAtCard = "";
+            }
+            if(this.outbound.CustomerData.TrackingId!=null && this.outbound.CustomerData.TrackingId!=undefined){
+              hdr.NumAtCard = this.outbound.CustomerData.TrackingId;
+            }else{
+              hdr.TrackingNumber= "";
+            }
             arrSOHEADER.push(hdr);
           }
           //============================start check header exist or not then add ========
@@ -1116,6 +1129,12 @@ export class OutOrderComponent implements OnInit {
   }
 
   onPalletChange() {
+
+    var inputValue = (<HTMLInputElement>document.getElementById('outOrderPalletNoInput')).value;
+    if (inputValue.length > 0) {
+      this.palletNo = inputValue;
+    }
+
     if (this.palletNo == undefined || this.palletNo == "") {
       return;
     }
@@ -1359,6 +1378,11 @@ export class OutOrderComponent implements OnInit {
 
   ItemCode: string;
   public onItemChange() {
+    var inputValue = (<HTMLInputElement>document.getElementById('outOrderItemcodeinput')).value;
+    if (inputValue.length > 0) {
+      this.palletNo = inputValue;
+    }
+
     if (this.selectedCustomer != null && this.selectedCustomer != undefined
       && this.selectedCustomer.CustomerCode != '' && this.selectedCustomer.CustomerCode != null) {
 
@@ -1434,6 +1458,11 @@ export class OutOrderComponent implements OnInit {
   }
 
   onITRChange() {
+    var inputValue = (<HTMLInputElement>document.getElementById('outOrderItrCodeInput')).value;
+    if (inputValue.length > 0) {
+      this.orderNumber = inputValue;
+    }
+
    // console.log("onITRChange :");
     this.showLookup = false;
     this.showLookupLoader = true;
@@ -1768,5 +1797,24 @@ export class OutOrderComponent implements OnInit {
   cancel(){
     localStorage.setItem(CommonConstants.OutboundData, null)
     this.router.navigate(['home/dashboard']);
+  }
+
+
+  onHiddenOutOrderItemCodeScanClick(){
+    this.onItemChange();
+  }
+
+  onHiddenOutOrderPalletScanClick(){
+ 
+    this.onPalletChange();
+  }
+  
+  onHiddenOutOrderSOScanClick(){
+
+    this.onOrderNoBlur();
+  }
+
+  onHiddenITRScanClick(){
+    this.onITRChange();
   }
 }

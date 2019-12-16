@@ -56,8 +56,41 @@ export class PalSplitComponent implements OnInit {
     }
   }
 
-  public getPalletList(from: string) {
+  public getFromPalletList(from: string) {
+    this.showLoader = true;
+    this.commonservice.GetPalletsWithRowsPresent().subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        console.log(data);
+        if (data != null) {
+          if (data.length > 0) {
+            console.log(data);
+            this.showLoader = false;
+            this.serviceData = data;
+            this.showLookup = true;
+            this.lookupFor = "PalletList";
+            this.fromPalletLookup = from;
+            return;
+          } else {
+            this.showLookup = false;
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          }
+        }
+      },
+      error => {
+        this.showLoader = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
 
+  public getPalletList(from: string) {
+    //This code will work for to pallet... fro FromPallet now we are calling seperate API.
     var code = "";
     if (from == "from_pallet") {
       code = Array.prototype.map.call(this.selectedToPallets, function (item) { return "'" + item.Code + "'"; }).join(",");
@@ -321,7 +354,7 @@ export class PalSplitComponent implements OnInit {
 
   onCheckChange() {
     this.newCreatedPalletNo = "";
-    this.showInputDialog("NewPallet", this.translate.instant("Done"), this.translate.instant("Cancel"),
+    this.showInputDialog("NewPallet_Split", this.translate.instant("Done"), this.translate.instant("Cancel",),
     this.translate.instant("Plt_CreateNewPallet"));
   }
 
@@ -572,7 +605,6 @@ export class PalSplitComponent implements OnInit {
       // this.toastr.error('', this.translate.instant("InvalidItemCode"));
       return;
     }
-
     if (this.fromPalletNo == "" || this.fromPalletNo == undefined) {
       this.itemCode = "";
       this.toastr.error('', this.translate.instant("Plt_SelectFromPallet"));
@@ -655,16 +687,32 @@ export class PalSplitComponent implements OnInit {
     this.qty = this.openQty - this.sumOfQty;
   }
   onHiddenFromPltScanClick() {
+    var inputValue = (<HTMLInputElement>document.getElementById('PalSplitFromPltInput')).value;
+    if (inputValue.length > 0) {
+      this.fromPalletNo = inputValue;
+    }
     this.onPalletChange('from_pallet');
   }
 
   onHiddenToPltScanClick() {
+    var inputValue = (<HTMLInputElement>document.getElementById('PalSplitToPltInput')).value;
+    if (inputValue.length > 0) {
+      this.toPalletNo = inputValue;
+    }
     this.onPalletChange('to_pallet');
   }
   onHiddenItemScanClick() {
+    var inputValue = (<HTMLInputElement>document.getElementById('PalSplitItemCodeInput')).value;
+    if (inputValue.length > 0) {
+      this.itemCode = inputValue;
+    }
     this.OnItemCodeChange();
   }
   onHiddenBatchSerialScanClick() {
+    var inputValue = (<HTMLInputElement>document.getElementById('PalSplitBatchSrInput')).value;
+    if (inputValue.length > 0) {
+      this.batchSerialNo = inputValue;
+    }
     this.OnLotsChange();
   }
 
@@ -727,7 +775,7 @@ export class PalSplitComponent implements OnInit {
     this.showInputDialogFlag = false;
     if ($event.Status == "yes") {
       switch ($event.From) {
-        case ("NewPallet"):
+        case ("NewPallet_Split"):
           this.createNewPallet($event.PalletNo, $event.BinNo);
           break
       }

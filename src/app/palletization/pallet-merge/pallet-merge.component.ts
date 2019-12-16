@@ -40,7 +40,41 @@ export class PalletMergeComponent implements OnInit {
     }
   }
 
+  public getFromPalletList(from: string) {
+    this.showLoader = true;
+    this.commonservice.GetPalletsWithRowsPresent().subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        console.log(data);
+        if (data != null) {
+          if (data.length > 0) {
+            console.log(data);
+            this.showLoader = false;
+            this.serviceData = data;
+            this.showLookup = true;
+            this.lookupFor = "PalletList";
+            this.fromPalletLookup = from;
+            return;
+          } else {
+            this.showLookup = false;
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          }
+        }
+      },
+      error => {
+        this.showLoader = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
+
   public getPalletList(from: string) {
+    //This code will only work for get ToPallet....we are calling seperate api for FromPallet
     var code = "";
     if (from == "from_pallet") {
       code = this.toPalletNo;
@@ -151,8 +185,8 @@ export class PalletMergeComponent implements OnInit {
   }
 
   getLookupValue(lookupValue: any) {
-    this.showLookup = false;
     if (this.fromPalletLookup == "from_pallet") {
+      this.showLookup = false;
       this.showLoader = false;
       this.fromPalletNo = "";//lookupValue.Code;
       this.toWhse = lookupValue.U_OPTM_WAREHOUSE_LOC;
@@ -161,6 +195,7 @@ export class PalletMergeComponent implements OnInit {
         this.selectedFromPallets.push(lookupValue);
       }
     } else if (this.fromPalletLookup == "to_pallet") {
+      this.showLookup = false;
       this.toPalletNo = lookupValue.Code;
       if (this.containPallet(this.selectedFromPallets, this.toPalletNo)) {
         this.toastr.error('', this.translate.instant("Plt_AlreadySelected"));
@@ -181,7 +216,7 @@ export class PalletMergeComponent implements OnInit {
 
   onCheckChange() {
     this.newCreatedPalletNo = "";
-    this.showInputDialog("NewPallet", this.translate.instant("Done"), this.translate.instant("Cancel"),
+    this.showInputDialog("NewPallet_PalletMerge", this.translate.instant("Done"), this.translate.instant("Cancel"),
     this.translate.instant("Plt_CreateNewPallet"));
   }
 
@@ -244,10 +279,18 @@ export class PalletMergeComponent implements OnInit {
     this.selectedFromPallets.splice(index, 1);
   }
 
-  ScanToPalletField() {
+  HiddenScanPalletField() {
+    var inputValue = (<HTMLInputElement>document.getElementById('pltMergePalletNoInput')).value;
+    if (inputValue.length > 0) {
+      this.toPalletNo = inputValue;
+    }
     this.onPalletChange('to_pallet');
   }
-  ScanFromPalletField() {
+  HiddenScanToPalletField() {
+    var inputValue = (<HTMLInputElement>document.getElementById('pltMergeToPalletInput')).value;
+    if (inputValue.length > 0) {
+      this.toPalletNo = inputValue;
+    }
     this.onPalletChange('from_pallet');
   }
 
@@ -298,7 +341,7 @@ export class PalletMergeComponent implements OnInit {
     this.showInputDialogFlag = false;
     if ($event.Status == "yes") {
       switch ($event.From) {
-        case ("NewPallet"):
+        case ("NewPallet_PalletMerge"):
           this.createNewPallet($event.PalletNo, $event.BinNo);
           break
       }
@@ -306,6 +349,7 @@ export class PalletMergeComponent implements OnInit {
   }
 
   viewPalletClick(index: any, item: any) {
+    this.fromPalletLookup = "";
     var code = this.selectedFromPallets[index].Code;
     this.getPalletData(code);
   }

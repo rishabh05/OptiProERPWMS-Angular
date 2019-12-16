@@ -52,11 +52,46 @@ export class PalTransferComponent implements OnInit {
     }
   }
 
+  public getFromPalletList(from: string) {
+    this.showLoader = true;
+    this.commonservice.GetPalletsWithRowsPresent().subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        console.log(data);
+        if (data != null) {
+          if (data.length > 0) {
+            console.log(data);
+            this.showLoader = false;
+            this.serviceData = data;
+            this.showLookup = true;
+            this.lookupFor = "PalletList";
+            this.fromPalletLookup = from;
+            return;
+          } else {
+            this.showLookup = false;
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          }
+        }
+      },
+      error => {
+        this.showLoader = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
+
   public getPalletList(from: string) {
+    //This code will work for to pallet... fro FromPallet now we are calling seperate API.
     var code = "";
     if (from == "from_pallet") {
       code = this.toPalletNo;
-    } else if (from == "to_pallet") {
+    } 
+    else if (from == "to_pallet") {
       code = this.fromPalletNo;
       console.log("code: " + code);
     }
@@ -98,6 +133,7 @@ export class PalTransferComponent implements OnInit {
   }
 
   onPalletChange(from: string) {
+
     if (from == "from_pallet") {
       if (this.fromPalletNo == '' || this.fromPalletNo == undefined) {
         this.palletData = [];
@@ -332,7 +368,7 @@ export class PalTransferComponent implements OnInit {
 
   onCheckChange() {
     this.newCreatedPalletNo = "";
-    this.showInputDialog("NewPallet", this.translate.instant("Done"), this.translate.instant("Cancel"),
+    this.showInputDialog("NewPallet_PalletTransfer", this.translate.instant("Done"), this.translate.instant("Cancel"),
     this.translate.instant("Plt_CreateNewPallet"));
   }
 
@@ -377,9 +413,18 @@ export class PalTransferComponent implements OnInit {
   }
 
   onHiddenToPltScanClick(){
+    var inputValue = (<HTMLInputElement>document.getElementById('PalXferToPalletNoInput')).value;
+    if (inputValue.length > 0) {
+      this.toPalletNo = inputValue;
+    }
     this.onPalletChange('to_pallet');
   }
   onHiddenFromPltScanClick(){
+    
+    var inputValue = (<HTMLInputElement>document.getElementById('palXfer_fromPalletNoInput')).value;
+    if (inputValue.length > 0) {
+      this.fromPalletNo = inputValue;
+    }
     this.onPalletChange('from_pallet');
   }
 
@@ -399,7 +444,7 @@ export class PalTransferComponent implements OnInit {
     this.showInputDialogFlag = false;
     if ($event.Status == "yes") {
       switch ($event.From) {
-        case ("NewPallet"):
+        case ("NewPallet_PalletTransfer"):
           this.createNewPallet($event.PalletNo, $event.BinNo);
           break
       }

@@ -13,7 +13,7 @@
                             class="col-sm-3 col-form-label">{{'Outbound_Customer'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input (blur)="onCustomerCodeBlur()"
+                                <input (blur)="onCustomerCodeBlur()" id="outCustomerCustomerCodeInput"
                                     [disabled]='orderCollection!=undefined && orderCollection!=null && orderCollection.length>0'
                                     type="text" class="form-control form-control-sm" name='customerCode'
                                     [(ngModel)]="customerCode" placeholder="{{'Outbound_Customer'|translate}}">
@@ -22,6 +22,13 @@
                                         [disabled]='orderCollection!=undefined && orderCollection!=null && orderCollection.length>0'
                                         class="k-button k-primary btn" (click)="openCustomerLookup()" type="button">
                                         <i class="opti-icon-hammenu"></i>
+                                    </button>
+                                </div>
+
+                                <div class="ml-1 d-flex">
+                                    <button type="button" id="outCustomerCuCodeScan" 
+                                        class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                        <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
                                 </div>
                             </div>
@@ -43,11 +50,17 @@
                             <div class="col-sm-9">
                                 <div class="input-group input-group-sm">
                                     <input (blur)="onOrderNoBlur()" type="text" class="form-control form-control-sm"
-                                        name='orderNumber' [(ngModel)]="orderNumber"
+                                        name='orderNumber' [(ngModel)]="orderNumber" id = "outCustomerSOInput"
                                         placeholder="{{'Outbound_SO'|translate}}">
                                     <div class="input-group-append">
                                         <button class="k-button k-primary btn" (click)="openOrderLookup()" type="button">
                                             <i class="opti-icon-hammenu"></i>
+                                        </button>
+                                    </div>
+                                    <div class="ml-1 d-flex">
+                                        <button type="button" id="outCustomerSOScan" 
+                                            class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                            <i class="opti-icon-qr-code fs-24"></i>
                                         </button>
                                     </div>
                                 </div>
@@ -142,8 +155,13 @@
                     [disabled]="!customerCode" (click)="openCustSO(true)" roterLink="binTransfer" skipLocationChange><i
                         class="opti-icon-arrow-next"></i></button>
 
-                <button type="button" id="outbound1_sohiddenScanButton" style="visibility:hidden"
-                    (click)="outbound1_sohiddenScanButton()"
+                <button type="button" id="Hid_outboundCustomerCodeScanBtn" style="visibility:hidden"
+                    (click)="hiddenScanCustCodeBtn()"
+                    class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                    SB </button>
+
+                    <button type="button" id="Hid_OutCustSOScanBtn" style="visibility:hidden"
+                    (click) = "hiddenScanSoBtn()"
                     class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                     SB </button>
 

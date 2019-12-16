@@ -1343,6 +1343,11 @@ export class OutProdissueComponent implements OnInit {
   }
 
   OnBinChange() {
+
+    var inputValue = (<HTMLInputElement>document.getElementById('InvTransfer_ToBinInput')).value;
+    if (inputValue.length > 0) {
+      this.toBinNo = inputValue;
+    }
     if (this.toBinNo == "" || this.toBinNo == undefined) {
       return;
     }
@@ -1420,5 +1425,10 @@ export class OutProdissueComponent implements OnInit {
         }
       }
     );
+  }
+
+
+  onHiddenToBinScanClick(){
+   this.OnBinChange()
   }
 } 

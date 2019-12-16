@@ -74,7 +74,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Inbound_ReceivingBin'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" name="RecvbBinvalue" #RecBinVal
+                                <input type="text" id ="inboundGrpoRecBinInput" class="form-control form-control-sm" name="RecvbBinvalue" #RecBinVal
                                     [(ngModel)]=RecvbBinvalue placeholder="{{'Inbound_ReceivingBin'|translate}}" (blur)="OnBinChange()">
                                 <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" type="button" (click)="ShowBins()">
@@ -83,7 +83,7 @@
 
                                 </div>
                                 <div class="ml-1 d-flex" *ngIf="showScanInput">
-                                    <button type="button" id="scanRecBin" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                    <button type="button" id="inboundGRPOScanRecBinBtn" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
                                 </div>
@@ -97,7 +97,7 @@
                                 [(ngModel)]=expiryDate placeholder={{dateFormat}}></kendo-datepicker>
                         </div>
                     </div>
-                    <div class="form-group row align-items-center" *ngIf="showScanInput">
+                    <div class="form-group row align-items-center" *ngIf="showScanAndInputRadio">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'ScanInputs'|translate}}</label>
                         <div class="col-sm-9">
                             <fieldset [disabled]=isDisabledScanInput class="d-block w-100">
@@ -142,7 +142,7 @@
                                 <label for="inputPassword" class="col-sm-3 col-form-label">{{'Plt_PalletNo'|translate}}</label>
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-sm">
-                                        <input type="text" class="form-control form-control-sm" name="palletValue" [(ngModel)]=palletValue
+                                        <input type="text" id="inboundGRPOPalletNo" class="form-control form-control-sm" name="palletValue" [(ngModel)]=palletValue
                                             (blur)="OnPalletChange()" placeholder="{{'Plt_PalletNo'|translate}}">
                                         <div class="input-group-append has-seprate-btn">
                                             <button class="k-button k-primary btn" type="button" (click)="getPalletList()">
@@ -150,7 +150,7 @@
                                             </button>
                                         </div>
                                         <div class="ml-1 d-flex">
-                                            <button type="button" id="inboundscanButton" (click)="onPalletScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                            <button type="button" id="inboundGRPOPalletScanBtn" (click)="onPalletScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                                 <i class="opti-icon-qr-code fs-24"></i>
                                             </button>
                                         </div>
@@ -179,40 +179,10 @@
                     <div class="form-group row mt-md-0" *ngIf="isPalletizationEnable && !isNonTrack"son>
                         <label class="col-sm-3 col-form-label"></label>
                         <div class="col-sm-9">
-                            <!-- <div class="opti_checkbox-container">
-                                <input type="checkbox" id="auth-2fa" class="k-checkbox float-left" name="newPallet"
-                                    (change)="onCheckChange()">
-                                <label class="k-checkbox-label" for="auth-2fa">{{'Inbound_NewPallet'|translate}}</label>
-                            </div> -->
                             <label class="textunderline" (click)="onCheckChange()">{{'Inbound_NewPallet'|translate}}</label>
                         </div>
                     </div>
-
-                    <!-- <div class="form-group row mt-1 mt-md-0" *ngIf="showNewPallet && !isNonTrack">
-                        <label class="col-sm-3 col-form-label"></label>
-                        <div class="col-sm-9">
-                            <div class="d-flex">
-                                <input type="text" class="form-control form-control-sm" id="newPallet" name="newPallet"
-                                    [(ngModel)]="newCreatedPalletNo" placeholder="{{'Inbound_NewPallet'|translate}}"
-                                    [disabled]="autoGeneratePalletEnable">
-                                <div class="ml-1 d-flex">
-                                    <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
-                                        type="button" (click)="createNewPallet(event)">
-                                        <i class="opti-icon-add1 fs-24"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
-
-                    <!-- <div class="form-group row" *ngIf="!isNonTrack">
-                        <div class="col-sm-3"></div>
-                        <div class="col-sm-9">
-                            <a class="cursor-pointer d-inline-flex text-primay" [ngStyle]="{'color':'#1fa2ff'}" *ngIf="isPalletizationEnable"><small
-                                    (click)="enableNewwPallet()">{{'Inbound_NewPallet'|translate}}</small></a>
-                        </div>
-                    </div> -->
-
+                 
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Quantity'|translate}}</label>
                         <div class="col-sm-9">
@@ -222,6 +192,10 @@
                                 <div class="ml-1 d-flex">
                                     <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
                                         type="button" (click)="addQuantity(event)">
+                                        <i class="opti-icon-add1 fs-24"></i>
+                                    </button>
+                                    <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
+                                        type="button" (click)="updateQuantity(event)" *ngIf="isNonTrack">
                                         <i class="opti-icon-add1 fs-24"></i>
                                     </button>
                                 </div>
@@ -284,14 +258,14 @@
                             <ng-template kendoGridCellTemplate let-dataItem let-idx='rowIndex'>
                                 <input type="text" class="form-control form-control-sm" name="dataItem.VendorLot" value={{dataItem.VendorLot}}
                                     id="display_name" #display_name (change)="updateVendorLot(display_name.value, idx)"
-                                    [disabled]="dataItem.autoLot == 'true'">
+                                    [disabled]="isDisabledScanInput">
                             </ng-template>
                         </kendo-grid-column>
 
                         <kendo-grid-column media="(min-width: 768px)" field="LotNumber" [width]="18" title="{{SRBatchColumnText}}">
                             <ng-template kendoGridCellTemplate let-dataItem let-idx='rowIndex'>
                                 <input type="text" class="form-control form-control-sm" name="dataItem.LotNumber" value={{dataItem.LotNumber}}
-                                    [disabled]="dataItem.autoLot == 'true'" id="display_name" #display_name (change)="updateLotNumber(display_name.value, idx, gridItem)"
+                                    [disabled]="isDisabledScanInput" id="display_name" #display_name (change)="updateLotNumber(display_name.value, idx, gridItem)"
                                     (blur)="checkAndValidateSerial()">
                             </ng-template>
                         </kendo-grid-column>
@@ -421,6 +395,12 @@
                 <button type="button" id="hiddenScanButton" style="visibility:hidden" (click)="onHiddenScanClick()"
                     class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                     SB </button>
+                <button type="button" id="hid_InboundGrpoHiddenScanButtonRecBin" style="visibility:hidden" (click)="onHiddenRecBinClick()"
+                    class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                    SB </button>
+                <button type="button" id="hid_InboundGrpoHiddenScanBtnPallet" style="visibility:hidden" (click)="onHiddenPalletClick()"
+                  class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                SB </button>
             </div>
         </div>
     </form>

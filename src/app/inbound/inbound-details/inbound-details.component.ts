@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { InboundMasterComponent } from '../inbound-master.component';
+import { StatePersistingServiceService } from 'src/app/services/state-persisting-service.service';
 
 @Component({
   selector: 'app-inbound-details',
@@ -26,7 +27,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
   showGRPOGridAndBtn: boolean = false;
   public Polist: any[] = [];
   dialogFor: string = "";
-  dialogMsg: string = ""
+  dialogMsg: string = "";
   showConfirmDialog: boolean;
   rowindexForDelete: any;
   gridDataAfterDelete: any[];
@@ -42,7 +43,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
     //this.vendInputScanField.nativeElement.focus();
   }
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
-    private inboundMasterComponent: InboundMasterComponent) {
+    private inboundMasterComponent: InboundMasterComponent,private persistingService:StatePersistingServiceService) {
     let userLang = navigator.language.split('-')[0];
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
     translate.use(userLang);
@@ -169,6 +170,10 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
 
   
   OnVendorChange() {
+    var inputValue = (<HTMLInputElement>document.getElementById('InboundDetailVendScanInputField')).value;
+    if (inputValue.length > 0) {
+      this.VendCode = inputValue;
+    }
     if (this.VendCode == "" || this.VendCode == undefined) {
       return;
     }
@@ -259,6 +264,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
     else {
       this.toastr.error('', this.translate.instant("Inbound_SelectVendorValidateMsg"));
     }
+    this.persistingService.set('gridSettings',null);
   }
 
   OnCancelClick() {
@@ -477,6 +483,12 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
   }
 
   OnPOChange() {
+    
+    var inputValue = (<HTMLInputElement>document.getElementById('inboundDetailPOScanInputField')).value;
+    if (inputValue.length > 0) {
+      this.poCode = inputValue;
+      
+    }
     if (this.poCode == "" || this.poCode == undefined) {
       return;
     }
@@ -556,4 +568,14 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
       this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
     }
   }
+
+  onHiddenVendCodeScanClick(){
+    this.OnVendorChange();
+  }
+
+  onHiddenSOScanClick(){
+    this.OnPOChange();
+    
+  }
+  
 }

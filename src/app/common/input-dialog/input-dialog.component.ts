@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { InventoryTransferService } from 'src/app/services/inventory-transfer.service';
 import { Commonservice } from 'src/app/services/commonservice.service';
 import { InboundService } from 'src/app/services/inbound.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-input-dialog',
@@ -28,7 +29,7 @@ export class InputDialogComponent implements OnInit {
   isPalletizationEnable: boolean = false;
 
   constructor(private commonservice: Commonservice, private translate: TranslateService, private toastr: ToastrService,
-    private inboundService: InboundService) { }
+    private inboundService: InboundService, private router: Router) { }
 
   ngOnInit() {
     if (localStorage.getItem("AutoPalletIdGenerationChecked") == "True") {
@@ -84,15 +85,18 @@ export class InputDialogComponent implements OnInit {
       (data: any) => {
         this.showLoader = false;
         console.log(data);
-        if (data != null) {
-          if (data.length > 0) {
+        if (data != null && data.length > 0) {
+          if (data[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          } else {
             this.showLookup = false;
             this.serviceData = data;
             this.lookupfor = "toBinsList";
           }
-          else {
-            this.toastr.error('', this.translate.instant("Inbound_NoBinsAvailableMsg"));
-          }
+        } else {
+          this.toastr.error('', this.translate.instant("Inbound_NoBinsAvailableMsg"));
         }
       },
       error => {
@@ -110,22 +114,25 @@ export class InputDialogComponent implements OnInit {
 
 
   OnBinLookupClick() {
-    if (localStorage.getItem('FromReceiptProd') == 'true') {
+    if (this.fromWhere != "NewPallet_GRPO") {
       this.ShowAllBins();
     } else {
       this.showLoader = true;
       this.inboundService.getRevBins('N').subscribe(
         data => {
           this.showLoader = false;
-          if (data != null) {
-            if (data.length > 0) {
+          if (data != null && data.length > 0) {
+            if (data[0].ErrorMsg == "7001") {
+              this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+                this.translate.instant("CommonSessionExpireMsg"));
+              return;
+            } else {
               this.showLookup = false;
               this.serviceData = data;
               this.lookupfor = "toBinsList";
             }
-            else {
-              this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
-            }
+          } else {
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
           }
         },
         error => {

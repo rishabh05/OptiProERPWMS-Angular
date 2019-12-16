@@ -24,13 +24,18 @@
             <label for="inputPassword" class="col-sm-3 col-form-label">{{'InvTransfer_ToWhse'|translate}}</label>
             <div class="col-sm-9">
               <div class="input-group input-group-sm">
-                <input type="text" name="toWhse" [(ngModel)]="toWhse" class="form-control form-control-sm" placeholder="{{'InvTransfer_ToWhse'|translate}}"
+                <input type="text" name="toWhse" [(ngModel)]="toWhse" id= "whsTransferToWhsInputField" class="form-control form-control-sm" placeholder="{{'InvTransfer_ToWhse'|translate}}"
                   (blur)="OnToWarehouseChange()" [disabled]="!isfromWhsDisabled">
                 <div class="input-group-append">
                   <button class="k-button k-primary btn" type="button" (click)="getToWhse()" [disabled]="!isfromWhsDisabled">
                     <i class="opti-icon-hammenu"></i>
                   </button>
                 </div>
+                <div class="ml-1 d-flex">
+                    <button type="button" id="binTransferByPalletToBin"  (click)="onInboundScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                     <i class="opti-icon-qr-code fs-24"></i>
+                     </button>
+                </div> 
               </div>
             </div>
           </div>
@@ -49,6 +54,10 @@
 
         <button type="button" *ngIf="showNext" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" (click)="viewSwitch()">
           <i class="opti-icon-arrow-next"></i>
+        </button>
+
+        <button type="button" id="btnWhsTransferToWhsScanBtn" style="visibility:hidden" (click)="onHiddenToWhsScanClick()" class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
+          <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn
         </button>
       </div>
     </div>

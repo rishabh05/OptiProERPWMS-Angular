@@ -95,10 +95,15 @@ export class PalletizeComponent implements OnInit {
   }
 
   onPalletChange() {
+
+    var inputValue = (<HTMLInputElement>document.getElementById('PalletizePalletNo')).value;
+    if (inputValue.length > 0) {
+      this.palletNo = inputValue;
+    }
+
     if (this.palletNo == '' || this.palletNo == undefined) {
       return
     }
-
     this.showLoader = true;
     this.commonservice.isPalletValid(this.palletNo).subscribe(
       (data: any) => {
@@ -183,7 +188,7 @@ export class PalletizeComponent implements OnInit {
 
   onCheckChange() {
     this.newCreatedPalletNo = "";
-    this.showInputDialog("NewPallet", this.translate.instant("Done"), this.translate.instant("Cancel"),
+    this.showInputDialog("NewPallet_Palletize", this.translate.instant("Done"), this.translate.instant("Cancel"),
     this.translate.instant("Plt_CreateNewPallet"));
   }
 
@@ -219,6 +224,12 @@ export class PalletizeComponent implements OnInit {
   }
 
   OnItemCodeChange() {
+    
+    var inputValue = (<HTMLInputElement>document.getElementById('PalletizeItemCodeInput')).value;
+    if (inputValue.length > 0) {
+      this.itemCode = inputValue;
+    }
+
     if (this.itemCode == "" || this.itemCode == undefined) {
       this.savedPalletsArray = [];
       return;
@@ -316,6 +327,12 @@ export class PalletizeComponent implements OnInit {
   }
 
   OnLotsChange() {
+
+    var inputValue = (<HTMLInputElement>document.getElementById('PalletizeBatchSrNo')).value;
+    if (inputValue.length > 0) {
+      this.batchSerialNo = inputValue;
+    }
+
     if (this.itemCode == '' || this.itemCode == undefined) {
       this.toastr.error('', this.translate.instant("SelectItemCode"));
       this.batchSerialNo = "";
@@ -599,7 +616,7 @@ export class PalletizeComponent implements OnInit {
     this.showInputDialogFlag = false;
     if ($event.Status == "yes") {
       switch ($event.From) {
-        case ("NewPallet"):
+        case ("NewPallet_Palletize"):
           this.toBin = $event.BinNo;
           this.toWhse = localStorage.getItem("whseId");
           this.createNewPallet($event.PalletNo, $event.BinNo);
