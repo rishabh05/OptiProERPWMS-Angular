@@ -10,7 +10,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Plt_PalletNo'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" name="fromPalletNo" (blur)="onPalletChange('from_pallet')" value=''
+                                <input type="text" id="pltMergePalletNoInput" name="fromPalletNo" (blur)="onPalletChange('from_pallet')" value=''
                                     [(ngModel)]="fromPalletNo" class="form-control form-control-sm" placeholder="{{'Plt_PalletNo'|translate}}">
                                 <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" (click)="getPalletList('from_pallet')" type="button">
@@ -89,7 +89,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Plt_ToPalletNo'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" name="palletNo" (blur)="onPalletChange('to_pallet')" value=''
+                                <input type="text" id="pltMergeToPalletInput" name="palletNo" (blur)="onPalletChange('to_pallet')" value=''
                                     [(ngModel)]="toPalletNo" class="form-control form-control-sm" placeholder="{{'Plt_ToPalletNo'|translate}}">
                                 <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" (click)="getPalletList('to_pallet')" type="button">
@@ -150,10 +150,10 @@
                     class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon opti-icon-pallet-marge"></span>
                     {{'Plt_Merge'|translate}}</button>
 
-                <button type="button" id="Pal_MergeHiddenToPltBtn" style="visibility:hidden" (click)="ScanToPalletField()"
+                <button type="button" id="Pal_MergeHiddenPltBtn" style="visibility:hidden" (click)="HiddenScanPalletField()"
                     class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                     SBItem </button>
-                <button type="button" id="Pal_MergeHiddenFromPltBtn" style="visibility:hidden" (click)="ScanFromPalletField()"
+                <button type="button" id="Pal_MergeHiddenFromPltBtn" style="visibility:hidden" (click)="HiddenScanToPalletField()"
                     class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                     SBItem </button>
             </div>

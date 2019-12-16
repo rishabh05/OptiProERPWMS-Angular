@@ -24,20 +24,20 @@
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
                                 <input #poScanInputField type="text" class="form-control form-control-sm" name="poCode" [(ngModel)]=poCode placeholder="{{'Inbound_PO#'|translate}}"
-                                    (blur)="OnPOChange()" [disabled]=disablePO id="poScanInputField">
+                                    (blur)="OnPOChange()" [disabled]=disablePO id="inboundPOScanPOInputField">
                                 <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" type="button" (click)="onPOlookupClick()" [disabled]=disablePO>
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
                                     <button class="k-button k-primary btn separate-btn" 
-                                    *ngIf="false" (click)="openPOLines()" type="button">
+                                    *ngIf="false" (click)="openPOLines()"  type="button">
                                         <i class="opti-icon-search"></i>
                                     </button>
                                 </div>
                                 <div class="ml-1 d-flex">
-                                    <button type="button" id="poscanButton"  (click)="onInboundScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                    <button type="button" id="inboundPOScanBtn"   (click)="onInboundScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                      <i class="opti-icon-qr-code fs-24"></i>
-                                     </button>
+                                    </button>
                                  </div> 
                             </div>
                         </div>
@@ -46,14 +46,16 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'ItemCode'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" (blur)="OnItemCodeChange()" placeholder="{{'ItemCode'|translate}}" class="form-control form-control-sm" name="itemCode" [(ngModel)]=itemCode id="itemScanInputField">
+                                <input type="text" (blur)="OnItemCodeChange()"  placeholder="{{'ItemCode'|translate}}" 
+                                class="form-control form-control-sm" name="itemCode" [(ngModel)]=itemCode 
+                                id="InboundPO_ItemCodeScanInputField">
                                 <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" type="button" (click)="onItemlookupClick()">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
                                 </div>
                                 <div class="ml-1 d-flex">
-                                    <button type="button" id="itemscanButton"  (click)="onInboundScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                    <button type="button" id="inboundPOItemCodescanButton"  (click)="onInboundScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                      <i class="opti-icon-qr-code fs-24"></i>
                                      </button>
                                  </div> 
@@ -152,9 +154,9 @@
                 <button type="button" *ngIf="showGRPOButton" class="btn btn-primary k-button btn-sm btn-icon-with-text" (click)="onAddtoGRPOClick()">
                     <span class="k-icon k-i-plus-outline" role="presentation"></span>{{'AddToGRPO'|translate}} </button>
 
-                    <button type="button" id="pohiddenScanButton" style="visibility:hidden" (click)="onHiddenScanClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                    <button type="button" id="hid_InboundPOScanButton" style="visibility:hidden" (click)="onHiddenPOScanClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                         SB </button>  
-                        <button type="button" id="itemhiddenScanButton" style="visibility:hidden" (click)="onItemHiddenScanClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                        <button type="button" id="hid_ItemhiddenScanButton" style="visibility:hidden" (click)="onItemHiddenScanClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                             SB </button>                                          
             </div>
         </div>
