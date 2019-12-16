@@ -71,8 +71,6 @@ export class ProductionService {
    */
   isSerialExists(serialNo: string, itemCode: string, transType: number, tracking: string, wono: string,
     fromReceiptProduction: boolean): Observable<any> {
-   
-    
     if(fromReceiptProduction){
       var jObject = { SerialNo: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), ItemCode: itemCode, SerialNo: serialNo,
        TransType: transType, TRACKING: tracking, WONO: wono }]) };

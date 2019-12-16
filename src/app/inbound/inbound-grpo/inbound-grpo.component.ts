@@ -294,7 +294,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   public ShowBins() {
 
     if (localStorage.getItem('FromReceiptProd') == 'true') {
-      this.ShowAllBins();
+      this.GetTargetBins();
     } else {
       this.targetBinClick = false;
       this.showLoader = true;
@@ -1749,10 +1749,10 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   }
 
 
-  public ShowAllBins() {
+  public GetTargetBins() {
     this.targetBinClick = false;
     this.showLoader = true;
-    this.inboundService.getAllBins('N', localStorage.getItem("whseId")).subscribe(
+    this.inboundService.GetTargetBins('N', localStorage.getItem("whseId")).subscribe(
       (data: any) => {
         this.showLoader = false;
         console.log(data);
@@ -2355,7 +2355,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   }
 
   checkAndValidateSerial() {
-
+    alert("hi");
   }
   checkAndValidateSerial1() {
     var type = 0;
