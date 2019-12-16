@@ -73,7 +73,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   showScanAndInputRadio: boolean = true;
   targetBinClick: boolean = false;
   public primaryAutoLots: AutoLot[];
-  radioSelected: any = 0;
+  radioSelected: any = 1;
   LastSerialNumber: any[];
   LineId: any[];
   previousReceivedQty: number = 0;
