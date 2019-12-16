@@ -1694,18 +1694,23 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     this.targetBinClick = true;
     //this.showLoader = true; this.getPIlistSubs =
     this.showLoader = true;
-    this.targetBinSubs = this.inboundService.getAllBins("N", this.targetWhse).subscribe(
+    this.targetBinSubs = this.inboundService.GetTargetBins("N", this.targetWhse).subscribe(
       (data: any) => {
         this.showLoader = false;
         console.log(data);
         if (data != null) {
 
           if (data.length > 0) {
-            console.log(data);
-            this.showLookupLoader = false;
-            this.serviceData = data;
-            this.lookupfor = "RecvBinList";
-
+            if (data[0].ErrorMsg == "7001") {
+              this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+                this.translate.instant("CommonSessionExpireMsg"));
+              return;
+            }else{
+              console.log(data);
+              this.showLookupLoader = false;
+              this.serviceData = data;
+              this.lookupfor = "RecvBinList";
+            }
             return;
           }
           else {
