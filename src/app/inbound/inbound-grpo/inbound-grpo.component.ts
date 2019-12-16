@@ -203,6 +203,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
 
       if (localStorage.getItem('FromReceiptProd') == 'true') {
+        this.showScanInput = false;
         if (this.RecvbBinvalue == "") {
           this.defaultRecvBin = true;
           this.getDefaultFromBin();
