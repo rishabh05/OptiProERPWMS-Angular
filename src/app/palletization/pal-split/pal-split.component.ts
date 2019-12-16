@@ -310,7 +310,7 @@ export class PalSplitComponent implements OnInit {
   }
 
   back(fromwhereval: number) {
-    this.router.navigateByUrl('home/dashboard', { skipLocationChange: true });
+    this.router.navigate(['home/dashboard', { skipLocationChange: true }]);
   }
 
   openConfirmForDelete(index: any, item: any) {

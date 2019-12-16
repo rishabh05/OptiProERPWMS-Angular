@@ -293,7 +293,7 @@ export class OutCutomerComponent implements OnInit {
         }
       }
     }
-    this.router.navigateByUrl('home/outbound/outorder', { skipLocationChange: true });
+    this.router.navigate(['home/outbound/outorder', { skipLocationChange: true }]);
   }
 
 
@@ -335,7 +335,7 @@ export class OutCutomerComponent implements OnInit {
     // lsOutbound
     localStorage.setItem(CommonConstants.OutboundData, null)
     CurrentOutBoundData.CustomerData = null;
-    this.router.navigateByUrl('home/dashboard');
+    this.router.navigate(['home/dashboard']);
   }
 
   getConfirmDialogValue($event) {

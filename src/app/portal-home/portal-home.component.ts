@@ -21,14 +21,14 @@ export class PortalHomeComponent implements OnInit {
     element.className = "";
 
     //this.localRightSectionContainer = this.globals.localRightSectionContainer;
-    this.service.currentSidebarInfo.subscribe(
-      data=> {
-        if(data!=null){
-          this.currentSidebarInfo=data;          
-          this.localRightSectionContainer=data.SideBarStatus
-        }
-      }
-    );
+    // this.service.currentSidebarInfo.subscribe(
+    //   data=> {
+    //     if(data!=null){
+    //       this.currentSidebarInfo=data;          
+    //       this.localRightSectionContainer=data.SideBarStatus
+    //     }
+    //   }
+    // );
     
   //  this.getSettingOnSAP();
     // UI operations

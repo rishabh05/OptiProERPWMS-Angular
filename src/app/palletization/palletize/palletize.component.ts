@@ -165,7 +165,7 @@ export class PalletizeComponent implements OnInit {
   }
 
   back(fromwhereval: number) {
-    this.router.navigateByUrl('home/dashboard', { skipLocationChange: true });
+    this.router.navigate(['home/dashboard', { skipLocationChange: true }]);
   }
 
   manageEyeIcon: boolean = true;

@@ -21,18 +21,18 @@ export class PortalLeftComponent implements OnInit {
   WarehouseTransfer: boolean = false;
 
   constructor(private commonService: Commonservice, private router: Router, private menuService: MenuService, private translate: TranslateService, private toastr: ToastrService) {
-    router.events.subscribe((val) => {
-      // get current url with last word
-      let partsOfUrl = this.router.url.split('/');
-      this.selectedItem = partsOfUrl[partsOfUrl.length - 1];
-      setTimeout(() => {
-        if (typeof (document.getElementById('opti_RightPanelID')) != 'undefined' && document.getElementById('opti_RightPanelID') != null) {
-          document.getElementById('opti_RightPanelID').classList.remove('opti_menusidebar-mobile-open');
-          document.getElementById('opti_LeftPanelID').classList.remove('opti_menusidebar-mobile-open');
-        }
-      }, 1000);
+    // router.events.subscribe((val) => {
+    //   // get current url with last word
+    //   let partsOfUrl = this.router.url.split('/');
+    //   this.selectedItem = partsOfUrl[partsOfUrl.length - 1];
+    //   setTimeout(() => {
+    //     if (typeof (document.getElementById('opti_RightPanelID')) != 'undefined' && document.getElementById('opti_RightPanelID') != null) {
+    //       document.getElementById('opti_RightPanelID').classList.remove('opti_menusidebar-mobile-open');
+    //       document.getElementById('opti_LeftPanelID').classList.remove('opti_menusidebar-mobile-open');
+    //     }
+    //   }, 1000);
 
-    });
+    // });
   }
   selectedThemeColor: string = 'opticonstants.DEFAULTTHEMECOLOR';
   selectedItem: string;
@@ -106,7 +106,7 @@ export class PortalLeftComponent implements OnInit {
   listClick(event, module) {
     this.selectedItem = module;
 
-    this.closeRightSidebar();
+    this.closeRightSidebar(event);
     this.router.navigate(['home/' + module]);
 
     localStorage.setItem("ProdReceptItem", '');
@@ -132,10 +132,14 @@ export class PortalLeftComponent implements OnInit {
   /** 
    * 
    */
-  closeRightSidebar() {
+  closeRightSidebar(e) {
     let currentSidebarInfo: CurrentSidebarInfo = new CurrentSidebarInfo();
     currentSidebarInfo.SideBarStatus = false;
     this.commonService.setCurrentSideBar(currentSidebarInfo);
+    if(UIHelper.isMobile()==true){ 
+      document.getElementById('opti_RightPanelID').classList.remove('opti_menusidebar-mobile-open');
+      document.getElementById('opti_LeftPanelID').classList.remove('opti_menusidebar-mobile-open');
+    } 
   }
 
   binClick() {
