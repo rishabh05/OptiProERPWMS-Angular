@@ -188,7 +188,7 @@ export class PalletizeComponent implements OnInit {
 
   onCheckChange() {
     this.newCreatedPalletNo = "";
-    this.showInputDialog("NewPallet", this.translate.instant("Done"), this.translate.instant("Cancel"),
+    this.showInputDialog("NewPallet_Palletize", this.translate.instant("Done"), this.translate.instant("Cancel"),
     this.translate.instant("Plt_CreateNewPallet"));
   }
 
@@ -616,7 +616,7 @@ export class PalletizeComponent implements OnInit {
     this.showInputDialogFlag = false;
     if ($event.Status == "yes") {
       switch ($event.From) {
-        case ("NewPallet"):
+        case ("NewPallet_Palletize"):
           this.toBin = $event.BinNo;
           this.toWhse = localStorage.getItem("whseId");
           this.createNewPallet($event.PalletNo, $event.BinNo);
