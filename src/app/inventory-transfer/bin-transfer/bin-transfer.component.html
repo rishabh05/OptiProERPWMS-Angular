@@ -18,8 +18,8 @@
                                         <label class="k-radio-label" for="byItem">{{'Plt_ByItem'|translate}}</label>
                                     </div>
                                     <div class="d-flex align-items-center ml-3">
-                                        <input type="radio" name="group" (click)="handleCheckChange($event)" id="byPallet"
-                                            class="k-radio" [checked]="radioSelected == 1" />
+                                        <input type="radio" name="group" (click)="handleCheckChange($event)"
+                                            id="byPallet" class="k-radio" [checked]="radioSelected == 1" />
                                         <label class="k-radio-label" for="byPallet">{{'Plt_ByPallet'|translate}}</label>
                                     </div>
                                 </div>
@@ -34,11 +34,19 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'ItemCode'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" placeholder="{{'ItemCode'|translate}}"
-                                    name="itemCode" [(ngModel)]="itemCode" (blur)="OnItemCodeChange()">
+                                <input type="text" class="form-control form-control-sm"  id="binTransferScanItemCodeInput"
+                           \         placeholder="{{'ItemCode'|translate}}" name="itemCode" id="binTransferItemCodeScan"
+                                    [(ngModel)]="itemCode" (blur)="OnItemCodeChange()">
                                 <div class="input-group-append">
-                                    <button class="k-button k-primary btn" type="button" (click)="OnItemCodeLookupClick()">
+                                    <button class="k-button k-primary btn" type="button"
+                                        (click)="OnItemCodeLookupClick()">
                                         <i class="opti-icon-hammenu"></i>
+                                    </button>
+                                </div>
+                                <div class="ml-1 d-flex">
+                                    <button type="button"  id="binTransferScanItemCodeBtn" (click)="onInboundScan()"
+                                        class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                        <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
                                 </div>
                             </div>
@@ -49,8 +57,8 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'ItemName'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" name="itemName" [(ngModel)]="itemName"
-                                    [disabled]=true>
+                                <input type="text" class="form-control form-control-sm" name="itemName"
+                                    [(ngModel)]="itemName" [disabled]=true>
                             </div>
                         </div>
                     </div>
@@ -62,8 +70,9 @@
                         </label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" placeholder="{{batchNoPlaceholder}}"
-                                    name="lotValue" [(ngModel)]="lotValue" (blur)="OnLotChange()">
+                                <input type="text" class="form-control form-control-sm" id="binTransferLotInput"
+                                    placeholder="{{batchNoPlaceholder}}" name="lotValue" [(ngModel)]="lotValue"
+                                    (blur)="OnLotChange()">
                                 <div class="input-group-append">
                                     <button class="k-button k-primary btn" type="button" (click)="ShowLOTList()">
                                         <i class="opti-icon-hammenu"></i>
@@ -73,28 +82,44 @@
                         </div>
                     </div>
                     <div class="form-group row" *ngIf="showBinFields">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'InvTransfer_FromBin'|translate}}</label>
+                        <label for="inputPassword"
+                            class="col-sm-3 col-form-label">{{'InvTransfer_FromBin'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" placeholder="{{'InvTransfer_FromBin'|translate}}"
-                                    name="fromBin" [(ngModel)]="fromBin" (blur)="OnFromBinChange()">
+                                <input type="text"  id="binTransferFromBinInput" class="form-control form-control-sm"
+                                    placeholder="{{'InvTransfer_FromBin'|translate}}" name="fromBin"
+                                    [(ngModel)]="fromBin" (blur)="OnFromBinChange()">
                                 <div class="input-group-append">
                                     <button class="k-button k-primary btn" type="button" (click)="ShowFromBins()">
                                         <i class="opti-icon-hammenu"></i>
+                                    </button>
+                                </div>
+                                <div class="ml-1 d-flex">
+                                    <button type="button" id="binTransferScanFromBinScanBtn" (click)="onInboundScan()"
+                                        class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                        <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="form-group row" *ngIf="showBinFields">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'InvTransfer_ToBin'|translate}}</label>
+                        <label for="inputPassword"
+                            class="col-sm-3 col-form-label">{{'InvTransfer_ToBin'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" placeholder="{{'InvTransfer_ToBin'|translate}}"
-                                    name="toBin" [(ngModel)]="toBin" (blur)="OnToBinChange()">
+                                <input type="text" class="form-control form-control-sm"  id="binTransferToBinInput"
+                                    placeholder="{{'InvTransfer_ToBin'|translate}}" name="toBin" [(ngModel)]="toBin"
+                                    (blur)="OnToBinChange()">
                                 <div class="input-group-append">
                                     <button class="k-button k-primary btn" type="button" (click)="ShowToBins()">
                                         <i class="opti-icon-hammenu"></i>
+                                    </button>
+                                </div>
+                                <div class="ml-1 d-flex">
+                                    <button type="button" id="binTransferScanToBinScanBtn" (click)="onInboundScan()"
+                                        class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                        <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
                                 </div>
                             </div>
@@ -106,23 +131,25 @@
                             <span *ngIf="isItemSerialTrack">{{'SerialQty'|translate}}</span>
                         </label>
                         <div class="col-sm-9">
-                            <input type="number" min="0" class="form-control form-control-sm text-right" placeholder="{{zero}}"
-                                name="onHandQty" [(ngModel)]="onHandQty" [disabled]=true>
+                            <input type="number" min="0" class="form-control form-control-sm text-right"
+                                placeholder="{{zero}}" name="onHandQty" [(ngModel)]="onHandQty" [disabled]=true>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'InvTransfer_TransferQty'|translate}}</label>
+                        <label for="inputPassword"
+                            class="col-sm-3 col-form-label">{{'InvTransfer_TransferQty'|translate}}</label>
                         <div class="col-sm-9">
                             <input id="txtfld" type="number" min="0" class="form-control form-control-sm text-right"
-                                placeholder="{{zero}}" (blur)="formatTransferNumbers()" name="transferQty" [(ngModel)]="transferQty"
-                                [disabled]="editTransferQty">
+                                placeholder="{{zero}}" (blur)="formatTransferNumbers()" name="transferQty"
+                                [(ngModel)]="transferQty" [disabled]="editTransferQty">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'InvTransfer_Reason'|translate}}</label>
+                        <label for="inputPassword"
+                            class="col-sm-3 col-form-label">{{'InvTransfer_Reason'|translate}}</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control form-control-sm" placeholder="{{'InvTransfer_Reason'|translate}}"
-                                name="Remarks" [(ngModel)]="Remarks">
+                            <input type="text" class="form-control form-control-sm"
+                                placeholder="{{'InvTransfer_Reason'|translate}}" name="Remarks" [(ngModel)]="Remarks">
                         </div>
                     </div>
 
@@ -135,15 +162,22 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Plt_PalletNo'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" placeholder="{{'Plt_PalletNo'|translate}}"
-                                    name="palletNo" [(ngModel)]="palletNo" (blur)="onPalletChange()">
+                                <input type="text" class="form-control form-control-sm" id= "binTransferScanByPalletPalletNoInput"
+                                    placeholder="{{'Plt_PalletNo'|translate}}" name="palletNo" [(ngModel)]="palletNo"
+                                    (blur)="onPalletChange()">
                                 <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" type="button" (click)="getPalletList()">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
-                                    <button class="k-button k-primary btn separate-btn" type="button" (click)="showSelectedPallets()"
-                                        *ngIf="selectedPallets.length>0">
+                                    <button class="k-button k-primary btn separate-btn" type="button"
+                                        (click)="showSelectedPallets()" *ngIf="selectedPallets.length>0">
                                         <i class="opti-icon-view-batch mr-1"></i>{{'Plt_Pallets'|translate}}
+                                    </button>
+                                </div>
+                                <div class="ml-1 d-flex">
+                                    <button type="button" id="binTransferByPalletPalletNoScanBtn" (click)="onInboundScan()"
+                                        class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                        <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
                                 </div>
                             </div>
@@ -151,18 +185,27 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'InvTransfer_ToBin'|translate}}</label>
+                        <label for="inputPassword"
+                            class="col-sm-3 col-form-label">{{'InvTransfer_ToBin'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" placeholder="{{'InvTransfer_ToBin'|translate}}"
-                                    name="toBin" [(ngModel)]="toBin" (blur)="OnToBinChange()">
+                                <input type="text" class="form-control form-control-sm" id="binTransferByPalletToBinNoInput"
+                                    placeholder="{{'InvTransfer_ToBin'|translate}}" name="toBin" [(ngModel)]="toBin"
+                                    (blur)="OnToBinChange()">
                                 <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" type="button" (click)="ShowToBins()">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
-                                    <button class="k-button k-primary btn separate-btn" type="button" *ngIf="!isNonTrack"
-                                        (click)="onAddPalletClick()">
-                                        <span class="k-icon k-i-plus-outline mr-1 fs-12"></span>{{'Plt_Pallets'|translate}}
+                                    <div class="mr-1 d-flex">
+                                        <button type="button" id="binTransferByPalletToBinScanbtn" (click)="onInboundScan()"
+                                            class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                            <i class="opti-icon-qr-code fs-24"></i>
+                                        </button>
+                                    </div>
+                                    <button class="k-button k-primary btn separate-btn" type="button"
+                                        *ngIf="!isNonTrack" (click)="onAddPalletClick()">
+                                        <span
+                                            class="k-icon k-i-plus-outline mr-1 fs-12"></span>{{'Plt_Pallets'|translate}}
                                     </button>
                                 </div>
                             </div>
@@ -170,10 +213,11 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'InvTransfer_Reason'|translate}}</label>
+                        <label for="inputPassword"
+                            class="col-sm-3 col-form-label">{{'InvTransfer_Reason'|translate}}</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control form-control-sm" placeholder="{{'InvTransfer_Reason'|translate}}"
-                                name="Remarks" [(ngModel)]="Remarks">
+                            <input type="text" class="form-control form-control-sm"
+                                placeholder="{{'InvTransfer_Reason'|translate}}" name="Remarks" [(ngModel)]="Remarks">
                         </div>
                     </div>
                 </div>
@@ -185,19 +229,55 @@
             </div>
             <div class="col-sm-12 col-12">
                 <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="goBack()">
-                            <span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
-               
+                    <span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
+
                 <button type="button" class="btn btn-primary k-button btn-sm btn-icon-with-text" (click)="AddLineLots()"
                     *ngIf="radioSelected==0">
                     <span class="k-icon k-i-plus" role="presentation"></span> {{'AddMore'|translate}}</button>
-                <button type="button" class="btn btn-primary k-button btn-sm btn-icon-with-text mr-1" (click)="ShowSavedData()">
-                    <span class="k-icon k-i-preview" role="presentation"></span> {{'InvTransfer_ViewLines'|translate}}</button>
+                <button type="button" class="btn btn-primary k-button btn-sm btn-icon-with-text mr-1"
+                    (click)="ShowSavedData()">
+                    <span class="k-icon k-i-preview" role="presentation"></span>
+                    {{'InvTransfer_ViewLines'|translate}}</button>
 
-                    <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text" (click)="SubmitPutAway()">
-                            <span class="k-icon k-i-check" role="presentation"></span> {{'Submit'|translate}}</button>
+                <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text"
+                    (click)="SubmitPutAway()">
+                    <span class="k-icon k-i-check" role="presentation"></span> {{'Submit'|translate}}</button>
 
+
+                <button type="button" id="hid_btnBinTransferItemCodeScanBtn" style="visibility:hidden"
+                    (click)="onHiddenBinTransferItemCodeScanClick()"
+                    class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
+                    <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn
+                </button> 
+                <button type="button" id="hid_btnBinTransferLotScanBtn" style="visibility:hidden"
+                    (click)="onHiddenLotScanClick()"
+                    class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
+                    <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn
+                </button>
+                <button type="button" id="hid_btnBinTransferFromBinScanBtn" style="visibility:hidden"
+                    (click)="onHiddenFromBinScanClick()"
+                    class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
+                    <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn
+                </button>
+                <button type="button" id="hid_btnBinTransferToBinScanBtn" style="visibility:hidden"
+                (click)="onHiddenToBinScanClick()"
+                class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
+                <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn
+            </button>
+
+            <button type="button" id="hid_btnBinTransferByPalletPalNoScanBtn" style="visibility:hidden"
+                (click)="onHiddenByPalPalNoScanClick()"
+                class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
+                <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn
+            </button>
+
+            <button type="button" id="hid_btnBinTransferByPalToBinScanBtn" style="visibility:hidden"
+                (click)="onHiddenByPalToBinScanClick()"
+                class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
+                <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn
+            </button>
                 <div class="clearfix mt-1 d-block d-sm-none"></div>
-                
+
             </div>
         </div>
     </form>
@@ -239,7 +319,8 @@
                                     <dl class="opti_mobile_grid_dl">
                                         <dt class="d-flex align-items-center">{{'Quantity'|translate}}
 
-                                            <button type="button" class="btn btn-danger k-button btn-sm btn-icon ml-auto"
+                                            <button type="button"
+                                                class="btn btn-danger k-button btn-sm btn-icon ml-auto"
                                                 (click)="ViewLinesRowDeleteClick(rowIndex, gridItem)">
                                                 <span class="k-icon k-i-delete" role="presentation"></span>
                                             </button>
@@ -253,18 +334,21 @@
                             </kendo-grid-column>
                             <!-- grid for mobile end -->
 
-                            <kendo-grid-column class="pl-1" media="(min-width: 768px)" field="ItemCode" title="{{'ItemCode'|translate}}"
-                                [width]="160"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="Qty" headerClass="text-right" class="text-right"
-                                title="{{'Quantity'|translate}}" [width]="60"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="LotNo" [width]="160" title="{{'BatchNo'|translate}}"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="BinNo" [width]="160" title="{{'InvTransfer_FromBin'|translate}}"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="ToBin" title="{{'InvTransfer_ToBin'|translate}}"
-                                [width]="160"></kendo-grid-column>
+                            <kendo-grid-column class="pl-1" media="(min-width: 768px)" field="ItemCode"
+                                title="{{'ItemCode'|translate}}" [width]="160"></kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" field="Qty" headerClass="text-right"
+                                class="text-right" title="{{'Quantity'|translate}}" [width]="60"></kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" field="LotNo" [width]="160"
+                                title="{{'BatchNo'|translate}}"></kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" field="BinNo" [width]="160"
+                                title="{{'InvTransfer_FromBin'|translate}}"></kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" field="ToBin"
+                                title="{{'InvTransfer_ToBin'|translate}}" [width]="160"></kendo-grid-column>
                             <kendo-grid-column media="(min-width: 768px)" field="Delete" headerClass="text-center"
                                 class="text-center" title="" width="30">
                                 <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                    <button type="button" class="btn btn-danger k-button btn-sm btn-icon" (click)="ViewLinesRowDeleteClick(rowIndex, gridItem)">
+                                    <button type="button" class="btn btn-danger k-button btn-sm btn-icon"
+                                        (click)="ViewLinesRowDeleteClick(rowIndex, gridItem)">
                                         <span class="k-icon k-i-delete" role="presentation"></span>
                                     </button>
                                 </ng-template>
@@ -281,8 +365,8 @@
             </div>
             <div class="col-sm-12 col-12">
 
-                    <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="deleteAll()">
-                            <span class="k-icon k-i-delete" role="presentation"></span> {{'DeleteAll'|translate}}</button>
+                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="deleteAll()">
+                    <span class="k-icon k-i-delete" role="presentation"></span> {{'DeleteAll'|translate}}</button>
 
                 <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text" (click)="OnOKClick()">
                     <span class="k-icon k-i-check" role="presentation"></span> {{'Ok'|translate}}</button>
@@ -294,7 +378,8 @@
     <ng-template #template>
         <div class="modal-header">
             <h4 class="modal-title pull-left">{{'Confirm'|translate}}</h4>
-            <button id="modalCloseBtn" type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <button id="modalCloseBtn" type="button" class="close pull-right" aria-label="Close"
+                (click)="modalRef.hide()">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
@@ -302,14 +387,16 @@
             {{'DeleteAllLines'|translate}}
         </div>
         <div class="modal-footer">
-            <button class="btn btn-primary k-button btn-sm" type="button" (click)="deleteAllOkClick()">{{'Ok'|translate}}</button>
-            <button class="btn btn-default k-button btn-sm" type="button" (click)="modalRef.hide()">{{'Cancel'|translate}}</button>
+            <button class="btn btn-primary k-button btn-sm" type="button"
+                (click)="deleteAllOkClick()">{{'Ok'|translate}}</button>
+            <button class="btn btn-default k-button btn-sm" type="button"
+                (click)="modalRef.hide()">{{'Cancel'|translate}}</button>
         </div>
     </ng-template>
 </div>
 
-<div *ngIf="isModalShown" [config]="{ show: true }" (onHidden)="onHidden()" bsModal #autoShownModal="bs-modal" class="modal fade"
-    tabindex="-1" role="dialog" aria-labelledby="dialog-auto-name">
+<div *ngIf="isModalShown" [config]="{ show: true }" (onHidden)="onHidden()" bsModal #autoShownModal="bs-modal"
+    class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-auto-name">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -322,20 +409,22 @@
                 {{ModalContent}}
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary k-button btn-sm" type="button" #transferedItemsBtn>{{'Ok'|translate}}</button>
-                <button class="btn btn-default k-button btn-sm" type="button" (click)="hideModal()">{{'Cancel'|translate}}</button>
+                <button class="btn btn-primary k-button btn-sm" type="button"
+                    #transferedItemsBtn>{{'Ok'|translate}}</button>
+                <button class="btn btn-default k-button btn-sm" type="button"
+                    (click)="hideModal()">{{'Cancel'|translate}}</button>
             </div>
         </div>
     </div>
 </div>
 
-<kendo-dialog [width]="750" *ngIf="dialogOpened" (close)="close('dialog')" [minWidth]="250" >
+<kendo-dialog [width]="750" *ngIf="dialogOpened" (close)="close('dialog')" [minWidth]="250">
     <kendo-dialog-titlebar>
         {{'Plt_SelectedPallets'|translate}}
     </kendo-dialog-titlebar>
-    <kendo-grid [resizable]="true" [pageSize]="pageSize" [pageable]="pagable" [sortable]="true" [filterable]=isColumnFilter
-        [groupable]=isColumnGroup [selectable]="true" [data]="selectedPallets" style="max-height:200px" class="no-shadow"
-        #gridItem>
+    <kendo-grid [resizable]="true" [pageSize]="pageSize" [pageable]="pagable" [sortable]="true"
+        [filterable]=isColumnFilter [groupable]=isColumnGroup [selectable]="true" [data]="selectedPallets"
+        style="max-height:200px" class="no-shadow" #gridItem>
 
         <!-- grid for mobile start -->
         <kendo-grid-column media="(max-width: 767px)" title="{{'Plt_Pallets'|translate}}" class="opti_mobile-grid-td">
@@ -346,7 +435,8 @@
                 </dl>
                 <dl class="opti_mobile_grid_dl">
                     <dt class="d-flex align-items-center">
-                        <button class="btn btn-danger k-button btn-sm btn-icon ml-auto" type="button" (click)="showSelectedPallets(rowIndex, gridItem)">
+                        <button class="btn btn-danger k-button btn-sm btn-icon ml-auto" type="button"
+                            (click)="showSelectedPallets(rowIndex, gridItem)">
                             <span class="k-icon k-i-delete"></span>
                         </button>
                     </dt>
@@ -359,7 +449,8 @@
         </kendo-grid-column>
         <kendo-grid-column media="(min-width: 768px)" field="" headerClass="text-center" class="text-center" width="40">
             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                <button class="btn btn-danger k-button btn-sm btn-icon" type="button" (click)="PalletDeleteClick(rowIndex, gridItem)">
+                <button class="btn btn-danger k-button btn-sm btn-icon" type="button"
+                    (click)="PalletDeleteClick(rowIndex, gridItem)">
                     <span class="k-icon k-i-delete"></span>
                 </button>
             </ng-template>
