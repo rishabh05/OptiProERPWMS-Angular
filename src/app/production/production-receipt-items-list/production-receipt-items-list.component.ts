@@ -35,12 +35,12 @@ export class ProductionReceiptItemsListComponent implements OnInit {
 
 
 
-  getProductionDetail() {
+  getProductionDetail(fromOrderChange:boolean = false) {
     
     if (this.orderNumber == "") {
       this.toastr.error('', this.translate.instant("OrderNoBlank"));
       return;
-    }
+    } 
     this.resetOnSerchClick();
     this.orderNoListSubs = this.productionService.GetItemsDetailForProductionReceipt(this.orderNumber).subscribe(
       data => {
@@ -52,7 +52,8 @@ export class ProductionReceiptItemsListComponent implements OnInit {
             return;
           }
           if (data.Table != undefined && data.Table != null && data.Table != "" && data.Table.length > 0) {
-            this.showLookupLoader = false;
+           if(!fromOrderChange)
+           this.showLookupLoader = false;
             // prepare data if its comming proper froms server
             // data.Table;
             this.prepareDataForGrid(data.Table);
@@ -73,30 +74,30 @@ export class ProductionReceiptItemsListComponent implements OnInit {
       },
     );
 
-    this.binListSubs = this.productionService.GetBinsList().subscribe(
-      data => {
-        if (data != undefined) {
-          if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
-            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
-              this.translate.instant("CommonSessionExpireMsg"));
-            return;
-          }
-          if (data != undefined && data != null && data != "") {
-            // this.binList = data;
-            // this.binNo = this.binList[0].BINNO;
-            // this.whsCode = this.binList[0].WHSCODE;
-            return;
-          }
-        }
-      },
-      error => {
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
-      });
+    // this.binListSubs = this.productionService.GetBinsList().subscribe(
+    //   data => {
+    //     if (data != undefined) {
+    //       if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+    //         this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+    //           this.translate.instant("CommonSessionExpireMsg"));
+    //         return;
+    //       }
+    //       if (data != undefined && data != null && data != "") {
+    //         // this.binList = data;
+    //         // this.binNo = this.binList[0].BINNO;
+    //         // this.whsCode = this.binList[0].WHSCODE;
+    //         return;
+    //       }
+    //     }
+    //   },
+    //   error => {
+    //     if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
+    //       this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
+    //    } 
+    //    else{
+    //     this.toastr.error('', error);
+    //    }
+    //   });
   }
   pagable: boolean = false;
   pageSize: any = 10;
@@ -106,7 +107,7 @@ export class ProductionReceiptItemsListComponent implements OnInit {
   gridDataAvailable: boolean = false;
   gridDataNew1: any[] = [];
   acceptQty:any =0;  rejQty: any=0;
-  prepareDataForGrid(data: any[],fromSave:boolean=false) {
+  prepareDataForGrid(data: any[],fromSave:boolean=false) { 
 
     if (data.length > 0) {
       this.gridDataAvailable = true;
@@ -345,6 +346,13 @@ export class ProductionReceiptItemsListComponent implements OnInit {
     );
   }
 
+
+  OnOrderValueChange(){ 
+    if (this.orderNumber == "" || this.orderNumber == undefined) {
+      return;
+    }
+    this.getProductionDetail(true);
+  }
   /**
      * @param $event this will return the value on row click of lookup grid.
      */
