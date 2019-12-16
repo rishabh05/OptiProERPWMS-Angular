@@ -336,6 +336,12 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
 
   OnBinChange() {
+    var inputValue = (<HTMLInputElement>document.getElementById('inboundGrpoRecBinInput')).value;
+    if (inputValue.length > 0) {
+      this.RecvbBinvalue = inputValue;
+    }
+
+
     if (this.RecvbBinvalue == "") {
       return;
     }
@@ -1786,8 +1792,17 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     );
   }
 
+  onHiddenRecBinClick() {
+    this.OnBinChange();
+  }
+  
+
   onHiddenScanClick() {
     this.onGS1ItemScan();
+  }
+
+  onHiddenPalletClick(){
+    this.OnPalletChange();
   }
   onGS1ItemScan() {
     // alert("at onGS1ItemScan ");
@@ -1795,7 +1810,6 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     if (inputValue.length > 0) {
       this.ScanInputs = inputValue;
     }
-
 
     if (this.ScanInputs != null && this.ScanInputs != undefined &&
       this.ScanInputs != "" && this.ScanInputs != "error decoding QR Code") {
@@ -2044,6 +2058,12 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   }
 
   OnPalletChange() {
+    
+    var inputValue = (<HTMLInputElement>document.getElementById('inboundGRPOPalletNo')).value;
+    if (inputValue.length > 0) {
+      this.palletValue = inputValue;
+    }
+    
     if (this.palletValue == "" || this.palletValue == undefined) {
       return;
     }

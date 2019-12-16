@@ -170,6 +170,10 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
 
   
   OnVendorChange() {
+    var inputValue = (<HTMLInputElement>document.getElementById('InboundDetailVendScanInputField')).value;
+    if (inputValue.length > 0) {
+      this.VendCode = inputValue;
+    }
     if (this.VendCode == "" || this.VendCode == undefined) {
       return;
     }
@@ -479,6 +483,12 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
   }
 
   OnPOChange() {
+    
+    var inputValue = (<HTMLInputElement>document.getElementById('inboundDetailPOScanInputField')).value;
+    if (inputValue.length > 0) {
+      this.poCode = inputValue;
+      
+    }
     if (this.poCode == "" || this.poCode == undefined) {
       return;
     }
@@ -558,4 +568,14 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
       this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
     }
   }
+
+  onHiddenVendCodeScanClick(){
+    this.OnVendorChange();
+  }
+
+  onHiddenSOScanClick(){
+    this.OnPOChange();
+    
+  }
+  
 }

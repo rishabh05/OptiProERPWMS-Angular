@@ -74,7 +74,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Inbound_ReceivingBin'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" name="RecvbBinvalue" #RecBinVal
+                                <input type="text" id ="inboundGrpoRecBinInput" class="form-control form-control-sm" name="RecvbBinvalue" #RecBinVal
                                     [(ngModel)]=RecvbBinvalue placeholder="{{'Inbound_ReceivingBin'|translate}}" (blur)="OnBinChange()">
                                 <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" type="button" (click)="ShowBins()">
@@ -83,7 +83,7 @@
 
                                 </div>
                                 <div class="ml-1 d-flex" *ngIf="showScanInput">
-                                    <button type="button" id="scanRecBin" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                    <button type="button" id="inboundGRPOScanRecBinBtn" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
                                 </div>
@@ -142,7 +142,7 @@
                                 <label for="inputPassword" class="col-sm-3 col-form-label">{{'Plt_PalletNo'|translate}}</label>
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-sm">
-                                        <input type="text" class="form-control form-control-sm" name="palletValue" [(ngModel)]=palletValue
+                                        <input type="text" id="inboundGRPOPalletNo" class="form-control form-control-sm" name="palletValue" [(ngModel)]=palletValue
                                             (blur)="OnPalletChange()" placeholder="{{'Plt_PalletNo'|translate}}">
                                         <div class="input-group-append has-seprate-btn">
                                             <button class="k-button k-primary btn" type="button" (click)="getPalletList()">
@@ -150,7 +150,7 @@
                                             </button>
                                         </div>
                                         <div class="ml-1 d-flex">
-                                            <button type="button" id="inboundscanButton" (click)="onPalletScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                            <button type="button" id="inboundGRPOPalletScanBtn" (click)="onPalletScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                                 <i class="opti-icon-qr-code fs-24"></i>
                                             </button>
                                         </div>
@@ -421,6 +421,12 @@
                 <button type="button" id="hiddenScanButton" style="visibility:hidden" (click)="onHiddenScanClick()"
                     class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                     SB </button>
+                <button type="button" id="hid_InboundGrpoHiddenScanButtonRecBin" style="visibility:hidden" (click)="onHiddenRecBinClick()"
+                    class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                    SB </button>
+                <button type="button" id="hid_InboundGrpoHiddenScanBtnPallet" style="visibility:hidden" (click)="onHiddenPalletClick()"
+                  class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                SB </button>
             </div>
         </div>
     </form>
