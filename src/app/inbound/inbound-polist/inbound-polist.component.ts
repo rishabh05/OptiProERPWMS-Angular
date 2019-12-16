@@ -20,7 +20,7 @@ import { process } from '@progress/kendo-data-query';
   styleUrls: ['./inbound-polist.component.scss']
 })
 export class InboundPolistComponent implements OnInit {
-
+  RecvbBinvalue: string;
   futurepo: boolean = false;
   poCode: string = "";
   showLookupLoader: boolean = true;
@@ -28,9 +28,9 @@ export class InboundPolistComponent implements OnInit {
   lookupfor: string;
   itemCode: string = "";
   Name: string;
-  NonItemsDetail: any[];
-  BatchItemsDetail: any[];
-  SerialItemsDetail: any[];
+  // NonItemsDetail: any[];
+  // BatchItemsDetail: any[];
+  // SerialItemsDetail: any[];
   showSerialTrackItem: boolean = false;
   showBatchTrackItem: boolean = false;
   showNonTrackItem: boolean = false;
@@ -211,9 +211,9 @@ export class InboundPolistComponent implements OnInit {
           this.showSerialTrackItem = false;
           if (data.Table != undefined && data.Table != null) {
             this.openPOLinesModel = [];
-            this.BatchItemsDetail = [];
-            this.NonItemsDetail = [];
-            this.SerialItemsDetail = [];
+            // this.BatchItemsDetail = [];
+            // this.NonItemsDetail = [];
+            // this.SerialItemsDetail = [];
 
             if (data.Table.length == 0) {
               this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
@@ -461,12 +461,15 @@ export class InboundPolistComponent implements OnInit {
         //this.inboundMasterComponent.setAutoLots(this.autoLot);
         localStorage.setItem("primaryAutoLots", JSON.stringify(this.autoLot));
         // this.openPOLineModel = this.openPOLinesModel.find(e => e.ITEMCODE == itemCode);
-        if (this.openPOLineModel != null) {
+        if (this.openPOLinesModel != null && this.openPOLinesModel.length > 0) {
           if (this.openPOLineModel.TRACKING == 'N') {
-            if(Number(this.openPOLineModel.RPTQTY) != Number(this.openPOLineModel.OPENQTY)){
-              this.openPOLineModel.RPTQTY = this.openPOLineModel.OPENQTY;
-              this.ShowBins();
-            }
+            // for(var i=0; i<this.openPOLinesModel.length; i++){
+            //   if(Number(this.openPOLinesModel[i].RPTQTY) != Number(this.openPOLinesModel[i].OPENQTY)){
+            //     this.openPOLinesModel[i].RPTQTY = this.openPOLinesModel[i].OPENQTY;
+            //     this.ShowBins();
+            //   }
+            // }
+            this.ShowBins();
           } else {
             localStorage.setItem("PalletizationEnabledForItem", "True");
             this.inboundMasterComponent.inboundComponent = 3;
@@ -794,9 +797,9 @@ export class InboundPolistComponent implements OnInit {
     localStorage.setItem("GRPOReceieveData", JSON.stringify(oSubmitPOLotsObj));
   }
 
-  RecvbBinvalue: string;
+
   public ShowBins() {
-    this.inboundService.getRevBins('N').subscribe(
+    this.inboundService.getRevBins(this.openPOLinesModel[0].QCREQUIRED).subscribe(
       (data: any) => {
         this.showLoader = false;
         console.log(data);
@@ -804,7 +807,18 @@ export class InboundPolistComponent implements OnInit {
           if (data.length > 0) {
             this.RecvbBinvalue = data[0].BINNO;
           }
-          this.prepareCommonData();
+
+          // if(this.openPOLinesModel[0].QCREQUIRED == 'Y'){
+
+          // }else{
+            for(var i=0; i<this.openPOLinesModel.length; i++){
+              if(Number(this.openPOLinesModel[i].RPTQTY) != Number(this.openPOLinesModel[i].OPENQTY)){
+                this.openPOLinesModel[i].RPTQTY = this.openPOLinesModel[i].OPENQTY;
+                this.openPOLineModel = this.openPOLinesModel[i];
+                this.prepareCommonData();
+              }
+            }
+          // }
         }
       },
       error => {
@@ -859,8 +873,8 @@ export class InboundPolistComponent implements OnInit {
     var size = oSubmitPOLotsObj.POReceiptLots.length;
     for (var i = 0; i < oSubmitPOLotsObj.POReceiptLots.length; i++) {
       if (oSubmitPOLotsObj.POReceiptLots[i].PONumber == this.poCode &&
-        oSubmitPOLotsObj.POReceiptLots[i].ItemCode == this.openPOLineModel[0].ITEMCODE &&
-        oSubmitPOLotsObj.POReceiptLots[i].LineNo == this.openPOLineModel[0].LINENUM) {
+        oSubmitPOLotsObj.POReceiptLots[i].ItemCode == this.openPOLineModel.ITEMCODE &&
+        oSubmitPOLotsObj.POReceiptLots[i].LineNo == this.openPOLineModel.LINENUM) {
         var s = oSubmitPOLotsObj.POReceiptLotDetails.length;
         for (var j = 0; j < oSubmitPOLotsObj.POReceiptLotDetails.length; j++) {
           if (oSubmitPOLotsObj.POReceiptLotDetails[j].ParentLineNo == oSubmitPOLotsObj.POReceiptLots[i].Line) {
@@ -905,7 +919,7 @@ export class InboundPolistComponent implements OnInit {
 
     oSubmitPOLotsObj.POReceiptLots.push({
       DiServerToken: localStorage.getItem("Token"),
-      PONumber: this.openPOLineModel.DOCENTRY,
+      PONumber: this.poCode,
       CompanyDBId: localStorage.getItem("CompID"),
       LineNo: this.openPOLineModel.LINENUM,
       ShipQty: this.openPOLineModel.RPTQTY.toString(),

@@ -179,40 +179,10 @@
                     <div class="form-group row mt-md-0" *ngIf="isPalletizationEnable && !isNonTrack"son>
                         <label class="col-sm-3 col-form-label"></label>
                         <div class="col-sm-9">
-                            <!-- <div class="opti_checkbox-container">
-                                <input type="checkbox" id="auth-2fa" class="k-checkbox float-left" name="newPallet"
-                                    (change)="onCheckChange()">
-                                <label class="k-checkbox-label" for="auth-2fa">{{'Inbound_NewPallet'|translate}}</label>
-                            </div> -->
                             <label class="textunderline" (click)="onCheckChange()">{{'Inbound_NewPallet'|translate}}</label>
                         </div>
                     </div>
-
-                    <!-- <div class="form-group row mt-1 mt-md-0" *ngIf="showNewPallet && !isNonTrack">
-                        <label class="col-sm-3 col-form-label"></label>
-                        <div class="col-sm-9">
-                            <div class="d-flex">
-                                <input type="text" class="form-control form-control-sm" id="newPallet" name="newPallet"
-                                    [(ngModel)]="newCreatedPalletNo" placeholder="{{'Inbound_NewPallet'|translate}}"
-                                    [disabled]="autoGeneratePalletEnable">
-                                <div class="ml-1 d-flex">
-                                    <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
-                                        type="button" (click)="createNewPallet(event)">
-                                        <i class="opti-icon-add1 fs-24"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
-
-                    <!-- <div class="form-group row" *ngIf="!isNonTrack">
-                        <div class="col-sm-3"></div>
-                        <div class="col-sm-9">
-                            <a class="cursor-pointer d-inline-flex text-primay" [ngStyle]="{'color':'#1fa2ff'}" *ngIf="isPalletizationEnable"><small
-                                    (click)="enableNewwPallet()">{{'Inbound_NewPallet'|translate}}</small></a>
-                        </div>
-                    </div> -->
-
+                 
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Quantity'|translate}}</label>
                         <div class="col-sm-9">
@@ -222,6 +192,10 @@
                                 <div class="ml-1 d-flex">
                                     <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
                                         type="button" (click)="addQuantity(event)">
+                                        <i class="opti-icon-add1 fs-24"></i>
+                                    </button>
+                                    <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
+                                        type="button" (click)="updateQuantity(event)" *ngIf="isNonTrack">
                                         <i class="opti-icon-add1 fs-24"></i>
                                     </button>
                                 </div>
