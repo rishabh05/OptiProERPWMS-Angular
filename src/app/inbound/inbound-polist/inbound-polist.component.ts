@@ -284,6 +284,11 @@ export class InboundPolistComponent implements OnInit {
   }
 
   OnPOChange() {
+    
+    var inputValue = (<HTMLInputElement>document.getElementById('inboundPOScanPOInputField')).value;
+    if (inputValue.length > 0) {
+      this.poCode = inputValue;
+    }
     if (this.poCode == "" || this.poCode == undefined) {
       return;
     }
@@ -342,6 +347,10 @@ export class InboundPolistComponent implements OnInit {
   }
 
   OnItemCodeChange() {
+    var inputValue = (<HTMLInputElement>document.getElementById('InboundPO_ItemCodeScanInputField')).value;
+    if (inputValue.length > 0) {
+      this.itemCode = inputValue;
+    }
     if (this.itemCode == "" || this.itemCode == undefined) {
       return;
     }
@@ -721,21 +730,16 @@ export class InboundPolistComponent implements OnInit {
     // alert("scan click");
   }
 
-  onHiddenScanClick() {
-    this.onGS1ItemScan();
+  
+
+  onItemHiddenScanClick(){
+    this.OnItemCodeChange();
   }
 
-  onGS1ItemScan() {
-    var inputValue = (<HTMLInputElement>document.getElementById('inboundScanInputField')).value;
-    if (inputValue.length > 0) {
-      this.poCode = inputValue;
-      this.OnPOChange();
-    }
+  onHiddenPOScanClick(){
+    this.OnPOChange();
   }
-
-  onItemHiddenScanClick() {
-    this.onGS1ItemScan1();
-  }
+  
 
   onGS1ItemScan1() {
     var inputValue = (<HTMLInputElement>document.getElementById('inboundScanInputField')).value;

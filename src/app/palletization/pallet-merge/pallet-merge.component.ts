@@ -244,10 +244,18 @@ export class PalletMergeComponent implements OnInit {
     this.selectedFromPallets.splice(index, 1);
   }
 
-  ScanToPalletField() {
+  HiddenScanPalletField() {
+    var inputValue = (<HTMLInputElement>document.getElementById('pltMergePalletNoInput')).value;
+    if (inputValue.length > 0) {
+      this.toPalletNo = inputValue;
+    }
     this.onPalletChange('to_pallet');
   }
-  ScanFromPalletField() {
+  HiddenScanToPalletField() {
+    var inputValue = (<HTMLInputElement>document.getElementById('pltMergeToPalletInput')).value;
+    if (inputValue.length > 0) {
+      this.toPalletNo = inputValue;
+    }
     this.onPalletChange('from_pallet');
   }
 

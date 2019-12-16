@@ -95,10 +95,15 @@ export class PalletizeComponent implements OnInit {
   }
 
   onPalletChange() {
+
+    var inputValue = (<HTMLInputElement>document.getElementById('PalletizePalletNo')).value;
+    if (inputValue.length > 0) {
+      this.palletNo = inputValue;
+    }
+
     if (this.palletNo == '' || this.palletNo == undefined) {
       return
     }
-
     this.showLoader = true;
     this.commonservice.isPalletValid(this.palletNo).subscribe(
       (data: any) => {
@@ -219,6 +224,12 @@ export class PalletizeComponent implements OnInit {
   }
 
   OnItemCodeChange() {
+    
+    var inputValue = (<HTMLInputElement>document.getElementById('PalletizeItemCodeInput')).value;
+    if (inputValue.length > 0) {
+      this.itemCode = inputValue;
+    }
+
     if (this.itemCode == "" || this.itemCode == undefined) {
       this.savedPalletsArray = [];
       return;
@@ -316,6 +327,12 @@ export class PalletizeComponent implements OnInit {
   }
 
   OnLotsChange() {
+
+    var inputValue = (<HTMLInputElement>document.getElementById('PalletizeBatchSrNo')).value;
+    if (inputValue.length > 0) {
+      this.batchSerialNo = inputValue;
+    }
+
     if (this.itemCode == '' || this.itemCode == undefined) {
       this.toastr.error('', this.translate.instant("SelectItemCode"));
       this.batchSerialNo = "";

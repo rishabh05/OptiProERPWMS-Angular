@@ -98,6 +98,7 @@ export class PalTransferComponent implements OnInit {
   }
 
   onPalletChange(from: string) {
+
     if (from == "from_pallet") {
       if (this.fromPalletNo == '' || this.fromPalletNo == undefined) {
         this.palletData = [];
@@ -377,9 +378,18 @@ export class PalTransferComponent implements OnInit {
   }
 
   onHiddenToPltScanClick(){
+    var inputValue = (<HTMLInputElement>document.getElementById('PalXferToPalletNoInput')).value;
+    if (inputValue.length > 0) {
+      this.toPalletNo = inputValue;
+    }
     this.onPalletChange('to_pallet');
   }
   onHiddenFromPltScanClick(){
+    
+    var inputValue = (<HTMLInputElement>document.getElementById('palXfer_fromPalletNoInput')).value;
+    if (inputValue.length > 0) {
+      this.fromPalletNo = inputValue;
+    }
     this.onPalletChange('from_pallet');
   }
 

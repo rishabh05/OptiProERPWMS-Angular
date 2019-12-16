@@ -154,6 +154,11 @@ export class OutOrderComponent implements OnInit {
 
   fromEvent: any = ""
   onOrderNoBlur() {
+    var inputValue = (<HTMLInputElement>document.getElementById('OutOrderOrderNoInput')).value;
+    if (inputValue.length > 0) {
+      this.orderNumber = inputValue;
+    }
+
     if (this.orderNumber)
       this.openSOOrderList(this.orderNumber);
   }
@@ -1124,6 +1129,12 @@ export class OutOrderComponent implements OnInit {
   }
 
   onPalletChange() {
+
+    var inputValue = (<HTMLInputElement>document.getElementById('outOrderPalletNoInput')).value;
+    if (inputValue.length > 0) {
+      this.palletNo = inputValue;
+    }
+
     if (this.palletNo == undefined || this.palletNo == "") {
       return;
     }
@@ -1367,6 +1378,11 @@ export class OutOrderComponent implements OnInit {
 
   ItemCode: string;
   public onItemChange() {
+    var inputValue = (<HTMLInputElement>document.getElementById('outOrderItemcodeinput')).value;
+    if (inputValue.length > 0) {
+      this.palletNo = inputValue;
+    }
+
     if (this.selectedCustomer != null && this.selectedCustomer != undefined
       && this.selectedCustomer.CustomerCode != '' && this.selectedCustomer.CustomerCode != null) {
 
@@ -1776,5 +1792,20 @@ export class OutOrderComponent implements OnInit {
   cancel(){
     localStorage.setItem(CommonConstants.OutboundData, null)
     this.router.navigate(['home/dashboard']);
+  }
+
+
+  onHiddenOutOrderItemCodeScanClick(){
+    this.onItemChange();
+  }
+
+  onHiddenOutOrderPalletScanClick(){
+ 
+    this.onPalletChange();
+  }
+  
+  onHiddenOutOrderSOScanClick(){
+
+    this.onOrderNoBlur();
   }
 }
