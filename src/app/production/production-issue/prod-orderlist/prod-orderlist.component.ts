@@ -522,4 +522,12 @@ export class ProdOrderlistComponent implements OnInit {
     this.soItemsDetail = []
   }
 
+  onHiddenProdOrderScanClick(){
+    var inputValue = (<HTMLInputElement>document.getElementById('prodOrder_OrderNoScanInput')).value;
+    if (inputValue.length > 0) {
+      this.orderNo = inputValue;
+    }
+    this.getItemListForOrder();
+  }
+
 }

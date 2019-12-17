@@ -115,10 +115,7 @@ export class OutCutomerComponent implements OnInit {
   }
 
   onCustomerCodeBlur() {
-    var inputValue = (<HTMLInputElement>document.getElementById('outCustomerCustomerCodeInput')).value;
-    if (inputValue.length > 0) {
-      this.customerCode = inputValue;
-    }
+  
 
     this.outboundservice.getCustomer(this.customerCode).subscribe(
       resp => {
@@ -296,7 +293,7 @@ export class OutCutomerComponent implements OnInit {
         }
       }
     }
-    this.router.navigate(['home/outbound/outorder', { skipLocationChange: true }]);
+    this.router.navigateByUrl('home/outbound/outorder', { skipLocationChange: true });
   }
 
 
@@ -338,7 +335,7 @@ export class OutCutomerComponent implements OnInit {
     // lsOutbound
     localStorage.setItem(CommonConstants.OutboundData, null)
     CurrentOutBoundData.CustomerData = null;
-    this.router.navigate(['home/dashboard']);
+    this.router.navigateByUrl('home/dashboard');
   }
 
   getConfirmDialogValue($event) {
@@ -449,7 +446,7 @@ export class OutCutomerComponent implements OnInit {
             hdr.Line = hdrLineVal;
             if(this.outbound.CustomerData.CustRefNo!=null && this.outbound.CustomerData.CustRefNo!=undefined){
               hdr.NumAtCard = this.outbound.CustomerData.CustRefNo;
-            }else{
+            }else{ 
               hdr.NumAtCard = "";
             }
             if(this.outbound.CustomerData.TrackingId!=null && this.outbound.CustomerData.TrackingId!=undefined){
@@ -633,10 +630,7 @@ export class OutCutomerComponent implements OnInit {
  
   public onOrderNoBlur() {
 
-    var inputValue = (<HTMLInputElement>document.getElementById('outCustomerSOInput')).value;
-    if (inputValue.length > 0) {
-      this.orderNumber = inputValue;
-    }
+   
 
     this.showLookup = false;
     if (this.orderNumber == "" || this.orderNumber == undefined) {
@@ -746,10 +740,18 @@ export class OutCutomerComponent implements OnInit {
 
 
   hiddenScanSoBtn(){
+    var inputValue = (<HTMLInputElement>document.getElementById('outCustomerSOInput')).value;
+    if (inputValue.length > 0) {
+      this.orderNumber = inputValue;
+    }
     this.onOrderNoBlur();
     }
 
   hiddenScanCustCodeBtn(){
+    var inputValue = (<HTMLInputElement>document.getElementById('outCustomerCustomerCodeInput')).value;
+    if (inputValue.length > 0) {
+      this.customerCode = inputValue;
+    }
     this.onCustomerCodeBlur();
   }
 }

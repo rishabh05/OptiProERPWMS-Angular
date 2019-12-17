@@ -506,5 +506,20 @@ export class ItemLabelComponent implements OnInit {
   OnCancelClick(){
     this.router.navigate(['home/dashboard']);
   }
+
+  onHiddenItemLabelItemCodeScanClick(){
+    var inputValue = (<HTMLInputElement>document.getElementById('itemLabelItemCodeInput')).value;
+    if (inputValue.length > 0) {
+      this.itemCode= inputValue;
+    }
+    this.OnItemCodeChange();
+  }
+  onHiddenItemLabelBatchSrScanClick(){
+    var inputValue = (<HTMLInputElement>document.getElementById('itemLabelBatchSerialInput')).value;
+    if (inputValue.length > 0) {
+      this.binNo= inputValue;
+    }
+    this.OnLotsChange()
+  }
 }
 

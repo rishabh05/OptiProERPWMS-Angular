@@ -195,16 +195,17 @@ export class OutProdissueComponent implements OnInit {
   }
 
   onHiddenScanClick() {
-    // alert("outbound hidden scan click")
+    
+    var inputValue = (<HTMLInputElement>document.getElementById('outboundOrderNoScanInput')).value;
+    if (inputValue.length > 0) {
+      this.ScanInputs = inputValue;
+    }
     this.onGS1ScanItem();
   }
   ScanInputs: string = "";
   onGS1ScanItem() {
 
-    var inputValue = (<HTMLInputElement>document.getElementById('outboundOrderNoScanInput')).value;
-    if (inputValue.length > 0) {
-      this.ScanInputs = inputValue;
-    }
+    
     if (this.ScanInputs != null && this.ScanInputs != undefined &&
       this.ScanInputs != "" && this.ScanInputs != "error decoding QR Code") {
 
@@ -1015,7 +1016,6 @@ export class OutProdissueComponent implements OnInit {
           binAndQtyCollectionArray.push(binAndQtyCollection);
         }
       }
-
     }
     return binAndQtyCollectionArray;
   }
@@ -1344,10 +1344,7 @@ export class OutProdissueComponent implements OnInit {
 
   OnBinChange() {
 
-    var inputValue = (<HTMLInputElement>document.getElementById('InvTransfer_ToBinInput')).value;
-    if (inputValue.length > 0) {
-      this.toBinNo = inputValue;
-    }
+   
     if (this.toBinNo == "" || this.toBinNo == undefined) {
       return;
     }
@@ -1429,6 +1426,10 @@ export class OutProdissueComponent implements OnInit {
 
 
   onHiddenToBinScanClick(){
+    var inputValue = (<HTMLInputElement>document.getElementById('InvTransfer_ToBinInput')).value;
+    if (inputValue.length > 0) {
+      this.toBinNo = inputValue;
+    }
    this.OnBinChange()
   }
 } 

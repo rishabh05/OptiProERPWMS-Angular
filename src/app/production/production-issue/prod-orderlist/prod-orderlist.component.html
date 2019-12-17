@@ -13,7 +13,7 @@
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
                                 <input type="text" class="form-control form-control-sm" name='orderNo' [(ngModel)]="orderNo"
-                                    placeholder="{{'Outbound_OrderNo'|translate}}"
+                                    placeholder="{{'Outbound_OrderNo'|translate}}" id="prodOrder_OrderNoScanInput"
                                     (blur)="getItemListForOrder(false,true)">
                                 <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" type="button" (click)="getOrderList()">
@@ -23,7 +23,7 @@
                                         <i class="opti-icon-search"></i>
                                     </button> -->
                                 </div>
-                                <div class="d-flex">
+                                <div class="d-flex ml-1">
                                     <button type="button"  id="binTransferScanItemCodeBtn" (click)="onInboundScan()"
                                         class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
@@ -104,7 +104,7 @@
                     {{'Submit'|translate}}</button>
 
                 <button type="button" id="hid_btnBinTransferItemCodeScanBtn" style="visibility:hidden"
-                    (click)="onHiddenBinTransferItemCodeScanClick()"
+                    (click)="onHiddenProdOrderScanClick()"
                     class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
                     <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn
                 </button>

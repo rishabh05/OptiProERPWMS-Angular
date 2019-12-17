@@ -148,10 +148,7 @@ export class WhsTransferComponent implements OnInit {
 
   OnToWarehouseChange () {
     
-    var inputValue = (<HTMLInputElement>document.getElementById('whsTransferToWhsInputField')).value;
-    if (inputValue.length > 0) {
-      this.toWhse = inputValue;
-    }
+   
 
     if (this.toWhse == "" || this.toWhse == undefined) {
       return;
@@ -219,6 +216,10 @@ export class WhsTransferComponent implements OnInit {
   }
 
   onHiddenToWhsScanClick(){
+    var inputValue = (<HTMLInputElement>document.getElementById('whsTransferToWhsInputField')).value;
+    if (inputValue.length > 0) {
+      this.toWhse = inputValue;
+    }
     this.OnToWarehouseChange();
   }
 }

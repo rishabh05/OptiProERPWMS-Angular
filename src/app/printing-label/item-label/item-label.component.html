@@ -13,12 +13,18 @@
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
 
-                                <input type="text" class="form-control form-control-sm" name='customerCode' [(ngModel)]="itemCode"
-                                    (blur)="OnItemCodeChange()" #itemCodeIp placeholder="{{'ItemCode'|translate}}">
+                                <input type="text" class="form-control form-control-sm" name='customerCode' id="itemLabelItemCodeInput"
+                                 [(ngModel)]="itemCode"  (blur)="OnItemCodeChange()" #itemCodeIp placeholder="{{'ItemCode'|translate}}">
                                 <div class="input-group-append">
                                     <button class="k-button k-primary btn" type="button" (click)="OnItemCodeLookupClick()">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
+                                    <div class="d-flex ">
+                                        <button type="button"  id="itemLabelItemCodeScanBtn" (click)="onInboundScan()"
+                                            class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                            <i class="opti-icon-qr-code fs-24"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -28,12 +34,18 @@
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
 
-                                <input type="text" class="form-control form-control-sm" #batchSrBinIp name='binNoInput'
+                                <input type="text" class="form-control form-control-sm" #batchSrBinIp name='binNoInput' id="itemLabelBatchSerialInput"
                                     placeholder="{{'BatchSrBinNo'|translate}}" [(ngModel)]="binNo" (blur)="OnLotsChange()">
                                 <div class="input-group-append">
                                     <button class="k-button k-primary btn" type="button" (click)="OnBatchSerialLookupClick()">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
+                                    <div class="d-flex">
+                                        <button type="button"  id="ItemLabelBatchSrScanBtn" (click)="onInboundScan()"
+                                            class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                            <i class="opti-icon-qr-code fs-24"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -53,13 +65,22 @@
             <div class="col-sm-12 col-12">
                 <hr />
             </div>
-            <div
-             class="col-sm-12 col-12">
-             <button type="button" (click)="OnCancelClick()" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
-                class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
+            <div class="col-sm-12 col-12">
+                <button type="button" (click)="OnCancelClick()" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
+                        class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
                 <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text" (click)="OnPrintClick()"><span
                         class="k-icon k-i-printer" role="presentation"></span> {{'Print'|translate}}</button>
-                
+            
+                <button type="button" id="hid_btnItemLabelItemCodeScanBtn" style="visibility:hidden"
+                    (click)="onHiddenItemLabelItemCodeScanClick()"
+                    class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
+                    <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn
+                </button>
+                <button type="button" id="hid_btnItemLabelIBatchSrScanBtn" style="visibility:hidden"
+                    (click)="onHiddenItemLabelBatchSrScanClick()" class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
+                    <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn
+                </button>
+            
             </div>
         </div>
     </form>

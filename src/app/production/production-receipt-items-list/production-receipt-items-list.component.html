@@ -13,8 +13,9 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Outbound_OrderNo'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" [(ngModel)]=orderNumber (blur)="OnOrderValueChange()"
-                                    name='orderNo' placeholder="{{'Outbound_OrderNo'|translate}}">
+                                <input type="text"  id="receiptItemOrderNoInput" class="form-control form-control-sm" 
+                                [(ngModel)]=orderNumber (blur)="OnOrderValueChange()" name='orderNo' 
+                                placeholder="{{'Outbound_OrderNo'|translate}}">
                                 <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" (click)="OnOrderLookupClick()" type="button">
                                         <i class="opti-icon-hammenu"></i>
@@ -23,6 +24,12 @@
                                         type="button">
                                         <i class="opti-icon-search"></i>
                                     </button> -->
+                                    <div class="d-flex ">
+                                        <button type="button"  id="receiptItemOrderNoScan" (click)="onInboundScan()"
+                                            class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                            <i class="opti-icon-qr-code fs-24"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -93,14 +100,18 @@
             </div>
             <div class="col-sm-12 col-12">
 
-                    <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="onCancelClick()"><span
+                    <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text"   (click)="onCancelClk($event)"><span
                         class="k-icon k-i-close-outline" role="presentation"></span>
                     {{'Cancel'|translate}}</button>
 
                 <button type="button" *ngIf="displaySubmit" (click)="submitProductionReport($event)" class="btn btn-success k-button btn-sm btn-icon-with-text">
                     <span class="k-icon k-i-check" role="presentation"></span> {{'Submit'|translate}}</button>
             
-               
+                    <button type="button" id="hid_btnReceiptItemOrderNoScanBtn" style="visibility:hidden"
+                    (click)="onHiddenReceiptItemOrderScanClick()"
+                    class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
+                    <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn
+                </button>
 
                 <!-- <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" 
                   roterLink="binTransfer" skipLocationChange><i class="opti-icon-arrow-next"></i></button> -->
