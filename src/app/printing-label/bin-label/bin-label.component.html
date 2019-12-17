@@ -12,12 +12,18 @@
                     <label for="inputPassword" class="col-sm-3 col-form-label">{{'InvTransfer_FromBin'|translate}}</label>
                     <div class="col-sm-9">
                         <div class="input-group input-group-sm">
-                            <input type="text" class="form-control form-control-sm" #fromBinIp=ngModel
+                            <input type="text" class="form-control form-control-sm" #fromBinIp=ngModel id="BinLabelFromBinInput"
                              [(ngModel)] ='fromBin' (blur)="OnFromBinChange()" name ='fromBin' placeholder="{{'InvTransfer_FromBin'|translate}}">
                             <div class="input-group-append">
                                 <button class="k-button k-primary btn" type="button"  (click)="OnFromBinLookupClick()">
                                     <i class="opti-icon-hammenu"></i>
                                 </button>
+                                <div class="d-flex">
+                                    <button type="button"  id="BinLabelFromBinScanBtn" 
+                                        class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                        <i class="opti-icon-qr-code fs-24"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -26,12 +32,18 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">{{'InvTransfer_ToBin'|translate}}</label>
                   <div class="col-sm-9">
                       <div class="input-group input-group-sm">
-                          <input type="text" (blur)="OnToBinChange()" class="form-control form-control-sm" [(ngModel)]='toBin' #toBinIp=ngModel
+                          <input type="text"   id="BinLabelToBinInput" (blur)="OnToBinChange()" class="form-control form-control-sm" [(ngModel)]='toBin' #toBinIp=ngModel
                            name ='toBin' placeholder="{{'InvTransfer_ToBin'|translate}}">
                           <div class="input-group-append">
                               <button class="k-button k-primary btn" type="button" (click)="OnToBinLookupClick()">
                                   <i class="opti-icon-hammenu"></i>
                               </button>
+                              <div class="d-flex">
+                                <button type="button"  id="BinLabelToBinScanBtn" (click)="onInboundScan()"
+                                    class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                    <i class="opti-icon-qr-code fs-24"></i>
+                                </button>
+                            </div>
                           </div> 
                       </div>
                   </div>
@@ -51,13 +63,24 @@
             <hr />
         </div>
         <div class="col-sm-12 col-12">
-                <button type="button" (click)="OnCancelClick()" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-close-outline"
-                    role="presentation"></span> {{'Cancel'|translate}}</button>
-            <button type="button"  (click)="OnPrintClick()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-printer"
-              role="presentation"></span> {{'Print'|translate}}</button>
-          
+            <button type="button" (click)="OnCancelClick()" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
+                    class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
+            <button type="button" (click)="OnPrintClick()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
+                    class="k-icon k-i-printer" role="presentation"></span> {{'Print'|translate}}</button>
+        
+        
+            <button type="button" id="hid_btnBinLabelFromBinScanBtn" style="visibility:hidden"
+                (click)="onHiddenBinLabelFromBinScanClick()"
+                class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
+                <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn
+            </button>
+            <button type="button" id="hid_btnBinLabelToBinScanBtn" style="visibility:hidden"
+                (click)="onHiddenBinLabelToBinScanClick()" class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
+                <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn
+            </button>
+        
         </div>
-    </div>
+        </div>
   </form>
 </div>
 <div *ngIf="showLookupLoader == false">

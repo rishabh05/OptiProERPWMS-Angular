@@ -371,7 +371,7 @@ export class ProductionReceiptItemsListComponent implements OnInit {
     }
   }
 }
-OnCancelClick() {
+onCancelClk() {
   this.router.navigate(['home/dashboard']);
 }
 

@@ -417,4 +417,19 @@ export class BinLabelComponent implements OnInit {
   OnCancelClick(){
     this.router.navigate(['home/dashboard']);
   }
+
+  onHiddenBinLabelFromBinScanClick(){
+    var inputValue = (<HTMLInputElement>document.getElementById('BinLabelFromBinInput')).value;
+    if (inputValue.length > 0) {
+      this.fromBin= inputValue;
+    }
+    this.OnFromBinChange();
+  }
+  onHiddenBinLabelToBinScanClick(){
+    var inputValue = (<HTMLInputElement>document.getElementById('BinLabelToBinInput')).value;
+    if (inputValue.length > 0) {
+      this.toBin= inputValue;
+    }
+    this.OnToBinChange();
+  }
 }
