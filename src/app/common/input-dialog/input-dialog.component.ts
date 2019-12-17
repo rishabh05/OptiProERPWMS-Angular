@@ -81,7 +81,7 @@ export class InputDialogComponent implements OnInit {
 
   public ShowAllBins() {
     this.showLoader = true;
-    this.inboundService.getAllBins('N', localStorage.getItem("whseId")).subscribe(
+    this.inboundService.GetTargetBins('N', localStorage.getItem("whseId")).subscribe(
       (data: any) => {
         this.showLoader = false;
         console.log(data);
