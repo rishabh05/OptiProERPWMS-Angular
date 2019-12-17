@@ -482,7 +482,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
 
     if (localStorage.getItem('FromReceiptProd') == 'true') {
-      this.checkAndValidateSerial();
+      this.checkAndValidateSerial(value, rowindex);
     } else {
       for (let i = 0; i < this.recvingQuantityBinArray.length; ++i) {
         if (i === rowindex) {
@@ -2379,7 +2379,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     );
   }
 
-  checkAndValidateSerial() {
+  checkAndValidateSerial(serialBatchNo, i) {
     var type = 0;
     var itemcode = ""
     var orderNo = "";
@@ -2391,7 +2391,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       else
         type = 1;
     }
-    this.checkValidateSerialSubs = this.productionService.isSerialExists(this.serialBatchNo,
+    this.checkValidateSerialSubs = this.productionService.isSerialExists(serialBatchNo,
       itemcode, type, this.tracking, orderNo,
       this.fromReceiptProduction).subscribe(
         data => {
@@ -2406,13 +2406,25 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
               //error message
               this.toastr.error('', this.translate.instant("ProdReceipt_SerialNoAlreadyUsed"));
               this.serialBatchNo = "";
-              return;
+              this.recvingQuantityBinArray[i].VendorLot = "";
+              this.recvingQuantityBinArray[i].LotNumber = "";
+       //       return;
             } else if (data == "2") {
               this.toastr.error('', this.translate.instant("ProdReceipt_InvalidBatchSerial"));
               this.serialBatchNo = "";
-              return;
+              this.recvingQuantityBinArray[i].VendorLot = "";
+              this.recvingQuantityBinArray[i].LotNumber = "";
+            //  return;
             } else {
               // allow data
+              this.recvingQuantityBinArray[i].VendorLot = serialBatchNo;
+              this.serialBatchNo = serialBatchNo;
+              // this.isDisabledScanInput = true;
+              this.recvingQuantityBinArray[i].LotNumber  = serialBatchNo;
+              var plt = (this.palletValue == "Loose") ? "" : this.palletValue;
+              if (serialBatchNo != '' && serialBatchNo != undefined && plt != '') {
+                this.recvingQuantityBinArray[i].LotNumber  = serialBatchNo + "-" + plt;
+              }
             }
           }
         },

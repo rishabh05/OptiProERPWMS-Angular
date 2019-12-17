@@ -346,7 +346,7 @@ export class SigninComponent implements OnInit {
         if (document.getElementById("whseId").innerText.trim() == this.translate.instant("SelectWarehouse") ||
             document.getElementById("whseId").innerText.trim() == "") {
             this.showLoader = false;
-            this.toastr.error('', this.translate.instant("Login_SelectCompanyMsg"), this.commonService.toast_config.iconClasses.error);
+            this.toastr.error('', this.translate.instant("Login_SelectwarehouseMsg"), this.commonService.toast_config.iconClasses.error);
             return true;
         }
         return false;
