@@ -479,20 +479,26 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
   updateVendorLot(value, rowindex) {
     value = value.trim();
-    for (let i = 0; i < this.recvingQuantityBinArray.length; ++i) {
-      if (i === rowindex) {
-        this.recvingQuantityBinArray[i].VendorLot = value;
-        if (this.isPalletizationEnable) {
-          if (this.recvingQuantityBinArray[i].PalletCode == "") {
-            this.recvingQuantityBinArray[i].palletSBNo = value;
-          } else {
-            this.recvingQuantityBinArray[i].palletSBNo = value + "-" + this.recvingQuantityBinArray[i].PalletCode;
-          }
 
-          if (this.recvingQuantityBinArray[i].PalletCode == "") {
-            this.recvingQuantityBinArray[i].LotNumber = value;
-          } else {
-            this.recvingQuantityBinArray[i].LotNumber = value + "-" + this.recvingQuantityBinArray[i].PalletCode;
+
+    if (localStorage.getItem('FromReceiptProd') == 'true') {
+      this.checkAndValidateSerial();
+    } else {
+      for (let i = 0; i < this.recvingQuantityBinArray.length; ++i) {
+        if (i === rowindex) {
+          this.recvingQuantityBinArray[i].VendorLot = value;
+          if (this.isPalletizationEnable) {
+            if (this.recvingQuantityBinArray[i].PalletCode == "") {
+              this.recvingQuantityBinArray[i].palletSBNo = value;
+            } else {
+              this.recvingQuantityBinArray[i].palletSBNo = value + "-" + this.recvingQuantityBinArray[i].PalletCode;
+            }
+  
+            if (this.recvingQuantityBinArray[i].PalletCode == "") {
+              this.recvingQuantityBinArray[i].LotNumber = value;
+            } else {
+              this.recvingQuantityBinArray[i].LotNumber = value + "-" + this.recvingQuantityBinArray[i].PalletCode;
+            }
           }
         }
       }
@@ -2356,9 +2362,6 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   }
 
   checkAndValidateSerial() {
-    alert("hi");
-  }
-  checkAndValidateSerial1() {
     var type = 0;
     var itemcode = ""
     var orderNo = "";

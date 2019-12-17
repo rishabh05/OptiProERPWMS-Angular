@@ -266,7 +266,7 @@
                             <ng-template kendoGridCellTemplate let-dataItem let-idx='rowIndex'>
                                 <input type="text" class="form-control form-control-sm" name="dataItem.LotNumber" value={{dataItem.LotNumber}}
                                     [disabled]="isDisabledScanInput" id="display_name" #display_name (change)="updateLotNumber(display_name.value, idx, gridItem)"
-                                    (blur)="checkAndValidateSerial()">
+                                    >
                             </ng-template>
                         </kendo-grid-column>
 
