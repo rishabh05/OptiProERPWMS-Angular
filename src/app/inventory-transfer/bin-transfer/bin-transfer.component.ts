@@ -206,7 +206,7 @@ export class BinTransferComponent implements OnInit {
   }
 
   OnItemCodeChange() {
-   
+    
 
     if (this.itemCode == "" || this.itemCode == undefined) {
       return;
