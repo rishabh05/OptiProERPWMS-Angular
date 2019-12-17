@@ -462,7 +462,7 @@ export class InboundPolistComponent implements OnInit {
             //     this.ShowBins();
             //   }
             // }
-            this.ShowBins();
+            this.ShowBins(itemCode);
           } else {
             localStorage.setItem("PalletizationEnabledForItem", "True");
             this.inboundMasterComponent.inboundComponent = 3;
@@ -799,14 +799,14 @@ export class InboundPolistComponent implements OnInit {
   }
 
 
-  public ShowBins() {
-    this.inboundService.getRevBins(this.openPOLinesModel[0].QCREQUIRED).subscribe(
+  public ShowBins(itemCode) {
+    this.inboundService.getRevBins(this.openPOLinesModel[0].QCREQUIRED, itemCode).subscribe(
       (data: any) => {
         this.showLoader = false;
         console.log(data);
         if (data != null) {
           if (data.length > 0) {
-            this.RecvbBinvalue = data[0].BINNO;
+            this.RecvbBinvalue = data[0].DefaultBin;
           }
 
           // if(this.openPOLinesModel[0].QCREQUIRED == 'Y'){

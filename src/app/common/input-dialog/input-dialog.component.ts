@@ -49,6 +49,8 @@ export class InputDialogComponent implements OnInit {
     }
 
     this.autoGeneratePallet();
+
+    this.OnBinLookupClick("OnInit");
   }
 
   public opened: boolean = true;
@@ -113,12 +115,12 @@ export class InputDialogComponent implements OnInit {
   }
 
 
-  OnBinLookupClick() {
+  OnBinLookupClick(fromWhere: string) {
     if (this.fromWhere != "NewPallet_GRPO") {
       this.ShowAllBins();
     } else {
       this.showLoader = true;
-      this.inboundService.getRevBins('N').subscribe(
+      this.inboundService.getRevBins('N', "").subscribe(
         data => {
           this.showLoader = false;
           if (data != null && data.length > 0) {
@@ -127,9 +129,12 @@ export class InputDialogComponent implements OnInit {
                 this.translate.instant("CommonSessionExpireMsg"));
               return;
             } else {
-              this.showLookup = false;
-              this.serviceData = data;
-              this.lookupfor = "toBinsList";
+              this.binNo = data[0].BINNO;
+              if(fromWhere != "OnInit"){
+                this.showLookup = false;
+                this.serviceData = data;
+                this.lookupfor = "toBinsList";
+              }
             }
           } else {
             this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));

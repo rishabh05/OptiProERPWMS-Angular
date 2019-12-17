@@ -299,14 +299,23 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     } else {
       this.targetBinClick = false;
       this.showLoader = true;
-      this.inboundService.getRevBins(this.openPOLineModel[0].QCREQUIRED).subscribe(
+      this.inboundService.getRevBins(this.openPOLineModel[0].QCREQUIRED, this.openPOLineModel[0].ITEMCODE).subscribe(
         (data: any) => {
           this.showLoader = false;
           console.log(data);
           if (data != null) {
             if (data.length > 0) {
+              if (data[0].ErrorMsg == "7001") {
+                this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+                  this.translate.instant("CommonSessionExpireMsg"));
+                return;
+              } 
               if (this.defaultRecvBin == true) {
-                this.RecvbBinvalue = data[0].BINNO;
+                if(this.openPOLineModel[0].QCREQUIRED == "Y"){
+                  this.RecvbBinvalue = data[0].BINNO;
+                } else {
+                  this.RecvbBinvalue = data[0].DefaultBin;
+                }
                 this.defaultRecvBin = false
               }
               else {
@@ -1771,7 +1780,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         if (data != null) {
           if (data.length > 0) {
             if (this.defaultRecvBin == true) {
-              this.RecvbBinvalue = data[0].BINNO;
+          //    this.RecvbBinvalue = data[0].BINNO;
               this.defaultRecvBin = false
             }
             else {
@@ -2345,8 +2354,16 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     // this.showNewPallet = !this.showNewPallet;
     this.newCreatedPalletNo = "";
     // if (this.showNewPallet) {
-    this.showInputDialog("NewPallet_GRPO", this.translate.instant("Done"), this.translate.instant("Cancel"),
-      this.translate.instant("Plt_CreateNewPallet"));
+
+      if (localStorage.getItem('FromReceiptProd') == 'true') {
+        this.showInputDialog("", this.translate.instant("Done"), this.translate.instant("Cancel"),
+        this.translate.instant("Plt_CreateNewPallet"));
+      } else {
+        this.showInputDialog("NewPallet_GRPO", this.translate.instant("Done"), this.translate.instant("Cancel"),
+        this.translate.instant("Plt_CreateNewPallet"));
+      }
+
+
     // }
   }
 
