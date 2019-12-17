@@ -980,7 +980,10 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
             LineNo: saveRecProdData.RejectLots[j].LineNo, //abhi k lea kea h need to check
             LotNumber: saveRecProdData.RejectLots[j].LotNumber,
             LotQty: saveRecProdData.RejectLots[j].LotQty,//need to check
-            ExpiryDate: saveRecProdData.RejectLots[j].ExpiryDate
+            ExpiryDate: saveRecProdData.RejectLots[j].ExpiryDate,
+            PalletCode: saveRecProdData.RejectLots[j].PalletCode,
+            ActualLotNo: saveRecProdData.RejectLots[j].ActualLotNo,
+          
           })
         }
         rejItmData = saveRecProdData.RejectItems;
@@ -999,7 +1002,9 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
             LineNo: saveRecProdData.Lots[i].LineNo,
             LotNumber: saveRecProdData.Lots[i].LotNumber,
             LotQty: saveRecProdData.Lots[i].LotQty,
-            ExpiryDate: saveRecProdData.Lots[i].ExpiryDate
+            ExpiryDate: saveRecProdData.Lots[i].ExpiryDate,
+            PalletCode: saveRecProdData.RejectLots[j].PalletCode,
+            ActualLotNo: saveRecProdData.RejectLots[j].ActualLotNo
           })
         }
         itmData = saveRecProdData.Items;
@@ -2093,25 +2098,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       UOMList: [], WHSE: this.receiptData.WhsCode, PalletCode: ""
     }
     this.openPOLineModel[0] = obj;
-    // this.openPOLineModel[0].CardCode = this.receiptData.ITEMCODE+""; //used at scanning
-    // this.openPOLineModel[0].DOCENTRY = this.receiptData.RefDocEntry;
-    // this.openPOLineModel[0].DocNum =  this.receiptData.RefDocEntry;
-    // this.openPOLineModel[0].FACTOR =  0;
-    // this.openPOLineModel[0].ITEMCODE =  this.receiptData.ITEMCODE;
-    // this.openPOLineModel[0].ITEMNAME =  this.receiptData.ITEMNAME;
-    // this.openPOLineModel[0].LINENUM=  0;// for now zero assigning
-    // this.openPOLineModel[0].OPENQTY =  this.receiptData.OPENQTY;
-    // this.openPOLineModel[0].QCREQUIRED =  this.receiptData.QCREQUIRED;
-    // this.openPOLineModel[0].ROWNUM =  0; // for now
-    // this.openPOLineModel[0].RPTQTY=  0; // as per rishabhsir acceptyed qty will be here
-    // this.openPOLineModel[0].SHIPDATE = new Date().toDateString(); // for now
-    // this.openPOLineModel[0].TOTALQTYINVUOM=  0; // for now
-    // this.openPOLineModel[0].TRACKING=   this.receiptData.TRACKING;// for now
-    // this.openPOLineModel[0].TargetBin=  ""; // for now
-    // this.openPOLineModel[0].TargetWhs=  ""; // for now
-    // this.openPOLineModel[0].UOM =  ""; // for now
-    // this.openPOLineModel[0].UOMList=  []; // for now
-    // this.openPOLineModel[0].WHSE= this.receiptData.WhsCode; // for now
+    
   }
 
   public getPalletList() {
@@ -2224,12 +2211,27 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     var Lots: any = [];
     if (receiveingQuantityBinArray != null && receiveingQuantityBinArray.length > 0) {
       for (let i = 0; i < receiveingQuantityBinArray.length; i++) {
+        var palCode="";
+        var ActualLotNumber = "";
+        if (receiveingQuantityBinArray[i].PalletCode != null && receiveingQuantityBinArray[i].PalletCode != undefined) {
+          palCode = receiveingQuantityBinArray[i].PalletCode
+        } else {
+          palCode = ""
+        }
+
+        if (receiveingQuantityBinArray[i].PalletCode != null && receiveingQuantityBinArray[i].PalletCode != undefined) {
+          ActualLotNumber = receiveingQuantityBinArray[i].VendorLot
+        } else {
+          ActualLotNumber = ""
+        }
         Lots.push({
           Bin: receiveingQuantityBinArray[i].Bin,
           LineNo: 0, //abhi k lea kea h need to check
           LotNumber: receiveingQuantityBinArray[i].LotNumber,
           LotQty: receiveingQuantityBinArray[i].LotQty,//need to check
-          ExpiryDate: this.GetReceiptSubmitDateFormat(receiveingQuantityBinArray[i].expiryDate)
+          ExpiryDate: this.GetReceiptSubmitDateFormat(receiveingQuantityBinArray[i].expiryDate),
+          PalletCode: palCode,
+          ActualLotNo: ActualLotNumber,
         });
       }
     } else {
@@ -2241,12 +2243,28 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     var RejectLots: any = [];
     if (receiveingQuantityBinArray != null && receiveingQuantityBinArray.length > 0) {
       for (let i = 0; i < receiveingQuantityBinArray.length; i++) {
+        var palCode="";
+        var ActualLotNumber = "";
+        if(receiveingQuantityBinArray[i].PalletCode!=null && receiveingQuantityBinArray[i].PalletCode!=undefined){
+            palCode = receiveingQuantityBinArray[i].PalletCode
+        }else{
+            palCode = ""
+        }
+
+        if(receiveingQuantityBinArray[i].PalletCode!=null && receiveingQuantityBinArray[i].PalletCode!=undefined){
+          ActualLotNumber = receiveingQuantityBinArray[i].VendorLot
+        }else{
+        ActualLotNumber = ""
+        }
+
         RejectLots.push({
           Bin: receiveingQuantityBinArray[i].Bin,
           LineNo: 1, //for reject lot item. (crosscheck)
           LotNumber: receiveingQuantityBinArray[i].LotNumber,
-          LotQty: receiveingQuantityBinArray[i].LotQty,//need to check
-          ExpiryDate: this.GetReceiptSubmitDateFormat(receiveingQuantityBinArray[i].expiryDate)
+          LotQty: receiveingQuantityBinArray[i].LotQty,
+          ExpiryDate: this.GetReceiptSubmitDateFormat(receiveingQuantityBinArray[i].expiryDate),
+          PalletCode: palCode,
+          ActualLotNo: ActualLotNumber,
         })
       }
     } else {
