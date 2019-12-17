@@ -188,7 +188,9 @@
                         <div class="col-sm-9">
                             <div class="d-flex">
                                 <input type="number" #Quantity name="qty"
-                                    [(ngModel)]=qty placeholder="{{'Quantity'|translate}}" class="text-right form-control form-control-sm">
+                                    [(ngModel)]=qty placeholder="{{'Quantity'|translate}}" 
+                                    min="0"
+                                    class="text-right form-control form-control-sm">
                                 <div class="ml-1 d-flex">
                                     <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
                                         type="button" (click)="addQuantity(event)">
