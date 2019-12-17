@@ -477,20 +477,26 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
   updateVendorLot(value, rowindex) {
     value = value.trim();
-    for (let i = 0; i < this.recvingQuantityBinArray.length; ++i) {
-      if (i === rowindex) {
-        this.recvingQuantityBinArray[i].VendorLot = value;
-        if (this.isPalletizationEnable) {
-          if (this.recvingQuantityBinArray[i].PalletCode == "") {
-            this.recvingQuantityBinArray[i].palletSBNo = value;
-          } else {
-            this.recvingQuantityBinArray[i].palletSBNo = value + "-" + this.recvingQuantityBinArray[i].PalletCode;
-          }
 
-          if (this.recvingQuantityBinArray[i].PalletCode == "") {
-            this.recvingQuantityBinArray[i].LotNumber = value;
-          } else {
-            this.recvingQuantityBinArray[i].LotNumber = value + "-" + this.recvingQuantityBinArray[i].PalletCode;
+
+    if (localStorage.getItem('FromReceiptProd') == 'true') {
+      this.checkAndValidateSerial(value, rowindex);
+    } else {
+      for (let i = 0; i < this.recvingQuantityBinArray.length; ++i) {
+        if (i === rowindex) {
+          this.recvingQuantityBinArray[i].VendorLot = value;
+          if (this.isPalletizationEnable) {
+            if (this.recvingQuantityBinArray[i].PalletCode == "") {
+              this.recvingQuantityBinArray[i].palletSBNo = value;
+            } else {
+              this.recvingQuantityBinArray[i].palletSBNo = value + "-" + this.recvingQuantityBinArray[i].PalletCode;
+            }
+  
+            if (this.recvingQuantityBinArray[i].PalletCode == "") {
+              this.recvingQuantityBinArray[i].LotNumber = value;
+            } else {
+              this.recvingQuantityBinArray[i].LotNumber = value + "-" + this.recvingQuantityBinArray[i].PalletCode;
+            }
           }
         }
       }
@@ -2377,10 +2383,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     );
   }
 
-  checkAndValidateSerial() {
-    alert("hi");
-  }
-  checkAndValidateSerial1() {
+  checkAndValidateSerial(serialBatchNo, i) {
     var type = 0;
     var itemcode = ""
     var orderNo = "";
@@ -2392,7 +2395,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       else
         type = 1;
     }
-    this.checkValidateSerialSubs = this.productionService.isSerialExists(this.serialBatchNo,
+    this.checkValidateSerialSubs = this.productionService.isSerialExists(serialBatchNo,
       itemcode, type, this.tracking, orderNo,
       this.fromReceiptProduction).subscribe(
         data => {
@@ -2407,13 +2410,25 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
               //error message
               this.toastr.error('', this.translate.instant("ProdReceipt_SerialNoAlreadyUsed"));
               this.serialBatchNo = "";
-              return;
+              this.recvingQuantityBinArray[i].VendorLot = "";
+              this.recvingQuantityBinArray[i].LotNumber = "";
+       //       return;
             } else if (data == "2") {
               this.toastr.error('', this.translate.instant("ProdReceipt_InvalidBatchSerial"));
               this.serialBatchNo = "";
-              return;
+              this.recvingQuantityBinArray[i].VendorLot = "";
+              this.recvingQuantityBinArray[i].LotNumber = "";
+            //  return;
             } else {
               // allow data
+              this.recvingQuantityBinArray[i].VendorLot = serialBatchNo;
+              this.serialBatchNo = serialBatchNo;
+              // this.isDisabledScanInput = true;
+              this.recvingQuantityBinArray[i].LotNumber  = serialBatchNo;
+              var plt = (this.palletValue == "Loose") ? "" : this.palletValue;
+              if (serialBatchNo != '' && serialBatchNo != undefined && plt != '') {
+                this.recvingQuantityBinArray[i].LotNumber  = serialBatchNo + "-" + plt;
+              }
             }
           }
         },
