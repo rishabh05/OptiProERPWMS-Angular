@@ -189,6 +189,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       } else if (this.tracking == "N") {
         this.isNonTrack = true;
         this.showScanInput = false;
+        this.showScanAndInputRadio = false;
       } else if (this.tracking == "B") {
         this.isSerial = false;
         this.isNonTrack = false;
@@ -337,10 +338,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
 
   OnBinChange() {
-    var inputValue = (<HTMLInputElement>document.getElementById('inboundGrpoRecBinInput')).value;
-    if (inputValue.length > 0) {
-      this.RecvbBinvalue = inputValue;
-    }
+   
 
 
     if (this.RecvbBinvalue == "") {
@@ -1909,23 +1907,32 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   }
 
   onHiddenRecBinClick() {
+    var inputValue = (<HTMLInputElement>document.getElementById('inboundGrpoRecBinInput')).value;
+    if (inputValue.length > 0) {
+      this.RecvbBinvalue = inputValue;
+    }
     this.OnBinChange();
   }
   
 
   onHiddenScanClick() {
-    this.onGS1ItemScan();
-  }
-
-  onHiddenPalletClick(){
-    this.OnPalletChange();
-  }
-  onGS1ItemScan() {
-    // alert("at onGS1ItemScan ");
+    
     var inputValue = (<HTMLInputElement>document.getElementById('inboundScanInputField')).value;
     if (inputValue.length > 0) {
       this.ScanInputs = inputValue;
     }
+    this.onGS1ItemScan();
+  }
+
+  onHiddenPalletClick(){
+    var inputValue = (<HTMLInputElement>document.getElementById('inboundGRPOPalletNo')).value;
+    if (inputValue.length > 0) {
+      this.palletValue = inputValue;
+    }
+    this.OnPalletChange();
+  }
+  onGS1ItemScan() {
+    
 
     if (this.ScanInputs != null && this.ScanInputs != undefined &&
       this.ScanInputs != "" && this.ScanInputs != "error decoding QR Code") {
@@ -2157,10 +2164,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
   OnPalletChange() {
     
-    var inputValue = (<HTMLInputElement>document.getElementById('inboundGRPOPalletNo')).value;
-    if (inputValue.length > 0) {
-      this.palletValue = inputValue;
-    }
+   
     
     if (this.palletValue == "" || this.palletValue == undefined) {
       return;

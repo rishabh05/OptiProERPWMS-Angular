@@ -177,10 +177,7 @@ export class PhysicalCountComponent implements OnInit {
   }
 
   OnItemChange() {
-    var inputValue = (<HTMLInputElement>document.getElementById('itemCodeInputPC')).value;
-    if (inputValue.length > 0) {
-      this.ItemCode = inputValue;
-    }
+   
 
     if (this.ItemCode == "" || this.ItemCode == undefined) {
       return;
@@ -291,11 +288,7 @@ export class PhysicalCountComponent implements OnInit {
 
   OnLotChange(savenext?: string) {
 
-    var inputValue = (<HTMLInputElement>document.getElementById('batchSerialInputPC')).value;
-    if (inputValue.length > 0) {
-      this.batchserno = inputValue;
-    }
-
+  
 
     if (this.batchserno == "" || this.batchserno == undefined) {
       return;
@@ -766,10 +759,7 @@ export class PhysicalCountComponent implements OnInit {
   }
 
   onCountedQtyChanged() {
-    var inputValue = (<HTMLInputElement>document.getElementById('countedQtyInputPC')).value;
-    if (inputValue.length > 0) {
-      this.CountedQty = inputValue;
-    } 
+   
 
     this.LotSerialQtycheck = 0;
     var oAddPhysicalCountData: any = {};
@@ -1231,14 +1221,27 @@ export class PhysicalCountComponent implements OnInit {
 
 
   onHiddenScanItemCodeClick(){
+    var inputValue = (<HTMLInputElement>document.getElementById('itemCodeInputPC')).value;
+    if (inputValue.length > 0) {
+      this.ItemCode = inputValue;
+    }
     this.OnItemChange();
   }
 
   onHiddenScanSrNoClick(){
+    var inputValue = (<HTMLInputElement>document.getElementById('batchSerialInputPC')).value;
+    if (inputValue.length > 0) {
+      this.batchserno = inputValue;
+    }
+
     this.OnLotChange();
   }
 
   onHiddenScanCountedQtyClick(){ 
+    var inputValue = (<HTMLInputElement>document.getElementById('countedQtyInputPC')).value;
+    if (inputValue.length > 0) {
+      this.CountedQty = inputValue;
+    } 
     this.onCountedQtyChanged();
   }
 }
