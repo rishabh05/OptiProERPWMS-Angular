@@ -90,8 +90,7 @@ body .k-grid tbody tr:hover {
   background-color: #13688c;
 }
 
-body kendo-grid,
-#opti_DashboardID {
+body kendo-grid{
   box-shadow: 0px 1px 15px #13688c;
 }
 body kendo-grid.no-shadow{
@@ -104,9 +103,6 @@ body .k-grid tr.k-grid-norecords td{
   font-size: 16px;
 }
 /* left section */
-.opti_left-navigation{
-box-shadow: 0px 1px 15px #13688c;
-}
 
 /* tab header */
 .opti_tab-outer ul.tabs > li:hover,

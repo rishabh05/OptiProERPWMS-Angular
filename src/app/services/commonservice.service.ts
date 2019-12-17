@@ -227,7 +227,7 @@ export class Commonservice {
     localStorage.removeItem('whseId');
     localStorage.removeItem('Token');
     this.clearInboundData()
-    this.router.navigateByUrl('/account');
+    this.router.navigate(['/account']);
 
   }
 

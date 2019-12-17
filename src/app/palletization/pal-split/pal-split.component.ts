@@ -343,7 +343,7 @@ export class PalSplitComponent implements OnInit {
   }
 
   back(fromwhereval: number) {
-    this.router.navigateByUrl('home/dashboard', { skipLocationChange: true });
+    this.router.navigate(['home/dashboard', { skipLocationChange: true }]);
   }
 
   openConfirmForDelete(index: any, item: any) {
@@ -354,7 +354,7 @@ export class PalSplitComponent implements OnInit {
 
   onCheckChange() {
     this.newCreatedPalletNo = "";
-    this.showInputDialog("NewPallet", this.translate.instant("Done"), this.translate.instant("Cancel"),
+    this.showInputDialog("NewPallet_Split", this.translate.instant("Done"), this.translate.instant("Cancel",),
     this.translate.instant("Plt_CreateNewPallet"));
   }
 
@@ -775,7 +775,7 @@ export class PalSplitComponent implements OnInit {
     this.showInputDialogFlag = false;
     if ($event.Status == "yes") {
       switch ($event.From) {
-        case ("NewPallet"):
+        case ("NewPallet_Split"):
           this.createNewPallet($event.PalletNo, $event.BinNo);
           break
       }

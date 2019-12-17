@@ -121,7 +121,7 @@ export class WhsTransferComponent implements OnInit {
     localStorage.setItem("towhseId", this.toWhse);
     this.selectedItem = module;
     this.closeRightSidebar();
-    this.router.navigateByUrl('home/' + module, { skipLocationChange: true });
+    this.router.navigate(['home/' + module, { skipLocationChange: true }]);
   }
 
   closeRightSidebar() {

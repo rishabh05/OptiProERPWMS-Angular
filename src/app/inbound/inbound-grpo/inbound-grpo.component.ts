@@ -2327,7 +2327,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     // this.showNewPallet = !this.showNewPallet;
     this.newCreatedPalletNo = "";
     // if (this.showNewPallet) {
-    this.showInputDialog("NewPallet", this.translate.instant("Done"), this.translate.instant("Cancel"),
+    this.showInputDialog("NewPallet_GRPO", this.translate.instant("Done"), this.translate.instant("Cancel"),
       this.translate.instant("Plt_CreateNewPallet"));
     // }
   }
@@ -2460,7 +2460,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     this.showInputDialogFlag = false;
     if ($event.Status == "yes") {
       switch ($event.From) {
-        case ("NewPallet"):
+        case ("NewPallet_GRPO"):
           this.createNewPallet($event.PalletNo, $event.BinNo);
           break
       }
