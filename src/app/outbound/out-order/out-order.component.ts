@@ -288,7 +288,7 @@ export class OutOrderComponent implements OnInit {
       // this.addMetToTempCollectionRe(this.outbound);
       //lsOutbound
       localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
-      this.router.navigateByUrl('home/outbound/outprodissue', { skipLocationChange: true });
+      this.router.navigate(['home/outbound/outprodissue', { skipLocationChange: true }]);
     }
   }
 
@@ -300,7 +300,7 @@ export class OutOrderComponent implements OnInit {
         this.outbound.SelectedItem = this.soItemsDetail[index];
       }
       localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
-      this.router.navigateByUrl('home/outbound/outprodissue', { skipLocationChange: true });
+      this.router.navigate(['home/outbound/outprodissue', { skipLocationChange: true }]);
     }
   }
 
@@ -399,7 +399,7 @@ export class OutOrderComponent implements OnInit {
       this.translate.instant("Plt_DataDeleteMsg"));
       this.fromEvent = "backArrow"
     }else{
-      this.router.navigateByUrl("home/outbound/outcustomer", { skipLocationChange: true })
+      this.router.navigate(["home/outbound/outcustomer", { skipLocationChange: true }])
     }
    }
   public addToDeleiver(goToCustomer: boolean = true) {
@@ -657,7 +657,7 @@ export class OutOrderComponent implements OnInit {
 
   clearOutbound() {
     localStorage.setItem(CommonConstants.OutboundData, null);
-    this.router.navigateByUrl("home/outbound/outcustomer", { skipLocationChange: true })
+    this.router.navigate(["home/outbound/outcustomer", { skipLocationChange: true }])
   }
 
   manageLineNo(hdrList: SOHEADER[], dtlList: SODETAIL[]) {
@@ -1327,7 +1327,7 @@ export class OutOrderComponent implements OnInit {
               localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
             }
             if(this.fromEvent =="backArrow"){
-              this.router.navigateByUrl("home/outbound/outcustomer", { skipLocationChange: true })  
+              this.router.navigate(["home/outbound/outcustomer", { skipLocationChange: true }])  
             }else if(this.fromEvent =="backArrow"){
 
             }

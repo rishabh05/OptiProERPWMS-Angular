@@ -1373,7 +1373,7 @@ export class BinTransferComponent implements OnInit {
         BinNo: this.palletData[i].BINNO,
         ToBin: this.toBin,
         Tracking: this.palletData[i].ITEMTYPE,
-        WhsCode: this.palletData[i].WHSCODE,
+        WhsCode: localStorage.getItem("towhseId"),
         OnHandQty: this.palletData[i].QTY,
         Remarks: this.Remarks,
         BaseLine: ""

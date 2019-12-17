@@ -273,7 +273,7 @@ export class SigninComponent implements OnInit {
                         this.setCookie('CompID', "", 365);
                         this.setCookie('whseId', "", 365);
                     }
-                    this.router.navigateByUrl('home/dashboard');
+                    this.router.navigate(['home/dashboard']);
                 } else {
                     alert(this.licenseData[0].Message + " " + this.licenseData[0].Token);
                 }

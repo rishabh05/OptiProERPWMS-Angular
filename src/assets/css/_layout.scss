@@ -31,11 +31,9 @@
         }
         
         .opti_left-navigation{
-            margin: 10px;
-            border-radius: 5px;
             display: flex;
             align-self: center;
-            width: calc(100% - 20px);
+            width:100%;
             justify-self: flex-start;
             flex: 1;
         }
@@ -124,10 +122,6 @@
 // if we will add this css in top bar than background color will not change from theme file becuase it will take high prioraty that's why i add here
 section#opti_TopBarID{ 
     background: linear-gradient(177deg, #483DF6 2%, #435EF8 10%, #1BA0F1 44%, #25DDF5 91%, #45D790 130%);
-}
-  
-.opti_left-navigation {
-    box-shadow: 0px 1px 15px #1fa2ff;
 }
 
 body kendo-grid {

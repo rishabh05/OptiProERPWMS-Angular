@@ -18,23 +18,23 @@ export class LandingComponent implements OnInit {
   }
 
   navigateToSignUp(value: number) {
-    this.router.navigateByUrl('account/signup');
+    this.router.navigate(['account/signup']);
   }
 
   navigateToSignIn(){
-    this.router.navigateByUrl('account/login');
+    this.router.navigate(['account/login']);
   }
 
   navigateToset(){
-    this.router.navigateByUrl('account/setpassword');
+    this.router.navigate(['account/setpassword']);
   }
 
   navigateToreset(){
-    this.router.navigateByUrl('account/resetpassword');
+    this.router.navigate(['account/resetpassword']);
   }
 
   navigateTohome(){
-    this.router.navigateByUrl('home');
+    this.router.navigate(['home']);
   }
 
 }

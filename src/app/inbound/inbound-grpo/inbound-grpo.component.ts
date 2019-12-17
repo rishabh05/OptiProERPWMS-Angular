@@ -295,7 +295,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   public ShowBins() {
 
     if (localStorage.getItem('FromReceiptProd') == 'true') {
-      this.ShowAllBins();
+      this.GetTargetBins();
     } else {
       this.targetBinClick = false;
       this.showLoader = true;
@@ -1755,10 +1755,10 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   }
 
 
-  public ShowAllBins() {
+  public GetTargetBins() {
     this.targetBinClick = false;
     this.showLoader = true;
-    this.inboundService.getAllBins('N', localStorage.getItem("whseId")).subscribe(
+    this.inboundService.GetTargetBins('N', localStorage.getItem("whseId")).subscribe(
       (data: any) => {
         this.showLoader = false;
         console.log(data);
@@ -2339,7 +2339,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     // this.showNewPallet = !this.showNewPallet;
     this.newCreatedPalletNo = "";
     // if (this.showNewPallet) {
-    this.showInputDialog("NewPallet", this.translate.instant("Done"), this.translate.instant("Cancel"),
+    this.showInputDialog("NewPallet_GRPO", this.translate.instant("Done"), this.translate.instant("Cancel"),
       this.translate.instant("Plt_CreateNewPallet"));
     // }
   }
@@ -2374,7 +2374,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   }
 
   checkAndValidateSerial() {
-
+    alert("hi");
   }
   checkAndValidateSerial1() {
     var type = 0;
@@ -2475,7 +2475,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     this.showInputDialogFlag = false;
     if ($event.Status == "yes") {
       switch ($event.From) {
-        case ("NewPallet"):
+        case ("NewPallet_GRPO"):
           this.createNewPallet($event.PalletNo, $event.BinNo);
           break
       }

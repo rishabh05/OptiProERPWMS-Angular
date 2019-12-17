@@ -839,7 +839,7 @@ export class OutProdissueComponent implements OnInit {
       var statusObject: any = { fromwhere: fromwhereval }
       this.screenBackEvent.emit(statusObject);
     } else {
-      this.router.navigateByUrl('home/outbound/outorder', { skipLocationChange: true });
+      this.router.navigate(['home/outbound/outorder', { skipLocationChange: true }]);
     }
   }
 

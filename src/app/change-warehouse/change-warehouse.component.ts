@@ -50,7 +50,7 @@ export class ChangeWarehouseComponent implements OnInit {
     localStorage.setItem("whseId", this.defaultWHS.OPTM_WHSE);
     this.setCookie('whseId', this.defaultWHS.OPTM_WHSE, 365);
     this.commonService.refreshTopBarValue(localStorage.getItem("whseId"));
-    this.router.navigateByUrl('home/dashboard');
+    this.router.navigate(['home/dashboard']);
   }
 
   /**
