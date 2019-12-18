@@ -6,7 +6,7 @@
     width: 100%;
     > li {
         list-style: none;
-        padding: 10px 10px;
+        padding: 15px 15px;
         background-color: transparent;
         cursor: pointer;
         > a {
@@ -27,7 +27,7 @@
                 
             }
             svg{
-                width:28px;
+                width:32px;
             }
         }
         &.dropdown {
@@ -37,7 +37,7 @@
             padding: 0;
             z-index: 0;
             & > a.dropdown-toggle{
-                padding: 10px 10px;
+                padding: 15px 15px;
 
                 &:after{
                     font-family: "OptiProErp";
@@ -86,7 +86,7 @@
                             background-color: transparent;
                         }
                         svg{
-                            width:24px
+                            width:28px
                         }
                     }
                     &:hover, &.active{
@@ -102,7 +102,7 @@
 }
 
 .opti_left-navigation>ul li span {
-    margin-left: 10px;
+    margin-left: 15px;
 }
 
 #opti_LeftPanelID.opti_sidebar-minimize {
@@ -120,7 +120,7 @@
                 & > ul.dropdown-menu{
                     min-width: initial;
                     & > li a{
-                        padding: 10px 15px;
+                        padding: 15px 15px;
                         justify-content: center;
                     }
                 }
