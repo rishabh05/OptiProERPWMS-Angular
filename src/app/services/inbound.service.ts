@@ -54,7 +54,7 @@ export class InboundService {
   }
 
   getPOList(futurepo: boolean, vendercode: string, itemcode: string): Observable<any> {
-    console.log("get polist method :");
+   // console.log("get polist method :");
     let jObject = {
       GoodsReceiptToken: JSON.stringify([{
         UserId: '',
@@ -64,7 +64,7 @@ export class InboundService {
         UsernameForLic: localStorage.getItem("UserId")
       }])
     };
-    console.log("get polist method call api :");
+    //console.log("get polist method call api :");
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetPOList", jObject, this.commonService.httpOptions);
   }
 
@@ -105,7 +105,7 @@ export class InboundService {
         ItemCode: itemCode
       }])
     };
-    console.log("getUOMs API's request:"+JSON.stringify(jObject));
+   // console.log("getUOMs API's request:"+JSON.stringify(jObject));
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/getUOM", jObject, this.commonService.httpOptions);
   }
 

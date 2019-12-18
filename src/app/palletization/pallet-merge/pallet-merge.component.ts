@@ -45,10 +45,10 @@ export class PalletMergeComponent implements OnInit {
     this.commonservice.GetPalletsWithRowsPresent().subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+       // console.log(data);
         if (data != null) {
           if (data.length > 0) {
-            console.log(data);
+           // console.log(data);
             this.showLoader = false;
             this.serviceData = data;
             this.showLookup = true;
@@ -80,16 +80,16 @@ export class PalletMergeComponent implements OnInit {
       code = this.toPalletNo;
     } else if (from == "to_pallet") {
       code = Array.prototype.map.call(this.selectedFromPallets, function (item) { return "'" + item.Code + "'"; }).join(",");
-      console.log("code: " + code);
+     // console.log("code: " + code);
     }
     this.showLoader = true;
     this.commonservice.getPalletsOfSameWarehouse(code).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+       // console.log(data);
         if (data != null) {
           if (data.length > 0) {
-            console.log(data);
+          //  console.log(data);
             this.showLoader = false;
             this.serviceData = data;
             this.showLookup = true;
@@ -135,7 +135,7 @@ export class PalletMergeComponent implements OnInit {
     this.commonservice.isPalletValid(plt).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+      //  console.log(data);
         if (data != null) {
           if (data.length > 0) {
             if (from == "from_pallet") {
@@ -237,7 +237,7 @@ export class PalletMergeComponent implements OnInit {
     this.commonservice.mergePallet(fromPltCode, this.toPalletNo).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+        //console.log(data);
         if (data != null && data != undefined && data.length > 0) {
           if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
             this.toastr.success('', this.translate.instant("Plt_Merge_success"));
@@ -274,8 +274,8 @@ export class PalletMergeComponent implements OnInit {
   }
 
   openConfirmForDelete(index: any, item: any) {
-    console.log("index: " + index)
-    console.log("item: " + item)
+    //console.log("index: " + index)
+    //console.log("item: " + item)
     this.selectedFromPallets.splice(index, 1);
   }
 
@@ -299,7 +299,7 @@ export class PalletMergeComponent implements OnInit {
     this.commonservice.createNewPallet(palletNo, binNo).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+       // console.log(data);
         if (data != null) {
           if (data.length > 0) {
             this.newCreatedPalletNo = data;
@@ -337,7 +337,7 @@ export class PalletMergeComponent implements OnInit {
   }
 
   getInputDialogValue($event) {
-    console.log("getInputDialogValue " + event)
+    //console.log("getInputDialogValue " + event)
     this.showInputDialogFlag = false;
     if ($event.Status == "yes") {
       switch ($event.From) {
@@ -361,7 +361,7 @@ export class PalletMergeComponent implements OnInit {
     this.commonservice.GetPalletData(pallet).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+       // console.log(data);
         if (data != null && data.length > 0) {
           // this.serviceData = data;
           var tempList: any = [];

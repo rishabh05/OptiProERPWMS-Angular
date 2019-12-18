@@ -58,10 +58,10 @@ export class SplitTransferComponent implements OnInit {
     this.commonservice.getPalletList(PalletOperationType.Split, "").subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+       // console.log(data);
         if (data != null) {
           if (data.length > 0) {
-            console.log(data);
+          //  console.log(data);
             this.showLookupLoader = false;
             this.serviceData = data;
             this.palletValue = this.serviceData[0].Code;
@@ -99,15 +99,15 @@ export class SplitTransferComponent implements OnInit {
       }
     }
 
-    console.log("palletId: " + palletId);
+    //console.log("palletId: " + palletId);
     this.showLoader = true;
     this.commonservice.createNewPallet(palletId, "").subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+        //(data);
         if (data != null) {
           if (data.length > 0) {
-            console.log(data);
+           // console.log(data);
             this.showLookupLoader = false;
             // this.serviceData = data;
             if (this.showNewPallet) {

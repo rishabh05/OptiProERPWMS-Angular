@@ -181,7 +181,7 @@ export class Commonservice {
   RemoveLicenseAndSignout(toastr: ToastrService, router: Router, message: string) {
     this.RemoveLicense().subscribe(
       (data: any) => {
-        console.log(data);
+       // console.log(data);
         this.signOut(this.toastr, this.router, message);
       },
       error => {

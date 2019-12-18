@@ -260,7 +260,7 @@ export class ProdOrderlistComponent implements OnInit {
           for (let j = 0; j < this.outbound.TempMeterials.length; j++) {
 
             const element = this.outbound.TempMeterials[j];
-            console.log("My Element", element);
+            //console.log("My Element", element);
             if (soelement.ROWNUM === element.Item.ROWNUM && soelement.ITEMCODE === element.Item.ITEMCODE && this.outbound.OrderData.DOCNUM === element.Order.DOCNUM) {
               totalPickQty = totalPickQty + parseInt(element.Meterial.MeterialPickQty);
             }
@@ -462,8 +462,8 @@ export class ProdOrderlistComponent implements OnInit {
         }
       }
 
-      console.log("Dtl", arrLots);
-      console.log("hdr", arrIssues);
+     // console.log("Dtl", arrLots);
+     // console.log("hdr", arrIssues);
 
       if (arrIssues.length > 0 && arrLots.length > 0) {
         prodIssueModel.Items = arrIssues;
@@ -510,7 +510,7 @@ export class ProdOrderlistComponent implements OnInit {
         }
 
       );
-      console.log("shdr", arrIssues);
+      //console.log("shdr", arrIssues);
     }
   }
 

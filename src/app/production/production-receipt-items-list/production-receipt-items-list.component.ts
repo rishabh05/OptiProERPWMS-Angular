@@ -229,7 +229,7 @@ export class ProductionReceiptItemsListComponent implements OnInit {
           localStorage.setItem("AvailableRejectQty",this.availableRejQty.toString());
           localStorage.setItem("PalletizationEnabledForItem", "True");
           this.prodReceiptComponent = 2;
-          console.log("recept value:"+this.prodReceiptComponent);
+         // console.log("recept value:"+this.prodReceiptComponent);
   }
  
   
@@ -264,7 +264,7 @@ export class ProductionReceiptItemsListComponent implements OnInit {
      this.prodReceiptComponent = 1;
         this.showLookupLoader = true;
   
-    console.log("back");
+   // console.log("back");
   }
 
   /** 

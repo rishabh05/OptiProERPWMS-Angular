@@ -59,14 +59,14 @@ export class BinLabelComponent implements OnInit {
    * Item code lookup click.
    */
   OnFromBinLookupClick() {
-    console.log('from bin click');
+   // console.log('from bin click');
     this.getFromBinsList();
   }
   /**
    * Batch serial lookup click.
    */
   OnToBinLookupClick() {
-    console.log('to bin click');
+   // console.log('to bin click');
     this.getToBinsList();
   }
 
@@ -176,13 +176,13 @@ export class BinLabelComponent implements OnInit {
     if (this.lookupfor == "FromBinList") {
       this.fromBin = $event[0];
       //this.whsCode = $event;
-      console.log("selected item:" + this.fromBin);
+      //console.log("selected item:" + this.fromBin);
 
     }
     if (this.lookupfor == "ToBinList") {
       this.toBin = $event[0];
       //this.whsCode = $event;
-      console.log("selected item:" + this.toBin);
+      //console.log("selected item:" + this.toBin);
 
     }
   }
@@ -233,7 +233,7 @@ export class BinLabelComponent implements OnInit {
     this.copyCountSubs = this.labelPrintReportsService.getCopyCountForBinLabelReport().subscribe(
       (data: any) => {
         if (data != undefined && data.length > 0) {
-          console.log("" + data);
+         // console.log("" + data);
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
@@ -273,7 +273,7 @@ export class BinLabelComponent implements OnInit {
       (data: any) => {
         this.showLoader = false;
         if (data != undefined) {
-          console.log("" + data);
+          //console.log("" + data);
           if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
@@ -298,8 +298,8 @@ export class BinLabelComponent implements OnInit {
           }else{
             this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
            }
-          console.log("filename:" + this.fileName);
-          console.log("filename:" + this.base64String);  
+         // console.log("filename:" + this.fileName);
+          //console.log("filename:" + this.base64String);  
         } else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         }

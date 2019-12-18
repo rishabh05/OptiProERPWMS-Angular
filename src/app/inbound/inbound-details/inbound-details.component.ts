@@ -95,7 +95,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
     this.inboundService.SubmitGoodsReceiptPO(oSubmitPOLotsObj).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+        //console.log(data);
         if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
           // alert("Goods Receipt PO generated successfully with Doc No: " + data.DocEntry);
           this.toastr.success('', this.translate.instant("Inbound_GRPOSuccessMessage") +" "+ data[0].SuccessNo);
@@ -140,7 +140,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
     this.inboundService.getVendorList().subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+      // console.log(data);
         if (data != undefined) {
           if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
@@ -409,7 +409,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
       (data: any) => {
         this.showLoader = false;
         if (data != undefined) { 
-          console.log("" + data);
+         // console.log("" + data);
           if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));

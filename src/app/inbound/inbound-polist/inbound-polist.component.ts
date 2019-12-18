@@ -98,10 +98,10 @@ export class InboundPolistComponent implements OnInit {
     this.showGRPOButton = false;
 
     if(this.savedStateExists){
-      console.log("default setting","grid settings available");
+      //console.log("default setting","grid settings available");
       this.gridSettings = this.mapGridSettings(this.persistingService.get('gridSettings'))
     }else{
-      console.log("default setting","grid settings not available");
+      //console.log("default setting","grid settings not available");
       //load with default settings.s
     }
   }
@@ -128,7 +128,7 @@ export class InboundPolistComponent implements OnInit {
       this.inboundMasterComponent.selectedVernder, this.itemCode).subscribe(
         (data: any) => {
           this.showLoader = false;
-          console.log("get polist response:");
+        //  console.log("get polist response:");
           if (data != undefined) {
             if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
               this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
@@ -137,7 +137,7 @@ export class InboundPolistComponent implements OnInit {
             }
             this.showLookupLoader = false;
             this.serviceData = data.Table;
-            console.log("get polist response serviceData:", this.serviceData);
+        //    console.log("get polist response serviceData:", this.serviceData);
             this.lookupfor = "POList";
           } else {
             this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
@@ -160,13 +160,13 @@ export class InboundPolistComponent implements OnInit {
 
   }
   onItemlookupClick() {
-    console.log("item lookup click :");
+    //console.log("item lookup click :");
     this.showLoader = true;
     this.inboundService.getItemList(this.futurepo, this.inboundMasterComponent.selectedVernder,
       this.poCode).subscribe(
         (data: any) => {
           this.showLoader = false;
-          console.log(data);
+         // console.log(data);
           if (data != undefined) {
             if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
               this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
@@ -204,8 +204,8 @@ export class InboundPolistComponent implements OnInit {
       this.poCode).subscribe(
         (data: any) => {
           this.showLoader = false;
-          console.log("api call resonse section :openPOLines()");
-          console.log(data);
+         // console.log("api call resonse section :openPOLines()");
+         // console.log(data);
           this.showNonTrackItem = false;
           this.showBatchTrackItem = false;
           this.showSerialTrackItem = false;
@@ -254,7 +254,7 @@ export class InboundPolistComponent implements OnInit {
               this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
-          console.log("api call resonse section end of if :openPOLines()");
+       //  console.log("api call resonse section end of if :openPOLines()");
         },
         error => {
           this.showLoader = false;
@@ -352,7 +352,7 @@ export class InboundPolistComponent implements OnInit {
       data => {
         this.showLoader = false;
         if (data != undefined && data.length > 0) {
-          console.log("" + data);
+         // console.log("" + data);
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
@@ -398,10 +398,10 @@ export class InboundPolistComponent implements OnInit {
   getAutoLotForN(itemCode: string) {
     this.inboundService.getAutoLot(itemCode).subscribe(
       (data: any) => {
-        console.log(data);
+        //console.log(data);
         if (data.Table != undefined) {
           this.autoLot = data.Table;
-          console.log("autolot value from polist:" + this.autoLot);
+         // console.log("autolot value from polist:" + this.autoLot);
         } else if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
           this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
             this.translate.instant("CommonSessionExpireMsg"));
@@ -439,7 +439,7 @@ export class InboundPolistComponent implements OnInit {
         console.log(data);
         if (data.Table != undefined) {
           this.autoLot = data.Table;
-          console.log("autolot value from polist:" + this.autoLot);
+          //console.log("autolot value from polist:" + this.autoLot);
         } else if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
           this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
             this.translate.instant("CommonSessionExpireMsg"));
@@ -509,8 +509,8 @@ export class InboundPolistComponent implements OnInit {
         }
       }
     }
-    console.log("OpenPOlines items size:", this.openPOLinesModel.length);
-    console.log("OpenPOlines items :", JSON.stringify(this.openPOLinesModel));
+   // console.log("OpenPOlines items size:", this.openPOLinesModel.length);
+    //console.log("OpenPOlines items :", JSON.stringify(this.openPOLinesModel));
   }
 
   copyRemaingItemtoMainArray(unmatchedPOLinesModel: any[]) {
@@ -804,7 +804,7 @@ export class InboundPolistComponent implements OnInit {
     this.inboundService.getRevBins(this.openPOLinesModel[0].QCREQUIRED, itemCode).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+       // console.log(data);
         if (data != null) {
           if (data.length > 0) {
             this.RecvbBinvalue = data[0].DefaultBin;

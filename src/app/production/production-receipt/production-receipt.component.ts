@@ -113,8 +113,8 @@ export class ProductionReceiptComponent implements OnInit {
     this.enteredQty = Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));
     this.acceptQty =  Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));//ye niche vali field jo calculation se dikhate hai.
     this.rjQty =  Number(this.defaultQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));//ye niche vali field jo calculation se dikhate hai.
-    console.log("entered qty"+this.enteredQty);
-    console.log("acceptQty qty"+this.acceptQty);
+    //console.log("entered qty"+this.enteredQty);
+    //console.log("acceptQty qty"+this.acceptQty);
     this.dateFormat = localStorage.getItem("DATEFORMAT");
   }
 
@@ -136,7 +136,7 @@ export class ProductionReceiptComponent implements OnInit {
     }
     this.productionService.isBinExists(this.binNo).subscribe(
       (data: any) => {
-        console.log(data);
+       // console.log(data);
         if (data != null) {
           if (data.length > 0) {
             if (data[0].Result == "0") {
@@ -174,7 +174,7 @@ export class ProductionReceiptComponent implements OnInit {
     // case when only single item is going to submit.
     if (this.Lots.length == 0 && this.RejectLots.length == 0) {
       // object is empty.
-      console.log("object is empty");
+     // console.log("object is empty");
       //means user comming first time and directly clicking on submit
       if (this.validateForm() == false) {
         return;
@@ -968,7 +968,7 @@ export class ProductionReceiptComponent implements OnInit {
 
   viewAcceptDeleteItem($event,rowIndex){
     //splice item from Array. and update grid.
-    console.log("event at delete click:"+JSON.stringify($event));
+   // console.log("event at delete click:"+JSON.stringify($event));
     var itemToDelete = this.Lots[rowIndex];
     this.acceptQty = this.acceptQty - itemToDelete.LotQty;
     if(this.acceptQty==0){ // if after substracting accpet qty become 0 then show 0.0000
@@ -1000,7 +1000,7 @@ export class ProductionReceiptComponent implements OnInit {
 
   viewRejectDeleteItem($event,rowIndex){
     //splice item from Array. and update grid.
-    console.log("event at delete click:"+JSON.stringify($event));
+   // console.log("event at delete click:"+JSON.stringify($event));
     var itemToDelete = this.RejectLots[rowIndex];
     this.rjQty = this.rjQty - itemToDelete.LotQty;
     if(this.rjQty==0){ // if after substracting accpet qty become 0 then show 0.0000

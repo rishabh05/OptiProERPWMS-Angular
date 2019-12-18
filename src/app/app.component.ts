@@ -36,7 +36,7 @@ export class AppComponent {
   }
 
   svgSprite(){
-    console.log("SVG Sprite version : " + this.svgVersion);
+    //console.log("SVG Sprite version : " + this.svgVersion);
     let that = this;
     if (!document.createElementNS || !document.createElementNS('http://www.w3.org/2000/svg', 'svg').createSVGRect)
           return true;

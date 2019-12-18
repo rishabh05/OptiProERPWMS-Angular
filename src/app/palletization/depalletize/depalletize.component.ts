@@ -45,10 +45,10 @@ export class DepalletizeComponent implements OnInit {
     // this.commonservice.getPalletsOfSameWarehouse("").subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+      //  console.log(data);
         if (data != null) {
           if (data.length > 0) {
-            console.log(data);
+           // console.log(data);
             this.showLoader = false;
             this.serviceData = data;
             this.showLookup = true;
@@ -89,7 +89,7 @@ export class DepalletizeComponent implements OnInit {
     this.commonservice.isPalletValid(this.palletNo).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+       // console.log(data);
         if (data != null) {
           if (data.length > 0) {
             if (data[0].Result == "0") {
@@ -162,7 +162,7 @@ export class DepalletizeComponent implements OnInit {
     this.commonservice.GetPalletData(this.palletNo).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+       // console.log(data);
         if (data != null) {
           this.palletData = data;
         }
@@ -188,7 +188,7 @@ export class DepalletizeComponent implements OnInit {
     this.commonservice.depalletize(this.palletNo).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+       // console.log(data);
         if (data != null && data != undefined && data.length > 0) {
           if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
             this.toastr.success('', this.translate.instant("Plt_DePalletize_success"));

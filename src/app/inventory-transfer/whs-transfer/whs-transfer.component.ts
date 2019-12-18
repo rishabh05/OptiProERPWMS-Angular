@@ -58,7 +58,7 @@ export class WhsTransferComponent implements OnInit {
               this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
               return;
           } 
-          console.log(data);
+         // console.log(data);
           this.showLookupLoader = false;
           this.serviceData = data;
           this.lookupfor = "fromWhsList";
@@ -88,7 +88,7 @@ export class WhsTransferComponent implements OnInit {
               this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
               return;
           } 
-          console.log(data);
+        //  console.log(data);
           this.showLookupLoader = false;
           this.serviceData = data;
           this.lookupfor = "toWhsList";
@@ -163,7 +163,7 @@ export class WhsTransferComponent implements OnInit {
               this.translate.instant("CommonSessionExpireMsg"));
               return;
           } 
-          console.log(data);
+          //console.log(data);
           if (data[0].Result == "0") {
             this.toastr.error('', this.translate.instant("InvalidWhsErrorMsg"));
             this.toWhse = "";

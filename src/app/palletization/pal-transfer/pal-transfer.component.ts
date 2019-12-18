@@ -57,10 +57,10 @@ export class PalTransferComponent implements OnInit {
     this.commonservice.GetPalletsWithRowsPresent().subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+        //console.log(data);
         if (data != null) {
           if (data.length > 0) {
-            console.log(data);
+          //  console.log(data);
             this.showLoader = false;
             this.serviceData = data;
             this.showLookup = true;
@@ -93,17 +93,17 @@ export class PalTransferComponent implements OnInit {
     } 
     else if (from == "to_pallet") {
       code = this.fromPalletNo;
-      console.log("code: " + code);
+     // console.log("code: " + code);
     }
 
     this.showLoader = true;
     this.commonservice.getPalletsOfSameWarehouse(code).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+       // console.log(data);
         if (data != null) {
           if (data.length > 0) {
-            console.log(data);
+          //  console.log(data);
             this.showLoader = false;
             this.serviceData = data;
             this.showLookup = true;
@@ -166,7 +166,7 @@ export class PalTransferComponent implements OnInit {
     this.commonservice.isPalletValid(plt).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+       // console.log(data);
         if (data != null) {
           if (data.length > 0) {
             if (from == "from_pallet") {
@@ -261,7 +261,7 @@ export class PalTransferComponent implements OnInit {
     this.commonservice.GetPalletData(this.fromPalletNo).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+       // console.log(data);
         if (data != null) {
           this.finalPalletData = [];
           this.palletData = data;
@@ -330,7 +330,7 @@ export class PalTransferComponent implements OnInit {
     this.commonservice.palletTransfer(this.fromPalletNo, this.toPalletNo).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+       // console.log(data);
         if (data != null && data != undefined && data.length > 0) {
           if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
             this.toastr.success('', this.translate.instant("Plt_Transfer_success"));
@@ -377,7 +377,7 @@ export class PalTransferComponent implements OnInit {
     this.commonservice.createNewPallet(palletNo, binNo).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+       // console.log(data);
         if (data != null) {
           if (data.length > 0) {
             this.newCreatedPalletNo = data;
@@ -405,7 +405,7 @@ export class PalTransferComponent implements OnInit {
     this.showHideGridToggle = false;
     this.showHideBtnTxt = this.translate.instant("showGrid");
 
-    console.log(this.toPalletNo);
+    //console.log(this.toPalletNo);
     this.palletData = [];
     this.finalPalletData = [];
     // this.fromPalletNo = '';
@@ -440,7 +440,7 @@ export class PalTransferComponent implements OnInit {
   }
 
   getInputDialogValue($event) {
-    console.log("getInputDialogValue " + event)
+   // console.log("getInputDialogValue " + event)
     this.showInputDialogFlag = false;
     if ($event.Status == "yes") {
       switch ($event.From) {
