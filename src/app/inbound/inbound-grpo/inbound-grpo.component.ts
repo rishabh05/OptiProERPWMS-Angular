@@ -317,6 +317,8 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
               if (this.defaultRecvBin == true) {
                 if(this.openPOLineModel[0].QCREQUIRED == "Y"){
                   this.RecvbBinvalue = data[0].BINNO;
+                } else if(data[0].DefaultBin == undefined || data[0].DefaultBin == null || data[0].DefaultBin == ""){
+                  this.RecvbBinvalue = data[0].BINNO;
                 } else {
                   this.RecvbBinvalue = data[0].DefaultBin;
                 }

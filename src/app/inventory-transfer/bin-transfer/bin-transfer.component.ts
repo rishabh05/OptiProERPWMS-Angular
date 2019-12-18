@@ -67,6 +67,8 @@ export class BinTransferComponent implements OnInit {
   selectedPallets: any = [];
   checkChangeEvent: any;
   showBinFields: boolean=true;
+  binOfSelectedPallet: any = "";
+  palletList: any = [];
 
   constructor(private commonservice: Commonservice, private activatedRoute: ActivatedRoute,
     private router: Router, private inventoryTransferService: InventoryTransferService,
@@ -1008,6 +1010,12 @@ export class BinTransferComponent implements OnInit {
     }
     else if (this.lookupfor == "PalletList") {
       this.palletNo = $event[0];
+      for(let i =0 ;i<this.palletList.length;i++){
+        if(this.palletNo == this.palletList[i].Code){
+          this.binOfSelectedPallet = this.palletList[i].U_OPTM_BIN;
+          break;
+        }
+      }
     }
     else {
       if (this.lookupfor == "ItemsList") {
@@ -1246,6 +1254,7 @@ export class BinTransferComponent implements OnInit {
           if (data.length > 0) {
             this.serviceData = data;
             this.lookupfor = "PalletList";
+            this.palletList = this.serviceData;
             return;
           } else {
             this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
@@ -1391,6 +1400,11 @@ export class BinTransferComponent implements OnInit {
 
     if (this.toBin == undefined || this.toBin == "") {
       this.toastr.error('', this.translate.instant("InvTransfer_ToBinMsg"));
+      return;
+    }
+
+    if (this.binOfSelectedPallet == this.toBin) {
+      this.toastr.error('', this.translate.instant("InvTransfer_SameBinMsg"));
       return;
     }
 

@@ -403,5 +403,6 @@
   "InvTransfer_SubmitITRMsg": "Do you want to submit ITR?",
   "InvTransfer_ITRTransferSuccess": "Submitted successfully",
   "ViewItems": "View Items",
+  "InvTransfer_SameBinMsg": "Pallet already belongs to selected ToBin.",
   "Dummy": "Dummy"
 }
