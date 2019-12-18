@@ -206,10 +206,7 @@ export class BinTransferComponent implements OnInit {
   }
 
   OnItemCodeChange() {
-    var inputValue = (<HTMLInputElement>document.getElementById('binTransferScanItemCodeInput')).value;
-    if (inputValue.length > 0) {
-      this.itemCode = inputValue;
-    }
+    
 
     if (this.itemCode == "" || this.itemCode == undefined) {
       return;
@@ -300,10 +297,7 @@ export class BinTransferComponent implements OnInit {
 
   OnLotChange() {
     
-    var inputValue = (<HTMLInputElement>document.getElementById('binTransferLotInput')).value;
-    if (inputValue.length > 0) {
-      this.lotValue = inputValue;
-    }
+    
 
     if (this.lotValue == "" || this.lotValue == undefined) {
       return;
@@ -530,10 +524,7 @@ export class BinTransferComponent implements OnInit {
 
   OnFromBinChange() {
 
-    var inputValue = (<HTMLInputElement>document.getElementById('binTransferFromBinInput')).value;
-    if (inputValue.length > 0) {
-      this.lotValue = inputValue;
-    }
+    
 
     if (this.fromBin == "" || this.fromBin == undefined) {
       return;
@@ -586,10 +577,7 @@ export class BinTransferComponent implements OnInit {
 
   OnToBinChange() {
     
-    var inputValue = (<HTMLInputElement>document.getElementById('binTransferToBinInput')).value;
-    if (inputValue.length > 0) {
-      this.lotValue = inputValue;
-    }
+    
     if (this.toBin == "" || this.toBin == undefined) {
       return;
     }
@@ -739,6 +727,7 @@ export class BinTransferComponent implements OnInit {
     console.log("radio selection: " + this.radioSelected);
     if (this.radioSelected == 1) { // radio selection == 1 for by pallet
       if (this.TransferedItemsDetail.length == 0) {
+        this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         return;
       }
       this.SubmitFinally();
@@ -1279,10 +1268,7 @@ export class BinTransferComponent implements OnInit {
 
   onPalletChange() {
     
-    var inputValue = (<HTMLInputElement>document.getElementById('binTransferScanByPalletPalletNoInput')).value;
-    if (inputValue.length > 0) {
-      this.palletNo = inputValue;
-    }
+   
     if (this.palletNo == undefined || this.palletNo == "") {
       return;
     }
@@ -1426,27 +1412,52 @@ export class BinTransferComponent implements OnInit {
 
 
   onHiddenBinTransferItemCodeScanClick(){
+    var inputValue = (<HTMLInputElement>document.getElementById('binTransferScanItemCodeInput')).value;
+    if (inputValue.length > 0) {
+      this.itemCode = inputValue;
+    }
     this.OnItemCodeChange();
   }
 
 
   onHiddenLotScanClick(){
+    var inputValue = (<HTMLInputElement>document.getElementById('binTransferLotInput')).value;
+    if (inputValue.length > 0) {
+      this.lotValue = inputValue;
+    }
    this.OnLotChange();
   }
 
   onHiddenFromBinScanClick(){
+    var inputValue = (<HTMLInputElement>document.getElementById('binTransferFromBinInput')).value;
+    if (inputValue.length > 0) {
+      this.fromBin = inputValue;
+    }
     this.OnFromBinChange();
   }
 
   onHiddenToBinScanClick(){
+    var inputValue = (<HTMLInputElement>document.getElementById('binTransferToBinInput')).value;
+    if (inputValue.length > 0) {
+      this.toBin = inputValue;
+    }
     this.OnToBinChange();
   }
 
   onHiddenByPalPalNoScanClick(){
+    var inputValue = (<HTMLInputElement>document.getElementById('binTransferScanByPalletPalletNoInput')).value;
+    if (inputValue.length > 0) {
+      this.palletNo = inputValue;
+    }
     this.onPalletChange();
   }
 
   onHiddenByPalToBinScanClick(){
+    var inputValue = (<HTMLInputElement>document.getElementById('binTransferToBinInput')).value;
+    if (inputValue.length > 0) {
+      this.toBin = inputValue;
+    }
+    
     this.OnToBinChange();
   }
   

@@ -367,11 +367,19 @@ export class ProductionReceiptItemsListComponent implements OnInit {
       this.orderNumber = $event[0];
       this.item = $event[1];
       this.getProductionDetail();
-      // } else if (this.lookupfor == "ToBinList") { // bin list next page pr aaigi ab
-      //   this.binNo = $event[0];
-      //   this.whsCode = $event[1];
-      // }
+    
     }
   }
+}
+onCancelClk() {
+  this.router.navigate(['home/dashboard']);
+}
+
+onHiddenReceiptItemOrderScanClick(){
+  var inputValue = (<HTMLInputElement>document.getElementById('receiptItemOrderNoInput')).value;
+    if (inputValue.length > 0) {
+      this.orderNumber= inputValue;
+    }
+  this.OnOrderValueChange();
 }
 }

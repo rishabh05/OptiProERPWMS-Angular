@@ -462,7 +462,7 @@ export class InboundPolistComponent implements OnInit {
             //     this.ShowBins();
             //   }
             // }
-            this.ShowBins();
+            this.ShowBins(itemCode);
           } else {
             localStorage.setItem("PalletizationEnabledForItem", "True");
             this.inboundMasterComponent.inboundComponent = 3;
@@ -600,6 +600,7 @@ export class InboundPolistComponent implements OnInit {
           this.addToGRPOArray.POReceiptLots.push({
             DiServerToken: localStorage.getItem("Token"),
             PONumber: this.oSavedPOLotsArray.POReceiptLots[i].PONumber,
+            DocEntry: this.oSavedPOLotsArray.POReceiptLots[i].DocEntry,
             CompanyDBId: localStorage.getItem("CompID"),
             LineNo: this.oSavedPOLotsArray.POReceiptLots[i].LineNo,
             ShipQty: this.oSavedPOLotsArray.POReceiptLots[i].ShipQty,
@@ -799,14 +800,14 @@ export class InboundPolistComponent implements OnInit {
   }
 
 
-  public ShowBins() {
-    this.inboundService.getRevBins(this.openPOLinesModel[0].QCREQUIRED).subscribe(
+  public ShowBins(itemCode) {
+    this.inboundService.getRevBins(this.openPOLinesModel[0].QCREQUIRED, itemCode).subscribe(
       (data: any) => {
         this.showLoader = false;
         console.log(data);
         if (data != null) {
           if (data.length > 0) {
-            this.RecvbBinvalue = data[0].BINNO;
+            this.RecvbBinvalue = data[0].DefaultBin;
           }
 
           // if(this.openPOLinesModel[0].QCREQUIRED == 'Y'){
@@ -921,6 +922,7 @@ export class InboundPolistComponent implements OnInit {
     oSubmitPOLotsObj.POReceiptLots.push({
       DiServerToken: localStorage.getItem("Token"),
       PONumber: this.poCode,
+      DocEntry: this.openPOLineModel.DOCENTRY,
       CompanyDBId: localStorage.getItem("CompID"),
       LineNo: this.openPOLineModel.LINENUM,
       ShipQty: this.openPOLineModel.RPTQTY.toString(),

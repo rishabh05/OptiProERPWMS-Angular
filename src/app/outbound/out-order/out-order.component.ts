@@ -154,10 +154,7 @@ export class OutOrderComponent implements OnInit {
 
   fromEvent: any = ""
   onOrderNoBlur() {
-    var inputValue = (<HTMLInputElement>document.getElementById('OutOrderOrderNoInput')).value;
-    if (inputValue.length > 0) {
-      this.orderNumber = inputValue;
-    }
+   
 
     if (this.orderNumber)
       this.openSOOrderList(this.orderNumber);
@@ -1130,10 +1127,7 @@ export class OutOrderComponent implements OnInit {
 
   onPalletChange() {
 
-    var inputValue = (<HTMLInputElement>document.getElementById('outOrderPalletNoInput')).value;
-    if (inputValue.length > 0) {
-      this.palletNo = inputValue;
-    }
+    
 
     if (this.palletNo == undefined || this.palletNo == "") {
       return;
@@ -1378,10 +1372,7 @@ export class OutOrderComponent implements OnInit {
 
   ItemCode: string;
   public onItemChange() {
-    var inputValue = (<HTMLInputElement>document.getElementById('outOrderItemcodeinput')).value;
-    if (inputValue.length > 0) {
-      this.palletNo = inputValue;
-    }
+   
 
     if (this.selectedCustomer != null && this.selectedCustomer != undefined
       && this.selectedCustomer.CustomerCode != '' && this.selectedCustomer.CustomerCode != null) {
@@ -1458,10 +1449,9 @@ export class OutOrderComponent implements OnInit {
   }
 
   onITRChange() {
-    var inputValue = (<HTMLInputElement>document.getElementById('outOrderItrCodeInput')).value;
-    if (inputValue.length > 0) {
-      this.orderNumber = inputValue;
-    }
+   if(this.itrCode == null || this.itrCode == undefined || this.itrCode == ""){
+      return;
+   }
 
    // console.log("onITRChange :");
     this.showLookup = false;
@@ -1470,7 +1460,7 @@ export class OutOrderComponent implements OnInit {
       (data: any) => {
         this.showLookupLoader = false;
      //   console.log("get ITR response:");
-        if (data != undefined) {
+        if (data != undefined && data != null) {
           if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
@@ -1478,15 +1468,17 @@ export class OutOrderComponent implements OnInit {
           }
           this.resetITRFields();
           //
-          this.toWhse = data.Table[0].ToWhsCode;
-          this.itrCode = data.Table[0].DocEntry;
-          this.orderNumber = this.itrCode;
-          this.outbound.ITRToBinNo = {
+          if(data.Table!=undefined && data.Table.length > 0){
+            this.toWhse = data.Table[0].ToWhsCode;
+            this.itrCode = data.Table[0].DocEntry;
+            this.orderNumber = this.itrCode;
+            this.outbound.ITRToBinNo = {
             ToBin: this.toBinNo,
             ToWhse: this.toWhse
           };
           localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
           this.getITRItemList();
+          }
         } else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         }
@@ -1801,20 +1793,34 @@ export class OutOrderComponent implements OnInit {
 
 
   onHiddenOutOrderItemCodeScanClick(){
+    var inputValue = (<HTMLInputElement>document.getElementById('outOrderItemcodeinput')).value;
+    if (inputValue.length > 0) {
+      this.ItemCode = inputValue;
+    }
     this.onItemChange();
   }
 
   onHiddenOutOrderPalletScanClick(){
- 
+    var inputValue = (<HTMLInputElement>document.getElementById('outOrderPalletNoInput')).value;
+    if (inputValue.length > 0) {
+      this.palletNo = inputValue;
+    }
     this.onPalletChange();
   }
   
   onHiddenOutOrderSOScanClick(){
-
+    var inputValue = (<HTMLInputElement>document.getElementById('OutOrderOrderNoInput')).value;
+    if (inputValue.length > 0) {
+      this.orderNumber = inputValue;
+    }
     this.onOrderNoBlur();
   }
 
   onHiddenITRScanClick(){
+    var inputValue = (<HTMLInputElement>document.getElementById('outOrderItrCodeInput')).value;
+    if (inputValue.length > 0) {
+      this.itrCode = inputValue;
+    }
     this.onITRChange();
   }
 }

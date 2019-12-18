@@ -109,12 +109,16 @@ export class InboundService {
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/getUOM", jObject, this.commonService.httpOptions);
   }
 
-  getRevBins(QCrequired: string): Observable<any> {
+  getRevBins(QCrequired: string, itemcode: string): Observable<any> {
     var jObject = {
       WhsCode: JSON.stringify([{
-        CompanyDBId: localStorage.getItem("CompID"), ItemCode: '',
-        WhsCode: localStorage.getItem("whseId"), QCRequired: QCrequired,
-        PageId: "GRPO"
+        CompanyDBId: localStorage.getItem("CompID"), 
+        ItemCode: itemcode,
+        WhsCode: localStorage.getItem("whseId"), 
+        QCRequired: QCrequired,
+        PageId: "GRPO",
+        GUID: localStorage.getItem("GUID"),
+        UsernameForLic: localStorage.getItem("UserId")
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetBinsForReceiptWithReceivingBin", jObject, this.commonService.httpOptions);

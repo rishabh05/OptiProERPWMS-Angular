@@ -49,6 +49,8 @@ export class InputDialogComponent implements OnInit {
     }
 
     this.autoGeneratePallet();
+
+    this.OnBinLookupClick("OnInit");
   }
 
   public opened: boolean = true;
@@ -79,7 +81,7 @@ export class InputDialogComponent implements OnInit {
     this.opened = true;
   }
 
-  public ShowAllBins() {
+  public ShowAllBins(callFrom: string) {
     this.showLoader = true;
     this.inboundService.GetTargetBins('N', localStorage.getItem("whseId")).subscribe(
       (data: any) => {
@@ -91,9 +93,12 @@ export class InputDialogComponent implements OnInit {
               this.translate.instant("CommonSessionExpireMsg"));
             return;
           } else {
-            this.showLookup = false;
-            this.serviceData = data;
-            this.lookupfor = "toBinsList";
+            this.binNo = data[0].BINNO;
+              if(callFrom != "OnInit"){
+                this.showLookup = false;
+                this.serviceData = data;
+                this.lookupfor = "toBinsList";
+              }
           }
         } else {
           this.toastr.error('', this.translate.instant("Inbound_NoBinsAvailableMsg"));
@@ -113,12 +118,12 @@ export class InputDialogComponent implements OnInit {
   }
 
 
-  OnBinLookupClick() {
+  OnBinLookupClick(callFrom: string) {
     if (this.fromWhere != "NewPallet_GRPO") {
-      this.ShowAllBins();
+      this.ShowAllBins(callFrom);
     } else {
       this.showLoader = true;
-      this.inboundService.getRevBins('N').subscribe(
+      this.inboundService.getRevBins('N', "").subscribe(
         data => {
           this.showLoader = false;
           if (data != null && data.length > 0) {
@@ -127,9 +132,12 @@ export class InputDialogComponent implements OnInit {
                 this.translate.instant("CommonSessionExpireMsg"));
               return;
             } else {
-              this.showLookup = false;
-              this.serviceData = data;
-              this.lookupfor = "toBinsList";
+              this.binNo = data[0].BINNO;
+              if(callFrom != "OnInit"){
+                this.showLookup = false;
+                this.serviceData = data;
+                this.lookupfor = "toBinsList";
+              }
             }
           } else {
             this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));

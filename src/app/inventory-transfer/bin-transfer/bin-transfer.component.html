@@ -58,10 +58,10 @@
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
                                 <input type="text" class="form-control form-control-sm" name="itemName"
-                                    [(ngModel)]="itemName" [disabled]=true>
-                            </div>
+                                    [(ngModel)]="itemName" [attr.disabled]="true?'':null">
+                            </div> 
                         </div>
-                    </div>
+                    </div> 
 
                     <div class="form-group row" *ngIf="showBatchNo">
                         <label for="inputPassword" class="col-sm-3 col-form-label">
