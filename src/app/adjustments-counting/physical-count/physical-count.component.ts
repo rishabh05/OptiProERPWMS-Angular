@@ -314,8 +314,11 @@ export class PhysicalCountComponent implements OnInit {
             this.CheckTrackingandVisiblity();
             this.formatCountedQty();
             this.formatOnHandQty();
+            this.isLotAdded = true;
             if (savenext == "savenext") {
               this.onSaveClick(true)
+            }else if (savenext == "submit") {
+              this.onSubmitClick()
             }
           }
         }
@@ -985,7 +988,7 @@ export class PhysicalCountComponent implements OnInit {
         }
       }
       if (!this.isLotAdded) {
-        this.OnLotChange();
+        this.OnLotChange("submit");
         return;
       }
     }
