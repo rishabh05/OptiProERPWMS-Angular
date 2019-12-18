@@ -81,7 +81,7 @@ export class InputDialogComponent implements OnInit {
     this.opened = true;
   }
 
-  public ShowAllBins() {
+  public ShowAllBins(callFrom: string) {
     this.showLoader = true;
     this.inboundService.GetTargetBins('N', localStorage.getItem("whseId")).subscribe(
       (data: any) => {
@@ -93,9 +93,12 @@ export class InputDialogComponent implements OnInit {
               this.translate.instant("CommonSessionExpireMsg"));
             return;
           } else {
-            this.showLookup = false;
-            this.serviceData = data;
-            this.lookupfor = "toBinsList";
+            this.binNo = data[0].BINNO;
+              if(callFrom != "OnInit"){
+                this.showLookup = false;
+                this.serviceData = data;
+                this.lookupfor = "toBinsList";
+              }
           }
         } else {
           this.toastr.error('', this.translate.instant("Inbound_NoBinsAvailableMsg"));
@@ -115,9 +118,9 @@ export class InputDialogComponent implements OnInit {
   }
 
 
-  OnBinLookupClick(fromWhere: string) {
+  OnBinLookupClick(callFrom: string) {
     if (this.fromWhere != "NewPallet_GRPO") {
-      this.ShowAllBins();
+      this.ShowAllBins(callFrom);
     } else {
       this.showLoader = true;
       this.inboundService.getRevBins('N', "").subscribe(
@@ -130,7 +133,7 @@ export class InputDialogComponent implements OnInit {
               return;
             } else {
               this.binNo = data[0].BINNO;
-              if(fromWhere != "OnInit"){
+              if(callFrom != "OnInit"){
                 this.showLookup = false;
                 this.serviceData = data;
                 this.lookupfor = "toBinsList";

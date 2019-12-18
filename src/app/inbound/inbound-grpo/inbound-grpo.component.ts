@@ -589,6 +589,9 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
               if (this.searlNo != '' && this.searlNo != undefined && plt != '') {
                 this.MfrSerial = this.searlNo;
                 this.searlNo = this.searlNo + "-" + plt;
+              } else {
+                this.MfrSerial = this.searlNo;
+                this.searlNo = this.searlNo;
               }
               var autLotFlag = "false";
               // if (autoLots[0].AUTOLOT == "Y") {
@@ -708,6 +711,9 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         if (this.searlNo != '' && this.searlNo != undefined && plt != '') {
           this.MfrSerial = this.searlNo;
           this.searlNo = this.searlNo + "-" + plt;
+        } else {
+          this.MfrSerial = this.searlNo;
+          this.searlNo = this.searlNo;
         }
 
         var autLotFlag = "false";
