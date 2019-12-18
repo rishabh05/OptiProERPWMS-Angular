@@ -58,7 +58,7 @@
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
                                 <input type="text" class="form-control form-control-sm" name="itemName"
-                                    [(ngModel)]="itemName" [disabled]=true>
+                                    [(ngModel)]="itemName" [attr.disabled]="true?'':null">
                             </div> 
                         </div>
                     </div> 

@@ -727,6 +727,7 @@ export class BinTransferComponent implements OnInit {
     console.log("radio selection: " + this.radioSelected);
     if (this.radioSelected == 1) { // radio selection == 1 for by pallet
       if (this.TransferedItemsDetail.length == 0) {
+        this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         return;
       }
       this.SubmitFinally();
