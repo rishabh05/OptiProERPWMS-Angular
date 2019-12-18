@@ -600,6 +600,7 @@ export class InboundPolistComponent implements OnInit {
           this.addToGRPOArray.POReceiptLots.push({
             DiServerToken: localStorage.getItem("Token"),
             PONumber: this.oSavedPOLotsArray.POReceiptLots[i].PONumber,
+            DocEntry: this.oSavedPOLotsArray.POReceiptLots[i].DocEntry,
             CompanyDBId: localStorage.getItem("CompID"),
             LineNo: this.oSavedPOLotsArray.POReceiptLots[i].LineNo,
             ShipQty: this.oSavedPOLotsArray.POReceiptLots[i].ShipQty,
@@ -921,6 +922,7 @@ export class InboundPolistComponent implements OnInit {
     oSubmitPOLotsObj.POReceiptLots.push({
       DiServerToken: localStorage.getItem("Token"),
       PONumber: this.poCode,
+      DocEntry: this.openPOLineModel.DOCENTRY,
       CompanyDBId: localStorage.getItem("CompID"),
       LineNo: this.openPOLineModel.LINENUM,
       ShipQty: this.openPOLineModel.RPTQTY.toString(),

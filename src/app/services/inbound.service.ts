@@ -116,7 +116,9 @@ export class InboundService {
         ItemCode: itemcode,
         WhsCode: localStorage.getItem("whseId"), 
         QCRequired: QCrequired,
-        PageId: "GRPO"
+        PageId: "GRPO",
+        GUID: localStorage.getItem("GUID"),
+        UsernameForLic: localStorage.getItem("UserId")
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetBinsForReceiptWithReceivingBin", jObject, this.commonService.httpOptions);

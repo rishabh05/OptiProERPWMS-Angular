@@ -28,6 +28,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   noButtonText: string = "";
   openPOLineModel: OpenPOLinesModel[] = [];
   Ponumber: any;
+  DocEntry: any;
   ItemCode: any;
   OpenQty: number;
   tracking: string = "";
@@ -145,6 +146,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       this.showScanAndInputRadio = false;
       if (this.openPOLineModel != undefined && this.openPOLineModel != null) {
         this.Ponumber = this.receiptData.OrderNo;
+        this.DocEntry = this.receiptData.OrderNo;
         this.tracking = this.openPOLineModel[0].TRACKING;
         this.OpenQty = this.openPOLineModel[0].OPENQTY;
         this.ItemCode = this.openPOLineModel[0].ITEMCODE;
@@ -169,6 +171,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
       if (this.openPOLineModel != undefined && this.openPOLineModel != null) {
         this.Ponumber = this.openPOLineModel[0].DocNum;
+        this.DocEntry = this.openPOLineModel[0].DOCENTRY;
         this.tracking = this.openPOLineModel[0].TRACKING;
         this.OpenQty = this.openPOLineModel[0].OPENQTY;
         this.ItemCode = this.openPOLineModel[0].ITEMCODE;
@@ -1414,6 +1417,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     oSubmitPOLotsObj.POReceiptLots.push({
       DiServerToken: localStorage.getItem("Token"),
       PONumber: this.Ponumber,
+      DocEntry: this.DocEntry,
       CompanyDBId: localStorage.getItem("CompID"),
       LineNo: this.openPOLineModel[0].LINENUM,
       ShipQty: this.openPOLineModel[0].RPTQTY.toString(),
