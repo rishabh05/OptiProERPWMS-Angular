@@ -1449,7 +1449,9 @@ export class OutOrderComponent implements OnInit {
   }
 
   onITRChange() {
-   
+   if(this.itrCode == null || this.itrCode == undefined || this.itrCode == ""){
+      return;
+   }
 
    // console.log("onITRChange :");
     this.showLookup = false;
@@ -1458,7 +1460,7 @@ export class OutOrderComponent implements OnInit {
       (data: any) => {
         this.showLookupLoader = false;
      //   console.log("get ITR response:");
-        if (data != undefined) {
+        if (data != undefined && data != null) {
           if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
@@ -1466,15 +1468,17 @@ export class OutOrderComponent implements OnInit {
           }
           this.resetITRFields();
           //
-          this.toWhse = data.Table[0].ToWhsCode;
-          this.itrCode = data.Table[0].DocEntry;
-          this.orderNumber = this.itrCode;
-          this.outbound.ITRToBinNo = {
+          if(data.Table!=undefined && data.Table.length > 0){
+            this.toWhse = data.Table[0].ToWhsCode;
+            this.itrCode = data.Table[0].DocEntry;
+            this.orderNumber = this.itrCode;
+            this.outbound.ITRToBinNo = {
             ToBin: this.toBinNo,
             ToWhse: this.toWhse
           };
           localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
           this.getITRItemList();
+          }
         } else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         }
