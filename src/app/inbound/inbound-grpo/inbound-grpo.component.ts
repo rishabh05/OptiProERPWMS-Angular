@@ -1843,6 +1843,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         //console.log("value of lots" + $event.LOTNO);
         this.targetWhse = $event[0];
         //this.itemCode = $event[2];
+        this.targetBin = "";
 
       } else if (this.lookupfor == "PalletList") {
         this.palletValue = $event[0];
@@ -1905,10 +1906,12 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
             if (data[0].Result == "0") {
               this.toastr.error('', this.translate.instant("InvalidWhsErrorMsg"));
               this.targetWhse = "";
+              this.targetBin = "";
               return;
             }
             else {
               this.targetWhse = data[0].ID;
+              this.targetBin = "";
               // oCurrentController.isReCeivingBinExist();
             }
           }
