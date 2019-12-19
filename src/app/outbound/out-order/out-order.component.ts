@@ -1093,6 +1093,10 @@ export class OutOrderComponent implements OnInit {
   }
 
   public getPalletList() {
+    if(this.soItemsDetail==undefined || this.soItemsDetail==null || this.soItemsDetail.length==0){
+      this.toastr.error('', this.translate.instant("InvTransfer_ITRRequired"));
+      return;
+    }
     this.showLookupLoader = true;
     var itemCodeArray = Array.prototype.map.call(this.soItemsDetail, function (item) { return "'" + item.ITEMCODE + "'"; }).join(",");
     this.commonservice.GetPalletListForOutBound(itemCodeArray).subscribe(

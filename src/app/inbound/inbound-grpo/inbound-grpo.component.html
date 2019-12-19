@@ -12,7 +12,7 @@
                 <div class="col-12 col-sm-12 col-md-12">
                     <kendo-grid class="no-shadow" [kendoGridBinding]="openPOLineModel" [resizable]="true" [pageSize]="2"
                         [pageable]="false" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
-                        [height]=gridHeight [selectable]="true" (selectionChange)="openPOByUOM($event,soItemsDetail.ITEMCODE)"
+                        [height]=gridHeight [selectable]="true" (selectionChange)="getUOMList()"
                         #gridItem>
 
                         <!-- grid for mobile start -->

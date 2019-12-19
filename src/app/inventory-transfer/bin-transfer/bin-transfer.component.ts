@@ -591,6 +591,7 @@ export class BinTransferComponent implements OnInit {
           if (data.length > 0) {
             if (data[0].Result == "0") {
               this.toastr.error('', this.translate.instant("INVALIDBIN"));
+              this.toBin = "";
               return;
             }
             else {
