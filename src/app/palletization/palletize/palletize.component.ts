@@ -63,10 +63,10 @@ export class PalletizeComponent implements OnInit {
     this.commonservice.getPalletList(1, this.itemCode).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+      //  console.log(data);
         if (data != null) {
           if (data.length > 0) {
-            console.log(data);
+           // console.log(data);
             this.showLoader = false;
             this.serviceData = data;
             this.showLookup = true;
@@ -105,7 +105,7 @@ export class PalletizeComponent implements OnInit {
     this.commonservice.isPalletValid(this.palletNo).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+      //  console.log(data);
         if (data != null) {
           if (data.length > 0) {
             if (data[0].Result == "0") {
@@ -195,7 +195,7 @@ export class PalletizeComponent implements OnInit {
       data => {
         this.showLoader = false;
         if (data != undefined && data.length > 0) {
-          console.log("getItemsToPalletize - " + JSON.stringify(data));
+         // console.log("getItemsToPalletize - " + JSON.stringify(data));
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
@@ -233,7 +233,7 @@ export class PalletizeComponent implements OnInit {
       data => {
         this.showLoader = false;
         if (data != undefined && data.length > 0) {
-          console.log("" + data);
+          //console.log("" + data);
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
@@ -295,7 +295,7 @@ export class PalletizeComponent implements OnInit {
       data => {
         this.showLoader = false;
         if (data != undefined && data.length > 0) {
-          console.log("getItemsToPalletize - " + JSON.stringify(data));
+          //console.log("getItemsToPalletize - " + JSON.stringify(data));
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
@@ -339,7 +339,7 @@ export class PalletizeComponent implements OnInit {
       (data: any) => {
         this.showLoader = false;
         if (data != undefined && data.length > 0) {
-          console.log("" + data);
+         // console.log("" + data);
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
@@ -479,7 +479,7 @@ export class PalletizeComponent implements OnInit {
     this.commonservice.palletize(oPalletReq).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+       // console.log(data);
         if (data != null && data != undefined && data.length > 0) {
           if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
             this.toastr.success('', this.translate.instant("Plt_PalletizedSuccess"));
@@ -522,8 +522,8 @@ export class PalletizeComponent implements OnInit {
   }
 
   openConfirmForDelete(index: any, item: any) {
-    console.log("index: " + index)
-    console.log("item: " + item)
+   // console.log("index: " + index)
+  //  console.log("item: " + item)
     this.savedPalletsArray.splice(index, 1);
   }
 
@@ -577,7 +577,7 @@ export class PalletizeComponent implements OnInit {
     this.commonservice.createNewPallet(palletNo, binNo).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+       // console.log(data);
         if (data != null) {
           if (data.length > 0) {
             this.newCreatedPalletNo = data;
@@ -615,7 +615,7 @@ export class PalletizeComponent implements OnInit {
   }
 
   getInputDialogValue($event) {
-    console.log("getInputDialogValue " + event)
+   // console.log("getInputDialogValue " + event)
     this.showInputDialogFlag = false;
     if ($event.Status == "yes") {
       switch ($event.From) {

@@ -86,7 +86,7 @@ export class InputDialogComponent implements OnInit {
     this.inboundService.GetTargetBins('N', localStorage.getItem("whseId")).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+       // console.log(data);
         if (data != null && data.length > 0) {
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
@@ -206,7 +206,7 @@ export class InputDialogComponent implements OnInit {
     this.showLoader = true;
     this.commonservice.autoGeneratePallet().subscribe(
       data => {
-        console.log(data);
+        //console.log(data);
         this.showLoader = false;
         if (data != null) {
           if (data.length > 0) {

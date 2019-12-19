@@ -28,7 +28,7 @@ export class NumberFormatPipe implements PipeTransform {
         formattedNo = formattedNo + "0";
       }
     }
-    console.log("case when no. not has decimal:", formattedNo);
+    //console.log("case when no. not has decimal:", formattedNo);
     return formattedNo;
   }
 

@@ -78,7 +78,7 @@ export class PhysicalCountComponent implements OnInit {
     this.phycountService.getPhysicalCountDataView().subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+       // console.log(data);
         if (data != undefined) {
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
@@ -113,7 +113,7 @@ export class PhysicalCountComponent implements OnInit {
     this.phycountService.getItemList(this.DocNo).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+        //console.log(data);
         if (data != undefined) {
           if (data.ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
@@ -143,7 +143,7 @@ export class PhysicalCountComponent implements OnInit {
     this.phycountService.ShowBILOTList(this.ItemCode, this.BinNo).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+       // console.log(data);
         if (data != undefined) {
           if (data.ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
@@ -340,7 +340,7 @@ export class PhysicalCountComponent implements OnInit {
     this.phycountService.GetSavedDocNoDetails(this.DocNo, this.ItemCode, this.BinNo, this.IsteamCount).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+        //console.log(data);
         if (data != undefined) {
           if (data.ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,

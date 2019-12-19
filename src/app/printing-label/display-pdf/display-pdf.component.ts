@@ -46,7 +46,7 @@ export class DisplayPdfComponent implements OnInit, OnDestroy {
   public opened: boolean = true;
 
   public close() {
-    console.log("PDF dialog  close called");
+    //console.log("PDF dialog  close called");
     this.pdfClose.emit({close: true});
     this.opened = false;
   } 
@@ -56,7 +56,7 @@ export class DisplayPdfComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(){
-    console.log("distroy")
+   // console.log("distroy")
   }
 
 }

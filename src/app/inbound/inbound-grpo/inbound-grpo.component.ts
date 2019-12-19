@@ -123,7 +123,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     // });
   }
   ngAfterViewInit(): void {
-    console.log('view after init');
+    //console.log('view after init');
     // this.RecBinVal.nativeElement.focus();
     // this.itemCodeInput.nativeElement.focus();
   }
@@ -306,7 +306,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       this.inboundService.getRevBins(this.openPOLineModel[0].QCREQUIRED, this.openPOLineModel[0].ITEMCODE).subscribe(
         (data: any) => {
           this.showLoader = false;
-          console.log(data);
+         // console.log(data);
           if (data != null) {
             if (data.length > 0) {
               if (data[0].ErrorMsg == "7001") {
@@ -325,7 +325,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
                 this.defaultRecvBin = false
               }
               else {
-                console.log(data);
+               // console.log(data);
                 this.showLookupLoader = false;
                 this.serviceData = data;
                 this.lookupfor = "RecvBinList";
@@ -362,7 +362,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     this.inboundService.binChange(localStorage.getItem("whseId"), this.RecvbBinvalue).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+        //console.log(data);
         if (data != null) {
           if (data.length > 0) {
             if (data[0].Result == "0") {
@@ -414,7 +414,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     this.inboundService.getUOMs(this.openPOLineModel[0].ITEMCODE).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log("UOM data response:", data);
+      //  console.log("UOM data response:", data);
         this.openPOLineModel[0].UOMList = data;
         if (this.openPOLineModel[0].UOMList.length > 0) {
           this.uomSelectedVal = this.openPOLineModel[0].UOMList[0];
@@ -1612,7 +1612,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     this.inboundService.SubmitGoodsReceiptPO(oSubmitPOLotsObj).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+        //console.log(data);
         if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
 
           if (this.operationType == "All") {
@@ -1746,7 +1746,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     this.targetBinSubs = this.inboundService.GetTargetBins("N", this.targetWhse).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+        //console.log(data);
         if (data != null) {
 
           if (data.length > 0) {
@@ -1755,7 +1755,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
                 this.translate.instant("CommonSessionExpireMsg"));
               return;
             }else{
-              console.log(data);
+             // console.log(data);
               this.showLookupLoader = false;
               this.serviceData = data;
               this.lookupfor = "RecvBinList";
@@ -1786,7 +1786,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     this.inboundService.GetTargetBins('N', localStorage.getItem("whseId")).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+       // console.log(data);
         if (data != null) {
           if (data.length > 0) {
             if (this.defaultRecvBin == true) {
@@ -1794,7 +1794,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
               this.defaultRecvBin = false
             }
             else {
-              console.log(data);
+            //  console.log(data);
               this.showLookupLoader = false;
               this.serviceData = data;
               this.lookupfor = "RecvBinList";
@@ -1839,8 +1839,8 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
       }
       else if (this.lookupfor == "toWhsList") {
-        console.log("value of lots" + $event);
-        console.log("value of lots" + $event.LOTNO);
+       // console.log("value of lots" + $event);
+        //console.log("value of lots" + $event.LOTNO);
         this.targetWhse = $event[0];
         //this.itemCode = $event[2];
 
@@ -1857,7 +1857,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     this.inboundService.binChange(this.targetWhse, this.targetBin).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+       // console.log(data);
         if (data != null) {
           if (data.length > 0) {
             if (data[0].Result == "0") {
@@ -1899,7 +1899,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     this.inboundService.isWHSExists(this.targetWhse).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+        //console.log(data);
         if (data != null) {
           if (data.length > 0) {
             if (data[0].Result == "0") {
@@ -1976,7 +1976,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       (data: any) => {
         //  alert("check and scan code api call response data:"+JSON.stringify(data));
 
-        console.log("responseData: " + JSON.stringify(data));
+        //console.log("responseData: " + JSON.stringify(data));
         if (data != null) {
           if (data[0].Error != null) {
             if (data[0].Error == "Invalidcodescan") {
@@ -1989,7 +1989,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
             }
             return;
           }
-          console.log("Inapi call section openPoline::", JSON.stringify(this.openPOLineModel));
+          //console.log("Inapi call section openPoline::", JSON.stringify(this.openPOLineModel));
           // now check if the  code is for avilable item or not other wise invalid item error.
           var itemCode = this.openPOLineModel[0].ITEMCODE.toUpperCase()
           if (piManualOrSingleDimentionBarcode == 0) {
@@ -2064,7 +2064,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       (data: any) => {
         this.showLoader = false;
         if (data != undefined) {
-          console.log("" + data);
+         // console.log("" + data);
           if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
@@ -2088,7 +2088,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
             this.inboundMasterComponent.inboundComponent = 1;
           }
           //  console.log("filename:" + this.fileName);
-          console.log("filename:" + this.base64String);
+         // console.log("filename:" + this.base64String);
         } else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         }
@@ -2108,7 +2108,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   closePDF() {
     //close current screen and redirect to first screen.
     this.inboundMasterComponent.inboundComponent = 1;
-    console.log("PDF dialog is closed");
+    //console.log("PDF dialog is closed");
   }
 
 
@@ -2134,10 +2134,10 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     this.commonservice.getPalletList(PalletOperationType.None, this.openPOLineModel[0].ITEMCODE).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+       // console.log(data);
         if (data != null) {
           if (data.length > 0) {
-            console.log(data);
+            //console.log(data);
             this.showLookupLoader = false;
             this.serviceData = data;
             this.recreatePalletList();
@@ -2201,7 +2201,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     this.commonservice.isPalletValid(this.palletValue).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+       // console.log(data);
         if (data != null) {
           if (data.length > 0) {
             this.palletValue = data[0].Code;
@@ -2388,7 +2388,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     this.commonservice.createNewPallet(palletNo, binNo).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+       // console.log(data);
         if (data != null) {
           if (data.length > 0) {
             this.newCreatedPalletNo = data;
@@ -2498,7 +2498,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   }
 
   clearPalletItems(item) {
-    console.log(this.palletValue);
+    //console.log(this.palletValue);
     for (var i = 0; i < this.recvingQuantityBinArray.length; i++) {
       if (this.palletValue == this.recvingQuantityBinArray[i].PalletCode) {
         this.recvingQuantityBinArray.splice(i)
@@ -2519,7 +2519,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   }
 
   getInputDialogValue($event) {
-    console.log("getInputDialogValue " + event)
+   // console.log("getInputDialogValue " + event)
     this.showInputDialogFlag = false;
     if ($event.Status == "yes") {
       switch ($event.From) {

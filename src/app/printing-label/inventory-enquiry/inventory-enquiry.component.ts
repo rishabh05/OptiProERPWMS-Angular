@@ -64,12 +64,12 @@ export class InventoryEnquiryComponent implements OnInit,AfterViewInit {
     });    
   }
   ngAfterViewInit(): void {
-    console.log('view after init');
+   // console.log('view after init');
     this.BatchNoInput.nativeElement.focus();
    // this.itemCodeInput.nativeElement.focus();
   } 
   ngOnInit() {
-    console.log("PageSize:",this.pageSize);
+   // console.log("PageSize:",this.pageSize);
     this.initialize();
   }
 
@@ -171,7 +171,7 @@ export class InventoryEnquiryComponent implements OnInit,AfterViewInit {
   * This method will check if entered code is valid or not on field blur event.
   */
   OnLotsChange() {
-    console.log("onLostsChange:");
+    //console.log("onLostsChange:");
     if (this.lotNo == undefined || this.lotNo == "") {
       return;
     }
@@ -186,7 +186,7 @@ export class InventoryEnquiryComponent implements OnInit,AfterViewInit {
       (data: any) => {
         this.showLoader = false;
         if (data != undefined && data.length > 0) {
-          console.log("" + data);
+         // console.log("" + data);
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
@@ -248,7 +248,7 @@ export class InventoryEnquiryComponent implements OnInit,AfterViewInit {
       }
       if (this.lookupfor == "ItemsList") {
         this.isFromItemChange = false;// reset this variable for batch value is not from on change.
-        console.log("value of lots" + $event);
+        //console.log("value of lots" + $event);
         this.lotNo = "";  //in case of  item code send lotNo = ""
         this.itemCode = $event[0];
         this.itemNameLabel = $event[1];
@@ -406,7 +406,7 @@ export class InventoryEnquiryComponent implements OnInit,AfterViewInit {
      this.lotNo = inputValue;
    }
   // alert("scan lotNo result:"+this.lotNo)
-   console.log("onLostsChange:");
+   //console.log("onLostsChange:");
     if (this.lotNo == undefined || this.lotNo == "") {
       return;
     }
@@ -456,7 +456,7 @@ export class InventoryEnquiryComponent implements OnInit,AfterViewInit {
       data => {
         this.showLoader = false;
         if (data != undefined && data.length > 0) {
-          console.log("" + data);
+         // console.log("" + data);
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
@@ -496,7 +496,7 @@ export class InventoryEnquiryComponent implements OnInit,AfterViewInit {
     this.itemTrackingSubs = this.labelPrintReportsService.getItemTracking(itemCode).subscribe(
       data => {
         if (data != undefined && data.length > 0 && data != "0") {
-          console.log("" + data);
+         // console.log("" + data);
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));

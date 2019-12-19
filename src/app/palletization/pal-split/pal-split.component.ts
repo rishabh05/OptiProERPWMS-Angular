@@ -61,10 +61,10 @@ export class PalSplitComponent implements OnInit {
     this.commonservice.GetPalletsWithRowsPresent().subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+       // console.log(data);
         if (data != null) {
           if (data.length > 0) {
-            console.log(data);
+           // console.log(data);
             this.showLoader = false;
             this.serviceData = data;
             this.showLookup = true;
@@ -94,7 +94,7 @@ export class PalSplitComponent implements OnInit {
     var code = "";
     if (from == "from_pallet") {
       code = Array.prototype.map.call(this.selectedToPallets, function (item) { return "'" + item.Code + "'"; }).join(",");
-      console.log("code: " + code);
+     // console.log("code: " + code);
     } else if (from == "to_pallet") {
       code = this.fromPalletNo;
     }
@@ -102,10 +102,10 @@ export class PalSplitComponent implements OnInit {
     this.commonservice.getPalletsOfSameWarehouse(code).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+       // console.log(data);
         if (data != null) {
           if (data.length > 0) {
-            console.log(data);
+           // console.log(data);
             this.serviceData = data;
             this.showLookup = true;
             this.lookupFor = "PalletList";
@@ -159,7 +159,7 @@ export class PalSplitComponent implements OnInit {
     this.commonservice.isPalletValid(plt).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+       // console.log(data);
         if (data != null) {
           if (data.length > 0) {
             if (from == "from_pallet") {
@@ -259,7 +259,7 @@ export class PalSplitComponent implements OnInit {
     this.commonservice.GetPalletData(fromPalletNo).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+       // console.log(data);
         if (data != null) {
           this.palletData = data;
         }
@@ -313,7 +313,7 @@ export class PalSplitComponent implements OnInit {
     this.commonservice.palletSplit(oPalletReq).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+       // console.log(data);
         if (data != null && data != undefined && data.length > 0) {
           if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
             this.savedPalletsArray = [];
@@ -347,8 +347,8 @@ export class PalSplitComponent implements OnInit {
   }
 
   openConfirmForDelete(index: any, item: any) {
-    console.log("index: " + index)
-    console.log("item: " + item)
+    //console.log("index: " + index)
+    //console.log("item: " + item)
     this.savedPalletsArray.splice(index, 1);
   }
 
@@ -360,7 +360,7 @@ export class PalSplitComponent implements OnInit {
 
   clearPalletItems(item) {
     var tempArray: any = [];
-    console.log(this.toPalletNo);
+    //console.log(this.toPalletNo);
     for (var i = 0; i < this.savedPalletsArray.length; i++) {
       if (this.toPalletNo != this.savedPalletsArray[i].PalletCode) {
         //this.savedPalletsArray.splice(i, 1)
@@ -395,7 +395,7 @@ export class PalSplitComponent implements OnInit {
       this.fromPalletNo).subscribe(
         (data: any) => {
           this.showLoader = false;
-          console.log(data);
+         // console.log(data);
           if (data != null) {
             if (data.length > 0) {
               this.batchSerialNo = data[0].LOTNO;
@@ -534,7 +534,7 @@ export class PalSplitComponent implements OnInit {
       data => {
         this.showLoader = false;
         if (data != undefined && data.length > 0) {
-          console.log("GetBatchandSerialItemsFromPallet - " + JSON.stringify(data));
+          //console.log("GetBatchandSerialItemsFromPallet - " + JSON.stringify(data));
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
@@ -575,7 +575,7 @@ export class PalSplitComponent implements OnInit {
       data => {
         this.showLoader = false;
         if (data != undefined && data.length > 0) {
-          console.log("GetItemsFromPallet - " + JSON.stringify(data));
+         // console.log("GetItemsFromPallet - " + JSON.stringify(data));
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
@@ -616,7 +616,7 @@ export class PalSplitComponent implements OnInit {
       data => {
         this.showLoader = false;
         if (data != undefined && data.length > 0) {
-          console.log("" + data);
+         // console.log("" + data);
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
@@ -733,7 +733,7 @@ export class PalSplitComponent implements OnInit {
     this.commonservice.createNewPallet(palletNo, binNo).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+       // console.log(data);
         if (data != null) {
           if (data.length > 0) {
             this.newCreatedPalletNo = data;
@@ -771,7 +771,7 @@ export class PalSplitComponent implements OnInit {
   }
 
   getInputDialogValue($event) {
-    console.log("getInputDialogValue " + event)
+   // console.log("getInputDialogValue " + event)
     this.showInputDialogFlag = false;
     if ($event.Status == "yes") {
       switch ($event.From) {
