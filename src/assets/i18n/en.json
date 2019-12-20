@@ -84,6 +84,7 @@
   "Inbound_VendRefNo": "Vendor Ref. No.",
   "Inbound_MaxLength": "Length cannot be greater than 100 characters.",
   "Inbound_AddToGRPOMsg":"Do you want to add your data to GRPO?",
+  "LINENUM": "Line Number",
   
   "5":"Outbound",
   "Outbound_Delivery": "Delivery",
@@ -405,5 +406,6 @@
   "ViewItems": "View Items",
   "InvTransfer_SameBinMsg": "Pallet already belongs to selected To Bin.",
   "InvTransfer_ITRRequired": "Please select ITR#",
+  "InvTransfer_PalletNotValid": "Invalid pallet for selected ITR.",
   "Dummy": "Dummy"
 }
