@@ -533,13 +533,13 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     // }
   }
 
-  updateLotNumber(value, rowindex, gridData: any) {
+  updateLotNumber(lotTemplateVar,value, rowindex, gridData: any) {
 
     value = value.trim();
 
 
     if (localStorage.getItem('FromReceiptProd') == 'true') {
-      this.checkAndValidateSerial(value, rowindex);
+      this.checkAndValidateSerial(lotTemplateVar,value, rowindex);
     } else {
 
       let result = this.recvingQuantityBinArray.find(element => element.LotNumber == value);
@@ -2442,7 +2442,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     );
   }
 
-  checkAndValidateSerial(serialBatchNo, i) {
+  checkAndValidateSerial(lotTemplateVar,serialBatchNo, i) {
     var type = 0;
     var itemcode = ""
     var orderNo = "";
@@ -2469,14 +2469,15 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
               //error message
               this.toastr.error('', this.translate.instant("ProdReceipt_SerialNoAlreadyUsed"));
               this.serialBatchNo = "";
-              this.recvingQuantityBinArray[i].VendorLot = "";
-              this.recvingQuantityBinArray[i].LotNumber = "";
+           //   this.recvingQuantityBinArray[i].VendorLot = "";
+            //  this.recvingQuantityBinArray[i].LotNumber = "";
               //       return;
             } else if (data == "2") {
               this.toastr.error('', this.translate.instant("ProdReceipt_InvalidBatchSerial"));
               this.serialBatchNo = "";
-              this.recvingQuantityBinArray[i].VendorLot = "";
-              this.recvingQuantityBinArray[i].LotNumber = "";
+             // this.recvingQuantityBinArray[i].VendorLot = "";
+             // this.recvingQuantityBinArray[i].LotNumber = "";
+              lotTemplateVar.value = "";
               //  return;
             } else {
               // allow data
@@ -2489,7 +2490,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
                 this.recvingQuantityBinArray[i].LotNumber = serialBatchNo + "-" + plt;
               }
             }
-          }
+          } 
         },
         error => {
           if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
