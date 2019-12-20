@@ -1734,7 +1734,7 @@ export class OutOrderComponent implements OnInit {
 
 
       // Transfer ITR
-    this.inventoryTransferService.submitBinTransfer(oWhsTransAddLot).subscribe(
+    this.inventoryTransferService.submitITByITR(oWhsTransAddLot).subscribe(
       data => {
         this.showLookupLoader = false;
           if (data!=null && data.length > 0) {
