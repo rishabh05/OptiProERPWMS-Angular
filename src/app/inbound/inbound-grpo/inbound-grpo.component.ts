@@ -234,7 +234,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
   getDefaultFromBin() {
     this.commonservice.GetDefaultBinOrBinWithQty(this.ItemCode,
-      localStorage.getItem("towhseId")).subscribe(
+      localStorage.getItem("whseId")).subscribe(
         data => {
           if (data != null) {
 
@@ -1803,17 +1803,17 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
        // console.log(data);
         if (data != null) {
           if (data.length > 0) {
-            if (this.defaultRecvBin == true) {
-          //    this.RecvbBinvalue = data[0].BINNO;
-              this.defaultRecvBin = false
-            }
-            else {
+          //   if (this.defaultRecvBin == true) {
+          // //    this.RecvbBinvalue = data[0].BINNO;
+          //     this.defaultRecvBin = false
+          //   }
+          //   else {
             //  console.log(data);
               this.showLookupLoader = false;
               this.serviceData = data;
               this.lookupfor = "RecvBinList";
               return;
-            }
+            // }
           } else {
             this.toastr.error('', this.translate.instant("Inbound_NoBinsAvailableMsg"));
           }

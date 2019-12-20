@@ -13,7 +13,7 @@
   "Login_Company": "Company",
   "Login_Warehouse": "Warehouse",
   "Login_UnPwdBlankErrorMsg": "Username or password cannot be blank",
-  "Login_InvalidUnPwdErrMsg": "Invalid username & password.",
+  "Login_InvalidUnPwdErrMsg": "Invalid username or password.",
   "Login_InvalidUn": "Invalid Username",
   "Login_UsernotActive": "User not active",
   "Login_SelectCompanyMsg": "Please select company.",
