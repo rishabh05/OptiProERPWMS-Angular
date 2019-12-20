@@ -114,6 +114,7 @@ export class OutProdissueComponent implements OnInit {
         this.pageTitle = this.translate.instant("ProdIssue_DeleiveryForSO");
       }
 
+      // call api to get uom data by item id.
         this.ourboundService.getUOMList(this.selected.ITEMCODE).subscribe(
           data => {
             this.uomList = data;
@@ -131,6 +132,7 @@ export class OutProdissueComponent implements OnInit {
         this.showLookupLoader = true;
         this.ourboundService.getAvaliableMeterialForNoneTracked(this.selected.ITEMCODE).subscribe(
           mdata => {
+            this.showLookupLoader = false;
             let el: any = document.getElementById('gridSelectedMeterial');
             this.getLookupValue(mdata, el, true);
             this.manageUOM();
@@ -454,7 +456,7 @@ export class OutProdissueComponent implements OnInit {
       return;
     }
   }
-
+  
   calculateTotalAndRemainingQty() {
     if (this.selectedMeterials && this.selectedMeterials.length > 0) {
       this._pickedMeterialQty = this.selectedMeterials.map(i => i.MeterialPickQty).reduce((sum, c) => parseFloat(sum) + parseFloat(c));
@@ -582,7 +584,7 @@ export class OutProdissueComponent implements OnInit {
   removeSelectedMeterial(idx: any, grd: any) {
 
     this.selectedMeterials.splice(idx, 1);
-    grd.data = this.selectedMeterials;
+    grd.data = this.selectedMeterials; 
     this.calculateTotalAndRemainingQty();
     if(this.selectedMeterials!=undefined && this.selectedMeterials!=null && this.selectedMeterials.length>=0) 
     {
