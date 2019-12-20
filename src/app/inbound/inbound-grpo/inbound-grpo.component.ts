@@ -41,6 +41,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   showRecButton: boolean = false;
   recvingQuantityBinArray: RecvingQuantityBin[] = [];
   defaultRecvBin: boolean = false;
+  lookupEnable: boolean = false;
   serviceData: any[];
   lookupfor: string;
   showLookupLoader = true;
@@ -154,6 +155,17 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       }
       this.showSavedReceiptProductionData();
       this.availableRejQty = parseInt(localStorage.getItem("AvailableRejectQty"));
+
+
+      if (!this.isPalletizationEnable) {
+        this.isDisabledLotNoField = false;
+        this.isDisabledScanInput = false;
+      } else {
+        this.isDisabledLotNoField = true;
+        this.isDisabledScanInput = false;
+      }
+
+
     } else {
 
       this.fromReceiptProduction = false;
@@ -226,9 +238,17 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
       if (localStorage.getItem('FromReceiptProd') == 'true') {
         this.showScanInput = false;
-        if (this.RecvbBinvalue == "") {
-          this.defaultRecvBin = true;
-          this.getDefaultFromBin();
+        if (this.receiptData.status == "Accept"){
+          if (this.RecvbBinvalue == "") {
+            this.defaultRecvBin = true;
+            // this.getDefaultFromBin();
+            this.getScrapBin(this.receiptData.status);
+            
+          }
+          this.lookupEnable = false;
+        }else{
+          this.getScrapBin(this.receiptData.status);
+          this.lookupEnable = true;
         }
       } else {
         if (this.RecvbBinvalue == "") {
@@ -238,6 +258,50 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       }
     }
   }
+
+  getScrapBin(status) {
+    this.commonservice.GetDefaultBinOrBinWithQtyForProduction(this.ItemCode,
+      localStorage.getItem("whseId"), status).subscribe(
+        data => {
+          if (data != null) {
+
+            if(status == "Accept"){
+              let resultV = data.find(element => element.BINTYPE == '1');
+              if (resultV != undefined) {
+                this.RecvbBinvalue = resultV.BINNO;
+                return;
+              }
+              let resultD = data.find(element => element.BINTYPE == '2');
+              if (resultD != undefined) {
+                this.RecvbBinvalue = resultD.BINNO;
+                return;
+              }
+            }else{
+              let resultV = data.find(element => element.BINTYPE == '1');
+              if (resultV != undefined) {
+                this.RecvbBinvalue = resultV.BINNO;
+                this.receiptData.WhsCode = resultV.WHSCODE;
+                return;
+              }
+              let resultD = data.find(element => element.BINTYPE == '2');
+              if (resultD != undefined) {
+                this.RecvbBinvalue = resultD.BINNO;
+                this.receiptData.WhsCode = resultD.WHSCODE;
+                return;
+              }
+            }
+          }
+        },
+        error => {
+          if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+          }
+          else {
+            this.toastr.error('', error);
+          }
+        }
+      );
+  }  
 
   getDefaultFromBin() {
     this.commonservice.GetDefaultBinOrBinWithQty(this.ItemCode,
@@ -511,9 +575,9 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     value = value.trim();
 
 
-    // if (localStorage.getItem('FromReceiptProd') == 'true') {
-    //   this.checkAndValidateSerial(value, rowindex);
-    // } else {
+    if (localStorage.getItem('FromReceiptProd') == 'true' && this.isPalletizationEnable) {
+      this.checkAndValidateSerial(value, rowindex);
+    } else {
     for (let i = 0; i < this.recvingQuantityBinArray.length; ++i) {
       if (i === rowindex) {
         this.recvingQuantityBinArray[i].VendorLot = value;
@@ -535,7 +599,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         }
       }
     }
-    // }
+    }
   }
 
   updateLotNumber(value, rowindex, gridData: any) {
@@ -2476,6 +2540,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
               this.serialBatchNo = "";
               this.recvingQuantityBinArray[i].VendorLot = "";
               this.recvingQuantityBinArray[i].LotNumber = "";
+              
               //       return;
             } else if (data == "2") {
               this.toastr.error('', this.translate.instant("ProdReceipt_InvalidBatchSerial"));
