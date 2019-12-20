@@ -168,13 +168,18 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       if (!this.isPalletizationEnable) {
         if (autoLots != null && autoLots != undefined && autoLots.length > 0 && autoLots[0].AUTOLOT == "Y") {
           this.isDisabledLotNoField = true;
-          this.isDisabledScanInput = true;
+          this.isDisabledScanInput = false;
         } else {
           this.isDisabledLotNoField = false;
+          this.isDisabledScanInput = false;
         }
       } else {
         this.isDisabledLotNoField = true;
-        this.isDisabledScanInput = false;
+        if (autoLots != null && autoLots != undefined && autoLots.length > 0 && autoLots[0].AUTOLOT == "Y") {
+          this.isDisabledScanInput = true;
+        } else {
+          this.isDisabledScanInput = false;
+        }
       }
       this.showScanAndInputRadio = true;
       this.showUOM = true;
@@ -628,12 +633,12 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
               // if (autoLots[0].AUTOLOT == "Y") {
               //   autLotFlag = "true";
               // }
-              if (autoLots != null && autoLots != undefined && autoLots.length > 0 && autoLots[0].AUTOLOT == "Y") {
-                autLotFlag = "true";
-                this.isDisabledScanInput = true;
-              } else {
-                this.isDisabledScanInput = false;
-              }
+              // if (autoLots != null && autoLots != undefined && autoLots.length > 0 && autoLots[0].AUTOLOT == "Y") {
+              //   autLotFlag = "true";
+              //   this.isDisabledScanInput = true;
+              // } else {
+              //   this.isDisabledScanInput = false;
+              // }
 
               this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial,
                 this.searlNo, 1, this.RecvbBinvalue, this.expiryDate, plt, autLotFlag));
@@ -752,12 +757,12 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         // if (autoLots[0].AUTOLOT == "Y") {
         //   autLotFlag = "true";
         // }
-        if (autoLots != null && autoLots != undefined && autoLots.length > 0 && autoLots[0].AUTOLOT == "Y") {
-          autLotFlag = "true";
-          this.isDisabledScanInput = true;
-        } else {
-          this.isDisabledScanInput = false;
-        }
+        // if (autoLots != null && autoLots != undefined && autoLots.length > 0 && autoLots[0].AUTOLOT == "Y") {
+        //   autLotFlag = "true";
+        //   this.isDisabledScanInput = true;
+        // } else {
+        //   this.isDisabledScanInput = false;
+        // }
 
         this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial,
           this.searlNo, qty, this.RecvbBinvalue, this.expiryDate, plt, autLotFlag));
