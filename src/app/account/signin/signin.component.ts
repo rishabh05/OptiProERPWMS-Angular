@@ -226,12 +226,15 @@ export class SigninComponent implements OnInit {
     }
 
     private handleLicenseDataSuccessResponse() {
+        console.log("log","handleLicense: start");
         // alert("in handle license data success response");
         this.selectedWhse = document.getElementById("whseId").innerText.trim();
         this.showLoader = false;
         if (this.licenseData.length > 1) {
+            console.log("log","handleLicense: start data>1");
             if (this.licenseData[1].ErrMessage == "" || this.licenseData[1].ErrMessage == null) {
                 if (this.licenseData[0].Message == "True") {
+                    console.log("log","handleLicense:message true");
                     this.selectedItem = document.getElementById("compId").innerText.trim();
                     localStorage.setItem("GUID", this.licenseData[1].GUID);
                     localStorage.setItem("CompID", this.selectedItem);
@@ -273,8 +276,10 @@ export class SigninComponent implements OnInit {
                         this.setCookie('CompID', "", 365);
                         this.setCookie('whseId', "", 365);
                     }
+                    console.log("log","handleLicense:abouve routing");
                     this.router.navigate(['home/dashboard']);
                 } else {
+                    console.log("log","handleLicense:else");
                     alert(this.licenseData[0].Message + " " + this.licenseData[0].Token);
                 }
             } else {

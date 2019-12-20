@@ -74,11 +74,17 @@
                         </kendo-grid-column>
                        
                         <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" title="{{'OpenQty'|translate}}" headerClass="text-right" class="text-right">
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                        {{dataItem.OPENQTY |numberFormat}}
+                                    </ng-template>
                         </kendo-grid-column>
                        
                         <kendo-grid-column media="(min-width: 768px)" field="Status" title="{{'Status'|translate}}">
                         </kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="ReceiveQty" title="{{'Inbound_ReceiveQty'|translate}}" headerClass="text-right" class="text-right">
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                        {{dataItem.ReceiveQty |numberFormat}}
+                                    </ng-template>
                         </kendo-grid-column>
                         <!-- <kendo-grid-column media="(min-width: 768px)" field="" class="text-center" headerClass="text-center"
                             width="60">
