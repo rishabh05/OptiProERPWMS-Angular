@@ -178,11 +178,11 @@ export class Commonservice {
     return this.httpclient.post(this.config_params.service_url + "/api/Gs1/GS1SETUP", jObject, this.httpOptions);
   }
 
-  RemoveLicenseAndSignout(toastr: ToastrService, router: Router, message: string) {
+  RemoveLicenseAndSignout(toastr: ToastrService, router: Router, message: string, fromLogout:boolean = false) {
     this.RemoveLicense().subscribe(
       (data: any) => {
        // console.log(data);
-        this.signOut(this.toastr, this.router, message);
+        this.signOut(this.toastr, this.router, message,fromLogout);
       },
       error => {
         if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
@@ -214,8 +214,13 @@ export class Commonservice {
     return this.httpclient.post(this.config_params.service_url + "/MoveOrder/GetSettingOnSAP", jObject, this.httpOptions);
   }
 
-  signOut(toastr: ToastrService, router: Router, message: string) {
-    toastr.error('', message);
+  signOut(toastr: ToastrService, router: Router, message: string, fromLogout: boolean= false) {
+    if(fromLogout){
+      toastr.success('', message);
+    }else{
+      toastr.error('', message);
+    }
+    
     sessionStorage.removeItem('isLoggedIn');
     sessionStorage.removeItem('selectedComp');
     sessionStorage.removeItem('loggedInUser');
