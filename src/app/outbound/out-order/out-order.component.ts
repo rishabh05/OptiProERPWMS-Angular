@@ -1750,6 +1750,12 @@ export class OutOrderComponent implements OnInit {
               this.toastr.success('', this.translate.instant("InvTransfer_ITRTransferSuccess") + " : " + data[0].SuccessNo);
               localStorage.setItem(CommonConstants.OutboundData, null);
               this.resetITRFields();
+              //reset global object for itr success.====
+              this.outbound = new OutboundData();
+              this.outbound.ITRToBinNo = { ToBin: "" };
+              var customerCode = "";
+              var customerName = "";
+              this.outbound.CustomerData = { CustomerCode: customerCode, CustomerName: customerName, TrackingId: "", CustRefNo: "" };
             } else {
               this.toastr.error('', data[0].ErrorMsg);
             }
