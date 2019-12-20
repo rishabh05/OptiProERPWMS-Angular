@@ -511,6 +511,9 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
             } else {
               this.recvingQuantityBinArray[i].LotNumber = value + "-" + this.recvingQuantityBinArray[i].PalletCode;
             }
+          } else {
+            this.recvingQuantityBinArray[i].LotNumber = value;
+            this.recvingQuantityBinArray[i].palletSBNo = value;
           }
         }
       }
