@@ -62,6 +62,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   public oSubmitPOLotsArray: any[] = [];
   isAutoLotEnabled: boolean;
   isDisabledScanInput: boolean = false;
+  isDisabledLotNoField: boolean = false;
   ScanSerial: string = "";
   ScanInputs: any = "";
   targetBin: string = "";
@@ -162,6 +163,16 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         this.isDisabledScanInput = true;
       } else {
         this.isDisabledScanInput = false;
+      }
+
+      if (!this.isPalletizationEnable) {
+        if(autoLots != null && autoLots != undefined && autoLots.length > 0 && autoLots[0].AUTOLOT == "Y"){
+          this.isDisabledLotNoField = true;
+        }else{
+          this.isDisabledLotNoField = false;
+        }
+      } else {
+        this.isDisabledLotNoField = true;
       }
       this.showScanAndInputRadio = true;
       this.showUOM = true;
