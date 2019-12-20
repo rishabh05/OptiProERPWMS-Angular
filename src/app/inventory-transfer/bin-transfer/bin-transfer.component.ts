@@ -691,13 +691,13 @@ export class BinTransferComponent implements OnInit {
         LotNo: this.lotValue,
         ItemCode: this.itemCode,
         ItemName: this.itemName,
-        Qty: ""+this.transferQty,
+        Qty: this.transferQty,
         SysNumber: this.SysNumber,
         BinNo: this.fromBin,
         ToBin: this.toBin,
         Tracking: this.ItemTracking,
         WhsCode: localStorage.getItem("towhseId"),
-        OnHandQty: ""+this.onHandQty,
+        OnHandQty: this.onHandQty,
         Remarks: this.Remarks,
         PalletCode: this.palletNo,
         MfrNo: this.actualLotNo,
@@ -755,6 +755,11 @@ export class BinTransferComponent implements OnInit {
     oWhsTransAddLot.Header = [];
     oWhsTransAddLot.Detail = [];
     oWhsTransAddLot.UDF = [];
+    
+    if(this.TransferedItemsDetail == undefined || this.TransferedItemsDetail.length==0){
+      return;
+    }
+
     for (var i = 0; i < this.TransferedItemsDetail.length; i++) {
       this.TransferedItemsDetail[i].LineNum = i;
     }
