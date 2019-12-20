@@ -242,7 +242,7 @@
                                     </dt>
                                     <dd>
                                         <input type="text" class="form-control form-control-sm" name="dataItem.LotNumber"
-                                            [disabled]="true" id="display_name1" [(ngModel)]=dataItem.LotNumber
+                                            [disabled]="isDisabledLotNoField" id="display_name1" [(ngModel)]=dataItem.LotNumber
                                             #display_name (change)="updateLotNumber(display_name.value, rowIndex, gridItem)">
                                     </dd>
 
@@ -267,7 +267,7 @@
                         <kendo-grid-column media="(min-width: 768px)" field="LotNumber" [width]="18" title="{{SRBatchColumnText}}">
                             <ng-template kendoGridCellTemplate let-dataItem let-idx='rowIndex'>
                                 <input type="text" class="form-control form-control-sm" name="dataItem.LotNumber" value={{dataItem.LotNumber}}
-                                    [disabled]="true" id="display_name" #display_name (change)="updateLotNumber(display_name.value, idx, gridItem)"
+                                    [disabled]="isDisabledLotNoField" id="display_name" #display_name (change)="updateLotNumber(display_name.value, idx, gridItem)"
                                     >
                             </ng-template>
                         </kendo-grid-column>
