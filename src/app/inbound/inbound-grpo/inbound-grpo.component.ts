@@ -1336,7 +1336,9 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
               LotQty: submitRecProdData.Lots[j].LotQty,
               LineNo: submitRecProdData.Lots[j].LineNo,
               Bin: submitRecProdData.Lots[j].Bin,
-              ExpireDate: submitRecProdData.Lots[j].ExpiryDate
+              ExpireDate: submitRecProdData.Lots[j].ExpiryDate,
+              PalletCode: submitRecProdData.Lots[j].PalletCode,
+              VendorLot: submitRecProdData.Lots[j].ActualLotNo
             }
             this.recvingQuantityBinArray.push(obj);
             this.previousReceivedQty = Number(this.previousReceivedQty) + Number(submitRecProdData
@@ -1360,7 +1362,9 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
               LotQty: submitRecProdData.RejectLots[j].LotQty,
               LineNo: submitRecProdData.RejectLots[j].LineNo,
               Bin: submitRecProdData.RejectLots[j].Bin,
-              ExpireDate: submitRecProdData.RejectLots[j].ExpiryDate
+              ExpireDate: submitRecProdData.RejectLots[j].ExpiryDate,
+              PalletCode: submitRecProdData.RejectLots[j].PalletCode,
+              VendorLot: submitRecProdData.RejectLots[j].ActualLotNo
             }
             this.recvingQuantityBinArray.push(obj);
             this.previousReceivedQty = Number(this.previousReceivedQty) + Number(
@@ -2554,7 +2558,8 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
               this.serialBatchNo = serialBatchNo;
               // this.isDisabledScanInput = true;
               this.recvingQuantityBinArray[i].LotNumber = serialBatchNo;
-              var plt = (this.palletValue == "Loose") ? "" : this.palletValue;
+              var plt = this.recvingQuantityBinArray[i].PalletCode;
+              //var plt = (savedPallet == "Loose") ? "" : savedPallet;
               if (serialBatchNo != '' && serialBatchNo != undefined && plt != '') {
                 this.recvingQuantityBinArray[i].LotNumber = serialBatchNo + "-" + plt;
               }
