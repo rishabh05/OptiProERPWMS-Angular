@@ -77,7 +77,7 @@
                                 <input type="text" id ="inboundGrpoRecBinInput" class="form-control form-control-sm" name="RecvbBinvalue" #RecBinVal
                                     [(ngModel)]=RecvbBinvalue placeholder="{{'Inbound_ReceivingBin'|translate}}" (blur)="OnBinChange()">
                                 <div class="input-group-append has-seprate-btn">
-                                    <button class="k-button k-primary btn" type="button" (click)="ShowBins()">
+                                    <button class="k-button k-primary btn" type="button" (click)="ShowBins()" [disabled]="lookupDisable">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
 
