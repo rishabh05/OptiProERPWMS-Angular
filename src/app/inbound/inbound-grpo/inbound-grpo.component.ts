@@ -535,7 +535,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         }
       }
     }
-    // } 
+    // }
   }
 
   updateLotNumber(lotTemplateVar,value, rowindex, gridData: any) {
