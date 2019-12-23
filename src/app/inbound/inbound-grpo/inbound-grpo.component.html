@@ -223,7 +223,7 @@
                                     <dt style="margin-top:4px;">{{mfrGridColumnText}}</dt>
                                     <dd>
                                         <input type="text" class="form-control form-control-sm" name="dataItem.VendorLot"
-                                        [disabled]="isDisabledScanInput" id="VendorLot" #VendorLot (change)="updateVendorLot(VendorLot.value, rowIndex)">
+                                        [disabled]="isDisabledScanInput" id="VendorLot" #VendorLot (change)="updateVendorLot(display_name, VendorLot.value, rowIndex)">
                                     </dd>
 
                                     <dt>{{'Quantity'|translate}}</dt>
@@ -231,7 +231,7 @@
 
                                     <dt>{{'ExpiryDate'|translate}}</dt>
                                     <dd>{{dataItem.expiryDate | date:dateFormat}}</dd>
-                                </dl>
+                                </dl> 
 
                                 <dl class="opti_mobile_grid_dl">
                                     <dt class="d-flex align-items-center">{{SRBatchColumnText}}
@@ -243,7 +243,7 @@
                                     <dd>
                                         <input type="text" class="form-control form-control-sm" name="dataItem.LotNumber"
                                             [disabled]="isDisabledLotNoField" id="display_name1" [(ngModel)]=dataItem.LotNumber
-                                            #display_name (change)="updateLotNumber(display_name.value, rowIndex, gridItem)">
+                                            #display_name (change)="updateLotNumber(display_name, display_name.value, rowIndex, gridItem)">
                                     </dd>
 
                                     <dt>{{'BinNo'|translate}}</dt> 
@@ -259,7 +259,7 @@
                         <kendo-grid-column media="(min-width: 768px)" field="VendorLot" [width]="18" title="{{mfrGridColumnText}}">
                             <ng-template kendoGridCellTemplate let-dataItem let-idx='rowIndex'>
                                 <input type="text" class="form-control form-control-sm" name="dataItem.VendorLot" value={{dataItem.VendorLot}}
-                                    id="display_name" #display_name (change)="updateVendorLot(display_name.value, idx)"
+                                    id="display_name" #display_name (change)="updateVendorLot(display_name, display_name.value, idx)"
                                     [disabled]="isDisabledScanInput">
                             </ng-template>
                         </kendo-grid-column>
@@ -267,7 +267,7 @@
                         <kendo-grid-column media="(min-width: 768px)" field="LotNumber" [width]="18" title="{{SRBatchColumnText}}">
                             <ng-template kendoGridCellTemplate let-dataItem let-idx='rowIndex'>
                                 <input type="text" class="form-control form-control-sm" name="dataItem.LotNumber" value={{dataItem.LotNumber}}
-                                    [disabled]="isDisabledLotNoField" id="display_name" #display_name (change)="updateLotNumber(display_name.value, idx, gridItem)"
+                                    [disabled]="isDisabledLotNoField" id="display_name" #display_name (change)="updateLotNumber(display_name, display_name.value, idx, gridItem)"
                                     >
                             </ng-template>
                         </kendo-grid-column>

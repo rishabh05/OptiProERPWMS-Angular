@@ -206,4 +206,11 @@ export class InventoryTransferService {
         };
     return this.httpclient.post(this.config_params.service_url + "/api/WhsTrans/GetItemListForWhseTrnsfr", jObject, this.commonService.httpOptions);
   }
+
+  submitITByITR(oWhsTransAddLot: any): Observable<any> {
+    var jObject = { 
+      DEFAULTSYSTEMBIN: JSON.stringify(oWhsTransAddLot) 
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/WhsTrans/SubmitITByITR", jObject, this.commonService.httpOptions);
+  }
 }

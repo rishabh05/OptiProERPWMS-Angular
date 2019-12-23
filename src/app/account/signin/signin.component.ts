@@ -84,8 +84,8 @@ export class SigninComponent implements OnInit {
         element.classList.add("opti_body-login");
         element.classList.add("opti_account-module");
         //localStorage.setItem("service_url","http://172.16.6.134/OptiProWMS/");
-        if (localStorage.getItem("service_url") != null && localStorage.getItem("service_url") != undefined 
-        && localStorage.getItem("service_url") != "") {
+        if (localStorage.getItem("service_url") != null && localStorage.getItem("service_url") != undefined
+            && localStorage.getItem("service_url") != "") {
 
             var url: any = { 'service_url': localStorage.getItem("service_url") }
             // alert("serviceURL not null:"+JSON.stringify(url));
@@ -99,14 +99,14 @@ export class SigninComponent implements OnInit {
                 },
                 (err: HttpErrorResponse) => {
                     console.log(err.message);
-                    alert("HttpErrorResponse:"+err.message);
+                    alert("HttpErrorResponse:" + err.message);
                 }
             );
         }
     }
 
     getPSURL() {
-    //    localStorage.setItem("PSURLFORADMIN", "http://139.144.10.220/optiproadmin/");
+        //    localStorage.setItem("PSURLFORADMIN", "http://139.144.10.220/optiproadmin/");
         // localStorage.setItem("PSURLFORADMIN", "http://172.16.6.140/OptiProAdmin/");
         this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
         this.signinService.getPSURL(this.config_params.service_url).subscribe(
@@ -120,7 +120,7 @@ export class SigninComponent implements OnInit {
                 this.showLoader = false;
             });
 
-            
+
     }
 
 
@@ -136,7 +136,7 @@ export class SigninComponent implements OnInit {
         // alert('login:: at login method top');
         // this.isCompleteLoginVisible = true;
 
-        window.localStorage.setItem('IsMenuLoaded' , 'false');
+        window.localStorage.setItem('IsMenuLoaded', 'false');
         if (this.userName == "" || this.password == "") {
             this.toastr.error('', this.translate.instant("Login_UnPwdBlankErrorMsg"), this.commonService.toast_config.iconClasses.error);
             return true;
@@ -164,27 +164,27 @@ export class SigninComponent implements OnInit {
     private validateUserLogin() {
         //alert('validateUserLogin: ');
         this.signinService.ValidateUserLogin(this.userName, this.password).subscribe(
-            data => {    
-                this.showLoader = false;              
-                if(data != null  && data != undefined){
-                    if(data.AuthenticationDetails.length > 0){
-                        let access_token = data.AuthenticationDetails[0].token_type +" "+data.AuthenticationDetails[0].access_token;            
+            data => {
+                this.showLoader = false;
+                if (data != null && data != undefined && data.Table.length > 0) {
+                    if (data.AuthenticationDetails != null && data.AuthenticationDetails.length > 0) {
+                        let access_token = data.AuthenticationDetails[0].token_type + " " + data.AuthenticationDetails[0].access_token;
                         localStorage.setItem('accessToken', access_token);
                         this.commonService.updateHeader();
+                        this.userDetails = data.Table;
+                        this.handleValidationUserSuccessResponse();
                     } else {
-                        this.toastr.error('', this.translate.instant("ErrorMsgSomethingWentWrong")); 
+                        this.toastr.error('', this.translate.instant("ErrorMsgSomethingWentWrong"));
                     }
-                  } else {
-                    this.toastr.error('', this.translate.instant("ErrorMsgSomethingWentWrong")); 
-                  }
-                this.userDetails = data.Table;
-                this.handleValidationUserSuccessResponse();
+                } else {
+                    this.toastr.error('', this.translate.instant("Login_InvalidUnPwdErrMsg"));
+                }
             },
             error => {
 
                 // alert("error:"+JSON.stringify(error));
                 this.toastr.error('', this.translate.instant("Login_InvalidUnPwdErrMsg"),
-                this.commonService.toast_config.iconClasses.error);
+                    this.commonService.toast_config.iconClasses.error);
                 this.showLoader = false;
             }
         );
@@ -335,9 +335,9 @@ export class SigninComponent implements OnInit {
                 }
             },
             error => {
-                if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-                   this.commonService.unauthorizedToken(error, this.translate.instant("token_expired"));               
-                }   
+                if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+                    this.commonService.unauthorizedToken(error, this.translate.instant("token_expired"));
+                }
             }
         );
     }

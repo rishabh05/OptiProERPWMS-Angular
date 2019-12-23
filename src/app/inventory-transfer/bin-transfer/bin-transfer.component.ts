@@ -755,6 +755,11 @@ export class BinTransferComponent implements OnInit {
     oWhsTransAddLot.Header = [];
     oWhsTransAddLot.Detail = [];
     oWhsTransAddLot.UDF = [];
+    
+    if(this.TransferedItemsDetail == undefined || this.TransferedItemsDetail.length==0){
+      return;
+    }
+
     for (var i = 0; i < this.TransferedItemsDetail.length; i++) {
       this.TransferedItemsDetail[i].LineNum = i;
     }
