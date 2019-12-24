@@ -408,5 +408,6 @@
   "InvTransfer_SameBinMsg": "Pallet already belongs to selected To Bin.",
   "InvTransfer_ITRRequired": "Please select ITR#",
   "InvTransfer_PalletNotValid": "Invalid pallet for selected ITR.",
+  "InvTransfer_InvalidITR": "Invalid ITR.",
   "Dummy": "Dummy"
 }

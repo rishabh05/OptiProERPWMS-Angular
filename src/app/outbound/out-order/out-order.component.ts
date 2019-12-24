@@ -1482,9 +1482,13 @@ export class OutOrderComponent implements OnInit {
           };
           localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
           this.getITRItemList();
+          } else {
+            this.itrCode = "";
+            this.toastr.error('', this.translate.instant("InvTransfer_InvalidITR"));
           }
         } else {
-          this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          this.itrCode = ""; 
+          this.toastr.error('', this.translate.instant("InvTransfer_InvalidITR"));
         }
       },
       error => {

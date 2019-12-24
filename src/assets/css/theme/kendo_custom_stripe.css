@@ -7815,11 +7815,11 @@ body .k-grid tr.k-grid-norecords td{
   
   .k-checkbox:checked + .k-checkbox-label::after {
     border-radius: 0.25rem;
-    transform: scale(1); }
+    transform: scale(0.8); }
   
   .k-checkbox:indeterminate + .k-checkbox-label::after {
     content: "";
-    transform: scale(1);
+    transform: scale(0.8);
     width: 8px;
     height: 8px;
     top: 4px;

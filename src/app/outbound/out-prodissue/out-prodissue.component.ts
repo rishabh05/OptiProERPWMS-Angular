@@ -206,8 +206,6 @@ export class OutProdissueComponent implements OnInit {
   }
   ScanInputs: string = "";
   onGS1ScanItem() {
-
-    
     if (this.ScanInputs != null && this.ScanInputs != undefined &&
       this.ScanInputs != "" && this.ScanInputs != "error decoding QR Code") {
 
@@ -502,7 +500,12 @@ export class OutProdissueComponent implements OnInit {
     
     if(this.lookupFor == "toBinsList") {
       this.toBinNo = lookupValue.BINNO;
-    } else if (lookupValue) {
+      if (this.OrderType == 'N') {
+      this.updateToBinForCommingSelectedMaterial(this.toBinNo);
+      }
+      //this.selectedMeterials = [];
+     // this.manageMeterial(scan);
+    } else if (lookupValue) { 
       if (this.OrderType == 'S') {
         let data: any[] = [];
         let tempLookup: any[] = lookupValue;
@@ -576,6 +579,27 @@ export class OutProdissueComponent implements OnInit {
     }
   }
 
+  updateToBinForCommingSelectedMaterial(toBin:string){
+    var tempComingSelectedMaterialList = []
+    if(this.selectedMeterials!=null && this.selectedMeterials!=undefined && this.selectedMeterials.length>0){
+    for(let i =0;i<this.selectedMeterials.length;i++){
+      tempComingSelectedMaterialList.push({
+        ACTLOTNO:this.selectedMeterials[i].ACTLOTNO,
+        BINNO:this.selectedMeterials[i].BINNO,
+        EXPDATE:this.selectedMeterials[i].EXPDATE,
+        ITEMCODE:this.selectedMeterials[i].ITEMCODE,
+        LOTNO:this.selectedMeterials[i].LOTNO,
+        PALLETNO:this.selectedMeterials[i].PALLETNO,
+        SYSNUMBER:this.selectedMeterials[i].SYSNUMBER,
+        TOTALQTY:this.selectedMeterials[i].TOTALQTY,
+        WHSCODE:this.selectedMeterials[i].WHSCODE,
+        ToBin:toBin,
+        MeterialPickQty:this.selectedMeterials[i].MeterialPickQty
+      }) 
+    }
+    }
+    this.selectedMeterials = tempComingSelectedMaterialList;
+  }
   valueChange(e: any) {
     this.selectedUOM = e;
     this.manageUOM();
@@ -623,11 +647,10 @@ export class OutProdissueComponent implements OnInit {
     let pickedMeterialQty: number = this._pickedMeterialQty;
     let remailingMeterialQty: number = requiredMeterialQty - pickedMeterialQty;
 
-    if (pickedMeterialQty < requiredMeterialQty) {
+    if (pickedMeterialQty <= requiredMeterialQty) {
       // if scan
       if (scan) {
         let meterial = this.comingSelectedMeterials[0];
-
         if (meterial.PickQty > requiredMeterialQty) {
           if (meterial.totalPickQty > remailingMeterialQty) {
             meterial.MeterialPickQty = remailingMeterialQty
@@ -637,7 +660,6 @@ export class OutProdissueComponent implements OnInit {
           }
         }
         else {
-
           if (meterial.totalPickQty > remailingMeterialQty) {
             meterial.MeterialPickQty = remailingMeterialQty
           }
@@ -646,31 +668,23 @@ export class OutProdissueComponent implements OnInit {
           }
           meterial.MeterialPickQty = meterial.TOTALQTY - meterial.PickQty
         }
-
         this.selectedMeterials.push(meterial);
         //apply paging..
         this.pagable = this.selectedMeterials.length > this.pageSize;
-
-
         pickedMeterialQty = pickedMeterialQty + meterial.MeterialPickQty;
         remailingMeterialQty = requiredMeterialQty - pickedMeterialQty;
       }
       else {
-
         for (let i = 0; i < this.comingSelectedMeterials.length; i++) {
-
           let meterial = this.comingSelectedMeterials[i];
           let avaliableMeterialQty = parseFloat(meterial.TOTALQTY);
-
           if (avaliableMeterialQty >= remailingMeterialQty) {
             meterial.MeterialPickQty = remailingMeterialQty;
           }
           else {
             meterial.MeterialPickQty = avaliableMeterialQty;
           }
-
           // meterial.MeterialPickQty = avaliableMeterialQty - remailingMeterialQty;
-
           // if (meterial.MeterialPickQty < 0) {
           //   meterial.MeterialPickQty = 0.000;
           // }
@@ -680,11 +694,9 @@ export class OutProdissueComponent implements OnInit {
           this.selectedMeterials.push(meterial);
           //apply paging..
           this.pagable = this.selectedMeterials.length > this.pageSize;
-
           pickedMeterialQty = pickedMeterialQty + meterial.MeterialPickQty;
           remailingMeterialQty = requiredMeterialQty - pickedMeterialQty;
         }
-
         //code only for non tracked item
         //fixed issue: save&remaing items showing  
         if (this.OrderType == 'N') {
@@ -692,7 +704,6 @@ export class OutProdissueComponent implements OnInit {
           if (this.outbound.TempMeterials !== undefined
             && this.outbound.TempMeterials !== null
             && this.outbound.TempMeterials.length > 0) {
-
             itemMeterials = this.outbound.TempMeterials.filter(
               (m: any) => m.Item.ITEMCODE
                 === this.outbound.SelectedItem.ITEMCODE && m.Item.ROWNUM
@@ -710,7 +721,6 @@ export class OutProdissueComponent implements OnInit {
             });
           }
         }
-
       }
       // Selected meterial
       if (this.selectedMeterials && this.selectedMeterials.length > 0) {
@@ -731,7 +741,7 @@ export class OutProdissueComponent implements OnInit {
     if(this.selectedMeterials!=null && this.selectedMeterials!=undefined &&
       this.selectedMeterials.length>0) {
         this.showSaveButton = true;
-      }
+      }  
     
   }   
   /**
