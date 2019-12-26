@@ -34,20 +34,20 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'ItemCode'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm"  id="binTransferScanItemCodeInput"
+                                <input type="text" #scanItemCode class="form-control form-control-sm"  id="binTransferScanItemCodeInput"
                                     placeholder="{{'ItemCode'|translate}}" name="itemCode" id="binTransferItemCodeScan"
                                     [(ngModel)]="itemCode" (blur)="OnItemCodeChange()">
                                 <div class="input-group-append">
-                                    <button class="k-button k-primary btn" type="button"
-                                        (click)="OnItemCodeLookupClick()">
+                                    <div class="k-button k-primary btn" type="button"
+                                        (mousedown)="OnItemCodeLookupClick()">
                                         <i class="opti-icon-hammenu"></i>
-                                    </button>
+                                    </div>
                                 </div>
                                 <div class="ml-1 d-flex">
-                                    <button type="button"  id="binTransferScanItemCodeBtn" (click)="onInboundScan()"
+                                    <div type="button"  id="binTransferScanItemCodeBtn" (mousedown)="onInboundScan()"
                                         class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
-                                    </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -70,13 +70,19 @@
                         </label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" id="binTransferLotInput"
+                                <input type="text" #scanLotNo class="form-control form-control-sm" id="binTransferLotInput"
                                     placeholder="{{batchNoPlaceholder}}" name="lotValue" [(ngModel)]="lotValue"
                                     (blur)="OnLotChange()">
                                 <div class="input-group-append">
-                                    <button class="k-button k-primary btn" type="button" (click)="ShowLOTList()">
+                                    <div class="k-button k-primary btn" type="button" (mousedown)="ShowLOTList()">
                                         <i class="opti-icon-hammenu"></i>
-                                    </button>
+                                    </div>
+                                </div>
+                                <div class="ml-1 d-flex">
+                                    <div type="button" id="binTransferScanFromBinScanBtn" (mousedown)="onInboundScan()"
+                                        class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                        <i class="opti-icon-qr-code fs-24"></i>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -86,19 +92,19 @@
                             class="col-sm-3 col-form-label">{{'InvTransfer_FromBin'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text"  id="binTransferFromBinInput" class="form-control form-control-sm"
+                                <input type="text" #scanFromBin id="binTransferFromBinInput" class="form-control form-control-sm"
                                     placeholder="{{'InvTransfer_FromBin'|translate}}" name="fromBin"
                                     [(ngModel)]="fromBin" (blur)="OnFromBinChange()">
                                 <div class="input-group-append">
-                                    <button class="k-button k-primary btn" type="button" (click)="ShowFromBins()">
+                                    <div class="k-button k-primary btn" type="button" (mousedown)="ShowFromBins()">
                                         <i class="opti-icon-hammenu"></i>
-                                    </button>
+                                    </div>
                                 </div>
                                 <div class="ml-1 d-flex">
-                                    <button type="button" id="binTransferScanFromBinScanBtn" (click)="onInboundScan()"
+                                    <div type="button" id="binTransferScanFromBinScanBtn" (mousedown)="onInboundScan()"
                                         class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
-                                    </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -108,19 +114,19 @@
                             class="col-sm-3 col-form-label">{{'InvTransfer_ToBin'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm"  id="binTransferToBinInput"
+                                <input type="text" #scanToBin class="form-control form-control-sm"  id="binTransferToBinInput"
                                     placeholder="{{'InvTransfer_ToBin'|translate}}" name="toBin" [(ngModel)]="toBin"
                                     (blur)="OnToBinChange()">
                                 <div class="input-group-append">
-                                    <button class="k-button k-primary btn" type="button" (click)="ShowToBins()">
+                                    <div class="k-button k-primary btn" type="button" (mousedown)="ShowToBins()">
                                         <i class="opti-icon-hammenu"></i>
-                                    </button>
+                                    </div>
                                 </div>
                                 <div class="ml-1 d-flex">
-                                    <button type="button" id="binTransferScanToBinScanBtn" (click)="onInboundScan()"
+                                    <div type="button" id="binTransferScanToBinScanBtn" (mousedown)="onInboundScan()"
                                         class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
-                                    </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -132,7 +138,7 @@
                         </label>
                         <div class="col-sm-9">
                             <input type="number" min="0" class="form-control form-control-sm text-right"
-                                placeholder="{{zero}}" name="onHandQty" [(ngModel)]="onHandQty" [disabled]=true>
+                                placeholder="{{zero}}" name="onHandQty" [(ngModel)]="onHandQty" [attr.disabled]="true ? '' : null">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -162,23 +168,23 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Plt_PalletNo'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" id= "binTransferScanByPalletPalletNoInput"
+                                <input type="text" #scanPallet class="form-control form-control-sm" id= "binTransferScanByPalletPalletNoInput"
                                     placeholder="{{'Plt_PalletNo'|translate}}" name="palletNo" [(ngModel)]="palletNo"
                                     (blur)="onPalletChange()">
                                 <div class="input-group-append has-seprate-btn">
-                                    <button class="k-button k-primary btn" type="button" (click)="getPalletList()">
+                                    <div class="k-button k-primary btn" type="button" (mousedown)="getPalletList()">
                                         <i class="opti-icon-hammenu"></i>
-                                    </button>
-                                    <button class="k-button k-primary btn separate-btn" type="button"
-                                        (click)="showSelectedPallets()" *ngIf="selectedPallets.length>0">
+                                    </div>
+                                    <div class="k-button k-primary btn separate-btn" type="button"
+                                        (mousedown)="showSelectedPallets()" *ngIf="selectedPallets.length>0">
                                         <i class="opti-icon-view-batch mr-1"></i>{{'Plt_Pallets'|translate}}
-                                    </button>
+                                    </div>
                                 </div>
                                 <div class="ml-1 d-flex">
-                                    <button type="button" id="binTransferByPalletPalletNoScanBtn" (click)="onInboundScan()"
+                                    <div type="button" id="binTransferByPalletPalletNoScanBtn" (mousedown)="onInboundScan()"
                                         class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
-                                    </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -193,20 +199,20 @@
                                     placeholder="{{'InvTransfer_ToBin'|translate}}" name="toBin" [(ngModel)]="toBin"
                                     (blur)="OnToBinChange()">
                                 <div class="input-group-append has-seprate-btn">
-                                    <button class="k-button k-primary btn" type="button" (click)="ShowToBins()">
+                                    <div class="k-button k-primary btn" type="button" (mousedown)="ShowToBins()">
                                         <i class="opti-icon-hammenu"></i>
-                                    </button>
-                                    <div class="mr-1 d-flex">
-                                        <button type="button" id="binTransferByPalletToBinScanbtn" (click)="onInboundScan()"
+                                    </div>
+                                    <div class="ml-1 d-flex">
+                                        <div type="button" id="binTransferByPalletToBinScanbtn" (mousedown)="onInboundScan()"
                                             class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                             <i class="opti-icon-qr-code fs-24"></i>
-                                        </button>
+                                        </div>
                                     </div>
-                                    <button class="k-button k-primary btn separate-btn" type="button"
-                                        *ngIf="!isNonTrack" (click)="onAddPalletClick()">
+                                    <div class="k-button k-primary btn separate-btn ml-1" type="button"
+                                        *ngIf="!isNonTrack" (mousedown)="onAddPalletClick()">
                                         <span
-                                            class="k-icon k-i-plus-outline mr-1 fs-12"></span>{{'Plt_Pallets'|translate}}
-                                    </button>
+                                            class="k-icon k-i-plus-outline fs-12"></span>{{'Plt_Pallets'|translate}}
+                                </div>
                                 </div>
                             </div>
                         </div>
@@ -228,19 +234,19 @@
                 <hr />
             </div>
             <div class="col-sm-12 col-12">
-                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="goBack()">
+                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (mousedown)="goBack()">
                     <span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
 
-                <button type="button" class="btn btn-primary k-button btn-sm btn-icon-with-text" (click)="AddLineLots()"
+                <button type="button" class="btn btn-primary k-button btn-sm btn-icon-with-text" (mousedown)="AddLineLots()"
                     *ngIf="radioSelected==0">
                     <span class="k-icon k-i-plus" role="presentation"></span> {{'AddMore'|translate}}</button>
                 <button type="button" class="btn btn-primary k-button btn-sm btn-icon-with-text mr-1"
-                    (click)="ShowSavedData()">
+                    (mousedown)="ShowSavedData()">
                     <span class="k-icon k-i-preview" role="presentation"></span>
                     {{'InvTransfer_ViewLines'|translate}}</button>
 
                 <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text"
-                    (click)="SubmitPutAway()">
+                    (mousedown)="SubmitPutAway()">
                     <span class="k-icon k-i-check" role="presentation"></span> {{'Submit'|translate}}</button>
 
 

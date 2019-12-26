@@ -31,7 +31,7 @@ export class BinTransferComponent implements OnInit {
   serviceData: any[];
   lookupfor: string;
   showItemName: boolean = false;
-  showBatchNo: boolean = false;
+  showBatchNo: boolean = true;
   Remarks: string = "";
   onHandQty: any = "0";
   SysNumber: any;
@@ -69,6 +69,11 @@ export class BinTransferComponent implements OnInit {
   showBinFields: boolean = true;
   binOfSelectedPallet: any = "";
   palletList: any = [];
+  @ViewChild("scanItemCode") scanItemCode;
+  @ViewChild("scanFromBin") scanFromBin;
+  @ViewChild("scanToBin") scanToBin;
+  @ViewChild("scanLotNo") scanLotNo;
+  @ViewChild("scanPallet") scanPallet;
 
   constructor(private commonservice: Commonservice, private activatedRoute: ActivatedRoute,
     private router: Router, private inventoryTransferService: InventoryTransferService,
@@ -97,6 +102,7 @@ export class BinTransferComponent implements OnInit {
   // End UI Section
 
   ngOnInit() {
+    this.batchNoPlaceholder = this.translate.instant("BatchNo");
     if (localStorage.getItem("PalletizationEnabled") == "True") {
       this.isPalletizationEnable = true;
     } else {
@@ -133,6 +139,10 @@ export class BinTransferComponent implements OnInit {
     this.formatOnHandQty();
     this.zero = this.onHandQty;
     console.log("bin loaded")
+  }
+
+  ngAfterViewInit(): void {
+    this.scanItemCode.nativeElement.focus();
   }
 
 
@@ -232,6 +242,7 @@ export class BinTransferComponent implements OnInit {
         } else {
           this.toastr.error('', this.translate.instant("InvalidItemCode"));
           this.itemCode = "";
+          this.scanItemCode.nativeElement.focus();
         }
       },
       error => {
@@ -978,48 +989,7 @@ export class BinTransferComponent implements OnInit {
       }
       return false;
     }
-    // if (this.ItemTracking == "B") {
-    //   if (this.lotValue == "") {
-    //     if (this.showValidation) {
-    //       this.toastr.error('', this.translate.instant("Lotcannotbeblank"));
-    //     }
-    //     return false;
-    //   }
-    // }
-    // if (this.ItemTracking == "S") {
-    //   if (this.lotValue == "") {
-    //     if (this.showValidation) {
-    //       this.toastr.error('', this.translate.instant("SerialNoCantBlank"));
-    //     }
-    //     return false;
-    //   }
-
-    // }
-    //-----------------------------------------------
-    // else {
-    //   if (Number(this.transferQty) <= 0) {
-    //     if (this.showValidation) {
-    //       this.toastr.error('', this.translate.instant("InvTransfer_Enterquantitygreaterthanzero"));
-    //     }
-    //     return false;
-    //   }
-    // }
-    // if (this.fromBin == "") {
-    //   this.toastr.error('', this.translate.instant("InvTransfer_FromBinMsg"));
-    //   return false;
-    // }
-    // if (this.toBin == "") {
-    //   if (this.showValidation) {
-    //     this.toastr.error('', this.translate.instant("InvTransfer_ToBinMsg"));
-    //   }
-    //   return false;
-    // }
-    // if (this.transferQty == "") {
-    //   if (this.showValidation) {
-    //     this.toastr.error('', this.translate.instant("EnterLotQuantity"));
-    //   }
-    //   return false;
-    // }
+    
     return true;
   }
 
@@ -1036,6 +1006,7 @@ export class BinTransferComponent implements OnInit {
           break;
         }
       }
+      this.scanPallet.nativeElement.focus();
     }
     else {
       if (this.lookupfor == "ItemsList") {
@@ -1053,6 +1024,7 @@ export class BinTransferComponent implements OnInit {
           this.getDefaultBin();
         }
         this.CheckTrackingandVisiblity();
+        this.scanItemCode.nativeElement.focus();
       } else if (this.lookupfor == "BatchNoList") {
         this.lotValue = $event[0];
         this.fromBin = $event[6];
@@ -1061,7 +1033,8 @@ export class BinTransferComponent implements OnInit {
         this.SysNumber = $event[9];
         this.palletNo = $event[12];
         this.actualLotNo = $event[13];
-      }
+        this.scanLotNo.nativeElement.focus();
+      } 
       else if (this.lookupfor == "BatchNoList2") {
         this.lotValue = $event[0];
         this.fromBin = $event[5];
@@ -1070,6 +1043,7 @@ export class BinTransferComponent implements OnInit {
         this.SysNumber = $event[9];
         this.palletNo = ""
         this.actualLotNo = $event[0];
+        this.scanLotNo.nativeElement.focus();
         // this.palletNo = $event[12];
         // this.actualLotNo = $event[13];
       }
@@ -1078,13 +1052,16 @@ export class BinTransferComponent implements OnInit {
         this.fromBin = $event[3];
         this.transferQty = $event[6];
         this.onHandQty = $event[6];
+        this.scanFromBin.nativeElement.focus();
       } else if (this.lookupfor == "NTrackFromBin") {
         this.fromBin = $event[3];
         this.transferQty = $event[6];
         this.onHandQty = $event[6];
+        this.scanFromBin.nativeElement.focus();
       } else if (this.lookupfor == "toBinsList") {
         this.toBin = $event[0];
         //this.prepareByPalletData();
+        this.scanToBin.nativeElement.focus();
       }
       this.formatTransferNumbers();
       this.formatOnHandQty();
