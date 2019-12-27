@@ -38,16 +38,16 @@
                                     placeholder="{{'ItemCode'|translate}}" name="itemCode" id="binTransferItemCodeScan"
                                     [(ngModel)]="itemCode" (blur)="OnItemCodeChange()">
                                 <div class="input-group-append">
-                                    <div class="k-button k-primary btn" type="button"
+                                    <button tabIndex="-1" class="k-button k-primary btn" type="button"
                                         (mousedown)="OnItemCodeLookupClick()">
                                         <i class="opti-icon-hammenu"></i>
-                                    </div>
+                                    </button>
                                 </div>
                                 <div class="ml-1 d-flex">
-                                    <div type="button"  id="binTransferScanItemCodeBtn" (mousedown)="onInboundScan()"
+                                    <button tabIndex="-1" type="button"  id="binTransferScanItemCodeBtn" (mousedown)="onInboundScan()"
                                         class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
-                                    </div>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -74,15 +74,15 @@
                                     placeholder="{{batchNoPlaceholder}}" name="lotValue" [(ngModel)]="lotValue"
                                     (blur)="OnLotChange()">
                                 <div class="input-group-append">
-                                    <div class="k-button k-primary btn" type="button" (mousedown)="ShowLOTList()">
+                                    <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="ShowLOTList()">
                                         <i class="opti-icon-hammenu"></i>
-                                    </div>
+                                    </button>
                                 </div>
                                 <div class="ml-1 d-flex">
-                                    <div type="button" id="binTransferScanFromBinScanBtn" (mousedown)="onInboundScan()"
+                                    <button tabIndex="-1" type="button" id="binTransferScanFromBinScanBtn" (mousedown)="onInboundScan()"
                                         class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
-                                    </div>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -96,15 +96,15 @@
                                     placeholder="{{'InvTransfer_FromBin'|translate}}" name="fromBin"
                                     [(ngModel)]="fromBin" (blur)="OnFromBinChange()">
                                 <div class="input-group-append">
-                                    <div class="k-button k-primary btn" type="button" (mousedown)="ShowFromBins()">
+                                    <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="ShowFromBins()">
                                         <i class="opti-icon-hammenu"></i>
-                                    </div>
+                                    </button>
                                 </div>
                                 <div class="ml-1 d-flex">
-                                    <div type="button" id="binTransferScanFromBinScanBtn" (mousedown)="onInboundScan()"
+                                    <button tabIndex="-1" type="button" id="binTransferScanFromBinScanBtn" (mousedown)="onInboundScan()"
                                         class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
-                                    </div>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -118,15 +118,15 @@
                                     placeholder="{{'InvTransfer_ToBin'|translate}}" name="toBin" [(ngModel)]="toBin"
                                     (blur)="OnToBinChange()">
                                 <div class="input-group-append">
-                                    <div class="k-button k-primary btn" type="button" (mousedown)="ShowToBins()">
+                                    <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="ShowToBins()">
                                         <i class="opti-icon-hammenu"></i>
-                                    </div>
+                                    </button>
                                 </div>
                                 <div class="ml-1 d-flex">
-                                    <div type="button" id="binTransferScanToBinScanBtn" (mousedown)="onInboundScan()"
+                                    <button tabIndex="-1" type="button" id="binTransferScanToBinScanBtn" (mousedown)="onInboundScan()"
                                         class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
-                                    </div>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -172,19 +172,19 @@
                                     placeholder="{{'Plt_PalletNo'|translate}}" name="palletNo" [(ngModel)]="palletNo"
                                     (blur)="onPalletChange()">
                                 <div class="input-group-append has-seprate-btn">
-                                    <div class="k-button k-primary btn" type="button" (mousedown)="getPalletList()">
+                                    <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="getPalletList()">
                                         <i class="opti-icon-hammenu"></i>
-                                    </div>
-                                    <div class="k-button k-primary btn separate-btn" type="button"
+                                    </button>
+                                    <button tabIndex="-1" class="k-button k-primary btn separate-btn" type="button"
                                         (mousedown)="showSelectedPallets()" *ngIf="selectedPallets.length>0">
                                         <i class="opti-icon-view-batch mr-1"></i>{{'Plt_Pallets'|translate}}
-                                    </div>
+                                    </button>
                                 </div>
                                 <div class="ml-1 d-flex">
-                                    <div type="button" id="binTransferByPalletPalletNoScanBtn" (mousedown)="onInboundScan()"
+                                    <button tabIndex="-1" type="button" id="binTransferByPalletPalletNoScanBtn" (mousedown)="onInboundScan()"
                                         class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
-                                    </div>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -199,20 +199,20 @@
                                     placeholder="{{'InvTransfer_ToBin'|translate}}" name="toBin" [(ngModel)]="toBin"
                                     (blur)="OnToBinChange()">
                                 <div class="input-group-append has-seprate-btn">
-                                    <div class="k-button k-primary btn" type="button" (mousedown)="ShowToBins()">
+                                    <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="ShowToBins()">
                                         <i class="opti-icon-hammenu"></i>
-                                    </div>
+                                    </button>
                                     <div class="ml-1 d-flex">
-                                        <div type="button" id="binTransferByPalletToBinScanbtn" (mousedown)="onInboundScan()"
+                                        <button tabIndex="-1" type="button" id="binTransferByPalletToBinScanbtn" (mousedown)="onInboundScan()"
                                             class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                             <i class="opti-icon-qr-code fs-24"></i>
-                                        </div>
+                                        </button>
                                     </div>
-                                    <div class="k-button k-primary btn separate-btn ml-1" type="button"
+                                    <button tabIndex="-1" class="k-button k-primary btn separate-btn ml-1" type="button"
                                         *ngIf="!isNonTrack" (mousedown)="onAddPalletClick()">
                                         <span
                                             class="k-icon k-i-plus-outline fs-12"></span>{{'Plt_Pallets'|translate}}
-                                </div>
+                                    </button>
                                 </div>
                             </div>
                         </div>
