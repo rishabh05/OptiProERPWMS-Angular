@@ -11,20 +11,20 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Outbound_SO'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" name="orderNumber" id="OutOrderOrderNoInput" (blur)="onOrderNoBlur()" value=''
+                                <input #scanSO type="text" name="orderNumber" id="OutOrderOrderNoInput" (blur)="onOrderNoBlur()" value=''
                                     [(ngModel)]="orderNumber" class="form-control form-control-sm"
                                     placeholder="{{'Outbound_SO'|translate}}">
                                 <div class="input-group-append has-seprate-btn">
-                                    <button class="k-button k-primary btn" (click)="openOrderLookup()" type="button">
+                                    <button tabindex="-1" class="k-button k-primary btn" (mousedown)="openOrderLookup()" type="button">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
                                     
-                                        <button type="button" id="outOrderSOScan" 
+                                        <button tabindex="-1" type="button" id="outOrderSOScan" 
                                             class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                             <i class="opti-icon-qr-code fs-24"></i>
                                         </button>
-                                        <button class="k-button k-primary btn separate-btn" 
-                                         (click)="openSOOrderList()"
+                                        <button tabindex="-1" class="k-button k-primary btn separate-btn" 
+                                         (mousedown)="openSOOrderList()"
                                         type="button">
                                         <i class="opti-icon-search"></i>
                                     </button>
@@ -46,12 +46,12 @@
                                     <input #DocEntry type="text" class="form-control form-control-sm" name="itrCode" [(ngModel)]=itrCode
                                       placeholder="{{'InvTransfer_ITR'|translate}}" (blur)="onITRChange()" id="outOrderItrCodeInput">
                                     <div class="input-group-append has-seprate-btn">
-                                      <button class="k-button k-primary btn" type="button" (click)="onITRlookupClick()">
+                                      <button tabindex="-1" class="k-button k-primary btn" type="button" (mousedown)="onITRlookupClick()">
                                         <i class="opti-icon-hammenu"></i>
                                       </button>
                                     </div>
                                     <div class="ml-1 d-flex">
-                                      <button type="button" id="OutOrderItrCodeScanBtn" (click)="onOrderScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                      <button tabindex="-1" type="button" id="OutOrderItrCodeScanBtn" (mousedown)="onOrderScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                       </button>
                                     </div>
@@ -71,18 +71,18 @@
                                     [(ngModel)]="palletNo" class="form-control form-control-sm" id="outOrderPalletNoInput"
                                     placeholder="{{'Plt_PalletNo'|translate}}">
                                 <div class="input-group-append has-seprate-btn">
-                                    <button class="k-button k-primary btn" (click)="getPalletList()" type="button">
+                                    <button tabindex="-1" class="k-button k-primary btn" (mousedown)="getPalletList()" type="button">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
                                     <!-- <button class="k-button k-primary btn separate-btn"
                                             (click)="openSOOrderList()" type="button">
                                             <i class="opti-icon-search"></i>
                                         </button> -->
-                                    <button class="k-button k-primary btn separate-btn" type="button" (click)="showSelectedPallets()"
+                                    <button tabindex="-1" class="k-button k-primary btn separate-btn" type="button" (mousedown)="showSelectedPallets()"
                                         *ngIf="savedPalletItems.length>0">
                                         <i class="opti-icon-view-batch mr-1"></i>{{'Plt_Pallets'|translate}}
                                     </button>
-                                    <button type="button" id="outOrderPalletScanButton" (click)="onPalletScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                    <button tabindex="-1" type="button" id="outOrderPalletScanButton" (mousedown)="onPalletScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
                                 </div>
@@ -98,7 +98,7 @@
                         <label for="orderNumber" class="col-sm-3 col-form-label">{{'ItemCode'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" id="outOrderItemcodeinput" name="ItemCode" (blur)="onItemChange()" value=''
+                                <input #scanItemCode type="text" id="outOrderItemcodeinput" name="ItemCode" (blur)="onItemChange()" value=''
                                     [(ngModel)]="ItemCode" class="form-control form-control-sm"
                                     placeholder="{{'ItemCode'|translate}}">
                                 <div class="input-group-append has-seprate-btn ml-1">
@@ -110,7 +110,7 @@
                                         *ngIf="savedPalletItems.length>0">
                                         <i class="opti-icon-view-batch mr-1"></i>{{'Plt_Pallets'|translate}}
                                     </button> -->
-                                    <button type="button" id="OutOrderItemCodeScanButton" (click)="onItemScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                    <button tabindex="-1" type="button" id="OutOrderItemCodeScanButton" (mousedown)="onItemScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
                                 </div>
@@ -130,14 +130,14 @@
                                     [(ngModel)]="selectedItem" class="form-control form-control-sm"
                                     placeholder="{{'Item'|translate}}">
                                 <div class="input-group-append has-seprate-btn">
-                                    <button class="k-button k-primary btn" (click)="getItemList()" type="button">
+                                    <button tabindex="-1" class="k-button k-primary btn" (mousedown)="getItemList()" type="button">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
                                     <!-- <button class="k-button k-primary btn separate-btn"
                                                 (click)="openSOOrderList()" type="button">
                                                 <i class="opti-icon-search"></i>
                                             </button> -->
-                                    <button type="button" id="OutOrderItemscanButton" (click)="onItemScan()"
+                                    <button tabindex="-1" type="button" id="OutOrderItemscanButton" (mousedown)="onItemScan()"
                                         class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
@@ -244,29 +244,29 @@
             <div class="col-sm-12 col-12">
 
                 <button type="button" *ngIf="fromWhere!='itr'" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon mr-1"
-                    (click)="openOutboundCustomer()" roterLink="binTransfer" skipLocationChange><i
+                    (mousedown)="openOutboundCustomer()" roterLink="binTransfer" skipLocationChange><i
                         class="opti-icon-arrow-back"></i></button>
 
                 <!-- *ngIf='outbound.TempMeterials!==undefined && outbound.TempMeterials!==null && outbound.TempMeterials.length>0;'' -->
-                <button type="button" *ngIf="showDeleiveryAndAdd && fromWhere!='itr'" (click)="addToDeleiver()"
+                <button type="button" *ngIf="showDeleiveryAndAdd && fromWhere!='itr'" (mousedown)="addToDeleiver()"
                     class="btn btn-primary k-button btn-sm btn-icon-with-text ml-1"><span
                         class="k-icon k-i-plus-outline" role="presentation"></span>
                     {{'AddToDeleiver'|translate}}</button>
 
-                <button type="button" *ngIf="showDeleiveryAndAdd && fromWhere!='itr'" (click)="DeliveryClick()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
+                <button type="button" *ngIf="showDeleiveryAndAdd && fromWhere!='itr'" (mousedown)="DeliveryClick()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-check" role="presentation"></span> {{'Deleiver'|translate}}</button>
                 
-                <button type="button" *ngIf="fromWhere=='itr'" (click)="cancel()" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
+                <button type="button" *ngIf="fromWhere=='itr'" (mousedown)="cancel()" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
 
-                <button type="button" *ngIf="showDeleiveryAndAdd && fromWhere=='itr'" (click)="itrClick()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
+                <button type="button" *ngIf="showDeleiveryAndAdd && fromWhere=='itr'" (mousedown)="itrClick()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-check" role="presentation"></span> {{'Submit'|translate}}</button>
                 <!-- <button type="button" (click)="showPalletsList()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-check" role="presentation"></span>{{btnText}}</button> -->
                 <!-- <button type="button" *ngIf="showDeleiveryAndAdd" (click)="deliveryConfirmation()"
                     class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-check"
                         role="presentation"></span> {{'Deleiver'|translate}}</button> -->
-                <button *ngIf="showTemporaryViews"  type="button"  (click)="showPalletsList()"
+                <button *ngIf="showTemporaryViews"  type="button"  (mousedown)="showPalletsList()"
                    class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-check"
                      role="presentation"></span>{{btnText}}</button>
 

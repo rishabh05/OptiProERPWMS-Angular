@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Pallet } from 'src/app/models/Inbound/Pallet';
 import { Commonservice } from 'src/app/services/commonservice.service';
 import { Router } from '@angular/router';
@@ -40,6 +40,8 @@ export class PalTransferComponent implements OnInit {
   toBin: string;
   toWhse: string;
   newCreatedPalletNo: string;
+  @ViewChild('fromPalletInput') fromPalletInput
+  @ViewChild('toPalletInputs') toPalletInputs
 
   constructor(private commonservice: Commonservice,
     private router: Router, private toastr: ToastrService, private translate: TranslateService) {
@@ -50,6 +52,10 @@ export class PalTransferComponent implements OnInit {
     if (localStorage.getItem("AutoPalletIdGenerationChecked") == "True") {
       this.autoGeneratePalletEnable = true;
     }
+  }
+
+  ngAfterViewInit(): void{
+    this.fromPalletInput.nativeElement.focus()
   }
 
   public getFromPalletList(from: string) {
@@ -225,8 +231,10 @@ export class PalTransferComponent implements OnInit {
       // }
       this.palletData = [];
       this.toPalletNo = '';
+      this.fromPalletInput.nativeElement.focus()
     } else if (this.fromPalletLookup == "to_pallet") {
       this.toPalletNo = lookupValue.Code;
+      this.toPalletInputs.nativeElement.focus()
     }
 
     if (this.fromPalletNo != '' && this.toPalletNo != '') {

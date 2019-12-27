@@ -15,6 +15,7 @@ import { StatePersistingServiceService } from 'src/app/services/state-persisting
 export class InboundDetailsComponent implements OnInit,AfterViewInit {
   
   @ViewChild('VendScanInputField') vendInputScanField:ElementRef;
+  @ViewChild('poScanInputField') poScanInputField;
   public viewLines: boolean;
   showLookupLoader: boolean = true; 
   VendRefNo: string="";
@@ -40,7 +41,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
   displayPDF1: boolean = false;
   detailsAvailable: boolean = false;
   ngAfterViewInit(): void {
-    //this.vendInputScanField.nativeElement.focus();
+    this.vendInputScanField.nativeElement.focus();
   }
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent,private persistingService:StatePersistingServiceService) {
@@ -236,6 +237,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
         this.showNext = true;
         this.detailsAvailable = true;
         this.VendCode1= this.VendCode;
+        this.poScanInputField.nativeElement.focus();
       }else{
         if(this.VendCode1 != $event[0]){
           this.poCode = "";
@@ -245,6 +247,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
         this.VendCode1= this.VendCode;
         this.showNext = true;
         this.detailsAvailable = true;
+        this.vendInputScanField.nativeElement.focus();
       }
     }
   }

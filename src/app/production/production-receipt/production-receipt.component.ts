@@ -103,7 +103,7 @@ export class ProductionReceiptComponent implements OnInit {
   dateFormat: string;
   pagable: boolean = false;
   pageSize:number = Commonservice.pageSize;
-  
+  @ViewChild('scanOrderNo') scanOrderNo;
 
   constructor(private renderer: Renderer, private commonservice: Commonservice, private router: Router, private productionService: ProductionService,
     private toastr: ToastrService, private translate: TranslateService) { }
@@ -118,6 +118,9 @@ export class ProductionReceiptComponent implements OnInit {
     this.dateFormat = localStorage.getItem("DATEFORMAT");
   }
 
+  ngAfterViewInit(): void{
+    this.scanOrderNo.nativeElement.focus()
+  }
 
   OnOrderLookupClick(){
     this.showOrderList();

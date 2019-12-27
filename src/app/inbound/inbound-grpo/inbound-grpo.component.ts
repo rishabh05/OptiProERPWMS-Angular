@@ -115,6 +115,10 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   checkValidateSerialSubs: ISubscription;
   @ViewChild('RecBinVal') RecBinVal: ElementRef;
   newCreatedPalletNo: string;
+  @ViewChild('scanPallet') scanPallet: ElementRef;
+  @ViewChild('scanTargetWhse') scanTargetWhse: ElementRef;
+  @ViewChild('scanTargetBin') scanTargetBin: ElementRef;
+
   constructor(private inboundService: InboundService, private commonservice: Commonservice,
     private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent, private productionService: ProductionService) {
@@ -126,7 +130,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   }
   ngAfterViewInit(): void {
     //console.log('view after init');
-    // this.RecBinVal.nativeElement.focus();
+    this.RecBinVal.nativeElement.focus();
     // this.itemCodeInput.nativeElement.focus();
   }
 
@@ -1867,7 +1871,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         } else {
           this.RecvbBinvalue = $event[0];
         }
-
+        this.RecBinVal.nativeElement.focus();
       }
       else if (this.lookupfor == "toWhsList") {
         // console.log("value of lots" + $event);
@@ -1875,9 +1879,10 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         this.targetWhse = $event[0];
         //this.itemCode = $event[2];
         this.targetBin = "";
-
+        this.scanTargetWhse.nativeElement.focus();
       } else if (this.lookupfor == "PalletList") {
         this.palletValue = $event[0];
+        this.scanPallet.nativeElement.focus();
       }
     }
   }

@@ -93,9 +93,9 @@ export class InventoryEnquiryComponent implements OnInit,AfterViewInit {
         this.itemDetail = false;
         this.disableDescription = true;
         this.disableItemCode = false;
-        setTimeout(() => {
-          this.itemCodeInput.nativeElement.focus(); 
-        }, 200);
+        // setTimeout(() => {
+        //   this.itemCodeInput.nativeElement.focus(); 
+        // }, 200);
          
         break;
       case ("InventoryEnquiryOptions3"):
@@ -105,9 +105,9 @@ export class InventoryEnquiryComponent implements OnInit,AfterViewInit {
         this.disableDescription = true;
         this.disableItemCode = false;
 
-        setTimeout(() => {
-          this.itemCodeInput.nativeElement.focus(); 
-        }, 200);
+        // setTimeout(() => {
+        //   this.itemCodeInput.nativeElement.focus(); 
+        // }, 200);
 
         break;
     }

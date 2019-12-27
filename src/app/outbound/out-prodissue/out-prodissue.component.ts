@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, ViewChild } from '@angular/core';
 import { CommonConstants } from 'src/app/const/common-constants';
 import { OutboundService } from 'src/app/services/outbound.service';
 import { OutboundData } from 'src/app/models/outbound/outbound-data';
@@ -72,6 +72,9 @@ export class OutProdissueComponent implements OnInit {
   toBinNo: string = "";
   toWhse: string = "";
   showSaveButton: boolean = false;
+  @ViewChild('scanToBin') scanToBin;
+  @ViewChild('scanBatchSerial') scanBatchSerial;
+
   ngOnInit() {
 
     //lsOutbound
@@ -139,6 +142,14 @@ export class OutProdissueComponent implements OnInit {
           }
         );
       }
+    }
+  }
+
+  ngAfterViewInit():void{
+    if(localStorage.getItem("ComingFrom") == "itr"){
+      this.scanToBin.nativeElement.focus()
+    } else {
+      this.scanBatchSerial.nativeElement.focus()
     }
   }
 
@@ -505,7 +516,8 @@ export class OutProdissueComponent implements OnInit {
       }
       //this.selectedMeterials = [];
      // this.manageMeterial(scan);
-    } else if (lookupValue) { 
+     this.scanToBin.nativeElement.focus()
+    } else if (lookupValue) {
       if (this.OrderType == 'S') {
         let data: any[] = [];
         let tempLookup: any[] = lookupValue;
@@ -572,6 +584,8 @@ export class OutProdissueComponent implements OnInit {
       this.outbound = JSON.parse(localStorage.getItem(CommonConstants.OutboundData));
       this.outbound.SelectedMeterials = lookupValue;
       localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+
+      this.scanBatchSerial.nativeElement.focus()
     } else {
       this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
       this.showLookupLoader = false;

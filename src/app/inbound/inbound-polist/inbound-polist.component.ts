@@ -108,7 +108,6 @@ export class InboundPolistComponent implements OnInit {
 
   ngAfterViewInit() {
     setTimeout(() => {
-      //  this.poScanInputField.nativeElement.focus();
       var selectedPO = localStorage.getItem("selectedPO");
       if (selectedPO != undefined && selectedPO != null && selectedPO != "") {
         this.poCode = selectedPO;
@@ -117,6 +116,7 @@ export class InboundPolistComponent implements OnInit {
       } else {
         this.disablePO = false;
       }
+      this.poScanInputField.nativeElement.focus();
     }, 100);
 
   }
@@ -333,7 +333,7 @@ export class InboundPolistComponent implements OnInit {
         this.openPOLines()
         //reset grid setting to null
         this.persistingService.set('gridSettings', null);
-
+        this.poScanInputField.nativeElement.focus();
       }
       else if (this.lookupfor == "POItemList") {
         this.itemCode = $event[0];

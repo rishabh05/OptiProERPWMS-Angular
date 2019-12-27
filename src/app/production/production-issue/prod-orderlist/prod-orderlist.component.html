@@ -12,11 +12,11 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Outbound_OrderNo'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" name='orderNo' [(ngModel)]="orderNo"
+                                <input #scanOrderNo type="text" class="form-control form-control-sm" name='orderNo' [(ngModel)]="orderNo"
                                     placeholder="{{'Outbound_OrderNo'|translate}}" id="prodOrder_OrderNoScanInput"
                                     (blur)="getItemListForOrder(false,true)">
                                 <div class="input-group-append has-seprate-btn">
-                                    <button class="k-button k-primary btn" type="button" (click)="getOrderList()">
+                                    <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="getOrderList()">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
                                     <!-- <button class="k-button k-primary btn separate-btn" type="button" (click)="getItemListForOrder(false,true)">
@@ -24,7 +24,7 @@
                                     </button> -->
                                 </div>
                                 <div class="d-flex ml-1">
-                                    <button type="button"  id="binTransferScanItemCodeBtn" (click)="onInboundScan()"
+                                    <button tabIndex="-1" type="button"  id="binTransferScanItemCodeBtn" (mousedown)="onInboundScan()"
                                         class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Commonservice } from 'src/app/services/commonservice.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
@@ -28,6 +28,8 @@ export class PalletMergeComponent implements OnInit {
   toBin: string;
   toWhse: string;
   newCreatedPalletNo: string;
+  @ViewChild('scanFromPallet') scanFromPallet
+  @ViewChild('scanToPallet') scanToPallet
 
   constructor(private commonservice: Commonservice,
     private router: Router, private toastr: ToastrService, private translate: TranslateService) {
@@ -38,6 +40,10 @@ export class PalletMergeComponent implements OnInit {
     if (localStorage.getItem("AutoPalletIdGenerationChecked") == "True") {
       this.autoGeneratePalletEnable = true;
     }
+  }
+
+  ngAfterViewInit(): void{
+    this.scanFromPallet.nativeElement.focus()
   }
 
   public getFromPalletList(from: string) {
@@ -194,14 +200,17 @@ export class PalletMergeComponent implements OnInit {
       if (!this.containPallet(this.selectedFromPallets, lookupValue.Code)) {
         this.selectedFromPallets.push(lookupValue);
       }
+      this.scanFromPallet.nativeElement.focus()
     } else if (this.fromPalletLookup == "to_pallet") {
       this.showLookup = false;
       this.toPalletNo = lookupValue.Code;
+      this.scanToPallet.nativeElement.focus()
       if (this.containPallet(this.selectedFromPallets, this.toPalletNo)) {
         this.toastr.error('', this.translate.instant("Plt_AlreadySelected"));
         this.toPalletNo = '';
         return;
       }
+      
     }
   }
 

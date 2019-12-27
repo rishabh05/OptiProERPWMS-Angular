@@ -15,17 +15,17 @@
                                 <input type="text" class="form-control form-control-sm" name="VendCode" [(ngModel)]="VendCode" placeholder="{{'VendorCode'|translate}}"
                                     (blur)="OnVendorChange()" #VendScanInputField [disabled]=showGRPOGridAndBtn id="InboundDetailVendScanInputField">
                                 <div class="input-group-append">
-                                    <button class="k-button k-primary btn" type="button" (click)="onVendorLookupClick()" [disabled]=showGRPOGridAndBtn>
+                                    <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="onVendorLookupClick()" [disabled]=showGRPOGridAndBtn>
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
                                 </div>
                                 <div class="ml-1 d-flex">
-                                    <button type="button" id="poscanButton" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                    <button tabIndex="-1" type="button" id="poscanButton" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
-                                </div>
                             </div>
                         </div>
+                    </div>
                     </div>
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Inbound_VendorName'|translate}}</label>
@@ -39,15 +39,15 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">{{'Inbound_PO#'|translate}}</label>
                             <div class="col-sm-9">
                                 <div class="input-group input-group-sm">
-                                    <input type="text" class="form-control form-control-sm" name="poCode" [(ngModel)]="poCode" placeholder="{{'Inbound_PO#'|translate}}"
-                                        (blur)="OnPOChange()" #poScanInputField id="inboundDetailPOScanInputField">
+                                    <input type="text" #poScanInputField class="form-control form-control-sm" name="poCode" [(ngModel)]="poCode" placeholder="{{'Inbound_PO#'|translate}}"
+                                        (blur)="OnPOChange()" id="inboundDetailPOScanInputField">
                                     <div class="input-group-append">
-                                        <button class="k-button k-primary btn" type="button" (click)="onPOlookupClick()">
+                                        <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="onPOlookupClick()">
                                             <i class="opti-icon-hammenu"></i>
                                         </button>
                                     </div>
                                     <div class="ml-1 d-flex">
-                                        <button type="button" id="inboundDetailPOScanButton" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                        <button tabIndex="-1" type="button" id="inboundDetailPOScanButton" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                             <i class="opti-icon-qr-code fs-24"></i>
                                         </button>
                                     </div>
@@ -85,7 +85,7 @@
                                     <dt class="d-flex align-items-center">{{'Inbound_PurchaseOrderNumber'|translate}}
                                         <div class="d-flex align-items-center  ml-auto">
                                             <span class="opti_arrow-grid-detail text-center opti_vertical-align">›</span>
-                                            <button class="btn btn-danger k-button btn-sm btn-icon ml-2" type="button" (click)="openConfirmForDelete(rowIndex, gridItem)">
+                                            <button class="btn btn-danger k-button btn-sm btn-icon ml-2" type="button" (mousedown)="openConfirmForDelete(rowIndex, gridItem)">
                                                 <span class="k-icon k-i-delete"></span>
                                             </button>
                                         </div>
@@ -100,7 +100,7 @@
                             [width]="90"></kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="" headerClass="text-center" class="text-center" title="" [width]="10">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                <button class="btn btn-danger k-button btn-sm btn-icon" type="button" (click)="openConfirmForDelete(rowIndex, gridItem)">
+                                <button class="btn btn-danger k-button btn-sm btn-icon" type="button" (mousedown)="openConfirmForDelete(rowIndex, gridItem)">
                                     <span class="k-icon k-i-delete"></span>
                                 </button>
                             </ng-template>
@@ -116,12 +116,12 @@
                 <hr />
             </div>
             <div class="col-sm-12 col-12">
-                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="OnCancelClick()">
+                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (mousedown)="OnCancelClick()">
                     <span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
-                <button *ngIf="showGRPOGridAndBtn" class="btn btn-success k-button btn-sm btn-icon-with-text" type="button" (click)="receive()">
+                <button *ngIf="showGRPOGridAndBtn" class="btn btn-success k-button btn-sm btn-icon-with-text" type="button" (mousedown)="receive()">
                     <span class="k-icon k-i-check" role="presentation"></span> {{'Receive'|translate}}</button>
 
-                <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" (click)="onNextClick()" [disabled]="!showNext"
+                <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" (mousedown)="onNextClick()" [disabled]="!showNext"
                     skipLocationChange>
                     <i class="opti-icon-arrow-next"></i>
                 </button>

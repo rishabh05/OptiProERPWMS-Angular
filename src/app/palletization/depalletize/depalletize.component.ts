@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Commonservice } from 'src/app/services/commonservice.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
@@ -27,6 +27,7 @@ export class DepalletizeComponent implements OnInit {
   palletData: any;
   toBin: string;
   toWhse: string;
+  @ViewChild('scanPallet') scanPallet
 
   constructor(private commonservice: Commonservice,
     private router: Router, private toastr: ToastrService, private translate: TranslateService) {
@@ -37,6 +38,10 @@ export class DepalletizeComponent implements OnInit {
     if (localStorage.getItem("AutoPalletIdGenerationChecked") == "True") {
       this.autoGenereatePalletEnable = true;
     }
+  }
+
+  ngAfterViewInit(): void{
+    this.scanPallet.nativeElement.focus()
   }
 
   public getPalletList(from: string) {

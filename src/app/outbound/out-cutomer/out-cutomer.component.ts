@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { OutboundService } from 'src/app/services/outbound.service';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
@@ -40,6 +40,9 @@ export class OutCutomerComponent implements OnInit {
   pageSize: number = 10;
   public trackingId: any = "";
   public CustRefNo: any = "";
+  @ViewChild('scanSO') scanSO
+  @ViewChild('scanCustomerCode') scanCustomerCode
+
   constructor(private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) { }
 
   ngOnInit() {
@@ -70,6 +73,10 @@ export class OutCutomerComponent implements OnInit {
       }
 
     }
+  }
+
+  ngAfterViewInit(): void{
+    this.scanCustomerCode.nativeElement.focus()
   }
 
   getUniqueValuesByProperty(data: any[]): any[] {
@@ -207,7 +214,7 @@ export class OutCutomerComponent implements OnInit {
         }
         //===================================
 
- 
+        this.scanSO.nativeElement.focus()
 
       }else{
         this.selectedCustomerElement = lookupValue;
@@ -225,6 +232,7 @@ export class OutCutomerComponent implements OnInit {
         localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
         CurrentOutBoundData.CustomerData = outbound.CustomerData;
         this.outbound = outbound;
+        this.scanCustomerCode.nativeElement.focus()
       }
     }
   }

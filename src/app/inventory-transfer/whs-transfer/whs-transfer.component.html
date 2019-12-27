@@ -10,10 +10,10 @@
             <label for="inputPassword" class="col-sm-3 col-form-label">{{'InvTransfer_FromWhse'|translate}}</label>
             <div class="col-sm-9">
               <div class="input-group input-group-sm">
-                <input id="fromWhse" name="fromWhse" [(ngModel)]="fromWhse" type="text" class="form-control form-control-sm" placeholder="{{'InvTransfer_FromWhse'|translate}}"
+                <input id="fromWhse" #scanFromWhse name="fromWhse" [(ngModel)]="fromWhse" type="text" class="form-control form-control-sm" placeholder="{{'InvTransfer_FromWhse'|translate}}"
                   [disabled]="isfromWhsDisabled">
                 <div class="input-group-append">
-                  <button class="k-button k-primary btn" type="button" (click)="getFromWhse()" [disabled]="isfromWhsDisabled">
+                  <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="getFromWhse()" [ngClass]="{'disableDiv': isfromWhsDisabled}">
                     <i class="opti-icon-hammenu"></i>
                   </button>
                 </div>
@@ -24,17 +24,17 @@
             <label for="inputPassword" class="col-sm-3 col-form-label">{{'InvTransfer_ToWhse'|translate}}</label>
             <div class="col-sm-9">
               <div class="input-group input-group-sm">
-                <input type="text" name="toWhse" [(ngModel)]="toWhse" id= "whsTransferToWhsInputField" class="form-control form-control-sm" placeholder="{{'InvTransfer_ToWhse'|translate}}"
+                <input type="text" #scanToWhse name="toWhse" [(ngModel)]="toWhse" id= "whsTransferToWhsInputField" class="form-control form-control-sm" placeholder="{{'InvTransfer_ToWhse'|translate}}"
                   (blur)="OnToWarehouseChange()" [disabled]="!isfromWhsDisabled">
                 <div class="input-group-append">
-                  <button class="k-button k-primary btn" type="button" (click)="getToWhse()" [disabled]="!isfromWhsDisabled">
+                  <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="getToWhse()" [ngClass]="{'disableDiv': !isfromWhsDisabled}">
                     <i class="opti-icon-hammenu"></i>
                   </button>
                 </div>
                 <div class="ml-1 d-flex">
-                    <button type="button" id="binTransferByPalletToBin"  (click)="onInboundScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                    <button tabIndex="-1" type="button" id="binTransferByPalletToBin"  (mousedown)="onInboundScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                      <i class="opti-icon-qr-code fs-24"></i>
-                     </button>
+                    </button>
                 </div> 
               </div>
             </div>
@@ -49,15 +49,15 @@
         <hr />
       </div>
       <div class="col-sm-12 col-12">
-        <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="onCancelClick()">
+        <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (mousedown)="onCancelClick()">
           <span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
 
-        <button type="button" *ngIf="showNext" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" (click)="viewSwitch()">
+        <button type="button" *ngIf="showNext" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" (mousedown)="viewSwitch()">
           <i class="opti-icon-arrow-next"></i>
         </button>
 
         <button type="button" id="btnWhsTransferToWhsScanBtn" style="visibility:hidden" (click)="onHiddenToWhsScanClick()" class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
-          <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn
+          <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>
         </button>
       </div>
     </div>

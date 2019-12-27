@@ -12,10 +12,10 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Outbound_OrderNo'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" [(ngModel)]=orderNumber
+                                <input #scanOrderNo type="text" class="form-control form-control-sm" [(ngModel)]=orderNumber
                                     (blur)="OnOrderValueChange()" name='orderNo' placeholder="{{'Outbound_OrderNo'|translate}}">
                                 <div class="input-group-append has-seprate-btn">
-                                    <button class="k-button k-primary btn" (click)="OnOrderLookupClick()" type="button">
+                                    <button tabIndex="-1" class="k-button k-primary btn" (mousedown)="OnOrderLookupClick()" type="button">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
                                     <!-- <button class="k-button k-primary btn separate-btn" (click)="getProductionDetail()"
@@ -136,7 +136,7 @@
                                     <input type="text" class="form-control form-control-sm" (blur)="OnBinValueChange()"
                                         [(ngModel)]=binNo name='binNo' placeholder="{{'BinNo'|translate}}">
                                     <div class="input-group-append">
-                                        <button class="k-button k-primary btn" type="button" (click)="getBinList()">
+                                        <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="getBinList()">
                                             <i class="opti-icon-hammenu"></i>
                                         </button>
                                     </div>
@@ -249,7 +249,7 @@
                                 </dl>
                                 <dl class="opti_mobile_grid_dl">
                                     <dt class="d-flex align-items-center">{{'BinNo'|translate}}
-                                        <button  (click)="confirmDialogForDeleteAcceptItem(rowIndex,gridItem)" class="btn btn-danger k-button btn-sm btn-icon ml-auto" type="button">
+                                        <button (click)="confirmDialogForDeleteAcceptItem(rowIndex,gridItem)" class="btn btn-danger k-button btn-sm btn-icon ml-auto" type="button">
                                             <span class="k-icon k-i-delete"></span>
                                         </button>
                                     </dt>

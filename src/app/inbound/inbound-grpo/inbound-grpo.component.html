@@ -77,13 +77,13 @@
                                 <input type="text" id ="inboundGrpoRecBinInput" class="form-control form-control-sm" name="RecvbBinvalue" #RecBinVal
                                     [(ngModel)]=RecvbBinvalue placeholder="{{'Inbound_ReceivingBin'|translate}}" (blur)="OnBinChange()">
                                 <div class="input-group-append has-seprate-btn">
-                                    <button class="k-button k-primary btn" type="button" (click)="ShowBins()" [disabled]="lookupDisable">
+                                    <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="ShowBins()" [ngClass]="{'disableDiv': lookupDisable}">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
 
                                 </div>
                                 <div class="ml-1 d-flex" *ngIf="showScanInput">
-                                    <button type="button" id="inboundGRPOScanRecBinBtn" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                    <button tabIndex="-1" type="button" id="inboundGRPOScanRecBinBtn" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
                                 </div>
@@ -123,7 +123,7 @@
                                 <input type="text" class="form-control form-control-sm" id="inboundScanInputField" name="ScanInputs"
                                     [(ngModel)]=ScanInputs (blur)="onScanCodeChange()" placeholder="{{scanInputPlaceholder}}">
                                 <div class="ml-1 d-flex">
-                                    <button type="button" id="inboundscanButton" (click)="onInboundScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                    <button tabIndex="-1" type="button" id="inboundscanButton" (mousedown)="onInboundScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
 
@@ -142,21 +142,21 @@
                                 <label for="inputPassword" class="col-sm-3 col-form-label">{{'Plt_PalletNo'|translate}}</label>
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-sm">
-                                        <input type="text" id="inboundGRPOPalletNo" class="form-control form-control-sm" name="palletValue" [(ngModel)]=palletValue
+                                        <input type="text" #scanPallet id="inboundGRPOPalletNo" class="form-control form-control-sm" name="palletValue" [(ngModel)]=palletValue
                                             (blur)="OnPalletChange()" placeholder="{{'Plt_PalletNo'|translate}}">
                                         <div class="input-group-append has-seprate-btn">
-                                            <button class="k-button k-primary btn" type="button" (click)="getPalletList()">
+                                            <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="getPalletList()">
                                                 <i class="opti-icon-hammenu"></i>
                                             </button>
                                         </div>
                                         <div class="ml-1 d-flex">
-                                            <button type="button" id="inboundGRPOPalletScanBtn" (click)="onPalletScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                            <button tabIndex="-1" type="button" id="inboundGRPOPalletScanBtn" (mousedown)="onPalletScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                                 <i class="opti-icon-qr-code fs-24"></i>
                                             </button>
                                         </div>
                                         <div class="ml-1 d-flex d-sm-flex d-md-flex d-lg-none d-xl-none">
-                                            <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
-                                                type="button" (click)="clearPalletItems($event)" id="btnClear">
+                                            <button tabIndex="-1" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
+                                                type="button" (mousedown)="clearPalletItems($event)" id="btnClear">
                                                 <small>{{'Common_Clear'|translate}}</small>
                                             </button>
                                         </div>
@@ -165,8 +165,8 @@
                             </div>
                         </div>
                         <div class="align-items-start col-md-2 col-lg-4 col-xl-6 pl-0 d-none d-sm-none d-md-none d-lg-flex d-xl-flex">
-                            <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button"
-                                (click)="clearPalletItems($event)" id="btnClear">
+                            <button tabIndex="-1" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button"
+                                (mousedown)="clearPalletItems($event)" id="btnClear">
                                 <small>{{'Common_Clear'|translate}}</small>
                             </button>
                         </div>
@@ -179,7 +179,7 @@
                     <div class="form-group row mt-md-0" *ngIf="isPalletizationEnable && !isNonTrack"son>
                         <label class="col-sm-3 col-form-label"></label>
                         <div class="col-sm-9">
-                            <label class="textunderline" (click)="onCheckChange()">{{'Inbound_NewPallet'|translate}}</label>
+                            <label class="textunderline" (mousedown)="onCheckChange()">{{'Inbound_NewPallet'|translate}}</label>
                         </div>
                     </div>
                  
@@ -193,11 +193,11 @@
                                     class="text-right form-control form-control-sm">
                                 <div class="ml-1 d-flex">
                                     <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
-                                        type="button" (click)="addQuantity(event)">
+                                        type="button" (mousedown)="addQuantity(event)">
                                         <i class="opti-icon-add1 fs-24"></i>
                                     </button>
                                     <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
-                                        type="button" (click)="updateQuantity(event)" *ngIf="isNonTrack">
+                                        type="button" (mousedown)="updateQuantity(event)" *ngIf="isNonTrack">
                                         <i class="k-i-track-changes-accept k-icon" [ngStyle]="{'font-size':'24px'}"></i>
                                     </button>
                                 </div>
@@ -236,7 +236,7 @@
                                 <dl class="opti_mobile_grid_dl">
                                     <dt class="d-flex align-items-center">{{SRBatchColumnText}}
                                         <button type="button" class="btn btn-danger k-button btn-sm btn-icon ml-auto"
-                                            style="margin-bottom: 2px;" (click)="openConfirmForDelete(rowIndex, gridItem)">
+                                            style="margin-bottom: 2px;" (mousedown)="openConfirmForDelete(rowIndex, gridItem)">
                                             <span class="k-icon k-i-delete" role="presentation"></span>
                                         </button>
                                     </dt>
@@ -290,7 +290,7 @@
                         <kendo-grid-column media="(min-width: 768px)" field="" headerClass="text-center" class="text-center"
                             [width]="10" title="">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                <button type="button" class="btn btn-danger k-button btn-sm btn-icon" (click)="openConfirmForDelete(rowIndex, gridItem)">
+                                <button type="button" class="btn btn-danger k-button btn-sm btn-icon" (mousedown)="openConfirmForDelete(rowIndex, gridItem)">
                                     <span class="k-icon k-i-delete" role="presentation"></span>
                                 </button>
                             </ng-template>
@@ -313,7 +313,7 @@
                                 <dl class="opti_mobile_grid_dl">
                                     <dt class="d-flex align-items-center">{{'BinNo'|translate}}
                                         <button type="button" class="btn btn-danger k-button btn-sm btn-icon ml-auto"
-                                            (click)="openConfirmForDelete(rowIndex, gridItem)">
+                                            (mousedown)="openConfirmForDelete(rowIndex, gridItem)">
                                             <span class="k-icon k-i-delete" role="presentation"></span>
                                         </button>
                                     </dt>
@@ -334,7 +334,7 @@
                         <kendo-grid-column media="(min-width: 768px)" headerClass="text-center" class="text-center"
                             field="" [width]="10" title="">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                <button type="button" class="btn btn-danger k-button btn-sm btn-icon" (click)="openConfirmForDelete(rowIndex, gridItem)">
+                                <button tabindex="-1" type="button" class="btn btn-danger k-button btn-sm btn-icon" (mousedown)="openConfirmForDelete(rowIndex, gridItem)">
                                     <span class="k-icon k-i-delete" role="presentation"></span>
                                 </button>
                             </ng-template>
@@ -351,10 +351,10 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'TargetWhse'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" name="targetWhse" [(ngModel)]=targetWhse
+                                <input #scanTargetWhse type="text" class="form-control form-control-sm" name="targetWhse" [(ngModel)]=targetWhse
                                     placeholder="{{'TargetWhse'|translate}}" (blur)="onQCWHSChange()">
                                 <div class="input-group-append has-seprate-btn">
-                                    <button class="k-button k-primary btn" type="button" (click)="getTargetWhseList()">
+                                    <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="getTargetWhseList()">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
 
@@ -366,10 +366,10 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'TargetBin'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" name="targetBinValue"
+                                <input #scanTargetBin type="text" class="form-control form-control-sm" name="targetBinValue"
                                     [(ngModel)]=targetBin placeholder="{{'TargetBin'|translate}}" (blur)="OnTargetBinChange()">
                                 <div class="input-group-append has-seprate-btn">
-                                    <button class="k-button k-primary btn" type="button" (click)="getTargetBinList()">
+                                    <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="getTargetBinList()">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
 
@@ -386,11 +386,11 @@
                 <hr />
             </div>
             <div class="col-sm-12 col-12">
-                    <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="cancel($event)">
+                    <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (mousedown)="cancel($event)">
                             <span class="k-icon k-i-close-outline" role="presentation"></span> Cancel</button>
-                <button type="button" *ngIf="showButton" (click)="save($event)"  class="k-button k-primary k-button btn-sm btn-icon-with-text" >
+                <button type="button" *ngIf="showButton" (mousedown)="save($event)"  class="k-button k-primary k-button btn-sm btn-icon-with-text" >
                     <span class="k-icon k-i-save" role="presentation"></span> {{'Save'|translate}}</button>
-                <button class="btn btn-success k-button btn-sm btn-icon-with-text" *ngIf="showRecButton" type="button" (click)="receive($event)">
+                <button class="btn btn-success k-button btn-sm btn-icon-with-text" *ngIf="showRecButton" type="button" (mousedown)="receive($event)">
                     <span class="k-icon k-i-download" role="presentation"></span> {{'Receive'|translate}}</button>
                 <!-- <button class="k-button k-primary" type="button" (click)="cancel($event)">Cancel</button> -->
                 
