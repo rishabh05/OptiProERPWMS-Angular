@@ -73,7 +73,7 @@ export class BinTransferComponent implements OnInit {
   @ViewChild("scanItemCode") scanItemCode;
   @ViewChild("scanFromBin") scanFromBin;
   @ViewChild("scanToBin") scanToBin;
-  @ViewChild("scanLotNo") scanLotNo;
+  @ViewChild("scanLotNo") scanLotNo; 
   @ViewChild("scanPallet") scanPallet;
   @ViewChild("scanToBinOther") scanToBinOther;
 
@@ -283,12 +283,13 @@ export class BinTransferComponent implements OnInit {
           }
           this.formatOnHandQty();
           this.formatTransferNumbers();
-          if (this.ItemTracking == 'N') {
+          if ( this.ItemTracking == 'N' ) {
+            if((localStorage.getItem("fromscreen") != "InventoryTransferRequest") ){
             this.getDefaultFromBin();
             this.scanFromBin.nativeElement.focus();
+          }
           }else{
-
-            setTimeout(() => {
+            setTimeout(() => { 
               this.scanLotNo.nativeElement.focus();
             }, 100);            
           }

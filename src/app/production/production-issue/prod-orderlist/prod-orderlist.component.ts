@@ -120,6 +120,9 @@ export class ProdOrderlistComponent implements OnInit {
     } 
     this.soItemsDetail = []; 
 
+    if(this.orderNumber == null || this.orderNumber == undefined || this.orderNumber == ""){
+      return ;
+    }
     this.showLoader = true;
     this.productionService.GetBOMItemForProductionIssue(this.orderNo).subscribe(
       (data: any) => {

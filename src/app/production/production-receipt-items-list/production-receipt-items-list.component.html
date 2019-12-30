@@ -13,7 +13,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Outbound_OrderNo'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text"  id="receiptItemOrderNoInput" class="form-control form-control-sm" 
+                                <input type="text" #OrderNoField  id="receiptItemOrderNoInput" class="form-control form-control-sm" 
                                 [(ngModel)]=orderNumber (blur)="OnOrderValueChange()" name='orderNo' 
                                 placeholder="{{'Outbound_OrderNo'|translate}}">
                                 <div class="input-group-append has-seprate-btn">

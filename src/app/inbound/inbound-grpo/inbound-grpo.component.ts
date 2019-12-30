@@ -130,7 +130,10 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   }
   ngAfterViewInit(): void {
     //console.log('view after init');
-    this.RecBinVal.nativeElement.focus();
+   
+    setTimeout(() => { 
+      this.RecBinVal.nativeElement.focus();
+    }, 100);
     // this.itemCodeInput.nativeElement.focus();
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
@@ -20,7 +20,7 @@ export class ProductionReceiptItemsListComponent implements OnInit {
   orderNumber: string = "";
   item: string = "";
   showLookupLoader: boolean = true;
-
+  @ViewChild('OrderNoField') OrderNoField: ElementRef;
   serviceData: any[];
   showLoader: boolean = false;
   lookupfor: string;
@@ -33,7 +33,11 @@ export class ProductionReceiptItemsListComponent implements OnInit {
     this.enableSubmitButton(false);
   }
 
-
+  ngAfterViewInit(): void {
+    setTimeout(() => { 
+      this.OrderNoField.nativeElement.focus();
+    }, 100);
+  }
 
   getProductionDetail(fromOrderChange:boolean = false) {
     
@@ -367,6 +371,9 @@ export class ProductionReceiptItemsListComponent implements OnInit {
       this.orderNumber = $event[0];
       this.item = $event[1];
       this.getProductionDetail();
+      setTimeout(() => { 
+        this.OrderNoField.nativeElement.focus();
+      }, 100);
     
     }
   }
