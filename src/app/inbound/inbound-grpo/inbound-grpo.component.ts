@@ -1969,7 +1969,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
   onHiddenRecBinClick() {
     var inputValue = (<HTMLInputElement>document.getElementById('inboundGrpoRecBinInput')).value;
-    if (inputValue.length > 0) {
+    if (inputValue.length > 0) { 
       this.RecvbBinvalue = inputValue;
     }
     this.OnBinChange();
@@ -2564,5 +2564,21 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
           break
       }
     }
+  }
+
+  onHiddenTargetWhseClick(){
+    var inputValue = (<HTMLInputElement>document.getElementById('inbound_grpo_targetWhseInput')).value;
+    if (inputValue.length > 0) {
+      this.targetWhse = inputValue;
+    }
+    this.onQCWHSChange();
+
+  }
+  onHiddenTargetBinClick(){
+    var inputValue = (<HTMLInputElement>document.getElementById('inbound_grpo_targetBinInput')).value;
+    if (inputValue.length > 0) {
+      this.targetBin = inputValue;
+    }
+    this.OnTargetBinChange();
   }
 }

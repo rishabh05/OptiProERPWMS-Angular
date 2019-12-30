@@ -82,7 +82,7 @@
                                     </button>
 
                                 </div>
-                                <div class="ml-1 d-flex" *ngIf="showScanInput">
+                                <div class="ml-1 d-flex" >
                                     <button type="button" id="inboundGRPOScanRecBinBtn" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
@@ -351,13 +351,17 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'TargetWhse'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" name="targetWhse" [(ngModel)]=targetWhse
+                                <input type="text" class="form-control form-control-sm" name="targetWhse" id="inbound_grpo_targetWhseInput" [(ngModel)]=targetWhse
                                     placeholder="{{'TargetWhse'|translate}}" (blur)="onQCWHSChange()">
                                 <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" type="button" (click)="getTargetWhseList()">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
-
+                                </div>
+                                <div class="ml-1 d-flex" >
+                                    <button type="button" id="inboundGRPOScanTargetWhseBtn" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                        <i class="opti-icon-qr-code fs-24"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -366,13 +370,18 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'TargetBin'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" name="targetBinValue"
+                                <input type="text" class="form-control form-control-sm" id="inbound_grpo_targetBinInput" name="targetBinValue"
                                     [(ngModel)]=targetBin placeholder="{{'TargetBin'|translate}}" (blur)="OnTargetBinChange()">
                                 <div class="input-group-append has-seprate-btn">
                                     <button class="k-button k-primary btn" type="button" (click)="getTargetBinList()">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
 
+                                </div>
+                                <div class="ml-1 d-flex"  >
+                                    <button type="button" id="inboundGRPOScanTargetBinBtn" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                        <i class="opti-icon-qr-code fs-24"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -403,6 +412,14 @@
                 <button type="button" id="hid_InboundGrpoHiddenScanBtnPallet" style="visibility:hidden" (click)="onHiddenPalletClick()"
                   class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                 SB </button>
+
+                <button type="button" id="hid_InboundGrpoHiddenTargetBin" style="visibility:hidden" (click)="onHiddenTargetBinClick()"
+                class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+              SB </button>
+
+              <button type="button" id="hid_InboundGrpoHiddenTargetWhse" style="visibility:hidden" (click)="onHiddenTargetWhseClick()"
+              class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+            SB </button>
             </div>
         </div>
     </form>
