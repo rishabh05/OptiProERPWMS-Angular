@@ -45,7 +45,8 @@
                     <kendo-grid [data]="gridDataNew1" [resizable]="true" [pageSize]="pageSize" [pageable]="pagable"
                         [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup [height]=gridHeight
                         [selectable]="true" style="max-height:400px" class="no-shadow" #gridItems 
-                        (selectionChange)="onGridItemClick($event)" >
+                        
+                        >
 
                         <!-- grid for mobile start -->
                         <kendo-grid-column media="(max-width: 767px)" class="opti_mobile-grid-td">
@@ -71,30 +72,38 @@
                         <!-- grid for mobile end -->
 
                         <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE" title="{{'ItemCode'|translate}}">
+
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                        <a class="col-template-mousedown" (mousedown)="onGridItemClick(dataItem)">
+                                            {{dataItem.ITEMCODE}}
+                                        </a></ng-template>
                         </kendo-grid-column>
                        
                         <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" title="{{'OpenQty'|translate}}" headerClass="text-right" class="text-right">
-                                <ng-template kendoGridCellTemplate let-dataItem>
-                                        {{dataItem.OPENQTY |numberFormat}}
-                                    </ng-template>
+            
+
+                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                            <a class="col-template-mousedown" (mousedown)="onGridItemClick(dataItem)">
+                                                    {{dataItem.OPENQTY |numberFormat}}
+                                            </a></ng-template>
                         </kendo-grid-column>
                        
                         <kendo-grid-column media="(min-width: 768px)" field="Status" title="{{'Status'|translate}}">
+
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                        <a class="col-template-mousedown" (mousedown)="onGridItemClick(dataItem)">
+                                            {{dataItem.Status}}
+                                        </a></ng-template>
+
                         </kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="ReceiveQty" title="{{'Inbound_ReceiveQty'|translate}}" headerClass="text-right" class="text-right">
-                                <ng-template kendoGridCellTemplate let-dataItem>
-                                        {{dataItem.ReceiveQty |numberFormat}}
-                                    </ng-template>
+                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                            <a class="col-template-mousedown" (mousedown)="onGridItemClick(dataItem)">
+                                                    {{dataItem.ReceiveQty |numberFormat}}
+                                            </a></ng-template>
+
                         </kendo-grid-column>
-                        <!-- <kendo-grid-column media="(min-width: 768px)" field="" class="text-center" headerClass="text-center"
-                            width="60">
-                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                <button (click)="confirmDialogForDeleteAcceptItem(rowIndex,gridItem)" class="btn btn-danger k-button btn-sm btn-icon"
-                                    type="button">
-                                    <span class="k-icon k-i-delete"></span>
-                                </button>
-                            </ng-template>
-                        </kendo-grid-column> -->
+
                     </kendo-grid>
                 </div>
             </div>

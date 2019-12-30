@@ -290,15 +290,15 @@ export class OutOrderComponent implements OnInit {
     }
   }
 
-  public openPOByUOM(selection: any) {
-    let selectdeData = selection.selectedRows[0].dataItem;
+  public openPOByUOM(selectdeData: any, ) {
+  //  let selectdeData = selection.selectedRows[0].dataItem;
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
     if (outboundData != undefined && outboundData != '') {
       this.outbound = JSON.parse(outboundData);
       this.outbound.SelectedItem = selectdeData;
-      if (this.soItemsDetail.length > 0) {
-        this.outbound.SelectedItem = this.soItemsDetail[selection.index];
-      }
+      // if (this.soItemsDetail.length > 0) {
+      //   this.outbound.SelectedItem = this.soItemsDetail[selection.index];
+      // }
       // this.outbound.TempMeterials = [];
       //this.addMetToTempCollection(this.outbound);
       // this.addMetToTempCollectionRe(this.outbound);

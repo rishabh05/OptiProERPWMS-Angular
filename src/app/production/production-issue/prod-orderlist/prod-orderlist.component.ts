@@ -177,9 +177,9 @@ export class ProdOrderlistComponent implements OnInit {
     );
   }
 
-  public openPOByUOM(selection: any) {
+  public openPOByUOM(selectdeData: any) {
 
-    let selectdeData = selection.selectedRows[0].dataItem;
+    // let selectdeData = selection.selectedRows[0].dataItem;
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
 
     if (outboundData != undefined && outboundData != '' && outboundData != null && outboundData != 'null') {
@@ -204,6 +204,7 @@ export class ProdOrderlistComponent implements OnInit {
     // this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
 
     this.getItemListForOrder(false, true);
+    this.scanOrderNo.nativeElement.focus()
   }
 
   public rowCallback = (context: RowClassArgs) => {

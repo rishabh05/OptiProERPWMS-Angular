@@ -50,7 +50,7 @@
                         <div class="col-12 mb-2 border-bottom"></div>
                         <kendo-grid class="no-shadow" [kendoGridBinding]="soItemsDetail" [resizable]="true" [pageSize]="pageSize"
                             [pageable]="pagable" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
-                            [height]=gridHeight [selectable]="true" [rowClass]="rowCallback" (selectionChange)="openPOByUOM($event, soItemsDetail.ItemCode)"
+                            [height]=gridHeight [selectable]="true" [rowClass]="rowCallback" 
                             #gridItem>
 
                             <!-- grid for mobile start -->
@@ -72,15 +72,22 @@
                             <!-- grid for mobile end -->
 
                             <kendo-grid-column media="(min-width: 768px)" field="ItemCode" title="{{'ItemCode'|translate}}"
-                                [width]="6"></kendo-grid-column>
+                                [width]="6">
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                        <a class="col-template-mousedown" (mousedown)="openPOByUOM(dataItem, dataItem.ItemCode)">{{dataItem.ItemCode}}</a>
+                                </ng-template>  
+                            </kendo-grid-column>
                             <kendo-grid-column media="(min-width: 768px)" field="BalQty" headerClass="text-right" class="text-right"
-                                [width]="6" title="{{'BalanceQty'|translate}}">
-                                <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.BalQty | numberFormat}}</ng-template>
-
+                                [width]="6" title="{{'BalanceQty'|translate}}">                               
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                        <a class="col-template-mousedown" (mousedown)="openPOByUOM(dataItem, dataItem.ItemCode)">{{dataItem.BalQty | numberFormat}}</a>
+                                </ng-template> 
                             </kendo-grid-column>
                             <kendo-grid-column media="(min-width: 768px)" field="RPTQTY" headerClass="text-right" class="text-right"
                                 [width]="6" format="{0:n3}" title="{{'IssuedQty'|translate}}">
-                                <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.RPTQTY | numberFormat}}</ng-template>
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                        <a class="col-template-mousedown" (mousedown)="openPOByUOM(dataItem, dataItem.ItemCode)">{{dataItem.RPTQTY | numberFormat}}</a>
+                                    </ng-template> 
                             </kendo-grid-column>
                         </kendo-grid>
                         

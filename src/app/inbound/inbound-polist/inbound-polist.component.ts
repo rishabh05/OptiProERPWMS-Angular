@@ -13,7 +13,7 @@ import { StatePersistingServiceService } from 'src/app/services/state-persisting
 import { GridSettings } from 'src/app/interface/grid-settings.interface';
 import { ColumnSettings } from 'src/app/interface/column-settings.interface';
 import { process } from '@progress/kendo-data-query';
-
+import * as $ from 'jquery';
 @Component({
   selector: 'app-inbound-polist',
   templateUrl: './inbound-polist.component.html',
@@ -75,7 +75,6 @@ export class InboundPolistComponent implements OnInit {
     return !!this.persistingService.get('gridSettings');
   }
 
-
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent, private inventoryTransferService: InventoryTransferService,
     private persistingService: StatePersistingServiceService) {
@@ -87,11 +86,9 @@ export class InboundPolistComponent implements OnInit {
   }
 
   ngOnInit() {
-
     var ponumber = localStorage.getItem("PONumber");
     if (ponumber != undefined && ponumber != null && ponumber != "") {
       this.poCode = ponumber;
-      // this.openPOLines();
       this.OnPOChange();
     }
     this.selectedVendor = this.inboundMasterComponent.selectedVernder;
@@ -379,8 +376,8 @@ export class InboundPolistComponent implements OnInit {
     );
   }
 
-  onClickOpenPOLineRowOpenAutoLot(selection, grid: GridComponent) {
-    const poline = selection.selectedRows[0].dataItem;
+  onClickOpenPOLineRowOpenAutoLot(poline, grid: GridComponent) {
+    //const poline = selection.selectedRows[0].dataItem;
     this.openPOLineModel = poline;
     // this.openPOLineModel.RPTQTY = 0;
     this.openPOLineModel.DocNum = this.poCode;

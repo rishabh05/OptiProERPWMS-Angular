@@ -23,11 +23,11 @@
                                             class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                             <i class="opti-icon-qr-code fs-24"></i>
                                         </button>
-                                        <button tabindex="-1" class="k-button k-primary btn separate-btn" 
+                                        <!-- <button tabindex="-1" class="k-button k-primary btn separate-btn" 
                                          (mousedown)="openSOOrderList()"
                                         type="button">
                                         <i class="opti-icon-search"></i>
-                                    </button>
+                                    </button> -->
                               
                                     
                                 </div>
@@ -215,18 +215,28 @@
                             <!-- grid for mobile end -->
 
                             <kendo-grid-column media="(min-width: 768px)" field="ROWNUM"
-                            title="{{'LINENUM'|translate}}" [width]="6"></kendo-grid-column>
+                            title="{{'LINENUM'|translate}}" [width]="6">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                    <a class="col-template-mousedown" (mousedown)="openPOByUOM(dataItem,dataItem.ITEMCODE)">{{dataItem.ROWNUM}}</a>
+                            </ng-template>    
+                        </kendo-grid-column>
                             <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE"
-                                title="{{'ItemCode'|translate}}" [width]="6"></kendo-grid-column>
+                                title="{{'ItemCode'|translate}}" [width]="6">
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                        <a class="col-template-mousedown" (mousedown)="openPOByUOM(dataItem,dataItem.ITEMCODE)">{{dataItem.ITEMCODE}}</a>
+                                </ng-template>                            
+                            
+                            </kendo-grid-column>
                             <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" headerClass="text-right"
                                 class="text-right" [width]="6" title="{{'OpenQty'|translate}}">
-                                <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.OPENQTY | numberFormat}}
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                        <a class="col-template-mousedown" (mousedown)="openPOByUOM(dataItem,dataItem.ITEMCODE)">{{dataItem.OPENQTY | numberFormat}}</a>                                   
                                 </ng-template>
-
                             </kendo-grid-column>
                             <kendo-grid-column media="(min-width: 768px)" field="RPTQTY" headerClass="text-right"
                                 class="text-right" [width]="6" format="{0:n3}" title="{{'PickQty'|translate}}">
-                                <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.RPTQTY | numberFormat}}
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                        <a class="col-template-mousedown" (mousedown)="openPOByUOM(dataItem,dataItem.ITEMCODE)">{{dataItem.RPTQTY | numberFormat}}</a>
                                 </ng-template>
                             </kendo-grid-column>
                           
