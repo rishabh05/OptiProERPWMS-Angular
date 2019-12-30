@@ -12,15 +12,15 @@
             <label for="fromPalletNo" class="col-sm-3 col-form-label">{{'Plt_FromPalletNo'|translate}}</label>
             <div class="col-sm-9">
               <div class="input-group input-group-sm">
-                <input type="text" id="PalSplitFromPltInput" class="form-control form-control-sm" name="fromPalletNo" [(ngModel)]="fromPalletNo"
+                <input #scanPallet type="text" id="PalSplitFromPltInput" class="form-control form-control-sm" name="fromPalletNo" [(ngModel)]="fromPalletNo"
                   placeholder="{{'Plt_FromPalletNo'|translate}}" (blur)="onPalletChange('from_pallet')">
                 <div class="input-group-append">
-                  <button class="k-button k-primary btn" type="button" (click)="getFromPalletList('from_pallet')">
+                  <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="getFromPalletList('from_pallet')">
                     <i class="opti-icon-hammenu"></i>
                   </button>
                 </div>
                 <div class="ml-1 d-flex">
-                  <button type="button" id="PalSplit_FromPalletScanBtn" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                  <button tabIndex="-1" type="button" id="PalSplit_FromPalletScanBtn" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                     <i class="opti-icon-qr-code fs-24"></i>
                   </button>
                 </div>
@@ -38,18 +38,18 @@
                 <input type="text" id="PalSplitToPltInput" class="form-control form-control-sm" name="toPalletNo" [(ngModel)]="toPalletNo"
                   placeholder="{{'Plt_ToPalletNo'|translate}}" (blur)="onPalletChange('to_pallet')">
                 <div class="input-group-append">
-                  <button class="k-button k-primary btn" type="button" (click)="getPalletList('to_pallet')">
+                  <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="getPalletList('to_pallet')">
                     <i class="opti-icon-hammenu"></i>
                   </button>
                 </div>
                 <div class="ml-1 d-flex">
-                  <button type="button" id="PalSplit_ToPalletScanBtn" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                  <button tabIndex="-1" type="button" id="PalSplit_ToPalletScanBtn" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                     <i class="opti-icon-qr-code fs-24"></i>
                   </button>
                 </div>
                 <div class="ml-1 d-flex d-sm-flex d-md-flex d-lg-none d-xl-none">
-                  <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button"
-                    (click)="clearPalletItems(event)" id="btnClear">
+                  <button tabIndex="-1" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button"
+                    (mousedown)="clearPalletItems(event)" id="btnClear">
                     <small>{{'Common_Clear'|translate}}</small>
                   </button>
                 </div>
@@ -211,14 +211,14 @@
         <hr />
       </div>
       <div class="col-sm-12 col-12">
-        <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text mx-0.5" (click)="back(0)">
-          <span class="k-icon k-i-close-outline" role="presentation"></span> Cancel
+        <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text mx-0.5" (mousedown)="back(0)">
+          <span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}
         </button>
-        <button type="button" *ngIf="savedPalletsArray.length > 0" (click)="splitPallet($event)" class="btn btn-success k-button btn-sm btn-icon-with-text">
+        <button type="button" *ngIf="savedPalletsArray.length > 0" (mousedown)="splitPallet($event)" class="btn btn-success k-button btn-sm btn-icon-with-text">
           <span class="k-icon opti-icon-pallet-split" role="presentation"></span> {{'Plt_Split'|translate}}
         </button>
       
-        <button type="button" id="showHideGrid" (click)="clickShowHideGrid()"
+        <button type="button" id="showHideGrid" (mousedown)="clickShowHideGrid()"
          class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
          <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>
           {{showHideBtnTxt}}

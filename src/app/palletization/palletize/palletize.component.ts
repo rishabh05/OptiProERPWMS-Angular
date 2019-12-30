@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Commonservice } from 'src/app/services/commonservice.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
@@ -39,6 +39,9 @@ export class PalletizeComponent implements OnInit {
   sumOfQty: number = 0;
   itemType: string = "";
   isSerailTrackedItem: boolean = false;
+  @ViewChild('scanItemCode') scanItemCode
+  @ViewChild('BatchNoInput') BatchNoInput
+  @ViewChild('scanToPallet') scanToPallet
 
   constructor(private commonservice: Commonservice,
     private router: Router, private toastr: ToastrService, private translate: TranslateService,
@@ -51,6 +54,10 @@ export class PalletizeComponent implements OnInit {
     if (localStorage.getItem("AutoPalletIdGenerationChecked") == "True") {
       this.autoGeneratePalletEnable = true;
     }
+  }
+
+  ngAfterViewInit(): void{
+    this.scanItemCode.nativeElement.focus()
   }
 
   public getPalletList(from: string) {
@@ -146,6 +153,7 @@ export class PalletizeComponent implements OnInit {
       this.toWhse = lookupValue.U_OPTM_WAREHOUSE_LOC;
       this.toBin = lookupValue.U_OPTM_BIN;
       this.showHideBtnTxt = this.translate.instant("showGrid");
+      this.scanToPallet.nativeElement.focus()
     } else if (this.lookupFor == "ItemsList") {
       this.itemCode = lookupValue.ITEMCODE;
       this.itemType = lookupValue.ITEMTYPE;
@@ -156,6 +164,7 @@ export class PalletizeComponent implements OnInit {
       }
       //Reset fields when change itemcode
       this.resetVariablesOnItemSelect();
+      this.scanItemCode.nativeElement.focus()
     } else if (this.lookupFor == "ShowBatachSerList") {
       this.batchSerialNo = lookupValue.LOTNO;
       this.expDate = lookupValue.EXPDATE;
@@ -163,6 +172,7 @@ export class PalletizeComponent implements OnInit {
       this.fromBinNo = lookupValue.BINNO;
       this.openQty = Number.parseInt(lookupValue.TOTALQTY);
       this.validateRemainigQuantity();
+      this.BatchNoInput.nativeElement.focus()
     }
   }
 

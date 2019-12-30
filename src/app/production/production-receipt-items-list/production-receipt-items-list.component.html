@@ -17,7 +17,7 @@
                                 [(ngModel)]=orderNumber (blur)="OnOrderValueChange()" name='orderNo' 
                                 placeholder="{{'Outbound_OrderNo'|translate}}">
                                 <div class="input-group-append has-seprate-btn">
-                                    <button class="k-button k-primary btn" (click)="OnOrderLookupClick()" type="button">
+                                    <button tabIndex="-1" class="k-button k-primary btn" (mousedown)="OnOrderLookupClick()" type="button">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
                                     <!-- <button class="k-button k-primary btn separate-btn" (click)="getProductionDetail()"
@@ -25,7 +25,7 @@
                                         <i class="opti-icon-search"></i>
                                     </button> -->
                                     <div class="d-flex ">
-                                        <button type="button"  id="receiptItemOrderNoScan" (click)="onInboundScan()"
+                                        <button tabIndex="-1" type="button"  id="receiptItemOrderNoScan" (mousedown)="onInboundScan()"
                                             class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                             <i class="opti-icon-qr-code fs-24"></i>
                                         </button>

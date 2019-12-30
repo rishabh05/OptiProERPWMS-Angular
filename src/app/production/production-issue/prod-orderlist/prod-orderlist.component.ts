@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProductionService } from 'src/app/services/production.service';
 import { Commonservice } from 'src/app/services/commonservice.service';
@@ -30,6 +30,7 @@ export class ProdOrderlistComponent implements OnInit {
 
   pagable: boolean = false;
   pageSize: number = Commonservice.pageSize;
+  @ViewChild('scanOrderNo') scanOrderNo;
 
   showConfirmDialog: boolean = false;
   constructor(private router: Router, private productionService: ProductionService, public productionIssueComponent: ProductionIssueComponent,
@@ -50,6 +51,10 @@ export class ProdOrderlistComponent implements OnInit {
       }
       this.calculatePickQty();
     }
+  }
+
+  ngAfterViewInit(): void{
+    this.scanOrderNo.nativeElement.focus()
   }
 
   onCancelClick() {

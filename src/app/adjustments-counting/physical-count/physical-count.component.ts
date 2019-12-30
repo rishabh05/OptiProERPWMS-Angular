@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { PhysicalcountService } from 'src/app/services/physicalcount.service';
 import { Commonservice } from 'src/app/services/commonservice.service';
 import { TranslateService, LangChangeEvent } from '../../../../node_modules/@ngx-translate/core';
 import { ToastrService } from '../../../../node_modules/ngx-toastr';
+import { storeCleanupWithContext } from '@angular/core/src/render3/instructions';
 
 @Component({
   selector: 'app-physical-count',
@@ -59,6 +60,9 @@ export class PhysicalCountComponent implements OnInit {
   ItemCodeTemp: string;
   trackingtemp: string;
   scanPlaceholder: string = "Scan";
+  @ViewChild('scanPC') scanPC;
+  @ViewChild('scanItemCode') scanItemCode;
+  @ViewChild('scanBatchSerial') scanBatchSerial;
 
   constructor(private phycountService: PhysicalcountService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService) {
     let userLang = navigator.language.split('-')[0];
@@ -71,6 +75,10 @@ export class PhysicalCountComponent implements OnInit {
   ngOnInit() {
     localStorage.setItem("PhysicalCountData", "");
     this.getPhysicalCountData();
+  }
+
+  ngAfterViewInit():void{
+
   }
 
   getPhysicalCountData() {

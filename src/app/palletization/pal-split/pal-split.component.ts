@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Commonservice } from 'src/app/services/commonservice.service';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
@@ -44,7 +44,8 @@ export class PalSplitComponent implements OnInit {
   itemType: string = "";
   isSerailTrackedItem: boolean = false;
   newCreatedPalletNo: string;
-
+  @ViewChild('scanPallet') scanPallet
+  
   constructor(private commonservice: Commonservice,
     private router: Router, private toastr: ToastrService, private translate: TranslateService) {
     this.showHideBtnTxt = this.translate.instant("showGrid");
@@ -54,6 +55,10 @@ export class PalSplitComponent implements OnInit {
     if (localStorage.getItem("AutoPalletIdGenerationChecked") == "True") {
       this.autoGeneratePalletEnable = true;
     }
+  }
+
+  ngAfterViewInit(): void{
+    this.scanPallet.nativeElement.focus()
   }
 
   public getFromPalletList(from: string) {

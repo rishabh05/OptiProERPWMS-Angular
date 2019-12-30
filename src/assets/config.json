@@ -1,6 +1,6 @@
 [
     {
-        "service_url": "http://172.16.6.128:1210/optiproerpwmsservice/",
+        "service_url": "http://localhost:57950/",
         "AppVersion": "1.2.10"
     } 
 ]   

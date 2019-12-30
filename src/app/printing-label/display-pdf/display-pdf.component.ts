@@ -39,6 +39,10 @@ export class DisplayPdfComponent implements OnInit, OnDestroy {
   }
   }
 
+  ngAfterViewInit(): void {
+    //this.fromBinInput.nativeElement.focus();
+  }
+
   OnCancelClick(){
     this.pdfClose.emit("item");
   }

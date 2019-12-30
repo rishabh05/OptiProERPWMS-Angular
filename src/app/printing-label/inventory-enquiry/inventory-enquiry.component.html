@@ -32,10 +32,10 @@
                                 [(ngModel)]="lotNo" (blur)="OnLotsChange()" #BatchNoInput
                                     name='batchSrNo' placeholder="{{'BatchSrBinNo'|translate}}">
                                 <div class="input-group-append has-seprate-btn">
-                                    <button class="k-button k-primary btn" (click)="OnBatchSerialLookupClick()" type="button">
+                                    <button tabIndex="-1" class="k-button k-primary btn" (mousedown)="OnBatchSerialLookupClick()" type="button">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
-                                    <button id="printBatchSerialscanButton" (click)="onBatchSerialScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
+                                    <button tabIndex="-1" id="printBatchSerialscanButton" (mousedown)="onBatchSerialScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
                                         type="button">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
@@ -54,10 +54,10 @@
                                 class="form-control form-control-sm"  (blur)="OnItemCodeChange()"
                                     name='itemCode' placeholder="{{'ItemCode'|translate}}">
                                 <div class="input-group-append has-seprate-btn">
-                                    <button class="k-button k-primary btn" (click)="OnItemCodeLookupClick()" type="button">
+                                    <button tabIndex="-1" class="k-button k-primary btn" (mousedown)="OnItemCodeLookupClick()" type="button">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
-                                    <button id="printItemscanButton" (click)="onItemScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
+                                    <button tabIndex="-1" id="printItemscanButton" (mousedown)="onItemScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
                                         type="button">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
@@ -139,7 +139,7 @@
             <div class="col-sm-12 col-12">
                 <!-- <button type="button"  (click)="OnPrintClick()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-printer"
                 role="presentation"></span> {{'Print'|translate}}</button> -->
-                <button type="button" (click)="OnCancelClick()" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-close-outline"
+                <button type="button" (mousedown)="OnCancelClick()" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-close-outline"
                         role="presentation"></span> {{'Cancel'|translate}}</button>
                 <button type="button" id="inventoryBatchHiddenScanButton" style="visibility:hidden" 
                 (click)="onHiddenScanBatchClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">

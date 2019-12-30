@@ -16,8 +16,8 @@ export class BinLabelComponent implements OnInit {
 
 
   //reference to the input components of html.
-  @ViewChild('fromBinIp') fromBinInput;
-  @ViewChild('toBinIp') toBinInput;
+  @ViewChild('fromBinIp') fromBinIp;
+  @ViewChild('scanToBin') scanToBin;
   @ViewChild('numberOfCopiesIp') noOfCopiesInput;
   showLoader: boolean = false;
   showLookupLoader: boolean = true;
@@ -55,6 +55,9 @@ export class BinLabelComponent implements OnInit {
     this.getCopyCountForBin();
   }
 
+  ngAfterViewInit(): void {
+    this.fromBinIp.nativeElement.focus();
+  }
   /**
    * Item code lookup click.
    */
@@ -177,13 +180,13 @@ export class BinLabelComponent implements OnInit {
       this.fromBin = $event[0];
       //this.whsCode = $event;
       //console.log("selected item:" + this.fromBin);
-
+      this.fromBinIp.nativeElement.focus()
     }
     if (this.lookupfor == "ToBinList") {
       this.toBin = $event[0];
       //this.whsCode = $event;
       //console.log("selected item:" + this.toBin);
-
+      this.scanToBin.nativeElement.focus()
     }
   }
   }
@@ -194,12 +197,12 @@ export class BinLabelComponent implements OnInit {
   checkValidation(): boolean {
     if (this.fromBin == "") {
       this.toastr.error('', this.translate.instant("InvTransfer_FromBinMsg"));
-      this.fromBinInput.nativeElement.focus();
+      this.fromBinIp.nativeElement.focus();
       return false;
     }
     if (this.toBin == "") {
       this.toastr.error('', this.translate.instant("InvTransfer_ToBinMsg"));
-      this.toBinInput.nativeElement.focus();
+      this.scanToBin.nativeElement.focus();
       return false;
     }
     if (this.noOfCopies == "" || this.noOfCopies == "0") {

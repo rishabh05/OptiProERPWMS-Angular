@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { InventoryTransferService } from '../../services/inventory-transfer.service';
 import { ToastrService } from 'ngx-toastr';
 import { ToWhs } from '../../models/InventoryTransfer/ToWhs';
@@ -27,6 +27,8 @@ export class WhsTransferComponent implements OnInit {
   showLoader: boolean = false;
   pageHeading: string; 
   isfromWhsDisabled: boolean;
+  @ViewChild("scanToWhse") scanToWhse;
+  @ViewChild("scanFromWhse") scanFromWhse;
 
   constructor(private commonservice: Commonservice, private router: Router, private inventoryTransferService: InventoryTransferService, private toastr: ToastrService, private translate: TranslateService) {
     let userLang = navigator.language.split('-')[0];
@@ -45,6 +47,14 @@ export class WhsTransferComponent implements OnInit {
       this.toWhse = localStorage.getItem("whseId");
       this.pageHeading = this.translate.instant("InventoryTransferRequest");
       this.isfromWhsDisabled = false;
+    }
+  }
+
+  ngAfterViewInit(): void {
+    if(localStorage.getItem("fromscreen") == "WhsTransfer"){
+      this.scanToWhse.nativeElement.focus();
+    }else{
+      this.scanFromWhse.nativeElement.focus();
     }
   }
 

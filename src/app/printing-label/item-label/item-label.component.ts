@@ -69,6 +69,10 @@ export class ItemLabelComponent implements OnInit {
     this.getCopyCountForItem();
   }
 
+  ngAfterViewInit(): void {
+    this.itemCodeIp.nativeElement.focus();
+  }
+
   /**
    * Item code lookup click.
    */
@@ -239,15 +243,17 @@ export class ItemLabelComponent implements OnInit {
     if (this.lookupfor == "ItemsList") {
       this.itemCode = $event[0];
       this.binNo = "";
+      this.itemCodeIp.nativeElement.focus();
     }
     else if (this.lookupfor == "LotsList") {
       console.log("value of lots" + $event);
       console.log("value of lots" + $event.LOTNO);
       this.binNo = $event[0];
       this.itemCode = $event[2];
-
+      this.batchSrBinIp.nativeElement.focus();
     }
     }
+    this.lookupfor = "";
   }
 
   /**

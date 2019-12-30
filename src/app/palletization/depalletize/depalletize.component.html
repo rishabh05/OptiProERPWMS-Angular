@@ -10,13 +10,13 @@
             <label for="inputPassword" class="col-sm-3 col-form-label">{{'Plt_PalletNo'|translate}}</label>
             <div class="col-sm-9">
               <div class="input-group input-group-sm">
-                <input type="text" name="fromPalletNo" id="Depalletize_PalletNoInput" (blur)="onPalletChange()" value='' [(ngModel)]="palletNo" class="form-control form-control-sm"
+                <input #scanPallet type="text" name="fromPalletNo" id="Depalletize_PalletNoInput" (blur)="onPalletChange()" value='' [(ngModel)]="palletNo" class="form-control form-control-sm"
                   placeholder="{{'Plt_PalletNo'|translate}}">
                 <div class="input-group-append has-seprate-btn">
-                  <button class="k-button k-primary btn" (click)="getPalletList()" type="button">
+                  <button tabIndex="-1" class="k-button k-primary btn" (mousedown)="getPalletList()" type="button">
                     <i class="opti-icon-hammenu"></i>
                   </button>
-                  <button type="button" id="DePal_PalletScanButton" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                  <button tabIndex="-1" type="button" id="DePal_PalletScanButton" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                     <i class="opti-icon-qr-code fs-24"></i>
                   </button>
                 </div>
@@ -64,17 +64,17 @@
         <hr />
       </div>
       <div class="col-sm-12 col-12">
-        <button type="button" (click)="back(0)" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-close-outline"
+        <button type="button" (mousedown)="back(0)" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-close-outline"
             role="presentation"></span> {{'Cancel'|translate}}</button>
-            <button type="button" id="showHideGrid" (click)="clickShowHideGrid()" class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
+            <button type="button" id="showHideGrid" (mousedown)="clickShowHideGrid()" class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
                 <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>  {{showHideBtnTxt}}
             </button>
-        <button type="button" *ngIf="palletNo!=''" (click)="depalletize()" class="btn btn-success k-button btn-sm btn-icon-with-text">
+        <button type="button" *ngIf="palletNo!=''" (mousedown)="depalletize()" class="btn btn-success k-button btn-sm btn-icon-with-text">
           <span class="k-icon opti-icon-deplletization"></span>
           {{'Plt_Depalletize'|translate}}</button>
        
  
-        <button type="button" id="DePal_HiddenScanPltBtn" style="visibility:hidden" (click)="ScanPalletField()"
+        <button type="button" id="DePal_HiddenScanPltBtn" style="visibility:hidden" (mousedown)="ScanPalletField()"
                    class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                    SBItemDeP </button>
       </div>

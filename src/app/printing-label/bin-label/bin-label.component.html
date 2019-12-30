@@ -12,14 +12,14 @@
                     <label for="inputPassword" class="col-sm-3 col-form-label">{{'InvTransfer_FromBin'|translate}}</label>
                     <div class="col-sm-9">
                         <div class="input-group input-group-sm">
-                            <input type="text" class="form-control form-control-sm" #fromBinIp=ngModel id="BinLabelFromBinInput"
+                            <input type="text" class="form-control form-control-sm" #fromBinIp id="BinLabelFromBinInput"
                              [(ngModel)] ='fromBin' (blur)="OnFromBinChange()" name ='fromBin' placeholder="{{'InvTransfer_FromBin'|translate}}">
                             <div class="input-group-append">
-                                <button class="k-button k-primary btn" type="button"  (click)="OnFromBinLookupClick()">
+                                <button tabIndex="-1" class="k-button k-primary btn" type="button"  (mousedown)="OnFromBinLookupClick()">
                                     <i class="opti-icon-hammenu"></i>
                                 </button>
                                 <div class="d-flex">
-                                    <button type="button"  id="BinLabelFromBinScanBtn" 
+                                    <button tabIndex="-1" type="button"  id="BinLabelFromBinScanBtn" 
                                         class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
@@ -32,14 +32,14 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">{{'InvTransfer_ToBin'|translate}}</label>
                   <div class="col-sm-9">
                       <div class="input-group input-group-sm">
-                          <input type="text"   id="BinLabelToBinInput" (blur)="OnToBinChange()" class="form-control form-control-sm" [(ngModel)]='toBin' #toBinIp=ngModel
+                          <input #scanToBin type="text"   id="BinLabelToBinInput" (blur)="OnToBinChange()" class="form-control form-control-sm" [(ngModel)]='toBin' #toBinIp=ngModel
                            name ='toBin' placeholder="{{'InvTransfer_ToBin'|translate}}">
                           <div class="input-group-append">
-                              <button class="k-button k-primary btn" type="button" (click)="OnToBinLookupClick()">
+                              <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="OnToBinLookupClick()">
                                   <i class="opti-icon-hammenu"></i>
                               </button>
                               <div class="d-flex">
-                                <button type="button"  id="BinLabelToBinScanBtn" (click)="onInboundScan()"
+                                <button tabIndex="-1" type="button"  id="BinLabelToBinScanBtn" (mousedown)="onInboundScan()"
                                     class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                     <i class="opti-icon-qr-code fs-24"></i>
                                 </button>
@@ -63,9 +63,9 @@
             <hr />
         </div>
         <div class="col-sm-12 col-12">
-            <button type="button" (click)="OnCancelClick()" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
+            <button type="button" (mousedown)="OnCancelClick()" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
                     class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
-            <button type="button" (click)="OnPrintClick()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
+            <button type="button" (mousedown)="OnPrintClick()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
                     class="k-icon k-i-printer" role="presentation"></span> {{'Print'|translate}}</button>
         
         

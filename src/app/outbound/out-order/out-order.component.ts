@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { OutboundService } from 'src/app/services/outbound.service';
 import { CommonConstants } from 'src/app/const/common-constants';
 import { Router } from '@angular/router';
@@ -65,6 +65,12 @@ export class OutOrderComponent implements OnInit {
   temoraryHideItemLookupRow: boolean = false;
   pagetitle: any ="";
   isPalletizationEnable: boolean = false
+  @ViewChild('scanSO') scanSO;
+  @ViewChild('DocEntry') DocEntry;
+  @ViewChild('PalletNo') PalletNo;
+  @ViewChild('scanItemCode') scanItemCode;
+
+
   constructor(private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService,
     private inventoryTransferService: InventoryTransferService) { }
 
@@ -125,6 +131,14 @@ export class OutOrderComponent implements OnInit {
 
     this.setSavedPelletDataToGrid();
    // document.getElementById("itemcodeid").focus();
+  }
+
+  ngAfterViewInit(): void{
+    if(localStorage.getItem("ComingFrom")=="itr"){
+      this.DocEntry.nativeElement.focus()
+    } else {
+      this.scanSO.nativeElement.focus()
+    }
   }
 
   /* this method set the update data to array to display in grid.
@@ -235,6 +249,7 @@ export class OutOrderComponent implements OnInit {
         this.showLookupLoader = false;
         this.palletNo = lookupValue.Code;
         this.getPalletData();
+        this.PalletNo.nativeElement.focus()
       } else {
         if (this.lookupfor == "out-order") {
           this.outbound.OrderData = lookupValue;
@@ -243,6 +258,7 @@ export class OutOrderComponent implements OnInit {
           localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
           this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
           this.openSOOrderList();
+          this.scanSO.nativeElement.focus()
         } else if (this.lookupfor == "ITRList") {
           this.resetITRFields();
           //
@@ -255,6 +271,7 @@ export class OutOrderComponent implements OnInit {
           };
           localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
           this.getITRItemList();
+          this.DocEntry.nativeElement.focus()
         } else if (this.lookupfor == "toBinsList") {
           this.toBinNo = lookupValue.BINNO;
           this.outbound.ITRToBinNo = { 
@@ -262,9 +279,11 @@ export class OutOrderComponent implements OnInit {
             ToWhse: this.toWhse
           };
           localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+          // this.scanToBin.nativeElement.focus()
         } else {
           if (this.lookupfor == "ItemsList") {
             this.selectedItem = lookupValue.ITEMCODE;
+            this.scanItemCode.nativeElement.focus()
           }
         }
       }
