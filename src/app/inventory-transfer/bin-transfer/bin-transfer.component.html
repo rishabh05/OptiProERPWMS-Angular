@@ -70,7 +70,7 @@
                         </label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" #scanLotNo class="form-control form-control-sm" id="binTransferLotInput"
+                                <input type="text" #scanLotNo class="form-control form-control-sm" id="binTransferBatchNoInput"
                                     placeholder="{{batchNoPlaceholder}}" name="lotValue" [(ngModel)]="lotValue"
                                     (blur)="OnLotChange()">
                                 <div class="input-group-append">
@@ -279,6 +279,12 @@
 
             <button type="button" id="hid_btnBinTransferByPalToBinScanBtn" style="visibility:hidden"
                 (click)="onHiddenByPalToBinScanClick()"
+                class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
+                <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn
+            </button>
+
+            <button type="button" id="hid_BtnbinTransferBatchNoInput" style="visibility:hidden"
+                (click)="onHiddenByPalBatchNoScanClick()"
                 class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
                 <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn
             </button>

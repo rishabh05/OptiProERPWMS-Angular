@@ -1282,7 +1282,6 @@ export class BinTransferComponent implements OnInit {
 
   onPalletChange() {
 
-
     if (this.palletNo == undefined || this.palletNo == "") {
       return;
     }
@@ -1480,4 +1479,12 @@ export class BinTransferComponent implements OnInit {
     this.OnToBinChange();
   }
 
+  onHiddenByPalBatchNoScanClick()
+  {
+    var inputValue = (<HTMLInputElement>document.getElementById('binTransferBatchNoInput')).value;
+    if (inputValue.length > 0) {
+      this.lotValue = inputValue;
+    }
+    this.OnLotChange();
+  }
 }
