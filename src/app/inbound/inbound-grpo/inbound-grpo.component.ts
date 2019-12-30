@@ -2577,7 +2577,6 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       this.targetWhse = inputValue;
     }
     this.onQCWHSChange();
-
   }
   onHiddenTargetBinClick(){
     var inputValue = (<HTMLInputElement>document.getElementById('inbound_grpo_targetBinInput')).value;
