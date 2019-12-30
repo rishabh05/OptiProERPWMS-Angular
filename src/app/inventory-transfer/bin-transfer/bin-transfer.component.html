@@ -195,7 +195,7 @@
                             class="col-sm-3 col-form-label">{{'InvTransfer_ToBin'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" id="binTransferByPalletToBinNoInput"
+                                <input type="text" #scanToBinOther class="form-control form-control-sm" id="binTransferByPalletToBinNoInput"
                                     placeholder="{{'InvTransfer_ToBin'|translate}}" name="toBin" [(ngModel)]="toBin"
                                     (blur)="OnToBinChange()">
                                 <div class="input-group-append has-seprate-btn">

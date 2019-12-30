@@ -9,6 +9,7 @@ import { InventoryTransferService } from '../../services/inventory-transfer.serv
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { Template } from '@angular/compiler/src/render3/r3_ast';
 import { Location } from '@angular/common';
+import { FieldAccessorPipe } from '@progress/kendo-angular-grid/dist/es2015/rendering/common/field-accessor.pipe';
 
 @Component({
   selector: 'app-bin-transfer',
@@ -74,6 +75,7 @@ export class BinTransferComponent implements OnInit {
   @ViewChild("scanToBin") scanToBin;
   @ViewChild("scanLotNo") scanLotNo;
   @ViewChild("scanPallet") scanPallet;
+  @ViewChild("scanToBinOther") scanToBinOther;
 
   constructor(private commonservice: Commonservice, private activatedRoute: ActivatedRoute,
     private router: Router, private inventoryTransferService: InventoryTransferService,
@@ -1007,8 +1009,13 @@ export class BinTransferComponent implements OnInit {
       } else if (this.lookupfor == "NTrackFromBin") {
         this.scanFromBin.nativeElement.focus();
       } else if (this.lookupfor == "toBinsList") {
-        this.scanToBin.nativeElement.focus();
-      }
+        if (this.radioSelected == 0) {
+          this.scanToBin.nativeElement.focus();
+        }else{
+          this.scanToBinOther.nativeElement.focus();
+          // other to bin field.
+        }
+      } 
       return;
     }
     else if (this.lookupfor == "PalletList") {
@@ -1074,7 +1081,12 @@ export class BinTransferComponent implements OnInit {
       } else if (this.lookupfor == "toBinsList") {
         this.toBin = $event[0];
         //this.prepareByPalletData();
+        if (this.radioSelected == 0) {
         this.scanToBin.nativeElement.focus();
+        }else{
+          //other to bin Field
+          this.scanToBinOther.nativeElement.focus();
+        }
       }
       this.formatTransferNumbers();
       this.formatOnHandQty();

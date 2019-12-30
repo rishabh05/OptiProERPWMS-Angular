@@ -149,7 +149,9 @@ export class OutProdissueComponent implements OnInit {
     if(localStorage.getItem("ComingFrom") == "itr"){
       this.scanToBin.nativeElement.focus()
     } else {
+      if (this.OrderType != 'N') {
       this.scanBatchSerial.nativeElement.focus()
+      }
     }
   }
 
@@ -584,9 +586,10 @@ export class OutProdissueComponent implements OnInit {
       this.outbound = JSON.parse(localStorage.getItem(CommonConstants.OutboundData));
       this.outbound.SelectedMeterials = lookupValue;
       localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
-
+      if (this.OrderType != 'N') {
       this.scanBatchSerial.nativeElement.focus()
-    } else {
+      }
+    } else { 
       this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
       this.showLookupLoader = false;
       this.showLookup = false;
