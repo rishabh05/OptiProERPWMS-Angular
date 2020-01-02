@@ -81,6 +81,11 @@ export class InventoryEnquiryComponent implements OnInit,AfterViewInit {
     this.disableDescription = true;
     this.disableItemCode = true;
   }
+  onRadioMouseDown(id){
+    console.log("on radio mouse down");
+    document.getElementById(id).click();
+  }
+
   handleCheckChange($event) {
     this.resetGridOnRadioChange();
     switch ($event.target.id) {
@@ -114,6 +119,7 @@ export class InventoryEnquiryComponent implements OnInit,AfterViewInit {
     }
   }
 
+ 
   onBatchSerialScan(){
 
   }
@@ -196,6 +202,10 @@ export class InventoryEnquiryComponent implements OnInit,AfterViewInit {
           if (data == "0" || data[0] == "0") {
             this.toastr.error('', this.translate.instant("InvalidBatch"));
             this.lotNo = "";
+            this.BatchNoInput.nativeElement.focus()
+            this.quantityGridData = [];
+            this.totalSum = 0
+            this.itemNameLabel = ''
             return;
           }
           this.lotNo = data[0].LOTNO; //check this code.
@@ -203,6 +213,10 @@ export class InventoryEnquiryComponent implements OnInit,AfterViewInit {
         } else {
           this.toastr.error('', this.translate.instant("InvalidBatch"));
           this.lotNo = "";
+          this.BatchNoInput.nativeElement.focus()
+          this.quantityGridData = [];
+          this.totalSum = 0
+          this.itemNameLabel = ''
         }
       },
       error => {
@@ -246,7 +260,7 @@ export class InventoryEnquiryComponent implements OnInit,AfterViewInit {
         if (this.lotNo != "")
           this.GetItemOrBatchDetail();
 
-        // this.BatchNoInput.nativeElement.focus()
+        this.BatchNoInput.nativeElement.focus()
       }
       if (this.lookupfor == "ItemsList") {
         this.isFromItemChange = false;// reset this variable for batch value is not from on change.
@@ -271,7 +285,7 @@ export class InventoryEnquiryComponent implements OnInit,AfterViewInit {
         if (this.itemCode != "")
           this.GetItemOrBatchDetail();
 
-        // this.itemCodeInput.nativeElement.focus()
+        this.itemCodeInput.nativeElement.focus()
       }
     }
   }
@@ -361,6 +375,7 @@ export class InventoryEnquiryComponent implements OnInit,AfterViewInit {
     this.binNo = "";
     this.itemName = "";
     this.type = "";
+    this.lotNo = "";
     this.itemNameLabel = "";
     this.isFromLotChange = false;
     this.isFromItemChange = false;
@@ -469,6 +484,10 @@ export class InventoryEnquiryComponent implements OnInit,AfterViewInit {
           if (data == "0" || data[0] == "0") {
             this.toastr.error('', this.translate.instant("InvalidItemCode"));
             this.itemCode = "";
+            this.itemCodeInput.nativeElement.focus()
+            this.quantityGridData = [];
+            this.totalSum = 0
+            this.itemNameLabel = ''
             return;
           }else{
              //do the needful for correct data.
@@ -477,6 +496,10 @@ export class InventoryEnquiryComponent implements OnInit,AfterViewInit {
         } else {
           this.toastr.error('', this.translate.instant("InvalidItemCode"));
           this.itemCode = "";
+          this.itemCodeInput.nativeElement.focus()
+          this.quantityGridData = [];
+          this.totalSum = 0
+          this.itemNameLabel = ''
         }
       },
       error => {

@@ -1233,8 +1233,29 @@ export class BinTransferComponent implements OnInit {
     }
   }
 
+  onRadioMouseDown(id){
+    console.log("on radio mouse down");
+    document.getElementById(id).click();
+  }
+
   handleCheckChange(event) {
+    console.log("on radio handleCheckChange");
+    if(event.toElement.name == "byPlt"){
+      console.log("by element: plt")
+      setTimeout(() => { 
+        this.scanPallet.nativeElement.focus();
+      }, 100);
+      //this.scanPallet.nativeElement.focus();
+    }else if(event.toElement.name == "byItem"){ 
+      console.log("by element: item")
+      
+      setTimeout(() => { 
+        this.scanItemCode.nativeElement.focus();
+      }, 100);
+    }
+
     this.checkChangeEvent = event;
+    console.log("check change:"+this.checkChangeEvent);
     console.log(this.checkChangeEvent);
     if (this.TransferedItemsDetail.length == 0) {
       this.selectedPallets = [];
