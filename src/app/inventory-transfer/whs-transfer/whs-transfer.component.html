@@ -27,7 +27,7 @@
                 <input type="text" #scanToWhse name="toWhse" [(ngModel)]="toWhse" id= "whsTransferToWhsInputField" class="form-control form-control-sm" placeholder="{{'InvTransfer_ToWhse'|translate}}"
                   (blur)="OnToWarehouseChange()" [disabled]="!isfromWhsDisabled">
                 <div class="input-group-append">
-                  <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="getToWhse()" [ngClass]="{'disableDiv': !isfromWhsDisabled}">
+                  <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="getToWhse()" [disabled]="!isfromWhsDisabled">
                     <i class="opti-icon-hammenu"></i>
                   </button>
                 </div>
