@@ -26,7 +26,7 @@
                                 <input #poScanInputField type="text" class="form-control form-control-sm" name="poCode" [(ngModel)]=poCode placeholder="{{'Inbound_PO#'|translate}}"
                                     (blur)="OnPOChange()" [disabled]=disablePO id="inboundPOScanPOInputField">
                                 <div class="input-group-append has-seprate-btn">
-                                    <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="onPOlookupClick()" [ngClass]="{'disableDiv': disablePO}">
+                                    <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="onPOlookupClick()" [disabled]="disablePO">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
                                     <button tabIndex="-1" class="k-button k-primary btn separate-btn" 

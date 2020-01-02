@@ -13,7 +13,7 @@
                 <input id="fromWhse" #scanFromWhse name="fromWhse" [(ngModel)]="fromWhse" type="text" class="form-control form-control-sm" placeholder="{{'InvTransfer_FromWhse'|translate}}"
                   [disabled]="isfromWhsDisabled">
                 <div class="input-group-append">
-                  <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="getFromWhse()" [ngClass]="{'disableDiv': isfromWhsDisabled}">
+                  <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="getFromWhse()" [disabled]="isfromWhsDisabled">
                     <i class="opti-icon-hammenu"></i>
                   </button>
                 </div>
