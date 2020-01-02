@@ -2557,6 +2557,20 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         break;
       }
     }
+
+    //enable disable buttons.
+    if (this.recvingQuantityBinArray.length > 0) {
+      if (!this.fromReceiptProduction) {
+        this.showButton = true;
+        this.showRecButton = true;
+      } else {
+        this.showRecButton = false;
+        this.showButton = true;
+      }
+    } else {
+      this.showButton = false;
+      this.showRecButton = false;
+    }
   }
 
   inputDialogFor: any;

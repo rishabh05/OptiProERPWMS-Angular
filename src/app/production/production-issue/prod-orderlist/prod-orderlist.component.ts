@@ -161,10 +161,9 @@ export class ProdOrderlistComponent implements OnInit {
             else {
               this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
               this.soItemsDetail = [];
+              this.orderNo = ''
+              //this.scanOrderNo.nativeElement.focus();
             }
-
-
-
           }
         }
       },
