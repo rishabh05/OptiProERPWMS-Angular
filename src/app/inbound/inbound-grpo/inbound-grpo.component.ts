@@ -394,6 +394,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
             if (data[0].Result == "0") {
               this.toastr.error('', this.translate.instant("INVALIDBIN"));
               this.RecvbBinvalue = "";
+              this.RecBinVal.nativeElement.focus()
               return;
             }
             else {
@@ -405,6 +406,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         else {
           this.toastr.error('', this.translate.instant("INVALIDBIN"));
           this.RecvbBinvalue = "";
+          this.RecBinVal.nativeElement.focus()
           return;
         }
       },
@@ -1903,6 +1905,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
             if (data[0].Result == "0") {
               this.toastr.error('', this.translate.instant("INVALIDBIN"));
               this.targetBin = "";
+              this.scanTargetBin.nativeElement.focus()
               return;
             }
             else {
@@ -1914,6 +1917,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         else {
           this.toastr.error('', this.translate.instant("INVALIDBIN"));
           this.targetBin = "";
+          this.scanTargetBin.nativeElement.focus()
           return;
         }
       },
@@ -1946,6 +1950,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
               this.toastr.error('', this.translate.instant("InvalidWhsErrorMsg"));
               this.targetWhse = "";
               this.targetBin = "";
+              this.scanTargetWhse.nativeElement.focus()
               return;
             }
             else {
@@ -1958,6 +1963,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         else {
           this.toastr.error('', this.translate.instant("InvalidWhsErrorMsg"));
           this.targetWhse = "";
+          this.scanTargetWhse.nativeElement.focus()
           return;
         }
       },
@@ -2250,12 +2256,14 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
           } else {
             this.toastr.error('', this.translate.instant("InValidPalletNo"));
             this.palletValue = "";
+            this.scanPallet.nativeElement.focus()
             return;
           }
         }
         else {
           this.toastr.error('', this.translate.instant("InValidPalletNo"));
           this.palletValue = "";
+          this.scanPallet.nativeElement.focus()
           return;
         }
       },

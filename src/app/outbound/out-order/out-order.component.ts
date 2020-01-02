@@ -1149,9 +1149,6 @@ export class OutOrderComponent implements OnInit {
   }
 
   onPalletChange() {
-
-    
-
     if (this.palletNo == undefined || this.palletNo == "") {
       return;
     }
@@ -1167,12 +1164,14 @@ export class OutOrderComponent implements OnInit {
           } else {
             this.toastr.error('', this.translate.instant("InValidPalletNo"));
             this.palletNo = "";
+            this.PalletNo.nativeElement.focus();
             return;
           }
         }
         else {
           this.toastr.error('', this.translate.instant("InValidPalletNo"));
           this.palletNo = "";
+          this.PalletNo.nativeElement.focus();
           return;
         }
       },
@@ -1395,8 +1394,6 @@ export class OutOrderComponent implements OnInit {
 
   ItemCode: string;
   public onItemChange() {
-   
-
     if (this.selectedCustomer != null && this.selectedCustomer != undefined
       && this.selectedCustomer.CustomerCode != '' && this.selectedCustomer.CustomerCode != null) {
 
@@ -1504,10 +1501,12 @@ export class OutOrderComponent implements OnInit {
           } else {
             this.itrCode = "";
             this.toastr.error('', this.translate.instant("InvTransfer_InvalidITR"));
+            this.DocEntry.nativeElement.focus();
           }
         } else {
           this.itrCode = ""; 
           this.toastr.error('', this.translate.instant("InvTransfer_InvalidITR"));
+          this.DocEntry.nativeElement.focus();
         }
       },
       error => {

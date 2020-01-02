@@ -192,6 +192,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
             this.showNext = false;
             this.poCode = "";
             this.VendCode1= this.VendCode;
+            this.vendInputScanField.nativeElement.focus()
             return;
           } else {
             if(this.VendCode1 != data[0].ID){

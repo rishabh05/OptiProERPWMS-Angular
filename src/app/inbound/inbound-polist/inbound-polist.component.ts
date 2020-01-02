@@ -51,7 +51,7 @@ export class InboundPolistComponent implements OnInit {
   pageSize: number = Commonservice.pageSize;
   showConfirmDialog = false;
   defaultPageSize: number = 10;
-
+  @ViewChild('scanItemCode') scanItemCode;
 
 
 
@@ -297,12 +297,13 @@ export class InboundPolistComponent implements OnInit {
           else {
             this.poCode = "";
             this.toastr.error('', this.translate.instant("Inbound_POExistMessage"));
-
+            this.poScanInputField.nativeElement.focus()
             return;
           }
         } else {
           this.poCode = "";
           this.toastr.error('', this.translate.instant("Inbound_POExistMessage"));
+          this.poScanInputField.nativeElement.focus()
         }
       },
       error => {
@@ -363,6 +364,7 @@ export class InboundPolistComponent implements OnInit {
         } else {
           this.toastr.error('', this.translate.instant("InvalidItemCode"));
           this.itemCode = "";
+          this.scanItemCode.nativeElement.focus()
         }
       },
       error => {

@@ -77,7 +77,7 @@
                                 <input type="text" id ="inboundGrpoRecBinInput" class="form-control form-control-sm" name="RecvbBinvalue" #RecBinVal
                                     [(ngModel)]=RecvbBinvalue placeholder="{{'Inbound_ReceivingBin'|translate}}" (blur)="OnBinChange()">
                                 <div class="input-group-append has-seprate-btn">
-                                    <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="ShowBins()" [disabled]="lookupDisable">
+                                    <button tabindex="-1" class="k-button k-primary btn" type="button" (mousedown)="ShowBins()" [disabled]="lookupDisable">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
 
@@ -123,7 +123,7 @@
                                 <input type="text" class="form-control form-control-sm" id="inboundScanInputField" name="ScanInputs"
                                     [(ngModel)]=ScanInputs (blur)="onScanCodeChange()" placeholder="{{scanInputPlaceholder}}">
                                 <div class="ml-1 d-flex">
-                                    <button tabIndex="-1" type="button" id="inboundscanButton" (mousedown)="onInboundScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                    <button tabindex="-1" type="button" id="inboundscanButton" (mousedown)="onInboundScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
 
@@ -145,17 +145,17 @@
                                         <input type="text" #scanPallet id="inboundGRPOPalletNo" class="form-control form-control-sm" name="palletValue" [(ngModel)]=palletValue
                                             (blur)="OnPalletChange()" placeholder="{{'Plt_PalletNo'|translate}}">
                                         <div class="input-group-append has-seprate-btn">
-                                            <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="getPalletList()">
+                                            <button tabindex="-1" class="k-button k-primary btn" type="button" (mousedown)="getPalletList()">
                                                 <i class="opti-icon-hammenu"></i>
                                             </button>
                                         </div>
                                         <div class="ml-1 d-flex">
-                                            <button tabIndex="-1" type="button" id="inboundGRPOPalletScanBtn" (mousedown)="onPalletScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                            <button tabindex="-1" type="button" id="inboundGRPOPalletScanBtn" (mousedown)="onPalletScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                                 <i class="opti-icon-qr-code fs-24"></i>
                                             </button>
                                         </div>
                                         <div class="ml-1 d-flex d-sm-flex d-md-flex d-lg-none d-xl-none">
-                                            <button tabIndex="-1" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
+                                            <button tabindex="-1" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
                                                 type="button" (mousedown)="clearPalletItems($event)" id="btnClear">
                                                 <small>{{'Common_Clear'|translate}}</small>
                                             </button>
@@ -165,7 +165,7 @@
                             </div>
                         </div>
                         <div class="align-items-start col-md-2 col-lg-4 col-xl-6 pl-0 d-none d-sm-none d-md-none d-lg-flex d-xl-flex">
-                            <button tabIndex="-1" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button"
+                            <button tabindex="-1" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button"
                                 (mousedown)="clearPalletItems($event)" id="btnClear">
                                 <small>{{'Common_Clear'|translate}}</small>
                             </button>
@@ -192,11 +192,11 @@
                                     min="0"
                                     class="text-right form-control form-control-sm">
                                 <div class="ml-1 d-flex">
-                                    <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
+                                    <button tabindex="-1" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
                                         type="button" (mousedown)="addQuantity(event)">
                                         <i class="opti-icon-add1 fs-24"></i>
                                     </button>
-                                    <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
+                                    <button tabindex="-1" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
                                         type="button" (mousedown)="updateQuantity(event)" *ngIf="isNonTrack">
                                         <i class="k-i-track-changes-accept k-icon" [ngStyle]="{'font-size':'24px'}"></i>
                                     </button>
@@ -360,7 +360,7 @@
                                     </button>
                                 </div>
                                 <div class="ml-1 d-flex" >
-                                    <button type="button" id="inboundGRPOScanTargetWhseBtn" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                    <button tabindex="-1" type="button" id="inboundGRPOScanTargetWhseBtn" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
                                 </div>
@@ -380,7 +380,7 @@
 
                                 </div>
                                 <div class="ml-1 d-flex"  >
-                                    <button type="button" id="inboundGRPOScanTargetBinBtn" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                    <button tabindex="-1" type="button" id="inboundGRPOScanTargetBinBtn" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
                                 </div>
