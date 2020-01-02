@@ -260,6 +260,7 @@ export class PalletizeComponent implements OnInit {
           this.savedPalletsArray = [];
           this.resetVariablesOnItemSelect();
           this.toastr.error('', this.translate.instant("InvalidItemCode"));
+          this.itemCode = ''
           this.scanItemCode.nativeElement.focus()
         }
       },
@@ -329,13 +330,13 @@ export class PalletizeComponent implements OnInit {
   }
 
   OnLotsChange() {
-    if (this.itemCode == '' || this.itemCode == undefined) {
-      this.toastr.error('', this.translate.instant("SelectItemCode"));
-      this.batchSerialNo = "";
+    if (this.batchSerialNo == '' || this.batchSerialNo == undefined) {
       return;
     }
 
-    if (this.batchSerialNo == "" || this.batchSerialNo == undefined) {
+    if (this.itemCode == '' || this.itemCode == undefined) {
+      this.toastr.error('', this.translate.instant("SelectItemCode"));
+      this.batchSerialNo = "";
       return;
     }
 

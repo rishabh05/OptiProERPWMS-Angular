@@ -12,7 +12,7 @@
             <label for="fromPalletNo" class="col-sm-3 col-form-label">{{'Plt_FromPalletNo'|translate}}</label>
             <div class="col-sm-9">
               <div class="input-group input-group-sm">
-                <input #scanPallet type="text" id="PalSplitFromPltInput" class="form-control form-control-sm" name="fromPalletNo" [(ngModel)]="fromPalletNo"
+                <input #scanFromPallet type="text" id="PalSplitFromPltInput" class="form-control form-control-sm" name="fromPalletNo" [(ngModel)]="fromPalletNo"
                   placeholder="{{'Plt_FromPalletNo'|translate}}" (blur)="onPalletChange('from_pallet')">
                 <div class="input-group-append">
                   <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="getFromPalletList('from_pallet')">
@@ -35,7 +35,7 @@
             <label for="toPalletNo" class="col-sm-3 col-form-label">{{'Plt_ToPalletNo'|translate}}</label>
             <div class="col-sm-9">
               <div class="input-group input-group-sm">
-                <input type="text" id="PalSplitToPltInput" class="form-control form-control-sm" name="toPalletNo" [(ngModel)]="toPalletNo"
+                <input #scanToPallet type="text" id="PalSplitToPltInput" class="form-control form-control-sm" name="toPalletNo" [(ngModel)]="toPalletNo"
                   placeholder="{{'Plt_ToPalletNo'|translate}}" (blur)="onPalletChange('to_pallet')">
                 <div class="input-group-append">
                   <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="getPalletList('to_pallet')">

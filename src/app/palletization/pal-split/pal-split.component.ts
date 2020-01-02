@@ -44,7 +44,8 @@ export class PalSplitComponent implements OnInit {
   itemType: string = "";
   isSerailTrackedItem: boolean = false;
   newCreatedPalletNo: string;
-  @ViewChild('scanPallet') scanPallet
+  @ViewChild('scanFromPallet') scanFromPallet
+  @ViewChild('scanToPallet') scanToPallet
   
   constructor(private commonservice: Commonservice,
     private router: Router, private toastr: ToastrService, private translate: TranslateService) {
@@ -58,7 +59,7 @@ export class PalSplitComponent implements OnInit {
   }
 
   ngAfterViewInit(): void{
-    this.scanPallet.nativeElement.focus()
+    this.scanFromPallet.nativeElement.focus()
   }
 
   public getFromPalletList(from: string) {
@@ -157,7 +158,7 @@ export class PalSplitComponent implements OnInit {
     if (this.toPalletNo == this.fromPalletNo) {
       this.toastr.error('', this.translate.instant("Plt_PalletShouldNotSame"));
       this.toPalletNo = '';
-      this.scanPallet.nativeElement.focus();
+      this.scanFromPallet.nativeElement.focus();
       return;
     }
 
@@ -184,8 +185,10 @@ export class PalSplitComponent implements OnInit {
             this.toastr.error('', this.translate.instant("InValidPalletNo"));
             if (from == "to_pallet") {
               this.toPalletNo = "";
+              this.scanToPallet.nativeElement.focus();
             } else if (from == "from_pallet") {
               this.fromPalletNo = "";
+              this.scanFromPallet.nativeElement.focus();
             }
             return;
           }
@@ -194,8 +197,10 @@ export class PalSplitComponent implements OnInit {
           this.toastr.error('', this.translate.instant("InValidPalletNo"));
           if (from == "to_pallet") {
             this.toPalletNo = "";
+            this.scanToPallet.nativeElement.focus();
           } else if (from == "from_pallet") {
             this.fromPalletNo = "";
+            this.scanFromPallet.nativeElement.focus();
           }
           return;
         }
@@ -287,6 +292,12 @@ export class PalSplitComponent implements OnInit {
   }
 
   splitPallet(event: any) {
+    if (this.toPalletNo == this.fromPalletNo) {
+      this.toastr.error('', this.translate.instant("Plt_PalletShouldNotSame"));
+      //this.scanFromPallet.nativeElement.focus();
+      return;
+    }
+
     this.showLoader = true;
     var oPalletReq: any = {};
     oPalletReq.Header = [];
