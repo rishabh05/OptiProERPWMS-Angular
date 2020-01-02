@@ -146,13 +146,15 @@ export class OutProdissueComponent implements OnInit {
   }
 
   ngAfterViewInit():void{
-    if(localStorage.getItem("ComingFrom") == "itr"){
-      this.scanToBin.nativeElement.focus()
-    } else {
-      if (this.OrderType != 'N') {
-      this.scanBatchSerial.nativeElement.focus()
+    setTimeout(()=> {
+      if(localStorage.getItem("ComingFrom") == "itr"){
+        this.scanToBin.nativeElement.focus()
+      } else {
+        if (this.OrderType != 'N') {
+          this.scanBatchSerial.nativeElement.focus()
+        }
       }
-    }
+   }, 200);
   }
 
   manageUOM() {
