@@ -162,8 +162,10 @@ export class PalletMergeComponent implements OnInit {
             this.toastr.error('', this.translate.instant("InValidPalletNo"));
             if (from == "to_pallet") {
               this.toPalletNo = "";
+              this.scanToPallet.nativeElement.focus();
             } else if (from == "from_pallet") {
               this.fromPalletNo = "";
+              this.scanFromPallet.nativeElement.focus()
             }
             return;
           }
@@ -172,8 +174,10 @@ export class PalletMergeComponent implements OnInit {
           this.toastr.error('', this.translate.instant("InValidPalletNo"));
           if (from == "to_pallet") {
             this.toPalletNo = "";
+            this.scanToPallet.nativeElement.focus();
           } else if (from == "from_pallet") {
             this.fromPalletNo = "";
+            this.scanFromPallet.nativeElement.focus()
           }
           return;
         }

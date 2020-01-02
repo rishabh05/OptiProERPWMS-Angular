@@ -206,6 +206,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
           this.toastr.error('', this.translate.instant("Inbound_VendorExistMessge"));
           this.VendCode = "";
           this.showNext = false;
+          this.vendInputScanField.nativeElement.focus()
         }
       },
       error => {
@@ -483,8 +484,6 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
   }
 
   OnPOChange() {
-    
-   
     if (this.poCode == "" || this.poCode == undefined) {
       return;
     }
@@ -503,10 +502,11 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
           else {
             this.poCode = "";
             this.toastr.error('', this.translate.instant("Inbound_POExistMessage"));
-
+            this.poScanInputField.nativeElement.focus()
             return;
           }
         } else {
+          this.poScanInputField.nativeElement.focus()
           this.poCode = "";
           this.toastr.error('', this.translate.instant("Inbound_POExistMessage"));
         }

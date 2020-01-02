@@ -81,10 +81,7 @@ export class DepalletizeComponent implements OnInit {
     // alert("scan click");
   }
 
-  onPalletChange() {
-
-    
-   
+  onPalletChange() { 
     if (this.palletNo == '' || this.palletNo == undefined) {
       this.palletData = [];
       return
@@ -101,12 +98,12 @@ export class DepalletizeComponent implements OnInit {
               this.toastr.error('', this.translate.instant("InValidPalletNo"));
               this.palletNo = "";
               this.palletData = [];
+              this.scanPallet.nativeElement.focus()
               return;
             } else {
               this.palletNo = data[0].Code;
               // this.showHideGridToggle = false;
               // this.showHideBtnTxt = this.translate.instant("showGrid");
-
               this.getPalletData();
             }
           } else {

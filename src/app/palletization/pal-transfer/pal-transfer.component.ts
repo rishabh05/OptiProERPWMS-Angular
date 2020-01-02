@@ -191,8 +191,10 @@ export class PalTransferComponent implements OnInit {
             this.toastr.error('', this.translate.instant("InValidPalletNo"));
             if (from == "to_pallet") {
               this.toPalletNo = "";
+              this.toPalletInputs.nativeElement.focus();
             } else if (from == "from_pallet") {
               this.fromPalletNo = "";
+              this.fromPalletInput.nativeElement.focus();
             }
             return;
           }
@@ -202,8 +204,10 @@ export class PalTransferComponent implements OnInit {
           this.toastr.error('', this.translate.instant("InValidPalletNo"));
           if (from == "to_pallet") {
             this.toPalletNo = "";
+            this.toPalletInputs.nativeElement.focus();
           } else if (from == "from_pallet") {
             this.fromPalletNo = "";
+            this.fromPalletInput.nativeElement.focus();
           }
           return;
         }

@@ -102,9 +102,6 @@ export class PalletizeComponent implements OnInit {
   }
 
   onPalletChange() {
-
- 
-
     if (this.palletNo == '' || this.palletNo == undefined) {
       return
     }
@@ -118,6 +115,7 @@ export class PalletizeComponent implements OnInit {
             if (data[0].Result == "0") {
               this.toastr.error('', this.translate.instant("InValidPalletNo"));
               this.palletNo = "";
+              this.scanToPallet.nativeElement.focus()
               return;
             } else {
               this.palletNo = data[0].Code;
@@ -126,11 +124,13 @@ export class PalletizeComponent implements OnInit {
           } else {
             this.palletNo = "";
             this.toastr.error('', this.translate.instant("InValidPalletNo"));
+            this.scanToPallet.nativeElement.focus()
           }
         }
         else {
           this.toastr.error('', this.translate.instant("InValidPalletNo"));
           this.palletNo = "";
+          this.scanToPallet.nativeElement.focus()
           return;
         }
       },
@@ -231,9 +231,6 @@ export class PalletizeComponent implements OnInit {
   }
 
   OnItemCodeChange() {
-    
-  
-
     if (this.itemCode == "" || this.itemCode == undefined) {
       this.savedPalletsArray = [];
       return;
@@ -263,6 +260,7 @@ export class PalletizeComponent implements OnInit {
           this.savedPalletsArray = [];
           this.resetVariablesOnItemSelect();
           this.toastr.error('', this.translate.instant("InvalidItemCode"));
+          this.scanItemCode.nativeElement.focus()
         }
       },
       error => {
@@ -331,9 +329,6 @@ export class PalletizeComponent implements OnInit {
   }
 
   OnLotsChange() {
-
-    
-
     if (this.itemCode == '' || this.itemCode == undefined) {
       this.toastr.error('', this.translate.instant("SelectItemCode"));
       this.batchSerialNo = "";
@@ -358,6 +353,7 @@ export class PalletizeComponent implements OnInit {
           if (data == "0" || data[0] == "0") {
             this.toastr.error('', this.translate.instant("InvalidBatch"));
             this.batchSerialNo = "";
+            this.BatchNoInput.nativeElement.focus()
             return;
           }
           this.batchSerialNo = data[0].LOTNO; //check this code.
@@ -369,6 +365,7 @@ export class PalletizeComponent implements OnInit {
         } else {
           this.toastr.error('', this.translate.instant("InvalidBatch"));
           this.batchSerialNo = "";
+          this.BatchNoInput.nativeElement.focus()
         }
       },
       error => {

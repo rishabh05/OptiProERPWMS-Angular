@@ -157,6 +157,7 @@ export class PalSplitComponent implements OnInit {
     if (this.toPalletNo == this.fromPalletNo) {
       this.toastr.error('', this.translate.instant("Plt_PalletShouldNotSame"));
       this.toPalletNo = '';
+      this.scanPallet.nativeElement.focus();
       return;
     }
 

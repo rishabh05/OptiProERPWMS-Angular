@@ -86,6 +86,9 @@ export class InventoryEnquiryComponent implements OnInit,AfterViewInit {
     switch ($event.target.id) {
       case ("InventoryEnquiryOptions1"):
         this.initialize()
+        setTimeout(() => {
+          this.BatchNoInput.nativeElement.focus(); 
+        }, 200);
         break;
       case ("InventoryEnquiryOptions2"):
         this.batchSerial = false;
@@ -93,10 +96,9 @@ export class InventoryEnquiryComponent implements OnInit,AfterViewInit {
         this.itemDetail = false;
         this.disableDescription = true;
         this.disableItemCode = false;
-        // setTimeout(() => {
-        //   this.itemCodeInput.nativeElement.focus(); 
-        // }, 200);
-         
+        setTimeout(() => {
+          this.itemCodeInput.nativeElement.focus(); 
+        }, 200);
         break;
       case ("InventoryEnquiryOptions3"):
         this.batchSerial = false;
@@ -104,10 +106,9 @@ export class InventoryEnquiryComponent implements OnInit,AfterViewInit {
         this.itemDetail = true;
         this.disableDescription = true;
         this.disableItemCode = false;
-
-        // setTimeout(() => {
-        //   this.itemCodeInput.nativeElement.focus(); 
-        // }, 200);
+        setTimeout(() => {
+          this.itemCodeInput.nativeElement.focus(); 
+        }, 200);
 
         break;
     }
@@ -245,6 +246,7 @@ export class InventoryEnquiryComponent implements OnInit,AfterViewInit {
         if (this.lotNo != "")
           this.GetItemOrBatchDetail();
 
+        // this.BatchNoInput.nativeElement.focus()
       }
       if (this.lookupfor == "ItemsList") {
         this.isFromItemChange = false;// reset this variable for batch value is not from on change.
@@ -268,6 +270,8 @@ export class InventoryEnquiryComponent implements OnInit,AfterViewInit {
         // we do not need to show lot no. column in case of item summery.
         if (this.itemCode != "")
           this.GetItemOrBatchDetail();
+
+        // this.itemCodeInput.nativeElement.focus()
       }
     }
   }

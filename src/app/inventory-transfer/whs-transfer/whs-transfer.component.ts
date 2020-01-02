@@ -157,9 +157,6 @@ export class WhsTransferComponent implements OnInit {
   }
 
   OnToWarehouseChange () {
-    
-   
-
     if (this.toWhse == "" || this.toWhse == undefined) {
       return;
     }
@@ -178,6 +175,7 @@ export class WhsTransferComponent implements OnInit {
             this.toastr.error('', this.translate.instant("InvalidWhsErrorMsg"));
             this.toWhse = "";
             this.showNext = false;
+            this.scanToWhse.nativeElement.focus()
           }
           else {
             this.toWhse = data[0].ID;

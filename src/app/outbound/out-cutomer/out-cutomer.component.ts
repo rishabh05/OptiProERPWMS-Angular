@@ -122,14 +122,13 @@ export class OutCutomerComponent implements OnInit {
   }
 
   onCustomerCodeBlur() {
-  
-
     this.outboundservice.getCustomer(this.customerCode).subscribe(
       resp => {
         if (resp.length == 0) {
           this.customerCode = null
           this.customerName = ''
           this.orderNumber = "";
+          this.scanCustomerCode.nativeElement.focus()
         }
         else {
           if (this.customerCode != resp[0].CUSTCODE) {
@@ -637,9 +636,6 @@ export class OutCutomerComponent implements OnInit {
   public selectedCustomer: any;
  
   public onOrderNoBlur() {
-
-   
-
     this.showLookup = false;
     if (this.orderNumber == "" || this.orderNumber == undefined) {
       return;
@@ -656,7 +652,6 @@ export class OutCutomerComponent implements OnInit {
             return;
           }
 
-         
           this.customerCode = resp[0].CARDCODE
           this.customerName = resp[0].CARDNAME
          
@@ -703,6 +698,7 @@ export class OutCutomerComponent implements OnInit {
         } else {
           this.toastr.error('', this.translate.instant("Outbound_InvalidSO"));
           this.orderNumber = "";
+          this.scanSO.nativeElement.focus()
         }
 
       },

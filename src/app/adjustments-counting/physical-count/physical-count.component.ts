@@ -209,6 +209,7 @@ export class PhysicalCountComponent implements OnInit {
             this.ItemCode = "";
             this.ItemName = "";
             this.ItemTracking = "";
+            this.scanItemCode.nativeElement.focus()
           }
         }
         else {
@@ -216,6 +217,7 @@ export class PhysicalCountComponent implements OnInit {
           this.ItemCode = "";
           this.ItemName = "";
           this.ItemTracking = "";
+          this.scanItemCode.nativeElement.focus()
         }
       },
       error => {
@@ -295,9 +297,6 @@ export class PhysicalCountComponent implements OnInit {
   }
 
   OnLotChange(savenext?: string) {
-
-  
-
     if (this.batchserno == "" || this.batchserno == undefined) {
       return;
     }
