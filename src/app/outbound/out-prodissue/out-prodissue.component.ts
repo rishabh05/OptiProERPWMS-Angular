@@ -199,6 +199,10 @@ export class OutProdissueComponent implements OnInit {
   }
 
   onScanInputChange() {
+    if(this.ScanInputs==undefined || this.ScanInputs== null || this.ScanInputs=="")
+    {
+      return;
+    }
     if (this.needMeterial() == false) {
       this.toastr.error('', this.translate.instant("ProdIssue_PickedAllRequiredItems"));
       //alert('You picked all requerde items.');
