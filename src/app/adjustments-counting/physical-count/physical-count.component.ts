@@ -185,8 +185,6 @@ export class PhysicalCountComponent implements OnInit {
   }
 
   OnItemChange() {
-   
-
     if (this.ItemCode == "" || this.ItemCode == undefined) {
       return;
     }
@@ -196,7 +194,6 @@ export class PhysicalCountComponent implements OnInit {
         this.showLoader = false;
         if (data != null) {
           if (data.length > 0) {
-
             this.ItemCode = data[0].ITEMCODE;
             this.ItemName = data[0].ITEMNAME;
             this.UOM = data[0].UomCode;
@@ -435,6 +432,7 @@ export class PhysicalCountComponent implements OnInit {
       this.QtyOnHand = $event[5];
       this.IsteamCount = $event[6];
       this.GetSavedDocNoDetails();
+      this.scanItemCode.nativeElement.focus()
     } else if (this.lookupfor == "showPhyCntItemsList") {
       this.ItemCode = $event[0];
       this.ItemName = $event[1];
@@ -445,6 +443,7 @@ export class PhysicalCountComponent implements OnInit {
       this.QtyOnHand = "0";
       this.batchserno = "";
       this.CheckTrackingandVisiblity();
+      this.scanItemCode.nativeElement.focus()
     } else if (this.lookupfor == "ShowBatachSerList") {
       this.batchserno = $event[0];
       this.ItemCode = $event[2];
@@ -454,6 +453,7 @@ export class PhysicalCountComponent implements OnInit {
       this.CountedQty = $event[7];
       this.QtyOnHand = $event[7];
       this.CheckTrackingandVisiblity();
+      this.scanBatchSerial.nativeElement.focus()
     }
     this.formatCountedQty();
     this.formatOnHandQty();
