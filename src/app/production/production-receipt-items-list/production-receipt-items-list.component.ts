@@ -135,7 +135,7 @@ export class ProductionReceiptItemsListComponent implements OnInit {
         "OPENQTY": this.gridDataNew[0].OPENQTY, "ORIGINALACTUALQUANTITY": this.gridDataNew[0].ORIGINALACTUALQUANTITY,
         "OrderNo": this.gridDataNew[0].OrderNo, "PRINTLBL": this.gridDataNew[0].PRINTLBL,
         "RefDocEntry": this.gridDataNew[0].RefDocEntry, "Status": this.gridDataNew[0].Status,
-        "WHSE": this.gridDataNew[0].WHSE, "ReceiveQty": qty
+        "WHSE": this.gridDataNew[0].WHSE, "ReceiveQty": qty, "TRACKING": this.gridDataNew[0].TRACKING
       };
     }
     if (this.gridDataNew != null && this.gridDataNew != undefined && this.gridDataNew.length > 0 &&
@@ -156,7 +156,7 @@ export class ProductionReceiptItemsListComponent implements OnInit {
           "OPENQTY": this.gridDataNew[i].OPENQTY, "ORIGINALACTUALQUANTITY": this.gridDataNew[i].ORIGINALACTUALQUANTITY,
           "OrderNo": this.gridDataNew[i].OrderNo, "PRINTLBL": this.gridDataNew[i].PRINTLBL,
           "RefDocEntry": this.gridDataNew[i].RefDocEntry, "Status": this.gridDataNew[i].Status,
-          "WHSE": this.gridDataNew[i].WHSE, "ReceiveQty": qty
+          "WHSE": this.gridDataNew[i].WHSE, "ReceiveQty": qty,"TRACKING": this.gridDataNew[i].TRACKING
         };
       }
     }
