@@ -73,7 +73,7 @@ export class BinTransferComponent implements OnInit {
   @ViewChild("scanItemCode") scanItemCode;
   @ViewChild("scanFromBin") scanFromBin;
   @ViewChild("scanToBin") scanToBin;
-  @ViewChild("scanLotNo") scanLotNo; 
+  @ViewChild("scanLotNo") scanLotNo;
   @ViewChild("scanPallet") scanPallet;
   @ViewChild("scanToBinOther") scanToBinOther;
 
@@ -278,20 +278,21 @@ export class BinTransferComponent implements OnInit {
           this.transferQty = "0.000";
           this.onHandQty = 0.000;
           this.CheckTrackingandVisiblity();
-          if (localStorage.getItem("fromscreen") == "WhsTransfer") {
-            this.getDefaultBin();
-          }
+          // if (localStorage.getItem("fromscreen") == "WhsTransfer") {
+          //   this.getDefaultBin();
+          // }
           this.formatOnHandQty();
           this.formatTransferNumbers();
-          if ( this.ItemTracking == 'N' ) {
-            if((localStorage.getItem("fromscreen") != "InventoryTransferRequest") ){
-            this.getDefaultFromBin();
-            this.scanFromBin.nativeElement.focus();
-          }
-          }else{
-            setTimeout(() => { 
+          if (this.ItemTracking == 'N') {
+            if ((localStorage.getItem("fromscreen") != "InventoryTransferRequest")) {
+              this.getDefaultFromBin();
+              this.scanFromBin.nativeElement.focus();
+            }
+          } else {
+            this.getDefaultToBin();
+            setTimeout(() => {
               this.scanLotNo.nativeElement.focus();
-            }, 100);            
+            }, 100);
           }
         } else {
           this.toastr.error('', this.translate.instant("InvalidItemCode"));
@@ -330,6 +331,12 @@ export class BinTransferComponent implements OnInit {
             else {
               this.toastr.error('', this.translate.instant("InvalidBatch"));
             }
+            this.lotValue = "";
+            this.onHandQty = 0;
+            this.transferQty = "0";
+            this.formatTransferNumbers();
+            this.formatOnHandQty();
+            this.fromBin = "";
           }
           else {
             this.lotValue = data[0].LOTNO;
@@ -991,7 +998,7 @@ export class BinTransferComponent implements OnInit {
       }
       return false;
     }
-    
+
     return true;
   }
 
@@ -1001,7 +1008,7 @@ export class BinTransferComponent implements OnInit {
         this.scanItemCode.nativeElement.focus();
       } else if (this.lookupfor == "BatchNoList") {
         this.scanLotNo.nativeElement.focus();
-      } 
+      }
       else if (this.lookupfor == "BatchNoList2") {
         this.scanLotNo.nativeElement.focus();
       }
@@ -1012,11 +1019,11 @@ export class BinTransferComponent implements OnInit {
       } else if (this.lookupfor == "toBinsList") {
         if (this.radioSelected == 0) {
           this.scanToBin.nativeElement.focus();
-        }else{
+        } else {
           this.scanToBinOther.nativeElement.focus();
           // other to bin field.
         }
-      } 
+      }
       return;
     }
     else if (this.lookupfor == "PalletList") {
@@ -1040,10 +1047,12 @@ export class BinTransferComponent implements OnInit {
         if (this.ItemTracking == 'N') {
           this.getDefaultFromBin();
           //     this.getDefaultToBin();
+        }else{
+          this.getDefaultToBin();
         }
-        if (localStorage.getItem("fromscreen") == "WhsTransfer") {
-          this.getDefaultBin();
-        }
+        // if (localStorage.getItem("fromscreen") == "WhsTransfer") {
+        //   this.getDefaultBin();
+        // }
         this.CheckTrackingandVisiblity();
         this.scanItemCode.nativeElement.focus();
       } else if (this.lookupfor == "BatchNoList") {
@@ -1055,7 +1064,7 @@ export class BinTransferComponent implements OnInit {
         this.palletNo = $event[12];
         this.actualLotNo = $event[13];
         this.scanLotNo.nativeElement.focus();
-      } 
+      }
       else if (this.lookupfor == "BatchNoList2") {
         this.lotValue = $event[0];
         this.fromBin = $event[5];
@@ -1083,8 +1092,8 @@ export class BinTransferComponent implements OnInit {
         this.toBin = $event[0];
         //this.prepareByPalletData();
         if (this.radioSelected == 0) {
-        this.scanToBin.nativeElement.focus();
-        }else{
+          this.scanToBin.nativeElement.focus();
+        } else {
           //other to bin Field
           this.scanToBinOther.nativeElement.focus();
         }
@@ -1157,7 +1166,7 @@ export class BinTransferComponent implements OnInit {
 
   goBack() {
     this.operationType = "back";
-   
+
     if (localStorage.getItem("fromscreen") == "WhsTransfer") {
       this.cancelevent.emit(true);
     } else if (localStorage.getItem("fromscreen") == "InventoryTransferRequest") {
@@ -1233,29 +1242,29 @@ export class BinTransferComponent implements OnInit {
     }
   }
 
-  onRadioMouseDown(id){
+  onRadioMouseDown(id) {
     console.log("on radio mouse down");
     document.getElementById(id).click();
   }
 
   handleCheckChange(event) {
     console.log("on radio handleCheckChange");
-    if(event.toElement.name == "byPlt"){
+    if (event.toElement.name == "byPlt") {
       console.log("by element: plt")
-      setTimeout(() => { 
+      setTimeout(() => {
         this.scanPallet.nativeElement.focus();
       }, 100);
       //this.scanPallet.nativeElement.focus();
-    }else if(event.toElement.name == "byItem"){ 
+    } else if (event.toElement.name == "byItem") {
       console.log("by element: item")
-      
-      setTimeout(() => { 
+
+      setTimeout(() => {
         this.scanItemCode.nativeElement.focus();
       }, 100);
     }
 
     this.checkChangeEvent = event;
-    console.log("check change:"+this.checkChangeEvent);
+    console.log("check change:" + this.checkChangeEvent);
     console.log(this.checkChangeEvent);
     if (this.TransferedItemsDetail.length == 0) {
       this.selectedPallets = [];
@@ -1513,8 +1522,7 @@ export class BinTransferComponent implements OnInit {
     this.OnToBinChange();
   }
 
-  onHiddenByPalBatchNoScanClick()
-  {
+  onHiddenByPalBatchNoScanClick() {
     var inputValue = (<HTMLInputElement>document.getElementById('binTransferBatchNoInput')).value;
     if (inputValue.length > 0) {
       this.lotValue = inputValue;
