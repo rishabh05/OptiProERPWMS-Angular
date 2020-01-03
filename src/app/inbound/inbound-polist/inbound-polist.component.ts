@@ -815,6 +815,8 @@ export class InboundPolistComponent implements OnInit {
           if (data.length > 0) {
             if (this.openPOLinesModel[0].QCREQUIRED == "Y") {
               this.RecvbBinvalue = data[0].BINNO;
+            } else if (data[0].DefaultBin == undefined || data[0].DefaultBin == null || data[0].DefaultBin == "") {
+              this.RecvbBinvalue = data[0].BINNO;
             } else {
               this.RecvbBinvalue = data[0].DefaultBin;
             }

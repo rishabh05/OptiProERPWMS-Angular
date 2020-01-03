@@ -234,10 +234,10 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
           this.GetDefaultBinOrBinWithQtyForProduction();
         }
       } else {
-        if (this.RecvbBinvalue == "") {
+       // if (this.RecvbBinvalue == "") {
           this.defaultRecvBin = true;
           this.ShowBins();
-        }
+     //   }
       }
     }
   }
