@@ -99,8 +99,8 @@
                             <!-- grid for mobile start -->
                             <kendo-grid-column media="(max-width: 767px)" title="{{'Items'|translate}}" class="opti_mobile-grid-td">
                                 <ng-template kendoGridCellTemplate let-dataItem>
-                                        <a class="col-template-mousedown" (mousedown)="onClickOpenPOLineRowOpenAutoLot(dataItem,grid)">
-                                    <dl class="opti_mobile_grid_dl">
+                                   
+                                    <dl class="opti_mobile_grid_dl"  (touchend)="onClickOpenPOLineRowOpenAutoLot(dataItem,grid)">
                                             <dt class="d-flex align-items-center">{{'LINENUM'|translate}}
                                                     <span class="opti_arrow-grid-detail ml-auto text-center opti_vertical-align">›</span>
                                                 </dt>
@@ -111,21 +111,22 @@
 
                                     </dl>
 
-                                    <dl class="opti_mobile_grid_dl">
+                                    <dl class="opti_mobile_grid_dl"  (touchend)="onClickOpenPOLineRowOpenAutoLot(dataItem,grid)">
                                         <dt class="d-flex align-items-center">{{'OpenQty'|translate}}
                                             <span class="opti_arrow-grid-detail ml-auto text-center opti_vertical-align">›</span>
                                         </dt>
                                         <dd>{{dataItem.OPENQTY | numberFormat}}</dd>
                                         <dt>{{'Inbound_ReceiveQty'|translate}}</dt>
                                         <dd>{{dataItem.RPTQTY | numberFormat}}</dd>
-                                    </dl></a>
+                                    </dl>
+                           
                                 </ng-template>
                             </kendo-grid-column>
                             <!-- grid for mobile end -->
 
                             <kendo-grid-column media="(min-width: 768px)" field="ROWNUM" title="{{'LINENUM'|translate}}">
                                     <ng-template kendoGridCellTemplate let-dataItem>
-                                        <a class="col-template-mousedown" (mousedown)="onClickOpenPOLineRowOpenAutoLot(dataItem,grid)">{{dataItem.ROWNUM}}</a>
+                                        <a class="col-template-mousedown" (mousedown)="onClickOpenPOLineRowOpenAutoLot(dataItem,grid)" >{{dataItem.ROWNUM}}</a>
                                     </ng-template>
                             </kendo-grid-column>
                             <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE" title="{{'ItemCode'|translate}}">

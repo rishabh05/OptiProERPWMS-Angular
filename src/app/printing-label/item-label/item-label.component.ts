@@ -18,13 +18,13 @@ import { ISubscription } from 'rxjs/Subscription';
   styleUrls: ['./item-label.component.scss']
 })
 export class ItemLabelComponent implements OnInit {
-  
-  //reference to the input components of html.
-  @ViewChild('itemCodeIp') itemCodeIp : ElementRef;
-  @ViewChild('batchSrBinIp') batchSrBinIp : ElementRef;
-  @ViewChild('noOfCopiesIp') noOfCopiesIp : ElementRef;
 
-  
+  //reference to the input components of html.
+  @ViewChild('itemCodeIp') itemCodeIp: ElementRef;
+  @ViewChild('batchSrBinIp') batchSrBinIp: ElementRef;
+  @ViewChild('noOfCopiesIp') noOfCopiesIp: ElementRef;
+
+
   showLoader: boolean = false;
   showLookupLoader: boolean = true;
   serviceData: any[];
@@ -33,7 +33,7 @@ export class ItemLabelComponent implements OnInit {
   itemCode: string = "";
   itemTracking: string = "";
   noOfCopies: string = "1";
-  
+
 
   selectedLots: any;
   binNo: string = "";
@@ -53,9 +53,9 @@ export class ItemLabelComponent implements OnInit {
   copyCountSubs: ISubscription;
   printServiceSubs: ISubscription;
 
-  displayPDF:boolean = false;
-   
-  constructor(private renderer: Renderer,private commonservice: Commonservice, private router: Router, private labelPrintReportsService: LabelPrintReportsService,
+  displayPDF: boolean = false;
+
+  constructor(private renderer: Renderer, private commonservice: Commonservice, private router: Router, private labelPrintReportsService: LabelPrintReportsService,
     private toastr: ToastrService, private translate: TranslateService) {
     let userLang = navigator.language.split('-')[0];
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
@@ -78,7 +78,7 @@ export class ItemLabelComponent implements OnInit {
    */
   OnItemCodeLookupClick() {
     console.log('button click');
-   // this.showLookupLoader = true;
+    // this.showLookupLoader = true;
     this.getItemList();
   }
 
@@ -103,23 +103,23 @@ export class ItemLabelComponent implements OnInit {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
-          this.showLookupLoader = false; 
-          this.serviceData = data; 
-          this.lookupfor = "ItemsList";  
+          this.showLookupLoader = false;
+          this.serviceData = data;
+          this.lookupfor = "ItemsList";
         }
         else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         }
         this.showLoader = false;
       },
-      error => {        
+      error => {
         this.showLoader = false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       },
     );
   }
@@ -129,12 +129,12 @@ export class ItemLabelComponent implements OnInit {
    * This method will check if entered code is valid or not on field blur event.
    */
   OnItemCodeChange() {
-    
+
     if (this.itemCode == "" || this.itemCode == undefined) {
       this.itemTracking = "";
       return;
-    } 
-    this.binNo = ""; 
+    }
+    this.binNo = "";
     this.showLoader = true;
     this.isItemExistsSubs = this.labelPrintReportsService.isItemExists(this.itemCode).subscribe(
       data => {
@@ -150,27 +150,27 @@ export class ItemLabelComponent implements OnInit {
             this.toastr.error('', this.translate.instant("InvalidItemCode"));
             this.itemCode = "";
             return;
-          }else{
-             //do the needful for correct data.
-             this.batchSrBinIp.nativeElement.focus(); //just focus on next field
-             this.getItemTracking(this.itemCode);
+          } else {
+            //do the needful for correct data.
+            this.batchSrBinIp.nativeElement.focus(); //just focus on next field
+            this.getItemTracking(this.itemCode);
           }
-          
-        
+
+
         } else {
           this.toastr.error('', this.translate.instant("InvalidItemCode"));
           this.itemCode = "";
         }
-      
+
       },
       error => {
         this.showLoader = false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -202,7 +202,7 @@ export class ItemLabelComponent implements OnInit {
    * @param itemCode 
    */
   getItemTracking(itemCode: string) {
-    
+
     this.itemTrackingSubs = this.labelPrintReportsService.getItemTracking(itemCode).subscribe(
       data => {
         if (data != undefined && data.length > 0 && data != "0") {
@@ -214,7 +214,7 @@ export class ItemLabelComponent implements OnInit {
           }
           if (data == "0" || data[0] == "0") { return; }
           this.itemTracking = data;
-          
+
 
         } else {
           //  this.toastr.error('', this.translate.instant("InvalidItemCode"));
@@ -222,12 +222,12 @@ export class ItemLabelComponent implements OnInit {
         }
       },
       error => {
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -240,18 +240,22 @@ export class ItemLabelComponent implements OnInit {
       return;
     }
     else {
-    if (this.lookupfor == "ItemsList") {
-      this.itemCode = $event[0];
-      this.binNo = "";
-      this.itemCodeIp.nativeElement.focus();
-    }
-    else if (this.lookupfor == "LotsList") {
-      console.log("value of lots" + $event);
-      console.log("value of lots" + $event.LOTNO);
-      this.binNo = $event[0];
-      this.itemCode = $event[2];
-      this.batchSrBinIp.nativeElement.focus();
-    }
+      if (this.lookupfor == "ItemsList") {
+        this.itemCode = $event[0];
+        this.binNo = "";
+        this.itemCodeIp.nativeElement.focus();
+      }
+      else if (this.lookupfor == "LotsList") {
+        console.log("value of lots" + $event);
+        console.log("value of lots" + $event.LOTNO);
+        if($event[9] == 'N'){
+          this.binNo = $event[3];
+        }else{
+          this.binNo = $event[0];
+        }
+        this.itemCode = $event[2];
+        this.batchSrBinIp.nativeElement.focus();
+      }
     }
     this.lookupfor = "";
   }
@@ -270,23 +274,23 @@ export class ItemLabelComponent implements OnInit {
             return;
           }
           this.showLookupLoader = false;
-          
+
           this.serviceData = data;
           this.lookupfor = "LotsList";
         }
         else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         }
-       
+
       },
-      error => {     
+      error => {
         this.showLoader = false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       },
     );
   }
@@ -314,15 +318,15 @@ export class ItemLabelComponent implements OnInit {
           this.binNo = "";
         }
       },
-      error => {       
+      error => {
         this.binNo = "";
         this.showLoader = false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -330,7 +334,7 @@ export class ItemLabelComponent implements OnInit {
     this.showLoader = true;
     this.lotScanListWithoutWhseBinSubs = this.labelPrintReportsService.getLotScanListWithoutWhseBinAndItemWise(this.itemCode, this.binNo).subscribe(
       (data: any) => {
-        this.showLoader = false; 
+        this.showLoader = false;
         if (data != undefined && data.length > 0) {
           console.log("" + data);
           if (data[0].ErrorMsg == "7001") {
@@ -379,18 +383,18 @@ export class ItemLabelComponent implements OnInit {
           this.noOfCopies = "1";
         }
       },
-      error => {       
+      error => {
         this.noOfCopies = "1";
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
-  
+
   /**
    * handel print click, validate data print data api call.
    */
@@ -409,28 +413,28 @@ export class ItemLabelComponent implements OnInit {
           if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
-            return; 
+            return;
           }
-          if(data.Detail != null && data.Detail != undefined && data.Detail[0]!=null 
-            &&  data.Detail[0] != undefined){
+          if (data.Detail != null && data.Detail != undefined && data.Detail[0] != null
+            && data.Detail[0] != undefined) {
             this.fileName = data.Detail[0].FileName;
             this.base64String = data.Detail[0].Base64String;
           }
-          
+
           // if(this.base64String !=null && this.base64String != ""){
-            
+
           // this.showPdf();
           // }
           if (this.base64String != null && this.base64String != "") {
             // this.showPdf(); // this function is used to display pdf in new tab.
             this.base64String = 'data:application/pdf;base64,' + this.base64String;
             this.displayPDF = true;
-            this.commonservice.refreshDisplyPDF(true); 
- 
-           }else{
+            this.commonservice.refreshDisplyPDF(true);
+
+          } else {
             this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
-           }
-           
+          }
+
           console.log("filename:" + this.fileName);
           console.log("filename:" + this.base64String);
         } else {
@@ -439,27 +443,27 @@ export class ItemLabelComponent implements OnInit {
       },
       error => {
         this.showLoader = false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
-  
-  
+
+
   /**
    * show pdf 
    * @param base64 
    */
   showPdf() {
     this.base64String = 'data:application/pdf;base64,' + this.base64String; //aeded type: application/pdf for pdf file
-    this.showPDF = true ;
+    this.showPDF = true;
     let pdfWindow = window.open("")
-    pdfWindow.document.write("<iframe width='80%' title="+this.fileName +" height='80%' src=' " + encodeURI(this.base64String)+"'></iframe>");    
-   
+    pdfWindow.document.write("<iframe width='80%' title=" + this.fileName + " height='80%' src=' " + encodeURI(this.base64String) + "'></iframe>");
+
   }
 
   /**
@@ -469,7 +473,7 @@ export class ItemLabelComponent implements OnInit {
     if (this.itemCode == "") {
       this.toastr.error('', this.translate.instant("ItemCannotbeBlank"));
       this.itemCodeIp.nativeElement.focus();
-      
+
       return false;
     }
     if (this.binNo == "") {
@@ -503,27 +507,27 @@ export class ItemLabelComponent implements OnInit {
     if (this.lotsListSubs != undefined)
       this.lotsListSubs.unsubscribe();
     if (this.printServiceSubs != undefined)
-      this.printServiceSubs.unsubscribe();   
+      this.printServiceSubs.unsubscribe();
   }
 
-  closePDF(){
+  closePDF() {
     console.log("PDF dialog is closed");
   }
-  OnCancelClick(){
+  OnCancelClick() {
     this.router.navigate(['home/dashboard']);
   }
 
-  onHiddenItemLabelItemCodeScanClick(){
+  onHiddenItemLabelItemCodeScanClick() {
     var inputValue = (<HTMLInputElement>document.getElementById('itemLabelItemCodeInput')).value;
     if (inputValue.length > 0) {
-      this.itemCode= inputValue;
+      this.itemCode = inputValue;
     }
     this.OnItemCodeChange();
   }
-  onHiddenItemLabelBatchSrScanClick(){
+  onHiddenItemLabelBatchSrScanClick() {
     var inputValue = (<HTMLInputElement>document.getElementById('itemLabelBatchSerialInput')).value;
     if (inputValue.length > 0) {
-      this.binNo= inputValue;
+      this.binNo = inputValue;
     }
     this.OnLotsChange()
   }
