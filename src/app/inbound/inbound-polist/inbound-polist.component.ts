@@ -94,13 +94,10 @@ export class InboundPolistComponent implements OnInit {
     this.selectedVendor = this.inboundMasterComponent.selectedVernder;
     this.showGRPOButton = false;
 
-    if (this.savedStateExists) {
-      //console.log("default setting","grid settings available");
-      this.gridSettings = this.mapGridSettings(this.persistingService.get('gridSettings'))
-    } else {
-      //console.log("default setting","grid settings not available");
-      //load with default settings.s
-    }
+    // if (this.savedStateExists) {
+    //   this.gridSettings = this.mapGridSettings(this.persistingService.get('gridSettings'))
+    // } else {
+    // }
   }
 
   ngAfterViewInit() {
@@ -218,11 +215,21 @@ export class InboundPolistComponent implements OnInit {
             }
 
             this.openPOLinesModel = data.Table;
-            this.gridSettings.gridData = process(this.openPOLinesModel, {
-              skip: 0,
-              take: this.defaultPageSize
-              // Initial filter descriptor 
-            });
+
+            if (this.savedStateExists) {
+              console.log("ng after me setTimeout savedState: True");
+              this.gridSettings = this.mapGridSettings(this.persistingService.get('gridSettings'))
+            } else {
+             this.gridSettings.gridData = process(this.openPOLinesModel, {
+               skip: 0,
+               take: this.defaultPageSize
+             });
+            }
+            // this.gridSettings.gridData = process(this.openPOLinesModel, {
+            //   skip: 0,
+            //   take: this.defaultPageSize
+            //   // Initial filter descriptor 
+            // });
 
             // var  unmatchedPOLinesModel = data.Table;
             this.updateReceivedQtyForSavedItems();

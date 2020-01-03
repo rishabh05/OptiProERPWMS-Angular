@@ -276,6 +276,8 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
   onPOSelection($event) {
     localStorage.setItem("selectedPO", $event.selectedRows[0].dataItem.PONumber);
     this.inboundMasterComponent.inboundComponent = 2;
+
+    this.persistingService.set('gridSettings',null);
   }
  
   public openConfirmForDelete(rowindex, gridData: any) {
