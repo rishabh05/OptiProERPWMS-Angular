@@ -122,6 +122,10 @@ export class OutCutomerComponent implements OnInit {
   }
 
   onCustomerCodeBlur() {
+    if(this.customerCode == undefined || this.customerCode == null || this.customerCode == ''){
+      return
+    }
+    
     this.outboundservice.getCustomer(this.customerCode).subscribe(
       resp => {
         if (resp.length == 0) {

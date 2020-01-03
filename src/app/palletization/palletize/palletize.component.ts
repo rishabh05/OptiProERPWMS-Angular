@@ -58,6 +58,9 @@ export class PalletizeComponent implements OnInit {
 
   ngAfterViewInit(): void{
     this.scanItemCode.nativeElement.focus()
+   setTimeout(()=>{
+    this.showHideBtnTxt = this.translate.instant("showGrid");
+   },500)
   }
 
   public getPalletList(from: string) {

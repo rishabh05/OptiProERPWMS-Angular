@@ -60,6 +60,9 @@ export class PalSplitComponent implements OnInit {
 
   ngAfterViewInit(): void{
     this.scanFromPallet.nativeElement.focus()
+    setTimeout(()=>{
+      this.showHideBtnTxt = this.translate.instant("showGrid");
+    },500)
   }
 
   public getFromPalletList(from: string) {

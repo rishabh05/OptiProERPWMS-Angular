@@ -56,6 +56,9 @@ export class PalTransferComponent implements OnInit {
 
   ngAfterViewInit(): void{
     this.fromPalletInput.nativeElement.focus()
+    setTimeout(()=>{
+      this.showHideBtnTxt = this.translate.instant("showGrid");
+    },500)
   }
 
   public getFromPalletList(from: string) {

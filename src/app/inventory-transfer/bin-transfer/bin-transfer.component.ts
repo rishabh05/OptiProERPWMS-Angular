@@ -145,6 +145,15 @@ export class BinTransferComponent implements OnInit {
 
   ngAfterViewInit(): void {
     this.scanItemCode.nativeElement.focus();
+    setTimeout(()=>{
+      if (localStorage.getItem("fromscreen") == "WhsTransfer") {
+        this.PageTitle = this.translate.instant("WarehouseTransfer") + this.translate.instant("InvTransfer_From") + localStorage.getItem("fromwhseId") + this.translate.instant("InvTransfer_To") + localStorage.getItem("towhseId");
+      } else if (localStorage.getItem("fromscreen") == "InventoryTransferRequest") {
+        this.PageTitle = this.translate.instant("InventoryTransferRequest") + this.translate.instant("InvTransfer_From") + localStorage.getItem("fromwhseId") + this.translate.instant("InvTransfer_To") + localStorage.getItem("towhseId");
+      } else {
+        this.PageTitle = this.translate.instant("BinTransfer");
+  }
+    }, 500)
   }
 
 
@@ -228,7 +237,7 @@ export class BinTransferComponent implements OnInit {
       data => {
         this.showLoader = false;
         if (data != undefined && data.length > 0) {
-          console.log("" + data);
+          // console.log("" + data);
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
@@ -265,7 +274,7 @@ export class BinTransferComponent implements OnInit {
       data => {
         this.showLoader = false;
         if (data != undefined && data.length > 0) {
-          console.log("" + data);
+          // console.log("" + data);
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
@@ -495,7 +504,7 @@ export class BinTransferComponent implements OnInit {
       data => {
         this.showLoader = false;
         if (data != undefined && data.length > 0) {
-          console.log("ItemList - " + data);
+          // console.log("ItemList - " + data);
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
@@ -1297,7 +1306,7 @@ export class BinTransferComponent implements OnInit {
       (data: any) => {
         this.showLoader = false;
         this.showLookupLoader = false;
-        console.log(data);
+        // console.log(data);
         if (data != null) {
           if (data.length > 0) {
             this.serviceData = data;
@@ -1332,7 +1341,7 @@ export class BinTransferComponent implements OnInit {
     this.commonservice.isPalletValid(this.palletNo).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+        // console.log(data);
         if (data != null) {
           if (data.length > 0) {
             this.palletNo = data[0].Code;
@@ -1369,7 +1378,7 @@ export class BinTransferComponent implements OnInit {
     this.commonservice.GetPalletDataForWhseTrns(this.palletNo).subscribe(
       (data: any) => {
         this.showLoader = false;
-        console.log(data);
+        // console.log(data);
         if (data != null) {
           this.palletData = data;
           this.prepareByPalletData();

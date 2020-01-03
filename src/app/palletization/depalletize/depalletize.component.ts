@@ -42,6 +42,9 @@ export class DepalletizeComponent implements OnInit {
 
   ngAfterViewInit(): void{
     this.scanPallet.nativeElement.focus()
+    setTimeout(()=>{
+      this.showHideBtnTxt = this.translate.instant("showGrid");
+    },500)
   }
 
   public getPalletList(from: string) {
