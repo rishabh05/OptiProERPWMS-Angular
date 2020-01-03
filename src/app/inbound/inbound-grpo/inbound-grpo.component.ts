@@ -162,6 +162,14 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       }
       this.showSavedReceiptProductionData();
       this.availableRejQty = parseInt(localStorage.getItem("AvailableRejectQty"));
+
+      if (!this.isPalletizationEnable) {
+        this.isDisabledLotNoField = false;
+        this.isDisabledScanInput = false;
+      } else {
+        this.isDisabledLotNoField = true;
+        this.isDisabledScanInput = false;
+      }
     } else {
 
       this.fromReceiptProduction = false;
