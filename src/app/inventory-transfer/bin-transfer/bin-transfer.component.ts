@@ -621,8 +621,6 @@ export class BinTransferComponent implements OnInit {
   }
 
   OnToBinChange() {
-
-
     if (this.toBin == "" || this.toBin == undefined) {
       return;
     }
@@ -1350,12 +1348,14 @@ export class BinTransferComponent implements OnInit {
           } else {
             this.toastr.error('', this.translate.instant("InValidPalletNo"));
             this.palletNo = "";
+            this.scanPallet.nativeElement.focus();
             return;
           }
         }
         else {
           this.toastr.error('', this.translate.instant("InValidPalletNo"));
           this.palletNo = "";
+          this.scanPallet.nativeElement.focus();
           return;
         }
       },
