@@ -125,6 +125,11 @@ export class OutCutomerComponent implements OnInit {
     if(this.customerCode == undefined || this.customerCode == null || this.customerCode == ''){
       return
     }
+    if(this.orderCollection!=undefined && this.orderCollection!=null && 
+      this.orderCollection.length>0){
+      return;
+    }
+
     
     this.outboundservice.getCustomer(this.customerCode).subscribe(
       resp => {
