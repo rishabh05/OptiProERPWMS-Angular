@@ -1701,10 +1701,10 @@ export class OutOrderComponent implements OnInit {
             }
             
             var toBinNo = "";
-            if(o.Item.ToBin == undefined || o.Item.ToBin == null || o.Item.ToBin == ""){
-              toBinNo = o.Meterial.ToBin;
-            } else {
+            if(o.Meterial.ToBin == undefined || o.Meterial.ToBin == null || o.Meterial.ToBin == ""){
               toBinNo = o.Item.ToBin;
+            } else {
+              toBinNo = o.Meterial.ToBin;
             }
             var mfrno="";
             if(ind != 0){
