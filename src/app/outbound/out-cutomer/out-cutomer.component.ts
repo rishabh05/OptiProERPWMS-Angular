@@ -447,7 +447,8 @@ export class OutCutomerComponent implements OnInit {
             headerLineArray.push(hdrLineVal);
             let hdr: SOHEADER = new SOHEADER();
             hdr.DiServerToken = token;
-            hdr.SONumber = o.Item.DOCENTRY;
+            hdr.SONumber = o.Item.DOCNUM;
+            hdr.DOCENTRY = o.Item.DOCENTRY;
             hdr.CompanyDBId = comDbId;
             hdr.LineNo = o.Item.LINENUM;
             let metQty = lineDeleiveryCollection.map(i => i.Meterial.MeterialPickQty).reduce((sum, c) => sum + c);

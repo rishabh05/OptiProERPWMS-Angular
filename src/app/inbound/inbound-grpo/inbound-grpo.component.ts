@@ -162,6 +162,14 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       }
       this.showSavedReceiptProductionData();
       this.availableRejQty = parseInt(localStorage.getItem("AvailableRejectQty"));
+
+      if (!this.isPalletizationEnable) {
+        this.isDisabledLotNoField = false;
+        this.isDisabledScanInput = false;
+      } else {
+        this.isDisabledLotNoField = true;
+        this.isDisabledScanInput = false;
+      }
     } else {
 
       this.fromReceiptProduction = false;
@@ -234,10 +242,10 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
           this.GetDefaultBinOrBinWithQtyForProduction();
         }
       } else {
-        if (this.RecvbBinvalue == "") {
+       // if (this.RecvbBinvalue == "") {
           this.defaultRecvBin = true;
           this.ShowBins();
-        }
+     //   }
       }
     }
   }
@@ -1280,7 +1288,9 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
               LotQty: submitRecProdData.Lots[j].LotQty,
               LineNo: submitRecProdData.Lots[j].LineNo,
               Bin: submitRecProdData.Lots[j].Bin,
-              ExpireDate: submitRecProdData.Lots[j].ExpiryDate
+              ExpireDate: submitRecProdData.Lots[j].ExpiryDate,
+              VendorLot: submitRecProdData.Lots[j].ActualLotNo,
+              PalletCode: submitRecProdData.Lots[j].PalletCode
             }
             this.recvingQuantityBinArray.push(obj);
             this.previousReceivedQty = Number(this.previousReceivedQty) + Number(submitRecProdData
@@ -1304,7 +1314,9 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
               LotQty: submitRecProdData.RejectLots[j].LotQty,
               LineNo: submitRecProdData.RejectLots[j].LineNo,
               Bin: submitRecProdData.RejectLots[j].Bin,
-              ExpireDate: submitRecProdData.RejectLots[j].ExpiryDate
+              ExpireDate: submitRecProdData.RejectLots[j].ExpiryDate,
+              VendorLot: submitRecProdData.RejectLots[j].ActualLotNo,
+              PalletCode: submitRecProdData.RejectLots[j].PalletCode
             }
             this.recvingQuantityBinArray.push(obj);
             this.previousReceivedQty = Number(this.previousReceivedQty) + Number(
@@ -2521,10 +2533,10 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
             this.toastr.error('', error);
           }
         },
-    );
+    ); 
   }
 
-  GetReceiptSubmitDateFormat(EXPDATE) {
+  GetReceiptSubmitDateFormat(EXPDATE) { 
     if (EXPDATE == "" || EXPDATE == null)
       return "";
     else {
