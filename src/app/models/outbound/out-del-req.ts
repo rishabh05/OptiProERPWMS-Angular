@@ -18,6 +18,7 @@ export class SOHEADER {
     UsernameForLic: string;
     NumAtCard: string ="";
     TrackingNumber: string ="";
+    DOCENTRY:string;
 }
 
 export class SODETAIL {

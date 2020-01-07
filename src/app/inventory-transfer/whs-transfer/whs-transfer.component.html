@@ -32,7 +32,7 @@
                   </button>
                 </div>
                 <div class="ml-1 d-flex">
-                    <button tabIndex="-1" type="button" id="binTransferByPalletToBin"  (mousedown)="onInboundScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                    <button tabIndex="-1" type="button" id="whseTransferToWhseScanBtn"  (mousedown)="onInboundScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                      <i class="opti-icon-qr-code fs-24"></i>
                     </button>
                 </div> 
@@ -56,7 +56,7 @@
           <i class="opti-icon-arrow-next"></i>
         </button>
 
-        <button type="button" id="btnWhsTransferToWhsScanBtn" style="visibility:hidden" (click)="onHiddenToWhsScanClick()" class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
+        <button type="button" id="Hid_btnWhsTransferToWhsScanBtn" style="visibility:hidden" (click)="onHiddenToWhsScanClick()" class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
           <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>
         </button>
       </div>

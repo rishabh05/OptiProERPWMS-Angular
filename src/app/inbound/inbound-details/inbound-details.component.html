@@ -20,7 +20,7 @@
                                     </button>
                                 </div>
                                 <div class="ml-1 d-flex">
-                                    <button tabIndex="-1" type="button" id="poscanButton" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                    <button tabIndex="-1" type="button" id="inboundDetailVendorScanButton" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
                             </div>
@@ -129,12 +129,12 @@
                 <button type="button" id="hid_InboundDetailVendCodeScanButton" style="visibility:hidden" (click)="onHiddenVendCodeScanClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                     Btn </button>
 
-                <button type="button" id="hid_InboundDetailSOScanButton" style="visibility:hidden" (click)="onHiddenSOScanClick()"
+                <button type="button" id="hid_InboundDetailPOScanButton" style="visibility:hidden" (click)="onHiddenSOScanClick()"
                     class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                     Btn </button>
             </div>
         </div>
-    </form>
+    </form> 
 
 </div>
 <span *ngIf="showLookupLoader == false">

@@ -169,10 +169,12 @@ export class OutOrderComponent implements OnInit {
 
   fromEvent: any = ""
   onOrderNoBlur() {
-   
-
-    if (this.orderNumber)
+   setTimeout(()=>{
+    console.log("onOrderNoBlur method run>>");
+    if (this.orderNumber){
       this.openSOOrderList(this.orderNumber);
+    }
+   }, 200)
   }
   
   public openOrderLookup() {
@@ -293,6 +295,7 @@ export class OutOrderComponent implements OnInit {
   }
 
   public openPOByUOM(selectdeData: any, ) {
+    console.log("openPOByUOM method run........");
   //  let selectdeData = selection.selectedRows[0].dataItem;
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
     if (outboundData != undefined && outboundData != '') {
@@ -580,7 +583,8 @@ export class OutOrderComponent implements OnInit {
             headerLineArray.push(hdrLineVal);
             let hdr: SOHEADER = new SOHEADER();
             hdr.DiServerToken = token;
-            hdr.SONumber = o.Item.DOCENTRY;
+            hdr.SONumber = o.Item.DOCNUM;
+            hdr.DOCENTRY = o.Item.DOCENTRY;
             hdr.CompanyDBId = comDbId;
             hdr.LineNo = o.Item.LINENUM;
             let metQty = lineDeleiveryCollection.map(i => i.Meterial.MeterialPickQty).reduce((sum, c) => sum + c);
