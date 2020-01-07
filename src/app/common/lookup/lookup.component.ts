@@ -775,7 +775,7 @@ export class LookupComponent implements OnInit {
   showITRList(){
     this.table_head = [
       {
-        field: 'DocEntry',
+        field: 'DocNum',
         title: this.translate.instant("InvTransfer_ITRRequestNo"),
         type: 'text',
         width: '100'
