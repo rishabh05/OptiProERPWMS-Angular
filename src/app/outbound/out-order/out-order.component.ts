@@ -168,10 +168,12 @@ export class OutOrderComponent implements OnInit {
 
   fromEvent: any = ""
   onOrderNoBlur() {
-   
-
-    if (this.orderNumber)
+   setTimeout(()=>{
+    console.log("onOrderNoBlur method run>>");
+    if (this.orderNumber){
       this.openSOOrderList(this.orderNumber);
+    }
+   }, 200)
   }
   
   public openOrderLookup() {
@@ -291,6 +293,7 @@ export class OutOrderComponent implements OnInit {
   }
 
   public openPOByUOM(selectdeData: any, ) {
+    console.log("openPOByUOM method run........");
   //  let selectdeData = selection.selectedRows[0].dataItem;
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
     if (outboundData != undefined && outboundData != '') {
