@@ -87,12 +87,14 @@ export class InboundService {
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetOpenPOLines", jObject, this.commonService.httpOptions);
   }
 
-  getAutoLot(itemCode: string): Observable<any> {
+  getAutoLot(itemCode: string, tracking: string, quantity: any): Observable<any> {
     let jObject = {
       GoodsReceiptToken: JSON.stringify([{
         UserId: '',
         CompanyDBId: localStorage.getItem("CompID"),
-        ItemCode: itemCode
+        ItemCode: itemCode,
+        TRACKING: tracking,
+        QUANTITY: quantity,
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetAutoLot", jObject, this.commonService.httpOptions);

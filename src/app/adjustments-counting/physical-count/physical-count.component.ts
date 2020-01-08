@@ -423,8 +423,8 @@ export class PhysicalCountComponent implements OnInit {
       return;
     }else{
     if (this.lookupfor == "PhyCntItemList") {
-      this.DocNo = $event[0];
-      this.DocEntry = $event[1];
+      this.DocEntry = $event[0];
+      this.DocNo = $event[1];
       this.CountDate = $event[4];
       this.ItemCode = $event[2];
 

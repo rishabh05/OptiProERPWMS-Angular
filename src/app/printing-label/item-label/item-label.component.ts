@@ -37,6 +37,7 @@ export class ItemLabelComponent implements OnInit {
 
   selectedLots: any;
   binNo: string = "";
+  LOTNoForNone: string = "";
 
   showPDF = false;
   fileName: string = "";
@@ -253,6 +254,7 @@ export class ItemLabelComponent implements OnInit {
         }else{
           this.binNo = $event[0];
         }
+        this.LOTNoForNone = $event[0];
         this.itemCode = $event[2];
         this.batchSrBinIp.nativeElement.focus();
       }
@@ -332,7 +334,7 @@ export class ItemLabelComponent implements OnInit {
   }
   checkBinForOtherTrackedItems() {
     this.showLoader = true;
-    this.lotScanListWithoutWhseBinSubs = this.labelPrintReportsService.getLotScanListWithoutWhseBinAndItemWise(this.itemCode, this.binNo).subscribe(
+    this.lotScanListWithoutWhseBinSubs = this.labelPrintReportsService.getLotScanListWithoutWhseBinAndItemWise(this.itemCode, this.LOTNoForNone).subscribe(
       (data: any) => {
         this.showLoader = false;
         if (data != undefined && data.length > 0) {
