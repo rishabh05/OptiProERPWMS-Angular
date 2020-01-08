@@ -6,6 +6,7 @@ import { ProductionService } from 'src/app/services/production.service';
 import { Commonservice } from 'src/app/services/commonservice.service';
 import { Router } from '@angular/router';
 import { AutoLot } from 'src/app/models/Inbound/AutoLot';
+import { RowClassArgs } from '@progress/kendo-angular-grid';
 
 @Component({
   selector: 'app-production-receipt-items-list',
@@ -46,9 +47,10 @@ export class ProductionReceiptItemsListComponent implements OnInit {
       return;
     } 
     this.resetOnSerchClick();
+    this.showLoader = true;
     this.orderNoListSubs = this.productionService.GetItemsDetailForProductionReceipt(this.orderNumber).subscribe(
       data => {
-     
+       this.showLoader = false;
         if (data != undefined) {
           if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
@@ -147,7 +149,7 @@ export class ProductionReceiptItemsListComponent implements OnInit {
         {
           qty = this.acceptQty;
         }else if(this.gridDataNew[i].Status =="Reject"){
-          qty = this.rejQty;
+          qty = this.rejQty; 
           this.availableRejQty = this.gridDataNew[0].OPENQTY;
         }else qty = 0;
 
@@ -241,6 +243,18 @@ export class ProductionReceiptItemsListComponent implements OnInit {
     this.showOrderList();
   }
 
+  // public rowCallback = (context: RowClassArgs) => {
+  //   switch (context.dataItem.TRACKING) {
+  //     case 'S':
+  //       return { serial: true };
+  //     case 'B':
+  //       return { batch: true };
+  //     case 'N':
+  //       return { none: false };
+  //     default:
+  //       return {};
+  //   }
+  //}
 
   resetOnSerchClick() {
      this.gridDataNew = [];
@@ -316,7 +330,7 @@ export class ProductionReceiptItemsListComponent implements OnInit {
     } else {
       submitRecProdData = JSON.parse(dataModel);
     }
-    this.showLoader = true;
+    this.showLoader = true;  
     this.productionService.submitProductionRecepit(submitRecProdData).subscribe(
       data => {
         this.showLoader = false;
