@@ -19,6 +19,7 @@ export class PortalLeftComponent implements OnInit {
 
   isPalletizationEnable: boolean = false;
   WarehouseTransfer: boolean = false;
+  allOptionMenus: any = []
 
   constructor(private commonService: Commonservice, private router: Router, private menuService: MenuService, private translate: TranslateService, private toastr: ToastrService) {
     // router.events.subscribe((val) => {
@@ -65,8 +66,11 @@ export class PortalLeftComponent implements OnInit {
     //  if(!menuLoaded){
     this.menuService.getAllMenus().subscribe(
       data => {
-        if (data != null)
+        if (data != null){
           this.displayMenuOptions(data.Modules);
+          this.allOptionMenus = data.Modules
+        }
+          
         window.localStorage.setItem('IsMenuLoaded', 'true');
       },
       error => {
@@ -84,17 +88,33 @@ export class PortalLeftComponent implements OnInit {
 
   displayMenuOptions(menus: any[]) {
     menus.forEach(element => {
+      var thisRefs = this;
+      console.log("forEach: element.id: "+document.getElementById(element.id))
         if (document.getElementById(element.id) != null) {
           document.getElementById(element.id).style.display = 'flex';
           if(document.getElementById(element.id).childNodes.length > 0 && document.querySelectorAll('#'+element.id+".dropdown")[0] !=undefined){
             (<HTMLElement>document.querySelectorAll('#'+element.id+".dropdown")[0].childNodes[0]).onclick = function(){
             for (var i = 0; i < document.querySelectorAll('#'+element.id+".dropdown")[0].childNodes[2].childNodes.length; i++) {
-              (<HTMLElement>document.querySelectorAll('#'+element.id+".dropdown")[0].childNodes[2].childNodes[i]).style.display = 'flex';
+              var menuId = (<HTMLElement>document.querySelectorAll('#'+element.id+".dropdown")[0].childNodes[2].childNodes[i]).id;
+              if(thisRefs.isMenuVisible(menuId)){
+                (<HTMLElement>document.querySelectorAll('#'+element.id+".dropdown")[0].childNodes[2].childNodes[i]).style.display = 'flex';
+              } else {
+                (<HTMLElement>document.querySelectorAll('#'+element.id+".dropdown")[0].childNodes[2].childNodes[i]).style.display = 'none';
+              }
             }
           };
         }
       }
     });
+  }
+
+  isMenuVisible(menu: string){
+    for(var i=0;i<this.allOptionMenus.length;i++){
+      if(this.allOptionMenus[i].id == menu){
+        return true;
+      }
+    }
+    return false;
   }
 
 

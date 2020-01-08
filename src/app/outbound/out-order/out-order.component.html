@@ -43,7 +43,7 @@
                                 <label for="inputPassword" class="col-sm-3 col-form-label">{{'InvTransfer_ITR'|translate}}</label>
                                 <div class="col-sm-9">
                                   <div class="input-group input-group-sm">
-                                    <input #DocEntry type="text" class="form-control form-control-sm" name="itrCode" [(ngModel)]=itrCode
+                                    <input #DocNum type="text" class="form-control form-control-sm" name="docNum" [(ngModel)]=docNum
                                       placeholder="{{'InvTransfer_ITR'|translate}}" (blur)="onITRChange()" id="outOrderItrCodeInput">
                                     <div class="input-group-append has-seprate-btn">
                                       <button tabindex="-1" class="k-button k-primary btn" type="button" (mousedown)="onITRlookupClick()">

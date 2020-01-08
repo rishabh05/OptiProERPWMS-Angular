@@ -39,6 +39,7 @@ export class OutOrderComponent implements OnInit {
   showConfirmDialog: boolean;
   showDeleiveryAndAdd: boolean;
   itrCode: string = "";
+  docNum: string = "";
   toBinNo: string = "";
   toWhse: string = "";
   @Input() fromWhere;
@@ -66,7 +67,7 @@ export class OutOrderComponent implements OnInit {
   pagetitle: any ="";
   isPalletizationEnable: boolean = false
   @ViewChild('scanSO') scanSO;
-  @ViewChild('DocEntry') DocEntry;
+  @ViewChild('DocNum') DocNum;
   @ViewChild('PalletNo') PalletNo;
   @ViewChild('scanItemCode') scanItemCode;
 
@@ -135,7 +136,7 @@ export class OutOrderComponent implements OnInit {
 
   ngAfterViewInit(): void{
     if(localStorage.getItem("ComingFrom")=="itr"){
-      this.DocEntry.nativeElement.focus()
+      this.DocNum.nativeElement.focus()
     } else {
       this.scanSO.nativeElement.focus()
     }
@@ -266,6 +267,7 @@ export class OutOrderComponent implements OnInit {
           //
           this.toWhse = lookupValue.ToWhsCode;
           this.itrCode = lookupValue.DocEntry;
+          this.docNum =  lookupValue.DocNum;
           this.orderNumber = this.itrCode;
           this.outbound.ITRToBinNo = { 
             ToBin: this.toBinNo,
@@ -273,7 +275,7 @@ export class OutOrderComponent implements OnInit {
           };
           localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
           this.getITRItemList();
-          this.DocEntry.nativeElement.focus()
+          this.DocNum.nativeElement.focus()
         } else if (this.lookupfor == "toBinsList") {
           this.toBinNo = lookupValue.BINNO;
           this.outbound.ITRToBinNo = { 
@@ -1472,14 +1474,14 @@ export class OutOrderComponent implements OnInit {
   }
 
   onITRChange() {
-   if(this.itrCode == null || this.itrCode == undefined || this.itrCode == ""){
+   if(this.docNum == null || this.docNum == undefined || this.docNum == ""){
       return;
    }
 
    // console.log("onITRChange :");
     this.showLookup = false;
     this.showLookupLoader = true;
-    this.inventoryTransferService.IsValidITR(this.itrCode).subscribe(
+    this.inventoryTransferService.IsValidITR(this.docNum).subscribe(
       (data: any) => {
         this.showLookupLoader = false;
      //   console.log("get ITR response:");
@@ -1494,6 +1496,7 @@ export class OutOrderComponent implements OnInit {
           if(data.Table!=undefined && data.Table.length > 0){
             this.toWhse = data.Table[0].ToWhsCode;
             this.itrCode = data.Table[0].DocEntry;
+            this.docNum = data.Table[0].DocNum;
             this.orderNumber = this.itrCode;
             this.outbound.ITRToBinNo = {
             ToBin: this.toBinNo,
@@ -1502,14 +1505,16 @@ export class OutOrderComponent implements OnInit {
           localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
           this.getITRItemList();
           } else {
+            this.docNum = ''
             this.itrCode = "";
             this.toastr.error('', this.translate.instant("InvTransfer_InvalidITR"));
-            this.DocEntry.nativeElement.focus();
+            this.DocNum.nativeElement.focus();
           }
         } else {
+          this.docNum = ''
           this.itrCode = ""; 
           this.toastr.error('', this.translate.instant("InvTransfer_InvalidITR"));
-          this.DocEntry.nativeElement.focus();
+          this.DocNum.nativeElement.focus();
         }
       },
       error => {
