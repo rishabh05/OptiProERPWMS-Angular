@@ -334,8 +334,7 @@ export class OutOrderComponent implements OnInit {
       if (orderNumber) {
         tempOrderData = {
           CARDCODE: this.outbound.CustomerData.CustomerCode,
-          CARDNAME: this.outbound.CustomerData.customerName,
-          CUSTREFNO: "",
+          CARDNAME: this.outbound.CustomerData.customerName, 
           DOCDUEDATE: "04/24/2019",
           DOCNUM: orderNumber.toString(),
           SHIPPINGTYPE: "",
@@ -601,7 +600,7 @@ export class OutOrderComponent implements OnInit {
               hdr.NumAtCard = "";
             }
             if(this.outbound.CustomerData.TrackingId!=null && this.outbound.CustomerData.TrackingId!=undefined){
-              hdr.NumAtCard = this.outbound.CustomerData.TrackingId;
+              hdr.TrackingNumber = this.outbound.CustomerData.TrackingId;
             }else{
               hdr.TrackingNumber= "";
             }

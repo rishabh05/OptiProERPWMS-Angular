@@ -81,7 +81,7 @@
                                     </button>
                                 </div>
                                 <div class="ml-1 d-flex">
-                                    <button tabIndex="-1" type="button" id="binTransferScanFromBinScanBtn" (mousedown)="onInboundScan()"
+                                    <button tabIndex="-1" type="button" id="binTransferScanBatchSerialBtn" (mousedown)="onInboundScan()"
                                         class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
@@ -205,7 +205,7 @@
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
                                     <div class="d-flex">
-                                        <button tabIndex="-1" type="button" id="binTransferByPalletToBinScanbtn" (mousedown)="onInboundScan()"
+                                        <button tabIndex="-1" type="button" id="binTransferByPlletToBinScanbtn" (mousedown)="onInboundScan()"
                                             class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                             <i class="opti-icon-qr-code fs-24"></i>
                                         </button>
@@ -257,7 +257,7 @@
                     class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
                     <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn
                 </button> 
-                <button type="button" id="hid_btnBinTransferLotScanBtn" style="visibility:hidden"
+                <button type="button" id="hid_btnBinTransferBatchSerialScanBtn" style="visibility:hidden"
                     (click)="onHiddenLotScanClick()"
                     class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
                     <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn
@@ -285,11 +285,13 @@
                 <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn
             </button>
 
-            <button type="button" id="hid_BtnbinTransferBatchNoInput" style="visibility:hidden"
+
+
+            <!-- <button type="button" id="hid_BtnbinTransferBatchNoInput" style="visibility:hidden"
                 (click)="onHiddenByPalBatchNoScanClick()"
                 class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
                 <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn
-            </button>
+            </button> -->
                 <div class="clearfix mt-1 d-block d-sm-none"></div>
 
             </div>
