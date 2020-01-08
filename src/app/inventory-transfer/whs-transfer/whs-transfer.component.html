@@ -49,10 +49,10 @@
         <hr />
       </div>
       <div class="col-sm-12 col-12">
-        <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (mousedown)="onCancelClick()">
+        <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="onCancelClick()">
           <span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
 
-        <button type="button" *ngIf="showNext" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" (mousedown)="viewSwitch()">
+        <button type="button" *ngIf="showNext" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" (click)="viewSwitch()">
           <i class="opti-icon-arrow-next"></i>
         </button>
 

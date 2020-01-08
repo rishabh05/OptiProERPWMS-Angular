@@ -146,7 +146,7 @@
             <div class="col-sm-12 col-12">
                 <button type="button" (click)="back(0)" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
-                <button type="button" *ngIf="selectedFromPallets.length>0 && toPalletNo!=''" (mousedown)="mergePallet()"
+                <button type="button" *ngIf="selectedFromPallets.length>0 && toPalletNo!=''" (click)="mergePallet()"
                     class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon opti-icon-pallet-marge"></span>
                     {{'Plt_Merge'|translate}}</button>
 

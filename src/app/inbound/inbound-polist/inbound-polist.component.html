@@ -160,11 +160,11 @@
             </div>
             <div class="col-sm-12 col-12">
 
-                <button class="btn btn-outline-secondary btn-sm btn-transparent btn-icon mr-1" (mousedown)="onCancelClick()" type="button">
+                <button class="btn btn-outline-secondary btn-sm btn-transparent btn-icon mr-1" (click)="onCancelClick()" type="button">
                     <i class="opti-icon-arrow-back"></i>
                 </button>
                
-                <button type="button" *ngIf="showGRPOButton" class="btn btn-primary k-button btn-sm btn-icon-with-text" (mousedown)="onAddtoGRPOClick()">
+                <button type="button" *ngIf="showGRPOButton" class="btn btn-primary k-button btn-sm btn-icon-with-text" (click)="onAddtoGRPOClick()">
                     <span class="k-icon k-i-plus-outline" role="presentation"></span>{{'AddToGRPO'|translate}} </button>
 
                     <button type="button" id="hid_InboundPOScanButton" style="visibility:hidden" (click)="onHiddenPOScanClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
