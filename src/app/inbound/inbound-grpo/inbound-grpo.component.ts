@@ -667,7 +667,12 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       }
       this.updateReceiveQty();
     } else {
-      this.getAutoLot(this.openPOLineModel[0].ITEMCODE, this.qty);
+
+      if (!this.fromReceiptProduction) {
+        this.getAutoLot(this.openPOLineModel[0].ITEMCODE, this.qty);
+      } else {
+        this.AddUpdateBatSerNo(null);
+      }
     }    
   }
 
@@ -1097,8 +1102,8 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
             LotNumber: saveRecProdData.Lots[i].LotNumber,
             LotQty: saveRecProdData.Lots[i].LotQty,
             ExpiryDate: saveRecProdData.Lots[i].ExpiryDate,
-            PalletCode: saveRecProdData.RejectLots[j].PalletCode,
-            ActualLotNo: saveRecProdData.RejectLots[j].ActualLotNo
+            PalletCode: saveRecProdData.Lots[i].PalletCode,
+            ActualLotNo: saveRecProdData.Lots[i].ActualLotNo
           })
         }
         itmData = saveRecProdData.Items;

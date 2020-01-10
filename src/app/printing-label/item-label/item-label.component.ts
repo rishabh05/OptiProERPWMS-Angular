@@ -299,6 +299,9 @@ export class ItemLabelComponent implements OnInit {
 
   checkBinForNonTrackedItems() {
     this.showLoader = true;
+    if(this.LOTNoForNone == null || this.LOTNoForNone == undefined || this.LOTNoForNone == ""){
+      this.LOTNoForNone = this.binNo;
+    }
     this.checkBinForItemSubs = this.labelPrintReportsService.checkBinForItemLabelReport(this.itemCode, this.binNo).subscribe(
       data => {
         this.showLoader = false;
@@ -310,13 +313,13 @@ export class ItemLabelComponent implements OnInit {
             return;
           }
           if (data == "0" || data[0] == "0") {
-            this.toastr.error('', this.translate.instant("InvalidBatch"));
+            this.toastr.error('', this.translate.instant("INVALIDBIN"));
             this.binNo = "";
             return;
           }
           this.binNo = data[0].BINNO; //check this code.
         } else {
-          this.toastr.error('', this.translate.instant("InvalidBatch"));
+          this.toastr.error('', this.translate.instant("INVALIDBIN"));
           this.binNo = "";
         }
       },
@@ -334,6 +337,10 @@ export class ItemLabelComponent implements OnInit {
   }
   checkBinForOtherTrackedItems() {
     this.showLoader = true;
+
+    if(this.LOTNoForNone == null || this.LOTNoForNone == undefined || this.LOTNoForNone == ""){
+      this.LOTNoForNone = this.binNo;
+    }
     this.lotScanListWithoutWhseBinSubs = this.labelPrintReportsService.getLotScanListWithoutWhseBinAndItemWise(this.itemCode, this.LOTNoForNone).subscribe(
       (data: any) => {
         this.showLoader = false;

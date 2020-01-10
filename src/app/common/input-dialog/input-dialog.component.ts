@@ -213,7 +213,7 @@ export class InputDialogComponent implements OnInit {
             this.palletNo = data;
           }
           else {
-            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+            // this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
           }
         }
       },

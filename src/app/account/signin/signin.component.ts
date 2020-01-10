@@ -174,7 +174,7 @@ export class SigninComponent implements OnInit {
                         this.userDetails = data.Table;
                         this.handleValidationUserSuccessResponse();
                     } else {
-                        this.toastr.error('', this.translate.instant("ErrorMsgSomethingWentWrong"));
+                        this.toastr.error('', this.translate.instant("SignIn_ValidateErrMsg"));
                     }
                 } else {
                     this.toastr.error('', this.translate.instant("Login_InvalidUnPwdErrMsg"));
@@ -243,9 +243,6 @@ export class SigninComponent implements OnInit {
                     localStorage.setItem("Token", this.licenseData[0].Token);
                     localStorage.setItem("PalletizationEnabled", this.licenseData[0].PalletizationEnabled);
                     localStorage.setItem("AutoPalletIdGenerationChecked", this.licenseData[0].AutoPalletIdGenerationChecked);
-                    // hard coded TRUE for development purpose
-                    // localStorage.setItem("PalletizationEnabled", "False");
-                    // localStorage.setItem("AutoPalletIdGenerationChecked", "False");
 
                     localStorage.setItem("DefaultValues", JSON.stringify(this.licenseData[0].DefaultValues));
                     for (var i = 0; i < this.licenseData[0].DefaultValues.length; i++) {
@@ -279,15 +276,27 @@ export class SigninComponent implements OnInit {
                     }
                     console.log("log","handleLicense:abouve routing");
                     this.router.navigate(['home/dashboard']);
+                } else if(this.licenseData[0].Message == "NotFound") {
+                    this.toastr.error('', this.translate.instant("SignIn_Msg_NotFound"));
+                    this.showFullPageLoader = false;
+                } else if(this.licenseData[0].Message == "Unauthorized") {
+                    this.toastr.error('', this.translate.instant("SignIn_Msg_Unauthorized"));
+                    this.showFullPageLoader = false;
+                } else if(this.licenseData[0].Message == "BadRequest") {
+                    this.toastr.error('', this.translate.instant("SignIn_Msg_BadRequest"));
+                    this.showFullPageLoader = false;
                 } else {
                     console.log("log","handleLicense:else");
-                    alert(this.licenseData[0].Message + " " + this.licenseData[0].Token);
+                    this.toastr.error('', this.translate.instant("SignIn_Msg_Default"));
+                    this.showFullPageLoader = false;
                 }
             } else {
-                alert(this.licenseData[1].ErrMessage);
+                this.showFullPageLoader = false;
+                this.toastr.error('', this.translate.instant("SignIn_Msg_Default"));
             }
         } else {
-            alert(this.licenseData[0].ErrMessage);
+            this.showFullPageLoader = false;
+            this.toastr.error('', this.translate.instant("SignIn_Msg_Default"));
         }
     }
 
