@@ -169,12 +169,12 @@
         <hr />
       </div>
       <div class="col-sm-12 col-12">
-        <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text mx-0.5" (mousedown)="back(0)">
+        <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text mx-0.5" (click)="back(0)">
           <span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
         <!-- <button type="button" *ngIf="showButton" (click)="save($event)" class="btn btn-success k-button btn-sm btn-icon-with-text">
                   <span class="k-icon k-i-save" role="presentation"></span> {{'Save'|translate}}</button> -->
        
-        <button type="button" id="showHideGrid" (mousedown)="clickShowHideGrid()" class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
+        <button type="button" id="showHideGrid" (click)="clickShowHideGrid()" class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
           <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>
           {{showHideBtnTxt}}
         </button>

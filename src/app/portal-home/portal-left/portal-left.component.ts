@@ -74,7 +74,6 @@ export class PortalLeftComponent implements OnInit {
         window.localStorage.setItem('IsMenuLoaded', 'true');
       },
       error => {
-        //alert( this.translate.instant("ReloadPageMsg"));
         if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
           this.commonService.unauthorizedToken(error, this.translate.instant("token_expired"));
         }

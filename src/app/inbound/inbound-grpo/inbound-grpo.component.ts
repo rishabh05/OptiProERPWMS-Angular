@@ -130,8 +130,8 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   }
   ngAfterViewInit(): void {
     //console.log('view after init');
-   
-    setTimeout(() => { 
+
+    setTimeout(() => {
       this.RecBinVal.nativeElement.focus();
     }, 100);
     // this.itemCodeInput.nativeElement.focus();
@@ -242,10 +242,10 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
           this.GetDefaultBinOrBinWithQtyForProduction();
         }
       } else {
-       // if (this.RecvbBinvalue == "") {
-          this.defaultRecvBin = true;
-          this.ShowBins();
-     //   }
+        // if (this.RecvbBinvalue == "") {
+        this.defaultRecvBin = true;
+        this.ShowBins();
+        //   }
       }
     }
   }
@@ -386,50 +386,96 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
 
   OnBinChange() {
-
-
-
     if (this.RecvbBinvalue == "") {
       return;
     }
     this.showLoader = true;
-    this.inboundService.binChange(localStorage.getItem("whseId"), this.RecvbBinvalue).subscribe(
-      (data: any) => {
-        this.showLoader = false;
-        //console.log(data);
-        if (data != null) {
-          if (data.length > 0) {
-            if (data[0].Result == "0") {
+    if (localStorage.getItem('FromReceiptProd') == 'true') {
+      this.inboundService.isBinExistForProduction(localStorage.getItem("whseId"), this.RecvbBinvalue, this.receiptData.status).subscribe(
+        (data: any) => {
+          this.showLoader = false;
+          //console.log(data);
+          if (data != null) {
+            if (data.length > 0) {
+              // if (data[0].Result == "0") {
+              //   this.toastr.error('', this.translate.instant("INVALIDBIN"));
+              //   this.RecvbBinvalue = "";
+              //   this.RecBinVal.nativeElement.focus()
+              //   return;
+              // }
+              // else {
+                this.RecvbBinvalue = data[0].BinNo;
+                if(this.receiptData.status == "Accept"){
+                }else{
+                  this.receiptData.WhsCode = data[0].WhsCode;
+                }
+                // oCurrentController.isReCeivingBinExist();
+             // }
+            }else{
               this.toastr.error('', this.translate.instant("INVALIDBIN"));
               this.RecvbBinvalue = "";
               this.RecBinVal.nativeElement.focus()
-              return;
-            }
-            else {
-              this.RecvbBinvalue = data[0].ID;
-              // oCurrentController.isReCeivingBinExist();
             }
           }
-        }
-        else {
-          this.toastr.error('', this.translate.instant("INVALIDBIN"));
+          else {
+            this.toastr.error('', this.translate.instant("INVALIDBIN"));
+            this.RecvbBinvalue = "";
+            this.RecBinVal.nativeElement.focus()
+            return;
+          }
+        },
+        error => {
+          this.showLoader = false;
+          console.log("Error: ", error);
           this.RecvbBinvalue = "";
-          this.RecBinVal.nativeElement.focus()
-          return;
+          if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+          }
+          else {
+            this.toastr.error('', error);
+          }
         }
-      },
-      error => {
-        this.showLoader = false;
-        console.log("Error: ", error);
-        this.RecvbBinvalue = "";
-        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+      );
+    } else {
+      this.inboundService.binChange(localStorage.getItem("whseId"), this.RecvbBinvalue).subscribe(
+        (data: any) => {
+          this.showLoader = false;
+          //console.log(data);
+          if (data != null) {
+            if (data.length > 0) {
+              if (data[0].Result == "0") {
+                this.toastr.error('', this.translate.instant("INVALIDBIN"));
+                this.RecvbBinvalue = "";
+                this.RecBinVal.nativeElement.focus()
+                return;
+              }
+              else {
+                this.RecvbBinvalue = data[0].ID;
+                // oCurrentController.isReCeivingBinExist();
+              }
+            }
+          }
+          else {
+            this.toastr.error('', this.translate.instant("INVALIDBIN"));
+            this.RecvbBinvalue = "";
+            this.RecBinVal.nativeElement.focus()
+            return;
+          }
+        },
+        error => {
+          this.showLoader = false;
+          console.log("Error: ", error);
+          this.RecvbBinvalue = "";
+          if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+          }
+          else {
+            this.toastr.error('', error);
+          }
         }
-        else {
-          this.toastr.error('', error);
-        }
-      }
-    );
+      );
+    }
+
   }
 
   onScanInputChange() {
@@ -593,6 +639,37 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     }
   }
 
+  getAutoLot(itemCode: string, qty: any) {
+    this.inboundService.getAutoLot(itemCode, this.tracking, qty).subscribe(
+      (data: any) => {
+        console.log(data);
+        if (data.Table != undefined) {
+          data.Table = data.Table;
+        } else if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+          this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+            this.translate.instant("CommonSessionExpireMsg"));
+          return;
+        }
+        this.AddUpdateBatSerNo(data.Table);
+        // if (data.Table.length > 0) {
+        //   this.AddUpdateBatSerNo(data.Table);
+        // }
+        // else {
+
+        // }
+      },
+      error => {
+        console.log("Error: ", error);
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
+
   addQuantity() {
     if (this.qty == 0 || this.qty == undefined) {
       this.toastr.error('', this.translate.instant("Inbound_EnterQuantityErrMsg"));
@@ -619,62 +696,77 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     this.LineId = [];
     if (this.isNonTrack) {
       this.addNonTrackQty(this.qty);
-    } else {
-      if (this.radioSelected == 0) {
-        this.MfrSerial = this.ScanInputs;
-      } else if (this.radioSelected == 1) {
-        this.searlNo = this.ScanInputs;
+
+      this.qty = undefined;
+      this.ScanInputs = "";
+      if (this.recvingQuantityBinArray.length > 0) {
+        if (!this.fromReceiptProduction) {
+          this.showButton = true;
+          this.showRecButton = true;
+        } else {
+          this.showButton = true;
+          this.showRecButton = false;
+        }
+      } else {
+        this.showButton = false;
+        this.showRecButton = false;
       }
-      let autoLots = JSON.parse(localStorage.getItem("primaryAutoLots"));
-      if (this.isSerial) {
-        while (this.qty > 0 && this.qty != 0) {
+      this.updateReceiveQty();
+    } else {
 
-          if (autoLots != null && autoLots != null && autoLots.length > 0 && autoLots[0].AUTOLOT == "Y") {
-            this.LastSerialNumber = [];
-            this.LineId = [];
-            this.addBatchSerialQty(autoLots, this.qty);
-            let result = this.recvingQuantityBinArray.find(element => element.LotNumber == this.searlNo);
-            if (result == undefined) {
-              this.searlNo = (this.searlNo == "null" || this.searlNo == null) ? "" : this.searlNo;
-              var plt = (this.palletValue == "Loose") ? "" : this.palletValue;
-              if (this.searlNo != '' && this.searlNo != undefined && plt != '') {
-                this.MfrSerial = this.searlNo;
-                this.searlNo = this.searlNo + "-" + plt;
-              } else {
-                if (this.isPalletizationEnable) {
-                  this.MfrSerial = this.searlNo;
-                }
-              }
-              var autLotFlag = "false";
-              // if (autoLots[0].AUTOLOT == "Y") {
-              //   autLotFlag = "true";
-              // }
-              // if (autoLots != null && autoLots != undefined && autoLots.length > 0 && autoLots[0].AUTOLOT == "Y") {
-              //   autLotFlag = "true";
-              //   this.isDisabledScanInput = true;
-              // } else {
-              //   this.isDisabledScanInput = false;
-              // }
+      if (!this.fromReceiptProduction) {
+        this.getAutoLot(this.openPOLineModel[0].ITEMCODE, this.qty);
+      } else {
+        this.AddUpdateBatSerNo(null);
+      }
+    }
+  }
 
-              this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial,
-                this.searlNo, 1, this.RecvbBinvalue, this.expiryDate, plt, autLotFlag));
-              this.qty = this.qty - 1;
-            }
-          } else {
+  AddUpdateBatSerNo(autoLots: any[]) {
+    if (this.radioSelected == 0) {
+      this.MfrSerial = this.ScanInputs;
+    } else if (this.radioSelected == 1) {
+      this.searlNo = this.ScanInputs;
+    }
+    // let autoLots = JSON.parse(localStorage.getItem("primaryAutoLots"));
+    if (this.isSerial) {
+      while (this.qty > 0 && this.qty != 0) {
+
+        if (autoLots != null && autoLots != null && autoLots.length > 0 && autoLots[0].AUTOLOT == "Y") {
+          this.LastSerialNumber = [];
+          this.LineId = [];
+          this.addBatchSerialQty(autoLots, this.qty);
+          let result = this.recvingQuantityBinArray.find(element => element.LotNumber == this.searlNo);
+          if (result == undefined) {
             this.searlNo = (this.searlNo == "null" || this.searlNo == null) ? "" : this.searlNo;
             var plt = (this.palletValue == "Loose") ? "" : this.palletValue;
             if (this.searlNo != '' && this.searlNo != undefined && plt != '') {
+              this.MfrSerial = this.searlNo;
               this.searlNo = this.searlNo + "-" + plt;
+            } else {
+              if (this.isPalletizationEnable) {
+                this.MfrSerial = this.searlNo;
+              }
             }
-
+            var autLotFlag = "false";
             this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial,
-              this.searlNo, 1, this.RecvbBinvalue, this.expiryDate, plt, "false"));
+              this.searlNo, 1, this.RecvbBinvalue, this.expiryDate, plt, autLotFlag));
             this.qty = this.qty - 1;
           }
+        } else {
+          this.searlNo = (this.searlNo == "null" || this.searlNo == null) ? "" : this.searlNo;
+          var plt = (this.palletValue == "Loose") ? "" : this.palletValue;
+          if (this.searlNo != '' && this.searlNo != undefined && plt != '') {
+            this.searlNo = this.searlNo + "-" + plt;
+          }
+
+          this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial,
+            this.searlNo, 1, this.RecvbBinvalue, this.expiryDate, plt, "false"));
+          this.qty = this.qty - 1;
         }
-      } else {
-        this.batchCalculation(autoLots, this.qty);
       }
+    } else {
+      this.batchCalculation(autoLots, this.qty);
     }
     this.qty = undefined;
     this.ScanInputs = "";
@@ -686,14 +778,12 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         this.showButton = true;
         this.showRecButton = false;
       }
-
     } else {
       this.showButton = false;
       this.showRecButton = false;
     }
     this.updateReceiveQty();
   }
-
 
   updateQuantity() {
     if (this.qty == 0 || this.qty == undefined) {
@@ -744,7 +834,6 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
   updateReceiveQty() {
     let quantitySum: number = 0;
-    //quantitySum = 0;//this.openPOLineModel[0].RPTQTY;
     for (var i = 0; i < this.recvingQuantityBinArray.length; i++) {
       quantitySum += Number(this.recvingQuantityBinArray[i].LotQty);
     }
@@ -770,16 +859,6 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         }
 
         var autLotFlag = "false";
-        // if (autoLots[0].AUTOLOT == "Y") {
-        //   autLotFlag = "true";
-        // }
-        // if (autoLots != null && autoLots != undefined && autoLots.length > 0 && autoLots[0].AUTOLOT == "Y") {
-        //   autLotFlag = "true";
-        //   this.isDisabledScanInput = true;
-        // } else {
-        //   this.isDisabledScanInput = false;
-        // }
-
         this.recvingQuantityBinArray.push(new RecvingQuantityBin(this.MfrSerial,
           this.searlNo, qty, this.RecvbBinvalue, this.expiryDate, plt, autLotFlag));
       } else {
@@ -852,33 +931,33 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         this.searlNo = this.searlNo + autoLots[i].STRING
       }
       if (autoLots[i].OPRTYPE === "2" && autoLots[i].OPERATION == "2") {
-        if (this.recvingQuantityBinArray.length > 0) {
-          var finalString = this.getAutoLotStringOPR2(autoLots[i].STRING);
-          autoLots[i].STRING = finalString;
-          this.searlNo = this.searlNo + finalString;
-          this.LastSerialNumber.push(this.getAutoLotStringOPR2(finalString))
-          this.LineId.push(autoLots[i].LINEID);
+        //  if (this.recvingQuantityBinArray.length > 0) {
+        var finalString = this.getAutoLotStringOPR2(autoLots[i].STRING);
+        autoLots[i].STRING = finalString;
+        this.searlNo = this.searlNo + finalString;
+        this.LastSerialNumber.push(this.getAutoLotStringOPR2(finalString))
+        this.LineId.push(autoLots[i].LINEID);
 
-        } else {
-          var finalString = autoLots[i].STRING;
-          this.searlNo = this.searlNo + finalString;
-          this.LastSerialNumber.push(this.getAutoLotStringOPR2(finalString));
-          this.LineId.push(autoLots[i].LINEID);
-        }
+        // } else {
+        //   var finalString = autoLots[i].STRING;//(parseInt(autoLots[i].STRING)+1).toString();
+        //   this.searlNo = this.searlNo + finalString;
+        //   this.LastSerialNumber.push(this.getAutoLotStringOPR2(finalString));
+        //   this.LineId.push(autoLots[i].LINEID);
+        // }
       }
       if (autoLots[i].OPRTYPE == "2" && autoLots[i].OPERATION == "3") {
-        if (this.recvingQuantityBinArray.length > 0) {
-          var finalString = this.getAutoLotStringOPR3(autoLots[i].STRING);
-          this.searlNo = this.searlNo + finalString;
-          autoLots[i].STRING = finalString;
-          this.LastSerialNumber.push(this.getAutoLotStringOPR3(autoLots[i].STRING));
-          this.LineId.push(autoLots[i].LINEID);
-        } else {
-          var finalString = autoLots[i].STRING;
-          this.searlNo = this.searlNo + finalString;
-          this.LastSerialNumber.push(this.getAutoLotStringOPR3(autoLots[i].STRING));
-          this.LineId.push(autoLots[i].LINEID);
-        }
+        // if (this.recvingQuantityBinArray.length > 0) {
+        var finalString = this.getAutoLotStringOPR3(autoLots[i].STRING);
+        this.searlNo = this.searlNo + finalString;
+        autoLots[i].STRING = finalString;
+        this.LastSerialNumber.push(this.getAutoLotStringOPR3(autoLots[i].STRING));
+        this.LineId.push(autoLots[i].LINEID);
+        // } else {
+        //   var finalString = autoLots[i].STRING;
+        //   this.searlNo = this.searlNo + finalString;
+        //   this.LastSerialNumber.push(this.getAutoLotStringOPR3(autoLots[i].STRING));
+        //   this.LineId.push(autoLots[i].LINEID);
+        // }
       }
     }
   }
@@ -1069,8 +1148,8 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
             LotNumber: saveRecProdData.Lots[i].LotNumber,
             LotQty: saveRecProdData.Lots[i].LotQty,
             ExpiryDate: saveRecProdData.Lots[i].ExpiryDate,
-            PalletCode: saveRecProdData.RejectLots[j].PalletCode,
-            ActualLotNo: saveRecProdData.RejectLots[j].ActualLotNo
+            PalletCode: saveRecProdData.Lots[i].PalletCode,
+            ActualLotNo: saveRecProdData.Lots[i].ActualLotNo
           })
         }
         itmData = saveRecProdData.Items;
@@ -1530,13 +1609,13 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       });
     }
 
-    for (var iLastIndexNumber = 0; iLastIndexNumber < this.LastSerialNumber.length; iLastIndexNumber++) {
-      oSubmitPOLotsObj.LastSerialNumber.push({
-        LastSerialNumber: this.LastSerialNumber[iLastIndexNumber],
-        LineId: this.LineId[iLastIndexNumber],
-        ItemCode: this.openPOLineModel[0].ITEMCODE
-      });
-    }
+    // for (var iLastIndexNumber = 0; iLastIndexNumber < this.LastSerialNumber.length; iLastIndexNumber++) {
+    //   oSubmitPOLotsObj.LastSerialNumber.push({
+    //     LastSerialNumber: this.LastSerialNumber[iLastIndexNumber],
+    //     LineId: this.LineId[iLastIndexNumber],
+    //     ItemCode: this.openPOLineModel[0].ITEMCODE
+    //   });
+    // }
     localStorage.setItem("Line", "" + (Number(localStorage.getItem("Line")) + 1));
 
     oSubmitPOLotsObj.Header.push({
@@ -1995,7 +2074,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
   onHiddenRecBinClick() {
     var inputValue = (<HTMLInputElement>document.getElementById('inboundGrpoRecBinInput')).value;
-    if (inputValue.length > 0) { 
+    if (inputValue.length > 0) {
       this.RecvbBinvalue = inputValue;
     }
     this.OnBinChange();
@@ -2533,10 +2612,10 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
             this.toastr.error('', error);
           }
         },
-    ); 
+    );
   }
 
-  GetReceiptSubmitDateFormat(EXPDATE) { 
+  GetReceiptSubmitDateFormat(EXPDATE) {
     if (EXPDATE == "" || EXPDATE == null)
       return "";
     else {
@@ -2608,14 +2687,14 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     }
   }
 
-  onHiddenTargetWhseClick(){
+  onHiddenTargetWhseClick() {
     var inputValue = (<HTMLInputElement>document.getElementById('inbound_grpo_targetWhseInput')).value;
     if (inputValue.length > 0) {
       this.targetWhse = inputValue;
     }
     this.onQCWHSChange();
   }
-  onHiddenTargetBinClick(){
+  onHiddenTargetBinClick() {
     var inputValue = (<HTMLInputElement>document.getElementById('inbound_grpo_targetBinInput')).value;
     if (inputValue.length > 0) {
       this.targetBin = inputValue;

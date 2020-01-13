@@ -37,6 +37,7 @@ export class ItemLabelComponent implements OnInit {
 
   selectedLots: any;
   binNo: string = "";
+  LOTNoForNone: string = "";
 
   showPDF = false;
   fileName: string = "";
@@ -253,6 +254,7 @@ export class ItemLabelComponent implements OnInit {
         }else{
           this.binNo = $event[0];
         }
+        this.LOTNoForNone = $event[0];
         this.itemCode = $event[2];
         this.batchSrBinIp.nativeElement.focus();
       }
@@ -297,6 +299,9 @@ export class ItemLabelComponent implements OnInit {
 
   checkBinForNonTrackedItems() {
     this.showLoader = true;
+    if(this.LOTNoForNone == null || this.LOTNoForNone == undefined || this.LOTNoForNone == ""){
+      this.LOTNoForNone = this.binNo;
+    }
     this.checkBinForItemSubs = this.labelPrintReportsService.checkBinForItemLabelReport(this.itemCode, this.binNo).subscribe(
       data => {
         this.showLoader = false;
@@ -308,13 +313,13 @@ export class ItemLabelComponent implements OnInit {
             return;
           }
           if (data == "0" || data[0] == "0") {
-            this.toastr.error('', this.translate.instant("InvalidBatch"));
+            this.toastr.error('', this.translate.instant("INVALIDBIN"));
             this.binNo = "";
             return;
           }
           this.binNo = data[0].BINNO; //check this code.
         } else {
-          this.toastr.error('', this.translate.instant("InvalidBatch"));
+          this.toastr.error('', this.translate.instant("INVALIDBIN"));
           this.binNo = "";
         }
       },
@@ -332,7 +337,11 @@ export class ItemLabelComponent implements OnInit {
   }
   checkBinForOtherTrackedItems() {
     this.showLoader = true;
-    this.lotScanListWithoutWhseBinSubs = this.labelPrintReportsService.getLotScanListWithoutWhseBinAndItemWise(this.itemCode, this.binNo).subscribe(
+
+    if(this.LOTNoForNone == null || this.LOTNoForNone == undefined || this.LOTNoForNone == ""){
+      this.LOTNoForNone = this.binNo;
+    }
+    this.lotScanListWithoutWhseBinSubs = this.labelPrintReportsService.getLotScanListWithoutWhseBinAndItemWise(this.itemCode, this.LOTNoForNone).subscribe(
       (data: any) => {
         this.showLoader = false;
         if (data != undefined && data.length > 0) {

@@ -347,7 +347,7 @@ export class PalSplitComponent implements OnInit {
             this.toastr.error('', data[0].ErrorMsg);
           }
         } else {
-          this.toastr.error('', this.translate.instant("ErrorMsgSomethingWentWrong"));
+          this.toastr.error('', this.translate.instant("Plt_SplitErrMsg"));
         }
       },
       error => {
@@ -796,8 +796,10 @@ export class PalSplitComponent implements OnInit {
     if ($event.Status == "yes") {
       switch ($event.From) {
         case ("NewPallet_Split"):
-          this.createNewPallet($event.PalletNo, $event.BinNo);
-          break
+        this.toBin = $event.BinNo;
+        this.toWhse = localStorage.getItem("whseId");
+        this.createNewPallet($event.PalletNo, $event.BinNo);
+        break
       }
     }
   }

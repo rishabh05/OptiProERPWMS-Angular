@@ -206,7 +206,7 @@ export class DepalletizeComponent implements OnInit {
             this.toastr.error('', data[0].ErrorMsg);
           }
         } else {
-          this.toastr.error('', this.translate.instant("ErrorMsgSomethingWentWrong"));
+          this.toastr.error('', this.translate.instant("Plt_DepalletizeErrMsg"));
         }
       },
       error => {

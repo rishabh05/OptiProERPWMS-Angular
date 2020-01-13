@@ -254,29 +254,29 @@
             <div class="col-sm-12 col-12">
 
                 <button type="button" *ngIf="fromWhere!='itr'" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon mr-1"
-                    (mousedown)="openOutboundCustomer()" roterLink="binTransfer" skipLocationChange><i
+                    (click)="openOutboundCustomer()" roterLink="binTransfer" skipLocationChange><i
                         class="opti-icon-arrow-back"></i></button>
 
                 <!-- *ngIf='outbound.TempMeterials!==undefined && outbound.TempMeterials!==null && outbound.TempMeterials.length>0;'' -->
-                <button type="button" *ngIf="showDeleiveryAndAdd && fromWhere!='itr'" (mousedown)="addToDeleiver()"
+                <button type="button" *ngIf="showDeleiveryAndAdd && fromWhere!='itr'" (click)="addToDeleiver()"
                     class="btn btn-primary k-button btn-sm btn-icon-with-text ml-1"><span
                         class="k-icon k-i-plus-outline" role="presentation"></span>
                     {{'AddToDeleiver'|translate}}</button>
 
-                <button type="button" *ngIf="showDeleiveryAndAdd && fromWhere!='itr'" (mousedown)="DeliveryClick()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
+                <button type="button" *ngIf="showDeleiveryAndAdd && fromWhere!='itr'" (click)="DeliveryClick()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-check" role="presentation"></span> {{'Deleiver'|translate}}</button>
                 
-                <button type="button" *ngIf="fromWhere=='itr'" (mousedown)="cancel()" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
+                <button type="button" *ngIf="fromWhere=='itr'" (click)="cancel()" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
 
-                <button type="button" *ngIf="showDeleiveryAndAdd && fromWhere=='itr'" (mousedown)="itrClick()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
+                <button type="button" *ngIf="showDeleiveryAndAdd && fromWhere=='itr'" (click)="itrClick()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-check" role="presentation"></span> {{'Submit'|translate}}</button>
                 <!-- <button type="button" (click)="showPalletsList()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-check" role="presentation"></span>{{btnText}}</button> -->
                 <!-- <button type="button" *ngIf="showDeleiveryAndAdd" (click)="deliveryConfirmation()"
                     class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-check"
                         role="presentation"></span> {{'Deleiver'|translate}}</button> -->
-                <button *ngIf="showTemporaryViews"  type="button"  (mousedown)="showPalletsList()"
+                <button *ngIf="showTemporaryViews"  type="button"  (click)="showPalletsList()"
                    class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-check"
                      role="presentation"></span>{{btnText}}</button>
 

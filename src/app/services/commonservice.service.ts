@@ -88,9 +88,6 @@ export class Commonservice {
   public unauthorizedToken(Error, message: string) {
     if (Error.error.ExceptionMessage == this.authTokenstr) {
       this.RemoveLicenseAndSignout(this.toastr, this.router, message);
-      // sessionStorage.clear();
-      // localStorage.clear();
-      // this.router.navigateByUrl('/account');  
     }
   }
 
@@ -181,11 +178,11 @@ export class Commonservice {
   RemoveLicenseAndSignout(toastr: ToastrService, router: Router, message: string, fromLogout:boolean = false) {
     this.RemoveLicense().subscribe(
       (data: any) => {
-       // console.log(data);
         this.signOut(this.toastr, this.router, message,fromLogout);
       },
       error => {
         if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.signOut(this.toastr, this.router, message,fromLogout);
         }
         else {
           this.toastr.error('', error);

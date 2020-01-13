@@ -207,14 +207,14 @@
                         </kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="Discontinued" width="120" title="{{'PhyCount_ViewBatchSerial'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                <button class="k-button k-primary simple-btn" type="button" (mousedown)="ShowBatachSerListForClickRow(rowIndex, gridItem)">
+                                <button class="k-button k-primary simple-btn" type="button" (click)="ShowBatachSerListForClickRow(rowIndex, gridItem)">
                                     <i class="opti-icon-detail-view"></i>
                                 </button>
                             </ng-template>
                         </kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="" headerClass="text-center" class="text-center" width="60">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                <button class="btn btn-danger k-button btn-sm btn-icon" type="button" (mousedown)="ItemListRowDeleteClick(rowIndex, gridItem)">
+                                <button class="btn btn-danger k-button btn-sm btn-icon" type="button" (click)="ItemListRowDeleteClick(rowIndex, gridItem)">
                                     <span class="k-icon k-i-delete"></span>
                                 </button>
                             </ng-template>
@@ -230,14 +230,14 @@
                 <hr />
             </div>
             <div class="col-sm-12 col-12">
-              <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (mousedown)="onCancelClick()">
+              <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="onCancelClick()">
                     <span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
                
-                <button type="button" class="k-button k-primary k-button btn-sm btn-icon-with-text" (mousedown)="onAddItemClick()">
+                <button type="button" class="k-button k-primary k-button btn-sm btn-icon-with-text" (click)="onAddItemClick()">
                     <span class="k-icon k-i-plus-outline" role="presentation"></span> {{'Item'|translate}}</button>
-                <button type="button"  class="k-button k-primary k-button btn-sm btn-icon-with-text"  (mousedown)="onSaveClick()">
+                <button type="button"  class="k-button k-primary k-button btn-sm btn-icon-with-text"  (click)="onSaveClick()">
                     <span class="k-icon k-i-save" role="presentation"></span> {{'PhyCount_Save&Next'|translate}}</button>
-                    <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text" (mousedown)="onSubmitClick()">
+                    <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text" (click)="onSubmitClick()">
                             <span class="k-icon k-i-check" role="presentation"></span> {{'Submit'|translate}}</button>
 
                 <div class="clearfix mt-1 d-block d-sm-none"></div>
@@ -258,7 +258,7 @@
                 <hr />
             </div>
             <div class="col-sm-12 col-12">
-                <button tabindex="-1" type="button" class="btn btn-success k-button btn-sm btn-icon-with-text" (mousedown)="loadFistPage()">
+                <button tabindex="-1" type="button" class="btn btn-success k-button btn-sm btn-icon-with-text" (click)="loadFistPage()">
                     <span class="k-icon k-i-check" role="presentation"></span> {{'Ok'|translate}}
                 </button>
             </div>

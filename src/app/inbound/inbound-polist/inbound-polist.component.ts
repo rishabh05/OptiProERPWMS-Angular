@@ -402,7 +402,7 @@ export class InboundPolistComponent implements OnInit {
   }
 
   getAutoLotForN(itemCode: string) {
-    this.inboundService.getAutoLot(itemCode).subscribe(
+    this.inboundService.getAutoLot(itemCode, this.openPOLineModel.TRACKING, 0).subscribe(
       (data: any) => {
         //console.log(data);
         if (data.Table != undefined) {
@@ -440,7 +440,7 @@ export class InboundPolistComponent implements OnInit {
   }
 
   getAutoLot(itemCode: string) {
-    this.inboundService.getAutoLot(itemCode).subscribe(
+    this.inboundService.getAutoLot(itemCode, this.openPOLineModel.TRACKING, 0).subscribe(
       (data: any) => {
         console.log(data);
         if (data.Table != undefined) {

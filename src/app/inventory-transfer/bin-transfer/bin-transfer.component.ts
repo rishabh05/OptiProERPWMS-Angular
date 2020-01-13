@@ -377,7 +377,7 @@ export class BinTransferComponent implements OnInit {
 
   getDefaultFromBin() {
     this.inventoryTransferService.GetDefaultBinOrBinWithQty(this.itemCode,
-      localStorage.getItem("towhseId")).subscribe(
+      localStorage.getItem("fromwhseId")).subscribe(
         data => {
           if (data != null) {
 

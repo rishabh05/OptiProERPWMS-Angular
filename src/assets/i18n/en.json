@@ -204,7 +204,7 @@
   "LotNo": "Lot No.",
   "TOTALQTY": "Total Qty.",
   "BinNo": "Bin No.",
-  "INVALIDBIN": "Invalid bin",
+  "INVALIDBIN": "Invalid bin number.",
   "FrmNToBinCantSame": "From Bin and To Bin cannot be same",
   "UOM": "UOM",
   "Manual": "Manual",
@@ -219,7 +219,6 @@
   "CommonLogoutMsg": "Sucessfully logged out",
   "CommonSessionExpireMsg": "Session expired.",
   "CommonNoDataAvailableMsg": "No data available.",
-  "CommonSomeErrorMsg": "Somthing went wrong.",
   "BinLookupTitle": "Bin Lookup",
   "binLabelReport": "Bin Label Report",
   "itemLabelReport": "Item Label Report",
@@ -282,7 +281,6 @@
   "Palletmessage.Lot": "Batch/Serial No. Details",
   "ServerConnectionError": "Server connection error",
   "DeleteRecordsMsg": "Do you want to delete this item?",
-  "ReloadPageMsg":"Something went wrong. Reload webpage.",
   "EnterBinNo": "Enter bin no.",
   "EnterBatchNo": "Enter Batch No.",
   "EnterSerialNo": "Enter Serial No.",
@@ -377,7 +375,6 @@
   "Plt_SelectFromPallet":"From Pallet field cannot be blank.",
   "Plt_SelectToPallet": "To Pallet field cannot be blank.",
   "Plt_InValidBatchSerial": "Invalid batch/serial no.",
-  "ErrorMsgSomethingWentWrong": "Something went wrong.",
   "Plt_Split": "Split",
   "Plt_Transfer": "Transfer",
   "Plt_PalletizedSuccess": "Items added to pallet successfully.",
@@ -409,5 +406,18 @@
   "InvTransfer_ITRRequired": "Please select ITR#",
   "InvTransfer_PalletNotValid": "Invalid pallet for selected ITR.",
   "InvTransfer_InvalidITR": "Invalid ITR.",
+
+  "SignIn_Msg_NotFound": "Connection url is not correct. Please contact system administrator.",
+  "SignIn_Msg_Unauthorized": "Invalid SAP username or password.",
+  "SignIn_Msg_BadRequest": "Unable to connect SAP.",
+  "SignIn_Msg_Default": "Unable to connect SAP. Please contact system administrator.",
+
+  "SignIn_ValidateErrMsg": "Authentication error.",
+  "Plt_DepalletizeErrMsg": "System is facing problem in depalletize operation. Please try again.",
+  "Plt_SplitErrMsg": "System is facing problem in split operation. Please try again.",
+  "Plt_MergeErrMsg": "System is facing problem in merge operation. Please try again.",
+  "Plt_PalletizeErrMsg": "System is facing problem in palletize operation. Please try again.",
+  "Plt_TransferErrMsg": "System is facing problem in transfer operation. Please try again.",
+
   "Dummy": "Dummy"
 }

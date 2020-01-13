@@ -341,7 +341,7 @@ export class PhysicalCountComponent implements OnInit {
 
   GetSavedDocNoDetails() {
     this.showLoader = true;
-    this.phycountService.GetSavedDocNoDetails(this.DocNo, this.ItemCode, this.BinNo, this.IsteamCount).subscribe(
+    this.phycountService.GetSavedDocNoDetails(this.DocEntry, this.ItemCode, this.BinNo, this.IsteamCount).subscribe(
       (data: any) => {
         this.showLoader = false;
         //console.log(data);
@@ -388,7 +388,7 @@ export class PhysicalCountComponent implements OnInit {
   }
 
   GetDocNoDetails() {
-    this.phycountService.GetDocNoDetails(this.DocNo, this.CountType, this.IsteamCount).subscribe(
+    this.phycountService.GetDocNoDetails(this.DocEntry, this.CountType, this.IsteamCount).subscribe(
       (data: any) => {
         if (data != undefined) {
           this.DocNoDetails = data;
@@ -423,8 +423,8 @@ export class PhysicalCountComponent implements OnInit {
       return;
     }else{
     if (this.lookupfor == "PhyCntItemList") {
-      this.DocNo = $event[0];
-      this.DocEntry = $event[1];
+      this.DocEntry = $event[0];
+      this.DocNo = $event[1];
       this.CountDate = $event[4];
       this.ItemCode = $event[2];
 
