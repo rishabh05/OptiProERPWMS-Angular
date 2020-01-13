@@ -796,8 +796,10 @@ export class PalSplitComponent implements OnInit {
     if ($event.Status == "yes") {
       switch ($event.From) {
         case ("NewPallet_Split"):
-          this.createNewPallet($event.PalletNo, $event.BinNo);
-          break
+        this.toBin = $event.BinNo;
+        this.toWhse = localStorage.getItem("whseId");
+        this.createNewPallet($event.PalletNo, $event.BinNo);
+        break
       }
     }
   }

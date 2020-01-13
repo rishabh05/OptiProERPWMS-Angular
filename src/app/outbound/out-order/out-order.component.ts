@@ -66,6 +66,8 @@ export class OutOrderComponent implements OnInit {
   temoraryHideItemLookupRow: boolean = false;
   pagetitle: any ="";
   isPalletizationEnable: boolean = false
+
+  docEntry:any;   // this variable is used only for single itr submit request for multiple we have to change implementation.
   @ViewChild('scanSO') scanSO;
   @ViewChild('DocNum') DocNum;
   @ViewChild('PalletNo') PalletNo;
@@ -108,6 +110,7 @@ export class OutOrderComponent implements OnInit {
       if (this.outbound.OrderData !== undefined && this.outbound.OrderData !== null
         && this.outbound.OrderData.DOCNUM !== undefined && this.outbound.OrderData.DOCNUM !== null) {
         this.orderNumber = this.outbound.OrderData.DOCNUM;
+        this.docEntry = this.outbound.OrderData.DOCENTRY;
         
         // this.openSOOrderList(); 
         
@@ -252,8 +255,8 @@ export class OutOrderComponent implements OnInit {
         this.showLookupLoader = false;
         this.palletNo = lookupValue.Code;
         this.getPalletData();
-        this.PalletNo.nativeElement.focus()
-      } else {
+        // this.PalletNo.nativeElement.focus()
+      } else { 
         if (this.lookupfor == "out-order") {
           this.outbound.OrderData = lookupValue;
           this.orderNumber = this.outbound.OrderData.DOCNUM;
@@ -929,6 +932,22 @@ export class OutOrderComponent implements OnInit {
     }
     this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
     isRollbackPalletSelected = false;
+    // if items of pallet added then show addToDelivery and Submit button. issue fixed.
+   // this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
+
+    let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+    // console.log("Order:data", outboundData);
+      if (outboundData != null && outboundData != undefined && outboundData != '' && outboundData != 'null') 
+      {
+        this.outbound = JSON.parse(outboundData);
+        if(this.outbound!=null && this.outbound!=undefined && this.outbound.TempMeterials!=null && this.outbound.TempMeterials!= undefined)
+        {
+          let data = this.outbound.TempMeterials.filter(tm => ""+tm.Order.DOCNUM === ""+this.orderNumber);
+         if(data.length > 0){
+          this.showDeleiveryAndAdd = true;
+         }
+        }
+      }
 
   }
 
@@ -1169,14 +1188,14 @@ export class OutOrderComponent implements OnInit {
           } else {
             this.toastr.error('', this.translate.instant("InValidPalletNo"));
             this.palletNo = "";
-            this.PalletNo.nativeElement.focus();
+            //this.PalletNo.nativeElement.focus();
             return;
           }
         }
         else {
           this.toastr.error('', this.translate.instant("InValidPalletNo"));
           this.palletNo = "";
-          this.PalletNo.nativeElement.focus();
+          //this.PalletNo.nativeElement.focus();
           return;
         }
       },
@@ -1747,7 +1766,8 @@ export class OutOrderComponent implements OnInit {
     }
 
       let hdr = {
-        WhseCode: localStorage.getItem("fromwhseId"),
+        //whseId changed by hari for send logged in whse
+        WhseCode: localStorage.getItem("whseId"),
         ToWhsCode: this.toWhse,
         Type: "",
         DiServerToken: localStorage.getItem("Token"),

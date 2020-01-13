@@ -407,17 +407,17 @@
   "InvTransfer_PalletNotValid": "Invalid pallet for selected ITR.",
   "InvTransfer_InvalidITR": "Invalid ITR.",
 
-  "SignIn_Msg_NotFound": "Connection url is not correct. Please contact to system administrator.",
+  "SignIn_Msg_NotFound": "Connection url is not correct. Please contact system administrator.",
   "SignIn_Msg_Unauthorized": "Invalid SAP username or password.",
   "SignIn_Msg_BadRequest": "Unable to connect SAP.",
-  "SignIn_Msg_Default": "Unable to connect SAP. Please contact to system administrator.",
+  "SignIn_Msg_Default": "Unable to connect SAP. Please contact system administrator.",
 
-  "SignIn_ValidateErrMsg": "There is some problem in authentication token.",
-  "Plt_DepalletizeErrMsg": "There is problem in depalletize operation. Please try again.",
-  "Plt_SplitErrMsg": "There is problem in split operation. Please try again.",
-  "Plt_MergeErrMsg": "There is problem in merge operation. Please try again.",
-  "Plt_PalletizeErrMsg": "There is problem in palletize operation. Please try again.",
-  "Plt_TransferErrMsg": "There is problem in transfer operation. Please try again.",
+  "SignIn_ValidateErrMsg": "Authentication error.",
+  "Plt_DepalletizeErrMsg": "System is facing problem in depalletize operation. Please try again.",
+  "Plt_SplitErrMsg": "System is facing problem in split operation. Please try again.",
+  "Plt_MergeErrMsg": "System is facing problem in merge operation. Please try again.",
+  "Plt_PalletizeErrMsg": "System is facing problem in palletize operation. Please try again.",
+  "Plt_TransferErrMsg": "System is facing problem in transfer operation. Please try again.",
 
   "Dummy": "Dummy"
 }

@@ -386,50 +386,96 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
 
   OnBinChange() {
-
-
-
     if (this.RecvbBinvalue == "") {
       return;
     }
     this.showLoader = true;
-    this.inboundService.binChange(localStorage.getItem("whseId"), this.RecvbBinvalue).subscribe(
-      (data: any) => {
-        this.showLoader = false;
-        //console.log(data);
-        if (data != null) {
-          if (data.length > 0) {
-            if (data[0].Result == "0") {
+    if (localStorage.getItem('FromReceiptProd') == 'true') {
+      this.inboundService.isBinExistForProduction(localStorage.getItem("whseId"), this.RecvbBinvalue, this.receiptData.status).subscribe(
+        (data: any) => {
+          this.showLoader = false;
+          //console.log(data);
+          if (data != null) {
+            if (data.length > 0) {
+              // if (data[0].Result == "0") {
+              //   this.toastr.error('', this.translate.instant("INVALIDBIN"));
+              //   this.RecvbBinvalue = "";
+              //   this.RecBinVal.nativeElement.focus()
+              //   return;
+              // }
+              // else {
+                this.RecvbBinvalue = data[0].BinNo;
+                if(this.receiptData.status == "Accept"){
+                }else{
+                  this.receiptData.WhsCode = data[0].WhsCode;
+                }
+                // oCurrentController.isReCeivingBinExist();
+             // }
+            }else{
               this.toastr.error('', this.translate.instant("INVALIDBIN"));
               this.RecvbBinvalue = "";
               this.RecBinVal.nativeElement.focus()
-              return;
-            }
-            else {
-              this.RecvbBinvalue = data[0].ID;
-              // oCurrentController.isReCeivingBinExist();
             }
           }
-        }
-        else {
-          this.toastr.error('', this.translate.instant("INVALIDBIN"));
+          else {
+            this.toastr.error('', this.translate.instant("INVALIDBIN"));
+            this.RecvbBinvalue = "";
+            this.RecBinVal.nativeElement.focus()
+            return;
+          }
+        },
+        error => {
+          this.showLoader = false;
+          console.log("Error: ", error);
           this.RecvbBinvalue = "";
-          this.RecBinVal.nativeElement.focus()
-          return;
+          if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+          }
+          else {
+            this.toastr.error('', error);
+          }
         }
-      },
-      error => {
-        this.showLoader = false;
-        console.log("Error: ", error);
-        this.RecvbBinvalue = "";
-        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+      );
+    } else {
+      this.inboundService.binChange(localStorage.getItem("whseId"), this.RecvbBinvalue).subscribe(
+        (data: any) => {
+          this.showLoader = false;
+          //console.log(data);
+          if (data != null) {
+            if (data.length > 0) {
+              if (data[0].Result == "0") {
+                this.toastr.error('', this.translate.instant("INVALIDBIN"));
+                this.RecvbBinvalue = "";
+                this.RecBinVal.nativeElement.focus()
+                return;
+              }
+              else {
+                this.RecvbBinvalue = data[0].ID;
+                // oCurrentController.isReCeivingBinExist();
+              }
+            }
+          }
+          else {
+            this.toastr.error('', this.translate.instant("INVALIDBIN"));
+            this.RecvbBinvalue = "";
+            this.RecBinVal.nativeElement.focus()
+            return;
+          }
+        },
+        error => {
+          this.showLoader = false;
+          console.log("Error: ", error);
+          this.RecvbBinvalue = "";
+          if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+          }
+          else {
+            this.toastr.error('', error);
+          }
         }
-        else {
-          this.toastr.error('', error);
-        }
-      }
-    );
+      );
+    }
+
   }
 
   onScanInputChange() {
@@ -673,10 +719,10 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       } else {
         this.AddUpdateBatSerNo(null);
       }
-    }    
+    }
   }
 
-  AddUpdateBatSerNo(autoLots: any[]){
+  AddUpdateBatSerNo(autoLots: any[]) {
     if (this.radioSelected == 0) {
       this.MfrSerial = this.ScanInputs;
     } else if (this.radioSelected == 1) {
@@ -721,7 +767,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       }
     } else {
       this.batchCalculation(autoLots, this.qty);
-    }    
+    }
     this.qty = undefined;
     this.ScanInputs = "";
     if (this.recvingQuantityBinArray.length > 0) {
@@ -885,14 +931,14 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         this.searlNo = this.searlNo + autoLots[i].STRING
       }
       if (autoLots[i].OPRTYPE === "2" && autoLots[i].OPERATION == "2") {
-      //  if (this.recvingQuantityBinArray.length > 0) {
-          var finalString = this.getAutoLotStringOPR2(autoLots[i].STRING);
-          autoLots[i].STRING = finalString;
-          this.searlNo = this.searlNo + finalString;
-          this.LastSerialNumber.push(this.getAutoLotStringOPR2(finalString))
-          this.LineId.push(autoLots[i].LINEID);
+        //  if (this.recvingQuantityBinArray.length > 0) {
+        var finalString = this.getAutoLotStringOPR2(autoLots[i].STRING);
+        autoLots[i].STRING = finalString;
+        this.searlNo = this.searlNo + finalString;
+        this.LastSerialNumber.push(this.getAutoLotStringOPR2(finalString))
+        this.LineId.push(autoLots[i].LINEID);
 
-       // } else {
+        // } else {
         //   var finalString = autoLots[i].STRING;//(parseInt(autoLots[i].STRING)+1).toString();
         //   this.searlNo = this.searlNo + finalString;
         //   this.LastSerialNumber.push(this.getAutoLotStringOPR2(finalString));
@@ -900,12 +946,12 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         // }
       }
       if (autoLots[i].OPRTYPE == "2" && autoLots[i].OPERATION == "3") {
-       // if (this.recvingQuantityBinArray.length > 0) {
-          var finalString = this.getAutoLotStringOPR3(autoLots[i].STRING);
-          this.searlNo = this.searlNo + finalString;
-          autoLots[i].STRING = finalString;
-          this.LastSerialNumber.push(this.getAutoLotStringOPR3(autoLots[i].STRING));
-          this.LineId.push(autoLots[i].LINEID);
+        // if (this.recvingQuantityBinArray.length > 0) {
+        var finalString = this.getAutoLotStringOPR3(autoLots[i].STRING);
+        this.searlNo = this.searlNo + finalString;
+        autoLots[i].STRING = finalString;
+        this.LastSerialNumber.push(this.getAutoLotStringOPR3(autoLots[i].STRING));
+        this.LineId.push(autoLots[i].LINEID);
         // } else {
         //   var finalString = autoLots[i].STRING;
         //   this.searlNo = this.searlNo + finalString;

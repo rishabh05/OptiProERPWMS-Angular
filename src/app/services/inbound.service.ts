@@ -154,6 +154,11 @@ export class InboundService {
     var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), BinCode: binCode, ItemCode: '', WhsCode: targetWhs }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsBinExist", jObject, this.commonService.httpOptions);
   } 
+
+  isBinExistForProduction(targetWhs: string, binCode: string, Status: string): Observable<any> {
+    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), BinCode: binCode, Status: Status, ItemCode: '', WhseCode: targetWhs }]) };
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/isBinExistForProduction", jObject, this.commonService.httpOptions);
+  } 
  
   SubmitGoodsReceiptPO(oSubmitPOLots: any): Observable<any> {
     var jObject = { GoodsReceiptToken: JSON.stringify(oSubmitPOLots) };    

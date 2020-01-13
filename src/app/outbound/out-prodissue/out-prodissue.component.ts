@@ -1419,9 +1419,38 @@ export class OutProdissueComponent implements OnInit {
 
   }
 
+  // getDefaultToBin() {
+  //   this.showLookupLoader = true;
+  //   this.inventoryTransferService.getToBin("", this.selected.WHSCODE).subscribe(
+  //     data => {
+  //       this.showLookupLoader = false;
+  //       if (data != null) {
+  //         if (data.length > 0) {
+  //           this.showLookup = false;
+  //           this.showOtherLookup = true;
+  //           this.lookupData = data;
+  //           this.lookupFor = "toBinsList";
+  //         }
+  //         else {
+  //           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+  //         }
+  //       }
+  //     },
+  //     error => {
+  //       if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+  //         this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+  //       }
+  //       else {
+  //         this.toastr.error('', error);
+  //       }
+  //     }
+  //   );
+  // }
+
+
   getDefaultToBin() {    
     this.showLookupLoader = true;
-    this.inventoryTransferService.GetToBinForWhsTrnsfr(this.selected.ITEMCODE, this.toWhse).subscribe(
+    this.inventoryTransferService.GetToBinForWhsTrnsfr(this.selected.ITEMCODE, this.selected.WHSCODE).subscribe(
       data => {
         this.showLookupLoader = false;
         if (data != null) {

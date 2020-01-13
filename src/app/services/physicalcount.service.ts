@@ -99,8 +99,8 @@ export class PhysicalcountService {
     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/SubmitPhysicalCount", jObject, this.commonService.httpOptions);
   }
 
-  GetDocNoDetails(DocNum: string, CountType: string, IsTeamCount: string): Observable<any> {
-    var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), DocNum: DocNum, CountType: CountType, User: localStorage.getItem("UserId"), IsTeamCount: IsTeamCount }]) };
+  GetDocNoDetails(DocEntry: string, CountType: string, IsTeamCount: string): Observable<any> {
+    var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), DocEntry: DocEntry, CountType: CountType, User: localStorage.getItem("UserId"), IsTeamCount: IsTeamCount }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetDocNoDetails", jObject, this.commonService.httpOptions);
   }
 
