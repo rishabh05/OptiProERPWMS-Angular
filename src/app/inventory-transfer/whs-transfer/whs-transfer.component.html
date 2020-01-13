@@ -10,13 +10,18 @@
             <label for="inputPassword" class="col-sm-3 col-form-label">{{'InvTransfer_FromWhse'|translate}}</label>
             <div class="col-sm-9">
               <div class="input-group input-group-sm">
-                <input id="fromWhse" #scanFromWhse name="fromWhse" [(ngModel)]="fromWhse" type="text" class="form-control form-control-sm" placeholder="{{'InvTransfer_FromWhse'|translate}}"
+                <input id="whsTransferFromWhsInputField" #scanFromWhse name="fromWhse" [(ngModel)]="fromWhse" type="text" class="form-control form-control-sm" placeholder="{{'InvTransfer_FromWhse'|translate}}"
                   [disabled]="isfromWhsDisabled">
                 <div class="input-group-append">
                   <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="getFromWhse()" [disabled]="isfromWhsDisabled">
                     <i class="opti-icon-hammenu"></i>
                   </button>
                 </div>
+                <div class="ml-1 d-flex" *ngIf="fromWhere==2">
+                    <button tabIndex="-1" type="button" id="whseTransferFromWhseScanBtn"  (mousedown)="onInboundScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                     <i class="opti-icon-qr-code fs-24"></i>
+                    </button>
+                </div> 
               </div>
             </div>
           </div>
@@ -31,7 +36,7 @@
                     <i class="opti-icon-hammenu"></i>
                   </button>
                 </div>
-                <div class="ml-1 d-flex">
+                <div class="ml-1 d-flex" *ngIf="fromWhere==1">
                     <button tabIndex="-1" type="button" id="whseTransferToWhseScanBtn"  (mousedown)="onInboundScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                      <i class="opti-icon-qr-code fs-24"></i>
                     </button>
@@ -59,6 +64,9 @@
         <button type="button" id="Hid_btnWhsTransferToWhsScanBtn" style="visibility:hidden" (click)="onHiddenToWhsScanClick()" class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
           <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>
         </button>
+        <button type="button" id="Hid_btnWhsTransferFromWhsScanBtn" style="visibility:hidden" (click)="onHiddenFromWhsScanClick()" class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
+            <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>
+          </button>
       </div>
     </div>
   </form>
