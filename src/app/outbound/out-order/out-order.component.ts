@@ -172,13 +172,10 @@ export class OutOrderComponent implements OnInit {
   }
 
   fromEvent: any = ""
-  onOrderNoBlur() {
-   setTimeout(()=>{
-    console.log("onOrderNoBlur method run>>");
+  onOrderNoBlur() { 
     if (this.orderNumber){
       this.openSOOrderList(this.orderNumber);
-    }
-   }, 200)
+    }  
   }
   
   public openOrderLookup() {
@@ -330,7 +327,6 @@ export class OutOrderComponent implements OnInit {
   }
 
   public openSOOrderList(orderNumber: any = null) {
-
     if (!this.orderNumber) {
       this.toastr.error('', this.translate.instant("OValidation"));
       return;
@@ -380,7 +376,7 @@ export class OutOrderComponent implements OnInit {
           }
           this.calculatePickQty();  
 
-
+        
           localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
 
           this.showSOIetDetail = true;
@@ -933,10 +929,9 @@ export class OutOrderComponent implements OnInit {
     }
     this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
     isRollbackPalletSelected = false;
-    // if items of pallet added then show addToDelivery and Submit button. issue fixed.
-   // this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
-
-    let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+    
+    // if items of pallet added then show delivery and AddToDelivery button. issue fixed.
+      let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
     // console.log("Order:data", outboundData);
       if (outboundData != null && outboundData != undefined && outboundData != '' && outboundData != 'null') 
       {
