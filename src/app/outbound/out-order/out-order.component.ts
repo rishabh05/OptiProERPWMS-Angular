@@ -115,7 +115,8 @@ export class OutOrderComponent implements OnInit {
         // this.openSOOrderList(); 
         
         if(localStorage.getItem("ComingFrom")=="itr"){
-          this.itrCode = this.orderNumber;
+          this.itrCode = this.docEntry;
+          this.docNum = this.outbound.OrderData.DOCNUM;
           //this.toBinNo = this.outbound.ITRToBinNo.ToBin
           this.toWhse = this.outbound.ITRToBinNo.ToWhse;
           this.getITRItemList();
@@ -139,7 +140,7 @@ export class OutOrderComponent implements OnInit {
 
   ngAfterViewInit(): void{
     if(localStorage.getItem("ComingFrom")=="itr"){
-      this.DocNum.nativeElement.focus()
+      //this.DocNum.nativeElement.focus()
     } else {
       this.scanSO.nativeElement.focus()
     }
@@ -271,14 +272,14 @@ export class OutOrderComponent implements OnInit {
           this.toWhse = lookupValue.ToWhsCode;
           this.itrCode = lookupValue.DocEntry;
           this.docNum =  lookupValue.DocNum;
-          this.orderNumber = this.itrCode;
+          this.orderNumber = this.docNum;
           this.outbound.ITRToBinNo = { 
             ToBin: this.toBinNo,
             ToWhse: this.toWhse
           };
           localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
           this.getITRItemList();
-          this.DocNum.nativeElement.focus()
+          //this.DocNum.nativeElement.focus()
         } else if (this.lookupfor == "toBinsList") {
           this.toBinNo = lookupValue.BINNO;
           this.outbound.ITRToBinNo = { 
@@ -1516,7 +1517,7 @@ export class OutOrderComponent implements OnInit {
             this.toWhse = data.Table[0].ToWhsCode;
             this.itrCode = data.Table[0].DocEntry;
             this.docNum = data.Table[0].DocNum;
-            this.orderNumber = this.itrCode;
+            this.orderNumber = this.docNum;
             this.outbound.ITRToBinNo = {
             ToBin: this.toBinNo,
             ToWhse: this.toWhse
@@ -1559,7 +1560,8 @@ export class OutOrderComponent implements OnInit {
             CARDNAME: this.outbound.CustomerData.customerName,
             CUSTREFNO: "",
             DOCDUEDATE: "04/24/2019",
-            DOCNUM: this.itrCode,
+            DOCNUM: this.docNum,
+            DOCENTRY: this.itrCode,
             SHIPPINGTYPE: "",
             SHIPTOCODE: ""
           };
@@ -1575,7 +1577,7 @@ export class OutOrderComponent implements OnInit {
             if (data.length > 0) {
               // When order num from text box.
               this.outbound.OrderData = tempOrderData;
-              this.orderNumber = this.itrCode;
+              this.orderNumber = this.docNum;
               this.soItemsDetail = data;
               if (this.soItemsDetail.length > this.pageSize) {
                 this.pagable = true;
@@ -1686,7 +1688,7 @@ export class OutOrderComponent implements OnInit {
       && this.outbound.DeleiveryCollection.length > 0) {
 
       if (this.itrCode !== undefined && this.itrCode !== null) {
-        this.outbound.DeleiveryCollection = this.outbound.DeleiveryCollection.filter(d => d.Order.DOCNUM === this.itrCode);
+        this.outbound.DeleiveryCollection = this.outbound.DeleiveryCollection.filter(d => d.Order.DOCENTRY === this.itrCode);
       }
     var oWhsTransAddLot: any = {};
     oWhsTransAddLot.Header = [];
@@ -1772,7 +1774,7 @@ export class OutOrderComponent implements OnInit {
         Type: "",
         DiServerToken: localStorage.getItem("Token"),
         CompanyDBId: localStorage.getItem("CompID"),
-        TransType: "WHS",
+        TransType: "",
         GUID: localStorage.getItem("GUID"),
         UsernameForLic: localStorage.getItem("UserId"),
         BaseEntry: this.itrCode,

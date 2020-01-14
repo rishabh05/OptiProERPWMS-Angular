@@ -228,5 +228,32 @@ export class InboundService {
     GUID: localStorage.getItem("GUID"), UsernameForLic: localStorage.getItem("UserId") }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/Printing/WMSPrintingService", jObject, this.commonService.httpOptions);
    }
+
+   GetPalletListsForGRPO(opType: number, itemCode: string, BinCode: string): Observable<any> {
+    var jObject = {
+      PalletCode: JSON.stringify([{
+        COMPANYDBNAME: localStorage.getItem("CompID"),
+        OPERATIONTYPE: "" + opType,
+        WhseCode: localStorage.getItem("whseId"),
+        ITEMCODE: itemCode,
+        BinCode: BinCode
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetPalletListsForGRPO", jObject, this.commonService.httpOptions);
+  }
+
+
+  IsPalletValidForGRPO(palletCode: string, itemCode: string, BinCode: string): Observable<any> {
+    var jObject = {
+      PalletCode: JSON.stringify([{
+        COMPANYDBNAME: localStorage.getItem("CompID"),
+        WhseCode: localStorage.getItem("whseId"),
+        PalletCode: palletCode,
+        ITEMCODE: itemCode,
+        BinCode: BinCode
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/IsPalletValidForGRPO", jObject, this.commonService.httpOptions);
+  }
 }
 

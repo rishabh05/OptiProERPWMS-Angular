@@ -2268,9 +2268,9 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
   }
 
-  public getPalletList() {
+  public GetPalletListsForGRPO() {
     this.showLoader = true;
-    this.commonservice.getPalletList(PalletOperationType.None, this.openPOLineModel[0].ITEMCODE).subscribe(
+    this.inboundService.GetPalletListsForGRPO(PalletOperationType.None, this.openPOLineModel[0].ITEMCODE, this.RecvbBinvalue).subscribe(
       (data: any) => {
         this.showLoader = false;
         // console.log(data);
@@ -2329,15 +2329,12 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   }
 
   OnPalletChange() {
-
-
-
     if (this.palletValue == "" || this.palletValue == undefined) {
       return;
     }
 
     this.showLoader = true;
-    this.commonservice.isPalletValid(this.palletValue).subscribe(
+    this.inboundService.IsPalletValidForGRPO(this.palletValue, this.openPOLineModel[0].ITEMCODE, this.RecvbBinvalue).subscribe(
       (data: any) => {
         this.showLoader = false;
         // console.log(data);
