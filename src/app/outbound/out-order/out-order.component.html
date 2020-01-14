@@ -184,7 +184,7 @@
                         <kendo-grid class="no-shadow" [kendoGridBinding]="soItemsDetail" [resizable]="true"
                             [pageSize]="pageSize" [pageable]="pagable" [sortable]="true" [filterable]=isColumnFilter
                             [groupable]=isColumnGroup [height]=gridHeight [selectable]="true" [rowClass]="rowCallback"
-                            (selectionChange)="openPOByUOM($event,soItemsDetail.ITEMCODE)" #gridItem>
+                             #gridItem>
 
                             <!-- grid for mobile start -->
                             <kendo-grid-column media="(max-width: 767px)" title="{{'Items'|translate}}"
