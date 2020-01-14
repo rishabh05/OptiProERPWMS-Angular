@@ -24,7 +24,7 @@
                                     </button> -->
                                 </div>
                                 <div class="d-flex ml-1">
-                                    <button tabIndex="-1" type="button"  id="binTransferScanItemCodeBtn" (mousedown)="onInboundScan()"
+                                    <button tabIndex="-1" type="button"  id="prodOrderScanOrderNoBtn" (mousedown)="onInboundScan()"
                                         class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
@@ -110,7 +110,7 @@
                     class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-check"></span>
                     {{'Submit'|translate}}</button>
 
-                <button type="button" id="hid_btnBinTransferItemCodeScanBtn" style="visibility:hidden"
+                <button type="button" id="hid_btnProdOrderScanBtn" style="visibility:hidden"
                     (click)="onHiddenProdOrderScanClick()"
                     class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
                     <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn

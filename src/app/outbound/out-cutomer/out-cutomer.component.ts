@@ -574,10 +574,11 @@ export class OutCutomerComponent implements OnInit {
         error => {
           this.showLookupLoader = false;
           if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
-            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));     
           }
           else {
             this.toastr.error('', error);
+            this.showLookupLoader = false;
           }
         }
 

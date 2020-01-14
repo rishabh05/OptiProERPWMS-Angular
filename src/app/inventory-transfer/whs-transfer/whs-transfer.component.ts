@@ -27,6 +27,7 @@ export class WhsTransferComponent implements OnInit {
   showLoader: boolean = false;
   pageHeading: string; 
   isfromWhsDisabled: boolean;
+  fromWhere:Number = 1;
   @ViewChild("scanToWhse") scanToWhse;
   @ViewChild("scanFromWhse") scanFromWhse;
 
@@ -43,10 +44,12 @@ export class WhsTransferComponent implements OnInit {
       this.fromWhse = localStorage.getItem("whseId");
       this.pageHeading = this.translate.instant("WarehouseTransfer");
       this.isfromWhsDisabled = true;
+      this.fromWhere = 1; 
     }else{
       this.toWhse = localStorage.getItem("whseId");
       this.pageHeading = this.translate.instant("InventoryTransferRequest");
       this.isfromWhsDisabled = false;
+      this.fromWhere = 2;
     }
   }
 
@@ -230,4 +233,13 @@ export class WhsTransferComponent implements OnInit {
     }
     this.OnToWarehouseChange();
   }
+
+  onHiddenFromWhsScanClick(){
+    var inputValue = (<HTMLInputElement>document.getElementById('whsTransferFromWhsInputField')).value;
+    if (inputValue.length > 0) {
+      this.toWhse = inputValue;
+    }
+   // this.OnToWarehouseChange(); call the method for that
+  }
 }
+ 
