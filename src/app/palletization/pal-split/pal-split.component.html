@@ -85,7 +85,7 @@
             <label for="inputPassword" class="col-sm-3 col-form-label">{{'ItemCode'|translate}}</label>
             <div class="col-sm-9">
               <div class="input-group input-group-sm">
-                <input id="PalSplitItemCodeInput" type="text" class="form-control form-control-sm" placeholder="{{'ItemCode'|translate}}" name="itemCode"
+                <input #scanItemCode id="PalSplitItemCodeInput" type="text" class="form-control form-control-sm" placeholder="{{'ItemCode'|translate}}" name="itemCode"
                   [(ngModel)]="itemCode" (blur)="OnItemCodeChange()">
                 <div class="input-group-append  has-seprate-btn">
                   <button class="k-button k-primary btn" type="button" (click)="OnItemCodeLookupClick()">
@@ -111,7 +111,7 @@
             <label for="inputPassword" class="col-sm-3 col-form-label">{{'BatchSerial_No'|translate}}</label>
             <div class="col-sm-9">
               <div class="input-group input-group-sm">
-                <input type="text" id="PalSplitBatchSrInput" name="batchSerialNo" class="form-control form-control-sm"
+                <input #scanBatchSerial type="text" id="PalSplitBatchSrInput" name="batchSerialNo" class="form-control form-control-sm"
                   [(ngModel)]="batchSerialNo" (blur)="OnLotsChange()" placeholder="{{'BatchSerial_No'|translate}}">
                 <div class="input-group-append has-seprate-btn">
                   <button class="k-button k-primary btn" (click)="OnBatchSerialLookupClick()" type="button">
@@ -134,7 +134,7 @@
             <label for="inputPassword" class="col-sm-3 col-form-label">{{'Quantity'|translate}}</label>
             <div class="col-sm-9">
               <div class="input-group input-group-sm">
-                <input type="number" id="qty" class="form-control form-control-sm text-right" [(ngModel)]="qty" name='qty'
+                <input #scanQty type="number" id="qty" class="form-control form-control-sm text-right" [(ngModel)]="qty" name='qty'
                   placeholder="{{'Quantity'|translate}}" [attr.disabled]="isSerailTrackedItem ? '' : null">
                 <div class="ml-1 d-flex">
                   <button class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button"

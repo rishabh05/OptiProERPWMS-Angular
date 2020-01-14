@@ -128,7 +128,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'PhyCount_CountedQty'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm text-right" name='CountedQty' id="countedQtyInputPC"
+                                <input #scanCountedQty type="text" class="form-control form-control-sm text-right" name='CountedQty' id="countedQtyInputPC"
                                  [(ngModel)]="CountedQty" placeholder="{{'PhyCount_CountedQty'|translate}}"
                                     (blur)="onCountedQtyChanged()">
                                 <div class="input-group-append">

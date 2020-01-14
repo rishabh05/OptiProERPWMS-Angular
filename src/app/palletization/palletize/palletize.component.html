@@ -113,7 +113,7 @@
             <label for="inputPassword" class="col-sm-3 col-form-label">{{'Quantity'|translate}}</label>
             <div class="col-sm-9">
               <div class="d-flex">
-                <input type="number" class="form-control form-control-sm text-right" #Quantity name="qty" [(ngModel)]=qty
+                <input type="number" class="form-control form-control-sm text-right" #scanQuantity name="qty" [(ngModel)]=qty
                   placeholder="{{'Quantity'|translate}}" headerClass="text-right" [attr.disabled]="isSerailTrackedItem ? '' : null">
                 <div class="ml-1 d-flex">
                   <button tabIndex="-1" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button"

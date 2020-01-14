@@ -76,6 +76,9 @@ export class BinTransferComponent implements OnInit {
   @ViewChild("scanLotNo") scanLotNo;
   @ViewChild("scanPallet") scanPallet;
   @ViewChild("scanToBinOther") scanToBinOther;
+  @ViewChild("scanTransQty") scanTransQty;
+  @ViewChild("scanReason") scanReason;
+  @ViewChild("scanReasonByPallet") scanReasonByPallet;
 
   constructor(private commonservice: Commonservice, private activatedRoute: ActivatedRoute,
     private router: Router, private inventoryTransferService: InventoryTransferService,
@@ -1041,7 +1044,7 @@ export class BinTransferComponent implements OnInit {
           break;
         }
       }
-      this.scanPallet.nativeElement.focus();
+      this.scanToBinOther.nativeElement.focus();
     }
     else {
       if (this.lookupfor == "ItemsList") {
@@ -1061,7 +1064,13 @@ export class BinTransferComponent implements OnInit {
         //   this.getDefaultBin();
         // }
         this.CheckTrackingandVisiblity();
-        this.scanItemCode.nativeElement.focus();
+        setTimeout(() => {
+          if(this.ItemTracking == 'N'){
+            this.scanFromBin.nativeElement.focus();
+          } else {
+            this.scanLotNo.nativeElement.focus();
+          }
+        }, 500);
       } else if (this.lookupfor == "BatchNoList") {
         this.lotValue = $event[0];
         this.fromBin = $event[6];
@@ -1070,7 +1079,7 @@ export class BinTransferComponent implements OnInit {
         this.SysNumber = $event[9];
         this.palletNo = $event[12];
         this.actualLotNo = $event[13];
-        this.scanLotNo.nativeElement.focus();
+        this.scanFromBin.nativeElement.focus();
       }
       else if (this.lookupfor == "BatchNoList2") {
         this.lotValue = $event[0];
@@ -1080,7 +1089,7 @@ export class BinTransferComponent implements OnInit {
         this.SysNumber = $event[9];
         this.palletNo = ""
         this.actualLotNo = $event[0];
-        this.scanLotNo.nativeElement.focus();
+        this.scanFromBin.nativeElement.focus();
         // this.palletNo = $event[12];
         // this.actualLotNo = $event[13];
       }
@@ -1089,20 +1098,20 @@ export class BinTransferComponent implements OnInit {
         this.fromBin = $event[3];
         this.transferQty = $event[6];
         this.onHandQty = $event[6];
-        this.scanFromBin.nativeElement.focus();
+        this.scanToBin.nativeElement.focus();
       } else if (this.lookupfor == "NTrackFromBin") {
         this.fromBin = $event[3];
         this.transferQty = $event[6];
         this.onHandQty = $event[6];
-        this.scanFromBin.nativeElement.focus();
+        this.scanToBin.nativeElement.focus();
       } else if (this.lookupfor == "toBinsList") {
         this.toBin = $event[0];
         //this.prepareByPalletData();
         if (this.radioSelected == 0) {
-          this.scanToBin.nativeElement.focus();
+          this.scanTransQty.nativeElement.focus();
         } else {
           //other to bin Field
-          this.scanToBinOther.nativeElement.focus();
+          this.scanReasonByPallet.nativeElement.focus();
         }
       }
       this.formatTransferNumbers();
@@ -1233,6 +1242,13 @@ export class BinTransferComponent implements OnInit {
           this.TransferedItemsDetail = [];
           this.selectedPallets = [];
           this.clearData();
+          setTimeout(()=>{
+            if (this.radioSelected == 0) {
+              this.scanItemCode.nativeElement.focus();
+            } else {
+              this.scanPallet.nativeElement.focus();
+            }
+          }, 200)
           break;
       }
     } else {
@@ -1256,20 +1272,6 @@ export class BinTransferComponent implements OnInit {
 
   handleCheckChange(event) {
     console.log("on radio handleCheckChange");
-    if (event.toElement.name == "byPlt") {
-      console.log("by element: plt")
-      setTimeout(() => {
-        this.scanPallet.nativeElement.focus();
-      }, 100);
-      //this.scanPallet.nativeElement.focus();
-    } else if (event.toElement.name == "byItem") {
-      console.log("by element: item")
-
-      setTimeout(() => {
-        this.scanItemCode.nativeElement.focus();
-      }, 100);
-    }
-
     this.checkChangeEvent = event;
     console.log("check change:" + this.checkChangeEvent);
     console.log(this.checkChangeEvent);
@@ -1281,6 +1283,20 @@ export class BinTransferComponent implements OnInit {
       this.checkChangeEvent.preventDefault();
       this.showDialog("RadioBtnChange", this.translate.instant("yes"), this.translate.instant("no"),
         this.translate.instant("Plt_DataDeleteMsg"));
+    }
+
+    if (this.TransferedItemsDetail.length == 0) {
+      if (event.toElement.name == "byPlt") {
+        console.log("by element: plt")
+        setTimeout(() => {
+          this.scanPallet.nativeElement.focus();
+        }, 100);
+      } else if (event.toElement.name == "byItem") {
+        console.log("by element: item")
+        setTimeout(() => {
+          this.scanItemCode.nativeElement.focus();
+        }, 100);
+      }
     }
   }
 

@@ -238,10 +238,10 @@ export class PalTransferComponent implements OnInit {
       // }
       this.palletData = [];
       this.toPalletNo = '';
-      this.fromPalletInput.nativeElement.focus()
+      this.toPalletInputs.nativeElement.focus()
     } else if (this.fromPalletLookup == "to_pallet") {
       this.toPalletNo = lookupValue.Code;
-      this.toPalletInputs.nativeElement.focus()
+      // this.toPalletInputs.nativeElement.focus()
     }
 
     if (this.fromPalletNo != '' && this.toPalletNo != '') {

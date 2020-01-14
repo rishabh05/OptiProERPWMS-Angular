@@ -16,6 +16,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
   
   @ViewChild('VendScanInputField') vendInputScanField:ElementRef;
   @ViewChild('poScanInputField') poScanInputField;
+  @ViewChild('scanVenderRefNo') scanVenderRefNo;
   public viewLines: boolean;
   showLookupLoader: boolean = true; 
   VendRefNo: string="";
@@ -239,7 +240,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
         this.showNext = true;
         this.detailsAvailable = true;
         this.VendCode1= this.VendCode;
-        this.poScanInputField.nativeElement.focus();
+        this.scanVenderRefNo.nativeElement.focus();
       }else{
         if(this.VendCode1 != $event[0]){
           this.poCode = "";
@@ -249,7 +250,8 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
         this.VendCode1= this.VendCode;
         this.showNext = true;
         this.detailsAvailable = true;
-        this.vendInputScanField.nativeElement.focus();
+        //this.vendInputScanField.nativeElement.focus();
+        this.poScanInputField.nativeElement.focus();
       }
     }
   }

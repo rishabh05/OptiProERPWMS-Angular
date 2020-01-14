@@ -338,7 +338,7 @@ export class InboundPolistComponent implements OnInit {
         this.openPOLines()
         //reset grid setting to null
         this.persistingService.set('gridSettings', null);
-        this.poScanInputField.nativeElement.focus();
+        this.scanItemCode.nativeElement.focus();
       }
       else if (this.lookupfor == "POItemList") {
         this.itemCode = $event[0];

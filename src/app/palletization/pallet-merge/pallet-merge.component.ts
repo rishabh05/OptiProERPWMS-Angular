@@ -204,11 +204,11 @@ export class PalletMergeComponent implements OnInit {
       if (!this.containPallet(this.selectedFromPallets, lookupValue.Code)) {
         this.selectedFromPallets.push(lookupValue);
       }
-      this.scanFromPallet.nativeElement.focus()
+      this.scanToPallet.nativeElement.focus()
     } else if (this.fromPalletLookup == "to_pallet") {
       this.showLookup = false;
       this.toPalletNo = lookupValue.Code;
-      this.scanToPallet.nativeElement.focus()
+      // this.scanToPallet.nativeElement.focus()
       if (this.containPallet(this.selectedFromPallets, this.toPalletNo)) {
         this.toastr.error('', this.translate.instant("Plt_AlreadySelected"));
         this.toPalletNo = '';

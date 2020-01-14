@@ -63,6 +63,7 @@ export class PhysicalCountComponent implements OnInit {
   @ViewChild('scanPC') scanPC;
   @ViewChild('scanItemCode') scanItemCode;
   @ViewChild('scanBatchSerial') scanBatchSerial;
+  @ViewChild('scanCountedQty') scanCountedQty;
 
   constructor(private phycountService: PhysicalcountService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService) {
     let userLang = navigator.language.split('-')[0];
@@ -443,7 +444,13 @@ export class PhysicalCountComponent implements OnInit {
       this.QtyOnHand = "0";
       this.batchserno = "";
       this.CheckTrackingandVisiblity();
-      this.scanItemCode.nativeElement.focus()
+      setTimeout(()=>{
+        if(this.ItemTracking == "N"){
+          this.scanCountedQty.nativeElement.focus()
+        } else {
+          this.scanBatchSerial.nativeElement.focus()
+        }
+      }, 200)
     } else if (this.lookupfor == "ShowBatachSerList") {
       this.batchserno = $event[0];
       this.ItemCode = $event[2];
@@ -453,7 +460,7 @@ export class PhysicalCountComponent implements OnInit {
       this.CountedQty = $event[7];
       this.QtyOnHand = $event[7];
       this.CheckTrackingandVisiblity();
-      this.scanBatchSerial.nativeElement.focus()
+      this.scanCountedQty.nativeElement.focus()
     }
     this.formatCountedQty();
     this.formatOnHandQty();

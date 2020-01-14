@@ -46,7 +46,10 @@ export class PalSplitComponent implements OnInit {
   newCreatedPalletNo: string;
   @ViewChild('scanFromPallet') scanFromPallet
   @ViewChild('scanToPallet') scanToPallet
-  
+  @ViewChild('scanItemCode') scanItemCode
+  @ViewChild('scanBatchSerial') scanBatchSerial
+  @ViewChild('scanQty') scanQty
+
   constructor(private commonservice: Commonservice,
     private router: Router, private toastr: ToastrService, private translate: TranslateService) {
     this.showHideBtnTxt = this.translate.instant("showGrid");
@@ -225,6 +228,7 @@ export class PalSplitComponent implements OnInit {
       this.showLoader = false;
       this.fromPalletNo = lookupValue.Code;
       this.savedPalletsArray = [];
+      this.scanToPallet.nativeElement.focus();
       this.resetVariables();
     } else if (this.fromPalletLookup == "to_pallet") {
       this.toWhse = lookupValue.U_OPTM_WAREHOUSE_LOC;
@@ -236,6 +240,7 @@ export class PalSplitComponent implements OnInit {
       }
       this.batchSerialNo = '';
       this.qty = 0;
+      this.scanItemCode.nativeElement.focus();
     } else if (this.lookupFor == "ItemsList") {
       this.itemCode = lookupValue.ITEMCODE;
       this.batchSerialNo = '';
@@ -246,6 +251,7 @@ export class PalSplitComponent implements OnInit {
       } else {
         this.isSerailTrackedItem = false;
       }
+      this.scanBatchSerial.nativeElement.focus();
     } else if (this.lookupFor == "ShowBatachSerList") {
       this.batchSerialNo = lookupValue.LOTNO;
       this.expDate = "" + lookupValue.EXPDATE;
@@ -254,6 +260,7 @@ export class PalSplitComponent implements OnInit {
       this.openQty = Number.parseInt(lookupValue.TOTALQTY);
       this.validateRemainigQuantity();
       //this.qty = this.openQty;
+      this.scanQty.nativeElement.focus();
     }
   }
 

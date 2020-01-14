@@ -97,7 +97,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   ActualSRBatchColumnText: string = "";
   showNewPallet: boolean = false;
   pageSize: number = Commonservice.pageSize;
-  @ViewChild('Quantity') QuantityField;
+
   serialBatchNo: string = "";
 
   //receipt production variables.
@@ -118,6 +118,8 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   @ViewChild('scanPallet') scanPallet: ElementRef;
   @ViewChild('scanTargetWhse') scanTargetWhse: ElementRef;
   @ViewChild('scanTargetBin') scanTargetBin: ElementRef;
+  @ViewChild('scanBatchSerial') scanBatchSerial: ElementRef;
+  @ViewChild('scanQty') scanQty;
 
   constructor(private inboundService: InboundService, private commonservice: Commonservice,
     private router: Router, private toastr: ToastrService, private translate: TranslateService,
@@ -677,7 +679,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     }
     if (!Number.isInteger(this.qty)) {
       this.toastr.error('', this.translate.instant("DecimalQuantity"));
-      this.QuantityField.nativeElement.focus();
+      this.scanQty.nativeElement.focus();
       return;
     }
     if (this.RecvbBinvalue == "" || this.RecvbBinvalue == undefined) {
@@ -792,7 +794,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     }
     if (!Number.isInteger(this.qty)) {
       this.toastr.error('', this.translate.instant("DecimalQuantity"));
-      this.QuantityField.nativeElement.focus();
+      this.scanQty.nativeElement.focus();
       return;
     }
     if (this.RecvbBinvalue == "" || this.RecvbBinvalue == undefined) {
@@ -1967,7 +1969,15 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         } else {
           this.RecvbBinvalue = $event[0];
         }
-        this.RecBinVal.nativeElement.focus();
+        if(this.tracking == "N"){
+          this.scanQty.nativeElement.focus();
+        } else {
+          if(localStorage.getItem('FromReceiptProd') == 'true'){
+            this.scanPallet.nativeElement.focus();
+          } else {
+            this.scanBatchSerial.nativeElement.focus();
+          }
+        }
       }
       else if (this.lookupfor == "toWhsList") {
         // console.log("value of lots" + $event);
@@ -1975,10 +1985,12 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         this.targetWhse = $event[0];
         //this.itemCode = $event[2];
         this.targetBin = "";
-        this.scanTargetWhse.nativeElement.focus();
+        this.scanTargetBin.nativeElement.focus();
       } else if (this.lookupfor == "PalletList") {
         this.palletValue = $event[0];
-        this.scanPallet.nativeElement.focus();
+        if(this.scanQty!=undefined && this.scanQty !=null){
+          this.scanQty.nativeElement.focus();
+        }
       }
     }
   }
@@ -2176,11 +2188,11 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
           if ((autoLots[0].AUTOLOT == "Y" || autoLots[0].AUTOLOT == "N" || autoLots[0].AUTOLOT == null)
             && selectedMode === "WMS" && tracking == "S" && this.ScanInputs != "") {
             //oAddserial.setValue("1");  I think not needed to set value because we are already setting in above code.
-            this.QuantityField.nativeElement.disabled = true;
+            this.scanQty.nativeElement.disabled = true;
           }
           else {
             //oAddserial.setValue("");
-            this.QuantityField.nativeElement.disabled = false;
+            this.scanQty.nativeElement.disabled = false;
           }
 
         }
