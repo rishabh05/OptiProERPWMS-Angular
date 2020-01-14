@@ -42,6 +42,7 @@ export class OutCutomerComponent implements OnInit {
   public CustRefNo: any = "";
   @ViewChild('scanSO') scanSO
   @ViewChild('scanCustomerCode') scanCustomerCode
+  @ViewChild('scanTracking') scanTracking
 
   constructor(private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) { }
 
@@ -224,7 +225,7 @@ export class OutCutomerComponent implements OnInit {
         }
         //===================================
 
-        this.scanSO.nativeElement.focus()
+        this.scanTracking.nativeElement.focus()
 
       } else {
         this.selectedCustomerElement = lookupValue;
@@ -244,7 +245,7 @@ export class OutCutomerComponent implements OnInit {
         localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
         CurrentOutBoundData.CustomerData = outbound.CustomerData;
         this.outbound = outbound;
-        this.scanCustomerCode.nativeElement.focus()
+        this.scanSO.nativeElement.focus()
       }
     }
   }

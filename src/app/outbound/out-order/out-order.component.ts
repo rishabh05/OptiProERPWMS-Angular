@@ -255,7 +255,7 @@ export class OutOrderComponent implements OnInit {
         this.showLookupLoader = false;
         this.palletNo = lookupValue.Code;
         this.getPalletData();
-        // this.PalletNo.nativeElement.focus()
+        this.scanItemCode.nativeElement.focus()
       } else { 
         if (this.lookupfor == "out-order") {
           this.outbound.OrderData = lookupValue;
@@ -264,7 +264,7 @@ export class OutOrderComponent implements OnInit {
           localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
           this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
           this.openSOOrderList();
-          this.scanSO.nativeElement.focus()
+          this.PalletNo.nativeElement.focus()
         } else if (this.lookupfor == "ITRList") {
           this.resetITRFields();
           //
@@ -278,7 +278,7 @@ export class OutOrderComponent implements OnInit {
           };
           localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
           this.getITRItemList();
-          this.DocNum.nativeElement.focus()
+          this.PalletNo.nativeElement.focus()
         } else if (this.lookupfor == "toBinsList") {
           this.toBinNo = lookupValue.BINNO;
           this.outbound.ITRToBinNo = { 
