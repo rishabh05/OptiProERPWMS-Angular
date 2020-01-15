@@ -66,7 +66,8 @@ export class OutOrderComponent implements OnInit {
   temoraryHideItemLookupRow: boolean = false;
   pagetitle: any ="";
   isPalletizationEnable: boolean = false
-
+  ItemCode: string;
+  
   docEntry:any;   // this variable is used only for single itr submit request for multiple we have to change implementation.
   @ViewChild('scanSO') scanSO;
   @ViewChild('DocNum') DocNum;
@@ -1412,46 +1413,40 @@ export class OutOrderComponent implements OnInit {
 
   //--------------------------item scanning-----
 
-  ItemCode: string;
+  
   public onItemChange() {
-    if (this.selectedCustomer != null && this.selectedCustomer != undefined
-      && this.selectedCustomer.CustomerCode != '' && this.selectedCustomer.CustomerCode != null) {
+    if (this.orderNumber != null && this.ItemCode != null
+      && this.ItemCode != "" 
+      && this.ItemCode != undefined) {
 
-      if (this.orderNumber != null && this.ItemCode != null) {
-        this.outboundservice.GetItemCode(this.ItemCode).subscribe(
-          resp => {
-            if (resp != null && resp.length > 0) {
-              this.ItemCode = resp[0].ItemCode;
+      this.outboundservice.GetItemCode(this.ItemCode).subscribe(
+        resp => {
+          if (resp != null && resp.length > 0) {
+            this.ItemCode = resp[0].ItemCode;
 
-              var index = -1;
-              for(var i=0; i<this.soItemsDetail.length; i++){
-                if(this.ItemCode == this.soItemsDetail[i].ITEMCODE){
-                  index = i;
-                }
+            var index = -1;
+            for(var i=0; i<this.soItemsDetail.length; i++){
+              if(this.ItemCode == this.soItemsDetail[i].ITEMCODE){
+                index = i;
               }
-              if(index == -1){
-                this.toastr.error('', this.translate.instant("Outbound_NoDataFound"));
-              }else{
-                document.getElementById("itemcodeid").focus();
-                this.openNextScreen(index);
-              }
-            } else {
-              this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
             }
-          },
-          error => {
-            this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
-            this.showLookupLoader = false;
-            this.showLookup = false;
+            if(index == -1){
+              this.toastr.error('', this.translate.instant("Outbound_NoDataFound"));
+            }else{
+              document.getElementById("itemcodeid").focus();
+              this.openNextScreen(index);
+            }
+          } else {
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
           }
-        );
-      }
-    }
-    else {
-      this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
-      this.showLookupLoader = false;
-      this.showLookup = false;
-    }
+        },
+        error => {
+          this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
+          this.showLookupLoader = false;
+          this.showLookup = false;
+        }
+      );
+    } 
   }
 
   onITRlookupClick() {
