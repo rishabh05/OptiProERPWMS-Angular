@@ -14,7 +14,7 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { GridComponent } from '@progress/kendo-angular-grid';
 import { UIHelper } from '../../helpers/ui.helpers';
 import { State } from '@progress/kendo-data-query';
-import { CommonConstants } from 'src/app/const/common-constants';
+import { CommonConstants } from '../../const/common-constants';
 // import { UIHelper } from '../../../helpers/ui.helpers';
 // import { Http, ResponseContentType } from '@angular/http';
 
@@ -118,8 +118,8 @@ export class LookupComponent implements OnInit {
     else if (this.lookupfor == "RecvBinList") {
       this.showRecvBinList();
     }
-    else if (this.lookupfor == "VendorList") {
-      this.showVendorList();
+    else if (this.lookupfor == "CTList") {
+      this.showContainerType();
     }
     else if (this.lookupfor == "POList") {
       this.showPOList();
@@ -402,22 +402,46 @@ export class LookupComponent implements OnInit {
     }
   }
 
-  showVendorList() {
+  showContainerType() {
     this.table_head = [
       {
         field: 'CARDCODE',
-        title: this.translate.instant("VendorCode"),
+        title: this.translate.instant("CT_ContainerType"),
         type: 'text',
         width: '100'
       },
       {
         field: 'CARDNAME',
-        title: this.translate.instant("Inbound_VendorName"),
+        title: this.translate.instant("CT_Description"),
         type: 'text',
+        width: '100'
+      },
+      {
+        field: 'CARDCODE',
+        title: this.translate.instant("CT_Length"),
+        type: 'numeric',
+        width: '100'
+      },
+      {
+        field: 'CARDNAME',
+        title: this.translate.instant("CT_Width"),
+        type: 'numeric',
+        width: '100'
+      },
+      {
+        field: 'CARDCODE',
+        title: this.translate.instant("CT_Height"),
+        type: 'numeric',
+        width: '100'
+      },
+      {
+        field: 'CARDNAME',
+        title: this.translate.instant("CT_Max_Width"),
+        type: 'numeric',
         width: '100'
       }
     ];
-    this.lookupTitle = this.translate.instant("VendorList");
+    this.lookupTitle = this.translate.instant("CT_ContainerType");
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
         this.dialogOpened = true;
