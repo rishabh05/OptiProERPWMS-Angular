@@ -22,8 +22,8 @@
   "Login_licenseFailed": "License failed",
   
   "2":"Home -> Left side Menus",
-  "ContainerType": "Container Type",
-  "ContainerTypeRelation": "Container Type Relation",
+  "Inbound": "Inbound",
+  "Outbound": "Outbound",
   "InventoryTransfer": "Inventory Transfer",
   "WarehouseTransfer": "Warehouse Transfer",
   "BinTransfer": "Bin Transfer",
@@ -41,15 +41,6 @@
   "InventoryEnquiry": "Inventory Enquiry",
   "issueForProduction": "Issue For Production",
   "receiptFromProduction": "Receipt From Production",
-
-  "CT_ContainerType":"Container Type", 
-  "CT_Description":"Description", 
-  "CT_Length":"Length", 
-  "CT_Width":"Width", 
-  "CT_Height":"Height", 
-  "CT_Max_Width":"Max_Width", 
-  "CT_Add":"Add", 
-  "CT_DeleteAll":"Delete All", 
 
   "3":"Dashboard",
   "Dashboard_AppVersion":"Version: ",

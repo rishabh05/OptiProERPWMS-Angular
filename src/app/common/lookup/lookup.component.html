@@ -1,70 +1,49 @@
 <!-- Grid Modal-->
-<!-- <kendo-dialog [width]="750"  *ngIf="dialogOpened" (close)="close_kendo_dialog()"> -->
+<kendo-dialog [width]="750"  *ngIf="dialogOpened" (close)="close_kendo_dialog()">
 
-<kendo-dialog-titlebar>
-    {{lookupTitle}}
-</kendo-dialog-titlebar>
-<kendo-grid [kendoGridBinding]="serviceData" [filterable]=isColumnFilter [groupable]=isColumnGroup [selectable]="true" [sort]="state.sort"
-    [filter]="state.filter" [resizable]="true" [skip]="skip" (selectionChange)="on_item_select($event)" style="max-height:400px"
-    class="no-shadow" [pageSize]="lookupPageSize" [pageable]="lookupPagable">
+    <kendo-dialog-titlebar>
+        {{lookupTitle}}
+    </kendo-dialog-titlebar>
+    <kendo-grid  [kendoGridBinding]="serviceData"
+        [filterable]=isColumnFilter [groupable]=isColumnGroup [selectable]="true"  [sort]="state.sort"
+        [filter]="state.filter" [resizable]="true" [skip]="skip" (selectionChange)="on_item_select($event)" 
+        style="max-height:400px" class="no-shadow" [pageSize]="lookupPageSize" [pageable]="lookupPagable">
 
-    <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="1">
-        <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
-        <kendo-pager-numeric-buttons [buttonCount]="5"></kendo-pager-numeric-buttons>
-        <kendo-pager-next-buttons></kendo-pager-next-buttons>
-        <kendo-pager-info></kendo-pager-info>
-    </ng-template>
-    <!-- grid template start -->
-    <ng-template kendoGridToolbarTemplate>
-
-        <!-- checkbox -->
-        <form class="k-form opti_show-hide-grid-column-filter float-left opti_hide-in-mobile pl-0 pt-0">
-            <div class="k-form-field d-flex">
-                <input #chkFilter type="checkbox" (change)="onFilterChange(chkFilter,gridItem)" id="opti_SalesOrderListColumnFilterID" [(ngModel)]="isColumnFilter"
-                    class="k-checkbox" name="columnfilter" />
-                <label class="k-checkbox-label" for="opti_SalesOrderListColumnFilterID">Enable Filter</label>
-            </div>
-        </form>
-
-    </ng-template>
-
-
-    <kendo-grid-checkbox-column *ngIf="showSelection==true" title="Select" [width]="25">
-        <ng-template kendoGridHeaderTemplate let-column let-rowIndex="rowIndex">
-            <div class="custom-control custom-checkbox">
-                <input type="checkbox" name="parent_checkbox" #Selectallcheckedvalue (change)="on_Selectall_checkbox_checked(Selectallcheckedvalue.checked)"
-                    id="parent_checkbox_{{rowIndex}}"  class="custom-control-input">
-                <label class="custom-control-label" for="parent_checkbox_{{rowIndex}}"></label>
-            </div>
+        <ng-template kendoPagerTemplate let-totalPages="totalPages" let-currentPage="1">
+            <kendo-pager-prev-buttons></kendo-pager-prev-buttons>
+            <kendo-pager-numeric-buttons [buttonCount]="5"></kendo-pager-numeric-buttons>
+            <kendo-pager-next-buttons></kendo-pager-next-buttons>
+            <kendo-pager-info></kendo-pager-info>
         </ng-template>
-        <ng-template kendoGridCellTemplate let-idx='rowIndex' let-di='dataItem'>
-            <div class="k-form-field d-flex center-checkbox">
-                <input #chkSelection type="checkbox"  (change)="onCheckboxClick(chkSelection.checked,idx)"
-                    id="chkbox-{{idx}}" class="k-checkbox" name="columnfilter" />
-                <label class="k-checkbox-label" for="chkbox-{{idx}}"></label>
-            </div>
-        </ng-template>
-    </kendo-grid-checkbox-column>
+        <!-- grid template start -->
+        <ng-template kendoGridToolbarTemplate>
 
-    <kendo-grid-column *ngFor="let column of table_head" field="{{column.field}}" title="{{column.title}}" filter="{{column.type}}"
-        format="{{column.format}}" width="{{column.width}}" minResizableWidth="{{column.width}}" headerClass={{column.headerClass}}
-        class={{column.class}}></kendo-grid-column>
-
-    <kendo-grid-column [sortable]="false" title="Action" filter="numeric" [filterable]="false">
-        <ng-template kendoGridCellTemplate let-dataItem>
-            <button type="button" class="btn btn-sm mr-10 " (click)="onEditClick(dataItem)" title="Action">
-                <i class="opti-icon-arrow-next"></i>
-            </button>
-            <button type="button" class="btn btn-danger" (click)="onDeleteRowClick(dataItem)" title="Action">
-            </button>
-
-            <button type="button" class="btn btn-sm mr-10 " (click)="show_association(dataItem)" title="Action">
-                <i class="opti-icon-arrow-next"></i>
-            </button>
-
+            <!-- checkbox -->
+            <form class="k-form opti_show-hide-grid-column-filter float-left opti_hide-in-mobile pl-0 pt-0">
+                <div class="k-form-field d-flex">
+                    <input #chkFilter  type="checkbox" (change)="onFilterChange(chkFilter,gridItem)" id="opti_SalesOrderListColumnFilterID"
+                        [(ngModel)]="isColumnFilter" class="k-checkbox" name="columnfilter" />
+                    <label class="k-checkbox-label" for="opti_SalesOrderListColumnFilterID">Enable Filter</label>
+                </div>
+            </form>
 
         </ng-template>
+        <kendo-grid-checkbox-column *ngIf="showSelection==true" title="Select" [width]="25">
+            <ng-template  kendoGridCellTemplate let-idx='rowIndex' let-di='dataItem'>
+                <div class="k-form-field d-flex center-checkbox">
+                    <input #chkSelection type="checkbox" [disabled]='di.OldData' [checked]='di.OldData' (change)="onCheckboxClick(chkSelection.checked,idx)" id="chkbox-{{idx}}" class="k-checkbox"
+                        name="columnfilter" />
+                        
+                    <label class="k-checkbox-label" for="chkbox-{{idx}}"></label>
+                </div>
+            </ng-template>
+        </kendo-grid-checkbox-column>
+        <!-- <kendo-grid-checkbox-column  *ngIf="showSelection==true" title="Select" [width]="25"></kendo-grid-checkbox-column> -->
 
-    </kendo-grid-column>
+        <kendo-grid-column *ngFor="let column of table_head" field="{{column.field}}" title="{{column.title}}" filter="{{column.type}}"
+            format="{{column.format}}" width="{{column.width}}" minResizableWidth="{{column.width}}" headerClass={{column.headerClass}} class={{column.class}}></kendo-grid-column>
 
-</kendo-grid>
+    </kendo-grid>
+    <div class="mt-3 clearfix" *ngIf="showSelection==true"></div>
+    <button id="btnDone" *ngIf="showSelection==true" (click)="Done()">Done</button>
+</kendo-dialog>

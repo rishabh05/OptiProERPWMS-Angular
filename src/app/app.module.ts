@@ -35,7 +35,7 @@ export function createTranslateLoader(http: HttpClient) {
    
     BrowserAnimationsModule,
     HttpClientModule, 
-    ToastrModule.forRoot(), 
+    ToastrModule.forRoot(),
     PerfectScrollbarModule,
     FormsModule,
     TranslateModule.forRoot({
