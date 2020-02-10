@@ -44,6 +44,8 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
   ngAfterViewInit(): void {
     this.vendInputScanField.nativeElement.focus();
   }
+
+  
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent,private persistingService:StatePersistingServiceService) {
     let userLang = navigator.language.split('-')[0];
