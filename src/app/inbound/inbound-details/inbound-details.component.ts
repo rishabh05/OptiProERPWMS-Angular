@@ -45,7 +45,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
     this.vendInputScanField.nativeElement.focus();
   }
 
-  
+  //commenting in 1210 GA branch
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent,private persistingService:StatePersistingServiceService) {
     let userLang = navigator.language.split('-')[0];
