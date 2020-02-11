@@ -42,6 +42,7 @@ export class PalletizeComponent implements OnInit {
   @ViewChild('scanItemCode') scanItemCode
   @ViewChild('BatchNoInput') BatchNoInput
   @ViewChild('scanToPallet') scanToPallet
+  @ViewChild('scanQuantity') scanQuantity
 
   constructor(private commonservice: Commonservice,
     private router: Router, private toastr: ToastrService, private translate: TranslateService,
@@ -156,7 +157,7 @@ export class PalletizeComponent implements OnInit {
       this.toWhse = lookupValue.U_OPTM_WAREHOUSE_LOC;
       this.toBin = lookupValue.U_OPTM_BIN;
       this.showHideBtnTxt = this.translate.instant("showGrid");
-      this.scanToPallet.nativeElement.focus()
+      this.scanQuantity.nativeElement.focus()
     } else if (this.lookupFor == "ItemsList") {
       this.itemCode = lookupValue.ITEMCODE;
       this.itemType = lookupValue.ITEMTYPE;
@@ -167,7 +168,7 @@ export class PalletizeComponent implements OnInit {
       }
       //Reset fields when change itemcode
       this.resetVariablesOnItemSelect();
-      this.scanItemCode.nativeElement.focus()
+      this.BatchNoInput.nativeElement.focus()
     } else if (this.lookupFor == "ShowBatachSerList") {
       this.batchSerialNo = lookupValue.LOTNO;
       this.expDate = lookupValue.EXPDATE;
@@ -175,7 +176,7 @@ export class PalletizeComponent implements OnInit {
       this.fromBinNo = lookupValue.BINNO;
       this.openQty = Number.parseInt(lookupValue.TOTALQTY);
       this.validateRemainigQuantity();
-      this.BatchNoInput.nativeElement.focus()
+      this.scanToPallet.nativeElement.focus()
     }
   }
 

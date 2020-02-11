@@ -180,13 +180,13 @@ export class BinLabelComponent implements OnInit {
       this.fromBin = $event[0];
       //this.whsCode = $event;
       //console.log("selected item:" + this.fromBin);
-      this.fromBinIp.nativeElement.focus()
+      this.scanToBin.nativeElement.focus()
     }
     if (this.lookupfor == "ToBinList") {
       this.toBin = $event[0];
       //this.whsCode = $event;
       //console.log("selected item:" + this.toBin);
-      this.scanToBin.nativeElement.focus()
+      // this.scanToBin.nativeElement.focus()
     }
   }
   }

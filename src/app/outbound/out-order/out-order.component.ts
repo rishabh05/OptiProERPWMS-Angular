@@ -448,6 +448,7 @@ export class OutOrderComponent implements OnInit {
     if (outboundData != undefined && outboundData != '') {
       this.outbound = JSON.parse(outboundData);
       //this.prepareDeleiveryTempCollection();
+      // this is new method we are using for multiple items.
       this.prepareDeliveryCollectionForAddToDeliveryItem();
       localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
       this.showLookupLoader = false;

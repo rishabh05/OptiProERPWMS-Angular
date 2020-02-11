@@ -101,6 +101,7 @@ export class PortalTopComponent implements OnInit {
         case ("Logout"):
           this.commonService.RemoveLicenseAndSignout(this.toastr, this.router, 
                 this.translate.instant("Dashboard_LogoutSuccess"),true);
+          this.clearLocalStorage();
           break;
       }
     } else {
@@ -121,5 +122,58 @@ export class PortalTopComponent implements OnInit {
   ngOnDestroy() {
     if (this.updatetopBarSubs != undefined)
       this.updatetopBarSubs.unsubscribe();
+  }
+
+  clearLocalStorage(){
+    localStorage.setItem("PhysicalCountData", "");
+    localStorage.setItem("whseId", "");
+    localStorage.setItem("Line", "");
+    localStorage.setItem("GRPOReceieveData", "");
+    localStorage.setItem("AddToGRPO", "");
+    localStorage.setItem("addToGRPOPONumbers", "");
+    localStorage.setItem("VendCode", "");
+    localStorage.setItem("VendName", "");
+    localStorage.setItem("selectedPO", "");
+    localStorage.setItem("PONumber", "");
+    localStorage.setItem("VendRefNo", "");
+    localStorage.setItem("GoodsReceiptModel", "");
+    localStorage.setItem("primaryAutoLots", "");
+    localStorage.setItem("PalletizationEnabledForItem", "");
+    localStorage.setItem("radioSelection", "");
+    localStorage.setItem("ComingFrom", "");
+    localStorage.setItem("OutboundData", "");
+    localStorage.setItem("towhseId", "");
+    localStorage.setItem("fromwhseId", "");
+    localStorage.setItem("IsSOAvailable", "");
+    localStorage.setItem("isCustEnabled", "");
+    localStorage.setItem("isUserIsSubcontracter", "");
+    localStorage.setItem("IsMenuLoaded", "");
+    localStorage.setItem("ProdReceptItem", "");
+    localStorage.setItem("FromReceiptProd", "");
+    localStorage.setItem("GoodsReceiptModel", "");
+    localStorage.setItem("AvailableRejectQty", "");
+    localStorage.setItem("fromscreen", "");
+    localStorage.setItem("ProdReceptItem", "");
+    localStorage.setItem("FromReceiptProd", "");
+    localStorage.setItem("AvailableRejectQty", "");
+    localStorage.setItem("primaryAutoLots", "");
+    localStorage.setItem("VendCode", "");
+
+    
+    localStorage.setItem("inlineSVGdata", "");
+    localStorage.setItem("inlineSVGrev", "");
+    localStorage.setItem("ThousandSeparator", "");
+    localStorage.setItem("UserId", "");
+    localStorage.setItem("DATEFORMAT", "");
+    localStorage.setItem("DecimalSeparator", "");
+    localStorage.setItem("DecimalPrecision", "");
+    localStorage.setItem("Token", "");
+    localStorage.setItem("PalletizationEnabled", "");
+    localStorage.setItem("AutoPalletIdGenerationChecked", "");
+    localStorage.setItem("DefaultValues", "");
+    localStorage.setItem("CompID", "");
+    localStorage.setItem("GUID", "");
+    localStorage.setItem("accessToken", "");
+    localStorage.setItem("PSURLFORADMIN", "");
   }
 } 

@@ -59,7 +59,7 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">{{'Inbound_VendRefNo'|translate}}</label>
                             <div class="col-sm-9">
                                 <div class="input-group input-group-sm">
-                                    <input type="text" class="form-control form-control-sm" name="VendRefNo" [(ngModel)]="VendRefNo" placeholder="{{'Inbound_VendRefNo'|translate}}"
+                                    <input #scanVenderRefNo type="text" class="form-control form-control-sm" name="VendRefNo" [(ngModel)]="VendRefNo" placeholder="{{'Inbound_VendRefNo'|translate}}"
                                         (blur)="OnVendRefNoChange()">
     
                                 </div>

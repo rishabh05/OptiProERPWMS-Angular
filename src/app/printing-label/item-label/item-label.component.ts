@@ -244,7 +244,7 @@ export class ItemLabelComponent implements OnInit {
       if (this.lookupfor == "ItemsList") {
         this.itemCode = $event[0];
         this.binNo = "";
-        this.itemCodeIp.nativeElement.focus();
+        this.batchSrBinIp.nativeElement.focus();
       }
       else if (this.lookupfor == "LotsList") {
         console.log("value of lots" + $event);
@@ -256,7 +256,7 @@ export class ItemLabelComponent implements OnInit {
         }
         this.LOTNoForNone = $event[0];
         this.itemCode = $event[2];
-        this.batchSrBinIp.nativeElement.focus();
+        // this.batchSrBinIp.nativeElement.focus();
       }
     }
     this.lookupfor = "";

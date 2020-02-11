@@ -524,7 +524,7 @@ export class OutProdissueComponent implements OnInit {
       }
       //this.selectedMeterials = [];
      // this.manageMeterial(scan);
-     this.scanToBin.nativeElement.focus()
+     this.scanBatchSerial.nativeElement.focus()
     } else if (lookupValue) {
       if (this.OrderType == 'S') {
         let data: any[] = [];

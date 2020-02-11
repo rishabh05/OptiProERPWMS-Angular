@@ -45,6 +45,7 @@ export class OutCutomerComponent implements OnInit {
   @ViewChild('scanSO') scanSO;
   @ViewChild('scanShipmentId') scanShipmentId;
   @ViewChild('scanCustomerCode') scanCustomerCode;
+  @ViewChild('scanTracking') scanTracking;
 
   showShipmentInfo: boolean = false;
   constructor(private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) { }
@@ -282,7 +283,7 @@ export class OutCutomerComponent implements OnInit {
         }
         //===================================
 
-        this.scanSO.nativeElement.focus()
+        this.scanTracking.nativeElement.focus()
 
       } else if (this.lookupfor == "ShipmentList") {
         this.shipmentId = lookupValue[0];
@@ -305,7 +306,7 @@ export class OutCutomerComponent implements OnInit {
         localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
         CurrentOutBoundData.CustomerData = outbound.CustomerData;
         this.outbound = outbound;
-        this.scanCustomerCode.nativeElement.focus()
+        this.scanSO.nativeElement.focus()
       }
     }
   }

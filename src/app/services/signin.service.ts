@@ -79,10 +79,6 @@ export class SigninService {
     if(this.config_params == null){
       this.loadConfig();
      }
-    //alert("in getLicenceData method of service :");
-   
-    //alert("in getLicenceData configparam S :"+this.config_params.service_url);
-    //alert("in getLicenceData  :"+this.lisenceDataUrl);
     return this.httpclient.post(this.config_params.service_url + this.lisenceDataUrl, jObject, this.commonService.httpOptions);
   }
 }
