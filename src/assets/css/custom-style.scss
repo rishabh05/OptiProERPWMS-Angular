@@ -436,3 +436,10 @@ body .k-dialog-wrapper kendo-grid.no-shadow{
 td .k-dropdown-wrap .k-input {
     height: 20px !important;
 }
+
+.k-dialog-wrapper .k-dialog{
+    max-height: 98%;
+    .k-grid{
+        max-height: 100%;
+    }
+}

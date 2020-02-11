@@ -1,0 +1,49 @@
+<!-- Grid Modal-->
+
+<kendo-dialog  *ngIf="showDialog" (close)="closeDialog()" >
+
+      <kendo-dialog-titlebar>
+        Shipment detail
+      </kendo-dialog-titlebar>
+      <h5>  Container Info:</h5>    
+      <kendo-grid [data]="serviceData"  [skip]="skip" #gridUser [pageable]="true"
+        [selectable]="true"  [pageSize]="5" >
+
+ 
+        <kendo-grid-column field="OPTM_ID" title="{{'ShipmentId'|translate}}"></kendo-grid-column>
+
+        <kendo-grid-column field="OPTM_ITEMCODE" title="Item Code"></kendo-grid-column>
+
+        <kendo-grid-column field="OPTM_ITEMDESC" title="Item Desc"></kendo-grid-column>
+        <kendo-grid-column field="OPTM_DOCENTRY" title="SO No."></kendo-grid-column>
+
+ 
+
+        <ng-template kendoGridDetailTemplate let-dataItem>
+        <h5>Items:</h5>  
+          <kendo-grid [data]="dataItem.ShipmentItemBatchSerial">
+
+            <kendo-grid-column field="OPTM_ID" title="batch sr id"></kendo-grid-column>
+
+            <kendo-grid-column field="OPTM_BTCHSER" title="Batch/Sr No."></kendo-grid-column>
+
+            <kendo-grid-column field="OPTM_ITEMCODE" class="grid-right-align-column" title="{{'ItemCode'|translate}}">
+            </kendo-grid-column>
+            <kendo-grid-column field="OPTM_BTCHQTY" class="grid-right-align-column" title="{{'Quantity'|translate}}">
+            </kendo-grid-column>
+           
+            <ng-template kendoGridDetailTemplate let-innerItem>
+              <h5>  Batch/Serial Info:</h5>  
+              <kendo-grid [data]="innerItem.innerItems">
+                <kendo-grid-column field="OPTM_ID" title="batch sr id"></kendo-grid-column>
+                <kendo-grid-column field="OPTM_BTCHSER" title="Batch/Sr No."></kendo-grid-column>
+            
+              </kendo-grid>
+            </ng-template> 
+          </kendo-grid>
+
+        </ng-template>
+
+      </kendo-grid>
+   
+</kendo-dialog>

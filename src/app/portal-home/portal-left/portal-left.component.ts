@@ -115,14 +115,14 @@ export class PortalLeftComponent implements OnInit {
     }
     return false;
   }
-
+// from whre number is for out bound 1 for delivery, 2 for delivery from shipment
 
   /**
    * 
    * @param event 
    * @param module 
    */
-  listClick(event, module) {
+  listClick(event, module, fromWhere: number =   0) {
     this.selectedItem = module;
 
     this.closeRightSidebar(event);
@@ -134,6 +134,12 @@ export class PortalLeftComponent implements OnInit {
     localStorage.setItem("AvailableRejectQty", 0 + "");
 
     if(module == "outbound"){
+      // manage delivery and shipment via delivery option in same outbound 
+      if(fromWhere==1){
+        localStorage.setItem("deliveryOptionType", '1');
+      }else if(fromWhere==2){
+        localStorage.setItem("deliveryOptionType", '2');
+      }
       this.onOutboundClick();
     }else if(module == "inbound"){
       this.onInboundClick();

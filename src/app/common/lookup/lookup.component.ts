@@ -160,6 +160,8 @@ export class LookupComponent implements OnInit {
       this.palletList();
     } else if(this.lookupfor == "ITRList"){
       this.showITRList();
+    }else if(this.lookupfor == "ShipmentList"){
+      this.showShipmentList();
     }
 
     this.clearFilters();
@@ -782,6 +784,23 @@ export class LookupComponent implements OnInit {
       }
     ];
     this.lookupTitle = this.translate.instant("InvTransfer_ITRList");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
+
+  showShipmentList(){
+    this.table_head = [
+      {
+        field: 'OPTM_DOCENTRY',
+        title: this.translate.instant("ShipmentID"),
+        type: 'text',
+        width: '100'
+      }
+    ];
+    this.lookupTitle = this.translate.instant("Shipment_List");
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
         this.dialogOpened = true;
