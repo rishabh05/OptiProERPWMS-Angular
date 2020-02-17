@@ -255,7 +255,7 @@ export class Commonservice {
   }
 
   getPalletList(opType: number, itemCode: string): Observable<any> {
-    var jObject = {
+    var jObject = { 
       PalletCode: JSON.stringify([{
         COMPANYDBNAME: localStorage.getItem("CompID"),
         OPERATIONTYPE: "" + opType,

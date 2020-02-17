@@ -66,8 +66,7 @@ export class OutOrderComponent implements OnInit {
   temoraryHideItemLookupRow: boolean = false;
   pagetitle: any ="";
   isPalletizationEnable: boolean = false
-  ItemCode: string;
-  
+  disableSO: boolean = false;
   docEntry:any;   // this variable is used only for single itr submit request for multiple we have to change implementation.
   @ViewChild('scanSO') scanSO;
   @ViewChild('DocNum') DocNum;
@@ -116,12 +115,19 @@ export class OutOrderComponent implements OnInit {
         // this.openSOOrderList(); 
         
         if(localStorage.getItem("ComingFrom")=="itr"){
-          this.itrCode = this.docEntry;
-          this.docNum = this.outbound.OrderData.DOCNUM;
+          this.itrCode = this.orderNumber;
           //this.toBinNo = this.outbound.ITRToBinNo.ToBin
           this.toWhse = this.outbound.ITRToBinNo.ToWhse;
           this.getITRItemList();
         } else {
+        // case when  user already added some items to delivery and click on any row from those items then it will work as this if condition.
+          if (localStorage.getItem("selectedSOAfterAddToDelivery") != null && localStorage.getItem("selectedSOAfterAddToDelivery")!= undefined &&
+          localStorage.getItem("selectedSOAfterAddToDelivery")!= "" && localStorage.getItem("selectedSOAfterAddToDelivery")!= "null" ) {
+            this.orderNumber = localStorage.getItem("selectedSOAfterAddToDelivery");
+            this.openSOOrderList(this.orderNumber);
+            this.disableSO = true;
+
+          }else{ 
           if (localStorage.getItem("IsSOAvailable") == "True") {
             this.openSOOrderList(this.orderNumber);
             localStorage.setItem("IsSOAvailable", "False");
@@ -129,6 +135,7 @@ export class OutOrderComponent implements OnInit {
           } else {
             this.openSOOrderList();
           } 
+        }
         }
         this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
       }
@@ -141,18 +148,19 @@ export class OutOrderComponent implements OnInit {
 
   ngAfterViewInit(): void{
     if(localStorage.getItem("ComingFrom")=="itr"){
-      //this.DocNum.nativeElement.focus()
+      this.DocNum.nativeElement.focus()
     } else {
       this.scanSO.nativeElement.focus()
     }
   }
 
-  /* this method set the update data to array to display in grid.
+  /* 
+   * This method set the update data to array to display in grid.
+   * this method is for showing the selected items which are selected from pallet in a temporary grid.
   */
   setSavedPelletDataToGrid() {
     this.savedPalletItems = [];
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
-  // console.log("Order:data", outboundData);
     if (outboundData != null && outboundData != undefined && outboundData != '' && outboundData != 'null') {
       this.outbound = JSON.parse(outboundData);
       this.savedPalletItems = this.outbound.PalletItems;
@@ -163,7 +171,7 @@ export class OutOrderComponent implements OnInit {
   showAddToMeterialAndDelevery() {
     let dBit: boolean = false;
     if (this.outbound && this.outbound.TempMeterials) {
-      let data = this.outbound.TempMeterials.filter(tm => tm.Order.DOCNUM === this.orderNumber);
+      let data = this.outbound.TempMeterials.filter(tm => ""+tm.Order.DOCNUM === ""+this.orderNumber);
       dBit = data.length > 0
     }
     else {
@@ -254,7 +262,7 @@ export class OutOrderComponent implements OnInit {
         this.showLookupLoader = false;
         this.palletNo = lookupValue.Code;
         this.getPalletData();
-        this.scanItemCode.nativeElement.focus()
+        // this.PalletNo.nativeElement.focus()
       } else { 
         if (this.lookupfor == "out-order") {
           this.outbound.OrderData = lookupValue;
@@ -263,21 +271,21 @@ export class OutOrderComponent implements OnInit {
           localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
           this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
           this.openSOOrderList();
-          this.PalletNo.nativeElement.focus()
+          this.scanSO.nativeElement.focus()
         } else if (this.lookupfor == "ITRList") {
           this.resetITRFields();
           //
           this.toWhse = lookupValue.ToWhsCode;
           this.itrCode = lookupValue.DocEntry;
           this.docNum =  lookupValue.DocNum;
-          this.orderNumber = this.docNum;
+          this.orderNumber = this.itrCode;
           this.outbound.ITRToBinNo = { 
             ToBin: this.toBinNo,
             ToWhse: this.toWhse
           };
           localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
           this.getITRItemList();
-          //this.DocNum.nativeElement.focus()
+          this.DocNum.nativeElement.focus()
         } else if (this.lookupfor == "toBinsList") {
           this.toBinNo = lookupValue.BINNO;
           this.outbound.ITRToBinNo = { 
@@ -439,7 +447,9 @@ export class OutOrderComponent implements OnInit {
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
     if (outboundData != undefined && outboundData != '') {
       this.outbound = JSON.parse(outboundData);
-      this.prepareDeleiveryTempCollection();
+      //this.prepareDeleiveryTempCollection();
+      // this is new method we are using for multiple items.
+      this.prepareDeliveryCollectionForAddToDeliveryItem();
       localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
       this.showLookupLoader = false;
     }
@@ -481,6 +491,47 @@ export class OutOrderComponent implements OnInit {
      this.outbound.TempMeterials =[];
   }
 
+  /**
+   * This method will update delivery collection for add to delivery items from Tempcollection.
+   */
+  prepareDeliveryCollectionForAddToDeliveryItem() {
+    if (this.outbound) {
+      let tempMeterialCollection: any[] = this.outbound.TempMeterials;
+      if (this.outbound != null && this.outbound.OrderData != null && this.outbound.OrderData != undefined &&
+        this.outbound.OrderData.DOCNUM != null) {
+        var DocNum = this.outbound.OrderData.DOCNUM;
+        //check if the item is already present in delivery collection then remove from temp collection.
+        if (this.outbound.DeleiveryCollection != null && this.outbound.DeleiveryCollection != undefined &&
+          this.outbound.DeleiveryCollection.length > 0) {
+          for (let index = 0; index < this.outbound.DeleiveryCollection.length; index++) {
+            let d = this.outbound.DeleiveryCollection[index];
+            if (d.Order.DOCNUM == DocNum) {
+              this.outbound.DeleiveryCollection.splice(index, 1);
+              index--;
+            }
+          }
+          // after removing delivery items from delivery for current so then we will add temp items.
+          if(tempMeterialCollection!=null && tempMeterialCollection!=undefined && tempMeterialCollection.length>0){
+            for(let k =0; k<tempMeterialCollection.length; k++){
+              this.outbound.DeleiveryCollection.push(tempMeterialCollection[k]);
+            }
+          }
+        }else{
+          // no delivery items available add temp directly.
+          if(tempMeterialCollection!=null && tempMeterialCollection!=undefined && tempMeterialCollection.length>0){
+            for(let k =0; k<tempMeterialCollection.length; k++){
+              this.outbound.DeleiveryCollection.push(tempMeterialCollection[k]);
+            }
+          }
+        }
+      }else{
+               // something went wrong doc num is not available this. case should not be there.
+      }
+    }
+    this.outbound.TempMeterials =[];
+  }
+
+  
   public deleiver(orderId: any = null) {
     //this.showLookupLoader = true;
     this.callPrepareDeleiveryTempCollectionMethod();
@@ -508,7 +559,7 @@ export class OutOrderComponent implements OnInit {
 
             const element = this.outbound.TempMeterials[j];
         //    console.log("My Element", element);
-            if (soelement.ROWNUM === element.Item.ROWNUM && soelement.ITEMCODE === element.Item.ITEMCODE && this.outbound.OrderData.DOCNUM === element.Order.DOCNUM) {
+            if (soelement.ROWNUM === element.Item.ROWNUM && soelement.ITEMCODE === element.Item.ITEMCODE && this.outbound.OrderData.DOCNUM.toString() === element.Order.DOCNUM.toString()) {
               totalPickQty = totalPickQty + element.Meterial.MeterialPickQty;
             }
           }
@@ -534,8 +585,8 @@ export class OutOrderComponent implements OnInit {
       && this.outbound.DeleiveryCollection != null
       && this.outbound.DeleiveryCollection != undefined
       && this.outbound.DeleiveryCollection.length > 0) {
-
       if (orderId !== undefined && orderId !== null) {
+         // filter delivery items for current order no.
         this.outbound.DeleiveryCollection = this.outbound.DeleiveryCollection.filter(d => d.Order.DOCNUM === orderId);
       }
       let arrSOHEADER: SOHEADER[] = [];
@@ -554,25 +605,25 @@ export class OutOrderComponent implements OnInit {
     this.showLookupLoader = true;
       // Loop through delivery collection 
       for (let index = 0; index < this.outbound.DeleiveryCollection.length; index++) {
-
         var selectedDelivery = this.outbound.DeleiveryCollection[index];
         //=========filter  collection docnum, docentry, tracking wise.
         let lineDeleiveryCollection = this.outbound.DeleiveryCollection.filter(d =>
           selectedDelivery.Order.DOCNUM === d.Order.DOCNUM &&
           selectedDelivery.Item.DOCENTRY === d.Item.DOCENTRY &&
-          selectedDelivery.Item.TRACKING === d.Item.TRACKING
+          selectedDelivery.Item.TRACKING === d.Item.TRACKING && 
+          selectedDelivery.Item.LINENUM === d.Item.LINENUM
         );
-        //=========filter  collection docnum, docentry, tracking wise.
+        //=========filter collection docnum, docentry, tracking, linenum wise.
         //=============== Adding header and Detail Objects logic==================
         for (let hIdx = 0; hIdx < lineDeleiveryCollection.length; hIdx++) {
           let o = lineDeleiveryCollection[hIdx];
-
           //============================start check header exist or not then add ========
           let existHdr = false;
           for (let index = 0; index < arrSOHEADER.length; index++) {
             let h = arrSOHEADER[index]; 
-            if (h.SONumber.toString() === o.Order.DOCNUM && h.ItemCode === o.Item.ITEMCODE &&
-              h.Tracking === o.Item.TRACKING) {
+            if (h.SONumber.toString() === o.Order.DOCNUM +""
+                && h.ItemCode === o.Item.ITEMCODE 
+                && h.Tracking === o.Item.TRACKING) {
               existHdr = true;
               break;
             }
@@ -596,7 +647,7 @@ export class OutOrderComponent implements OnInit {
             hdr.ItemCode = o.Item.ITEMCODE;
             hdr.UOM = -1;
             hdr.UOMName = o.Item.UOM;
-            hdr.Line = hdrLineVal;
+            hdr.Line = hdrLineVal;//0
             if(this.outbound.CustomerData.CustRefNo!=null && this.outbound.CustomerData.CustRefNo!=undefined){
               hdr.NumAtCard = this.outbound.CustomerData.CustRefNo;
             }else{
@@ -609,18 +660,32 @@ export class OutOrderComponent implements OnInit {
             }
             arrSOHEADER.push(hdr);
           }
-          //============================start check header exist or not then add ========
-          //============================start check detail exist or not then add ========
+          //================logic to add delivery line.
+          var parentLineNum = hdrLineVal;
           let hasDetail = false;
           both:
-          for (let dIdx = 0; dIdx < arrSODETAIL.length; dIdx++) {
-            let selectedDetl = arrSODETAIL[dIdx];
-            if (selectedDetl.LotNumber === o.Meterial.LOTNO && selectedDetl.Bin === o.Meterial.BINNO) {
+          for(let index = 0; index < arrSODETAIL.length; index++){
+            const e1 = arrSODETAIL[index];
+            if(o.Item.TRACKING == "S"){
+              if (e1.LotNumber === o.Meterial.LOTNO && e1.Bin === o.Meterial.BINNO) {
+                hasDetail = true; //need to show error
+              }
+            }else{
+              for(let idx = 0; idx < arrSOHEADER.length; idx++){
+                  const headerElement =arrSOHEADER[idx]
+                  if (headerElement.LineNo === o.Item.LINENUM && headerElement.DOCENTRY === o.Item.DOCENTRY) {
 
-              for (let headerIndex = 0; headerIndex < headerLineArray.length; headerIndex++) {
-                if (selectedDetl.parentLine === headerLineArray[headerIndex]) {
+                  for(let innerIdx = 0; innerIdx<arrSODETAIL.length; innerIdx++){
+                    if (arrSODETAIL[innerIdx].LotNumber === o.Meterial.LOTNO && headerElement.LineNo === o.Item.LINENUM && 
+                      headerElement.DOCENTRY === o.Item.DOCENTRY && arrSODETAIL[innerIdx].DOCENTRY === o.Item.DOCENTRY){
+                      // it means already taken.
                   hasDetail = true;
                   break both;
+                }
+              }
+                    parentLineNum = headerElement.Line; 
+                    break both;
+                  //------
                 }
               }
             }
@@ -632,21 +697,20 @@ export class OutOrderComponent implements OnInit {
             dtl.LotNumber = o.Meterial.LOTNO;
             dtl.LotQty = o.Meterial.MeterialPickQty;
             dtl.SysSerial = o.Meterial.SYSNUMBER;
-            dtl.parentLine = hdrLineVal;
+            dtl.parentLine = parentLineNum;
             dtl.GUID = guid;
             dtl.UsernameForLic = uid;
+            dtl.DOCENTRY = o.Item.DOCENTRY
             arrSODETAIL.push(dtl);
           }
           limit = limit + lineDeleiveryCollection.length;
         }
       }
-
       if (arrSOHEADER.length > 0 && arrSODETAIL.length > 0) {
         deliveryToken.SOHEADER = arrSOHEADER;
         deliveryToken.SODETAIL = arrSODETAIL;
         deliveryToken.UDF = [];
       }
-     
       //==delivery submit final code===
       this.outboundservice.addDeleivery(deliveryToken).subscribe(
         data => {
@@ -824,7 +888,7 @@ export class OutOrderComponent implements OnInit {
         }
       }
     }
-    // //lsOutbound
+    //lsOutbound
     localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
 
   }
@@ -1368,6 +1432,7 @@ export class OutOrderComponent implements OnInit {
             }else if(this.fromEvent =="backArrow"){
 
             }
+            localStorage.setItem("selectedSOAfterAddToDelivery",null);
             
             this.fromEvent =  "";
             break;
@@ -1413,40 +1478,46 @@ export class OutOrderComponent implements OnInit {
 
   //--------------------------item scanning-----
 
-  
+  ItemCode: string;
   public onItemChange() {
-    if (this.orderNumber != null && this.ItemCode != null
-      && this.ItemCode != "" 
-      && this.ItemCode != undefined) {
+    if (this.selectedCustomer != null && this.selectedCustomer != undefined
+      && this.selectedCustomer.CustomerCode != '' && this.selectedCustomer.CustomerCode != null) {
 
-      this.outboundservice.GetItemCode(this.ItemCode).subscribe(
-        resp => {
-          if (resp != null && resp.length > 0) {
-            this.ItemCode = resp[0].ItemCode;
+      if (this.orderNumber != null && this.ItemCode != null) {
+        this.outboundservice.GetItemCode(this.ItemCode).subscribe(
+          resp => {
+            if (resp != null && resp.length > 0) {
+              this.ItemCode = resp[0].ItemCode;
 
-            var index = -1;
-            for(var i=0; i<this.soItemsDetail.length; i++){
-              if(this.ItemCode == this.soItemsDetail[i].ITEMCODE){
-                index = i;
+              var index = -1;
+              for(var i=0; i<this.soItemsDetail.length; i++){
+                if(this.ItemCode == this.soItemsDetail[i].ITEMCODE){
+                  index = i;
+                }
               }
+              if(index == -1){
+                this.toastr.error('', this.translate.instant("Outbound_NoDataFound"));
+              }else{
+                document.getElementById("itemcodeid").focus();
+                this.openNextScreen(index);
+              }
+            } else {
+              this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
             }
-            if(index == -1){
-              this.toastr.error('', this.translate.instant("Outbound_NoDataFound"));
-            }else{
-              document.getElementById("itemcodeid").focus();
-              this.openNextScreen(index);
-            }
-          } else {
-            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          },
+          error => {
+            this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
+            this.showLookupLoader = false;
+            this.showLookup = false;
           }
-        },
-        error => {
-          this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
-          this.showLookupLoader = false;
-          this.showLookup = false;
-        }
-      );
-    } 
+        );
+      }
+    }
+    else {
+      this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+      this.showLookupLoader = false;
+      this.showLookup = false;
+    }
   }
 
   onITRlookupClick() {
@@ -1507,7 +1578,7 @@ export class OutOrderComponent implements OnInit {
             this.toWhse = data.Table[0].ToWhsCode;
             this.itrCode = data.Table[0].DocEntry;
             this.docNum = data.Table[0].DocNum;
-            this.orderNumber = this.docNum;
+            this.orderNumber = this.itrCode;
             this.outbound.ITRToBinNo = {
             ToBin: this.toBinNo,
             ToWhse: this.toWhse
@@ -1550,8 +1621,7 @@ export class OutOrderComponent implements OnInit {
             CARDNAME: this.outbound.CustomerData.customerName,
             CUSTREFNO: "",
             DOCDUEDATE: "04/24/2019",
-            DOCNUM: this.docNum,
-            DOCENTRY: this.itrCode,
+            DOCNUM: this.itrCode,
             SHIPPINGTYPE: "",
             SHIPTOCODE: ""
           };
@@ -1567,7 +1637,7 @@ export class OutOrderComponent implements OnInit {
             if (data.length > 0) {
               // When order num from text box.
               this.outbound.OrderData = tempOrderData;
-              this.orderNumber = this.docNum;
+              this.orderNumber = this.itrCode;
               this.soItemsDetail = data;
               if (this.soItemsDetail.length > this.pageSize) {
                 this.pagable = true;
@@ -1678,7 +1748,7 @@ export class OutOrderComponent implements OnInit {
       && this.outbound.DeleiveryCollection.length > 0) {
 
       if (this.itrCode !== undefined && this.itrCode !== null) {
-        this.outbound.DeleiveryCollection = this.outbound.DeleiveryCollection.filter(d => d.Order.DOCENTRY === this.itrCode);
+        this.outbound.DeleiveryCollection = this.outbound.DeleiveryCollection.filter(d => d.Order.DOCNUM === this.itrCode);
       }
     var oWhsTransAddLot: any = {};
     oWhsTransAddLot.Header = [];
@@ -1696,7 +1766,8 @@ export class OutOrderComponent implements OnInit {
         let lineDeleiveryCollection = this.outbound.DeleiveryCollection.filter(d =>
           selectedDelivery.Order.DOCNUM === d.Order.DOCNUM &&
           selectedDelivery.Item.DOCENTRY === d.Item.DOCENTRY &&
-          selectedDelivery.Item.TRACKING === d.Item.TRACKING
+          selectedDelivery.Item.TRACKING === d.Item.TRACKING &&
+          selectedDelivery.Item.LINENUM === d.Item.LINENUM
         );
         //=========filter  collection docnum, docentry, tracking wise.
         //=============== Adding Detail Objects logic==================
@@ -1764,7 +1835,7 @@ export class OutOrderComponent implements OnInit {
         Type: "",
         DiServerToken: localStorage.getItem("Token"),
         CompanyDBId: localStorage.getItem("CompID"),
-        TransType: "",
+        TransType: "WHS",
         GUID: localStorage.getItem("GUID"),
         UsernameForLic: localStorage.getItem("UserId"),
         BaseEntry: this.itrCode,

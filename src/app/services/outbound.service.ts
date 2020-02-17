@@ -57,6 +57,28 @@ export class OutboundService {
   }
 
 
+  public getShipmentDetail(shipmentId: string): Observable<any> {
+    this.outRequest = new OutRequest();
+    this.outRequest.CompanyDBId = localStorage.getItem("CompID");
+    var body: any = { PalletCode:JSON.stringify( [{ COMPANYDBNAME: this.outRequest.CompanyDBId, OPTM_SHIPMENTID: shipmentId }] )};
+    return this.httpclient.post(this.config_params.service_url + "/api/Shipment/GetItemContainerDataForShipment", body, this.commonService.httpOptions);
+  }
+
+  public getShipmentIdList(): Observable<any> { 
+    this.outRequest = new OutRequest();
+    this.outRequest.CompanyDBId = localStorage.getItem("CompID");
+    var body: any = { PalletCode:JSON.stringify( [{ CompanyDBId: this.outRequest.CompanyDBId}] )};
+    return this.httpclient.post(this.config_params.service_url + "/api/Shipment/GetShipmentId", body, this.commonService.httpOptions);
+  }
+
+  public getShipmentInformation(): Observable<any> { 
+    this.outRequest = new OutRequest();
+    this.outRequest.CompanyDBId = localStorage.getItem("CompID");
+    var body: any = { PalletCode:JSON.stringify( [{ CompanyDBId: this.outRequest.CompanyDBId}] )};
+    return this.httpclient.post(this.config_params.service_url + "/api/Shipment/GetShipmentId", body, this.commonService.httpOptions);
+  }
+
+
   public getCustomerSOList(custCode: string, docNum: string, whseId: string): Observable<any> {
     this.outRequest = new OutRequest();
     this.outRequest.DOCNUM = docNum;

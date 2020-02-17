@@ -48,7 +48,7 @@
   "Dashboard_ProductName":"WMS",
   "Dashboard_Logout_Msg":"Do you want to Log out?",
   "Dashboard_LogoutSuccess":"You have successfully logged out",
-
+ 
   "4":"Inbound",
   "Inbound_Expdate_Msg": "Expiry date cannot be past date",
   "Inbound_GoodsReceiptPO": "Goods Receipt PO",
@@ -426,7 +426,6 @@
   "PT_Customer": "Customer",
   "PT_Ship_To": "Ship To",
   "PT_Warehouse": "Warehouse",
-  "Quantity": "Quantity",
   "Quantity_Fulfilled": "Quantity Fulfilled",
   "Line_status": "Line Status",
 
@@ -446,5 +445,16 @@
   "Task Id": "Task Id",
   "PT_PlanDate":"Plan Date",
 
+  "ShipmentID": "Shipment Code", 
+  "ShipmentreadyToDeliver": "Your Shipment is ready to deliver.",
+  "InvalidShipmentCode": "Invalid Shipment Code.",
+  "ShipmentNotAvailable": "No Shipment Available.",
+  "Shipment_List": "Shipment List",
+  "ShipmentNoInfo": "No information available for selected Shipment.",
+  "ShipmentHasNoData": "This Shipment has no data.",
+  "Shipment": "Shipment",
+  "Shipment_Detail": "Shipment",
+  "outbound_Delivery": "Delivery",
+  "Outbound_Delivery_through_Shipment": "Delivery through Shipment",
   "Dummy": "Dummy"
 }
