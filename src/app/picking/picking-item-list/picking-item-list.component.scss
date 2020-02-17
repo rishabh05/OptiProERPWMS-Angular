@@ -1,0 +1,121 @@
+.po-labels{
+    display: block;
+    margin-bottom: 5px;
+    color: #000;
+}
+.po-date{
+    font-size: 12px;
+}
+.po-items-icon{
+    position: absolute;
+    left: 50%;
+    margin-left: -25px;
+    top: -25px;
+    width: 50px;
+    background: #f8bb19;
+    text-align: center;
+    font-size: 28px;
+    border-radius: 50%;
+    height: 50px;
+    line-height: 50px;
+}
+.po-icon, .po-details{
+    display: inline-block;
+    vertical-align: top;
+}
+.po-num{
+    font-size: 24px;
+    margin-bottom: 0;
+    color: #19a0f8;
+}
+.po-details-sec{
+    padding: 0 10px 0 10px;
+    color: #f5fbff;
+    font-size: 16px;
+}
+.po-details-comp{
+    // background: #68bbf3;
+    height:calc(100% - 51px);
+}
+.po-item-list{
+    // position: relative;
+    // background: #fff;
+    margin: 0 10px;
+   height: calc(100% - 140px);
+   overflow-y: auto;
+    // border-radius: 20px;
+    // box-shadow: 0px 2px 6px #678ba3;
+}
+.po-item{
+    // border-bottom: 1px solid #ececec;
+    // padding: 5px 0;
+    margin-bottom: 10px;
+    position: relative;
+    padding: 5px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 5px #e2dddd;
+   /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#ffffff+0,e5e5e5+100;White+3D */
+background: #ffffff; /* Old browsers */
+background: -moz-linear-gradient(top,  #ffffff 0%, #f6f6f6 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top,  #ffffff 0%,#f6f6f6 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom,  #ffffff 0%,#f6f6f6 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f6f6f6',GradientType=0 ); /* IE6-9 */
+}
+.po-item:last-child{
+    border: none;
+}
+.item-name{
+    color: #19a0f8;
+    font-size: 16px;
+}
+.po-nav{
+    position: absolute;
+    right: 0;
+    top: 12px;
+    cursor: pointer;
+    font-size: 22px;
+    width: 30px;
+    text-align: center;
+    transition: all 0.5s ease;
+
+}
+.po-nav:hover{
+    right: -5px;
+}
+.option-menu-left{
+    position: absolute;
+    bottom: 5px;
+    left: 10px;
+    background: #19a0f8;
+    height: 40px;
+    width: 40px;
+    text-align: center;
+    font-size: 22px;
+    line-height: 40px;
+    border-radius: 50%;
+    color: #fff;
+}
+
+@media (max-width:640px) {
+    .pick-list-row{
+        height: calc(100% - 120px);
+    }
+    .pick-list-col{
+        height:100%;
+    }
+    .new-custom-grid{
+       height: 100%;
+       kendo-grid {
+        height: 100%;
+       }
+    }
+    body kendo-grid .k-grid-pager{
+        padding-top: 10px;
+    }
+    }
+    
+    @media screen and (max-width: 479px){
+    .form-with-fix-btnBar {
+        padding-bottom: 0 !important;
+    }
+    }

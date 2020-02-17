@@ -8,11 +8,17 @@
                 <section class="opti_logo opti_device-logo text-primary">
                     <!-- <img src="assets/images/logo/large-logo.png" alt="Large Logo" class="opti_large-logo opti_mouse-pointer" />
                     <img src="assets/images/logo/small-logo.png" alt="Logo" class="opti_small-logo opti_mouse-pointer" /> -->
-                    <svg viewBox="0 0 464.3 148.3" class="opti_large-logo" style="height:45px;"><use xlink:href="#planLogo"></use></svg>
-                    <svg viewBox="0 0 164.6 148.3" class="opti_small-logo" style="height:45px;"><use xlink:href="#logo"></use></svg>
+                    <svg viewBox="0 0 464.3 148.3" class="opti_large-logo" style="height:45px;">
+                        <use xlink:href="#planLogo"></use>
+                    </svg>
+                    <svg viewBox="0 0 164.6 148.3" class="opti_small-logo" style="height:45px;">
+                        <use xlink:href="#logo"></use>
+                    </svg>
                 </section>
                 <div id="sidebarCollapse-alt" class="opti_vertical-align">
-                    <svg viewBox="0 0 512 512" class="icon"><use xlink:href="#home"></use></svg>
+                    <svg viewBox="0 0 512 512" class="icon">
+                        <use xlink:href="#home"></use>
+                    </svg>
                 </div>
             </div>
         </div>
@@ -29,46 +35,71 @@
 
             <li id="PUR" (click)="listClick($event, 'inbound')" [ngClass]="{'active': selectedItem == 'inbound'}" [ngStyle]="{'display':'none'}">
                 <a (click)="onInboundClick()">
-                    <svg viewBox="0 0 503.322 503.322"  class="icon"><use xlink:href="#inbound"></use></svg>
+                    <svg viewBox="0 0 503.322 503.322" class="icon">
+                        <use xlink:href="#inbound"></use>
+                    </svg>
                     <span class="text">{{'Inbound'|translate}}</span>
                 </a>
             </li>
 
             <li id="SLS" (click)="listClick($event, 'outbound')" [ngClass]="{'active': selectedItem == 'outbound'}" [ngStyle]="{'display':'none'}">
                 <a (click)="onOutboundClick()">
-                    <svg viewBox="0 0 8500 6050" class="icon"><use xlink:href="#outbound"></use></svg>
+                    <svg viewBox="0 0 8500 6050" class="icon">
+                        <use xlink:href="#outbound"></use>
+                    </svg>
                     <span class="text">{{'Outbound'|translate}}</span>
                 </a>
             </li>
+
+            <li id="PICKlIST" (click)="listClick($event, 'picking')" [ngClass]="{'active': selectedItem == 'picking'}"
+                [ngStyle]="{'display':'flex'}">
+                <a>
+                    <svg viewBox="0 0 8500 6050" class="icon">
+                        <use xlink:href="#outbound"></use>
+                    </svg>
+                    <span class="text">Pick List</span>
+                </a>
+            </li>
+
             <li class="dropdown" dropdown id="INV" [ngStyle]="{'display':'none'}" [insideClick]="true">
                 <a dropdownToggle class="dropdown-toggle">
-                        <svg viewBox="0 0 7473 6193" class="icon"><use xlink:href="#inventoryTransferALt"></use></svg>
+                    <svg viewBox="0 0 7473 6193" class="icon">
+                        <use xlink:href="#inventoryTransferALt"></use>
+                    </svg>
                     <span class="text">{{'InventoryTransfer'|translate}}</span>
                 </a>
                 <ul *dropdownMenu class="dropdown-menu" role="menu">
                     <!-- <li id="15108" role="menuitem" (click)="listClick($event, 'inventory-transfer/whsTransfer')" > -->
                     <li id="15108" role="menuitem" (click)="listClick($event, 'whsTransfer')" [ngStyle]="{'display':'none'}">
                         <a class="dropdown-item">
-                            <svg viewBox="0 0 8500 5637" class="icon"><use xlink:href="#warehouseTransfer"></use></svg>                             
+                            <svg viewBox="0 0 8500 5637" class="icon">
+                                <use xlink:href="#warehouseTransfer"></use>
+                            </svg>
                             <span class="text">{{'WarehouseTransfer'|translate}}</span>
                         </a>
                     </li>
                     <!-- <li id="15109" role="menuitem" (click)="listClick($event, 'inventory-transfer/binTransfer')" > -->
                     <li id="15109" role="menuitem" (click)="listClick($event, 'binTransfer')" [ngStyle]="{'display':'none'}">
                         <a class="dropdown-item" (click)="binClick()">
-                            <svg viewBox="0 0 7110 7110" class="icon"><use xlink:href="#binTransfer"></use></svg>
+                            <svg viewBox="0 0 7110 7110" class="icon">
+                                <use xlink:href="#binTransfer"></use>
+                            </svg>
                             <span class="text">{{'BinTransfer'|translate}}</span>
                         </a>
                     </li>
                     <li id="15110" role="menuitem" (click)="listClick($event, 'InventoryTransferRequest')" [ngStyle]="{'display':'none'}">
-                        <a class="dropdown-item" >
-                            <svg viewBox="0 0 64 64" class="icon"><use xlink:href="#inventoryTransferRequest"></use></svg> 
+                        <a class="dropdown-item">
+                            <svg viewBox="0 0 64 64" class="icon">
+                                <use xlink:href="#inventoryTransferRequest"></use>
+                            </svg>
                             <span class="text">{{'InventoryTransferRequest'|translate}}</span>
                         </a>
                     </li>
                     <li id="15111" role="menuitem" (click)="listClick($event, 'InventoryTransferbyITR')" [ngStyle]="{'display':'none'}">
                         <a class="dropdown-item">
-                            <svg viewBox="0 0 256 256" class="icon"><use xlink:href="#inventoryTransferItr"></use></svg> 
+                            <svg viewBox="0 0 256 256" class="icon">
+                                <use xlink:href="#inventoryTransferItr"></use>
+                            </svg>
                             <span class="text">{{'InventoryTransferbyITR'|translate}}</span>
                         </a>
                     </li>
@@ -76,37 +107,49 @@
             </li>
             <li class="dropdown" dropdown id="PALLET" *ngIf="isPalletizationEnable" [ngStyle]="{'display':'none'}" [insideClick]="true">
                 <a dropdownToggle class="dropdown-toggle">
-                    <svg viewBox="0 0 7187 6527" class="icon"><use xlink:href="#palletizeMain"></use></svg>
+                    <svg viewBox="0 0 7187 6527" class="icon">
+                        <use xlink:href="#palletizeMain"></use>
+                    </svg>
                     <span class="text">{{'Plt_Palletization'|translate}}</span>
                 </a>
                 <ul *dropdownMenu class="dropdown-menu" role="menu">
                     <li id="15123" role="menuitem" (click)="listClick($event, 'palletization/plt-transfer')" [ngStyle]="{'display':'none'}">
                         <a class="dropdown-item">
-                            <svg viewBox="0 0 8147 8193" class="icon"><use xlink:href="#palletTransfer"></use></svg>
+                            <svg viewBox="0 0 8147 8193" class="icon">
+                                <use xlink:href="#palletTransfer"></use>
+                            </svg>
                             <span class="text">{{'Plt_PalletTransfer'|translate}}</span>
                         </a>
                     </li>
                     <li id="15122" role="menuitem" (click)="listClick($event, 'palletization/plt-split')" [ngStyle]="{'display':'none'}">
                         <a class="dropdown-item">
-                            <svg viewBox="0 0 5333 5333" class="icon"><use xlink:href="#palletSplit"></use></svg>
+                            <svg viewBox="0 0 5333 5333" class="icon">
+                                <use xlink:href="#palletSplit"></use>
+                            </svg>
                             <span class="text">{{'Plt_PalletSplit'|translate}}</span>
                         </a>
                     </li>
                     <li id="15124" role="menuitem" (click)="listClick($event, 'palletization/pallet-merge')" [ngStyle]="{'display':'none'}">
                         <a class="dropdown-item">
-                            <svg viewBox="0 0 384 384" class="icon"><use xlink:href="#palletMarge"></use></svg>
+                            <svg viewBox="0 0 384 384" class="icon">
+                                <use xlink:href="#palletMarge"></use>
+                            </svg>
                             <span class="text">{{'Plt_PalletMerge'|translate}}</span>
                         </a>
                     </li>
                     <li id="15126" role="menuitem" (click)="listClick($event, 'palletization/palletize')" [ngStyle]="{'display':'none'}">
                         <a class="dropdown-item">
-                            <svg viewBox="0 0 6443 6443" class="icon"><use xlink:href="#palletize"></use></svg>
+                            <svg viewBox="0 0 6443 6443" class="icon">
+                                <use xlink:href="#palletize"></use>
+                            </svg>
                             <span class="text">{{'Plt_Palletize'|translate}}</span>
                         </a>
                     </li>
                     <li id="15125" role="menuitem" (click)="listClick($event, 'palletization/depalletize')" [ngStyle]="{'display':'none'}">
                         <a class="dropdown-item">
-                            <svg viewBox="0 0 6443 6443"  class="icon"><use xlink:href="#deplletization"></use></svg>
+                            <svg viewBox="0 0 6443 6443" class="icon">
+                                <use xlink:href="#deplletization"></use>
+                            </svg>
                             <span class="text">{{'Plt_Depalletization'|translate}}</span>
                         </a>
                     </li>
@@ -114,13 +157,17 @@
             </li>
             <li class="dropdown" dropdown id="INVADJ" [ngStyle]="{'display':'none'}" [insideClick]="true">
                 <a dropdownToggle class="dropdown-toggle">
-                    <svg viewBox="0 0 502.422 502.422" class="icon"><use xlink:href="#adjustment"></use></svg>
+                    <svg viewBox="0 0 502.422 502.422" class="icon">
+                        <use xlink:href="#adjustment"></use>
+                    </svg>
                     <span class="text">{{'AdjustmentsCounting'|translate}}</span>
                 </a>
                 <ul *dropdownMenu class="dropdown-menu" role="menu">
                     <li id="15112" role="menuitem" (click)="listClick($event, 'adjustment-counting/physical-count')" [ngStyle]="{'display':'none'}">
                         <a class="dropdown-item">
-                            <svg viewBox="-66 0 512 512.00198" class="icon"><use xlink:href="#physicalCount"></use></svg>
+                            <svg viewBox="-66 0 512 512.00198" class="icon">
+                                <use xlink:href="#physicalCount"></use>
+                            </svg>
                             <span class="text">{{'PhysicalCount'|translate}}</span>
                         </a>
                     </li>
@@ -128,19 +175,25 @@
             </li>
             <li class="dropdown" dropdown id="PRO" [ngStyle]="{'display':'none'}" [insideClick]="true">
                 <a dropdownToggle class="dropdown-toggle">
-                    <svg viewBox="0 0 6990 7110"  class="icon"><use xlink:href="#production"></use></svg>
+                    <svg viewBox="0 0 6990 7110" class="icon">
+                        <use xlink:href="#production"></use>
+                    </svg>
                     <span class="text">{{'Production'|translate}}</span>
                 </a>
                 <ul *dropdownMenu class="dropdown-menu" role="menu">
                     <li id="15117" role="menuitem" (click)="listClick($event, 'production/production-issue')" [ngStyle]="{'display':'none'}">
                         <a class="dropdown-item" (click)="onOutboundClick()">
-                            <svg viewBox="0 0 64 64"  class="icon"><use xlink:href="#issueProduction"></use></svg>
+                            <svg viewBox="0 0 64 64" class="icon">
+                                <use xlink:href="#issueProduction"></use>
+                            </svg>
                             <span class="text">{{'IssueForProduction'|translate}}</span>
                         </a>
                     </li>
                     <li id="15116" role="menuitem" (click)="listClick($event, 'production/production-receipt-master')" [ngStyle]="{'display':'none'}">
                         <a class="dropdown-item">
-                            <svg viewBox="0 0 480 480" class="icon"><use xlink:href="#receiptProduction"></use></svg> 
+                            <svg viewBox="0 0 480 480" class="icon">
+                                <use xlink:href="#receiptProduction"></use>
+                            </svg>
                             <span class="text">{{'ReceiptFromProduction'|translate}}</span>
                         </a>
                     </li>
@@ -148,25 +201,33 @@
             </li>
             <li class="dropdown" dropdown id="LBLRPT" [ngStyle]="{'display':'none'}" [insideClick]="true">
                 <a dropdownToggle class="dropdown-toggle">
-                    <svg viewBox="0 0 429.279 429.279" class="icon"><use xlink:href="#printing"></use></svg> 
+                    <svg viewBox="0 0 429.279 429.279" class="icon">
+                        <use xlink:href="#printing"></use>
+                    </svg>
                     <span class="text">{{'LabelPrintingandReports'|translate}}</span>
                 </a>
                 <ul *dropdownMenu class="dropdown-menu" role="menu">
                     <li id="15119" role="menuitem" (click)="listClick($event, 'printing-label/item-label')" [ngStyle]="{'display':'none'}">
-                        <a class="dropdown-item">                            
-                            <svg viewBox="0 0 4887 4887" class="icon"><use xlink:href="#itemLabel"></use></svg> 
+                        <a class="dropdown-item">
+                            <svg viewBox="0 0 4887 4887" class="icon">
+                                <use xlink:href="#itemLabel"></use>
+                            </svg>
                             <span class="text">{{'ItemLabel'|translate}}</span>
                         </a>
                     </li>
                     <li id="15120" role="menuitem" (click)="listClick($event, 'printing-label/bin-label')" [ngStyle]="{'display':'none'}">
                         <a class="dropdown-item">
-                            <svg viewBox="0 0 512 512" class="icon"><use xlink:href="#binLabel"></use></svg> 
+                            <svg viewBox="0 0 512 512" class="icon">
+                                <use xlink:href="#binLabel"></use>
+                            </svg>
                             <span class="text">{{'BinLabel'|translate}}</span>
                         </a>
                     </li>
                     <li id="15121" role="menuitem" (click)="listClick($event, 'printing-label/inventory-enquiry')" [ngStyle]="{'display':'none'}">
                         <a class="dropdown-item">
-                            <svg viewBox="0 0 512 512" class="icon"><use xlink:href="#inventoryEnquiry"></use></svg> 
+                            <svg viewBox="0 0 512 512" class="icon">
+                                <use xlink:href="#inventoryEnquiry"></use>
+                            </svg>
                             <span class="text">{{'InventoryEnquiry'|translate}}</span>
                         </a>
                     </li>
