@@ -40,7 +40,10 @@ export class OutCutomerComponent implements OnInit {
   pageSize: number = 10;
   public trackingId: any = "";
   public CustRefNo: any = "";
-  public shipmentId: any = "";
+  public shipmentId: any = ""; 
+  public dockDoorCode: any = "";
+  
+  public dockDoorFromShipment: any = "";
   public deliveryOptionType: any = '1';
   @ViewChild('scanSO') scanSO;
   @ViewChild('scanShipmentId') scanShipmentId;
@@ -236,7 +239,6 @@ export class OutCutomerComponent implements OnInit {
       return;
     }
     else {
-
       if (this.lookupfor == "out-order") {
         this.selectedCustomerElement = lookupValue;
         let outbound: OutboundData = new OutboundData();
@@ -289,14 +291,17 @@ export class OutCutomerComponent implements OnInit {
 
       } else if (this.lookupfor == "ShipmentList") {
         this.shipmentId = lookupValue[0];
+        this.dockDoorCode = lookupValue[4]
         for(var i=0;i<this.serviceData.length;i++){
           // if(this.serviceData[i]== this.shipmentId){
           //   this.shipmentId = this.serviceData[i].
           // }
         }
         this.isShipmentValid(this.shipmentId);
-       // this.getShipmentDetail();
-      } else {
+       // this.getShipmentDetail(); 
+      } else if (this.lookupfor =="DockDoorList"){
+        this.dockDoorCode = lookupValue[0];
+;      }else {
         this.selectedCustomerElement = lookupValue;
         if (this.customerCode != this.selectedCustomerElement[0]) {
           this.orderNumber = "";
@@ -304,7 +309,6 @@ export class OutCutomerComponent implements OnInit {
         let outbound: OutboundData = new OutboundData();
         this.customerCode = this.selectedCustomerElement[0];
         this.customerName = this.selectedCustomerElement[1];
-
         //outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
         outbound.CustomerData = {
           CustomerCode: this.customerCode, CustomerName: this.customerName,
@@ -318,6 +322,70 @@ export class OutCutomerComponent implements OnInit {
       }
     }
   }
+
+  public getDockDoorList(){
+    this.showLookup = false;
+    this.showLookupLoader = true;
+    this.outboundservice.getDockDoorList().subscribe(
+      resp => {
+        this.showLookupLoader = false;
+        if (resp != null && resp != undefined && resp.length > 0) {
+          if (resp[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
+            this.showLookupLoader = false;
+            return;
+          }
+          this.serviceData = resp;
+          this.lookupfor = "DockDoorList";
+          this.showLookup = true;
+        } else {
+          this.toastr.error('', this.translate.instant("ShipmentNotAvailable"));
+          this.orderNumber = "";
+         // this.scanShipmentId.nativeElement.focus()
+        }
+      },
+      error => {
+        this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
+        this.showLookupLoader = false;
+      }
+    );}
+
+    public isValidDockDoor(ddId: any) {
+      if(this.dockDoorCode==undefined || this.dockDoorCode==null || this.dockDoorCode==""){
+        return;
+      }
+      this.showLookup = false;
+      this.showLookupLoader = true;
+      this.outboundservice.isValidDockDoorId(this.dockDoorCode).subscribe(
+        resp => {
+          this.showLookupLoader = false;
+          if (resp != null && resp != undefined) {
+            if (resp[0]!=null && resp[0]!=undefined && resp[0].ErrorMsg!=null &&
+              resp[0].ErrorMsg!=undefined &&  resp[0].ErrorMsg == "7001") {
+              this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
+              this.showLookupLoader = false;
+              return;
+            }
+            
+            if(resp[0]!=null && resp[0].OPTM_DOCKDOORID!=null && resp[0].OPTM_DOCKDOORID!=undefined){
+              this.dockDoorCode = resp[0].OPTM_DOCKDOORID;
+              
+            }
+          } else {
+            this.toastr.error('', this.translate.instant("ShipmentNotAvailable"));
+            this.shipmentId = "";
+           // this.scanShipmentId.nativeElement.focus()
+          }
+        },
+        error => {
+          this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
+          this.showLookupLoader = false;
+        }
+      );
+    }
+    onDockDoorBlur(){
+      this.isValidDockDoor(this.dockDoorCode);
+    }
 
   public openCustomerLookup() {
     this.showLookupLoader = true;
@@ -488,6 +556,14 @@ export class OutCutomerComponent implements OnInit {
 
 
   prepareDeleiveryCollection() {
+     
+    if(this.deliveryOptionType==2){
+      if(this.dockDoorCode!=this.dockDoorFromShipment){
+        this.toastr.error('', this.translate.instant("DockDoorConfirmMessage"));
+        return;
+      }
+    }
+
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
     if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
       this.outbound = JSON.parse(outboundData);
@@ -947,13 +1023,22 @@ export class OutCutomerComponent implements OnInit {
     this.outboundservice.isValidShipmentId(shipmentId).subscribe(
       resp => {
         this.showLookupLoader = false;
-        if (resp != null && resp != undefined && resp.length > 0) {
-          if (resp[0].ErrorMsg == "7001") {
+        if (resp != null && resp != undefined) {
+          if (resp[0]!=null && resp[0]!=undefined && resp[0].ErrorMsg!=null &&
+            resp[0].ErrorMsg!=undefined &&  resp[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
             this.showLookupLoader = false;
             return;
           }
-        console.log("is valid shipment resp",resp);
+          
+          if(resp.ItemHeader!=null && resp.ItemHeader!=undefined && resp.ItemHeader.length>0 &&
+            resp.ItemDetail!=null && resp.ItemDetail!=undefined && resp.ItemDetail.length>0){
+              this.resetOldShipmentData();
+              this.dockDoorCode = resp.ItemHeader[0].OPTM_DOCKDOORID;
+              this.dockDoorFromShipment = resp.ItemHeader[0].OPTM_DOCKDOORID;
+              this.parseAndGenerateDeliveryDataFromShipment(resp);
+          }
+           
 
         } else {
           this.toastr.error('', this.translate.instant("ShipmentNotAvailable"));
@@ -980,53 +1065,6 @@ export class OutCutomerComponent implements OnInit {
 
 
   //-------------------get shipment detail.
-
-  public getShipmentDetail() {
-    this.showLookup = false;
-    if (this.shipmentId == "" || this.shipmentId == undefined || this.shipmentId == null) {
-      return;
-    }
-    let whseId = localStorage.getItem("whseId");
-    this.showLookupLoader = true;
-    this.outboundservice.getShipmentDetail(this.shipmentId).subscribe(
-      resp => {
-        this.showLookupLoader = false;
-        if (resp != null && resp != undefined) {
-          this.resetOldShipmentData();
-          if (resp.ShipmentItems.length > 0) {
-            if(resp.ShipmentBtchSer.length>0 || (resp.ContainerHeader.length>0 && resp.ContainerItems.length>0)){
-              this.parseAndGenerateDeliveryDataFromShipment(resp);
-            }else{
-              this.toastr.error('', this.translate.instant("ShipmentHasNoData"));
-            }
-            
-          } else {
-            if(resp.ItemHeader.length==0 ||resp.ItemDetail.length==0 ){
-              this.resetOldShipmentData();
-
-              this.toastr.error('', this.translate.instant("ShipmentHasNoData"));
-            }else{
-            if (resp[0].ErrorMsg == "7001") {
-              this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
-              this.showLookupLoader = false;
-              return;
-            }
-          }
-          }
-        } else {
-          this.toastr.error('', this.translate.instant("ShipmentNoInfo"));
-          this.orderNumber = "";
-         // this.scanShipmentId.nativeElement.focus();
-          this.shipmentId = "";
-        }
-
-      },
-      error => {
-        this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
-        this.showLookupLoader = false;
-      }
-    );
-  }
 
   resetOldShipmentData(){
     this.orderCollection = [];
@@ -1239,7 +1277,6 @@ export class OutCutomerComponent implements OnInit {
       this.shipmentId== ""){
          return;
       }
-   
    var ContainerBtchSer:any =[];
     this.showLookup = false;
     this.showLookupLoader = true;
@@ -1264,24 +1301,23 @@ export class OutCutomerComponent implements OnInit {
           for(let i=0;i<this.ShipmentItems.length; i++){
             this.ShipmentItems[i]["ShipmentItemBatchSerial"] = []
           }
-          for(let i=0;i<this.ShipmentItems.length; i++){
-            this.ShipmentItems[i]["ShipmentItemBatchSerial"] = []
-          }
           
           for(let j=0;j<this.ShipmentItems.length; j++){
             for(let k=0;k<this.ShipmentItems[j].ShipmentItemBatchSerial.length; k++){
-            this.ShipmentItems[k].ShipmentItemBatchSerial[k]["innerItems"] = []
-          }
+            this.ShipmentItems[j].ShipmentItemBatchSerial[j]["batchSerialLines"] = []
+            }
           }
  
           // for(let i=0;i<this.ContainerItems.length; i++){
           //   this.ContainerItems[i]["ContainerItemsData"] = []
           // }
+
+          //abhi container ki array use nahi kari hai..
           this.ShipmentItems = this.setShipmentItemsBatchSerials(this.ShipmentItems,this.ShipmentBtchSer);
           this.ShipmentItems = this.setShipmentInnerItemsBatchSerials(this.ShipmentItems,this.ShipmentBtchSer);
         } else {
           this.toastr.error('', this.translate.instant("ShipmentNotAvailable"));
-          this.orderNumber = "";
+         // this.orderNumber = "";
          // this.scanShipmentId.nativeElement.focus()
         }
   
@@ -1292,6 +1328,7 @@ export class OutCutomerComponent implements OnInit {
       }
     );
   }
+
   setShipmentInnerItemsBatchSerials(ShipmentItems:any,ShipmentBtchSer:any):any{
     for(let i =0; i<ShipmentItems.length;i++){
       for(let k=0;k<this.ShipmentItems[i].ShipmentItemBatchSerial.length; k++){
@@ -1299,7 +1336,7 @@ export class OutCutomerComponent implements OnInit {
       let itemLines = ShipmentBtchSer.filter(data =>
         ShipmentItems[i].OPTM_ITEMCODE === data.OPTM_ITEMCODE 
       );
-      this.ShipmentItems[i].ShipmentItemBatchSerial[k].innerItems=ShipmentBtchSer;
+      this.ShipmentItems[i].ShipmentItemBatchSerial[k].batchSerialLines = ShipmentBtchSer;
       }
     }
     return  ShipmentItems;
@@ -1323,6 +1360,80 @@ export class OutCutomerComponent implements OnInit {
     }
   
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+// not using this method becaulse api which is using here is not correct.
+
+// public getShipmentDetail() {
+//   this.showLookup = false;
+//   if (this.shipmentId == "" || this.shipmentId == undefined || this.shipmentId == null) {
+//     return;
+//   }
+//   let whseId = localStorage.getItem("whseId");
+//   this.showLookupLoader = true;
+//   this.outboundservice.getShipmentDetail(this.shipmentId).subscribe(
+//     resp => {
+//       this.showLookupLoader = false;
+//       if (resp != null && resp != undefined) {
+//         this.resetOldShipmentData();
+//         if (resp.ShipmentItems.length > 0) {
+//           if(resp.ShipmentBtchSer.length>0 || (resp.ContainerHeader.length>0 && resp.ContainerItems.length>0)){
+//             this.parseAndGenerateDeliveryDataFromShipment(resp);
+//           }else{
+//             this.toastr.error('', this.translate.instant("ShipmentHasNoData"));
+//           }
+          
+//         } else {
+//           if(resp.ItemHeader.length==0 ||resp.ItemDetail.length==0 ){
+//             this.resetOldShipmentData();
+
+//             this.toastr.error('', this.translate.instant("ShipmentHasNoData"));
+//           }else{
+//           if (resp[0].ErrorMsg == "7001") {
+//             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
+//             this.showLookupLoader = false;
+//             return;
+//           }
+//         }
+//         }
+//       } else {
+//         this.toastr.error('', this.translate.instant("ShipmentNoInfo"));
+//         this.orderNumber = "";
+//        // this.scanShipmentId.nativeElement.focus();
+//         this.shipmentId = "";
+//       }
+
+//     },
+//     error => {
+//       this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
+//       this.showLookupLoader = false;
+//     }
+//   );
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 

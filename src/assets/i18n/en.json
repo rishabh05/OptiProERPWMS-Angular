@@ -457,5 +457,8 @@
   "outbound_Delivery": "Delivery",
   "Outbound_Delivery_through_Shipment": "Delivery through Shipment",
   "outbound_Dock_DoorNo": "Dock Door Code",
+  "Outbound_Dock_Door_List": "Dock Door List",
+  "DockDoorNotAvailable": "No Dock Door Available.",
+  "DockDoorConfirmMessage": "Please Confirm your delivery with the correct Dock Door.",
   "Dummy": "Dummy"
 }

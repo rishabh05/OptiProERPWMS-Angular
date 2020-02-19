@@ -77,6 +77,22 @@ export class OutboundService {
     return this.httpclient.post(this.config_params.service_url + "/api/Shipment/GetShipmentId", body, this.commonService.httpOptions);
   }
 
+  public getDockDoorList(): Observable<any> { 
+    this.outRequest = new OutRequest();
+    this.outRequest.CompanyDBId = localStorage.getItem("CompID");
+    var body: any = { PalletCode:JSON.stringify( [{ COMPANYDBNAME: this.outRequest.CompanyDBId,
+      OPTM_WHSE: localStorage.getItem("whseId")}] )};
+    return this.httpclient.post(this.config_params.service_url + "/api/Shipment/GetDataForDockDoor", body, this.commonService.httpOptions);
+  }
+
+  public isValidDockDoorId(dockDoorId: string): Observable<any> {
+    this.outRequest = new OutRequest();
+    this.outRequest.CompanyDBId = localStorage.getItem("CompID");
+    var body: any = { PalletCode:JSON.stringify( [{ COMPANYDBNAME: this.outRequest.CompanyDBId, 
+      OPTM_WHSE: localStorage.getItem("whseId"), OPTM_DOCKDOORID:dockDoorId }] )};
+    return this.httpclient.post(this.config_params.service_url + "/api/Shipment/IsValidDockDoor", body, this.commonService.httpOptions);
+  }
+
   public getShipmentInformation(): Observable<any> { 
     this.outRequest = new OutRequest();
     this.outRequest.CompanyDBId = localStorage.getItem("CompID");

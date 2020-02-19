@@ -10,12 +10,12 @@
         [selectable]="true"  [pageSize]="5" >
 
  
-        <kendo-grid-column field="OPTM_ID" title="{{'ShipmentId'|translate}}"></kendo-grid-column>
+        <kendo-grid-column field="OPTM_SHIPMENTID" title="{{'ShipmentId'|translate}}"></kendo-grid-column>
 
         <kendo-grid-column field="OPTM_ITEMCODE" title="Item Code"></kendo-grid-column>
-
-        <kendo-grid-column field="OPTM_ITEMDESC" title="Item Desc"></kendo-grid-column>
-        <kendo-grid-column field="OPTM_DOCENTRY" title="SO No."></kendo-grid-column>
+        <kendo-grid-column field="OPTM_STATUS" title="Status"></kendo-grid-column>
+        <kendo-grid-column field="OPTM_QTY" title="Quantity"></kendo-grid-column>
+        <kendo-grid-column field="OPTM_QTY_FULFILLED" title="Filled Quantity"></kendo-grid-column>
 
  
 
@@ -23,22 +23,25 @@
         <h5>Items:</h5>  
           <kendo-grid [data]="dataItem.ShipmentItemBatchSerial">
 
-            <kendo-grid-column field="OPTM_ID" title="batch sr id"></kendo-grid-column>
+            <kendo-grid-column field="OPTM_SHIPMENTID" title="{{'ShipmentId'|translate}}"></kendo-grid-column>
 
-            <kendo-grid-column field="OPTM_BTCHSER" title="Batch/Sr No."></kendo-grid-column>
+            <kendo-grid-column field="OPTM_DTLLINEID" title="Line Id"></kendo-grid-column>
 
+            <kendo-grid-column field="OPTM_BTCHSER" class="grid-right-align-column" title="{{'BatchSerial_No'|translate}}">
+            </kendo-grid-column>
             <kendo-grid-column field="OPTM_ITEMCODE" class="grid-right-align-column" title="{{'ItemCode'|translate}}">
             </kendo-grid-column>
-            <kendo-grid-column field="OPTM_BTCHQTY" class="grid-right-align-column" title="{{'Quantity'|translate}}">
+            <kendo-grid-column field="OPTM_QTY" class="grid-right-align-column" title="{{'Quantity'|translate}}">
             </kendo-grid-column>
+
            
             <ng-template kendoGridDetailTemplate let-innerItem>
               <h5>  Batch/Serial Info:</h5>  
-              <kendo-grid [data]="innerItem.innerItems">
-                <kendo-grid-column field="OPTM_ID" title="batch sr id"></kendo-grid-column>
-                <kendo-grid-column field="OPTM_BTCHSER" title="Batch/Sr No."></kendo-grid-column>
+              <!-- <kendo-grid [data]="innerItem.batchSerialLines">
+                <kendo-grid-column field="OPTM_BTCHSER" title="{{'BatchSerial_No'|translate}}"></kendo-grid-column>
+               <kendo-grid-column field="OPTM_BTCHSER" title="Batch/Sr No."></kendo-grid-column>
             
-              </kendo-grid>
+              </kendo-grid> -->
             </ng-template> 
           </kendo-grid>
 

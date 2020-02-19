@@ -79,7 +79,7 @@
                             class="col-sm-3 col-form-label">{{'outbound_Dock_DoorNo'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input #scanShipmentId (blur)="onDockDoorBlur()" id="outDockDoorNoInput"
+                                <input #dockDoorID (blur)="onDockDoorBlur()" id="outDockDoorNoInput"
                                     type="text" class="form-control form-control-sm" name='DockDoorCode'
                                     [(ngModel)]="dockDoorCode" placeholder="{{'outbound_Dock_DoorNo'|translate}}">
                                 <div class="input-group-append">

@@ -162,8 +162,10 @@ export class LookupComponent implements OnInit {
       this.showITRList();
     } else if (this.lookupfor == "PickItemBtchSer") {
       this.showPickItemBtchSerList();
-    }else if(this.lookupfor == "ShipmentList"){
+    } else if(this.lookupfor == "ShipmentList"){
       this.showShipmentList();
+    } else if (this.lookupfor == "DockDoorList"){
+      this.showDockDoorList();
     }
 
     this.clearFilters();
@@ -839,6 +841,23 @@ export class LookupComponent implements OnInit {
       }
     ];
     this.lookupTitle = this.translate.instant("Shipment_List");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
+
+  showDockDoorList(){
+    this.table_head = [
+      {
+        field: 'OPTM_DOCKDOORID',
+        title: this.translate.instant("ShipmentID"),
+        type: 'text',
+        width: '150'
+      }
+    ];
+    this.lookupTitle = this.translate.instant("Outbound_Dock_Door_List");
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
         this.dialogOpened = true;
