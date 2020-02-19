@@ -35,23 +35,23 @@
             </li>
 
             <!--outbound options start.-->
-            <li class="dropdown" dropdown id="SLS"  [ngClass]="{'active': selectedItem == 'outbound'}" [ngStyle]="{'display':'none'}">
+            <li class="dropdown" dropdown id="SLS"  [ngStyle]="{'display':'none'}" [insideClick]="true">
               
                 <a dropdownToggle class="dropdown-toggle">
                     <svg viewBox="0 0 8500 6050" class="icon"><use xlink:href="#outbound"></use></svg>
                 <span class="text">{{'Outbound'|translate}}</span>
             </a>
             <ul *dropdownMenu class="dropdown-menu" role="menu">
-                <li id="15108" role="menuitem" (click)="listClick($event, 'outbound', 1)" [ngStyle]="{'display':'none'}">
+                <li id="15035" role="menuitem" (click)="listClick($event, 'outbound', 1)" [ngStyle]="{'display':'none'}">
                     <a class="dropdown-item">
-                        <svg viewBox="0 0 8500 6050" class="icon"><use xlink:href="#outbound"></use></svg>
-                        <span class="text">{{'outbound_Delivery'|translate}}</span>
+                        <svg viewBox="0 0 1837 1123" class="icon"><use xlink:href="#outDelivery"></use></svg>
+                        <span class="text">{{'outbound_Delivery'|translate}}</span>                       
                     </a>
                 </li>
                 <!-- <li id="15109" role="menuitem" (click)="listClick($event, 'inventory-transfer/binTransfer')" > -->
-                <li id="15109" role="menuitem" (click)="listClick($event, 'outbound', 2)" [ngStyle]="{'display':'none'}">
+                <li id="15036" role="menuitem" (click)="listClick($event, 'outbound', 2)" [ngStyle]="{'display':'none'}">
                     <a class="dropdown-item">
-                        <svg viewBox="0 0 8500 6050" class="icon"><use xlink:href="#outbound"></use></svg>
+                        <svg viewBox="0 0 1837 1123" class="icon"><use xlink:href="#deliveryThroughShipment"></use></svg>
                         <span class="text">{{'Outbound_Delivery_through_Shipment'|translate}}</span>
                     </a>
                 </li>

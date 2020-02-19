@@ -14,9 +14,10 @@ import { GridModule } from '@progress/kendo-angular-grid';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
 import { InputsModule } from '@progress/kendo-angular-inputs';
 import { DialogModule } from '@progress/kendo-angular-dialog';
+import { DeliveryThroughShipmentComponent } from './delivery-through-shipment/delivery-through-shipment.component';
  
 @NgModule({
-  declarations: [ OutCutomerComponent, OutOrderComponent, OutProdissueComponent],
+  declarations: [ OutCutomerComponent, OutOrderComponent, OutProdissueComponent, DeliveryThroughShipmentComponent],
   imports: [   
     FormsModule,
     CommonModule,

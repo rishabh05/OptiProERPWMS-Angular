@@ -794,7 +794,7 @@ export class LookupComponent implements OnInit {
   showShipmentList(){
     this.table_head = [
       {
-        field: 'OPTM_DOCENTRY',
+        field: 'OPTM_SHIPMENTID',
         title: this.translate.instant("ShipmentID"),
         type: 'text',
         width: '100'

@@ -3,7 +3,7 @@
         <div class="opti_container_inner" [perfectScrollbar]=" ">
 
             <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
-                {{'Outbound_Delivery'|translate}}
+                {{pageTitle}}
             </h3>
             <div class="row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
@@ -71,6 +71,30 @@
                                 <input type="text" class="form-control form-control-sm" name="customerName"
                                     value="{{customerName}}" placeholder="{{'Outbound_CustomerName'|translate}}"
                                     [disabled]="true">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row" *ngIf ="deliveryOptionType==2">
+                        <label for="inputPassword"
+                            class="col-sm-3 col-form-label">{{'outbound_Dock_DoorNo'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input #scanShipmentId (blur)="onDockDoorBlur()" id="outDockDoorNoInput"
+                                    type="text" class="form-control form-control-sm" name='DockDoorCode'
+                                    [(ngModel)]="dockDoorCode" placeholder="{{'outbound_Dock_DoorNo'|translate}}">
+                                <div class="input-group-append">
+                                    <button tabIndex="-1"
+                                        class="k-button k-primary btn" (mousedown)="getDockDoorList()" type="button">
+                                        <i class="opti-icon-hammenu"></i>
+                                    </button>
+                                </div>
+
+                                <div class="ml-1 d-flex">
+                                    <button tabIndex="-1" type="button" id="outDockDoorScan" 
+                                        class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                        <i class="opti-icon-qr-code fs-24"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -10,7 +10,7 @@ import { Router, NavigationEnd } from '@angular/router';
 })
 export class AppComponent {
   public svgFile:string = 'assets/images/svg/svg-sprite.svg';
-  public svgVersion:any = "1.12";
+  public svgVersion:any = "1.15";
 
   constructor(private router: Router) { 
     // let userLang = navigator.language.split('-')[0];

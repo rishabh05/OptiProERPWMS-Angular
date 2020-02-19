@@ -429,5 +429,6 @@
   "Shipment_Detail": "Shipment",
   "outbound_Delivery": "Delivery",
   "Outbound_Delivery_through_Shipment": "Delivery through Shipment",
+  "outbound_Dock_DoorNo": "Dock Door Code",
   "Dummy": "Dummy"
 }

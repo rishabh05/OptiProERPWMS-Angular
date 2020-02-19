@@ -123,11 +123,9 @@ export class PortalLeftComponent implements OnInit {
    * @param module 
    */
   listClick(event, module, fromWhere: number =   0) {
+    
     this.selectedItem = module;
-
     this.closeRightSidebar(event);
-    this.router.navigate(['home/' + module]);
-
     localStorage.setItem("ProdReceptItem", '');
     localStorage.setItem("FromReceiptProd", 'false');
     localStorage.setItem("GoodsReceiptModel", '');
@@ -137,8 +135,10 @@ export class PortalLeftComponent implements OnInit {
       // manage delivery and shipment via delivery option in same outbound 
       if(fromWhere==1){
         localStorage.setItem("deliveryOptionType", '1');
+        module = module + '/outcustomer'
       }else if(fromWhere==2){
         localStorage.setItem("deliveryOptionType", '2');
+        module = module + '/deliveryThroughShipment'
       }
       this.onOutboundClick();
     }else if(module == "inbound"){
@@ -152,6 +152,7 @@ export class PortalLeftComponent implements OnInit {
       localStorage.setItem("towhseId", localStorage.getItem("whseId"));
       localStorage.setItem("fromwhseId", localStorage.getItem("whseId"));
     }
+    this.router.navigate(['home/' + module]);
   }
 
   /** 
