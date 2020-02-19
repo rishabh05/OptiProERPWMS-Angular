@@ -1,0 +1,62 @@
+<div class="opti_container position-relative bg-white rounded">
+    <form class="form-with-fix-btnBar" *ngIf="!viewLines">
+        <div class="opti_container_inner" [perfectScrollbar]=" ">
+
+            <h3 class="border-bottom no-border-mobile d-flex pt-1 pb-3 mb-4">
+                {{'PT_ShipmentList'|translate}}
+            </h3>
+            <div class="row pick-list-row">
+                <div class="col-12 pick-list-col">
+                    <div class="new-custom-grid">
+                        <kendo-grid [data]="ShipmentList" (cellClick)="onShipmentSelection($event)" [pageSize]="pageSize" [skip]="skip" [pageable]="true">
+                            <kendo-grid-column [media]="mobileMedia" class="opti_mobile-grid-td">
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                    <dl class="grid-mobile-card">
+                                        <button class="task-btn" (click)="showPickTaskList(dataItem)">
+                                            <span class=" k-icon k-i-track-changes"></span>
+                                        </button>
+                                        <div class="di-list">
+                                            <dt>{{'PT_ShipmentId'|translate}}</dt>
+                                            <dd>{{ dataItem.OPTM_DOCENTRY}}</dd>
+                                        
+                                            <dt>{{'PT_Customer'|translate}}</dt>
+                                            <dd>{{ dataItem.OPTM_BPCODE}}</dd>
+                                        </div>
+                                        <div class="di-list">
+                                            <dt>{{'PT_Ship_To'|translate}}</dt>
+                                            <dd>{{ dataItem.OPTM_SHIPTO}}</dd>
+                                        
+                                            <dt>{{'PT_Warehouse'|translate}}</dt>
+                                            <dd>{{ dataItem.OPTM_WHSCODE}}</dd>
+                                        </div>
+                                    </dl>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column [media]="desktopMedia" field="OPTM_DOCENTRY" title="{{'PT_ShipmentId'|translate}}">
+                            </kendo-grid-column>
+                            <kendo-grid-column [media]="desktopMedia" field="OPTM_BPCODE" title="{{'PT_Customer'|translate}}">
+                            </kendo-grid-column>
+                            <kendo-grid-column [media]="desktopMedia" field="OPTM_SHIPTO" title="{{'PT_Ship_To'|translate}}">
+                            </kendo-grid-column>
+                            <kendo-grid-column [media]="desktopMedia" field="OPTM_WHSCODE" title="{{'PT_Warehouse'|translate}}">
+                            </kendo-grid-column>
+                            <kendo-grid-column [media]="desktopMedia" title="Pick Detail">
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <button type="button" class="btn btn-danger k-button btn-sm mr-10 " (click)="showPickTaskList(dataItem)">
+                                            <i class=" k-icon k-i-track-changes"></i>
+                                    </button>                                    
+                                </ng-template>
+                            </kendo-grid-column>
+                        </kendo-grid>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="fix-footer-btnBar">
+
+        </div>
+    </form>
+
+</div>

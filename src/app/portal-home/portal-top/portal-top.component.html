@@ -16,54 +16,7 @@
                 <div class="opti_topbar-rightpanel float-right">
                     <div class="opti_vertical-align">
                         <ul class="d-inline-flex">
-                            <!-- <li class="opti_icon-spacing"> -->
-
-                                <!-- search for desktop and ipad -->
-                                <!-- <div class="opti_search-form opti_hide-in-mobile">
-                                    <input class="form-control" type="text" placeholder="Search" aria-label="Search">
-                                    <span class="opti_top-search-icon opti_vertical-align opti_mouse-pointer"><img src="assets/images/common/search-black.svg" class="" alt="Search" width="15" /></span>
-                                </div> -->
-                                <!-- end search for desktop and ipad -->
-
-                                <!-- search for mobile -->
-                                <!-- <div class="opti_search-form opti_hide-in-desktop-ipad ">
-                                    <input class="form-control" type="text" placeholder="Search" aria-label="Search">
-                                    <span class="opti_top-search-icon opti_vertical-align opti_mouse-pointer" (click)="openVerticallyCentered(mobileSearch)"><img src="assets/images/common/search-white.svg" class="" alt="Search" width="20" height="30" /></span>
-                                </div> -->
-                                <!-- end search for mobile -->
-                                
-                            <!-- </li> -->
-
-                            <!-- <li class="opti_icon-spacing">
-                            <img src="assets/images/common/settings.svg" (click)="openCloseRightPanel();" class="opti_mouse-pointer opti_theme-setting" alt="Theme Setting" width="20" height="30" />
-                        </li> -->
-
-                            <!-- if notifications not  avialble -->
-                            <!-- <li class="opti_icon-spacing">
-                            <img src="assets/images/common/notifications-button.svg" class="opti_mouse-pointer opti_theme-setting" alt="Theme Setting" width="20" height="30" />
-                        </li> -->
-
-                            <!-- if notifications avialble -->
-                            <!-- <li class="opti_icon-spacing position-relative" dropdown>
-                                <span dropdownToggle class="dropdown-toggle opti_mouse-pointer">
-                                <img src="assets/images/common/notifications-button.svg" class="float-left opti_mouse-pointer opti_theme-setting" alt="Theme Setting" width="20" height="30" />
-                                <span class="opt_topbar-count">99+</span>
-                                </span>
-                                <div class="dropdown-menu opti_notification-drop-down" *dropdownMenu [perfectScrollbar]="">
-                                    <ul class="opti_liststyle-one-ul">
-                                        <li class="opti_mouse-pointer opti_liststyle-one-li" *ngFor='let i of [1,2,3,4,5,6]'>
-                                            <div class="opti_liststyle-one-image">
-                                                <img src="assets/images/common/user-avatar.png" width="30" height="30" alt="img" />
-                                            </div>
-                                            <div class="opti_liststyle-one-text">
-                                                <h5>Peter</h5>
-                                                <p>purchase request has been created by samsung</p>
-                                                <p class="opti_date">May 30, 2018 8:02 AM</p>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li> -->
+                          
 
                             <li class="opti_icon-spacing opti_user-profile position-relative" dropdown>
                                 <a dropdownToggle class="dropdown-toggle">
@@ -71,28 +24,17 @@
                                     <span>{{DBName}}</span>
                                 </a>
                                 <ul class="dropdown-menu opti_user-profile-drop-down" *dropdownMenu>
-                                    <!-- <li>
-                                        <div class="container-fluid">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="opti_profile-box">
-                                                        <div class="opti_profile-box-img">
-                                                            <img src="assets/images/common/user-avatar.png" alt="user image" width="80"> 
-                                                        </div>
-                                                        <div class="opti_profile-box-text opti_vertical-align">
-                                                            <h5>{{loggedInUserName}}</h5>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li> -->
-
+                                  
                                     <li class="opti_mouse-pointer opti_profile-box-setting cursor-normal">
                                         <div class="container-fluid">
                                             <div class="row">
                                                 <div class="col-md-12 pl-2">
-                                                    <img src="assets/images/common/user-avatar.png" class="opti_mouse-pointer opti_theme-setting mr-1" alt="User Profile" width="30" height="30" /> {{loggedInUserName}}
+                                                    <div class="user-list-details">
+                                                        <img src="assets/images/common/user-avatar.png" class="opti_mouse-pointer opti_theme-setting mr-1" alt="User Profile" width="30" height="30" /> 
+                                                        <div class="name"> {{loggedInUserName}}</div>
+                                                        <div>{{DBName}}</div>
+                                                    </div>
+                                                    
                                                 </div>
                                             </div>
                                         </div>
@@ -142,9 +84,7 @@
                             </li>
                         </ul>
                     </div>
-                    <!-- <div class="opti_vertical-align opt_top-bar-height opti_icon-spacing float-left">
-                    <img src="assets/images/common/settings.svg" (click)="themeSetting();" class="opti_mouse-pointer opti_theme-setting" alt="Theme Setting" width="20" height="30" />
-                </div> -->
+                    
                 </div>
             </div>
         </div>
@@ -170,9 +110,10 @@
             <img src="assets/images/common/close-black.svg" width="15" />
         </button>
         <p></p>
-        <p>
-            <img src="assets/images/logo/large-logo-old.png" alt="Large Logo" class="opti_large-logo" />
-        </p>
+        <h4>
+            Shipping Solution
+            <!-- <img src="assets/images/logo/large-logo-old.png" alt="Large Logo" class="opti_large-logo" /> -->
+        </h4>
         <p>{{appVersion}}</p>
         <p>{{'Dashboard_CopyWrt_Msg'|translate}}</p>
         <p><a href="http://www.optiproerp.com">www.optiproerp.com</a></p>

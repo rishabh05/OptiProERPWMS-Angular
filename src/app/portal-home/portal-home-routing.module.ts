@@ -36,7 +36,7 @@ const routes: Routes = [
       { path:'changeWarehouse', component:ChangeWarehouseComponent },
       { path:'inbound', loadChildren:"../inbound/inbound.module#InboundModule"},     
       { path: 'adjustment-counting', loadChildren: "../adjustments-counting/adjustments-counting.module#AdjustmentsCountingModule" }, 
-      //{ path: 'inventory-transfer', loadChildren: "../inventory-transfer/inventory-transfer.module#InventoryTransferModule" },
+      { path: 'picking', loadChildren: "../picking/picking.module#PickingModule" },
       { path: 'production', loadChildren: "../production/production.module#ProductionModule" },
       { path: 'printing-label', loadChildren: "../printing-label/printing-label.module#PrintingLabelModule" },
       // Need to remove these routing

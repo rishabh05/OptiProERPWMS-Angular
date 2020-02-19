@@ -1,0 +1,81 @@
+<div class="opti_container position-relative bg-white rounded">
+    <form class="form-with-fix-btnBar" *ngIf="!viewLines">
+        <div class="opti_container_inner" [perfectScrollbar]=" ">
+
+            <!-- <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
+               Item List
+            </h3> -->
+            <div class="po-details-sec">
+                <span class="po-details">
+                    <span class="po-labels po-num">{{shipmentno}}</span>
+                    <span class="po-labels">{{'Customer'|translate}}: {{customereName}}</span>
+                </span>
+            </div>
+            <div class="row pick-list-row">
+                <div class="col-12 pick-list-col">
+                    <div class="new-custom-grid">
+                        <kendo-grid (cellClick)="cellClickHandler($event)" [data]="PickTaskList" [pageSize]="pageSize"
+                            [skip]="skip" [pageable]="true">
+                            <kendo-grid-column [media]="mobileMedia" class="opti_mobile-grid-td">
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                    <dl class="grid-mobile-card">
+                                        <div class="di-list">
+                                            <dt>{{'PT_TaskId'|translate}}</dt>
+                                            <dd>{{ dataItem.OPTM_TASKID }}</dd>
+                                        </div>
+                                        <div class="di-list">
+                                            <dt>{{'PT_TaskType'|translate}}</dt>
+                                            <dd>{{ dataItem.OPTM_TASKTYPE }}</dd>
+                                        </div>
+                                        <div class="di-list">
+                                            <dt>{{'ItemCode'|translate}}</dt>
+                                            <dd>{{ dataItem.OPTM_ITEMCODE }}</dd>
+                                        </div>
+                                        <div class="di-list">
+                                            <dt>{{'PT_Warehouse'|translate}}</dt>
+                                            <dd>{{ dataItem.OPTM_PICK_WHSE }}</dd>
+                                        </div>
+                                        <div class="di-list">
+                                            <dt>{{'Quantity'|translate}}</dt>
+                                            <dd>{{ dataItem.OPTM_PLANNED_QTY }}</dd>
+                                        </div>
+                                        <div class="di-list">
+                                            <dt>{{'PT_PlanDate'|translate}}</dt>
+                                            <dd>{{ dataItem.OPTM_PLANNEDATETIME }}</dd>
+                                        </div>
+                                    </dl>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column [media]="desktopMedia" field="OPTM_TASKID" title="{{'PT_TaskId'|translate}}">
+                            </kendo-grid-column>
+                            <kendo-grid-column [media]="desktopMedia" field="OPTM_TASKTYPE" title="{{'PT_TaskType'|translate}}">
+                            </kendo-grid-column>
+                            <kendo-grid-column [media]="desktopMedia" field="OPTM_ITEMCODE" title="{{'ItemCode'|translate}}">
+                            </kendo-grid-column>
+                            <kendo-grid-column [media]="desktopMedia" field="OPTM_PICK_WHSE" title="{{'PT_Warehouse'|translate}}">
+                            </kendo-grid-column>
+                            <kendo-grid-column [media]="desktopMedia" field="OPTM_PLANNED_QTY" title="{{'Quantity'|translate}}">
+                            </kendo-grid-column>
+                            <kendo-grid-column [media]="desktopMedia" field="OPTM_PLANNEDATETIME" title="{{'PT_PlanDate'|translate}}">
+                            </kendo-grid-column>
+                        </kendo-grid>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="fix-footer-btnBar">
+            <div class="col-sm-12 col-12">
+                <button (click)="onPrevClick()" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon mr-1"
+                    type="button">
+                    <i class="opti-icon-arrow-back"></i>
+                </button>
+                <!-- <button (click)="onNextClick()" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon mr-1"
+                    type="button">
+                    <i class="opti-icon-arrow-next"></i></button> -->
+            </div>
+        </div>
+    </form>
+
+</div>
