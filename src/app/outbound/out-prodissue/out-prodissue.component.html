@@ -1,12 +1,13 @@
 <div class="opti_container position-relative bg-white rounded">
     <form class="form-with-fix-btnBar ">
+        <!-- <div class = "opti-disable-page-div"></div> -->
         <div class="opti_container_inner" [perfectScrollbar]=" ">
             <h3 class="border-bottom d-flex pt-1 pb-3 mb-4" *ngIf="!fromProduction">
                 {{pageTitle}}: {{outbound.OrderData.DOCNUM}}
             </h3>
 
             <h3 class="border-bottom d-flex pt-1 pb-3 mb-4" *ngIf="fromProduction">
-                {{pageTitle}}: {{currentOrderNo}}
+                {{pageTitle}}: {{currentOrderNo}} 
             </h3>
             <div class="row">
                 <div class="col-12">

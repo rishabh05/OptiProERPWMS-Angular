@@ -552,11 +552,11 @@ export class OutCutomerComponent implements OnInit {
     this.showLookup = false;
     this.shipmentId = '';
   }
-
+ 
 
 
   prepareDeleiveryCollection() {
-     
+    // dock door confirmation when delivery through shipment.
     if(this.deliveryOptionType==2){
       if(this.dockDoorCode!=this.dockDoorFromShipment){
         this.toastr.error('', this.translate.instant("DockDoorConfirmMessage"));
