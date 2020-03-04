@@ -16,7 +16,7 @@ import { SOHEADER, SODETAIL, DeliveryToken } from 'src/app/models/outbound/out-d
   styleUrls: ['./out-cutomer.component.scss']
 })
 export class OutCutomerComponent implements OnInit {
-  
+  useContainer:boolean = false;
   dialogMsg: string = "Do you want to delete?"
   yesButtonText: string = "Yes";
   noButtonText: string = "No";
@@ -42,7 +42,7 @@ export class OutCutomerComponent implements OnInit {
   public CustRefNo: any = "";
   public shipmentId: any = ""; 
   public dockDoorCode: any = "";
-  
+ 
   public dockDoorFromShipment: any = "";
   public deliveryOptionType: any = '1';
   @ViewChild('scanSO') scanSO;
@@ -291,12 +291,18 @@ export class OutCutomerComponent implements OnInit {
 
       } else if (this.lookupfor == "ShipmentList") {
         this.shipmentId = lookupValue[0];
-        this.dockDoorCode = lookupValue[4]
-        for(var i=0;i<this.serviceData.length;i++){
-          // if(this.serviceData[i]== this.shipmentId){
-          //   this.shipmentId = this.serviceData[i].
-          // }
+        this.dockDoorCode = lookupValue[4];
+        var useContainer = lookupValue[5];
+        if(useContainer =="Y" ||useContainer =="y"){
+          this.useContainer = true;  
+        }else{
+          this.useContainer = false;
         }
+        // for(var i=0;i<this.serviceData.length;i++){
+        //   if(this.serviceData[i]== this.shipmentId){
+        //    var shipmentId = this.serviceData[i]
+        //   }
+        // } 
         this.isShipmentValid(this.shipmentId);
        // this.getShipmentDetail(); 
       } else if (this.lookupfor =="DockDoorList"){
@@ -364,6 +370,11 @@ export class OutCutomerComponent implements OnInit {
               resp[0].ErrorMsg!=undefined &&  resp[0].ErrorMsg == "7001") {
               this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
               this.showLookupLoader = false;
+              return;
+            }
+            if(resp!=null && resp.length==0){
+              this.toastr.error('', this.translate.instant("ShipmentNotAvailable"));
+              this.shipmentId = "";
               return;
             }
             
@@ -1272,6 +1283,8 @@ export class OutCutomerComponent implements OnInit {
    ShipmentBtchSer:any =[];
    ContainerHeader:any =[];
    ContainerItems:any =[];
+   ContainerBatchSerial:any =[];
+   ShipmentInfoData:any;
   public getShipmentDataItemDetails() {
     if(this.shipmentId == undefined || this.shipmentId == null ||
       this.shipmentId== ""){
@@ -1295,18 +1308,17 @@ export class OutCutomerComponent implements OnInit {
            this.ShipmentBtchSer= resp.ShipmentBtchSer;
            this.ContainerItems= resp.ContainerItems;
            this.ContainerHeader= resp.ContainerHeader;
-           ContainerBtchSer= resp.ContainerBtchSer;
+           this.ContainerBatchSerial= resp.ContainerBtchSer;
           // this.lookupfor = "ShipmentList";
           // this.showLookup = true;
           for(let i=0;i<this.ShipmentItems.length; i++){
             this.ShipmentItems[i]["ShipmentItemBatchSerial"] = []
           }
-          
-          for(let j=0;j<this.ShipmentItems.length; j++){
-            for(let k=0;k<this.ShipmentItems[j].ShipmentItemBatchSerial.length; k++){
-            this.ShipmentItems[j].ShipmentItemBatchSerial[j]["batchSerialLines"] = []
-            }
-          }
+          // for(let j=0;j<this.ShipmentItems.length; j++){
+          //   for(let k=0;k<this.ShipmentItems[j].ShipmentItemBatchSerial.length; k++){
+          //   this.ShipmentItems[j].ShipmentItemBatchSerial[j]["batchSerialLines"] = []
+          //   }
+          // }
  
           // for(let i=0;i<this.ContainerItems.length; i++){
           //   this.ContainerItems[i]["ContainerItemsData"] = []
@@ -1314,7 +1326,27 @@ export class OutCutomerComponent implements OnInit {
 
           //abhi container ki array use nahi kari hai..
           this.ShipmentItems = this.setShipmentItemsBatchSerials(this.ShipmentItems,this.ShipmentBtchSer);
-          this.ShipmentItems = this.setShipmentInnerItemsBatchSerials(this.ShipmentItems,this.ShipmentBtchSer);
+         // this.ShipmentItems = this.setShipmentInnerItemsBatchSerials(this.ShipmentItems,this.ShipmentBtchSer);
+
+          // set Container Data
+           for(let i=0;i<this.ContainerItems.length; i++){
+             this.ContainerItems[i]["ContainerItemsBatchSerial"] = []
+           }
+          for(let i=0;i<this.ContainerHeader.length; i++){
+            this.ContainerHeader[i]["ContainerItems"] = []
+          }
+          
+
+          this.ContainerHeader = this.setContainerItemsToHeader(this.ContainerHeader,this.ContainerItems);
+          this.ContainerHeader = this.setContainerItemBatchSerials(this.ContainerHeader,this.ContainerBatchSerial);
+         if(this.useContainer){
+          this.ShipmentInfoData = this.ContainerHeader;
+         }else{
+          this.ShipmentInfoData = this.ShipmentItems;
+         }
+          
+          //this.useContainer = true;
+          //ContainerItemsBatchSerial
         } else {
           this.toastr.error('', this.translate.instant("ShipmentNotAvailable"));
          // this.orderNumber = "";
@@ -1350,6 +1382,33 @@ export class OutCutomerComponent implements OnInit {
       item["ShipmentItemBatchSerial"] = itemLines;
     }
     return  ShipmentItems;
+  }
+
+  setContainerItemBatchSerials(ContainerHeader: any, ContainerBtchSer: any): any {
+    for (let p = 0; p < ContainerHeader.length; p++) {
+      for (let q = 0; q < ContainerHeader[p].ContainerItems.length; q++) {
+ 
+       var  hdrContainerId = ContainerHeader[p].ContainerItems[q].OPTM_CONTAINERID;
+       var hdrItemCode = ContainerHeader[p].ContainerItems[q].OPTM_ITEMCODE;
+        let containerItemBatchSerialLines = ContainerBtchSer.filter(data =>
+          hdrContainerId == data.OPTM_CONTAINERID &&
+          hdrItemCode == data.OPTM_ITEMCODE
+        );
+        ContainerHeader[p].ContainerItems[q].ContainerItemsBatchSerial = containerItemBatchSerialLines;
+      }
+    }
+    return ContainerHeader;
+  }
+
+  setContainerItemsToHeader(ContainerHeaders:any,ContainerItems:any):any{
+    for(let i =0; i<ContainerHeaders.length;i++){
+      var headerItem =  ContainerHeaders[i];
+      let containerItemLines = ContainerItems.filter(data => 
+        headerItem.OPTM_CONTCODE === data.OPTM_CONTAINERID 
+      );
+      headerItem.ContainerItems = containerItemLines;
+    }
+    return  ContainerHeaders;
   }
 
   getShipmentLookupEvent(eventValue){

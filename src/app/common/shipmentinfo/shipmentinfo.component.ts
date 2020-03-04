@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 export class ShipmentinfoComponent implements OnInit {
   showDialog:boolean = true;
   @Input() serviceData: any;
+  @Input() useContainer: any;
  
 
   lookupPagable: boolean = true; 
@@ -28,7 +29,6 @@ export class ShipmentinfoComponent implements OnInit {
 
   closeDialog(){
     this.showDialog = false;
-
     this.lookupOutputEvent.emit('close')
   }
 

@@ -29,10 +29,11 @@ body.opti_account-module {
         width: 100%;
         content: "";
         left: 0;
-        z-index: -1;
-        -webkit-filter: blur(8px);
-        filter: blur(8px);
+        // z-index: -1;
+        // -webkit-filter: blur(8px);
+        // filter: blur(8px);
         height: 100%;
+        
     }
     &:after {
         content: '';
@@ -58,7 +59,7 @@ body.opti_account-module {
         kendo-dateinput {
             width: calc(100% - 30px);
         }
-        .k-dateinput-wrap,
+        .k-dateinput-wrap, .k-dateinput  .k-dateinput-wrap,
         .k-select {
             border: none;
         }
@@ -200,16 +201,16 @@ file-drop .drop-zone.over {
     padding-bottom: calc(.24rem + 1px);
     line-height: 1;
 }
-body .k-dateinput-wrap .k-input{
+body .k-dateinput-wrap .k-input, body .k-dateinput .k-dateinput-wrap .k-input{
     font-size: $font-size-small;
     line-height: 1.5;
 }
 .input-group-sm>.form-control, .input-group-sm>.input-group-append>.btn, .input-group-sm>.input-group-append>.input-group-text, .input-group-sm>.input-group-prepend>.btn, .input-group-sm>.input-group-prepend>.input-group-text{
     font-size: $font-size-small;
-    height: 26px;
+    height: 22px;
 }
 .form-group {
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 kendo-numerictextbox.text-right{
     & input{
@@ -217,7 +218,7 @@ kendo-numerictextbox.text-right{
     }
 }
 .form-control-sm{
-    height:26px;
+    height:22px;
     font-size:12px;
 }
 
@@ -226,7 +227,7 @@ kendo-numerictextbox.text-right{
 ////////////////////////////////////////////////////////////////////
 .btn-danger.k-button{
     color:#fff;
-    background-color: #ff0f31;
+    background: #ff0f31;
     &:hover, &:active, &:focus{
         background-color: #de102d;
         color:#fff;
@@ -234,7 +235,7 @@ kendo-numerictextbox.text-right{
 }
 .btn-success.k-button{
     color:#fff;
-    background-color: #11bf4f;
+    background: #11bf4f;
     &:hover, &:active, &:focus{
         background-color: #10a746;
         color:#fff;
@@ -242,7 +243,7 @@ kendo-numerictextbox.text-right{
 }
 .k-button.btn-transparent{
     color:#999;
-    background-color: transparent;
+    background: transparent;
     &:hover, &:active, &:focus{
         background-color: transparent;
         color:#333;
@@ -271,7 +272,7 @@ kendo-numerictextbox.text-right{
     display: inline-flex;
 }
 body .k-dropdown .k-dropdown-wrap {
-    height: 26px !important;
+    height: 22px !important;
 }
 body kendo-grid-filter-cell-operators kendo-dropdownlist.k-dropdown-operator .k-select{
     height: auto;
@@ -305,11 +306,11 @@ body.modal-open app-root {
     font-size: 18px;
 }
 .k-widget.form-control-sm .k-input{
-    height: 26px !important;
+    height: 22px !important;
 }
 .k-form .k-form-field > input {
-    height: 26px !important;
-    line-height: 26px !important;
+    height: 22px !important;
+    line-height: 22px !important;
 }
 /////////////////////////////////////////////////////////////////////
 ///////////////////////////// Kendo Grid custom Style /////////////////////
@@ -342,7 +343,7 @@ body .opti_container .opti_container_inner{
 ///////////////////////////// Kendo grid /////////////////////
 ////////////////////////////////////////////////////////////////////
 .k-filtercell .k-filtercell-wrapper > .k-textbox {
-    height: 26px;
+    height: 22px;
     padding: .25rem .5rem;
     font-size: 12px;
 }
@@ -367,7 +368,7 @@ body .k-grid-toolbar + .k-grid-aria-root .k-grid-header .k-header .k-dropdown-wr
     padding: 3px 2px;
 }
 .k-filtercell .k-filtercell-operator > .k-button.k-clear-button-visible {
-    height: 26px;
+    height: 22px;
     background: transparent;
 }
 .k-filtercell .k-filtercell-operator > .k-button .k-icon,
@@ -376,7 +377,7 @@ body .k-grid-toolbar + .k-grid-aria-root .k-grid-header .k-header .k-dropdown-wr
 }
 .k-filtercell .k-filtercell-operator {
     margin-left: 0.375rem;
-    height: 26px;
+    height: 22px;
     display: flex;
     align-items: center;
 }
@@ -437,9 +438,15 @@ td .k-dropdown-wrap .k-input {
     height: 20px !important;
 }
 
-.k-dialog-wrapper .k-dialog{
-    max-height: 98%;
-    .k-grid{
-        max-height: 100%;
-    }
+// page navigation Loader
+.grid-right-align-column{
+    text-align: right !important;
 }
+body.opti_account-module #opti_signinID .k-dropdown .k-dropdown-wrap{
+    border: none !important;
+    height: 36px !important;
+    border-radius: 5px !important;
+  }
+  #opti_signinID .k-widget.form-control-sm .k-input {
+    height: 36px !important;
+  }

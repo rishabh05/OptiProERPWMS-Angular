@@ -455,10 +455,12 @@
   "Shipment": "Shipment",
   "Shipment_Detail": "Shipment",
   "outbound_Delivery": "Delivery",
-  "Outbound_Delivery_through_Shipment": "Delivery through Shipment",
+  "Outbound_Delivery_through_Shipment": "Delivery by Shipment",
   "outbound_Dock_DoorNo": "Dock Door Code",
   "Outbound_Dock_Door_List": "Dock Door List",
   "DockDoorNotAvailable": "No Dock Door Available.",
-  "DockDoorConfirmMessage": "Please Confirm your delivery with the correct Dock Door.",
+  "DockDoorConfirmMessage": "Please Confirm your delivery with the correct Dock Door!",
+  "ContainerCode":"Container Code",
+  "ContainerType":"Container Type",
   "Dummy": "Dummy"
 }

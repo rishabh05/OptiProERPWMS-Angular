@@ -21,7 +21,7 @@
                                         class="k-button k-primary btn" (mousedown)="getShipmentList()" type="button">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
-                                    <button tabIndex="-1" class="k-button k-primary btn separate-btn" type="button"
+                                    <button tabIndex="-1" class="k-button k-primary btn separate-btn ship-btn" type="button"
                                     (mousedown)="getShipmentDataItemDetails()" >
                                     <i class="opti-icon-view-batch mr-1"></i>{{'Shipment_Detail'|translate}}
                                     </button>
@@ -236,5 +236,5 @@
         [yesButtonText]="yesButtonText" (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
 </span>
 <span *ngIf="showShipmentInfo==true">
- <app-shipmentinfo  [serviceData]='ShipmentItems' (lookupOutputEvent)="getShipmentLookupEvent($event)"></app-shipmentinfo>
+ <app-shipmentinfo  [serviceData]='ShipmentInfoData' [useContainer]='useContainer' (lookupOutputEvent)="getShipmentLookupEvent($event)"></app-shipmentinfo>
 </span> 
