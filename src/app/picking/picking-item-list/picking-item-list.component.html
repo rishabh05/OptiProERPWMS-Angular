@@ -33,11 +33,11 @@
                                         </div>
                                         <div class="di-list">
                                             <dt>{{'PT_Warehouse'|translate}}</dt>
-                                            <dd>{{ dataItem.OPTM_PICK_WHSE }}</dd>
+                                            <dd>{{ dataItem.OPTM_SRC_WHSE }}</dd>
                                         </div>
                                         <div class="di-list">
                                             <dt>{{'Quantity'|translate}}</dt>
-                                            <dd>{{ dataItem.OPTM_PLANNED_QTY }}</dd>
+                                            <dd>{{ dataItem.OPTM_TASK_QTY }}</dd>
                                         </div>
                                         <div class="di-list">
                                             <dt>{{'PT_PlanDate'|translate}}</dt>
@@ -52,9 +52,9 @@
                             </kendo-grid-column>
                             <kendo-grid-column [media]="desktopMedia" field="OPTM_ITEMCODE" title="{{'ItemCode'|translate}}">
                             </kendo-grid-column>
-                            <kendo-grid-column [media]="desktopMedia" field="OPTM_PICK_WHSE" title="{{'PT_Warehouse'|translate}}">
+                            <kendo-grid-column [media]="desktopMedia" field="OPTM_SRC_WHSE" title="{{'PT_Warehouse'|translate}}">
                             </kendo-grid-column>
-                            <kendo-grid-column [media]="desktopMedia" field="OPTM_PLANNED_QTY" title="{{'Quantity'|translate}}">
+                            <kendo-grid-column [media]="desktopMedia" field="OPTM_TASK_QTY" title="{{'Quantity'|translate}}">
                             </kendo-grid-column>
                             <kendo-grid-column [media]="desktopMedia" field="OPTM_PLANNEDATETIME" title="{{'PT_PlanDate'|translate}}">
                             </kendo-grid-column>

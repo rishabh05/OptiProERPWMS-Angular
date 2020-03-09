@@ -3,7 +3,7 @@
         <div class="opti_container_inner" [perfectScrollbar]=" ">
 
             <h3 class="border-bottom no-border-mobile d-flex pt-1 pb-3 mb-4">
-                {{'PT_ShipmentList'|translate}}
+                {{'PickList'|translate}}
             </h3>
             <div class="row pick-list-row">
                 <div class="col-12 pick-list-col">
@@ -16,30 +16,30 @@
                                             <span class=" k-icon k-i-track-changes"></span>
                                         </button>
                                         <div class="di-list">
-                                            <dt>{{'PT_ShipmentId'|translate}}</dt>
-                                            <dd>{{ dataItem.OPTM_DOCENTRY}}</dd>
+                                            <dt>{{'PickListCode'|translate}}</dt>
+                                            <dd>{{ dataItem.OPTM_PICKLIST_CODE}}</dd>
                                         
-                                            <dt>{{'PT_Customer'|translate}}</dt>
-                                            <dd>{{ dataItem.OPTM_BPCODE}}</dd>
+                                            <!-- <dt>{{'PT_Customer'|translate}}</dt>
+                                            <dd>{{ dataItem.OPTM_BPCODE}}</dd> -->
                                         </div>
                                         <div class="di-list">
-                                            <dt>{{'PT_Ship_To'|translate}}</dt>
-                                            <dd>{{ dataItem.OPTM_SHIPTO}}</dd>
-                                        
+                                            <dt>{{'TaskListCode'|translate}}</dt>
+                                            <dd>{{ dataItem.OPTM_TASK_CODE}}</dd>
+<!--                                         
                                             <dt>{{'PT_Warehouse'|translate}}</dt>
-                                            <dd>{{ dataItem.OPTM_WHSCODE}}</dd>
+                                            <dd>{{ dataItem.OPTM_WHSCODE}}</dd> -->
                                         </div>
                                     </dl>
                                 </ng-template>
                             </kendo-grid-column>
-                            <kendo-grid-column [media]="desktopMedia" field="OPTM_DOCENTRY" title="{{'PT_ShipmentId'|translate}}">
+                            <kendo-grid-column [media]="desktopMedia" field="OPTM_PICKLIST_CODE" title="{{'PickListCode'|translate}}">
                             </kendo-grid-column>
-                            <kendo-grid-column [media]="desktopMedia" field="OPTM_BPCODE" title="{{'PT_Customer'|translate}}">
+                            <kendo-grid-column [media]="desktopMedia" field="OPTM_TASK_CODE" title="{{'TaskListCode'|translate}}">
                             </kendo-grid-column>
-                            <kendo-grid-column [media]="desktopMedia" field="OPTM_SHIPTO" title="{{'PT_Ship_To'|translate}}">
+                            <!-- <kendo-grid-column [media]="desktopMedia" field="OPTM_SHIPTO" title="{{'PT_Ship_To'|translate}}">
                             </kendo-grid-column>
                             <kendo-grid-column [media]="desktopMedia" field="OPTM_WHSCODE" title="{{'PT_Warehouse'|translate}}">
-                            </kendo-grid-column>
+                            </kendo-grid-column> -->
                             <kendo-grid-column [media]="desktopMedia" title="Pick Detail">
                                 <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                     <button type="button" class="btn btn-danger k-button btn-sm mr-10 " (click)="showPickTaskList(dataItem)">

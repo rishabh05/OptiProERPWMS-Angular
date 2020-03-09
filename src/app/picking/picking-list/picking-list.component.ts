@@ -61,7 +61,7 @@ export class PickingListComponent implements OnInit {
 
   ngOnInit() {
     this.picktaskService.clearLocaStorage();
-    this.getShipmentList()
+    this.GetPicklist()
     // this.commonservice.setCustomizeInfo();
   }
 
@@ -72,13 +72,14 @@ export class PickingListComponent implements OnInit {
   }
 
   showPickTaskList(row) {
+    //OPTM_PICKLIST_ID
     localStorage.setItem("ShipDetail", JSON.stringify(row));
     this.router.navigate(['home/picking/picking-item-list']);
   }
 
-  getShipmentList() {
+  GetPicklist() {
     this.showLoader = true;
-    this.picktaskService.GetShipmentId().subscribe(
+    this.picktaskService.GetPicklist().subscribe(
       (data: any) => {
         this.showLoader = false;
         if (data != undefined) {
@@ -92,7 +93,7 @@ export class PickingListComponent implements OnInit {
           //   data[i].OPTM_CONT_PERPARENT = data[i].OPTM_CONT_PERPARENT.toFixed(Number(localStorage.getItem("DecimalPrecision")));
           //   data[i].OPTM_CONT_PARTOFPARENT = data[i].OPTM_CONT_PARTOFPARENT.toFixed(Number(localStorage.getItem("DecimalPrecision")));
           // }
-          this.ShipmentList = data;
+          this.ShipmentList = data.Table;
         } else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         }

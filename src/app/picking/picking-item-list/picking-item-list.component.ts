@@ -76,9 +76,8 @@ export class PickingItemListComponent implements OnInit {
   ngOnInit() {
     this.picktaskService.clearLocaStorage();
     this.ShipDetail = JSON.parse(localStorage.getItem("ShipDetail"));
-    this.shipmentno = this.translate.instant("PT_ShipmentId") + ": " + this.ShipDetail.OPTM_DOCENTRY;
-    this.customereName = this.ShipDetail.OPTM_BPCODE;
-    this.getPickTaskList(this.ShipDetail.OPTM_DOCENTRY);
+    this.shipmentno = this.translate.instant("PickListCode") + ": " + this.ShipDetail.OPTM_PICKLIST_CODE;
+    this.getPickTaskList(this.ShipDetail.OPTM_TASK_CODE);
   }
 
 
@@ -94,9 +93,9 @@ export class PickingItemListComponent implements OnInit {
     this.router.navigate(['home/picking/picking-list']);
   }
 
-  getPickTaskList(ShipmentId) {
+  getPickTaskList(OPTM_TASK_CODE) {
     this.showLoader = true;
-    this.picktaskService.GetPickTaskId(ShipmentId).subscribe(
+    this.picktaskService.GetDataBasedOnPickList(OPTM_TASK_CODE).subscribe(
       (data: any) => {
         this.showLoader = false;
         if (data != undefined) {

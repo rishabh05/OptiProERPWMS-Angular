@@ -22,23 +22,24 @@ export class PickTaskService {
     localStorage.setItem("TaskDetail", "");
   }
 
-  GetShipmentId(): Observable<any> {
+  GetPicklist(): Observable<any> {
     let jObject = {
-      Shipment: JSON.stringify([{
-        CompanyDBId: localStorage.getItem("CompID")
+      PalletCode: JSON.stringify([{
+        CompanyDBId: localStorage.getItem("CompID"),
+        OPTM_PICK_TYPE: 1
       }])
     };
-    return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetShipmentId", jObject, this.commonService.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetPicklist", jObject, this.commonService.httpOptions);
   }
 
-  GetPickTaskId(ShipmentId): Observable<any> {
+  GetDataBasedOnPickList(OPTM_TASK_CODE): Observable<any> {
     let jObject = {
-      Shipment: JSON.stringify([{
+      PalletCode: JSON.stringify([{
         CompanyDBId: localStorage.getItem("CompID"),
-        OPTM_SHIPMENTID: ShipmentId
+        OPTM_TASK_CODE: OPTM_TASK_CODE
       }])
     };
-    return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetDataBasedOnShipmentID", jObject, this.commonService.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetDataBasedOnPickList", jObject, this.commonService.httpOptions);
   }
 
   InsertIntoContainerRelationship(OPTM_CONTAINER_TYPE: string, OPTM_PARENT_CONTTYPE: string, OPTM_CONT_PERPARENT, OPTM_CONT_PARTOFPARENT): Observable<any> {

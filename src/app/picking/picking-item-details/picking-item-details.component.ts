@@ -73,7 +73,7 @@ export class PickingItemDetailsComponent implements OnInit {
   OPTM_Tracking: string = 'S';
   itemcodeLabel: string;
   itemcodeValue: string;
-  showLocation: boolean;
+  showLocation: boolean=true;
   ShipmentList: any[] = [];
   totalPickTask: Number;
   dialogOpened: boolean = false;
@@ -99,9 +99,9 @@ export class PickingItemDetailsComponent implements OnInit {
   ngOnInit() {
     this.ShipDetail = JSON.parse(localStorage.getItem("ShipDetail"));
     this.ShipmentList[0] = this.ShipDetail;
-    this.shipmentno = this.translate.instant("PT_ShipmentId") + " " + this.ShipDetail.OPTM_DOCENTRY;
+    this.shipmentno = this.translate.instant("PT_ShipmentId") + " " + this.ShipDetail.OPTM_PICKLIST_CODE;
     if (localStorage.getItem("TaskDetail") == "" || localStorage.getItem("TaskDetail") == undefined) {
-      this.getPickTaskList(this.ShipDetail.OPTM_DOCENTRY);
+      this.getPickTaskList(this.ShipDetail.OPTM_TASK_CODE);
     } else {
       this.PickTaskDetail = JSON.parse(localStorage.getItem("TaskDetail"));
       this.PickTaskList = this.PickTaskDetail.OPTM_WHSTASKLIST;
@@ -119,9 +119,9 @@ export class PickingItemDetailsComponent implements OnInit {
     }
   }
 
-  getPickTaskList(ShipmentId) {
+  getPickTaskList(OPTM_TASK_CODE) {
     this.showLoader = true;
-    this.picktaskService.GetPickTaskId(ShipmentId).subscribe(
+    this.picktaskService.GetDataBasedOnPickList(OPTM_TASK_CODE).subscribe(
       (data: any) => {
         this.showLoader = false;
         if (data != undefined) {
@@ -152,9 +152,9 @@ export class PickingItemDetailsComponent implements OnInit {
 
   setVales(index) {
     this.pickTaskName = this.PickTaskList[index].OPTM_TASKID;
-    this.openQty = this.PickTaskList[index].OPTM_PLANNED_QTY;
+    this.openQty = this.PickTaskList[index].OPTM_TASK_QTY;
     this.OPTM_Tracking = this.PickTaskList[index].OPTM_TRACKING;
-    this.locationValue = this.PickTaskList[index].OPTM_PICK_BIN;
+    this.locationValue = this.PickTaskList[index].OPTM_SRC_BIN;
     if (this.PickTaskList[index].OPTM_LINETYPE == 1) {
       this.itemcodeLabel = this.translate.instant("ContainerId");
       this.itemcodeValue = this.PickTaskDetail.OPTM_WHSTASK_DTL[index].OPTM_CONTAINERID;
@@ -220,7 +220,7 @@ export class PickingItemDetailsComponent implements OnInit {
     if (this.PT_Enter_Location == undefined || this.PT_Enter_Location == "") {
       return;
     }
-    if (this.PT_Enter_Location === this.PickTaskList[this.index].OPTM_PICK_BIN) {// location
+    if (this.PT_Enter_Location === this.PickTaskList[this.index].OPTM_SRC_BIN) {// location
       this.nextStep();
     } else {
       this.toastr.error('', this.translate.instant("PT_Location_not_match"));
@@ -314,10 +314,10 @@ export class PickingItemDetailsComponent implements OnInit {
   // }
 
   onSaveClick() {
-    if (this.ContBtchSerArray.length <= 0 && !this.threeSteps) {
-      this.toastr.error('', this.translate.instant("NoRecord"));
-      return;
-    }
+    // if (this.ContBtchSerArray.length <= 0 && !this.threeSteps) {
+    //   this.toastr.error('', this.translate.instant("NoRecord"));
+    //   return;
+    // }
     if (this.threeSteps) {
 
       if (this.pickQty != undefined || this.pickQty != 0) {
@@ -481,5 +481,9 @@ export class PickingItemDetailsComponent implements OnInit {
     // localStorage.setItem("ShipDetail", JSON.stringify(row));
     // this.router.navigate(['home/picking/picking-item-list']);
     this.dialogOpened = true;
+  }
+
+  close_kendo_dialog(){
+    this.dialogOpened = false;
   }
 }

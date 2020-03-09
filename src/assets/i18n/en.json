@@ -24,6 +24,7 @@
   "2":"Home -> Left side Menus",
   "Inbound": "Inbound",
   "Outbound": "Outbound",
+  "PickList": "Pick List",
   "InventoryTransfer": "Inventory Transfer",
   "WarehouseTransfer": "Warehouse Transfer",
   "BinTransfer": "Bin Transfer",
@@ -418,17 +419,23 @@
   "Plt_MergeErrMsg": "System is facing problem in merge operation. Please try again.",
   "Plt_PalletizeErrMsg": "System is facing problem in palletize operation. Please try again.",
   "Plt_TransferErrMsg": "System is facing problem in transfer operation. Please try again.",
+  "outbound_Delivery": "Delivery",
+  "Outbound_Delivery_through_Shipment": "Delivery by Shipment",
+  "outbound_Dock_DoorNo": "Dock Door Code",
+  "Outbound_Dock_Door_List": "Dock Door List",
 
+  "12": "Pick List",
   "PickTask": "Pick Task",
   "Pick": "Pick",
   "PT_ShipmentList": "Shipment List",
   "PT_ShipmentId": "Shipment Id",
   "PT_Customer": "Customer",
+  "TaskListCode": "Task List Code",
   "PT_Ship_To": "Ship To",
   "PT_Warehouse": "Warehouse",
   "Quantity_Fulfilled": "Quantity Fulfilled",
   "Line_status": "Line Status",
-
+  "PickListCode":"Pick List Code",
   "ContainerId":"Container Id",
   "LineID": "Line Id",
   "PT_Enter_Location":"Enter Location",
@@ -454,13 +461,11 @@
   "ShipmentHasNoData": "This Shipment has no data.",
   "Shipment": "Shipment",
   "Shipment_Detail": "Shipment",
-  "outbound_Delivery": "Delivery",
-  "Outbound_Delivery_through_Shipment": "Delivery by Shipment",
-  "outbound_Dock_DoorNo": "Dock Door Code",
-  "Outbound_Dock_Door_List": "Dock Door List",
+
   "DockDoorNotAvailable": "No Dock Door Available.",
   "DockDoorConfirmMessage": "Please Confirm your delivery with the correct Dock Door!",
   "ContainerCode":"Container Code",
   "ContainerType":"Container Type",
+
   "Dummy": "Dummy"
 }
