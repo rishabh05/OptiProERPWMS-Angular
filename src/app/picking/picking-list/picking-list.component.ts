@@ -19,6 +19,7 @@ export class PickingListComponent implements OnInit {
   PackTypeList: any[] = [];
   Pick_Type: string;
   pickTypeIndex: any = 1;
+  showGrid:boolean = false;
 
   constructor(private picktaskService: PickTaskService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService) {
     let userLang = navigator.language.split('-')[0];
@@ -67,7 +68,7 @@ export class PickingListComponent implements OnInit {
   ngOnInit() {
     this.picktaskService.clearLocaStorage();
     this.initialize();
-    this.GetPicklist(this.pickTypeIndex)
+   // this.GetPicklist(this.pickTypeIndex)
     // this.commonservice.setCustomizeInfo();
   }
 
@@ -75,7 +76,7 @@ export class PickingListComponent implements OnInit {
     this.PackTypeList = [this.translate.instant("Batch_Picking"),
     this.translate.instant("Cluster_Picking"), this.translate.instant("Container_Picking"),
     this.translate.instant("Discreate_Picking"), this.translate.instant("Zone_Picking")];
-    this.Pick_Type = this.PackTypeList[0];
+    //this.Pick_Type = this.PackTypeList[0];
   }
 
   onShipmentSelection(row) {
@@ -102,11 +103,13 @@ export class PickingListComponent implements OnInit {
             return;
           }
           this.showLookupLoader = false;
-          // for (var i = 0; i < data.length; i++) {
-          //   data[i].OPTM_CONT_PERPARENT = data[i].OPTM_CONT_PERPARENT.toFixed(Number(localStorage.getItem("DecimalPrecision")));
-          //   data[i].OPTM_CONT_PARTOFPARENT = data[i].OPTM_CONT_PARTOFPARENT.toFixed(Number(localStorage.getItem("DecimalPrecision")));
-          // }
           this.ShipmentList = data.Table;
+          if(this.ShipmentList.length > 0){
+            this.showGrid = true;
+          }else{
+            this.showGrid = false;
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          }
           if(this.ShipmentList.length > this.pageSize){
             this.pagable = true;
           }
