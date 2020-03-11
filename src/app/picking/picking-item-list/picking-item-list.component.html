@@ -2,20 +2,20 @@
     <form class="form-with-fix-btnBar" *ngIf="!viewLines">
         <div class="opti_container_inner" [perfectScrollbar]=" ">
 
-            <!-- <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
-               Item List
-            </h3> -->
-            <div class="po-details-sec">
+                <h3 class="border-bottom no-border-mobile d-flex pt-1 pb-3 mb-4">
+                        {{shipmentno}}
+                    </h3>
+            <!-- <div class="po-details-sec">
                 <span class="po-details">
                     <span class="po-labels po-num">{{shipmentno}}</span>
-                    <span class="po-labels">{{'Customer'|translate}}: {{customereName}}</span>
+                    <span class="po-labels">{{'Customer'|translate}}: {{customereName}}</span> 
                 </span>
-            </div>
+            </div> -->
             <div class="row pick-list-row">
                 <div class="col-12 pick-list-col">
                     <div class="new-custom-grid">
                         <kendo-grid (cellClick)="cellClickHandler($event)" [data]="PickTaskList" [pageSize]="pageSize"
-                            [skip]="skip" [pageable]="true">
+                            [skip]="skip" [pageable]="pagable">
                             <kendo-grid-column [media]="mobileMedia" class="opti_mobile-grid-td">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <dl class="grid-mobile-card">

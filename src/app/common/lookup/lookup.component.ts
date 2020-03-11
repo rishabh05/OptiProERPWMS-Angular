@@ -816,7 +816,7 @@ export class LookupComponent implements OnInit {
         width: '100'
       },
       {
-        field: 'OPTM_QTY',
+        field: 'OPTM_PLANNED_QTY',
         title: this.translate.instant("Quantity"),
         type: 'numeric',
         class: 'text-right',

@@ -22,11 +22,11 @@ export class PickTaskService {
     localStorage.setItem("TaskDetail", "");
   }
 
-  GetPicklist(): Observable<any> {
+  GetPicklist(OPTM_PICK_TYPE): Observable<any> {
     let jObject = {
       PalletCode: JSON.stringify([{
         CompanyDBId: localStorage.getItem("CompID"),
-        OPTM_PICK_TYPE: 1
+        OPTM_PICK_TYPE: OPTM_PICK_TYPE
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetPicklist", jObject, this.commonService.httpOptions);

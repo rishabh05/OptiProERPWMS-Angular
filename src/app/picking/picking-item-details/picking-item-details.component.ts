@@ -286,32 +286,37 @@ export class PickingItemDetailsComponent implements OnInit {
   }
 
   onQtyChange() {
-    // if (this.pickQty != undefined) {
-    //   let sum = 0;
-    //   for (var i = 0; i < this.BtchNoneArray.length; i++) {
-    //     sum = sum + this.BtchNoneArray[i].OPTM_Qty;
-    //   }
-    //   if ((sum + this.pickQty) <= this.openQty) {
-    //     this.totalpickQty = sum + this.pickQty;
-    //   } else {
-    //     this.toastr.error('', this.translate.instant("Inbound_NoOpenQuantityValid"));
-    //     this.pickQty = undefined;
-    //   }
-    // }
-  }
+    if (this.pickQty != undefined) {
+      let sum = 0;
+      for (var i = 0; i < this.BtchNoneArray.length; i++) {
+        sum = sum + this.BtchNoneArray[i].OPTM_Qty;
+      }
+      if ((sum + this.pickQty) <= this.openQty) {
+        this.totalpickQty = sum + this.pickQty;
+      } else {
+        this.toastr.error('', this.translate.instant("Inbound_NoOpenQuantityValid"));
+        this.pickQty = undefined;
+        return;
+      }
 
-  // conConfirmClick() {
-  //   let result = this.BtchNoneArray.find(element => element.PT_Enter_ContBtchSer == this.PT_Enter_ContBtchSer);
-  //   if (result == undefined) {
-  //     this.BtchNoneArray.push(new BtchNoneModel(this.PT_Enter_Location, this.PT_Enter_ContBtchSer, this.pickQty));
-  //     this.currentStep = 1;
-  //     this.PT_Enter_Location = "";
-  //     this.PT_Enter_ContBtchSer = "";
-  //     this.pickQty = undefined;
-  //   } else {
-  //     this.toastr.error('', this.translate.instant("DataAlreadySaved"));
-  //   }
-  // }
+      let result = this.BtchNoneArray.find(element => element.PT_Enter_ContBtchSer == this.PT_Enter_ContBtchSer);
+      if (result == undefined) {
+        this.BtchNoneArray.push(new BtchNoneModel(this.PT_Enter_Location, this.PT_Enter_ContBtchSer, this.pickQty));
+      } else {
+        this.toastr.error('', this.translate.instant("DataAlreadySaved"));
+        return;
+      }
+      this.PT_Enter_Location = "";
+      this.PT_Enter_ContBtchSer = "";
+      this.pickQty = undefined;
+      if (Number(this.totalpickQty) != Number(this.openQty)) {
+        this.currentStep = 2;
+        return;
+      }else{
+        this.preparePickTaskData();
+      }
+    }
+  }
 
   onSaveClick() {
     // if (this.ContBtchSerArray.length <= 0 && !this.threeSteps) {
@@ -467,6 +472,7 @@ export class PickingItemDetailsComponent implements OnInit {
     this.showbtchser = [];
     for (var i = 0; i < this.PickTaskDetail.OPTM_WHSTASK_BTCHSER.length; i++) {
       if(this.PickTaskDetail.OPTM_WHSTASK_BTCHSER[i].OPTM_TASKID == this.pickTaskName){
+        this.PickTaskDetail.OPTM_WHSTASK_BTCHSER[i].OPTM_PLANNED_QTY = Number(this.PickTaskDetail.OPTM_WHSTASK_BTCHSER[i].OPTM_PLANNED_QTY).toFixed(Number(localStorage.getItem("DecimalPrecision")));
         this.showbtchser.push(this.PickTaskDetail.OPTM_WHSTASK_BTCHSER[i]);
       }
     }

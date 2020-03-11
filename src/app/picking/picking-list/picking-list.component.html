@@ -5,10 +5,29 @@
             <h3 class="border-bottom no-border-mobile d-flex pt-1 pb-3 mb-4">
                 {{'PickList'|translate}}
             </h3>
+
+            <!-- row start PickType-->
+            <div class="row">
+                <!-- col start -->
+                <div class="col-sm-6">
+                    <div class="form-group row">
+                        <label for="Pick_Type" class="col-sm-4 col-form-label">{{'Pick_Type'|translate}}</label>
+                        <div class="col-sm-7">
+                            <div class="input-group ">
+                                <kendo-dropdownlist [data]="PackTypeList" id="Pick_Type" #selectedvalue (selectionChange)="onPickTypeChange($event)" name="Pick_Type"
+                                    [(ngModel)]="Pick_Type">
+                                </kendo-dropdownlist>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- col end -->
+            </div>
+
             <div class="row pick-list-row">
                 <div class="col-12 pick-list-col">
                     <div class="new-custom-grid">
-                        <kendo-grid [data]="ShipmentList" (cellClick)="onShipmentSelection($event)" [pageSize]="pageSize" [skip]="skip" [pageable]="true">
+                        <kendo-grid [data]="ShipmentList" (cellClick)="onShipmentSelection($event)" [pageSize]="pageSize" [skip]="skip" [pageable]="pagable">
                             <kendo-grid-column [media]="mobileMedia" class="opti_mobile-grid-td">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <dl class="grid-mobile-card">
@@ -18,14 +37,14 @@
                                         <div class="di-list">
                                             <dt>{{'PickListCode'|translate}}</dt>
                                             <dd>{{ dataItem.OPTM_PICKLIST_CODE}}</dd>
-                                        
+
                                             <!-- <dt>{{'PT_Customer'|translate}}</dt>
                                             <dd>{{ dataItem.OPTM_BPCODE}}</dd> -->
                                         </div>
                                         <div class="di-list">
                                             <dt>{{'TaskListCode'|translate}}</dt>
                                             <dd>{{ dataItem.OPTM_TASK_CODE}}</dd>
-<!--                                         
+                                            <!--                                         
                                             <dt>{{'PT_Warehouse'|translate}}</dt>
                                             <dd>{{ dataItem.OPTM_WHSCODE}}</dd> -->
                                         </div>
@@ -43,8 +62,8 @@
                             <kendo-grid-column [media]="desktopMedia" title="Pick Detail">
                                 <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                     <button type="button" class="btn btn-danger k-button btn-sm mr-10 " (click)="showPickTaskList(dataItem)">
-                                            <i class=" k-icon k-i-track-changes"></i>
-                                    </button>                                    
+                                        <i class=" k-icon k-i-track-changes"></i>
+                                    </button>
                                 </ng-template>
                             </kendo-grid-column>
                         </kendo-grid>

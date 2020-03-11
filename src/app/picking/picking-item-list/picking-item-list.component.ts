@@ -26,6 +26,8 @@ export class PickingItemListComponent implements OnInit {
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
     translate.use(userLang);
     translate.onLangChange.subscribe((event: LangChangeEvent) => {
+      this.ShipDetail = JSON.parse(localStorage.getItem("ShipDetail"));
+      this.shipmentno = this.translate.instant("PickListCode") + ": " + this.ShipDetail.OPTM_PICKLIST_CODE;
     });
   }
 
@@ -67,6 +69,7 @@ export class PickingItemListComponent implements OnInit {
   public items: any[] = [];
   public mySelection: number[] = [];
   public pageSize = 10;
+  public pagable= false;
   public skip = 0;
   public mobileMedia = "(max-width: 767px)";
   public desktopMedia = "(min-width: 768px)";
@@ -79,8 +82,6 @@ export class PickingItemListComponent implements OnInit {
     this.shipmentno = this.translate.instant("PickListCode") + ": " + this.ShipDetail.OPTM_PICKLIST_CODE;
     this.getPickTaskList(this.ShipDetail.OPTM_TASK_CODE);
   }
-
-
 
   cellClickHandler(row) {
     localStorage.setItem("From", "tasklist");
@@ -107,6 +108,9 @@ export class PickingItemListComponent implements OnInit {
           this.showLookupLoader = false;
           this.PickTaskDetail = data;
           this.PickTaskList = data.OPTM_WHSTASKLIST;
+          if(this.PickTaskList.length > this.pageSize){
+            this.pagable = true;
+          }
         } else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         }

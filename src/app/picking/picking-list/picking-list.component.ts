@@ -16,12 +16,16 @@ export class PickingListComponent implements OnInit {
   showLookupLoader: boolean = true;
   ShipmentList: any[];
   showLoader: boolean = false;
+  PackTypeList: any[] = [];
+  Pick_Type: string;
+  pickTypeIndex: any = 1;
 
   constructor(private picktaskService: PickTaskService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService) {
     let userLang = navigator.language.split('-')[0];
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
     translate.use(userLang);
     translate.onLangChange.subscribe((event: LangChangeEvent) => {
+      this.initialize();
     });
   }
 
@@ -54,6 +58,7 @@ export class PickingListComponent implements OnInit {
   public items: any[] = [];
   public mySelection: number[] = [];
   public pageSize = 10;
+  public pagable = false;
   public skip = 0;
   public mobileMedia = "(max-width: 767px)";
   public desktopMedia = "(min-width: 768px)";
@@ -61,8 +66,16 @@ export class PickingListComponent implements OnInit {
 
   ngOnInit() {
     this.picktaskService.clearLocaStorage();
-    this.GetPicklist()
+    this.initialize();
+    this.GetPicklist(this.pickTypeIndex)
     // this.commonservice.setCustomizeInfo();
+  }
+
+  initialize() {
+    this.PackTypeList = [this.translate.instant("Batch_Picking"),
+    this.translate.instant("Cluster_Picking"), this.translate.instant("Container_Picking"),
+    this.translate.instant("Discreate_Picking"), this.translate.instant("Zone_Picking")];
+    this.Pick_Type = this.PackTypeList[0];
   }
 
   onShipmentSelection(row) {
@@ -77,9 +90,9 @@ export class PickingListComponent implements OnInit {
     this.router.navigate(['home/picking/picking-item-list']);
   }
 
-  GetPicklist() {
+  GetPicklist(OPTM_PICK_TYPE) {
     this.showLoader = true;
-    this.picktaskService.GetPicklist().subscribe(
+    this.picktaskService.GetPicklist(OPTM_PICK_TYPE).subscribe(
       (data: any) => {
         this.showLoader = false;
         if (data != undefined) {
@@ -94,6 +107,9 @@ export class PickingListComponent implements OnInit {
           //   data[i].OPTM_CONT_PARTOFPARENT = data[i].OPTM_CONT_PARTOFPARENT.toFixed(Number(localStorage.getItem("DecimalPrecision")));
           // }
           this.ShipmentList = data.Table;
+          if(this.ShipmentList.length > this.pageSize){
+            this.pagable = true;
+          }
         } else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         }
@@ -113,5 +129,14 @@ export class PickingListComponent implements OnInit {
 
   ShowBatchSerials(){
     
+  }
+
+
+  onPickTypeChange(event) {
+    this.pickTypeIndex = this.PackTypeList.indexOf(event);
+    this.pickTypeIndex = this.pickTypeIndex + 1;
+    if (event == this.PackTypeList[2]) {
+    } 
+    this.GetPicklist(this.pickTypeIndex);
   }
 }

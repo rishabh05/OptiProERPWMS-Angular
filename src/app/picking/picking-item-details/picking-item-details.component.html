@@ -104,9 +104,9 @@
 <kendo-dialog [width]="500" *ngIf="dialogOpened" (close)="close_kendo_dialog()">
     <div class="new-custom-grid">
         <kendo-dialog-titlebar>
-            Pick Task List
+            {{'PickTaskList'||translate}}
         </kendo-dialog-titlebar>
-        <kendo-grid (cellClick)="cellClickHandler($event)" [height]="500" [data]="PickTaskList" [skip]="skip">
+        <kendo-grid (cellClick)="cellClickHandler($event)" [height]="300" [data]="PickTaskList" [skip]="skip">
             <kendo-grid-column [media]="mobileMedia" class="opti_mobile-grid-td">
                 <ng-template kendoGridCellTemplate let-dataItem>
                     <dl class="grid-mobile-card">
