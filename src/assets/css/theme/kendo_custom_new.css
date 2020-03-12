@@ -13053,7 +13053,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
 .custom-task-btn .k-icon{
   color: #fff;
 }
-
+.input-group-sm>.input-group-append>.btn.custom-icon-button{
+  padding: 2px 5px;
+}
 
 @media only screen and (min-width: 768) {
   .k-grid .k-alt {
