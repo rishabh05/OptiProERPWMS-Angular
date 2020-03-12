@@ -1,7 +1,22 @@
 <div class="opti_container position-relative bg-white rounded">
     <form class="form-with-fix-btnBar" *ngIf="!viewLines">
         <div class="opti_container_inner" [perfectScrollbar]=" ">
-            <div class="new-custom-grid">
+            <div>
+                <div *ngFor="let item of ShipmentList" class="custom-card-view">
+                    <a class="custom-task-btn k-button btn-success" (click)="showPickTaskList(dataItem)">
+                        <i class=" k-icon k-i-track-changes"></i>
+                    </a>
+                    <div class="custom-dl-list"> 
+                        <dt>{{'PickListCode'|translate}}</dt>
+                        <dd>{{item.OPTM_PICKLIST_CODE}}</dd>
+                    </div>
+                    <div class="custom-dl-list">
+                        <dt>{{'TaskListCode'|translate}}</dt>
+                        <dd>{{item.OPTM_TASK_CODE}}</dd>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="new-custom-grid">
                 <kendo-grid [data]="ShipmentList" (cellClick)="onShipmentSelection($event)" [pageSize]="1" [skip]="skip">
                     <kendo-grid-column [media]="mobileMedia" class="opti_mobile-grid-td">
                         <ng-template kendoGridCellTemplate let-dataItem>
@@ -21,7 +36,7 @@
                         </ng-template>
                     </kendo-grid-column>
                 </kendo-grid>
-            </div>
+            </div> -->
 
             <div class="row">
                 <div class="col-12">

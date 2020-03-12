@@ -13007,6 +13007,54 @@ body kendo-grid .k-grid-header{
   background: #f3f8ff;
 }
 
+.custom-card-view{
+    
+  margin: 5px 0;
+  font-size: 16px;
+  position: relative;
+  padding: 5px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 5px #e2dddd;
+ /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#ffffff+0,e5e5e5+100;White+3D */
+background: #ffffff; /* Old browsers */
+background: -moz-linear-gradient(top,  #ffffff 0%, #f6f6f6 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top,  #ffffff 0%,#f6f6f6 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom,  #ffffff 0%,#f6f6f6 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f6f6f6',GradientType=0 ); /* IE6-9 */
+
+}
+
+.custom-dl-list {
+  display: flex;
+ 
+}
+.custom-dl-list  dd{
+  flex-grow: 1;
+  padding-left: 5px;    
+}
+.custom-dl-list  dt{
+  position: relative;
+  padding-right: 5px;
+}
+
+.custom-task-btn{
+  position: absolute;
+  right: 6px;
+  bottom: 5px;
+  height: 25px;
+  width: 30px;
+  text-align: center;
+  border-radius: 5px;
+  line-height: 24px;
+  color: #fff;
+  border: none;
+  padding: 0;
+}
+.custom-task-btn .k-icon{
+  color: #fff;
+}
+
+
 @media only screen and (min-width: 768) {
   .k-grid .k-alt {
     color: #292b2c;
