@@ -55,7 +55,7 @@
     position: relative;
     input{
         border-width: 0 0 1px 0;
-        width: calc(100% - 44px);
+        width:100%;
         font-size: 16px;
     }
     i{
@@ -74,10 +74,10 @@
     text-align: center;
     font-size: 80px;
     .k-i-arrow-chevron-right, .k-i-arrow-chevron-left, .k-i-save{
-       font-size: 55px;
+       font-size: 38px;
        color: #ccc;
        position: absolute;
-       top: 10px;
+       top: 30px;
     }
     .k-i-arrow-chevron-right, .k-i-save{
      right: 0;
@@ -96,7 +96,7 @@
     text-align: center;
     font-size: 24px;
     position: relative;
-    margin-top: 15px;
+    margin-top: 30px;
 }
 .or-text{        position: relative;
     z-index: 2;
@@ -132,7 +132,7 @@
     margin-bottom: 5px;
 }
 .scan-text{ font-size: 24px;} 
-.bar-code{    line-height: 80px;     margin-top: 10px;
+.bar-code{    line-height: 80px;    
 i {
     font-size: 68px;
 }
@@ -193,4 +193,19 @@ i {
 body kendo-grid .k-grid-pager{
     padding-top: 10px;
 }
+}
+.step-flex{
+    display: flex;
+    align-items: stretch;
+    margin: 15px 0px;
+    .step-flex-item{
+        flex-grow: 1;
+    }
+}
+.keyboard-icon{
+    line-height: 85px;
+    text-align: center;
+}
+.keyboard-box i{
+    font-size: 68px;
 }
