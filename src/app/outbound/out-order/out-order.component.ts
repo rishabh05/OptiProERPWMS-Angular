@@ -72,12 +72,17 @@ export class OutOrderComponent implements OnInit {
   @ViewChild('DocNum') DocNum;
   @ViewChild('PalletNo') PalletNo;
   @ViewChild('scanItemCode') scanItemCode;
+  fromShipment: boolean = false;
 
 
   constructor(private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService,
     private inventoryTransferService: InventoryTransferService) { }
 
   ngOnInit() {
+
+    if(localStorage.getItem(CommonConstants.FROM_DTS)=="true"){
+     this.fromShipment = true;
+    }
     if (localStorage.getItem("PalletizationEnabled") == "True") {
       this.isPalletizationEnable = true;
     } else {

@@ -62,7 +62,7 @@
                 </div>
             </div>
 
-            <div class="row" *ngIf="isPalletizationEnable">
+            <div class="row" *ngIf="isPalletizationEnable && !fromShipment">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
                     <div class="form-group row">
                         <label for="orderNumber" class="col-sm-3 col-form-label">{{'Plt_PalletNo'|translate}}</label>
@@ -93,7 +93,7 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row"  *ngIf="!fromShipment">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
                     <div class="form-group row">
                         <label for="orderNumber" class="col-sm-3 col-form-label">{{'ItemCode'|translate}}</label>
@@ -254,30 +254,30 @@
             </div>
             <div class="col-sm-12 col-12">
 
-                <button type="button" *ngIf="fromWhere!='itr'" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon mr-1"
+                <button type="button" *ngIf="fromWhere!='itr' && !fromShipment" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon mr-1"
                     (click)="openOutboundCustomer()" roterLink="binTransfer" skipLocationChange><i
                         class="opti-icon-arrow-back"></i></button>
 
                 <!-- *ngIf='outbound.TempMeterials!==undefined && outbound.TempMeterials!==null && outbound.TempMeterials.length>0;'' -->
-                <button type="button" *ngIf="showDeleiveryAndAdd && fromWhere!='itr'" (click)="addToDeleiver()"
+                <button type="button" *ngIf="showDeleiveryAndAdd && fromWhere!='itr' && !fromShipment" (click)="addToDeleiver()"
                     class="btn btn-primary k-button btn-sm btn-icon-with-text ml-1"><span
                         class="k-icon k-i-plus-outline" role="presentation"></span>
                     {{'AddToDeleiver'|translate}}</button>
 
-                <button type="button" *ngIf="showDeleiveryAndAdd && fromWhere!='itr'" (click)="DeliveryClick()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
+                <button type="button" *ngIf="showDeleiveryAndAdd && fromWhere!='itr' && !fromShipment" (click)="DeliveryClick()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-check" role="presentation"></span> {{'Deleiver'|translate}}</button>
                 
                 <button type="button" *ngIf="fromWhere=='itr'" (click)="cancel()" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
 
-                <button type="button" *ngIf="showDeleiveryAndAdd && fromWhere=='itr'" (click)="itrClick()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
+                <button type="button" *ngIf="showDeleiveryAndAdd && fromWhere=='itr' && !fromShipment" (click)="itrClick()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-check" role="presentation"></span> {{'Submit'|translate}}</button>
                 <!-- <button type="button" (click)="showPalletsList()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-check" role="presentation"></span>{{btnText}}</button> -->
                 <!-- <button type="button" *ngIf="showDeleiveryAndAdd" (click)="deliveryConfirmation()"
                     class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-check"
                         role="presentation"></span> {{'Deleiver'|translate}}</button> -->
-                <button *ngIf="showTemporaryViews"  type="button"  (click)="showPalletsList()"
+                <button *ngIf="showTemporaryViews && !fromShipment"  type="button"  (click)="showPalletsList()"
                    class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-check"
                      role="presentation"></span>{{btnText}}</button>
 

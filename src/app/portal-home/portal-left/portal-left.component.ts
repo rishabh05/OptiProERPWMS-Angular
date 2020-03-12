@@ -177,6 +177,7 @@ export class PortalLeftComponent implements OnInit {
   }
 
   onOutboundClick() {
+    localStorage.setItem(CommonConstants.FROM_DTS, "False");
     localStorage.setItem(CommonConstants.OutboundData, null);
     localStorage.setItem("ComingFrom", "");
   }

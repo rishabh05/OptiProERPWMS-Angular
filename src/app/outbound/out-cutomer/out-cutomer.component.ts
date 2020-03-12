@@ -354,7 +354,8 @@ export class OutCutomerComponent implements OnInit {
         this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
         this.showLookupLoader = false;
       }
-    );}
+    );
+  }
 
     public isValidDockDoor(ddId: any) {
       if(this.dockDoorCode==undefined || this.dockDoorCode==null || this.dockDoorCode==""){
@@ -373,18 +374,18 @@ export class OutCutomerComponent implements OnInit {
               return;
             }
             if(resp!=null && resp.length==0){
-              this.toastr.error('', this.translate.instant("ShipmentNotAvailable"));
-              this.shipmentId = "";
+              this.toastr.error('', this.translate.instant("DockDoorNotAvailable"));
+              this.dockDoorCode = "";
               return;
-            }
+            } 
             
             if(resp[0]!=null && resp[0].OPTM_DOCKDOORID!=null && resp[0].OPTM_DOCKDOORID!=undefined){
               this.dockDoorCode = resp[0].OPTM_DOCKDOORID;
               
             }
           } else {
-            this.toastr.error('', this.translate.instant("ShipmentNotAvailable"));
-            this.shipmentId = "";
+            this.toastr.error('', this.translate.instant("DockDoorNotAvailable"));
+            this.dockDoorCode = "";
            // this.scanShipmentId.nativeElement.focus()
           }
         },
@@ -1159,8 +1160,10 @@ export class OutCutomerComponent implements OnInit {
     localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
     // prepare deliery collection from shipment response.
     this.prepareDeleiveryCollectionFromTempCollection(outbound);
-    //set delivery data to local storage.
+
     localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
+    //set delivery data to local storage.
+    localStorage.setItem(CommonConstants.FROM_DTS, JSON.stringify(true));
 
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
         if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {

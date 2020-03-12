@@ -75,8 +75,12 @@ export class OutProdissueComponent implements OnInit {
   @ViewChild('scanToBin') scanToBin;
   @ViewChild('scanBatchSerial') scanBatchSerial;
 
+  fromShipment: boolean = false;
   ngOnInit() {
-
+    
+    if(localStorage.getItem(CommonConstants.FROM_DTS)=="true"){
+      this.fromShipment = true;
+     }
     //lsOutbound
     let outboundData = localStorage.getItem(CommonConstants.OutboundData);
     if (outboundData != undefined && outboundData != '') {
