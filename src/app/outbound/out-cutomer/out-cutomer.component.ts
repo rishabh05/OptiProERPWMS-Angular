@@ -1034,7 +1034,7 @@ export class OutCutomerComponent implements OnInit {
     this.showLookupLoader = true;
     this.outboundservice.isValidShipmentId(shipmentId).subscribe(
       resp => {
-        this.showLookupLoader = false;
+        this.showLookupLoader = false; 
         if (resp != null && resp != undefined) {
           if (resp[0]!=null && resp[0]!=undefined && resp[0].ErrorMsg!=null &&
             resp[0].ErrorMsg!=undefined &&  resp[0].ErrorMsg == "7001") {
@@ -1042,10 +1042,11 @@ export class OutCutomerComponent implements OnInit {
             this.showLookupLoader = false;
             return;
           }
+          // reset for this shipment id.
+          this.resetOldShipmentData();
           
           if(resp.ItemHeader!=null && resp.ItemHeader!=undefined && resp.ItemHeader.length>0 &&
             resp.ItemDetail!=null && resp.ItemDetail!=undefined && resp.ItemDetail.length>0){
-              this.resetOldShipmentData();
               this.dockDoorCode = resp.ItemHeader[0].OPTM_DOCKDOORID;
               this.dockDoorFromShipment = resp.ItemHeader[0].OPTM_DOCKDOORID;
               this.parseAndGenerateDeliveryDataFromShipment(resp);
