@@ -43,7 +43,7 @@
             </li>
 
             <!--outbound options start.-->
-            <li class="dropdown" dropdown id="SLS"  [ngStyle]="{'display':'none'}" [insideClick]="true">
+            <li class="dropdown" dropdown id="SLS" [autoClose]="false"  [ngStyle]="{'display':'none'}" [insideClick]="true">
               
                 <a dropdownToggle class="dropdown-toggle">
                     <svg viewBox="0 0 8500 6050" class="icon"><use xlink:href="#outbound"></use></svg>
@@ -75,7 +75,7 @@
                     <span class="text">{{'PickList'|translate}}</span>
                 </a>
             </li>
-            <li class="dropdown" dropdown id="INV" [ngStyle]="{'display':'none'}" [insideClick]="true">
+            <li class="dropdown" dropdown id="INV" [ngStyle]="{'display':'none'}"  [autoClose]="false" [insideClick]="true">
                 <a dropdownToggle class="dropdown-toggle">
                     <svg viewBox="0 0 7473 6193" class="icon">
                         <use xlink:href="#inventoryTransferALt"></use>
@@ -119,7 +119,7 @@
                     </li>
                 </ul>
             </li>
-            <li class="dropdown" dropdown id="PALLET" *ngIf="isPalletizationEnable" [ngStyle]="{'display':'none'}" [insideClick]="true">
+            <li class="dropdown" dropdown id="PALLET" *ngIf="isPalletizationEnable"  [autoClose]="false" [ngStyle]="{'display':'none'}" [insideClick]="true">
                 <a dropdownToggle class="dropdown-toggle">
                     <svg viewBox="0 0 7187 6527" class="icon">
                         <use xlink:href="#palletizeMain"></use>
@@ -169,7 +169,7 @@
                     </li>
                 </ul>
             </li>
-            <li class="dropdown" dropdown id="INVADJ" [ngStyle]="{'display':'none'}" [insideClick]="true">
+            <li class="dropdown" dropdown id="INVADJ"  [autoClose]="false" [ngStyle]="{'display':'none'}" [insideClick]="true">
                 <a dropdownToggle class="dropdown-toggle">
                     <svg viewBox="0 0 502.422 502.422" class="icon">
                         <use xlink:href="#adjustment"></use>
@@ -187,7 +187,7 @@
                     </li>
                 </ul>
             </li>
-            <li class="dropdown" dropdown id="PRO" [ngStyle]="{'display':'none'}" [insideClick]="true">
+            <li class="dropdown" dropdown id="PRO"  [autoClose]="false" [ngStyle]="{'display':'none'}" [insideClick]="true">
                 <a dropdownToggle class="dropdown-toggle">
                     <svg viewBox="0 0 6990 7110" class="icon">
                         <use xlink:href="#production"></use>
@@ -213,7 +213,7 @@
                     </li>
                 </ul>
             </li>
-            <li class="dropdown" dropdown id="LBLRPT" [ngStyle]="{'display':'none'}" [insideClick]="true">
+            <li class="dropdown" dropdown id="LBLRPT"  [autoClose]="false" [ngStyle]="{'display':'none'}" [insideClick]="true">
                 <a dropdownToggle class="dropdown-toggle">
                     <svg viewBox="0 0 429.279 429.279" class="icon">
                         <use xlink:href="#printing"></use>

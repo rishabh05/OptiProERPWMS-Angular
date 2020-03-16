@@ -92,3 +92,12 @@
   position: relative;
   top: -7px;
 }
+#opti_signinID .form-control{
+  height: 38px !important;
+    border: 1px solid #ccc;
+    border-radius: 0px 5px 5px 0px !important;
+}
+
+#opti_signinID kendo-dropdownlist.form-control{
+    border-radius: 5px !important;
+}
