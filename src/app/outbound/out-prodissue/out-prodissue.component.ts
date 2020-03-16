@@ -150,7 +150,10 @@ export class OutProdissueComponent implements OnInit {
   }
 
   ngAfterViewInit():void{
+    // we do not need to show focus in case of shipent
+    if(this.fromShipment!=true){
     setTimeout(()=> {
+   
       if(localStorage.getItem("ComingFrom") == "itr"){
         this.scanToBin.nativeElement.focus()
       } else {
@@ -159,6 +162,7 @@ export class OutProdissueComponent implements OnInit {
         }
       }
    }, 200);
+  }
   }
 
   manageUOM() {
