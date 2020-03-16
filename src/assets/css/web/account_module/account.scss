@@ -138,7 +138,23 @@ label>label {
     margin-left: 0;
     text-align: center;
 }
-
+.panel-body{
+    background-color: rgba(255,255,255,0.8);
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+}
+.opti_signin-logo{
+    padding: 20px 20px 5px 20px !important;
+    background: rgba(255, 255, 255, 0.8);
+}
+#opti_signinID .k-form .k-form-field > input{
+    height: 35px !important;
+    line-height: 35px !important;
+}
+#opti_signinID #connectbtn{
+    display: block;
+    width: 100%;
+    height: 30px;
+}
 button {
     background: linear-gradient(177deg, #483DF6 2%, #435EF8 10%, #1BA0F1 44%, #25DDF5 91%, #45D790 130%);
 }
