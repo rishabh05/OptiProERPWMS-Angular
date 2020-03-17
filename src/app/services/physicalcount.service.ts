@@ -63,27 +63,27 @@ export class PhysicalcountService {
     }
   }
 
-  IslotExist(bin: string, itemCode: string, lot: string): Observable<any> {
+  IslotExist(bin: string, itemCode: string, lot: string): Promise<any> {
     var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), WHSCODE: localStorage.getItem("whseId"), BINNO: bin, ITEMCODE: itemCode, LOTNO: lot, DOCNUM: '' }]) };
 
     if (itemCode == "" && bin == "") {
-      return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetLotWithoutBinNItemCode", jObject, this.commonService.httpOptions);
+      return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetLotWithoutBinNItemCode", jObject, this.commonService.httpOptions).toPromise();
     }
     else if (itemCode != "" && bin != "") {
-      return this.httpclient.post(this.config_params.service_url + "/api/Delivery/CheckLotValid", jObject, this.commonService.httpOptions);
+      return this.httpclient.post(this.config_params.service_url + "/api/Delivery/CheckLotValid", jObject, this.commonService.httpOptions).toPromise();
 
     }
     else if (itemCode != "" && bin == "") {
-      return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetLotWithoutBinForPallet", jObject, this.commonService.httpOptions);
+      return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetLotWithoutBinForPallet", jObject, this.commonService.httpOptions).toPromise();
     }
     else if (itemCode == "" && bin != "") {
-      return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetLotBinWithoutItemCode", jObject, this.commonService.httpOptions);
+      return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetLotBinWithoutItemCode", jObject, this.commonService.httpOptions).toPromise();
     }
   }
 
-  getItemInfo(itemCode: string, docNo: string, docEntry: string): Observable<any> {
+  getItemInfo(itemCode: string, docNo: string, docEntry: string): Promise<any> {
     var jObject = { DeliveryToken: JSON.stringify([{ CompanyDbName: localStorage.getItem("CompID"), ITEMCODE: itemCode, WHSCODE: localStorage.getItem("whseId"), DocNo: docNo, DocEntry: docEntry }]) };
-    return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetItemValidate", jObject, this.commonService.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetItemValidate", jObject, this.commonService.httpOptions).toPromise();
   }
 
   SavePhysicalCountData(oAddPhysicalCountData: any): Observable<any> {

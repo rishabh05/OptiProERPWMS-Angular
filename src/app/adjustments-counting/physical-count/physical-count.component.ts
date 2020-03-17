@@ -185,13 +185,22 @@ export class PhysicalCountComponent implements OnInit {
     );
   }
 
-  OnItemChange() {
+  OnItemChangeBlur(){
+    if(this.isValidateCalled){
+      return;
+    }
+    this.OnItemChange();
+  }
+
+  async OnItemChange():Promise<any>{
     if (this.ItemCode == "" || this.ItemCode == undefined) {
       return;
     }
     this.showLoader = true;
-    this.phycountService.getItemInfo(this.ItemCode, this.DocNo, this.DocEntry).subscribe(
+    var result = false;
+    await this.phycountService.getItemInfo(this.ItemCode, this.DocNo, this.DocEntry).then(
       data => {
+        console.log("inside OnItemChange");
         this.showLoader = false;
         if (data != null) {
           if (data.length > 0) {
@@ -201,6 +210,7 @@ export class PhysicalCountComponent implements OnInit {
             this.ItemTracking = data[0].TRACKING;
             this.batchserno = "";
             this.CheckTrackingandVisiblity();
+            result = true;
           }
           else {
             this.toastr.error('', this.translate.instant("PhyCount_GoodsIssue.INVALIDITEM"));
@@ -208,6 +218,7 @@ export class PhysicalCountComponent implements OnInit {
             this.ItemName = "";
             this.ItemTracking = "";
             this.scanItemCode.nativeElement.focus()
+            result = false;
           }
         }
         else {
@@ -216,6 +227,7 @@ export class PhysicalCountComponent implements OnInit {
           this.ItemName = "";
           this.ItemTracking = "";
           this.scanItemCode.nativeElement.focus()
+          result = false;
         }
       },
       error => {
@@ -225,8 +237,10 @@ export class PhysicalCountComponent implements OnInit {
        else{
         this.toastr.error('', error);
        }
+       result = false;
       }
     );
+    return result;
   }
 
 
@@ -294,19 +308,29 @@ export class PhysicalCountComponent implements OnInit {
     this.dialogMsg = msg;
   }
 
-  OnLotChange(savenext?: string) {
+  OnLotChangeBlur(){
+    if(this.isValidateCalled){
+      return;
+    }
+    this.OnLotChange();
+  }
+
+  async OnLotChange(savenext?: string): Promise<any> {
     if (this.batchserno == "" || this.batchserno == undefined) {
       return;
     }
     this.showLoader = true;
-    this.phycountService.IslotExist(this.BinNo, this.ItemCode, this.batchserno).subscribe(
+    var result = false;
+    await this.phycountService.IslotExist(this.BinNo, this.ItemCode, this.batchserno).then(
       data => {
+        console.log("inside IslotExist")
         this.showLoader = false;
         if (data != null) {
           if (data.length == "0") {
             if (this.ItemTracking != "N") {
               this.LotExistCheck();
             }
+            result = false;
           }
           else {
             this.batchserno = data[0].LOTNO;
@@ -325,6 +349,7 @@ export class PhysicalCountComponent implements OnInit {
             }else if (savenext == "submit") {
               this.onSubmitClick()
             }
+            result = true;
           }
         }
 
@@ -336,8 +361,10 @@ export class PhysicalCountComponent implements OnInit {
        else{
         this.toastr.error('', error);
        }
+       result = false;
       }
     );
+    return result;
   }
 
   GetSavedDocNoDetails() {
@@ -775,9 +802,14 @@ export class PhysicalCountComponent implements OnInit {
     return oAddPhysicalCountData;
   }
 
-  onCountedQtyChanged() {
-   
+  onCountedQtyChangedBlur(){
+    if(this.isValidateCalled){
+      return;
+    }
+    this.onCountedQtyChanged();
+  }
 
+  async onCountedQtyChanged():Promise<any>{
     this.LotSerialQtycheck = 0;
     var oAddPhysicalCountData: any = {};
     var dataModel = localStorage.getItem("PhysicalCountData");
@@ -801,7 +833,14 @@ export class PhysicalCountComponent implements OnInit {
     this.formatCountedQty();
   }
 
-  onSaveClick(existingItem?: boolean) {
+  async onSaveClick(existingItem?: boolean) {
+    var result = await this.validateBeforeSubmit();
+    this.isValidateCalled = false;
+    console.log("validate result: " + result);
+    if (result != undefined && result == false) {
+      return;
+    }
+
     if (this.ItemTracking != "N") {
       if (this.batchserno == undefined || this.batchserno == "" || this.batchserno == null) {
         if (this.ItemTracking == "S") {
@@ -845,7 +884,14 @@ export class PhysicalCountComponent implements OnInit {
     this.SavePhysicalCountData(oAddPhysicalCountData);
   }
 
-  onAddItemClick() {
+  async onAddItemClick() {
+    var result = await this.validateBeforeSubmit();
+    this.isValidateCalled = false;
+    console.log("validate result: " + result);
+    if (result != undefined && result == false) {
+      return;
+    }
+
     if (this.ItemTracking != "N") {
       if (this.batchserno == undefined || this.batchserno == "" || this.batchserno == null) {
         if (this.ItemTracking == "S") {
@@ -978,7 +1024,13 @@ export class PhysicalCountComponent implements OnInit {
     }
   }
 
-  onSubmitClick() {
+  async onSubmitClick() {
+    var result = await this.validateBeforeSubmit();
+    this.isValidateCalled = false;
+    console.log("validate result: " + result);
+    if (result != undefined && result == false) {
+      return;
+    }
 
     var oAddPhysicalCountData: any = {};
     var dataModel = localStorage.getItem("PhysicalCountData");
@@ -1260,5 +1312,22 @@ export class PhysicalCountComponent implements OnInit {
       this.CountedQty = inputValue;
     } 
     this.onCountedQtyChanged();
+  }
+
+  isValidateCalled: boolean = false;
+  async validateBeforeSubmit():Promise<any>{
+    this.isValidateCalled = true;
+    var currentFocus = document.activeElement.id;
+    console.log("validateBeforeSubmit current focus: "+currentFocus);
+    
+    if(currentFocus != undefined){
+      if(currentFocus == "itemCodeInputPC"){
+        return this.OnItemChange();
+      } else if(currentFocus == "batchSerialInputPC"){
+        return this.OnLotChange();
+      } else if(currentFocus == "countedQtyInputPC"){
+        return await this.onCountedQtyChanged();
+      }
+    }
   }
 }

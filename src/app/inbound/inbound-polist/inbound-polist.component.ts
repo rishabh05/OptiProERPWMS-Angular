@@ -287,30 +287,39 @@ export class InboundPolistComponent implements OnInit {
     }
   }
 
-  OnPOChange() {
+  OnPOChangeBlur(){
+    if(this.isValidateCalled){
+      return;
+    }
+    this.OnPOChange();
+  }
 
+  async OnPOChange() {
     if (this.poCode == "" || this.poCode == undefined) {
       return;
     }
 
     this.showLoader = true;
-    this.inboundService.IsPOExists(this.poCode, "").subscribe(
+    var result = false;
+    await this.inboundService.IsPOExists(this.poCode, "").then(
       data => {
         this.showLoader = false;
         if (data != null) {
           if (data.length > 0) {
             this.openPOLines();
+            result = true;
           }
           else {
             this.poCode = "";
             this.toastr.error('', this.translate.instant("Inbound_POExistMessage"));
             this.poScanInputField.nativeElement.focus()
-            return;
+            result = false;
           }
         } else {
           this.poCode = "";
           this.toastr.error('', this.translate.instant("Inbound_POExistMessage"));
           this.poScanInputField.nativeElement.focus()
+          result = false;
         }
       },
       error => {
@@ -322,8 +331,10 @@ export class InboundPolistComponent implements OnInit {
         else {
           this.toastr.error('', error);
         }
+        result = false;
       }
     );
+    return result
   }
 
   getLookupValue($event) {
@@ -347,13 +358,21 @@ export class InboundPolistComponent implements OnInit {
     }
   }
 
-  OnItemCodeChange() {
+  OnItemCodeChangeBlur(){
+    if(this.isValidateCalled){
+      return;
+    }
+    this.OnItemCodeChange();
+  }
+
+  async OnItemCodeChange() {
 
     if (this.itemCode == "" || this.itemCode == undefined) {
       return;
     }
     this.showLoader = true;
-    this.inventoryTransferService.GetItemCode(this.itemCode).subscribe(
+    var result = false;
+    await this.inventoryTransferService.GetItemCode(this.itemCode).then(
       data => {
         this.showLoader = false;
         if (data != undefined && data.length > 0) {
@@ -367,11 +386,12 @@ export class InboundPolistComponent implements OnInit {
           if (this.itemCode != null && this.itemCode != undefined && this.itemCode != '') {
             this.openPOLines();
           }
-
+          result = true;
         } else {
           this.toastr.error('', this.translate.instant("InvalidItemCode"));
           this.itemCode = "";
           this.scanItemCode.nativeElement.focus()
+          result = false;
         }
       },
       error => {
@@ -381,8 +401,10 @@ export class InboundPolistComponent implements OnInit {
         else {
           this.toastr.error('', error);
         }
+        result = false;
       }
     );
+    return result
   }
 
   onClickOpenPOLineRowOpenAutoLot(poline, grid: GridComponent) {
@@ -561,7 +583,9 @@ export class InboundPolistComponent implements OnInit {
   }
 
 
-  onAddtoGRPOClick() {
+  async  onAddtoGRPOClick() {
+    await this.validateBeforeSubmit();
+
     this.oSavedPOLotsArray = JSON.parse(localStorage.getItem("GRPOReceieveData"));
     if (this.oSavedPOLotsArray != undefined && this.oSavedPOLotsArray != null && this.oSavedPOLotsArray != "") {
       if (localStorage.getItem("AddToGRPO") != "") {
@@ -1042,4 +1066,18 @@ export class InboundPolistComponent implements OnInit {
     });
   }
 
+  isValidateCalled: boolean = false;
+  async validateBeforeSubmit():Promise<any>{
+    this.isValidateCalled = true;
+    var currentFocus = document.activeElement.id;
+    console.log("validateBeforeSubmit current focus: "+currentFocus);
+    
+    if(currentFocus != undefined){
+      if(currentFocus == "inboundPOScanPOInputField"){
+        return this.OnPOChangeBlur();
+      } else if(currentFocus == "InboundPO_ItemCodeScanInputField"){
+        return this.OnItemCodeChangeBlur();
+      }
+    }
+  }
 }

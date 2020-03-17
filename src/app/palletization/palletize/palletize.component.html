@@ -13,7 +13,7 @@
             <div class="col-sm-9">
               <div class="input-group input-group-sm">
                 <input #scanItemCode type="text" id="PalletizeItemCodeInput" class="form-control form-control-sm" placeholder="{{'ItemCode'|translate}}" name="itemCode"
-                  [(ngModel)]="itemCode" (blur)="OnItemCodeChange()">
+                  [(ngModel)]="itemCode" (blur)="OnItemCodeChangeBlur()">
                 <div class="input-group-append  has-seprate-btn">
                   <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="OnItemCodeLookupClick()">
                     <i class="opti-icon-hammenu"></i>
@@ -37,7 +37,7 @@
             <div class="col-sm-9">
               <div class="input-group input-group-sm">
                 <input type="text" id="PalletizeBatchSrNo" class="form-control form-control-sm" [(ngModel)]="batchSerialNo"
-                  (blur)="OnLotsChange()" #BatchNoInput name='batchSrNo' placeholder="{{'BatchSerial_No'|translate}}">
+                  (blur)="OnLotsChangeBlur()" #BatchNoInput name='batchSrNo' placeholder="{{'BatchSerial_No'|translate}}">
                 <div class="input-group-append has-seprate-btn">
                   <button tabIndex="-1" class="k-button k-primary btn" (mousedown)="OnBatchSerialLookupClick()" type="button">
                     <i class="opti-icon-hammenu"></i>
@@ -59,7 +59,7 @@
             <label for="inputPassword" class="col-sm-3 col-form-label">{{'Plt_PalletNo'|translate}}</label>
             <div class="col-sm-9">
               <div class="input-group input-group-sm">
-                <input #scanToPallet type="text" id="PalletizePalletNo" name="toPalletNo" (blur)="onPalletChange()" value='' [(ngModel)]="palletNo" class="form-control form-control-sm"
+                <input #scanToPallet type="text" id="PalletizePalletNo" name="toPalletNo" (blur)="onPalletChangeBlur()" value='' [(ngModel)]="palletNo" class="form-control form-control-sm"
                   placeholder="{{'Plt_PalletNo'|translate}}">
                 <div class="input-group-append has-seprate-btn">
                   <button tabIndex="-1" class="k-button k-primary btn" (mousedown)="getPalletList()" type="button">
@@ -170,7 +170,7 @@
             <kendo-grid-column media="(min-width: 768px)" headerClass="text-center" class="text-center" field=""
               [width]="8" title="">
               <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                <button type="button" class="btn btn-danger k-button btn-sm btn-icon" (click)="openConfirmForDelete(rowIndex, gridItem)">
+                <button type="button" class="btn btn-danger k-button btn-sm btn-icon" (mousedown)="openConfirmForDelete(rowIndex, gridItem)">
                   <span class="k-icon k-i-delete" role="presentation"></span>
                 </button>
               </ng-template>
@@ -185,12 +185,12 @@
         <hr />
       </div>
       <div class="col-sm-12 col-12">
-        <button type="button" (click)="back(0)" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-close-outline"
+        <button type="button" (mousedown)="back(0)" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-close-outline"
             role="presentation"></span> {{'Cancel'|translate}}</button>
-            <button type="button" id="showHideGrid" (click)="clickShowHideGrid()" class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
+            <button type="button" id="showHideGrid" (mousedown)="clickShowHideGrid()" class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
                 <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>{{showHideBtnTxt}}
               </button>
-            <button type="button" *ngIf="savedPalletsArray.length > 0" (click)="palletize()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
+            <button type="button" *ngIf="savedPalletsArray.length > 0" (mousedown)="palletize()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
             class="k-icon opti-icon-palletize"></span>
           {{'Plt_AddToPallet'|translate}}</button>
      

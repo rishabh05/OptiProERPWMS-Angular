@@ -386,17 +386,24 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     }
   }
 
+  OnBinChangeBlur(){
+    if(this.isValidateCalled){
+      return;
+    }
+    this.OnBinChange();
+  }
 
-  OnBinChange() {
+  async OnBinChange(): Promise<any>{
     if (this.RecvbBinvalue == "") {
       return;
     }
     this.showLoader = true;
+    var result = false;
     if (localStorage.getItem('FromReceiptProd') == 'true') {
-      this.inboundService.isBinExistForProduction(localStorage.getItem("whseId"), this.RecvbBinvalue, this.receiptData.status).subscribe(
+      await this.inboundService.isBinExistForProduction(localStorage.getItem("whseId"), this.RecvbBinvalue, this.receiptData.status).then(
         (data: any) => {
           this.showLoader = false;
-          //console.log(data);
+          console.log("inside inboundService.isBinExistForProduction");
           if (data != null) {
             if (data.length > 0) {
               // if (data[0].Result == "0") {
@@ -413,17 +420,19 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
                 }
                 // oCurrentController.isReCeivingBinExist();
              // }
+             result = true
             }else{
               this.toastr.error('', this.translate.instant("INVALIDBIN"));
               this.RecvbBinvalue = "";
               this.RecBinVal.nativeElement.focus()
+              result = false;
             }
           }
           else {
             this.toastr.error('', this.translate.instant("INVALIDBIN"));
             this.RecvbBinvalue = "";
             this.RecBinVal.nativeElement.focus()
-            return;
+            result = false;
           }
         },
         error => {
@@ -436,11 +445,13 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
           else {
             this.toastr.error('', error);
           }
+          result = false;
         }
       );
     } else {
-      this.inboundService.binChange(localStorage.getItem("whseId"), this.RecvbBinvalue).subscribe(
+      await this.inboundService.binChange(localStorage.getItem("whseId"), this.RecvbBinvalue).then(
         (data: any) => {
+          console.log("inside binChange");
           this.showLoader = false;
           //console.log(data);
           if (data != null) {
@@ -449,11 +460,12 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
                 this.toastr.error('', this.translate.instant("INVALIDBIN"));
                 this.RecvbBinvalue = "";
                 this.RecBinVal.nativeElement.focus()
-                return;
+                result = false;
               }
               else {
                 this.RecvbBinvalue = data[0].ID;
                 // oCurrentController.isReCeivingBinExist();
+                result = true;
               }
             }
           }
@@ -461,7 +473,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
             this.toastr.error('', this.translate.instant("INVALIDBIN"));
             this.RecvbBinvalue = "";
             this.RecBinVal.nativeElement.focus()
-            return;
+            result = false;
           }
         },
         error => {
@@ -474,10 +486,11 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
           else {
             this.toastr.error('', error);
           }
+          result = false;
         }
       );
     }
-
+    return result;
   }
 
   onScanInputChange() {
@@ -672,11 +685,21 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     );
   }
 
-  addQuantity() {
+  async addQuantity() {
+    var result = await this.validateBeforeSubmit();
+    this.isValidateCalled = false;
+    console.log("validate result: " + result);
+    if (result != undefined && result == false) {
+      return;
+    }
+
     if (this.qty == 0 || this.qty == undefined) {
       this.toastr.error('', this.translate.instant("Inbound_EnterQuantityErrMsg"));
       return;
     }
+    // if (this.ScanInputs == null || this.ScanInputs == undefined || this.ScanInputs == "") {
+    //   return;
+    // }
     if (!Number.isInteger(this.qty)) {
       this.toastr.error('', this.translate.instant("DecimalQuantity"));
       this.scanQty.nativeElement.focus();
@@ -1068,7 +1091,14 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     return s;
   }
 
-  save() {
+  async save() {
+    var result = await this.validateBeforeSubmit();
+    this.isValidateCalled = false;
+    console.log("validate result: " + result);
+    if (result != undefined && result == false) {
+      return;
+    }
+
     if (this.IsQCRequired && (this.targetBin == null || this.targetBin == undefined || this.targetBin == "")) {
       this.toastr.error('', "Target Warehouse cannot be blank");
       return;
@@ -1994,12 +2024,17 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       }
     }
   }
-  OnTargetBinChange() {
+
+  OnTargetBinChangeBlu(){
+
+  }
+
+  async OnTargetBinChange() {
     if (this.targetBin == "") {
       return;
     }
     this.showLoader = true;
-    this.inboundService.binChange(this.targetWhse, this.targetBin).subscribe(
+    await this.inboundService.binChange(this.targetWhse, this.targetBin).then(
       (data: any) => {
         this.showLoader = false;
         // console.log(data);
@@ -2036,6 +2071,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         }
       }
     );
+    return
   }
 
   onQCWHSChange() {
@@ -2109,9 +2145,14 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     }
     this.OnPalletChange();
   }
-  onGS1ItemScan() {
 
-
+  onGS1ItemScanBlur(){
+    if(this.isValidateCalled){
+      return;
+    }
+    this.onGS1ItemScan();
+  }
+  async onGS1ItemScan(): Promise<any>{
     if (this.ScanInputs != null && this.ScanInputs != undefined &&
       this.ScanInputs != "" && this.ScanInputs != "error decoding QR Code") {
 
@@ -2123,22 +2164,21 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     this.openPOLineModel;
     let piManualOrSingleDimentionBarcode = 0;
     // alert("check and scan code api call")
-    this.inboundService.checkAndScanCode(this.openPOLineModel[0].CardCode, this.ScanInputs).subscribe(
+    var result = false;
+    await this.inboundService.checkAndScanCode(this.openPOLineModel[0].CardCode, this.ScanInputs).then(
       (data: any) => {
         //  alert("check and scan code api call response data:"+JSON.stringify(data));
-
-        //console.log("responseData: " + JSON.stringify(data));
+        console.log("insie checkAndScanCode");
         if (data != null) {
           if (data[0].Error != null) {
             if (data[0].Error == "Invalidcodescan") {
               piManualOrSingleDimentionBarcode = 1
+              this.ScanInputs = "";
               this.toastr.error('', this.translate.instant("InvalidScanCode"));
               // nothing is done in old code.
-            } else {
-              // some message is handle in else section in old code
-              //return;
+              result = false;
+              return result
             }
-            return;
           }
           //console.log("Inapi call section openPoline::", JSON.stringify(this.openPOLineModel));
           // now check if the  code is for avilable item or not other wise invalid item error.
@@ -2147,9 +2187,10 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
             if (data[0] != null && data[0].Value != null && (data[0].Value.toUpperCase() != itemCode.toUpperCase())) {
               this.toastr.error('', this.translate.instant("InvalidItemCode"));
               this.ScanInputs = "";
-              return;
+              result = false;
+              return result;
             }
-
+            result = true;
             var piExpDateExist = 0;
             //var oGetExpDate = oTextExpiryDate.getValue();
             var tracking = this.openPOLineModel[0].TRACKING;
@@ -2206,7 +2247,9 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         else {
           this.toastr.error('', error);
         }
+        result = false;
       });
+      return result;
   }
 
   public displayPDF(dNo: string) {
@@ -2340,31 +2383,41 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     this.showNewPallet = true;
   }
 
-  OnPalletChange() {
+  OnPalletChangeBlur(){
+    if(this.isValidateCalled){
+      return;
+    }
+    this.OnPalletChange();
+  }
+
+  async OnPalletChange(): Promise<any> {
     if (this.palletValue == "" || this.palletValue == undefined) {
       return;
     }
 
     this.showLoader = true;
-    this.inboundService.IsPalletValidForGRPO(this.palletValue, this.openPOLineModel[0].ITEMCODE, this.RecvbBinvalue).subscribe(
+    var result = false;
+    await this.inboundService.IsPalletValidForGRPO(this.palletValue, this.openPOLineModel[0].ITEMCODE, this.RecvbBinvalue).then(
       (data: any) => {
+        console.log("inside inboundService.IsPalletValidForGRPO");
         this.showLoader = false;
         // console.log(data);
         if (data != null) {
           if (data.length > 0) {
             this.palletValue = data[0].Code;
+            result = true;
           } else {
             this.toastr.error('', this.translate.instant("InValidPalletNo"));
             this.palletValue = "";
             this.scanPallet.nativeElement.focus()
-            return;
+            result = false;
           }
         }
         else {
           this.toastr.error('', this.translate.instant("InValidPalletNo"));
           this.palletValue = "";
           this.scanPallet.nativeElement.focus()
-          return;
+          result = false;
         }
       },
       error => {
@@ -2377,8 +2430,10 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         else {
           this.toastr.error('', this.translate.instant("InValidPalletNo"));
         }
+        result = false;
       }
     );
+    return result
   }
 
 
@@ -2709,5 +2764,24 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       this.targetBin = inputValue;
     }
     this.OnTargetBinChange();
+  }
+
+  isValidateCalled: boolean = false;
+  async validateBeforeSubmit():Promise<any>{
+    this.isValidateCalled = true;
+    var currentFocus = document.activeElement.id;
+    console.log("validateBeforeSubmit current focus: "+currentFocus);
+    
+    if(currentFocus != undefined){
+      if(currentFocus == "inboundGrpoRecBinInput"){
+        return this.OnBinChange();
+      }
+      else if(currentFocus == "inboundGRPOPalletNo"){
+        return this.OnPalletChange();
+      }
+      else if(currentFocus == "inboundScanInputField"){
+        return this.onGS1ItemScan();
+      }
+    }
   }
 }

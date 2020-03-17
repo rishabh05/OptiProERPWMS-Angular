@@ -419,5 +419,6 @@
   "Plt_PalletizeErrMsg": "System is facing problem in palletize operation. Please try again.",
   "Plt_TransferErrMsg": "System is facing problem in transfer operation. Please try again.",
 
+  "Outbound_CustomerExistMessge": "Customer does not exist!",
   "Dummy": "Dummy"
 }

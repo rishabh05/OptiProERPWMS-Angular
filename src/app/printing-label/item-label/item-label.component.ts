@@ -125,20 +125,28 @@ export class ItemLabelComponent implements OnInit {
     );
   }
 
+  OnItemCodeChangeBlur(){
+    if(this.isValidateCalled){
+      return 
+    }
+    this.OnItemCodeChange();
+  }
+
   /**
    * 
    * This method will check if entered code is valid or not on field blur event.
    */
-  OnItemCodeChange() {
-
+  async OnItemCodeChange(): Promise<any>{
     if (this.itemCode == "" || this.itemCode == undefined) {
       this.itemTracking = "";
       return;
     }
     this.binNo = "";
     this.showLoader = true;
-    this.isItemExistsSubs = this.labelPrintReportsService.isItemExists(this.itemCode).subscribe(
+    var result = false
+    await this.labelPrintReportsService.isItemExistsPromise(this.itemCode).then(
       data => {
+        console.log("inside OnItemCodeChange")
         this.showLoader = false;
         if (data != undefined && data.length > 0) {
           console.log("" + data);
@@ -150,19 +158,18 @@ export class ItemLabelComponent implements OnInit {
           if (data == "0" || data[0] == "0") {
             this.toastr.error('', this.translate.instant("InvalidItemCode"));
             this.itemCode = "";
-            return;
+            result = false
           } else {
             //do the needful for correct data.
             this.batchSrBinIp.nativeElement.focus(); //just focus on next field
+            result = true
             this.getItemTracking(this.itemCode);
           }
-
-
         } else {
           this.toastr.error('', this.translate.instant("InvalidItemCode"));
           this.itemCode = "";
+          result = false
         }
-
       },
       error => {
         this.showLoader = false;
@@ -172,28 +179,36 @@ export class ItemLabelComponent implements OnInit {
         else {
           this.toastr.error('', error);
         }
+        result = false
       }
     );
+    return result
+  }
+
+  OnLotsChangeBlur(){
+    if(this.isValidateCalled){
+      return;
+    }
+    this.OnLotsChange();
   }
 
   /**
    * This method will check if entered code is valid or not on field blur event.
    */
-  OnLotsChange() {
-
+  async OnLotsChange(): Promise<any>{
     if (this.binNo == undefined || this.binNo == "") {
       return;
     }
     if (this.itemCode != undefined && this.itemCode != null && this.itemCode != "") {
       if (this.itemTracking == "N") {
         //item type is empty then get tracking type
-        this.checkBinForNonTrackedItems();
+        await this.checkBinForNonTrackedItems();
       }
       else {
-        this.checkBinForOtherTrackedItems();
+        await this.checkBinForOtherTrackedItems();
       }
     } else {
-      this.checkBinForOtherTrackedItems();
+      await this.checkBinForOtherTrackedItems();
     }
 
   }
@@ -297,7 +312,7 @@ export class ItemLabelComponent implements OnInit {
     );
   }
 
-  checkBinForNonTrackedItems() {
+  async checkBinForNonTrackedItems(): Promise<any> {
     this.showLoader = true;
     if(this.LOTNoForNone == null || this.LOTNoForNone == undefined || this.LOTNoForNone == ""){
       this.LOTNoForNone = this.binNo;
@@ -407,7 +422,14 @@ export class ItemLabelComponent implements OnInit {
   /**
    * handel print click, validate data print data api call.
    */
-  OnPrintClick() {
+  async OnPrintClick() {
+    var result = await this.validateBeforeSubmit();
+    this.isValidateCalled = false;
+    console.log("validate result: " + result);
+    if (result != undefined && result == false) {
+      return;
+    }
+
     console.log('print click');
 
     if (!this.checkValidation()) {
@@ -539,6 +561,21 @@ export class ItemLabelComponent implements OnInit {
       this.binNo = inputValue;
     }
     this.OnLotsChange()
+  }
+
+  isValidateCalled: boolean = false;
+  async validateBeforeSubmit():Promise<any>{
+    this.isValidateCalled = true;
+    var currentFocus = document.activeElement.id;
+    console.log("validateBeforeSubmit current focus: "+currentFocus);
+    
+    if(currentFocus != undefined){
+      if(currentFocus == "itemLabelItemCodeInput"){
+        return this.OnItemCodeChange();
+      } else if(currentFocus == "itemLabelBatchSerialInput"){
+        return this.OnLotsChange();
+      }
+    }
   }
 }
 

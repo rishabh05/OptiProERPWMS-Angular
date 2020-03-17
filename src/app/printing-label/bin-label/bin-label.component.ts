@@ -39,8 +39,6 @@ export class BinLabelComponent implements OnInit {
   copyCountSubs: ISubscription;
   printServiceSubs: ISubscription;
 
-  isBinExistsSubs: ISubscription;
-
   displayPDF:boolean = false;
   constructor(private commonservice: Commonservice, private router: Router, private labelPrintReportsService: LabelPrintReportsService,
     private toastr: ToastrService, private translate: TranslateService) {
@@ -266,8 +264,14 @@ export class BinLabelComponent implements OnInit {
   /**
    * handel print click, validate data print data api call.
    */
-  OnPrintClick() {
-    
+  async OnPrintClick() {
+    var result = await this.validateBeforeSubmit();
+    this.isValidateCalled = false;
+    console.log("validate result: " + result);
+    if (result != undefined && result == false) {
+      return;
+    }
+
     if (!this.checkValidation()) {
       return;
     }
@@ -330,18 +334,27 @@ export class BinLabelComponent implements OnInit {
     pdfWindow.document.write("<iframe width='80%' title=" + this.fileName + " height='80%' src=' " + encodeURI(this.base64String) + "'></iframe>");
   }
 
+
+  OnFromBinChangeBlur(){
+    if(this.isValidateCalled){
+      return;
+    }
+    this.OnFromBinChange();
+  }
+
  /**
    * 
    * This method will check if entered bin is valid or not on field blur event.
    */
-  OnFromBinChange() {
-  
+  async OnFromBinChange(): Promise<any>{
     if (this.fromBin == "" || this.fromBin == undefined) {
       return;
     }
     this.showLoader = true;
-    this.isBinExistsSubs = this.labelPrintReportsService.isBinExists(this.fromBin).subscribe(
+    var result = false;
+    await this.labelPrintReportsService.isBinExists(this.fromBin).then(
       data => {
+        console.log("inside OnFromBinChange isBinExists")
         this.showLoader = false;
         if (data != undefined && data != null) {
           if (data[0].ErrorMsg == "7001") {
@@ -352,12 +365,15 @@ export class BinLabelComponent implements OnInit {
           if (data[0].Result == "0" ) {
             this.toastr.error('', this.translate.instant("INVALIDBIN"));
             this.fromBin = "";
-            return; 
+            result = false;
+            return result; 
           }
+          result = true;
           this.fromBin = data[0].ID; //check this code.
         } else {
           this.toastr.error('', this.translate.instant("INVALIDBIN"));
           this.fromBin = "";
+          result = false;
         }
       },
       error => {
@@ -368,22 +384,32 @@ export class BinLabelComponent implements OnInit {
        else{
         this.toastr.error('', error);
        }
+       result = false;
       }
     );
+    return result;
+  }
+
+  OnToBinChangeBlur(){
+    if(this.isValidateCalled){
+      return
+    }
+    this.OnToBinChange();
   }
 
   /**
    * 
    * This method will check if entered bin is valid or not on field blur event.
    */
-  OnToBinChange() {
-   
+  async OnToBinChange(): Promise<any>{
     if (this.toBin == "" || this.toBin == undefined) {
       return;
     }
     this.showLoader = true;
-    this.isBinExistsSubs = this.labelPrintReportsService.isBinExists(this.toBin).subscribe(
+    var result = false;
+    await this.labelPrintReportsService.isBinExists(this.toBin).then(
       data => {
+        console.log("inside OnFromBinChange isBinExists")
         this.showLoader = false;
         if (data != undefined && data != null) {
           if (data[0].ErrorMsg == "7001") {
@@ -394,12 +420,15 @@ export class BinLabelComponent implements OnInit {
           if (data[0].Result == "0" ) {
             this.toastr.error('', this.translate.instant("INVALIDBIN"));
             this.toBin = "";
-            return; 
+            result = false;
+            return result; 
           }
+          result = true;
           this.toBin = data[0].ID; //check this code.
         } else {
           this.toastr.error('', this.translate.instant("INVALIDBIN"));
           this.toBin = "";
+          result = false;
         }
       },
       error => {
@@ -410,8 +439,10 @@ export class BinLabelComponent implements OnInit {
        else{
         this.toastr.error('', error);
        }
+       result = false;
       }
     );
+    return result
   }
 
   getValueOfRedirect($event) {
@@ -434,5 +465,20 @@ export class BinLabelComponent implements OnInit {
       this.toBin= inputValue;
     }
     this.OnToBinChange();
+  }
+
+  isValidateCalled: boolean = false;
+  async validateBeforeSubmit():Promise<any>{
+    this.isValidateCalled = true;
+    var currentFocus = document.activeElement.id;
+    console.log("validateBeforeSubmit current focus: "+currentFocus);
+    
+    if(currentFocus != undefined){
+      if(currentFocus == "BinLabelFromBinInput"){
+        return this.OnFromBinChange();
+      } else if(currentFocus == "BinLabelToBinInput"){
+        return this.OnToBinChange();
+      }
+    }
   }
 }

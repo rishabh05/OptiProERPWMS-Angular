@@ -520,11 +520,12 @@ export class OutProdissueComponent implements OnInit {
     if(this.lookupFor == "toBinsList") {
       this.toBinNo = lookupValue.BINNO;
       if (this.OrderType == 'N') {
-      this.updateToBinForCommingSelectedMaterial(this.toBinNo);
+        this.updateToBinForCommingSelectedMaterial(this.toBinNo);
+      } else {
+        this.scanBatchSerial.nativeElement.focus()
       }
       //this.selectedMeterials = [];
      // this.manageMeterial(scan);
-     this.scanBatchSerial.nativeElement.focus()
     } else if (lookupValue) {
       if (this.OrderType == 'S') {
         let data: any[] = [];
@@ -1384,7 +1385,7 @@ export class OutProdissueComponent implements OnInit {
       return;
     }
     this.showLookupLoader = true;
-    this.inventoryTransferService.isToBinExist(this.toBinNo, this.selected.WHSCODE).subscribe(
+    this.inventoryTransferService.isToBinExist(this.toBinNo, this.selected.WHSCODE).then(
       data => {
         this.showLookupLoader = false;
         if (data != null) {

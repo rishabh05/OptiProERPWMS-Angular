@@ -141,7 +141,14 @@ export class PalTransferComponent implements OnInit {
     // alert("scan click");
   }
 
-  onPalletChange(from: string) {
+  onPalletChangeBlur(from: string){
+    if(this.isValidateCalled){
+      return;
+    }
+    this.onPalletChange(from);
+  }
+
+  async onPalletChange(from: string): Promise<any> {
 
     if (from == "from_pallet") {
       if (this.fromPalletNo == '' || this.fromPalletNo == undefined) {
@@ -172,10 +179,11 @@ export class PalTransferComponent implements OnInit {
     }
 
     this.showLoader = true;
-    this.commonservice.isPalletValid(plt).subscribe(
+    var result = false;
+    await this.commonservice.isPalletValid(plt).then(
       (data: any) => {
+        console.log("inside isPalletValid "+from);
         this.showLoader = false;
-       // console.log(data);
         if (data != null) {
           if (data.length > 0) {
             if (from == "from_pallet") {
@@ -189,6 +197,7 @@ export class PalTransferComponent implements OnInit {
             if (this.fromPalletNo != '' && this.toPalletNo != '') {
               this.getPalletData();
             }
+            result = true;
           } else {
             this.palletData = [];
             this.toastr.error('', this.translate.instant("InValidPalletNo"));
@@ -199,7 +208,7 @@ export class PalTransferComponent implements OnInit {
               this.fromPalletNo = "";
               this.fromPalletInput.nativeElement.focus();
             }
-            return;
+            result = false;
           }
         }
         else {
@@ -212,7 +221,7 @@ export class PalTransferComponent implements OnInit {
             this.fromPalletNo = "";
             this.fromPalletInput.nativeElement.focus();
           }
-          return;
+          result = false;
         }
       },
       error => {
@@ -223,8 +232,10 @@ export class PalTransferComponent implements OnInit {
         else {
           this.toastr.error('', error);
         }
+        result = false;
       }
     );
+    return result;
   }
 
   getLookupValue(lookupValue: any) {
@@ -260,7 +271,10 @@ export class PalTransferComponent implements OnInit {
     return false;
   }
   manageEyeIcon: boolean =true;
-  clickShowHideGrid() {
+  async clickShowHideGrid() {
+    await this.validateBeforeSubmit();
+    this.isValidateCalled = false;
+
     this.showHideGridToggle = !this.showHideGridToggle;
     if (this.showHideGridToggle) {
       this.showHideBtnTxt = this.translate.instant("hideGrid");
@@ -325,7 +339,14 @@ export class PalTransferComponent implements OnInit {
     this.showConfirmDialog = true;
   }
 
-  transfer() {
+  async transfer() {
+    var result = await this.validateBeforeSubmit();
+    this.isValidateCalled = false;
+    console.log("validate result: " + result);
+    if (result != undefined && result == false) {
+      return;
+    }
+  
     if (this.fromPalletNo == '' || this.fromPalletNo == undefined) {
       this.toastr.error('', this.translate.instant("Plt_SelectFromPallet"));
       return;
@@ -462,6 +483,22 @@ export class PalTransferComponent implements OnInit {
         case ("NewPallet_PalletTransfer"):
           this.createNewPallet($event.PalletNo, $event.BinNo);
           break
+      }
+    }
+  }
+
+  isValidateCalled: boolean = false;
+  async validateBeforeSubmit():Promise<any>{
+    this.isValidateCalled = true;
+    var currentFocus = document.activeElement.id;
+    console.log("validateBeforeSubmit current focus: "+currentFocus);
+    
+    if(currentFocus != undefined){
+      if(currentFocus == "palXfer_fromPalletNoInput"){
+        return this.onPalletChange("from_pallet");
+      }
+      else if(currentFocus == "PalXferToPalletNoInput"){
+        return this.onPalletChange("to_pallet");
       }
     }
   }
