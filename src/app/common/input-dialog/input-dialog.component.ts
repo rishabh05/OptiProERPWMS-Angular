@@ -160,7 +160,7 @@ export class InputDialogComponent implements OnInit {
       return;
     }
     this.showLoader = true;
-    this.inboundService.binChange(localStorage.getItem("whseId"), this.binNo).subscribe(
+    this.inboundService.binChange(localStorage.getItem("whseId"), this.binNo).then(
       data => {
         this.showLoader = false;
         if (data != null) {

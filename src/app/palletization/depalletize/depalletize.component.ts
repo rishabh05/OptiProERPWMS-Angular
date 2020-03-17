@@ -40,23 +40,23 @@ export class DepalletizeComponent implements OnInit {
     }
   }
 
-  ngAfterViewInit(): void{
+  ngAfterViewInit(): void {
     this.scanPallet.nativeElement.focus()
-    setTimeout(()=>{
+    setTimeout(() => {
       this.showHideBtnTxt = this.translate.instant("showGrid");
-    },500)
+    }, 500)
   }
 
   public getPalletList(from: string) {
     this.showLoader = true;
     this.commonservice.GetPalletsWithRowsPresent().subscribe(
-    // this.commonservice.getPalletsOfSameWarehouse("").subscribe(
+      // this.commonservice.getPalletsOfSameWarehouse("").subscribe(
       (data: any) => {
         this.showLoader = false;
-      //  console.log(data);
+        //  console.log(data);
         if (data != null) {
           if (data.length > 0) {
-           // console.log(data);
+            // console.log(data);
             this.showLoader = false;
             this.serviceData = data;
             this.showLookup = true;
@@ -84,17 +84,25 @@ export class DepalletizeComponent implements OnInit {
     // alert("scan click");
   }
 
-  onPalletChange() { 
+  onPalletChangeBlur() {
+    if (this.isValidateCalled) {
+      return
+    }
+    this.onPalletChange();
+  }
+
+  async onPalletChange(): Promise<any> {
     if (this.palletNo == '' || this.palletNo == undefined) {
       this.palletData = [];
-      return
+      return false;
     }
 
     this.showLoader = true;
-    this.commonservice.isPalletValid(this.palletNo).subscribe(
+    var result = false;
+    await this.commonservice.isPalletValid(this.palletNo).then(
       (data: any) => {
         this.showLoader = false;
-       // console.log(data);
+        console.log("inside isPalletValid");
         if (data != null) {
           if (data.length > 0) {
             if (data[0].Result == "0") {
@@ -102,23 +110,25 @@ export class DepalletizeComponent implements OnInit {
               this.palletNo = "";
               this.palletData = [];
               this.scanPallet.nativeElement.focus()
-              return;
+              result = false;
             } else {
               this.palletNo = data[0].Code;
               // this.showHideGridToggle = false;
               // this.showHideBtnTxt = this.translate.instant("showGrid");
               this.getPalletData();
+              result = true;
             }
           } else {
             this.palletNo = "";
             this.palletData = [];
             this.toastr.error('', this.translate.instant("InValidPalletNo"));
+            result = false;
           }
         }
         else {
           this.toastr.error('', this.translate.instant("InValidPalletNo"));
           this.palletNo = "";
-          return;
+          result = false;
         }
       },
       error => {
@@ -129,8 +139,10 @@ export class DepalletizeComponent implements OnInit {
         else {
           this.toastr.error('', error);
         }
+        result = false;
       }
     );
+    return result;
   }
 
   getLookupValue(lookupValue: any) {
@@ -167,7 +179,7 @@ export class DepalletizeComponent implements OnInit {
     this.commonservice.GetPalletData(this.palletNo).subscribe(
       (data: any) => {
         this.showLoader = false;
-       // console.log(data);
+        // console.log(data);
         if (data != null) {
           this.palletData = data;
         }
@@ -188,12 +200,23 @@ export class DepalletizeComponent implements OnInit {
     );
   }
 
-  depalletize() {
+  async depalletize() {
+    var result = await this.validateBeforeSubmit();
+    this.isValidateCalled = false;
+    console.log("validate result: " + result);
+    if (result != undefined && result == false) {
+      return;
+    }
+    if (this.palletNo == '' || this.palletNo == undefined) {
+      this.palletData = [];
+      return;
+    }
+
     this.showLoader = true;
     this.commonservice.depalletize(this.palletNo).subscribe(
       (data: any) => {
         this.showLoader = false;
-       // console.log(data);
+        // console.log(data);
         if (data != null && data != undefined && data.length > 0) {
           if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
             this.toastr.success('', this.translate.instant("Plt_DePalletize_success"));
@@ -235,4 +258,16 @@ export class DepalletizeComponent implements OnInit {
     this.onPalletChange();
   }
 
+  isValidateCalled: boolean = false;
+  async validateBeforeSubmit(): Promise<any> {
+    this.isValidateCalled = true;
+    var currentFocus = document.activeElement.id;
+    console.log("validateBeforeSubmit current focus: " + currentFocus);
+
+    if (currentFocus != undefined) {
+      if (currentFocus == "Depalletize_PalletNoInput") {
+        return this.onPalletChange();
+      }
+    }
+  }
 }

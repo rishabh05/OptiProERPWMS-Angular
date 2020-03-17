@@ -24,7 +24,7 @@
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
                                 <input #poScanInputField type="text" class="form-control form-control-sm" name="poCode" [(ngModel)]=poCode placeholder="{{'Inbound_PO#'|translate}}"
-                                    (blur)="OnPOChange()" [disabled]=disablePO id="inboundPOScanPOInputField">
+                                    (blur)="OnPOChangeBlur()" [disabled]=disablePO id="inboundPOScanPOInputField">
                                 <div class="input-group-append has-seprate-btn">
                                     <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="onPOlookupClick()" [disabled]="disablePO">
                                         <i class="opti-icon-hammenu"></i>
@@ -46,7 +46,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'ItemCode'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input #scanItemCode type="text" (blur)="OnItemCodeChange()"  placeholder="{{'ItemCode'|translate}}" 
+                                <input #scanItemCode type="text" (blur)="OnItemCodeChangeBlur()"  placeholder="{{'ItemCode'|translate}}" 
                                 class="form-control form-control-sm" name="itemCode" [(ngModel)]=itemCode 
                                 id="InboundPO_ItemCodeScanInputField">
                                 <div class="input-group-append has-seprate-btn">
@@ -164,7 +164,7 @@
                     <i class="opti-icon-arrow-back"></i>
                 </button>
                
-                <button type="button" *ngIf="showGRPOButton" class="btn btn-primary k-button btn-sm btn-icon-with-text" (click)="onAddtoGRPOClick()">
+                <button type="button" *ngIf="showGRPOButton" class="btn btn-primary k-button btn-sm btn-icon-with-text" (mousedown)="onAddtoGRPOClick()">
                     <span class="k-icon k-i-plus-outline" role="presentation"></span>{{'AddToGRPO'|translate}} </button>
 
                     <button type="button" id="hid_InboundPOScanButton" style="visibility:hidden" (click)="onHiddenPOScanClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">

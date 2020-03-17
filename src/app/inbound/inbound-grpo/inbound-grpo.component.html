@@ -75,7 +75,7 @@
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
                                 <input type="text" id ="inboundGrpoRecBinInput" class="form-control form-control-sm" name="RecvbBinvalue" #RecBinVal
-                                    [(ngModel)]=RecvbBinvalue placeholder="{{'Inbound_ReceivingBin'|translate}}" (blur)="OnBinChange()">
+                                    [(ngModel)]=RecvbBinvalue placeholder="{{'Inbound_ReceivingBin'|translate}}" (blur)="OnBinChangeBlur()">
                                 <div class="input-group-append has-seprate-btn">
                                     <button tabindex="-1" class="k-button k-primary btn" type="button" (mousedown)="ShowBins()" [disabled]="lookupDisable">
                                         <i class="opti-icon-hammenu"></i>
@@ -121,7 +121,7 @@
                         <div class="col-sm-9">
                             <div class="d-flex">
                                 <input type="text" #scanBatchSerial class="form-control form-control-sm" id="inboundScanInputField" name="ScanInputs"
-                                    [(ngModel)]=ScanInputs (blur)="onScanCodeChange()" placeholder="{{scanInputPlaceholder}}">
+                                    [(ngModel)]=ScanInputs (blur)="onGS1ItemScanBlur()" placeholder="{{scanInputPlaceholder}}">
                                 <div class="ml-1 d-flex">
                                     <button tabindex="-1" type="button" id="inboundscanButton" (mousedown)="onInboundScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
@@ -143,7 +143,7 @@
                                 <div class="col-sm-9">
                                     <div class="input-group input-group-sm">
                                         <input type="text" #scanPallet id="inboundGRPOPalletNo" class="form-control form-control-sm" name="palletValue" [(ngModel)]=palletValue
-                                            (blur)="OnPalletChange()" placeholder="{{'Plt_PalletNo'|translate}}">
+                                            (blur)="OnPalletChangeBlur()" placeholder="{{'Plt_PalletNo'|translate}}">
                                         <div class="input-group-append has-seprate-btn">
                                             <button tabindex="-1" class="k-button k-primary btn" type="button" (mousedown)="GetPalletListsForGRPO()">
                                                 <i class="opti-icon-hammenu"></i>
@@ -396,11 +396,11 @@
                 <hr />
             </div>
             <div class="col-sm-12 col-12">
-                    <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="cancel($event)">
+                    <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (mousedown)="cancel($event)">
                             <span class="k-icon k-i-close-outline" role="presentation"></span> Cancel</button>
-                <button type="button" *ngIf="showButton" (click)="save($event)"  class="k-button k-primary k-button btn-sm btn-icon-with-text" >
+                <button type="button" *ngIf="showButton" (mousedown)="save($event)"  class="k-button k-primary k-button btn-sm btn-icon-with-text" >
                     <span class="k-icon k-i-save" role="presentation"></span> {{'Save'|translate}}</button>
-                <button class="btn btn-success k-button btn-sm btn-icon-with-text" *ngIf="showRecButton" type="button" (click)="receive($event)">
+                <button class="btn btn-success k-button btn-sm btn-icon-with-text" *ngIf="showRecButton" type="button" (mousedown)="receive($event)">
                     <span class="k-icon k-i-download" role="presentation"></span> {{'Receive'|translate}}</button>
                 <!-- <button class="k-button k-primary" type="button" (click)="cancel($event)">Cancel</button> -->
                 

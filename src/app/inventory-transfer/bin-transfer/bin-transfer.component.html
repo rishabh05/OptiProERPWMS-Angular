@@ -38,7 +38,7 @@
                             <div class="input-group input-group-sm">
                                 <input type="text" #scanItemCode class="form-control form-control-sm"  id="binTransferScanItemCodeInput"
                                     placeholder="{{'ItemCode'|translate}}" name="itemCode" id="binTransferItemCodeScan"
-                                    [(ngModel)]="itemCode" (blur)="OnItemCodeChange()">
+                                    [(ngModel)]="itemCode" (blur)="OnItemCodeChangeBlur()">
                                 <div class="input-group-append">
                                     <button tabIndex="-1" class="k-button k-primary btn" type="button"
                                         (mousedown)="OnItemCodeLookupClick()">
@@ -74,7 +74,7 @@
                             <div class="input-group input-group-sm">
                                 <input type="text" #scanLotNo class="form-control form-control-sm" id="binTransferBatchNoInput"
                                     placeholder="{{batchNoPlaceholder}}" name="lotValue" [(ngModel)]="lotValue"
-                                    (blur)="OnLotChange()">
+                                    (blur)="OnLotChangeBlur()">
                                 <div class="input-group-append">
                                     <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="ShowLOTList()">
                                         <i class="opti-icon-hammenu"></i>
@@ -96,7 +96,7 @@
                             <div class="input-group input-group-sm">
                                 <input type="text" #scanFromBin id="binTransferFromBinInput" class="form-control form-control-sm"
                                     placeholder="{{'InvTransfer_FromBin'|translate}}" name="fromBin"
-                                    [(ngModel)]="fromBin" (blur)="OnFromBinChange()">
+                                    [(ngModel)]="fromBin" (blur)="OnFromBinChangeBlur()">
                                 <div class="input-group-append">
                                     <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="ShowFromBins()">
                                         <i class="opti-icon-hammenu"></i>
@@ -118,7 +118,7 @@
                             <div class="input-group input-group-sm">
                                 <input type="text" #scanToBin class="form-control form-control-sm"  id="binTransferToBinInput"
                                     placeholder="{{'InvTransfer_ToBin'|translate}}" name="toBin" [(ngModel)]="toBin"
-                                    (blur)="OnToBinChange()">
+                                    (blur)="OnToBinChangeBlur()">
                                 <div class="input-group-append">
                                     <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="ShowToBins()">
                                         <i class="opti-icon-hammenu"></i>
@@ -148,7 +148,7 @@
                             class="col-sm-3 col-form-label">{{'InvTransfer_TransferQty'|translate}}</label>
                         <div class="col-sm-9">
                             <input #scanTransQty id="txtfld" type="number" min="0" class="form-control form-control-sm text-right"
-                                placeholder="{{zero}}" (blur)="formatTransferNumbers()" name="transferQty"
+                                placeholder="{{zero}}" (blur)="formatTransferNumbers()" id="transferQty" name="transferQty"
                                 [(ngModel)]="transferQty" [disabled]="editTransferQty">
                         </div>
                     </div>
@@ -157,7 +157,7 @@
                             class="col-sm-3 col-form-label">{{'InvTransfer_Reason'|translate}}</label>
                         <div class="col-sm-9">
                             <input #scanReason type="text" class="form-control form-control-sm"
-                                placeholder="{{'InvTransfer_Reason'|translate}}" name="Remarks" [(ngModel)]="Remarks">
+                                placeholder="{{'InvTransfer_Reason'|translate}}" id="remarkByItem" name="Remarks" [(ngModel)]="Remarks">
                         </div>
                     </div>
 
@@ -172,7 +172,7 @@
                             <div class="input-group input-group-sm">
                                 <input type="text" #scanPallet class="form-control form-control-sm" id= "binTransferScanByPalletPalletNoInput"
                                     placeholder="{{'Plt_PalletNo'|translate}}" name="palletNo" [(ngModel)]="palletNo"
-                                    (blur)="onPalletChange()">
+                                    (blur)="onPalletChangeBlur()">
                                 <div class="input-group-append has-seprate-btn">
                                     <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="getPalletList()">
                                         <i class="opti-icon-hammenu"></i>
@@ -199,7 +199,7 @@
                             <div class="input-group input-group-sm">
                                 <input type="text" #scanToBinOther class="form-control form-control-sm" id="binTransferByPalletToBinNoInput"
                                     placeholder="{{'InvTransfer_ToBin'|translate}}" name="toBin" [(ngModel)]="toBin"
-                                    (blur)="OnToBinChange()">
+                                    (blur)="OnToBinChangeBlur()">
                                 <div class="input-group-append has-seprate-btn">
                                     <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="ShowToBins()">
                                         <i class="opti-icon-hammenu"></i>
@@ -239,7 +239,7 @@
                 <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (mousedown)="goBack()">
                     <span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
 
-                <button type="button" class="btn btn-primary k-button btn-sm btn-icon-with-text" (mousedown)="AddLineLots()"
+                <button type="button" class="btn btn-primary k-button btn-sm btn-icon-with-text" (mousedown)="AddLineLots('add')"
                     *ngIf="radioSelected==0">
                     <span class="k-icon k-i-plus" role="presentation"></span> {{'AddMore'|translate}}</button>
                 <button type="button" class="btn btn-primary k-button btn-sm btn-icon-with-text mr-1"

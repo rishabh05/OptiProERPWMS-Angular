@@ -51,7 +51,7 @@
                             <div class="input-group input-group-sm">
                                 <input #scanItemCode type="text" class="form-control form-control-sm" id="itemCodeInputPC" name="ItemCode"
                                  [(ngModel)]="ItemCode" placeholder="{{'ItemCode'|translate}}"
-                                    (blur)="OnItemChange()">
+                                    (blur)="OnItemChangeBlur()">
                                 <div class="input-group-append has-seprate-btn">
                                     <button tabindex="-1" class="k-button k-primary btn" type="button" (mousedown)="onItemlookupClick()">
                                         <i class="opti-icon-hammenu"></i>
@@ -100,7 +100,7 @@
                             <div class="input-group input-group-sm">
                                 <input #scanBatchSerial type="text" class="form-control form-control-sm" name="batchserno" id="batchSerialInputPC"
                                  [(ngModel)]="batchserno" placeholder="{{batchNoPlaceholder}}"
-                                autocomplete="off" (blur)="OnLotChange()">
+                                autocomplete="off" (blur)="OnLotChangeBlur()">
 
                                 <div class="input-group-append has-seprate-btn">
                                     <button tabindex="-1" class="k-button k-primary btn" type="button" (mousedown)="ShowBatachSerList()">
@@ -128,9 +128,9 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'PhyCount_CountedQty'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input #scanCountedQty type="text" class="form-control form-control-sm text-right" name='CountedQty' id="countedQtyInputPC"
+                                <input #scanCountedQty type="number" class="form-control form-control-sm text-right" name='CountedQty' id="countedQtyInputPC"
                                  [(ngModel)]="CountedQty" placeholder="{{'PhyCount_CountedQty'|translate}}"
-                                    (blur)="onCountedQtyChanged()">
+                                    (blur)="onCountedQtyChangedBlur()">
                                 <div class="input-group-append">
                                     <button tabindex="-1" class="k-button k-primary btn" type="button" *ngIf="!isNonTrack" (mousedown)="onAddItemClick()">
                                         <span class="k-icon k-i-plus-outline "></span>{{batchSrBtn}}
@@ -230,14 +230,14 @@
                 <hr />
             </div>
             <div class="col-sm-12 col-12">
-              <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="onCancelClick()">
+              <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (mousedown)="onCancelClick()">
                     <span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
                
-                <button type="button" class="k-button k-primary k-button btn-sm btn-icon-with-text" (click)="onAddItemClick()">
+                <button type="button" class="k-button k-primary k-button btn-sm btn-icon-with-text" (mousedown)="onAddItemClick()">
                     <span class="k-icon k-i-plus-outline" role="presentation"></span> {{'Item'|translate}}</button>
-                <button type="button"  class="k-button k-primary k-button btn-sm btn-icon-with-text"  (click)="onSaveClick()">
+                <button type="button"  class="k-button k-primary k-button btn-sm btn-icon-with-text"  (mousedown)="onSaveClick()">
                     <span class="k-icon k-i-save" role="presentation"></span> {{'PhyCount_Save&Next'|translate}}</button>
-                    <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text" (click)="onSubmitClick()">
+                    <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text" (mousedown)="onSubmitClick()">
                             <span class="k-icon k-i-check" role="presentation"></span> {{'Submit'|translate}}</button>
 
                 <div class="clearfix mt-1 d-block d-sm-none"></div>

@@ -170,14 +170,20 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
     );
   }
 
+  OnVendorChangeBlur() {
+    if(this.isValidateCalled){
+      return;
+    }
+    this.OnVendorChange();
+  }
   
-  OnVendorChange() {
-    
+  async OnVendorChange(): Promise<any>{
     if (this.VendCode == "" || this.VendCode == undefined) {
       return;
     }
     this.showLoader = true;
-    this.inboundService.IsVendorExists(this.VendCode).subscribe(
+    var result = false;
+    await this.inboundService.IsVendorExists(this.VendCode).then(
       (data: any) => {
         this.showLoader = false;
         console.log(data);
@@ -185,7 +191,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
           if (data != undefined && data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
-            return;
+              result = false;
           }
           if (data[0].Result == "0") {
             this.toastr.error('', this.translate.instant("Inbound_VendorExistMessge"));
@@ -194,7 +200,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
             this.poCode = "";
             this.VendCode1= this.VendCode;
             this.vendInputScanField.nativeElement.focus()
-            return;
+            result = false;
           } else {
             if(this.VendCode1 != data[0].ID){
               this.poCode = "";
@@ -203,12 +209,14 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
             this.VendName = data[0].Name;
             this.showNext = true;
             this.VendCode1= this.VendCode;
+            result = true;
           }
         } else {
           this.toastr.error('', this.translate.instant("Inbound_VendorExistMessge"));
           this.VendCode = "";
           this.showNext = false;
           this.vendInputScanField.nativeElement.focus()
+          result = false;
         }
       },
       error => {
@@ -221,8 +229,10 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
        else{
         this.toastr.error('', error);
        }
+       result = false;
       }
     );
+    return result;
   }
 
   getLookupValue($event) {
@@ -256,7 +266,14 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
     }
   }
 
-  public onNextClick() {
+  async onNextClick() {
+    var result = await this.validateBeforeSubmit();
+    this.isValidateCalled = false;
+    console.log("validate result: " + result);
+    if (result != undefined && result == false) {
+      return;
+    }
+
     if (this.VendCode != undefined && this.VendCode != "") {
       this.inboundMasterComponent.selectedVernder = this.VendCode;
       this.inboundMasterComponent.inboundComponent = 2;
@@ -488,12 +505,20 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
     }
   }
 
-  OnPOChange() {
+  OnPOChangeBlur() {
+    if(this.isValidateCalled){
+      return;
+    }
+    this.OnPOChange();
+  }
+
+  async OnPOChange(): Promise<any>{
     if (this.poCode == "" || this.poCode == undefined) {
       return;
     }
     this.showLoader = true;
-    this.inboundService.IsPOExists(this.poCode, "").subscribe(
+    var result = false;
+    await this.inboundService.IsPOExists(this.poCode, "").then(
       data => {
         this.showLoader = false;
         if (data != null) {
@@ -503,17 +528,19 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
             this.showNext = true;
             this.detailsAvailable = true;
             this.VendCode1= this.VendCode;
+            result = true
           }
           else {
             this.poCode = "";
             this.toastr.error('', this.translate.instant("Inbound_POExistMessage"));
             this.poScanInputField.nativeElement.focus()
-            return;
+            result = false;
           }
         } else {
           this.poScanInputField.nativeElement.focus()
           this.poCode = "";
           this.toastr.error('', this.translate.instant("Inbound_POExistMessage"));
+          result = false;
         }
       },
       error => {
@@ -525,8 +552,10 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
        else{
         this.toastr.error('', error);
        }
+       result = false;
       }
     );
+    return result;
   }
 
   onPOlookupClick() {
@@ -561,6 +590,12 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
       );
   }
 
+  OnVendRefNoChangeBlur(){
+    if(this.isValidateCalled){
+      return;
+    }
+    this.OnVendRefNoChange();
+  }
 
   OnVendRefNoChange() {
     if(this.VendRefNo.length <= 100){
@@ -588,4 +623,20 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
     
   }
   
+  isValidateCalled: boolean = false;
+  async validateBeforeSubmit():Promise<any>{
+    this.isValidateCalled = true;
+    var currentFocus = document.activeElement.id;
+    console.log("validateBeforeSubmit current focus: "+currentFocus);
+    
+    if(currentFocus != undefined){
+      if(currentFocus == "InboundDetailVendScanInputField"){
+        return this.OnVendorChange();
+      } else if(currentFocus == "inboundDetailPOScanInputField"){
+        return this.OnPOChange();
+      } else if(currentFocus == "venderRefNo"){
+        return this.OnVendRefNoChangeBlur();
+      }
+    }
+  }
 }

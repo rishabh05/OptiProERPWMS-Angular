@@ -10,7 +10,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Plt_PalletNo'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input #scanFromPallet type="text" id="pltMergePalletNoInput" name="fromPalletNo" (blur)="onPalletChange('from_pallet')" value=''
+                                <input #scanFromPallet type="text" id="fromPalletNoInput" name="fromPalletNo" (blur)="onPalletChangeBlur('from_pallet')" value=''
                                     [(ngModel)]="fromPalletNo" class="form-control form-control-sm" placeholder="{{'Plt_PalletNo'|translate}}">
                                 <div class="input-group-append has-seprate-btn">
                                     <button tabIndex="-1" class="k-button k-primary btn" (mousedown)="getFromPalletList('from_pallet')" type="button">
@@ -89,7 +89,7 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Plt_ToPalletNo'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input #scanToPallet type="text" id="pltMergeToPalletInput" name="palletNo" (blur)="onPalletChange('to_pallet')" value=''
+                                <input #scanToPallet type="text" id="toPalletNoInput" name="palletNo" (blur)="onPalletChangeBlur('to_pallet')" value=''
                                     [(ngModel)]="toPalletNo" class="form-control form-control-sm" placeholder="{{'Plt_ToPalletNo'|translate}}">
                                 <div class="input-group-append has-seprate-btn">
                                     <button tabIndex="-1" class="k-button k-primary btn" (mousedown)="getPalletList('to_pallet')" type="button">
@@ -144,9 +144,9 @@
                 <hr />
             </div>
             <div class="col-sm-12 col-12">
-                <button type="button" (click)="back(0)" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
+                <button type="button" (mousedown)="back(0)" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
-                <button type="button" *ngIf="selectedFromPallets.length>0 && toPalletNo!=''" (click)="mergePallet()"
+                <button type="button" *ngIf="selectedFromPallets.length>0 && toPalletNo!=''" (mousedown)="mergePallet()"
                     class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon opti-icon-pallet-marge"></span>
                     {{'Plt_Merge'|translate}}</button>
 

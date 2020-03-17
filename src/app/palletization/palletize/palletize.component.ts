@@ -105,37 +105,47 @@ export class PalletizeComponent implements OnInit {
     // alert("scan click");
   }
 
-  onPalletChange() {
+  onPalletChangeBlur(){
+    if(this.isValidateCalled){
+      return;
+    }
+    this.onPalletChange();
+  } 
+
+  async onPalletChange(): Promise<any>{
     if (this.palletNo == '' || this.palletNo == undefined) {
       return
     }
     this.showLoader = true;
-    this.commonservice.isPalletValid(this.palletNo).subscribe(
+    var result = false
+    await this.commonservice.isPalletValid(this.palletNo).then(
       (data: any) => {
         this.showLoader = false;
-      //  console.log(data);
+        console.log("inside isPalletValid")
         if (data != null) {
           if (data.length > 0) {
             if (data[0].Result == "0") {
               this.toastr.error('', this.translate.instant("InValidPalletNo"));
               this.palletNo = "";
               this.scanToPallet.nativeElement.focus()
-              return;
+              result = false
             } else {
               this.palletNo = data[0].Code;
               this.showHideBtnTxt = this.translate.instant("showGrid");
+              result = true
             }
           } else {
             this.palletNo = "";
             this.toastr.error('', this.translate.instant("InValidPalletNo"));
             this.scanToPallet.nativeElement.focus()
+            result = false
           }
         }
         else {
           this.toastr.error('', this.translate.instant("InValidPalletNo"));
           this.palletNo = "";
           this.scanToPallet.nativeElement.focus()
-          return;
+          result = false
         }
       },
       error => {
@@ -146,8 +156,10 @@ export class PalletizeComponent implements OnInit {
         else {
           this.toastr.error('', error);
         }
+        result = false
       }
     );
+    return result
   }
 
   getLookupValue(lookupValue: any) {
@@ -234,17 +246,25 @@ export class PalletizeComponent implements OnInit {
     );
   }
 
-  OnItemCodeChange() {
+  OnItemCodeChangeBlur(){
+    if(this.isValidateCalled){
+      return
+    }
+    this.OnItemCodeChange();
+  }
+
+  async OnItemCodeChange(): Promise<any>{
     if (this.itemCode == "" || this.itemCode == undefined) {
       this.savedPalletsArray = [];
       return;
     }
     this.showLoader = true;
-    this.commonservice.getItemInfo(this.itemCode).subscribe(
+    var result = false
+    await this.commonservice.getItemInfo(this.itemCode).then(
       data => {
+        console.log("inside OnItemCodeChange");
         this.showLoader = false;
         if (data != undefined && data.length > 0) {
-          //console.log("" + data);
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
@@ -260,12 +280,14 @@ export class PalletizeComponent implements OnInit {
           } else {
             this.isSerailTrackedItem = false;
           }
+          result = true
         } else {
           this.savedPalletsArray = [];
           this.resetVariablesOnItemSelect();
           this.toastr.error('', this.translate.instant("InvalidItemCode"));
           this.itemCode = ''
           this.scanItemCode.nativeElement.focus()
+          result = false
         }
       },
       error => {
@@ -275,8 +297,10 @@ export class PalletizeComponent implements OnInit {
         else {
           this.toastr.error('', error);
         }
+        result = false
       }
     );
+    return result;
   }
 
   // clickShowHideGrid() {
@@ -333,7 +357,14 @@ export class PalletizeComponent implements OnInit {
     );
   }
 
-  OnLotsChange() {
+  OnLotsChangeBlur(){
+    if(this.isValidateCalled){
+      return;
+    }
+    this.OnLotsChange();
+  }
+
+  async OnLotsChange() : Promise<any>{
     if (this.batchSerialNo == '' || this.batchSerialNo == undefined) {
       return;
     }
@@ -345,11 +376,12 @@ export class PalletizeComponent implements OnInit {
     }
 
     this.showLoader = true;
-    this.labelPrintReportsService.getLotScanListWithoutWhseBinAndItemWise(this.itemCode, this.batchSerialNo).subscribe(
+    var result = false
+    await this.labelPrintReportsService.getLotScanListWithoutWhseBinAndItemWisePromise(this.itemCode, this.batchSerialNo).then(
       (data: any) => {
+        console.log("inside OnLotsChange")
         this.showLoader = false;
         if (data != undefined && data.length > 0) {
-         // console.log("" + data);
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
@@ -359,7 +391,8 @@ export class PalletizeComponent implements OnInit {
             this.toastr.error('', this.translate.instant("InvalidBatch"));
             this.batchSerialNo = "";
             this.BatchNoInput.nativeElement.focus()
-            return;
+            result = false
+            return result;
           }
           this.batchSerialNo = data[0].LOTNO; //check this code.
           this.expDate = data[0].EXPDATE;
@@ -367,22 +400,33 @@ export class PalletizeComponent implements OnInit {
           this.fromBinNo = data[0].BINNO;
           this.openQty = Number.parseInt(data[0].TOTALQTY);
           this.validateRemainigQuantity();
+          result = true
         } else {
           this.toastr.error('', this.translate.instant("InvalidBatch"));
           this.batchSerialNo = "";
           this.BatchNoInput.nativeElement.focus()
+          result = false
         }
       },
       error => {
         this.toastr.error('', error);
         this.batchSerialNo = "";
         this.showLoader = false;
+        result = false
       }
     );
+    return result;
   }
 
 
-  addQuantity() {
+  async addQuantity() {
+    var result = await this.validateBeforeSubmit();
+    this.isValidateCalled = false;
+    console.log("validate result: " + result);
+    if (result != undefined && result == false) {
+      return;
+    }
+
     if (this.qty == 0 || this.qty == undefined) {
       this.toastr.error('', this.translate.instant("Inbound_EnterQuantityErrMsg"));
       return;
@@ -457,7 +501,13 @@ export class PalletizeComponent implements OnInit {
     }
   }
 
-  palletize() {
+  async palletize() {
+    var result = await this.validateBeforeSubmit();
+    this.isValidateCalled = false;
+    if (result != undefined && result == false) {
+      console.log("validate result: " + result);
+      return;
+    }
 
     this.showLoader = true;
     var oPalletReq: any = {};
@@ -636,6 +686,23 @@ export class PalletizeComponent implements OnInit {
           this.toWhse = localStorage.getItem("whseId");
           this.createNewPallet($event.PalletNo, $event.BinNo);
           break
+      }
+    }
+  }
+
+  isValidateCalled: boolean = false;
+  async validateBeforeSubmit():Promise<any>{
+    this.isValidateCalled = true;
+    var currentFocus = document.activeElement.id;
+    console.log("validateBeforeSubmit current focus: "+currentFocus);
+    
+    if(currentFocus != undefined){
+      if(currentFocus == "PalletizePalletNo"){
+        return this.onPalletChange();
+      } else if(currentFocus == "PalletizeBatchSrNo"){
+        return this.OnLotsChange();
+      } else if(currentFocus == "PalletizeItemCodeInput") {
+        return this.OnItemCodeChange();
       }
     }
   }

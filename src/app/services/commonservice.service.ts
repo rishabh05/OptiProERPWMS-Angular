@@ -279,7 +279,7 @@ export class Commonservice {
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/CreateNewPallet", jObject, this.httpOptions);
   }
 
-  isPalletValid(palletCode: string): Observable<any> {
+  isPalletValid(palletCode: string): Promise<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
         COMPANYDBNAME: localStorage.getItem("CompID"),
@@ -287,7 +287,7 @@ export class Commonservice {
         PalletCode: palletCode
       }])
     };
-    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/IsPalletValid", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/IsPalletValid", jObject, this.httpOptions).toPromise();
   }
 
   getItemCodeList(): Observable<any> {
@@ -295,9 +295,9 @@ export class Commonservice {
     return this.httpclient.post(this.config_params.service_url + "/api/GoodsIssue/AllItemLookup", jObject, this.httpOptions);
   }
 
-  getItemInfo(itemCode: string): Observable<any> {
+  getItemInfo(itemCode: string): Promise<any> {
     var jObject = { ITEMCODE: JSON.stringify([{ CompanyDbName: localStorage.getItem("CompID"), ITEMCODE: itemCode, WHSCODE: localStorage.getItem("whseId") }]) };
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodsReceipt/GetItemInfo", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodsReceipt/GetItemInfo", jObject, this.httpOptions).toPromise();
   }
 
   // Palletization APIs 
@@ -562,7 +562,7 @@ export class Commonservice {
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/PalletTransaction", jObject, this.httpOptions);
   }
 
-  IsValidItemsFromPallet(palletCode: string, itemCode: string): Observable<any> {
+  IsValidItemsFromPallet(palletCode: string, itemCode: string): Promise<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
         COMPANYDBNAME: localStorage.getItem("CompID"),
@@ -571,10 +571,10 @@ export class Commonservice {
         WhseCode: localStorage.getItem("whseId")
       }])
     };
-    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/IsValidItemsFromPallet", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/IsValidItemsFromPallet", jObject, this.httpOptions).toPromise();
   }
 
-  IsValidBatchandSerialItemsFromPallet(batchNo: string, itemCode: string, palletCode: string): Observable<any> {
+  IsValidBatchandSerialItemsFromPallet(batchNo: string, itemCode: string, palletCode: string): Promise<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
         COMPANYDBNAME: localStorage.getItem("CompID"),
@@ -584,7 +584,7 @@ export class Commonservice {
         WhseCode: localStorage.getItem("whseId")
       }])
     };
-    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/IsValidBatchandSerialItemsFromPallet", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/IsValidBatchandSerialItemsFromPallet", jObject, this.httpOptions).toPromise();
   }
 
   GetPalletListForOutBound(itemCode: string): Observable<any> {
@@ -598,7 +598,7 @@ export class Commonservice {
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetPalletListForOutBound", jObject, this.httpOptions);
   }
 
-  IsPalletValidForOutBound(palletCode: string, itemCodeArray: string): Observable<any> {
+  IsPalletValidForOutBound(palletCode: string, itemCodeArray: string): Promise<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
         COMPANYDBNAME: localStorage.getItem("CompID"),
@@ -607,7 +607,7 @@ export class Commonservice {
         PALLETCODE: palletCode
       }])
     };
-    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/IsPalletValidForOutBound", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/IsPalletValidForOutBound", jObject, this.httpOptions).toPromise();
   }
 
   GetPalletDataForWhseTrns(palletCode: string): Observable<any> {
