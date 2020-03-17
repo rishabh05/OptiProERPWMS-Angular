@@ -455,7 +455,7 @@
   "Batch_Picking":"Batch Picking",
   "Cluster_Picking":"Cluster Picking",
   "Container_Picking":"Container Picking",
-  "Discreate_Picking":"Discreate Picking",
+  "Discreate_Picking":"Discrete Picking",
   "Zone_Picking":"Zone Picking",
   "Pick_Type": "Pick Type",
 
