@@ -51,7 +51,7 @@
 }
 
 .item-input-section{
-    margin-top: 30px;
+    margin-top: 10px;
     position: relative;
     input{
         border-width: 0 0 1px 0;
@@ -72,24 +72,7 @@
 .scanner-box{
     position: relative;
     text-align: center;
-    font-size: 80px;
-    .k-i-arrow-chevron-right, .k-i-arrow-chevron-left, .k-i-save{
-       font-size: 38px;
-       color: #ccc;
-       position: absolute;
-       top: 30px;
-    }
-    .k-i-arrow-chevron-right, .k-i-save{
-     right: 0;
-    }
-    .k-i-save{
-        font-size: 28px;
-        color: #3e5b99;
-        top: 26px;
-    }
-    .k-i-arrow-chevron-left{
-        left: 0;
-    }
+    font-size: 80px;   
     
 }
 .or-class{
@@ -160,6 +143,25 @@ i {
 .po-item-name{
     flex-grow: 1;
 }
+
+.k-i-arrow-chevron-right, .k-i-arrow-chevron-left, .k-i-save{
+    font-size: 38px;
+    color: #ccc;
+    position: absolute;
+    top:89px;
+ }
+ .k-i-arrow-chevron-right{
+  right: 0;
+ }
+ .k-i-save{
+     font-size: 28px;
+     color: #3e5b99;
+     top: 92px;
+     right: 14px;
+ }
+ .k-i-arrow-chevron-left{
+     left: 0;
+ }
 
 @media (max-width:640px) {
     .task-btn{
