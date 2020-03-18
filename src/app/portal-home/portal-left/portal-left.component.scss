@@ -23,11 +23,11 @@
                 justify-self: flex-start;
                 display: flex;
                 flex: 1;
-                font-size: 12px;
+                font-size: 16px;
                 
             }
             svg{
-                width:32px;
+                width:25px;
             }
         }
         &.dropdown {
@@ -73,11 +73,11 @@
                 border-radius: 0;
                 position: static;
                 z-index: 0;
-                box-shadow: inset 0px 0px 6px 0px rgba(0,0,0,0.2);
+                 box-shadow: none;
                 & > li{
 
                     & > a{                        
-                        padding: 10px 15px 10px 25px;
+                        padding: 10px 15px 10px 30px;
                         display: flex;
                         align-items: center;
                         justify-content: flex-start;
@@ -188,15 +188,16 @@
 .opti_device-logo-outer {
     max-height: $top-bar-height + 10;
     overflow: hidden;
-    height: $top-bar-height + 10;
+    height: 45px;
     display: flex;
     flex-direction: row;
     align-items: center;
+    border-bottom: 1px solid #f1f1f1;
     .opti_logo.opti_device-logo{
         flex: 1;
         align-items: center;
         display: flex;
-        justify-content: center;
+        justify-content: left;
     }
     #sidebarCollapse-alt{
         display: none;
@@ -256,3 +257,7 @@
     }
 }
 
+.opti_device-logo  h4{
+    font-size: 16px;
+    margin-bottom: 0px;
+}

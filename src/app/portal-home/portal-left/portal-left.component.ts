@@ -115,25 +115,31 @@ export class PortalLeftComponent implements OnInit {
     }
     return false;
   }
-
+// from whre number is for out bound 1 for delivery, 2 for delivery from shipment
 
   /**
    * 
    * @param event 
    * @param module 
    */
-  listClick(event, module) {
+  listClick(event, module, fromWhere: number =   0) {
+    
     this.selectedItem = module;
-
     this.closeRightSidebar(event);
-    this.router.navigate(['home/' + module]);
-
     localStorage.setItem("ProdReceptItem", '');
     localStorage.setItem("FromReceiptProd", 'false');
     localStorage.setItem("GoodsReceiptModel", '');
     localStorage.setItem("AvailableRejectQty", 0 + "");
 
     if(module == "outbound"){
+      // manage delivery and shipment via delivery option in same outbound 
+      if(fromWhere==1){
+        localStorage.setItem("deliveryOptionType", '1');
+        module = module + '/outcustomer'
+      }else if(fromWhere==2){
+        localStorage.setItem("deliveryOptionType", '2');
+        module = module + '/deliveryThroughShipment'
+      }
       this.onOutboundClick();
     }else if(module == "inbound"){
       this.onInboundClick();
@@ -146,6 +152,7 @@ export class PortalLeftComponent implements OnInit {
       localStorage.setItem("towhseId", localStorage.getItem("whseId"));
       localStorage.setItem("fromwhseId", localStorage.getItem("whseId"));
     }
+    this.router.navigate(['home/' + module]);
   }
 
   /** 
@@ -170,6 +177,7 @@ export class PortalLeftComponent implements OnInit {
   }
 
   onOutboundClick() {
+    localStorage.setItem(CommonConstants.FROM_DTS, "False");
     localStorage.setItem(CommonConstants.OutboundData, null);
     localStorage.setItem("ComingFrom", "");
   }

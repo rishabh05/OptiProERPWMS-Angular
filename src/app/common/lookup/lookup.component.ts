@@ -94,13 +94,13 @@ export class LookupComponent implements OnInit {
     this.clearFilters()
   }
   ngOnInit() {
-    
+
   }
 
   async ngOnChanges(): Promise<void> {
 
-    if(this.serviceData != undefined && this.serviceData.length>= this.lookupPageSize){
-        this.lookupPagable = true;
+    if (this.serviceData != undefined && this.serviceData.length >= this.lookupPageSize) {
+      this.lookupPagable = true;
     }
     if (this.lookupfor == "toWhsList" || this.lookupfor == "fromWhsList") {
       this.showToWhsList();
@@ -154,12 +154,18 @@ export class LookupComponent implements OnInit {
       this.ShowPhyCntInnerItemList();
     } else if (this.lookupfor == "ShowBatachSerList") {
       this.ShowBatachSerList();
-    } else if(this.lookupfor == "PIOrderList"){
+    } else if (this.lookupfor == "PIOrderList") {
       this.orderList();
-    } else if(this.lookupfor == "PalletList"){
+    } else if (this.lookupfor == "PalletList") {
       this.palletList();
-    } else if(this.lookupfor == "ITRList"){
+    } else if (this.lookupfor == "ITRList") {
       this.showITRList();
+    } else if (this.lookupfor == "PickItemBtchSer") {
+      this.showPickItemBtchSerList();
+    } else if(this.lookupfor == "ShipmentList"){
+      this.showShipmentList();
+    } else if (this.lookupfor == "DockDoorList"){
+      this.showDockDoorList();
     }
 
     this.clearFilters();
@@ -191,13 +197,13 @@ export class LookupComponent implements OnInit {
 
   showAvaliableItems() {
     this.pagesize = 5;
-    if(this.serviceData.length>this.pagesize){
+    if (this.serviceData.length > this.pagesize) {
       this.pagable = true;
-    }else{
+    } else {
       this.pagable = false;
     }
-    
-    
+
+
     this.showSelection = true;
     this.selectedValues = [];
     this.table_head = [
@@ -230,7 +236,7 @@ export class LookupComponent implements OnInit {
       if (len > 0) {
         //  console.log('ServiceData', this.serviceData);
         var tempData: any;
-        for(var i=0;i<len;i++){
+        for (var i = 0; i < len; i++) {
           var qty = Number(this.serviceData[i].TOTALQTY).toFixed(Number(localStorage.getItem("DecimalPrecision")));
           this.serviceData[i].TOTALQTY = qty;
         }
@@ -461,7 +467,7 @@ export class LookupComponent implements OnInit {
         title: this.translate.instant("DelDate"),
         type: 'date',
         width: '100'
-       }//,
+      }//,
       // {
       //   field: 'CardCode',
       //   title: this.translate.instant("VendorCode"),
@@ -631,34 +637,34 @@ export class LookupComponent implements OnInit {
   showLotsList() {
     var titleValue = this.translate.instant("BatchNo");
     if (this.serviceData !== undefined && this.serviceData.length > 0) {
-        if("S" == this.serviceData[0].TRACKING){
-          titleValue = this.translate.instant("SerialNo");
-        } else if("N" == this.serviceData[0].TRACKING){
-          titleValue = this.serviceData[0].TRACKING;
-        }
+      if ("S" == this.serviceData[0].TRACKING) {
+        titleValue = this.translate.instant("SerialNo");
+      } else if ("N" == this.serviceData[0].TRACKING) {
+        titleValue = this.serviceData[0].TRACKING;
+      }
     }
     this.table_head = [
-        {
-          field: 'LOTNO',
-          title: titleValue,
-          type: 'text',
-          width: '100'
-        },
-        {
-          field: 'ITEMCODE',
-          title: this.translate.instant("ItemCode"),
-          type: 'text',
-          width: '100'
-        },
-        {
-          field: 'BINNO',
-          title: this.translate.instant("BinNo"),
-          type: 'text',
-          width: '100'
-        }
-      ];
-    
-    if("N" == titleValue){
+      {
+        field: 'LOTNO',
+        title: titleValue,
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'ITEMCODE',
+        title: this.translate.instant("ItemCode"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'BINNO',
+        title: this.translate.instant("BinNo"),
+        type: 'text',
+        width: '100'
+      }
+    ];
+
+    if ("N" == titleValue) {
       this.table_head.splice(0, 1);
     }
 
@@ -739,12 +745,12 @@ export class LookupComponent implements OnInit {
     let servivceItem: any = this.serviceData[index];
     if (checked) {
       this.selectedValues.push(servivceItem);
-    } 
+    }
     else {
       // let rixd: number= this.selectedValues.findIndex(i => i.LOTNO == servivceItem.LOTNO && i.LOTNO == servivceItem.BINNO)
       var temp = this.selectedValues.splice(index, 1);
-     this.selectedValues = this.selectedValues;
-     //console.log("selectedValues.size", this.selectedValues.length);
+      this.selectedValues = this.selectedValues;
+      //console.log("selectedValues.size", this.selectedValues.length);
     }
   }
 
@@ -772,7 +778,7 @@ export class LookupComponent implements OnInit {
     }
   }
 
-  showITRList(){
+  showITRList() {
     this.table_head = [
       {
         field: 'DocNum',
@@ -789,10 +795,78 @@ export class LookupComponent implements OnInit {
     }
   }
 
-  Done() {
-    this.lookupkey.emit(this.selectedValues);
-    this.dialogOpened = false; 
+  showPickItemBtchSerList() {
+    this.table_head = [
+      // {
+      //   field: 'OPTM_TASKID',
+      //   title: this.translate.instant("VendorCode"),
+      //   type: 'text',
+      //   width: '100'
+      // },
+      {
+        field: 'OPTM_ITEMCODE',
+        title: this.translate.instant("ItemCode"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'OPTM_BTCHSER',
+        title: this.translate.instant("BatchSerial_No"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'OPTM_PLANNED_QTY',
+        title: this.translate.instant("Quantity"),
+        type: 'numeric',
+        class: 'text-right',
+        width: '100'
+      }
+    ];
+    this.lookupTitle = this.translate.instant("ItemDetail");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
   }
 
+  showShipmentList(){
+    this.table_head = [
+      {
+        field: 'OPTM_SHIPMENTID',
+        title: this.translate.instant("ShipmentID"),
+        type: 'text',
+        width: '100'
+      }
+    ];
+    this.lookupTitle = this.translate.instant("Shipment_List");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
 
+  showDockDoorList(){
+    this.table_head = [
+      {
+        field: 'OPTM_DOCKDOORID',
+        title: this.translate.instant("ShipmentID"),
+        type: 'text',
+        width: '150'
+      }
+    ];
+    this.lookupTitle = this.translate.instant("Outbound_Dock_Door_List");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
+
+  Done() {
+    this.lookupkey.emit(this.selectedValues);
+    this.dialogOpened = false;
+  }
 }

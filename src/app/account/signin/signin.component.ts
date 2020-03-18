@@ -95,6 +95,7 @@ export class SigninComponent implements OnInit {
             this.httpClientSer.get('./assets/config.json').subscribe(
                 data => {
                     sessionStorage.setItem('ConfigData', JSON.stringify(data[0]));
+                    this.signinService.loadConfig();
                     this.getPSURL();
                 },
                 (err: HttpErrorResponse) => {

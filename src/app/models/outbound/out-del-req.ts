@@ -29,6 +29,7 @@ export class SODETAIL {
     parentLine: number;
     GUID: string;
     UsernameForLic: string;
+    DOCENTRY:string;
 }
 
 export class DeliveryToken {

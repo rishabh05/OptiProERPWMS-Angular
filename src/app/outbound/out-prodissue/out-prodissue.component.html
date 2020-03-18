@@ -1,12 +1,13 @@
 <div class="opti_container position-relative bg-white rounded">
     <form class="form-with-fix-btnBar ">
+         <div [ngClass]="{'opti-disable-page-div': fromShipment==true}" >
         <div class="opti_container_inner" [perfectScrollbar]=" ">
             <h3 class="border-bottom d-flex pt-1 pb-3 mb-4" *ngIf="!fromProduction">
                 {{pageTitle}}: {{outbound.OrderData.DOCNUM}}
             </h3>
 
             <h3 class="border-bottom d-flex pt-1 pb-3 mb-4" *ngIf="fromProduction">
-                {{pageTitle}}: {{currentOrderNo}}
+                {{pageTitle}}: {{currentOrderNo}} 
             </h3>
             <div class="row">
                 <div class="col-12">
@@ -236,7 +237,7 @@
                 </div>
             </div>
         </div>
-
+    </div> 
         <div class="fix-footer-btnBar">
             <div class="col-sm-12 col-12">
                 <hr />
@@ -246,11 +247,12 @@
                 <button type="button" (mousedown)="back(0)" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
                 <button type="button" *ngIf="showSaveButton && !fromProduction"
-                    (mousedown)="addMetToCollection()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
-                        class="k-icon k-i-save" role="presentation"></span> {{'Save'|translate}}</button>
+                    (click)="addMetToCollection()" class="btn btn-success k-button btn-sm btn-icon-with-text" [disabled]=fromShipment><span
+                        class="k-icon k-i-save" role="presentation" ></span> {{'Save'|translate}}</button>
 
                 <button type="button" *ngIf="selectedMeterials && selectedMeterials.length>0 && fromProduction"
-                    (mousedown)="addMetToCollection(true)" class="btn  k-primary k-button btn-sm btn-icon-with-text"><span
+                    (click)="addMetToCollection(true)" class="btn  k-primary k-button btn-sm btn-icon-with-text"
+                    [disabled]=fromShipment><span
                         class="k-icon k-i-save"></span>
                     {{'Save'|translate}}</button>
 
@@ -261,7 +263,7 @@
                     {{'Issue'|translate}}</button>
                 <!-- <div class="clearfix mt-1 d-block d-sm-none"></div> -->
 
-
+ 
                 <button type="button" id="outBoundHiddenScanButton" style="visibility:hidden"
                     (click)="onHiddenScanClick()"
                     class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">

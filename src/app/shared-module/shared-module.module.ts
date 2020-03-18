@@ -13,17 +13,21 @@ import {NumberFormatPipe} from '../common/number-format.pipe';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { InputDialogComponent } from '../common/input-dialog/input-dialog.component';
 import { StatePersistingServiceService } from '../services/state-persisting-service.service';
+import { ShipmentinfoComponent } from '../common/shipmentinfo/shipmentinfo.component';
+import { TrnaslateLazyModule } from '../../translate-lazy.module';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 @NgModule({  
   imports: [ CommonModule, 
     GridModule, 
     FormsModule,
-    DialogsModule,PdfViewerModule],
+    TrnaslateLazyModule,
+    DialogsModule,PdfViewerModule,PerfectScrollbarModule],
     providers:[ ConfirmdialogService,StatePersistingServiceService],
-  declarations: [ LookupComponent,ConfirmDialogComponent,ComonConfirmDialogComponent,DisplayPdfComponent,
+  declarations: [ LookupComponent,ConfirmDialogComponent,ComonConfirmDialogComponent,DisplayPdfComponent,ShipmentinfoComponent,
     PdfpipePipe,NumberFormatPipe, InputDialogComponent ],
-  entryComponents: [ ConfirmDialogComponent,DisplayPdfComponent, InputDialogComponent],
+  entryComponents: [ ConfirmDialogComponent,DisplayPdfComponent, InputDialogComponent,ShipmentinfoComponent],
   exports:      [ LookupComponent,ConfirmDialogComponent,ComonConfirmDialogComponent,
-    DisplayPdfComponent,PdfpipePipe,NumberFormatPipe, InputDialogComponent ]
+    DisplayPdfComponent,PdfpipePipe,NumberFormatPipe, InputDialogComponent, ShipmentinfoComponent]
     
 })
 export class SharedModule { }

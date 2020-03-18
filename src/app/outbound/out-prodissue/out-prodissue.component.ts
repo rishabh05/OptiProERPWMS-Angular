@@ -75,8 +75,12 @@ export class OutProdissueComponent implements OnInit {
   @ViewChild('scanToBin') scanToBin;
   @ViewChild('scanBatchSerial') scanBatchSerial;
 
+  fromShipment: boolean = false;
   ngOnInit() {
-
+    
+    if(localStorage.getItem(CommonConstants.FROM_DTS)=="true"){
+      this.fromShipment = true;
+     }
     //lsOutbound
     let outboundData = localStorage.getItem(CommonConstants.OutboundData);
     if (outboundData != undefined && outboundData != '') {
@@ -146,7 +150,10 @@ export class OutProdissueComponent implements OnInit {
   }
 
   ngAfterViewInit():void{
+    // we do not need to show focus in case of shipent
+    if(this.fromShipment!=true){
     setTimeout(()=> {
+   
       if(localStorage.getItem("ComingFrom") == "itr"){
         this.scanToBin.nativeElement.focus()
       } else {
@@ -155,6 +162,7 @@ export class OutProdissueComponent implements OnInit {
         }
       }
    }, 200);
+  }
   }
 
   manageUOM() {

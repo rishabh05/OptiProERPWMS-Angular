@@ -1,0 +1,9 @@
+.opti-disable-page-div{
+    width: calc(100% - 30px);
+    height: 100%;
+    position: absolute;
+    z-index: 9;
+    opacity:0.72;
+    pointer-events: none;
+}
+

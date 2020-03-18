@@ -16,7 +16,7 @@ import { SOHEADER, SODETAIL, DeliveryToken } from 'src/app/models/outbound/out-d
   styleUrls: ['./out-cutomer.component.scss']
 })
 export class OutCutomerComponent implements OnInit {
-
+  useContainer:boolean = false;
   dialogMsg: string = "Do you want to delete?"
   yesButtonText: string = "Yes";
   noButtonText: string = "No";
@@ -40,19 +40,37 @@ export class OutCutomerComponent implements OnInit {
   pageSize: number = 10;
   public trackingId: any = "";
   public CustRefNo: any = "";
-  @ViewChild('scanSO') scanSO
-  @ViewChild('scanCustomerCode') scanCustomerCode
-  @ViewChild('scanTracking') scanTracking
-
+  public shipmentId: any = ""; 
+  public dockDoorCode: any = "";
+ 
+  public dockDoorFromShipment: any = "";
+  public deliveryOptionType: any = '1';
+  @ViewChild('scanSO') scanSO;
+  @ViewChild('scanShipmentId') scanShipmentId;
+  @ViewChild('scanCustomerCode') scanCustomerCode;
+  @ViewChild('scanTracking') scanTracking;
+  public pageTitle:String = "";
+  showShipmentInfo: boolean = false;
   constructor(private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) { }
 
   ngOnInit() {
     this.customerName = '';
     this.customerCode = '';
     this.showLookup = false;
+
+    let option = localStorage.getItem("deliveryOptionType");
+    this.deliveryOptionType = option;
+    if(this.deliveryOptionType == '1'){
+      this.pageTitle = this.translate.instant("Outbound_Delivery")
+      this.setOutboundPageInfo()
+      // set page ui for outbound.
+    }else if(this.deliveryOptionType =='2'){
+      // set page ui for shipment.
+      this.pageTitle = this.translate.instant("Outbound_Delivery_through_Shipment")
+      this.setShipmentPageInfo();
+    }
     // lsOutbound
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
-
     if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
       this.outbound = JSON.parse(outboundData);
       if (this.outbound != undefined && this.outbound != null) {
@@ -62,22 +80,67 @@ export class OutCutomerComponent implements OnInit {
           this.customerName = this.outbound.CustomerData.CustomerName;
           this.CustRefNo = this.outbound.CustomerData.CustRefNo;
           this.trackingId = this.outbound.CustomerData.TrackingId;
+          this.shipmentId = this.outbound.CustomerData.ShipmentId;
         }
-
         if (this.outbound.DeleiveryCollection !== undefined && this.outbound.DeleiveryCollection !== null && this.outbound.DeleiveryCollection.length > 0) {
-
           this.orderCollection = this.getUniqueValuesByProperty(this.outbound.DeleiveryCollection);
           if (this.orderCollection.length > this.pageSize) {
             this.pagable = true;
           }
         }
       }
-
     }
   }
 
-  ngAfterViewInit(): void {
-    this.scanCustomerCode.nativeElement.focus()
+  public setShipmentPageInfo(){
+
+  }
+  public setOutboundPageInfo(){
+
+  }
+
+  /**
+   * This method creates delivery collection
+   * Data from temp stored data in case of Shipment.
+   * @param outbound 
+   */
+  prepareDeleiveryCollectionFromTempCollection(outbound: OutboundData) {
+    if (outbound) {
+      let tempMeterialCollection: any[] = outbound.TempMeterials;
+      //check if the item is already present in delivery collection then remove from temp collection.
+      for (let index = 0; index < outbound.DeleiveryCollection.length; index++) {
+        const d = outbound.DeleiveryCollection[index];
+        for (let j = 0; j < tempMeterialCollection.length; j++) {
+          const element = tempMeterialCollection[j];
+          if (d.Item.DOCENTRY == element.Item.DOCENTRY && d.Order.DOCNUM == element.Order.DOCNUM) {
+            tempMeterialCollection.slice(index, 1);
+          }
+        }
+      }
+      //check that temp collection item if not present in deliver then push to delivery collection.
+      if (tempMeterialCollection !== undefined &&
+        tempMeterialCollection !== null && tempMeterialCollection.length > 0) {
+        for (let index = 0; index < tempMeterialCollection.length; index++) {
+          const tm = tempMeterialCollection[index];
+          let hasitem = outbound.DeleiveryCollection.filter(d =>
+            d.Item.DOCENTRY === tm.Item.DOCENTRY &&
+            d.Item.TRACKING === tm.Item.TRACKING &&
+            d.Order.DOCNUM === tm.Order.DOCNUM &&
+            d.Meterial.LOTNO === tm.Meterial.LOTNO &&
+            d.Meterial.BINNO === tm.Meterial.BINNO
+          );
+          if (hasitem.length == 0) {
+            outbound.DeleiveryCollection.push(tm)
+          }
+        }
+      }
+    }
+    // after we create delivery collection clear temp collection.
+    outbound.TempMeterials = [];
+  }
+
+  ngAfterViewInit(): void { 
+    //this.scanCustomerCode.nativeElement.focus()
   }
 
   getUniqueValuesByProperty(data: any[]): any[] {
@@ -158,7 +221,7 @@ export class OutCutomerComponent implements OnInit {
           this.customerName = resp[0].CUSTNAME;
           outbound.CustomerData = {
             CustomerCode: this.customerCode, CustomerName: this.customerName, TrackingId: this.trackingId,
-            CustRefNo: this.CustRefNo
+            CustRefNo: this.CustRefNo, ShipmentId:''
           };
 
           // lsOutbound
@@ -188,7 +251,6 @@ export class OutCutomerComponent implements OnInit {
       return;
     }
     else {
-
       if (this.lookupfor == "out-order") {
         this.selectedCustomerElement = lookupValue;
         let outbound: OutboundData = new OutboundData();
@@ -221,7 +283,7 @@ export class OutCutomerComponent implements OnInit {
             //console.log("outbound","Outbound ka else...")
             //if order is not present first time case.
             let outbound: OutboundData = new OutboundData();
-            outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
+            outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName,ShipmentId:'' };
             outbound.OrderData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
             outbound.OrderData.DOCNUM = this.orderNumber;
             localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
@@ -229,7 +291,7 @@ export class OutCutomerComponent implements OnInit {
         } else {
           // if first time.
           let outbound: OutboundData = new OutboundData();
-          outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
+          outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName,ShipmentId:'' };
           outbound.OrderData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
           outbound.OrderData.DOCNUM = this.orderNumber;
           localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
@@ -239,7 +301,25 @@ export class OutCutomerComponent implements OnInit {
 
         this.scanTracking.nativeElement.focus()
 
-      } else {
+      } else if (this.lookupfor == "ShipmentList") {
+        this.shipmentId = lookupValue[0];
+        this.dockDoorCode = lookupValue[4];
+        var useContainer = lookupValue[5];
+        if(useContainer =="Y" ||useContainer =="y"){
+          this.useContainer = true;  
+        }else{
+          this.useContainer = false;
+        }
+        // for(var i=0;i<this.serviceData.length;i++){
+        //   if(this.serviceData[i]== this.shipmentId){
+        //    var shipmentId = this.serviceData[i]
+        //   }
+        // } 
+        this.isShipmentValid(this.shipmentId);
+       // this.getShipmentDetail(); 
+      } else if (this.lookupfor =="DockDoorList"){
+        this.dockDoorCode = lookupValue[0];
+;      }else {
         this.selectedCustomerElement = lookupValue;
         if (this.customerCode != this.selectedCustomerElement[0]) {
           this.orderNumber = "";
@@ -247,11 +327,10 @@ export class OutCutomerComponent implements OnInit {
         let outbound: OutboundData = new OutboundData();
         this.customerCode = this.selectedCustomerElement[0];
         this.customerName = this.selectedCustomerElement[1];
-
         //outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
         outbound.CustomerData = {
           CustomerCode: this.customerCode, CustomerName: this.customerName,
-          TrackingId: this.trackingId, CustRefNo: this.CustRefNo
+          TrackingId: this.trackingId, CustRefNo: this.CustRefNo,ShipmentId:''
         };
         // lsOutbound
         localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
@@ -261,6 +340,76 @@ export class OutCutomerComponent implements OnInit {
       }
     }
   }
+
+  public getDockDoorList(){
+    this.showLookup = false;
+    this.showLookupLoader = true;
+    this.outboundservice.getDockDoorList().subscribe(
+      resp => {
+        this.showLookupLoader = false;
+        if (resp != null && resp != undefined && resp.length > 0) {
+          if (resp[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
+            this.showLookupLoader = false;
+            return;
+          }
+          this.serviceData = resp;
+          this.lookupfor = "DockDoorList";
+          this.showLookup = true;
+        } else {
+          this.toastr.error('', this.translate.instant("ShipmentNotAvailable"));
+          this.orderNumber = "";
+         // this.scanShipmentId.nativeElement.focus()
+        }
+      },
+      error => {
+        this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
+        this.showLookupLoader = false;
+      }
+    );
+  }
+
+    public isValidDockDoor(ddId: any) {
+      if(this.dockDoorCode==undefined || this.dockDoorCode==null || this.dockDoorCode==""){
+        return;
+      }
+      this.showLookup = false;
+      this.showLookupLoader = true;
+      this.outboundservice.isValidDockDoorId(this.dockDoorCode).subscribe(
+        resp => {
+          this.showLookupLoader = false;
+          if (resp != null && resp != undefined) {
+            if (resp[0]!=null && resp[0]!=undefined && resp[0].ErrorMsg!=null &&
+              resp[0].ErrorMsg!=undefined &&  resp[0].ErrorMsg == "7001") {
+              this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
+              this.showLookupLoader = false;
+              return;
+            }
+            if(resp!=null && resp.length==0){
+              this.toastr.error('', this.translate.instant("DockDoorNotAvailable"));
+              this.dockDoorCode = "";
+              return;
+            } 
+            
+            if(resp[0]!=null && resp[0].OPTM_DOCKDOORID!=null && resp[0].OPTM_DOCKDOORID!=undefined){
+              this.dockDoorCode = resp[0].OPTM_DOCKDOORID;
+              
+            }
+          } else {
+            this.toastr.error('', this.translate.instant("DockDoorNotAvailable"));
+            this.dockDoorCode = "";
+           // this.scanShipmentId.nativeElement.focus()
+          }
+        },
+        error => {
+          this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
+          this.showLookupLoader = false;
+        }
+      );
+    }
+    onDockDoorBlur(){
+      this.isValidDockDoor(this.dockDoorCode);
+    }
 
   public openCustomerLookup() {
     this.showLookupLoader = true;
@@ -308,11 +457,30 @@ export class OutCutomerComponent implements OnInit {
     )
   }
 
-  openSelectedDeleveryItem($event){
-    console.log("selected delivery item"); 
-    localStorage.setItem("selectedSOAfterAddToDelivery", $event.selectedRows[0].dataItem.DOCNUM);
-    this.prepareTempCollectionForSelectedDelivery($event.selectedRows[0].dataItem.DOCNUM,$event.selectedRows[0].dataItem.DOCENTRY)
+  // openSelectedDeleveryItem($event){
+  //   console.log("selected delivery item"); 
+  //   localStorage.setItem("selectedSOAfterAddToDelivery", $event.selectedRows[0].dataItem.DOCNUM);
+  //   this.prepareTempCollectionForSelectedDelivery($event.selectedRows[0].dataItem.DOCNUM,$event.selectedRows[0].dataItem.DOCENTRY)
     
+  // }
+
+  // async openCustSO(clearOrder: boolean = false) {
+  //   var result = await this.validateBeforeSubmit();
+  //   this.isValidateCalled = false;
+  //   console.log("validate result: " + result);
+  //   if (result != undefined && result == false) {
+  //     return;
+  //   }
+  // }
+  /**
+   * Open delivery detail screens after click on add to delivery item list.
+   * @param $event 
+   */
+  openSelectedDeleveryItem($event) {
+    //console.log("selected delivery item");
+    localStorage.setItem("selectedSOAfterAddToDelivery", $event.selectedRows[0].dataItem.DOCNUM);
+    this.prepareTempCollectionForSelectedDelivery($event.selectedRows[0].dataItem.DOCNUM, $event.selectedRows[0].dataItem.DOCENTRY)
+
   }
 
   async openCustSO(clearOrder: boolean = false) {
@@ -322,7 +490,6 @@ export class OutCutomerComponent implements OnInit {
     if (result != undefined && result == false) {
       return;
     }
-
     // Clear otred data
     // if (this.outbound)
     //   this.outbound.OrderData = null;
@@ -334,7 +501,7 @@ export class OutCutomerComponent implements OnInit {
     if (this.orderNumber != null) {
       localStorage.setItem("IsSOAvailable", "True");
     }
-
+    localStorage.setItem("selectedSOAfterAddToDelivery",null);
     if (clearOrder == true) {
       let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
       if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
@@ -376,7 +543,7 @@ export class OutCutomerComponent implements OnInit {
         var trackingId = this.outbound.CustomerData.TrackingId;
         this.outbound.CustomerData = {
           CustomerCode: customerCode, CustomerName: customerName,
-          TrackingId: trackingId, CustRefNo: CustRefNo
+          TrackingId: trackingId, CustRefNo: CustRefNo, ShipmentId:this.shipmentId
         };
         localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
       }
@@ -395,7 +562,7 @@ export class OutCutomerComponent implements OnInit {
         var trackingId = this.trackingId;
         this.outbound.CustomerData = {
           CustomerCode: customerCode, CustomerName: customerName,
-          TrackingId: trackingId, CustRefNo: CustRefNo
+          TrackingId: trackingId, CustRefNo: CustRefNo, ShipmentId:this.shipmentId
         };
         localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
       }
@@ -432,28 +599,32 @@ export class OutCutomerComponent implements OnInit {
     this.customerName = '';
     this.customerCode = '';
     this.showLookup = false;
+    this.shipmentId = '';
   }
-
+ 
 
 
   prepareDeleiveryCollection() {
-    let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+    // dock door confirmation when delivery through shipment.
+    if(this.deliveryOptionType==2){
+      if(this.dockDoorCode!=this.dockDoorFromShipment){
+        this.toastr.error('', this.translate.instant("DockDoorConfirmMessage"));
+        return;
+      }
+    }
 
+    let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
     if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
       this.outbound = JSON.parse(outboundData);
     }
-
     if (this.outbound != null && this.outbound != undefined
       && this.outbound.DeleiveryCollection != null && this.outbound.DeleiveryCollection != undefined
-      && this.outbound.DeleiveryCollection.length > 0
-    ) {
-
-
+      && this.outbound.DeleiveryCollection.length > 0 ) 
+      {
       //let tempDeleiveryCollection: any[] = this.outbound.DeleiveryCollection;
       let arrSOHEADER: SOHEADER[] = [];
       let arrSODETAIL: SODETAIL[] = [];
       let deliveryToken: DeliveryToken = new DeliveryToken();
-
       // Hdr
       let comDbId = localStorage.getItem('CompID');
       let token = localStorage.getItem('Token');
@@ -465,40 +636,32 @@ export class OutCutomerComponent implements OnInit {
       let headerLineArray: any = [];
       // Loop through delivery collection
       for (let index = 0; index < this.outbound.DeleiveryCollection.length; index++) {
-
         //get first item from collection
         const element = this.outbound.DeleiveryCollection[index];
-
-
         // let coll=Get all Item for Item.Lineno===i
         let lineDeleiveryCollection = this.outbound.DeleiveryCollection.filter(d =>
           element.Order.DOCNUM === d.Order.DOCNUM &&
           element.Item.DOCENTRY === d.Item.DOCENTRY &&
           element.Item.TRACKING === d.Item.TRACKING &&
-          d.Item.LINENUM === element.Item.LINENUM 
+          d.Item.LINENUM === element.Item.LINENUM
         );
-
-
-        // Process Order Item and Tracking collection
+        //=========filter  collection docnum, docentry, tracking, linenum wise.
+        //=============== Adding header and Detail Objects logic==================
         for (let hIdx = 0; hIdx < lineDeleiveryCollection.length; hIdx++) {
-
           const o = lineDeleiveryCollection[hIdx];
-
           // check hdr exists
           let existHdr = false;
           for (let index = 0; index < arrSOHEADER.length; index++) {
             const h = arrSOHEADER[index];
-            if (h.SONumber.toString() === ""+o.Order.DOCNUM
+            if (h.SONumber.toString() === "" + o.Order.DOCNUM
               && h.ItemCode === o.Item.ITEMCODE
               && h.Tracking === o.Item.TRACKING) {
               existHdr = true;
               break;
             }
           }
-
-          if (existHdr == false) {
-            // Add Header here and then add
-            hdrLineVal = hdrLineVal + 1;
+          if (existHdr == false) { // Add Header here if not added.
+            hdrLineVal = hdrLineVal + 1; // add line for header.
             headerLineArray.push(hdrLineVal);
             let hdr: SOHEADER = new SOHEADER();
             hdr.DiServerToken = token;
@@ -528,46 +691,35 @@ export class OutCutomerComponent implements OnInit {
             }
             arrSOHEADER.push(hdr);
           }
-
-          // check weather item existe or not
-          // let hasDetail = false;
-          // both:
-          // for (let index = 0; index < arrSODETAIL.length; index++) {
-          //   const element = arrSODETAIL[index];
-          //   if (element.LotNumber === o.Meterial.LOTNO && element.Bin === o.Meterial.BINNO) {
-          //     for (let headerIndex = 0; headerIndex < headerLineArray.length; headerIndex++) {
-          //       if (element.parentLine === headerLineArray[headerIndex]) {
-          //         hasDetail = true;
-          //         break both;
-          //       } 
-          //     }
-          //     hasDetail = true;
-          //     break;
-          //   }
-          // }
+          //================logic to add delivery line.
           var parentLineNum = hdrLineVal;
           let hasDetail = false;
           both:
-          for(let index = 0; index < arrSODETAIL.length; index++){
+          for (let index = 0; index < arrSODETAIL.length; index++) {
             const e1 = arrSODETAIL[index];
-            if(o.Item.TRACKING == "S"){
+            if (o.Item.TRACKING == "S") {
               if (e1.LotNumber === o.Meterial.LOTNO && e1.Bin === o.Meterial.BINNO) {
                 hasDetail = true; //need to show error
               }
-            }else{
-              for(let idx = 0; idx < arrSOHEADER.length; idx++){
-                   const headerElement =arrSOHEADER[idx]
-                if (headerElement.LineNo === o.Meterial.LineNo && headerElement.DOCENTRY === o.Meterial.DOCENTRY) {
-                  //hasDetail = true;
-                  parentLineNum = headerElement[idx].Line;
+            } else {
+              for (let idx = 0; idx < arrSOHEADER.length; idx++) {
+                const headerElement = arrSOHEADER[idx]
+                if (headerElement.LineNo === o.Item.LINENUM && headerElement.DOCENTRY === o.Item.DOCENTRY) {
+                 
+                 for(let innerIdx = 0; innerIdx<arrSODETAIL.length; innerIdx++){
+                  if (arrSODETAIL[innerIdx].LotNumber === o.Meterial.LOTNO && headerElement.LineNo === o.Item.LINENUM && 
+                    headerElement.DOCENTRY === o.Item.DOCENTRY && arrSODETAIL[innerIdx].DOCENTRY === o.Item.DOCENTRY){
+                    // it means already taken.
+                    hasDetail = true;
+                    break both;
+                  }
+                 }
+                  parentLineNum = headerElement.Line; 
                   break both;
                 }
               }
-              
             }
           }
-
-
           if (hasDetail == false) {
             // Add Detail here
             let dtl: SODETAIL = new SODETAIL();
@@ -578,24 +730,17 @@ export class OutCutomerComponent implements OnInit {
             dtl.parentLine = parentLineNum;
             dtl.GUID = guid;
             dtl.UsernameForLic = uid;
+            dtl.DOCENTRY = o.Item.DOCENTRY
             arrSODETAIL.push(dtl);
-
-
           }
-
           limit = limit + lineDeleiveryCollection.length;
-
- 
         }
       }
-
       if (arrSOHEADER.length > 0 && arrSODETAIL.length > 0) {
-
         deliveryToken.SOHEADER = arrSOHEADER;
         deliveryToken.SODETAIL = arrSODETAIL;
         deliveryToken.UDF = [];
       }
-
       this.showLookupLoader = true;
       this.outboundservice.addDeleivery(deliveryToken).subscribe(
         data => {
@@ -608,21 +753,18 @@ export class OutCutomerComponent implements OnInit {
           } else if (data[0].ErrorMsg == "7001") {
             this.showLookupLoader = false;
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
-              this.translate.instant("CommonSessionExpireMsg"));
-
+            this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
           else {
             this.showLookupLoader = false;
             this.toastr.error('', data[0].ErrorMsg);
           }
-
- 
         },
         error => {
           this.showLookupLoader = false;
           if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
-            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));     
+            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
           }
           else {
             this.toastr.error('', error);
@@ -695,6 +837,7 @@ export class OutCutomerComponent implements OnInit {
       this.pagable = true;
     }
   }
+
 
   filterData(idx: any) {
     let order = this.orderCollection[idx];
@@ -770,7 +913,7 @@ export class OutCutomerComponent implements OnInit {
               //console.log("outbound","Outbound ka else...")
               //if order is not present first time case.
               let outbound: OutboundData = new OutboundData();
-              outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
+              outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName, ShipmentId:this.shipmentId };
               outbound.OrderData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
               outbound.OrderData.DOCNUM = this.orderNumber;
               localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
@@ -778,7 +921,7 @@ export class OutCutomerComponent implements OnInit {
           } else {
             // if first time.
             let outbound: OutboundData = new OutboundData();
-            outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
+            outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName , ShipmentId:this.shipmentId};
             outbound.OrderData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
             outbound.OrderData.DOCNUM = this.orderNumber;
             localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
@@ -873,36 +1016,599 @@ export class OutCutomerComponent implements OnInit {
   }
 
 
-  
   /**
-   * This method create temp array for selected SO for furthre updation in that SO.
+   * New This method create temp array for selected SO for furthre updation in that SO.
    * @param selectedDocNum 
    * @param selectedDocEntry 
    */
   prepareTempCollectionForSelectedDelivery(selectedDocNum: any, selectedDocEntry: any) {
     let deliveryDataForSelectedSO: any = [];
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+
     if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
       this.outbound = JSON.parse(outboundData);
       if (this.outbound != undefined && this.outbound != null) {
         if (this.outbound && this.outbound.DeleiveryCollection !== undefined &&
           this.outbound.DeleiveryCollection !== null) {
-          //check if the item is already present in delivery collection then remove from temp collection.
+          // create Order data object from selected Order.
+          var orderData: any = {
+            CARDCODE: this.outbound.CustomerData.CustomerCode,
+            CARDNAME: this.outbound.CustomerData.customerName, DOCDUEDATE: "04/24/2019",
+            DOCNUM: selectedDocNum.toString(), SHIPPINGTYPE: "", SHIPTOCODE: ""
+          }
+          // after we create delivery collection clear temp collection.
+          this.outbound.OrderData = orderData;
+          //create temp collection for selected delivery item..
           for (let index = 0; index < this.outbound.DeleiveryCollection.length; index++) {
             const d = this.outbound.DeleiveryCollection[index];
             if (d.Item.DOCENTRY == selectedDocEntry && d.Order.DOCNUM == selectedDocNum) {
               deliveryDataForSelectedSO.push(d);
-            } 
+            }
           }
         }
       }
     }
     // after we create delivery collection clear temp collection.
     this.outbound.TempMeterials = deliveryDataForSelectedSO;
-     // //lsOutbound
-     localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
-     this.router.navigateByUrl('home/outbound/outorder', { skipLocationChange: true });
+    // //lsOutbound
+    localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+    this.router.navigateByUrl('home/outbound/outorder', { skipLocationChange: true });
   }
+
+
+
+
+
+  /**
+   * New This method create temp array for selected SO for furthre updation in that SO.
+   * @param selectedDocNum 
+   * @param selectedDocEntry 
+   */
+  // prepareTempCollectionForSelectedDelivery(selectedDocNum: any, selectedDocEntry: any) {
+  //   let deliveryDataForSelectedSO: any = [];
+  //   let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+
+  //   if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
+  //     this.outbound = JSON.parse(outboundData);
+  //     if (this.outbound != undefined && this.outbound != null) {
+  //       if (this.outbound && this.outbound.DeleiveryCollection !== undefined &&
+  //         this.outbound.DeleiveryCollection !== null) {
+  //         // create Order data object from selected Order.
+  //         var orderData: any = {
+  //           CARDCODE: this.outbound.CustomerData.CustomerCode,
+  //           CARDNAME: this.outbound.CustomerData.customerName, DOCDUEDATE: "04/24/2019",
+  //           DOCNUM: selectedDocNum.toString(), SHIPPINGTYPE: "", SHIPTOCODE: ""
+  //         }
+  //         // after we create delivery collection clear temp collection.
+  //         this.outbound.OrderData = orderData;
+  //         //create temp collection for selected delivery item..
+  //         for (let index = 0; index < this.outbound.DeleiveryCollection.length; index++) {
+  //           const d = this.outbound.DeleiveryCollection[index];
+  //           if (d.Item.DOCENTRY == selectedDocEntry && d.Order.DOCNUM == selectedDocNum) {
+  //             deliveryDataForSelectedSO.push(d);
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  //   // after we create delivery collection clear temp collection.
+  //   this.outbound.TempMeterials = deliveryDataForSelectedSO;
+  //   // //lsOutbound
+  //   localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+  //   this.router.navigateByUrl('home/outbound/outorder', { skipLocationChange: true });
+  // }
+
+
+
+  //--------------------add So field--
+
+  public getShipmentList() {
+    this.showLookup = false;
+    this.showLookupLoader = true;
+    this.outboundservice.getShipmentIdList().subscribe(
+      resp => {
+        this.showLookupLoader = false;
+        if (resp != null && resp != undefined && resp.length > 0) {
+          if (resp[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
+            this.showLookupLoader = false;
+            return;
+          }
+
+          this.serviceData = resp;
+          this.lookupfor = "ShipmentList";
+          this.showLookup = true;
+
+        } else {
+          this.toastr.error('', this.translate.instant("ShipmentNotAvailable"));
+          this.orderNumber = "";
+         // this.scanShipmentId.nativeElement.focus()
+        }
+
+      },
+      error => {
+        this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
+        this.showLookupLoader = false;
+      }
+    );
+  }
+
+
+  public isShipmentValid(shipmentId: any) {
+    if(shipmentId==undefined || shipmentId==null || shipmentId==""){
+      return;
+    }
+    this.showLookup = false;
+    this.showLookupLoader = true;
+    this.outboundservice.isValidShipmentId(shipmentId).subscribe(
+      resp => {
+        this.showLookupLoader = false; 
+        if (resp != null && resp != undefined) {
+          if (resp[0]!=null && resp[0]!=undefined && resp[0].ErrorMsg!=null &&
+            resp[0].ErrorMsg!=undefined &&  resp[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
+            this.showLookupLoader = false;
+            return;
+          }
+          // reset for this shipment id.
+          this.resetOldShipmentData();
+          
+          if(resp.ItemHeader!=null && resp.ItemHeader!=undefined && resp.ItemHeader.length>0 &&
+            resp.ItemDetail!=null && resp.ItemDetail!=undefined && resp.ItemDetail.length>0){
+              this.dockDoorCode = resp.ItemHeader[0].OPTM_DOCKDOORID;
+              this.dockDoorFromShipment = resp.ItemHeader[0].OPTM_DOCKDOORID;
+              this.parseAndGenerateDeliveryDataFromShipment(resp);
+          }
+           
+
+        } else {
+          this.toastr.error('', this.translate.instant("ShipmentNotAvailable"));
+          this.shipmentId = "";
+         // this.scanShipmentId.nativeElement.focus()
+        }
+
+      },
+      error => {
+        this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
+        this.showLookupLoader = false;
+      }
+    );
+  }
+
+
+
+  //-------------------validate shipment detail.
+
+  public onShipmentBlur() {
+    this.isShipmentValid(this.shipmentId);
+    //this.getShipmentDetail();
+  }
+
+
+  //-------------------get shipment detail.
+
+  resetOldShipmentData(){
+    this.orderCollection = [];
+    let outbound: OutboundData = new OutboundData();
+    outbound.CustomerData = {
+      CustomerCode: "", CustomerName:"", TrackingId: "",
+      CustRefNo: "", ShipmentId:""
+    };
+    outbound.TempMeterials = [];
+      
+  }
+  parseAndGenerateDeliveryDataFromShipment(shipmentResponse: any) {
+    let outbound: OutboundData = new OutboundData();
+    if (shipmentResponse != null && shipmentResponse != undefined && shipmentResponse != "" &&
+      shipmentResponse != "null" && shipmentResponse.ItemHeader != undefined && shipmentResponse.ItemHeader != null &&
+      shipmentResponse.ItemHeader != "" && shipmentResponse.ItemHeader.length > 0) {
+      this.customerCode = shipmentResponse.ItemHeader[0].CARDCODE;
+      this.customerName = shipmentResponse.ItemHeader[0].CARDNAME;
+      outbound.CustomerData = {
+        CustomerCode: this.customerCode, CustomerName: this.customerName, TrackingId: this.trackingId,
+        CustRefNo: this.CustRefNo, ShipmentId:this.shipmentId
+      };
+    }
+    var arrItemHeader: any[] = shipmentResponse.ItemHeader;
+    var arrItemDetail: any[] = shipmentResponse.ItemDetail;
+    for (let i = 0; i < arrItemHeader.length; i++) {
+
+      for (let j = 0; j < arrItemDetail.length; j++) {
+
+        if (arrItemHeader[i].ITEMCODE === arrItemDetail[j].ITEMCODE) {
+          //  check if all the batch serial allocated for this lot or not.
+          if (parseFloat(arrItemDetail[j].MeterialPickQty) == parseFloat(arrItemDetail[j].TOTALQTY)) {
+                // nothing to do for current object.
+          } else {
+            var pickedQty =0;
+            // crate a temp record and take the respective calculated qty from the current detail object.
+            var diff = parseFloat(arrItemDetail[j].TOTALQTY) - parseFloat(arrItemDetail[j].MeterialPickQty);
+            if(diff >= parseFloat(arrItemHeader[i].OPENQTY)) {
+              arrItemDetail[j].MeterialPickQty  = parseFloat(arrItemDetail[j].MeterialPickQty) + parseFloat(arrItemHeader[i].OPENQTY)
+              pickedQty = parseFloat(arrItemHeader[i].OPENQTY);
+            }else{
+              arrItemDetail[j].MeterialPickQty  = parseFloat(arrItemDetail[j].MeterialPickQty) + diff;
+              pickedQty = diff ;
+            }    
+            //--------------------create temp object row start.-----------------------------
+            var orderData: any = {
+              CARDCODE: arrItemHeader[i].CARDCODE, DOCDUEDATE: arrItemHeader[i].DOCDUEDATE,
+              DOCNUM: arrItemHeader[i].DOCNUM, SHIPPINGTYPE: "", SHIPTOCODE: ""
+            } 
+            // prepare item data.
+            var itemData: any = { 
+              ROWNUM: arrItemHeader[i].ROWNUM, ITEMCODE: arrItemHeader[i].ITEMCODE,
+              LINENUM: arrItemHeader[i].LINENUM, ITEMNAME: arrItemHeader[i].ITEMNAME, OPENQTY: arrItemHeader[i].OPENQTY,
+              RPTQTY: arrItemHeader[i].RPTQTY, UOM: arrItemHeader[i].UOM, DOCDUEDATE: arrItemHeader[i].DOCDUEDATE,
+              WHSCODE: arrItemHeader[i].WHSCODE, TREETYPE: arrItemHeader[i].TREETYPE, TRACKING: arrItemHeader[i].TRACKING,
+              ENABLECONTAINER: arrItemHeader[i].ENABLECONTAINER, FACTOR: arrItemHeader[i].FACTOR, DOCENTRY: arrItemHeader[i].DOCENTRY,
+              DOCNUM: arrItemHeader[i].DOCNUM, GTINNO: arrItemHeader[i].GTINNO, U_LOTISSUEMETHOD: arrItemHeader[i].U_LOTISSUEMETHOD,
+              CONTAINERSIZE: arrItemHeader[i].CONTAINERSIZE, ACTUALOPENQTY: arrItemHeader[i].ACTUALOPENQTY, INVENTORYUOM: arrItemHeader[i].INVENTORYUOM,
+              QUANTITY: arrItemHeader[i].QUANTITY, LINESTATUS: arrItemHeader[i].LINESTATUS, COUNT: arrItemHeader[i].COUNT,
+              ITEMCOUNT: arrItemHeader[i].ITEMCOUNT, REMQTY: arrItemHeader[i].REMQTY, CARDCODE: arrItemHeader[i].CARDCODE
+            }
+            // prepare material data.
+            var materialData: any = {
+              LOTNO: arrItemDetail[j].LOTNO, ITEMCODE: arrItemDetail[j].ITEMCODE,
+              WHSCODE: arrItemDetail[j].WHSCODE, BINNO: arrItemDetail[j].BINNO, TOTALQTY: arrItemDetail[j].TOTALQTY,
+              EXPDATE: arrItemDetail[j].EXPDATE, SYSNUMBER: arrItemDetail[j].SYSNUMBER,
+              PALLETNO: arrItemDetail[j].PALLETNO, ACTLOTNO: arrItemDetail[j].ACTLOTNO,
+              MeterialPickQty: pickedQty
+            }
+            //--------------------create temp object row end.-----------------------------
+            let tempItemRecord = { Order: orderData, Item: itemData, Meterial: materialData };
+            outbound.TempMeterials.push(tempItemRecord);
+          }
+        }else{ 
+          //nothing to do.
+        }
+      }
+    }
+
+    //set temp collection data to local storage.
+    localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
+    // prepare deliery collection from shipment response.
+    this.prepareDeleiveryCollectionFromTempCollection(outbound);
+
+    localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
+    //set delivery data to local storage.
+    localStorage.setItem(CommonConstants.FROM_DTS, JSON.stringify(true));
+
+    let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+        if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
+          this.outbound = JSON.parse(outboundData);
+        }
+        if (this.outbound.DeleiveryCollection !== undefined && this.outbound.DeleiveryCollection !== null && this.outbound.DeleiveryCollection.length > 0) {
+          this.orderCollection = this.getUniqueValuesByProperty(this.outbound.DeleiveryCollection);
+          if (this.orderCollection.length > this.pageSize) {
+            this.pagable = true;
+            this.toastr.success('', this.translate.instant("ShipmentreadyToDeliver"));
+          }
+        }
+
+  }
+
+
+
+
+  /**
+   * This method create a temp data collection from shipment response.
+   * @param items 
+   * @param outbound 
+   */
+  prepareTempCollectionForShipment(items: any, outbound: OutboundData) {
+    for (var i = 0; i < items.length; i++) {
+      // prepare order model.
+      var orderData: any = {
+        CARDCODE: items[i].ItemHeader.CARDCODE, DOCDUEDATE: items[i].ItemHeader.DOCDUEDATE,
+        DOCNUM: items[i].ItemHeader.DOCNUM, SHIPPINGTYPE: "", SHIPTOCODE: ""
+      }
+      // prepare item data.
+      var itemData: any = {
+        ROWNUM: items[i].ItemHeader.ROWNUM, ITEMCODE: items[i].ItemHeader.ITEMCODE,
+        LINENUM: items[i].ItemHeader.LINENUM, ITEMNAME: items[i].ItemHeader.ITEMNAME, OPENQTY: items[i].ItemHeader.OPENQTY,
+        RPTQTY: items[i].ItemHeader.RPTQTY, UOM: items[i].ItemHeader.UOM, DOCDUEDATE: items[i].ItemHeader.DOCDUEDATE,
+        WHSCODE: items[i].ItemHeader.WHSCODE, TREETYPE: items[i].ItemHeader.TREETYPE, TRACKING: items[i].ItemHeader.TRACKING,
+        ENABLECONTAINER: items[i].ItemHeader.ENABLECONTAINER, FACTOR: items[i].ItemHeader.FACTOR, DOCENTRY: items[i].ItemHeader.DOCENTRY,
+        DOCNUM: items[i].ItemHeader.DOCNUM, GTINNO: items[i].ItemHeader.GTINNO, U_LOTISSUEMETHOD: items[i].ItemHeader.U_LOTISSUEMETHOD,
+        CONTAINERSIZE: items[i].ItemHeader.CONTAINERSIZE, ACTUALOPENQTY: items[i].ItemHeader.ACTUALOPENQTY, INVENTORYUOM: items[i].ItemHeader.INVENTORYUOM,
+        QUANTITY: items[i].ItemHeader.QUANTITY, LINESTATUS: items[i].ItemHeader.LINESTATUS, COUNT: items[i].ItemHeader.COUNT,
+        ITEMCOUNT: items[i].ItemHeader.ITEMCOUNT, REMQTY: items[i].ItemHeader.REMQTY, CARDCODE: items[i].ItemHeader.CARDCODE
+      }
+      // prepare material data.
+      var materialData: any = {
+        LOTNO: items[i].ItemDetail.LOTNO, ITEMCODE: items[i].ItemDetail.ITEMCODE,
+        WHSCODE: items[i].ItemDetail.WHSCODE, BINNO: items[i].ItemDetail.BINNO, TOTALQTY: items[i].ItemDetail.TOTALQTY,
+        EXPDATE: items[i].ItemDetail.EXPDATE, SYSNUMBER: items[i].ItemDetail.SYSNUMBER,
+        PALLETNO: items[i].ItemDetail.PALLETNO, ACTLOTNO: items[i].ItemDetail.ACTLOTNO,
+        MeterialPickQty: items[i].ItemDetail.MeterialPickQty
+      }
+      let tempItemRecord = { Order: orderData, Item: itemData, Meterial: materialData };
+      outbound.TempMeterials.push(tempItemRecord);
+    }
+
+  }
+
+  /**
+   * Create shipment detail data.
+   */
+  showShipmenInformation() {
+    
+     this.showShipmentInfo = true;
+  }
+   serviceData1:any = [{
+    "ContainerId": 1,
+    "ContainerName": "C1",
+    "Items": [ 
+      {
+        "ItemCode": 1,
+        "ItemName": "Child_Batch",
+        "ItemLines": [
+          {
+            "ItemCode": "Child_Batch",
+            "BatchSerial": "b1",
+            "Qty": 2,
+          },
+          {
+            "ItemCode": "Child_Batch",
+            "BatchSerial": "b1",
+            "Qty": 1,
+          },
+          {
+            "ItemCode": "Child_Batch",
+            "BatchSerial": "b1",
+            "Qty": 2,
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "ContainerId": 2,
+    "ContainerName": "C2",
+    "Items": [
+      {
+        "ItemCode": 1,
+        "ItemName": "Child_Serial",
+        "ItemLines": [
+          {
+            "ItemCode": "Child_Serial",
+            "BatchSerial": "s1",
+            "Qty": 1,
+          },
+          {
+            "ItemCode": "Child_Serial",
+            "BatchSerial": "s2",
+            "Qty": 1,
+          },
+          {
+            "ItemCode": "Child_Serial",
+            "BatchSerial": "s3",
+            "Qty": 1,
+          }
+        ]
+      }
+    ]
+  }];
+
+   ShipmentItems:any =[];
+   ShipmentBtchSer:any =[];
+   ContainerHeader:any =[];
+   ContainerItems:any =[];
+   ContainerBatchSerial:any =[];
+   ShipmentInfoData:any;
+  public getShipmentDataItemDetails() {
+    if(this.shipmentId == undefined || this.shipmentId == null ||
+      this.shipmentId== ""){
+         return;
+      }
+   var ContainerBtchSer:any =[];
+    this.showLookup = false;
+    this.showLookupLoader = true;
+    this.outboundservice.getShipmentDetail(this.shipmentId+"").subscribe(
+      resp => {
+        this.showLookupLoader = false;
+        console.log("shipment Resp:",resp);
+        if (resp != null && resp != undefined) {
+          if (resp[0]!=null && resp[0].ErrorMsg != null && resp[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
+            this.showLookupLoader = false;
+            return;
+          }
+          this.showShipmentInfo = true;
+           this.ShipmentItems = resp.ShipmentItems;
+           this.ShipmentBtchSer= resp.ShipmentBtchSer;
+           this.ContainerItems= resp.ContainerItems;
+           this.ContainerHeader= resp.ContainerHeader;
+           this.ContainerBatchSerial= resp.ContainerBtchSer;
+          // this.lookupfor = "ShipmentList";
+          // this.showLookup = true;
+          for(let i=0;i<this.ShipmentItems.length; i++){
+            this.ShipmentItems[i]["ShipmentItemBatchSerial"] = []
+          }
+          // for(let j=0;j<this.ShipmentItems.length; j++){
+          //   for(let k=0;k<this.ShipmentItems[j].ShipmentItemBatchSerial.length; k++){
+          //   this.ShipmentItems[j].ShipmentItemBatchSerial[j]["batchSerialLines"] = []
+          //   }
+          // }
+ 
+          // for(let i=0;i<this.ContainerItems.length; i++){
+          //   this.ContainerItems[i]["ContainerItemsData"] = []
+          // }
+
+          //abhi container ki array use nahi kari hai..
+          this.ShipmentItems = this.setShipmentItemsBatchSerials(this.ShipmentItems,this.ShipmentBtchSer);
+         // this.ShipmentItems = this.setShipmentInnerItemsBatchSerials(this.ShipmentItems,this.ShipmentBtchSer);
+
+          // set Container Data
+           for(let i=0;i<this.ContainerItems.length; i++){
+             this.ContainerItems[i]["ContainerItemsBatchSerial"] = []
+           }
+          for(let i=0;i<this.ContainerHeader.length; i++){
+            this.ContainerHeader[i]["ContainerItems"] = []
+          }
+          
+
+          this.ContainerHeader = this.setContainerItemsToHeader(this.ContainerHeader,this.ContainerItems);
+          this.ContainerHeader = this.setContainerItemBatchSerials(this.ContainerHeader,this.ContainerBatchSerial);
+         if(this.useContainer){
+          this.ShipmentInfoData = this.ContainerHeader;
+         }else{
+          this.ShipmentInfoData = this.ShipmentItems;
+         }
+          
+          //this.useContainer = true;
+          //ContainerItemsBatchSerial
+        } else {
+          this.toastr.error('', this.translate.instant("ShipmentNotAvailable"));
+         // this.orderNumber = "";
+         // this.scanShipmentId.nativeElement.focus()
+        }
+  
+      },
+      error => {
+        this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
+        this.showLookupLoader = false;
+      }
+    );
+  }
+
+  setShipmentInnerItemsBatchSerials(ShipmentItems:any,ShipmentBtchSer:any):any{
+    for(let i =0; i<ShipmentItems.length;i++){
+      for(let k=0;k<this.ShipmentItems[i].ShipmentItemBatchSerial.length; k++){
+      
+      let itemLines = ShipmentBtchSer.filter(data =>
+        ShipmentItems[i].OPTM_ITEMCODE === data.OPTM_ITEMCODE 
+      );
+      this.ShipmentItems[i].ShipmentItemBatchSerial[k].batchSerialLines = ShipmentBtchSer;
+      }
+    }
+    return  ShipmentItems;
+  }
+  setShipmentItemsBatchSerials(ShipmentItems:any,ShipmentBtchSer:any):any{
+    for(let i =0; i<ShipmentItems.length;i++){
+      var item =  ShipmentItems[i];
+      let itemLines = ShipmentBtchSer.filter(data =>
+        item.OPTM_ITEMCODE === data.OPTM_ITEMCODE 
+      );
+      item["ShipmentItemBatchSerial"] = itemLines;
+    }
+    return  ShipmentItems;
+  }
+
+  setContainerItemBatchSerials(ContainerHeader: any, ContainerBtchSer: any): any {
+    for (let p = 0; p < ContainerHeader.length; p++) {
+      for (let q = 0; q < ContainerHeader[p].ContainerItems.length; q++) {
+ 
+       var  hdrContainerId = ContainerHeader[p].ContainerItems[q].OPTM_CONTAINERID;
+       var hdrItemCode = ContainerHeader[p].ContainerItems[q].OPTM_ITEMCODE;
+        let containerItemBatchSerialLines = ContainerBtchSer.filter(data =>
+          hdrContainerId == data.OPTM_CONTAINERID &&
+          hdrItemCode == data.OPTM_ITEMCODE
+        );
+        ContainerHeader[p].ContainerItems[q].ContainerItemsBatchSerial = containerItemBatchSerialLines;
+      }
+    }
+    return ContainerHeader;
+  }
+
+  setContainerItemsToHeader(ContainerHeaders:any,ContainerItems:any):any{
+    for(let i =0; i<ContainerHeaders.length;i++){
+      var headerItem =  ContainerHeaders[i];
+      let containerItemLines = ContainerItems.filter(data => 
+        headerItem.OPTM_CONTCODE === data.OPTM_CONTAINERID 
+      );
+      headerItem.ContainerItems = containerItemLines;
+    }
+    return  ContainerHeaders;
+  }
+
+  getShipmentLookupEvent(eventValue){
+    if (eventValue != null && eventValue == "close") {
+      //nothing to do
+      this.showShipmentInfo = false;
+      return;
+    }
+  
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+// not using this method becaulse api which is using here is not correct.
+
+// public getShipmentDetail() {
+//   this.showLookup = false;
+//   if (this.shipmentId == "" || this.shipmentId == undefined || this.shipmentId == null) {
+//     return;
+//   }
+//   let whseId = localStorage.getItem("whseId");
+//   this.showLookupLoader = true;
+//   this.outboundservice.getShipmentDetail(this.shipmentId).subscribe(
+//     resp => {
+//       this.showLookupLoader = false;
+//       if (resp != null && resp != undefined) {
+//         this.resetOldShipmentData();
+//         if (resp.ShipmentItems.length > 0) {
+//           if(resp.ShipmentBtchSer.length>0 || (resp.ContainerHeader.length>0 && resp.ContainerItems.length>0)){
+//             this.parseAndGenerateDeliveryDataFromShipment(resp);
+//           }else{
+//             this.toastr.error('', this.translate.instant("ShipmentHasNoData"));
+//           }
+          
+//         } else {
+//           if(resp.ItemHeader.length==0 ||resp.ItemDetail.length==0 ){
+//             this.resetOldShipmentData();
+
+//             this.toastr.error('', this.translate.instant("ShipmentHasNoData"));
+//           }else{
+//           if (resp[0].ErrorMsg == "7001") {
+//             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
+//             this.showLookupLoader = false;
+//             return;
+//           }
+//         }
+//         }
+//       } else {
+//         this.toastr.error('', this.translate.instant("ShipmentNoInfo"));
+//         this.orderNumber = "";
+//        // this.scanShipmentId.nativeElement.focus();
+//         this.shipmentId = "";
+//       }
+
+//     },
+//     error => {
+//       this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
+//       this.showLookupLoader = false;
+//     }
+//   );
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
+
+
+
+
 
 

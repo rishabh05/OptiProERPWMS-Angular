@@ -1,0 +1,39 @@
+@media (max-width:640px) {
+    .task-btn{
+        position: absolute;
+        right: 6px;
+        bottom: 5px;
+        height: 25px;
+        width: 25px;
+        text-align: center;
+        border-radius: 50%;
+        line-height: 24px;
+        color: #fff;
+        border: none;
+        padding: 0;
+        .k-icon{
+            color: #fff;
+        }
+    }
+.pick-list-row{
+    height: calc(100% - 100px);
+}
+.pick-list-col{
+    height:100%;
+}
+.new-custom-grid{
+   height: 100%;
+   kendo-grid {
+    height: 100%;
+   }
+}
+body kendo-grid .k-grid-pager{
+    padding-top: 10px;
+}
+}
+
+@media screen and (max-width: 479px){
+.form-with-fix-btnBar {
+    padding-bottom: 0 !important;
+}
+}

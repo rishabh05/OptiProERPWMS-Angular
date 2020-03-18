@@ -3,23 +3,52 @@
         <div class="opti_container_inner" [perfectScrollbar]=" ">
 
             <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
-                {{'Outbound_Delivery'|translate}}
+                {{pageTitle}}
             </h3>
             <div class="row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
 
-                    <div class="form-group row">
+                    <div class="form-group row" *ngIf ="deliveryOptionType==2">
+                        <label for="inputPassword"
+                            class="col-sm-3 col-form-label">{{'ShipmentID'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input #scanShipmentId (blur)="onShipmentBlur()" id="outCustomerCustomerCodeInput"
+                                    type="text" class="form-control form-control-sm" name='shipmentCode'
+                                    [(ngModel)]="shipmentId" placeholder="{{'ShipmentID'|translate}}">
+                                <div class="input-group-append">
+                                    <button tabIndex="-1"
+                                        class="k-button k-primary btn" (mousedown)="getShipmentList()" type="button">
+                                        <i class="opti-icon-hammenu"></i>
+                                    </button>
+                                    <button tabIndex="-1" class="k-button k-primary btn separate-btn ship-btn" type="button"
+                                    (mousedown)="getShipmentDataItemDetails()" >
+                                    <i class="opti-icon-view-batch mr-1"></i>{{'Shipment_Detail'|translate}}
+                                    </button>
+                                </div>
+
+                                <div class="ml-1 d-flex">
+                                    <button tabIndex="-1" type="button" id="outCustomerCuCodeScan" 
+                                        class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                        <i class="opti-icon-qr-code fs-24"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row"  *ngIf ="deliveryOptionType==1 || (deliveryOptionType==2 && orderCollection!=undefined && orderCollection!=null && orderCollection.length > 0)">
                         <label for="inputPassword"
                             class="col-sm-3 col-form-label">{{'Outbound_Customer'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
                                 <input #scanCustomerCode (blur)="onCustomerCodeBlur()" id="outCustomerCustomerCodeInput"
-                                    [disabled]='orderCollection!=undefined && orderCollection!=null && orderCollection.length>0'
+                                    [disabled]='orderCollection!=undefined && orderCollection!=null && orderCollection.length > 0'
                                     type="text" class="form-control form-control-sm" name='customerCode'
                                     [(ngModel)]="customerCode" placeholder="{{'Outbound_Customer'|translate}}">
                                 <div class="input-group-append">
                                     <button tabIndex="-1"
-                                        [disabled]='orderCollection!=undefined && orderCollection!=null && orderCollection.length>0'
+                                        [disabled]=' orderCollection!=undefined && orderCollection!=null && orderCollection.length>0'
                                         class="k-button k-primary btn" (mousedown)="openCustomerLookup()" type="button">
                                         <i class="opti-icon-hammenu"></i>
                                     </button>
@@ -35,7 +64,7 @@
                         </div>
                     </div>
                     <!-- *ngIf="customerName!=undefined && customerName!=''" -->
-                    <div class="form-group row">
+                    <div class="form-group row"  *ngIf ="deliveryOptionType==1 || (deliveryOptionType==2 && orderCollection!=undefined && orderCollection!=null && orderCollection.length > 0)">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Name'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
@@ -45,7 +74,31 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <div class="form-group row" *ngIf ="deliveryOptionType==2">
+                        <label for="inputPassword"
+                            class="col-sm-3 col-form-label">{{'outbound_Dock_DoorNo'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input #dockDoorID (blur)="onDockDoorBlur()" id="outDockDoorNoInput"
+                                    type="text" class="form-control form-control-sm" name='DockDoorCode'
+                                    [(ngModel)]="dockDoorCode" placeholder="{{'outbound_Dock_DoorNo'|translate}}">
+                                <div class="input-group-append">
+                                    <button tabIndex="-1"
+                                        class="k-button k-primary btn" (mousedown)="getDockDoorList()" type="button">
+                                        <i class="opti-icon-hammenu"></i>
+                                    </button>
+                                </div>
+
+                                <div class="ml-1 d-flex">
+                                    <button tabIndex="-1" type="button" id="outDockDoorScan" 
+                                        class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                        <i class="opti-icon-qr-code fs-24"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row" *ngIf ="deliveryOptionType==1">
                             <label for="inputPassword" class="col-sm-3 col-form-label">{{'Outbound_SO'|translate}}</label>
                             <div class="col-sm-9">
                                 <div class="input-group input-group-sm">
@@ -66,7 +119,7 @@
                                 </div>
                             </div>
                         </div>
-                    <div class="form-group row">
+                    <div class="form-group row" *ngIf ="deliveryOptionType==1 || deliveryOptionType==2">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'TrackingId'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
@@ -76,7 +129,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <div class="form-group row" *ngIf ="deliveryOptionType==1 || deliveryOptionType==2">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'CustomerRefNo'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
@@ -87,22 +140,21 @@
                         </div>
                     </div>
 
-
-                 
-
                 </div>
             </div>
 
             <div class="row"
                 *ngIf='(orderCollection!==undefined && orderCollection!==null && orderCollection.length>0)'>
                 <div class="col-12">
-
                     <div>
-                        <!-- (selectionChange)="openPOByUOM($event,soItemsDetail.ITEMCODE)" -->
+                        <!-- (selectionChange)="openPOByUOM($event,soItemsDetail.ITEMCODE)" 
+                        (selectionChange)="openSelectedDeleveryItem($event)"
+                    (selectionChange)="openSelectedDeleveryItem($event)"-->
                         <kendo-grid class="no-shadow" [kendoGridBinding]="orderCollection" [resizable]="true"
                             [pageSize]="pageSize" [pageable]="pagable" [sortable]="true" [filterable]=isColumnFilter
-                            [groupable]=isColumnGroup [height]=gridHeight 
-                            [selectable]="true" #gridItem>
+                            [groupable]=isColumnGroup [height]=gridHeight  (selectionChange)="openSelectedDeleveryItem($event)" 
+                            [selectable]="true" #gridItem 
+                           >
 
                             <!-- grid for mobile start -->
                             <kendo-grid-column media="(max-width: 767px)" title="List" class="opti_mobile-grid-td">
@@ -130,11 +182,9 @@
                                 </ng-template>
                             </kendo-grid-column>
                         </kendo-grid>
-
                     </div>
                 </div>
             </div>
-
         </div>
         <div class="fix-footer-btnBar">
             <div class="col-sm-12 col-12">
@@ -151,10 +201,10 @@
                     class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-check"
                         role="presentation"></span> {{'Deleiver'|translate}}</button>
 
-                <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon"
-                    [disabled]="!customerCode" (mousedown)="openCustSO(true)" roterLink="binTransfer" skipLocationChange><i
+                <button type="button" *ngIf ="deliveryOptionType==1" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon"
+                    [disabled]="!customerCode" (click)="openCustSO(true)" roterLink="binTransfer" skipLocationChange><i
                         class="opti-icon-arrow-next"></i></button>
-
+ 
                 <button type="button" id="Hid_outboundCustomerCodeScanBtn" style="visibility:hidden"
                     (click)="hiddenScanCustCodeBtn()"
                     class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
@@ -185,3 +235,6 @@
     <app-comon-confirm-dialog [titleMessage]="dialogMsg" [fromWhere]="dialogFor" [noButtonText]="noButtonText"
         [yesButtonText]="yesButtonText" (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
 </span>
+<span *ngIf="showShipmentInfo==true">
+ <app-shipmentinfo  [serviceData]='ShipmentInfoData' [useContainer]='useContainer' (lookupOutputEvent)="getShipmentLookupEvent($event)"></app-shipmentinfo>
+</span> 

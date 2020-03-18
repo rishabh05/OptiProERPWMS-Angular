@@ -1,0 +1,153 @@
+<div class="opti_container position-relative bg-white rounded">
+    <form class="form-with-fix-btnBar" *ngIf="!viewLines">
+        <div class="opti_container_inner" [perfectScrollbar]=" ">
+            <div>
+                <div *ngFor="let item of ShipmentList" class="custom-card-view">
+                    <a class="custom-task-btn k-button btn-success" (click)="showPickTaskList(dataItem)">
+                        <i class=" k-icon k-i-track-changes"></i>
+                    </a>
+                    <div class="custom-dl-list"> 
+                        <dt>{{'PickListCode'|translate}}</dt>
+                        <dd>{{item.OPTM_PICKLIST_CODE}}</dd>
+                    </div>
+                    <div class="custom-dl-list">
+                        <dt>{{'TaskListCode'|translate}}</dt>
+                        <dd>{{item.OPTM_TASK_CODE}}</dd>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="new-custom-grid">
+                <kendo-grid [data]="ShipmentList" (cellClick)="onShipmentSelection($event)" [pageSize]="1" [skip]="skip">
+                    <kendo-grid-column [media]="mobileMedia" class="opti_mobile-grid-td">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            <dl class="grid-mobile-card">
+                                <button class="task-btn" (click)="showPickTaskList(dataItem)">
+                                    <i class=" k-icon k-i-track-changes"></i>
+                                </button>
+                                <div class="di-list">
+                                    <dt>{{'PickListCode'|translate}}</dt>
+                                    <dd>{{ dataItem.OPTM_PICKLIST_CODE}}</dd>
+                                </div>
+                                <div class="di-list">
+                                    <dt>{{'TaskListCode'|translate}}</dt>
+                                    <dd>{{ dataItem.OPTM_TASK_CODE}}</dd>
+                                </div>
+                            </dl>
+                        </ng-template>
+                    </kendo-grid-column>
+                </kendo-grid>
+            </div> -->
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="po-details-comp">
+                        <div class="po-details-sec">
+                            <span class="po-details">
+                                <div class="item-name-row">
+                                    <span class="po-item-name">{{'Pick'|translate}}: {{pickTaskName}}</span>
+                                    <span class="po-item-name">{{index+1}}/{{totalPickTask}}</span>
+                                    <span>{{'Quantity'|translate}}: {{totalpickQty}}/{{openQty}}</span>
+                                </div>
+                                <span class="po-item-name">{{itemcodeLabel}}: {{itemcodeValue}}</span> &nbsp;&nbsp;
+                                <button (click)="ShowBatchSerials()">
+                                    <i class=" k-icon k-i-track-changes"></i>
+                                </button>
+                                <br>
+                                <span class="po-item-name">{{Location}}: {{locationValue}}</span>
+                            </span>
+                        </div>
+                        <div class="item-sec">
+                            <div class="item-steps">
+                                <div *ngIf="currentStep == 1 && showLocation" class="item-input-section">
+                                    <input #focusOnLocation type="text" placeholder="{{'PT_Enter_Location'|translate}}" (blur)="onLocationChange()" name="PT_Enter_Location"
+                                        [(ngModel)]="PT_Enter_Location">
+                                    <!-- <i class="k-icon k-i-group-box" aria-hidden="true"></i> -->
+                                </div>
+                                <div *ngIf="currentStep == 2" class="item-input-section">
+                                    <input #focusOnSerNo type="text" placeholder="{{'PT_Enter_ContBtchSer'|translate}}" (blur)="onLotChange()" name="PT_Enter_ContBtchSer"
+                                        [(ngModel)]="PT_Enter_ContBtchSer">
+                                    <i class="k-icon k-i-group-box" aria-hidden="true"></i>
+                                </div>
+                                <div *ngIf="currentStep == 3" class="item-input-section">
+                                    <input type="number" placeholder="{{'PT_EnterQty'|translate}}" min=0 (blur)="onQtyChange()" name="pickQty" [(ngModel)]="pickQty">
+                                   
+                                </div>
+                                <div class="step-flex">
+                                    <div class="keyboard-box step-flex-item">
+                                       <div class="keyboard-icon"><i class="k-icon k-i-group-box" aria-hidden="true"></i> </div> 
+                                    </div>
+                                    <div class="or-class step-flex-item" *ngIf="currentStep != 3">
+                                        <span class="or-text">OR</span>
+                                        <span class="or-line"></span>
+                                    </div>
+                                    <div class="scanner-box step-flex-item">
+                                        <div class="bar-code" *ngIf="currentStep != 3">
+                                            <i class="k-icon k-i-greyscale" aria-hidden="true"></i>
+                                        </div>
+                                        <i *ngIf="currentStep > 1" (click)="prevStep()" class="k-icon k-i-arrow-chevron-left" aria-hidden="true"></i>
+                                        <i *ngIf="currentStep != maxStep" (click)="nextStep()" class="k-icon k-i-arrow-chevron-right" aria-hidden="true"></i>
+    
+                                        <i *ngIf="currentStep == maxStep" (click)="onSaveClick('/po-order-details')" class="k-icon k-i-save" aria-hidden="true"></i>
+                                        <div class="scan-text">{{currentStepText}}</div>
+                                    </div>
+                                 </div>
+                                
+                            </div>
+                            <div class="item-steps-bar">
+                                <span [ngClass]="{active:currentStep == 1}" *ngIf="showLocation" class="step"></span>
+                                <span *ngIf="this.OPTM_Tracking != 'N'" [ngClass]="{active:currentStep == 2}" class="step"></span>
+                                <span *ngIf="threeSteps" [ngClass]="{active:currentStep == 3}" class="step"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="fix-footer-btnBar">
+            <div class="col-sm-12 col-12">
+                <button class="btn btn-outline-secondary btn-sm btn-transparent btn-icon mr-1" type="button" (click)="onBackClick()">
+                    <i class="opti-icon-arrow-back"></i>
+                </button>
+                <button class="btn btn-success k-button btn-sm btn-icon-with-text" type="button" (click)="onSubmitClick()">
+                    <span class="k-icon k-i-check" role="presentation"></span>{{'Submit'|translate}}</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+<span [hidden]="hideLookup">
+    <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
+</span>
+
+<kendo-dialog [width]="500" *ngIf="dialogOpened" (close)="close_kendo_dialog()">
+    <div class="new-custom-grid">
+        <kendo-dialog-titlebar>
+            {{'PickTaskList'||translate}}
+        </kendo-dialog-titlebar>
+        <kendo-grid (cellClick)="cellClickHandler($event)" [height]="300" [data]="PickTaskList" [skip]="skip">
+            <kendo-grid-column [media]="mobileMedia" class="opti_mobile-grid-td">
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    <dl class="grid-mobile-card">
+                        <div class="di-list">
+                            <dt>{{'PT_TaskId'|translate}}</dt>
+                            <dd>{{ dataItem.OPTM_TASKID }}</dd>
+
+                            <dt>{{'ItemCode'|translate}}</dt>
+                            <dd>{{ dataItem.OPTM_ITEMCODE }}</dd>
+                        </div>
+                        <div class="di-list">
+                            <dt>{{'Quantity'|translate}}</dt>
+                            <dd>{{ dataItem.OPTM_PLANNED_QTY }}</dd>
+
+                            <dt>{{'PT_PlanDate'|translate}}</dt>
+                            <dd>{{ dataItem.OPTM_PLANNEDATETIME }}</dd>
+                        </div>
+                    </dl>
+                </ng-template>
+            </kendo-grid-column>
+        </kendo-grid>
+    </div>
+</kendo-dialog>
