@@ -82,6 +82,7 @@ export class PickingListComponent implements OnInit {
   onShipmentSelection(row) {
     localStorage.setItem("ShipDetail", JSON.stringify(row.dataItem));
     localStorage.setItem("From", "shiplist");
+    localStorage.setItem("TaskDetail", "");
     this.router.navigate(['home/picking/picking-item-details']);
   }
 

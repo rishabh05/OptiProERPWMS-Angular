@@ -55,7 +55,7 @@ export class PickingItemDetailsComponent implements OnInit {
   showbtchser: any[] = [];
   hideLookup = true;
   lookupfor: string;
-  serviceData: any[]=[];
+  serviceData: any[] = [];
   PickTaskDetail: any;
   showLookupLoader: boolean = true;
   showLoader: boolean = false;
@@ -73,7 +73,7 @@ export class PickingItemDetailsComponent implements OnInit {
   OPTM_Tracking: string = 'S';
   itemcodeLabel: string;
   itemcodeValue: string;
-  showLocation: boolean=true;
+  showLocation: boolean = true;
   ShipmentList: any[] = [];
   totalPickTask: Number;
   dialogOpened: boolean = false;
@@ -103,8 +103,9 @@ export class PickingItemDetailsComponent implements OnInit {
     if (localStorage.getItem("TaskDetail") == "" || localStorage.getItem("TaskDetail") == undefined) {
       this.getPickTaskList(this.ShipDetail.OPTM_TASK_CODE);
     } else {
-      this.PickTaskDetail = JSON.parse(localStorage.getItem("TaskDetail"));
-      this.PickTaskList = this.PickTaskDetail.OPTM_WHSTASKLIST;
+      this.getPickTaskList(this.ShipDetail.OPTM_TASK_CODE);
+      // this.PickTaskDetail = JSON.parse(localStorage.getItem("TaskDetail"));
+      // this.PickTaskList = this.PickTaskDetail.OPTM_WHSTASKLIST;
       this.index = Number(localStorage.getItem("PickItemIndex"));
       this.setVales(this.index);
     }
@@ -287,6 +288,16 @@ export class PickingItemDetailsComponent implements OnInit {
 
   onQtyChange() {
     if (this.pickQty != undefined) {
+      let BtchSerDtl = this.PickTaskDetail.OPTM_WHSTASK_BTCHSER.find(element => element.PT_Enter_ContBtchSer == this.PT_Enter_ContBtchSer);
+      if (BtchSerDtl == undefined) {
+
+      } else {
+        if (Number(this.pickQty) > Number(BtchSerDtl.OPTM_PLANNED_QTY)) {
+          this.toastr.error('', this.translate.instant("QtyExceed"));
+          return;
+        }
+      }
+
       let sum = 0;
       for (var i = 0; i < this.BtchNoneArray.length; i++) {
         sum = sum + this.BtchNoneArray[i].OPTM_Qty;
@@ -303,71 +314,73 @@ export class PickingItemDetailsComponent implements OnInit {
       if (result == undefined) {
         this.BtchNoneArray.push(new BtchNoneModel(this.PT_Enter_Location, this.PT_Enter_ContBtchSer, this.pickQty));
       } else {
+        //need to update qty here
         this.toastr.error('', this.translate.instant("DataAlreadySaved"));
         return;
       }
-      this.PT_Enter_Location = "";
-      this.PT_Enter_ContBtchSer = "";
-      this.pickQty = undefined;
+      // this.PT_Enter_Location = "";
+      // this.PT_Enter_ContBtchSer = "";
+      // this.pickQty = undefined;
       if (Number(this.totalpickQty) != Number(this.openQty)) {
         this.currentStep = 2;
         return;
-      }else{
-        this.preparePickTaskData();
+      } else {
+        // this.preparePickTaskData();
+        this.toastr.error('', this.translate.instant("AllQtyPickedMsg"));
       }
     }
   }
 
   onSaveClick() {
-    // if (this.ContBtchSerArray.length <= 0 && !this.threeSteps) {
-    //   this.toastr.error('', this.translate.instant("NoRecord"));
-    //   return;
+    if (Number(this.totalpickQty) != Number(this.openQty)) {
+      this.toastr.error('', this.translate.instant("QtyNotFullFillMsg"));
+      return;
+    }
+    // if (this.threeSteps) {
+
+    //   if (this.pickQty != undefined || this.pickQty != 0) {
+    //     let sum = 0;
+    //     for (var i = 0; i < this.BtchNoneArray.length; i++) {
+    //       sum = sum + this.BtchNoneArray[i].OPTM_Qty;
+    //     }
+    //     if ((sum + this.pickQty) <= this.openQty) {
+    //       this.totalpickQty = sum + this.pickQty;
+    //     } else {
+    //       this.toastr.error('', this.translate.instant("Inbound_NoOpenQuantityValid"));
+    //       this.pickQty = undefined;
+    //       return;
+    //     }
+    //   } else {
+    //     this.toastr.error('', this.translate.instant("ProdReceipt_QtyGraterThenZero"));
+    //     return;
+    //   }
+
+    //   let result = this.BtchNoneArray.find(element => element.PT_Enter_ContBtchSer == this.PT_Enter_ContBtchSer);
+    //   if (result == undefined) {
+    //     this.BtchNoneArray.push(new BtchNoneModel(this.PT_Enter_Location, this.PT_Enter_ContBtchSer, this.pickQty));
+    //   } else {
+    //     this.toastr.error('', this.translate.instant("DataAlreadySaved"));
+    //   }
+    //   this.PT_Enter_Location = "";
+    //   this.PT_Enter_ContBtchSer = "";
+    //   this.pickQty = undefined;
+
+    //   if (Number(this.totalpickQty) != Number(this.openQty)) {
+    //     this.currentStep = 1;
+    //     return;
+    //   }
     // }
-    if (this.threeSteps) {
-
-      if (this.pickQty != undefined || this.pickQty != 0) {
-        let sum = 0;
-        for (var i = 0; i < this.BtchNoneArray.length; i++) {
-          sum = sum + this.BtchNoneArray[i].OPTM_Qty;
-        }
-        if ((sum + this.pickQty) <= this.openQty) {
-          this.totalpickQty = sum + this.pickQty;
-        } else {
-          this.toastr.error('', this.translate.instant("Inbound_NoOpenQuantityValid"));
-          this.pickQty = undefined;
-          return;
-        }
-      } else {
-        this.toastr.error('', this.translate.instant("ProdReceipt_QtyGraterThenZero"));
-        return;
-      }
-
-      let result = this.BtchNoneArray.find(element => element.PT_Enter_ContBtchSer == this.PT_Enter_ContBtchSer);
-      if (result == undefined) {
-        this.BtchNoneArray.push(new BtchNoneModel(this.PT_Enter_Location, this.PT_Enter_ContBtchSer, this.pickQty));
-      } else {
-        this.toastr.error('', this.translate.instant("DataAlreadySaved"));
-      }
-      this.PT_Enter_Location = "";
-      this.PT_Enter_ContBtchSer = "";
-      this.pickQty = undefined;
-
-      if (Number(this.totalpickQty) != Number(this.openQty)) {
-        this.currentStep = 1;
-        return;
-      }
-    }
-    if (localStorage.getItem("From") == "shiplist") {
-      // if(this.SubmitPickTaskData.length > 0)
-    } else {
-      if (this.SubmitPickTaskData.length > 0) {
-        this.toastr.error('', this.translate.instant("DataAlreadySaved"));
-        return;
-      }
-    }
+    // if (localStorage.getItem("From") == "shiplist") {
+    //   // if(this.SubmitPickTaskData.length > 0)
+    // } else {
+    //   if (this.SubmitPickTaskData.length > 0) {
+    //     this.toastr.error('', this.translate.instant("DataAlreadySaved"));
+    //     return;
+    //   }
+    // }
 
     this.preparePickTaskData();
-    if (localStorage.getItem("From") == "shiplist") {
+   // if (localStorage.getItem("From") == "shiplist") {
       if (this.index == this.PickTaskList.length - 1) {
         this.toastr.success('', this.translate.instant("PickedAllTask"));
         return;
@@ -375,7 +388,10 @@ export class PickingItemDetailsComponent implements OnInit {
       this.clearFields();
       this.index = this.index + 1;
       this.setVales(this.index);
-    }
+    //}
+    this.PT_Enter_Location = "";
+    this.PT_Enter_ContBtchSer = "";
+    this.pickQty = undefined;
     this.currentStep = 1;
     this.toastr.success('', this.translate.instant("DataSaved"));
   }
@@ -471,12 +487,12 @@ export class PickingItemDetailsComponent implements OnInit {
   ShowBatchSerials(): any {
     this.showbtchser = [];
     for (var i = 0; i < this.PickTaskDetail.OPTM_WHSTASK_BTCHSER.length; i++) {
-      if(this.PickTaskDetail.OPTM_WHSTASK_BTCHSER[i].OPTM_TASKID == this.pickTaskName){
+      if (this.PickTaskDetail.OPTM_WHSTASK_BTCHSER[i].OPTM_TASKID == this.pickTaskName) {
         this.PickTaskDetail.OPTM_WHSTASK_BTCHSER[i].OPTM_PLANNED_QTY = Number(this.PickTaskDetail.OPTM_WHSTASK_BTCHSER[i].OPTM_PLANNED_QTY).toFixed(Number(localStorage.getItem("DecimalPrecision")));
         this.showbtchser.push(this.PickTaskDetail.OPTM_WHSTASK_BTCHSER[i]);
       }
     }
-    if(this.showbtchser.length > 0){
+    if (this.showbtchser.length > 0) {
       this.hideLookup = false;
       this.serviceData = this.showbtchser;
       this.lookupfor = "PickItemBtchSer";
@@ -489,7 +505,7 @@ export class PickingItemDetailsComponent implements OnInit {
     this.dialogOpened = true;
   }
 
-  close_kendo_dialog(){
+  close_kendo_dialog() {
     this.dialogOpened = false;
   }
 }
