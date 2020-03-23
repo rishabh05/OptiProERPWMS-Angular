@@ -103,7 +103,8 @@
                             <!-- step bars -->
                             <div class="item-steps-bar">
                                 <span [ngClass]="{active:currentStep == 1}" *ngIf="showLocation" class="step"></span>
-                                <span *ngIf="this.OPTM_Tracking != 'N'" [ngClass]="{active:currentStep == 2}" class="step"></span>
+                                <span [ngClass]="{active:currentStep == 2}" class="step"></span>
+                                <span *ngIf="this.OPTM_Tracking == 'N' && currentStep == 3" [ngClass]="{active:currentStep == 3}" class="step"></span>
                                 <span *ngIf="threeSteps" [ngClass]="{active:currentStep == 3}" class="step"></span>
                             </div>
                             <!--/ step bars -->

@@ -68,6 +68,7 @@ export class PickingListComponent implements OnInit {
   ngOnInit() {
     this.picktaskService.clearLocaStorage();
     this.initialize();
+
    // this.GetPicklist(this.pickTypeIndex)
     // this.commonservice.setCustomizeInfo();
   }
@@ -77,6 +78,15 @@ export class PickingListComponent implements OnInit {
     this.translate.instant("Cluster_Picking"), this.translate.instant("Container_Picking"),
     this.translate.instant("Discreate_Picking"), this.translate.instant("Zone_Picking")];
     //this.Pick_Type = this.PackTypeList[0];
+
+    if(localStorage.getItem("PickType") != ""){
+      this.Pick_Type = localStorage.getItem("PickType");
+      this.pickTypeIndex = this.PackTypeList.indexOf(this.Pick_Type);
+      this.pickTypeIndex = this.pickTypeIndex + 1;
+      if(this.pickTypeIndex > 0){
+        this.GetPicklist(this.pickTypeIndex);
+      }
+    }
   }
 
   onShipmentSelection(row) {
@@ -142,5 +152,6 @@ export class PickingListComponent implements OnInit {
     if (event == this.PackTypeList[2]) {
     } 
     this.GetPicklist(this.pickTypeIndex);
+    localStorage.setItem("PickType", event);
   }
 }

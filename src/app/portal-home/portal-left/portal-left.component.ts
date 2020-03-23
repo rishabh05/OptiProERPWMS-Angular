@@ -151,6 +151,8 @@ export class PortalLeftComponent implements OnInit {
       localStorage.setItem("fromscreen", "");
       localStorage.setItem("towhseId", localStorage.getItem("whseId"));
       localStorage.setItem("fromwhseId", localStorage.getItem("whseId"));
+    }else if(module == "picking"){
+      localStorage.setItem("PickType", "");
     }
     this.router.navigate(['home/' + module]);
   }

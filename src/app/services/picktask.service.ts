@@ -76,8 +76,8 @@ export class PickTaskService {
   }
 
   SubmitPickList(oSubmitPOLots: any): Observable<any> {
-    var jObject = { Shipment: JSON.stringify(oSubmitPOLots) };    
-    return this.httpclient.post(this.config_params.service_url + "/api/PickList/SubmitPickList", jObject, this.commonService.httpOptions);
+    var jObject = { PalletCode: JSON.stringify(oSubmitPOLots) };    
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/SavePickTaskInformation", jObject, this.commonService.httpOptions);
   }
 
   
