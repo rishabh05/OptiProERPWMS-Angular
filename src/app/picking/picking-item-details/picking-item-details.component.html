@@ -49,7 +49,7 @@
                                     <span>{{'Quantity'|translate}}: {{totalpickQty}}/{{openQty}}</span>
                                 </div>
                                 <span class="po-item-name">{{itemcodeLabel}}: {{itemcodeValue}}</span> &nbsp;&nbsp;
-                                <button (click)="ShowBatchSerials()">
+                                <button (click)="ShowBatchSerials()" *ngIf="!IsContPicking">
                                     <i class=" k-icon k-i-track-changes"></i>
                                 </button>
                                 <br>
@@ -145,15 +145,15 @@
                             <dt>{{'PT_TaskId'|translate}}</dt>
                             <dd>{{ dataItem.OPTM_TASKID }}</dd>
 
-                            <dt>{{'ItemCode'|translate}}</dt>
+                            <dt>{{itemcodeLabel}}</dt>
                             <dd>{{ dataItem.OPTM_ITEMCODE }}</dd>
                         </div>
                         <div class="di-list">
-                            <dt>{{'Quantity'|translate}}</dt>
-                            <dd>{{ dataItem.OPTM_PLANNED_QTY }}</dd>
+                            <!-- <dt>{{'Quantity'|translate}}</dt>
+                            <dd>{{ dataItem.OPTM_PLANNED_QTY }}</dd> -->
 
                             <dt>{{'PT_PlanDate'|translate}}</dt>
-                            <dd>{{ dataItem.OPTM_PLANNEDATETIME }}</dd>
+                            <dd>{{dataItem.OPTM_PLANNEDATETIME | date:dateFormat}}</dd>
                         </div>
                     </dl>
                 </ng-template>

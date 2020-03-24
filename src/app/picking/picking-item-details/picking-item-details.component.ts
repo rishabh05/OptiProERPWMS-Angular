@@ -160,6 +160,9 @@ export class PickingItemDetailsComponent implements OnInit {
     if (localStorage.getItem("PickType") == this.translate.instant("Container_Picking")) {
       this.itemcodeLabel = this.translate.instant("ContainerId");
       this.itemcodeValue = this.PickTaskDetail.OPTM_WHSTASK_DTL[index].OPTM_CONTCODE;
+      for(var i=0; i<this.PickTaskList.length; i++){
+        this.PickTaskList[i].OPTM_ITEMCODE = this.PickTaskDetail.OPTM_WHSTASK_DTL[i].OPTM_CONTCODE;
+      }      
       this.IsContPicking = true;
     } else {
       this.itemcodeLabel = this.translate.instant("ItemCode");
