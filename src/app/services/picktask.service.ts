@@ -42,37 +42,26 @@ export class PickTaskService {
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetDataBasedOnPickList", jObject, this.commonService.httpOptions);
   }
 
-  InsertIntoContainerRelationship(OPTM_CONTAINER_TYPE: string, OPTM_PARENT_CONTTYPE: string, OPTM_CONT_PERPARENT, OPTM_CONT_PARTOFPARENT): Observable<any> {
+  IsValidBatchSerial(ITEMCODE: string, LOTNO: string, OPTM_SRC_BIN: string): Observable<any> {
     let jObject = {
-      Shipment: JSON.stringify([{
+      PalletCode: JSON.stringify([{
         CompanyDBId: localStorage.getItem("CompID"), 
-        OPTM_CONTAINER_TYPE: OPTM_CONTAINER_TYPE,
-        OPTM_PARENT_CONTTYPE: OPTM_PARENT_CONTTYPE,
-        OPTM_CONT_PERPARENT: OPTM_CONT_PERPARENT, 
-        OPTM_CONT_PARTOFPARENT: OPTM_CONT_PARTOFPARENT,
+        ITEMCODE: ITEMCODE,
+        LOTNO: LOTNO,
+        OPTM_SRC_BIN: OPTM_SRC_BIN,
         OPTM_CREATEDBY: localStorage.getItem("UserId")
       }])
     };
-    return this.httpclient.post(this.config_params.service_url + "/api/Shipment/InsertIntoContainerRelationship", jObject, this.commonService.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/IsValidBatchSerial", jObject, this.commonService.httpOptions);
   }
 
-  UpdateContainerRelationship(OPTM_CONTAINER_TYPE, OPTM_PARENT_CONTTYPE, OPTM_CONT_PERPARENT, OPTM_CONT_PARTOFPARENT): Observable<any> {
+  GetPickTaskSelectedSteps(): Observable<any> {
     let jObject = {
-      Shipment: JSON.stringify([{
-        CompanyDBId: localStorage.getItem("CompID"), 
-        OPTM_CONTAINER_TYPE: OPTM_CONTAINER_TYPE,
-        OPTM_PARENT_CONTTYPE: OPTM_PARENT_CONTTYPE,
-        OPTM_CONT_PERPARENT: OPTM_CONT_PERPARENT, 
-        OPTM_CONT_PARTOFPARENT: OPTM_CONT_PARTOFPARENT,
-        OPTM_MODIFIEDBY: localStorage.getItem("UserId")
+      PalletCode: JSON.stringify([{
+        CompanyDBId: localStorage.getItem("CompID")
       }])
     };
-    return this.httpclient.post(this.config_params.service_url + "/api/Shipment/UpdateContainerRelationship", jObject, this.commonService.httpOptions);
-  }
-
-  DeleteFromContainerRelationship(ddDeleteArry: any[]): Observable<any> {
-    var jObject = { Shipment: JSON.stringify(ddDeleteArry) };
-    return this.httpclient.post(this.config_params.service_url + "/api/Shipment/DeleteFromContainerRelationship", jObject, this.commonService.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetPickTaskSelectedSteps", jObject, this.commonService.httpOptions);
   }
 
   SubmitPickList(oSubmitPOLots: any): Observable<any> {

@@ -77,7 +77,7 @@ export class PickingListComponent implements OnInit {
     this.PackTypeList = [this.translate.instant("Batch_Picking"),
     this.translate.instant("Cluster_Picking"), this.translate.instant("Container_Picking"),
     this.translate.instant("Discreate_Picking"), this.translate.instant("Zone_Picking")];
-    //this.Pick_Type = this.PackTypeList[0];
+    this.GetPickTaskSelectedSteps();
 
     if(localStorage.getItem("PickType") != ""){
       this.Pick_Type = localStorage.getItem("PickType");
@@ -140,6 +140,36 @@ export class PickingListComponent implements OnInit {
     );
   }
 
+
+  GetPickTaskSelectedSteps() {
+    this.showLoader = true;
+    this.picktaskService.GetPickTaskSelectedSteps().subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        if (data != undefined) {
+          if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
+          this.showLookupLoader = false;
+          this.ShipmentList = data.Table;
+          
+        } else {
+          this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+        }
+      },
+      error => {
+        this.showLoader = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
 
   ShowBatchSerials(){
     

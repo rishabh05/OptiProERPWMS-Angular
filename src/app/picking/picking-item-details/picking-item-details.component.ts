@@ -52,6 +52,7 @@ export class PickingItemDetailsComponent implements OnInit {
   shipmentno: string;
   PickTaskList: any[] = [];
   SubmitPickTaskData: any[] = [];
+  BtchSerDtlData: any[] = [];
   showbtchser: any[] = [];
   hideLookup = true;
   lookupfor: string;
@@ -160,9 +161,9 @@ export class PickingItemDetailsComponent implements OnInit {
     if (localStorage.getItem("PickType") == this.translate.instant("Container_Picking")) {
       this.itemcodeLabel = this.translate.instant("ContainerId");
       this.itemcodeValue = this.PickTaskDetail.OPTM_WHSTASK_DTL[index].OPTM_CONTCODE;
-      for(var i=0; i<this.PickTaskList.length; i++){
+      for (var i = 0; i < this.PickTaskList.length; i++) {
         this.PickTaskList[i].OPTM_ITEMCODE = this.PickTaskDetail.OPTM_WHSTASK_DTL[i].OPTM_CONTCODE;
-      }      
+      }
       this.IsContPicking = true;
     } else {
       this.itemcodeLabel = this.translate.instant("ItemCode");
@@ -240,7 +241,7 @@ export class PickingItemDetailsComponent implements OnInit {
       return;
     }
     let batserAdded = false;
-    if (localStorage.getItem("PickType") == this.translate.instant("Container_Picking")){//((this.PickTaskList[this.index].OPTM_LINE_TYPE) == "1") {
+    if (localStorage.getItem("PickType") == this.translate.instant("Container_Picking")) {//((this.PickTaskList[this.index].OPTM_LINE_TYPE) == "1") {
       for (var i = 0; i < this.PickTaskDetail.OPTM_WHSTASK_DTL.length; i++) {
         if (this.PickTaskDetail.OPTM_WHSTASK_DTL[i].OPTM_TASKID == this.PickTaskList[this.index].OPTM_TASKID) {
           if (this.PT_Enter_ContBtchSer === this.PickTaskDetail.OPTM_WHSTASK_DTL[i].OPTM_CONTCODE) {
@@ -262,30 +263,22 @@ export class PickingItemDetailsComponent implements OnInit {
         }
       }
     } else {
-      for (var i = 0; i < this.PickTaskDetail.OPTM_WHSTASK_BTCHSER.length; i++) {
-        if (this.PickTaskDetail.OPTM_WHSTASK_BTCHSER[i].OPTM_TASKID == this.PickTaskList[this.index].OPTM_TASKID) {
-          if (this.PT_Enter_ContBtchSer === this.PickTaskDetail.OPTM_WHSTASK_BTCHSER[i].OPTM_BTCHSER) {
-            batserAdded = true;
-            let result = this.ContBtchSerArray.find(element => element == this.PT_Enter_ContBtchSer);
-            if (result == undefined) {
-              if (!this.threeSteps) {
-                this.ContBtchSerArray.push(this.PT_Enter_ContBtchSer);
-                this.totalpickQty = this.totalpickQty + 1;
-                this.PT_Enter_ContBtchSer = "";
-              } else {
-                this.nextStep();
-              }
-            } else {
-              this.toastr.error('', this.translate.instant("DataAlreadySaved"));
+      if (this.PickTaskDetail.OPTM_WHSTASK_BTCHSER != undefined && this.PickTaskDetail.OPTM_WHSTASK_BTCHSER.length > 0) {
+        for (var i = 0; i < this.PickTaskDetail.OPTM_WHSTASK_BTCHSER.length; i++) {
+          if (this.PickTaskDetail.OPTM_WHSTASK_BTCHSER[i].OPTM_TASKID == this.PickTaskList[this.index].OPTM_TASKID) {
+            if (this.PT_Enter_ContBtchSer === this.PickTaskDetail.OPTM_WHSTASK_BTCHSER[i].OPTM_BTCHSER) {
+              batserAdded = true;
+              this.addBatchSerials();
               if (!this.threeSteps) {
                 this.PT_Enter_ContBtchSer = "";
-              } else {
-                this.nextStep();
-              }
+              } 
+              break;
             }
-            break;
           }
         }
+      } else {
+        batserAdded = true;
+        this.IsValidBatchSerial();
       }
     }
     if (!batserAdded) {
@@ -297,15 +290,100 @@ export class PickingItemDetailsComponent implements OnInit {
     }, 500)
   }
 
+  addBatchSerials() {
+    let result = this.ContBtchSerArray.find(element => element == this.PT_Enter_ContBtchSer);
+    if (result == undefined) {
+      if (!this.threeSteps) {
+        this.ContBtchSerArray.push(this.PT_Enter_ContBtchSer);
+        this.totalpickQty = this.totalpickQty + 1;
+        if (Number(this.totalpickQty) == Number(this.openQty)) {
+          this.toastr.success('', this.translate.instant("AllQtyPickedMsg"));
+        }
+      } else {
+        this.nextStep();
+      }
+    } else {
+      this.toastr.error('', this.translate.instant("DataAlreadySaved"));
+      if (!this.threeSteps) {
+        this.PT_Enter_ContBtchSer = "";
+      } else {
+        this.nextStep();
+      }
+    }
+  }
+
+  IsValidBatchSerial() {
+    if (this.PT_Enter_ContBtchSer == "" || this.PT_Enter_ContBtchSer == undefined) {
+      return;
+    }
+    this.BatchSerDetail = "";
+    this.showLoader = true;
+    this.picktaskService.IsValidBatchSerial(this.itemcodeValue, this.PT_Enter_ContBtchSer, this.PT_Enter_Location).subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        if (data != undefined) {
+          if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
+          this.showLookupLoader = false;
+          if (data.Table.length > 0) {
+            this.PT_Enter_ContBtchSer = data.Table[0].LOTNO;
+            this.BatchSerDetail = data.Table[0];
+            this.addBatchSerials();
+            if (!this.threeSteps && this.PT_Enter_ContBtchSer != "") {
+              this.BtchSerDtlData.push({
+                OPTM_TASKID: this.PickTaskList[this.index].OPTM_TASKID,
+                OPTM_ITEMCODE: this.itemcodeValue,
+                OPTM_BIN: this.PT_Enter_Location,
+                OPTM_CONTAINER_ID: "",
+                OPTM_QTY: 1,
+                OPTM_BTCHSER: this.PT_Enter_ContBtchSer,
+                OPTM_CREATEDBY: localStorage.getItem("UserId")
+              });              
+              this.PT_Enter_ContBtchSer = "";
+            } 
+          } else {
+            this.PT_Enter_ContBtchSer = "";
+            this.toastr.error('', this.translate.instant("ProdReceipt_InvalidBatchSerial"));
+          }
+        } else {
+          this.PT_Enter_ContBtchSer = "";
+          this.toastr.error('', this.translate.instant("ProdReceipt_InvalidBatchSerial"));
+        }
+      },
+      error => {
+        this.showLoader = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
+
+  BatchSerDetail: any;
   onQtyChange() {
     if (this.pickQty != undefined) {
-      let BtchSerDtl = this.PickTaskDetail.OPTM_WHSTASK_BTCHSER.find(element => element.PT_Enter_ContBtchSer == this.PT_Enter_ContBtchSer);
-      if (BtchSerDtl == undefined) {
+      if (this.OPTM_Tracking == 'B') {
+        if (this.PickTaskDetail.OPTM_WHSTASK_BTCHSER.length > 0) {
+          let BtchSerDtl = this.PickTaskDetail.OPTM_WHSTASK_BTCHSER.find(element => element.PT_Enter_ContBtchSer == this.PT_Enter_ContBtchSer);
+          if (BtchSerDtl == undefined) {
 
-      } else {
-        if (Number(this.pickQty) > Number(BtchSerDtl.OPTM_PLANNED_QTY)) {
-          this.toastr.error('', this.translate.instant("QtyExceed"));
-          return;
+          } else {
+            if (Number(this.pickQty) > Number(BtchSerDtl.OPTM_PLANNED_QTY)) {
+              this.toastr.error('', this.translate.instant("QtyExceed"));
+              return;
+            }
+          }
+        } else {
+          if (Number(this.pickQty) > Number(this.BatchSerDetail.TOTALQTY)) {
+            this.toastr.error('', this.translate.instant("QtyExceed"));
+            return;
+          }
         }
       }
 
@@ -324,6 +402,17 @@ export class PickingItemDetailsComponent implements OnInit {
       let result = this.BtchNoneArray.find(element => element.PT_Enter_ContBtchSer == this.PT_Enter_ContBtchSer);
       if (result == undefined) {
         this.BtchNoneArray.push(new BtchNoneModel(this.PT_Enter_Location, this.PT_Enter_ContBtchSer, this.pickQty));
+
+        this.BtchSerDtlData.push({
+          OPTM_TASKID: this.PickTaskList[this.index].OPTM_TASKID,
+          OPTM_ITEMCODE: this.itemcodeValue,
+          OPTM_BIN: this.PT_Enter_Location,
+          OPTM_CONTAINER_ID: "",
+          OPTM_QTY: this.pickQty,
+          OPTM_BTCHSER: this.PT_Enter_ContBtchSer,
+          OPTM_CREATEDBY: localStorage.getItem("UserId")
+        });
+
       } else {
         //need to update qty here
         this.toastr.error('', this.translate.instant("DataAlreadySaved"));
@@ -336,7 +425,6 @@ export class PickingItemDetailsComponent implements OnInit {
         this.currentStep = 2;
         return;
       } else {
-        // this.preparePickTaskData();
         this.toastr.success('', this.translate.instant("AllQtyPickedMsg"));
       }
     }
@@ -352,28 +440,33 @@ export class PickingItemDetailsComponent implements OnInit {
     this.PT_Enter_ContBtchSer = "";
     this.pickQty = undefined;
     this.currentStep = 1;
-      if (this.index == this.PickTaskList.length - 1) {
-        this.toastr.success('', this.translate.instant("PickedAllTaskAndSubmitMsg"));
-        return;
-      }
-      this.clearFields();
-      this.index = this.index + 1;
-      this.setVales(this.index);
+    if (this.index == this.PickTaskList.length - 1) {
+      this.toastr.success('', this.translate.instant("PickedAllTaskAndSubmitMsg"));
+      return;
+    }
+    this.clearFields();
+    this.index = this.index + 1;
+    this.setVales(this.index);
     this.toastr.success('', this.translate.instant("PickedAllTask"));
   }
 
 
   onSubmitClick() {
     if (this.SubmitPickTaskData.length > 0) {
-      this.SubmitPickList();
+      var oSubmitPOLotsObj: any = {};
+      oSubmitPOLotsObj.SubmitPickTaskData = [];
+      oSubmitPOLotsObj.BtchSerDtlData = [];
+      oSubmitPOLotsObj.SubmitPickTaskData = this.SubmitPickTaskData;
+      oSubmitPOLotsObj.BtchSerDtlData = this.BtchSerDtlData;
+      this.SubmitPickList(oSubmitPOLotsObj);
     } else {
       this.toastr.error('', this.translate.instant("NoRecord"));
     }
   }
 
-  SubmitPickList() {
+  SubmitPickList(oSubmitPOLotsObj) {
     this.showLoader = true;
-    this.picktaskService.SubmitPickList(this.SubmitPickTaskData).subscribe(
+    this.picktaskService.SubmitPickList(oSubmitPOLotsObj).subscribe(
       (data: any) => {
         this.showLoader = false;
         if (data != undefined) {
@@ -410,6 +503,7 @@ export class PickingItemDetailsComponent implements OnInit {
   clearFields() {
     this.ContBtchSerArray = [];
     this.BtchNoneArray = [];
+    // this.BtchSerDtlData = [];
     this.PT_Enter_ContBtchSer = "";
     this.PT_Enter_Location = "";
     this.pickQty = undefined;
@@ -462,7 +556,7 @@ export class PickingItemDetailsComponent implements OnInit {
       this.hideLookup = false;
       this.serviceData = this.showbtchser;
       this.lookupfor = "PickItemBtchSer";
-    }else{
+    } else {
       this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
     }
   }

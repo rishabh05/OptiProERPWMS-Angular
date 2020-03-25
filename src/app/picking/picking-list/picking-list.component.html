@@ -41,7 +41,7 @@
                                             <!-- <dt>{{'PT_Customer'|translate}}</dt>
                                             <dd>{{ dataItem.OPTM_BPCODE}}</dd> -->
                                         </div>
-                                        <div class="di-list">
+                                        <div class="di-list" *ngIf="false">
                                             <dt>{{'TaskListCode'|translate}}</dt>
                                             <dd>{{ dataItem.OPTM_TASK_CODE}}</dd>
                                             <!--                                         
@@ -53,7 +53,7 @@
                             </kendo-grid-column>
                             <kendo-grid-column [media]="desktopMedia" field="OPTM_PICKLIST_CODE" title="{{'PickListCode'|translate}}">
                             </kendo-grid-column>
-                            <kendo-grid-column [media]="desktopMedia" field="OPTM_TASK_CODE" title="{{'TaskListCode'|translate}}">
+                            <kendo-grid-column *ngIf="false" [media]="desktopMedia" field="OPTM_TASK_CODE" title="{{'TaskListCode'|translate}}">
                             </kendo-grid-column>
                             <!-- <kendo-grid-column [media]="desktopMedia" field="OPTM_SHIPTO" title="{{'PT_Ship_To'|translate}}">
                             </kendo-grid-column>
