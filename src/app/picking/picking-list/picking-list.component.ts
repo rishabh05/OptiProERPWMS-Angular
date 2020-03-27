@@ -63,6 +63,7 @@ export class PickingListComponent implements OnInit {
   public skip = 0;
   public mobileMedia = "(max-width: 767px)";
   public desktopMedia = "(min-width: 768px)";
+  pickListSteps : any[] = [];
   // GRID VARIABLE
 
   ngOnInit() {
@@ -153,7 +154,8 @@ export class PickingListComponent implements OnInit {
             return;
           }
           this.showLookupLoader = false;
-          this.ShipmentList = data.Table;
+          this.pickListSteps = data.OPTM_TRANS_STEPS;
+          localStorage.setItem("PickListSteps", JSON.stringify(this.pickListSteps));
           
         } else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
@@ -183,5 +185,6 @@ export class PickingListComponent implements OnInit {
     } 
     this.GetPicklist(this.pickTypeIndex);
     localStorage.setItem("PickType", event);
+    localStorage.setItem("PickTypeIndex", this.pickTypeIndex);
   }
 }

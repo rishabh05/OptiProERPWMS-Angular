@@ -13,7 +13,7 @@ export class PickTaskService {
   public config_params: any;
   public outRequest: OutRequest = new OutRequest();
 
-  constructor(private httpclient: HttpClient,private commonService:Commonservice) {
+  constructor(private httpclient: HttpClient, private commonService: Commonservice) {
     this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
   }
 
@@ -45,7 +45,7 @@ export class PickTaskService {
   IsValidBatchSerial(ITEMCODE: string, LOTNO: string, OPTM_SRC_BIN: string): Observable<any> {
     let jObject = {
       PalletCode: JSON.stringify([{
-        CompanyDBId: localStorage.getItem("CompID"), 
+        CompanyDBId: localStorage.getItem("CompID"),
         ITEMCODE: ITEMCODE,
         LOTNO: LOTNO,
         OPTM_SRC_BIN: OPTM_SRC_BIN,
@@ -65,53 +65,44 @@ export class PickTaskService {
   }
 
   SubmitPickList(oSubmitPOLots: any): Observable<any> {
-    var jObject = { PalletCode: JSON.stringify(oSubmitPOLots) };    
+    var jObject = { PalletCode: JSON.stringify(oSubmitPOLots) };
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/SavePickTaskInformation", jObject, this.commonService.httpOptions);
   }
 
-  
-  /**
-   * check whs is valid or not.
-   * @param whsCode 
-   */
-  isWHSExists(whsCode:string){
-
-    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId:  localStorage.getItem("CompID"), ItemCode: '', WhsCode: whsCode}]) };
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsWhsExist", jObject, this.commonService.httpOptions);
-  }
-
-   /**
-   * check is serial exists or not.
-   * @param whsCode 
-   */
-  isSerialExists(itemCode:string, serialNo:string){
-    var jObject = { SerialNo: JSON.stringify([{ CompanyDBId:  localStorage.getItem("CompID"), ItemCode: itemCode, SerialNo: serialNo}]) };
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/CheckSerialNo", jObject, this.commonService.httpOptions);
-  }
-  
   /**
    * check and scan code.
    * @param whsCode 
    */
-  checkAndScanCode(vendCode:string,scanInputString){
-    var jObject = {Gs1Token: JSON.stringify([{Vsvendorid:vendCode,StrScan:scanInputString,CompanyDBId:localStorage.getItem("CompID")}])};
-    return this.httpclient.post(this.config_params.service_url + "/api/Gs1/GS1SETUP", jObject, this.commonService.httpOptions);
+  GetNextPickList(OPTM_WHSECODE: string, OPTM_PICKTYPE, OPTM_USERGRP) {
+    var jObject = {
+      PalletCode: JSON.stringify([{
+        OPTM_WHSECODE: OPTM_WHSECODE,
+        OPTM_USERGRP: OPTM_USERGRP,
+        OPTM_PICKTYPE: OPTM_PICKTYPE,
+        CompanyDBId: localStorage.getItem("CompID")
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetNextPickList", jObject, this.commonService.httpOptions);
   }
 
-    /**
-    * This API method will return base64 string for pdf format for print.
-    * @param item 
-    * @param binNo 
-    * @param noOfCopies 
-    */
-   printingServiceForSubmitGRPO(psReceiptNo:string) : Observable<any> {
-    var jObject = { PrintingObject: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"),
-    USERID: localStorage.getItem("UserId"), RPTID: 6, DOCNO: psReceiptNo, 
-    GUID: localStorage.getItem("GUID"), UsernameForLic: localStorage.getItem("UserId") }]) };
+  /**
+  * This API method will return base64 string for pdf format for print.
+  * @param item 
+  * @param binNo 
+  * @param noOfCopies 
+  */
+  printingServiceForSubmitGRPO(psReceiptNo: string): Observable<any> {
+    var jObject = {
+      PrintingObject: JSON.stringify([{
+        CompanyDBId: localStorage.getItem("CompID"),
+        USERID: localStorage.getItem("UserId"), RPTID: 6, DOCNO: psReceiptNo,
+        GUID: localStorage.getItem("GUID"), UsernameForLic: localStorage.getItem("UserId")
+      }])
+    };
     return this.httpclient.post(this.config_params.service_url + "/api/Printing/WMSPrintingService", jObject, this.commonService.httpOptions);
-   }
+  }
 
-   GetPalletListsForGRPO(opType: number, itemCode: string, BinCode: string): Observable<any> {
+  GetPalletListsForGRPO(opType: number, itemCode: string, BinCode: string): Observable<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
         COMPANYDBNAME: localStorage.getItem("CompID"),
