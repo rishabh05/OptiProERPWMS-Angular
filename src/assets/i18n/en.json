@@ -475,7 +475,7 @@
   "Shipment": "Shipment",
   "Shipment_Detail": "Shipment",
   "DataAlreadySaved": "Data already exists.",
-
+  "PT_ItemCode": "Enter ItemCode",
   "DockDoorNotAvailable": "No Dock Door Available.",
   "DockDoorConfirmMessage": "Please Confirm your delivery with the correct Dock Door!",
   "ContainerCode":"Container Code",

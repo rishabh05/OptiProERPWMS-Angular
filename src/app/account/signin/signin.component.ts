@@ -117,7 +117,7 @@ export class SigninComponent implements OnInit {
                 }
             },
             error => {
-                this.toastr.error('', 'There is some error to connect with server', error);
+          //      this.toastr.error('', 'There is some error to connect with server', error);
                 this.showLoader = false;
             });
 

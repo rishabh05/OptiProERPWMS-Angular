@@ -6,7 +6,7 @@
                     <a class="custom-task-btn k-button btn-success" (click)="showPickTaskList(dataItem)">
                         <i class=" k-icon k-i-track-changes"></i>
                     </a>
-                    <div class="custom-dl-list"> 
+                    <div class="custom-dl-list">
                         <dt>{{'PickListCode'|translate}}</dt>
                         <dd>{{item.OPTM_PICKLIST_CODE}}</dd>
                     </div>
@@ -16,28 +16,6 @@
                     </div>
                 </div>
             </div>
-            <!-- <div class="new-custom-grid">
-                <kendo-grid [data]="ShipmentList" (cellClick)="onShipmentSelection($event)" [pageSize]="1" [skip]="skip">
-                    <kendo-grid-column [media]="mobileMedia" class="opti_mobile-grid-td">
-                        <ng-template kendoGridCellTemplate let-dataItem>
-                            <dl class="grid-mobile-card">
-                                <button class="task-btn" (click)="showPickTaskList(dataItem)">
-                                    <i class=" k-icon k-i-track-changes"></i>
-                                </button>
-                                <div class="di-list">
-                                    <dt>{{'PickListCode'|translate}}</dt>
-                                    <dd>{{ dataItem.OPTM_PICKLIST_CODE}}</dd>
-                                </div>
-                                <div class="di-list">
-                                    <dt>{{'TaskListCode'|translate}}</dt>
-                                    <dd>{{ dataItem.OPTM_TASK_CODE}}</dd>
-                                </div>
-                            </dl>
-                        </ng-template>
-                    </kendo-grid-column>
-                </kendo-grid>
-            </div> -->
-
             <div class="row">
                 <div class="col-12">
                     <div class="po-details-comp">
@@ -59,53 +37,59 @@
                         <div class="item-sec">
                             <div class="item-steps">
                                 <!-- step inputs -->
-                                <div *ngIf="currentStep == 1 && showLocation" class="item-input-section">
+                                <div *ngIf="currentStep == 1" class="item-input-section">
                                     <input #focusOnLocation type="text" placeholder="{{'PT_Enter_Location'|translate}}" (blur)="onLocationChange()" name="PT_Enter_Location"
                                         [(ngModel)]="PT_Enter_Location">
                                 </div>
                                 <div *ngIf="currentStep == 2" class="item-input-section">
-                                    <input #focusOnSerNo type="text" placeholder="{{'PT_Enter_ContBtchSer'|translate}}" (blur)="onLotChange()" name="PT_Enter_ContBtchSer"
-                                        [(ngModel)]="PT_Enter_ContBtchSer">                                    
+                                    <input #focusOnItemCode type="text" placeholder="{{'PT_ItemCode'|translate}}" (blur)="onItemChange()" name="PT_ItemCode"
+                                        [(ngModel)]="PT_ItemCode">
                                 </div>
                                 <div *ngIf="currentStep == 3" class="item-input-section">
-                                    <input type="number" placeholder="{{'PT_EnterQty'|translate}}" min=0 (blur)="onQtyChange()" name="pickQty" [(ngModel)]="pickQty">                                   
+                                    <input #focusOnSerNo type="text" placeholder="{{'PT_Enter_ContBtchSer'|translate}}" (blur)="onLotChange()" name="PT_Enter_ContBtchSer"
+                                        [(ngModel)]="PT_Enter_ContBtchSer">
+                                </div>
+                                <div *ngIf="currentStep == 4" class="item-input-section">
+                                    <input #focusOnQty type="number" placeholder="{{'PT_EnterQty'|translate}}" min=0 (blur)="onQtyChange()" name="pickQty" [(ngModel)]="pickQty">
                                 </div>
                                 <!--/ step inputs -->
 
                                 <!-- step input option icons -->
-                                <div class="step-flex">                                   
+                                <div class="step-flex">
                                     <div class="keyboard-box step-flex-item">
-                                       <div class="keyboard-icon"><i class="k-icon k-i-group-box" aria-hidden="true"></i> </div> 
+                                        <div class="keyboard-icon">
+                                            <i class="k-icon k-i-group-box" aria-hidden="true"></i>
+                                        </div>
                                     </div>
-                                    <div class="or-class step-flex-item" *ngIf="currentStep != 3">
+                                    <div class="or-class step-flex-item" *ngIf="currentStep != 4">
                                         <span class="or-text">OR</span>
                                         <span class="or-line"></span>
                                     </div>
-                                    <div  *ngIf="currentStep != 3" class="scanner-box step-flex-item">
+                                    <div *ngIf="currentStep != 4" class="scanner-box step-flex-item">
                                         <div class="bar-code">
                                             <i class="k-icon k-i-greyscale" aria-hidden="true"></i>
-                                        </div>                                                                              
-                                        <div class="scan-text">{{currentStepText}}</div>
-                                    </div>                                   
-                                 </div>
-                                 <!--/ step input option icons -->                                                           
+                                        </div>
+                                        <div class="text-center scan-text">{{currentStepText}}</div>
+                                    </div>
+                                </div>
+                                <!--/ step input option icons -->
                             </div>
-                             
-                            <!-- step navigation -->
-                              <div>
-                                <i *ngIf="currentStep > 1" (click)="prevStep()" class="k-icon k-i-arrow-chevron-left" aria-hidden="true"></i>
-                                <i *ngIf="currentStep != maxStep" (click)="nextStep()" class="k-icon k-i-arrow-chevron-right" aria-hidden="true"></i>
 
-                                <i *ngIf="currentStep == maxStep" (click)="onSaveClick('/po-order-details')" class="k-icon k-i-save" aria-hidden="true"></i>
-                             </div>
-                             <!--/ step navigation -->    
+                            <!-- step navigation Arrow placement -->
+                            <div>
+                                <i *ngIf="currentStep > 1" (click)="prevStep()" class="k-icon k-i-arrow-chevron-left" aria-hidden="true"></i>
+                                <i *ngIf="currentStep != LastStep" (click)="nextStep()" class="k-icon k-i-arrow-chevron-right" aria-hidden="true"></i>
+                                <i *ngIf="currentStep == LastStep" (click)="onSaveClick('/po-order-details')" class="k-icon k-i-save" aria-hidden="true"></i>
+                            </div>
+                            <!--/ step navigation -->
 
                             <!-- step bars -->
                             <div class="item-steps-bar">
-                                <span [ngClass]="{active:currentStep == 1}" *ngIf="showLocation" class="step"></span>
-                                <span [ngClass]="{active:currentStep == 2}" class="step"></span>
-                                <span *ngIf="this.OPTM_Tracking == 'N' && currentStep == 3" [ngClass]="{active:currentStep == 3}" class="step"></span>
-                                <span *ngIf="threeSteps" [ngClass]="{active:currentStep == 3}" class="step"></span>
+                                <span *ngFor="let c of CurrentTaskSteps" [ngClass]="{active:currentStep == 1}" class="step"></span>
+                                <!-- <span [ngClass]="{active:currentStep == 2}" class="step"></span>
+                                <span [ngClass]="{active:currentStep == 3}" class="step"></span>
+                                <span *ngIf="this.OPTM_Tracking == 'N' && currentStep == 4" [ngClass]="{active:currentStep == 4}" class="step"></span>
+                                <span *ngIf="threeSteps" [ngClass]="{active:currentStep == 4}" class="step"></span> -->
                             </div>
                             <!--/ step bars -->
                         </div>
