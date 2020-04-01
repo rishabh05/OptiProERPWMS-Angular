@@ -31,7 +31,8 @@ export class PickingItemDetailsComponent implements OnInit {
   pickTaskName: string;
   openQty: number;
   totalpickQty: number = 0;
-  pickQty: number = undefined; index = 0;
+  pickQty: number = undefined; 
+  index = 0;
   PT_Enter_Location: string;
   PT_ItemCode: string;
   PT_Enter_ContBtchSer: string;
@@ -46,6 +47,7 @@ export class PickingItemDetailsComponent implements OnInit {
   ShipmentList: any[] = [];
   PickListSteps: any[] = [];
   totalPickTask: Number;
+  currentTaskNo = 0;
   dialogOpened: boolean = false;
 // steps Start
   LOCATION_STEP = 1;
@@ -83,6 +85,18 @@ export class PickingItemDetailsComponent implements OnInit {
 
     this.PickOperationList = ["Pick_To_Tote", "Pick_To_Container", ""];
     this.ShipmentList[0] = this.ShipDetail;
+    if(localStorage.getItem("TaskDetail") != undefined && localStorage.getItem("TaskDetail") != "" && localStorage.getItem("TaskDetail") != "null"){
+      this.index = Number(localStorage.getItem("PickItemIndex"));
+      this.getPickTaskList(this.ShipDetail.OPTM_TASK_CODE);
+    }else{
+      this.getPickTaskList(this.ShipDetail.OPTM_TASK_CODE);
+    }
+  }
+
+  cellClickHandler(row){
+    this.currentTaskNo=0;
+    this.dialogOpened = false;
+    this.index = Number(row.rowIndex);
     this.getPickTaskList(this.ShipDetail.OPTM_TASK_CODE);
   }
 
@@ -186,6 +200,8 @@ export class PickingItemDetailsComponent implements OnInit {
     }
     this.setfocus();
     this.totalPickTask = this.PickTaskList.length;
+    this.currentTaskNo = this.currentTaskNo + 1;
+    this.changeText(this.currentStep);
   }
 
   stepIndex = 0;
@@ -486,15 +502,19 @@ export class PickingItemDetailsComponent implements OnInit {
     this.PT_Enter_Location = "";
     this.PT_Enter_ContBtchSer = "";
     this.pickQty = undefined;
-    this.currentStep = 1;
+    this.currentStep = this.LOCATION_STEP;
+    this.stepIndex = 0;
     this.whsCode = this.PickTaskList[this.index].OPTM_SRC_WHSE;
     this.UserGrp = this.PickTaskList[this.index].OPTM_USER_GRP;
-    if (this.index == this.PickTaskList.length - 1) {
+    if (this.currentTaskNo == this.totalPickTask) {
       this.toastr.success('', this.translate.instant("PickedAllTaskAndSubmitMsg"));
       return;
     }
     this.clearFields();
     this.index = this.index + 1;
+    if(this.index >= this.PickTaskList.length){
+      this.index = 0;
+    }
     this.setVales(this.index);
     this.toastr.success('', this.translate.instant("SavePickedTask"));
     this.setfocus();
