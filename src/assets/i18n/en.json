@@ -25,6 +25,7 @@
   "Inbound": "Inbound",
   "Outbound": "Outbound",
   "PickList": "Pick List",
+  "SHP_Loading": "Shipment Loading",
   "InventoryTransfer": "Inventory Transfer",
   "WarehouseTransfer": "Warehouse Transfer",
   "BinTransfer": "Bin Transfer",
@@ -460,6 +461,7 @@
   "Container_Picking":"Container Picking",
   "Discreate_Picking":"Discrete Picking",
   "Zone_Picking":"Zone Picking",
+  
   "Pick_Type": "Pick Type",
   "QtyNotFullFillMsg": "Please pick all the quantities of task.",
   "AllQtyPickedMsg": "You have picked all the quantities, Now click on save to save this task.",
@@ -480,6 +482,10 @@
   "DockDoorConfirmMessage": "Please Confirm your delivery with the correct Dock Door!",
   "ContainerCode":"Container Code",
   "ContainerType":"Container Type",
+  "LoadLocation":"Load Location",
+  "LoadContainers":"Load Containers",
+  "ScanContainer":"Scan Container",
+  "ScanLoadLocation":"Scan Load Location",
 
   "Outbound_CustomerExistMessge": "Customer does not exist!",
   "Dummy": "Dummy"

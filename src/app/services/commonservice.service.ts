@@ -651,4 +651,15 @@ export class Commonservice {
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetPalletsWithRowsPresent", jObject, this.httpOptions);
   }
+
+  onShipmentIDChange(OPTM_SHIPMENT_CODE): Observable<any> {
+    var jObject = {
+      PalletCode: JSON.stringify([{
+        CompanyDBId: localStorage.getItem("CompID"), 
+        WhseCode: localStorage.getItem("whseId"),
+        OPTM_SHIPMENT_CODE: OPTM_SHIPMENT_CODE
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetShipmentContainers", jObject, this.httpOptions);
+  }
 }

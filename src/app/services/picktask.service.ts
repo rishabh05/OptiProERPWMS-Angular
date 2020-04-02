@@ -91,15 +91,14 @@ export class PickTaskService {
   * @param binNo 
   * @param noOfCopies 
   */
-  printingServiceForSubmitGRPO(psReceiptNo: string): Observable<any> {
+  CancelPickList(OPTM_PICKLIST_CODE): Observable<any> {
     var jObject = {
       PrintingObject: JSON.stringify([{
         CompanyDBId: localStorage.getItem("CompID"),
-        USERID: localStorage.getItem("UserId"), RPTID: 6, DOCNO: psReceiptNo,
-        GUID: localStorage.getItem("GUID"), UsernameForLic: localStorage.getItem("UserId")
+        OPTM_PICKLIST_CODE: OPTM_PICKLIST_CODE
       }])
     };
-    return this.httpclient.post(this.config_params.service_url + "/api/Printing/WMSPrintingService", jObject, this.commonService.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/CancelPickList", jObject, this.commonService.httpOptions);
   }
 
   GetPalletListsForGRPO(opType: number, itemCode: string, BinCode: string): Observable<any> {
