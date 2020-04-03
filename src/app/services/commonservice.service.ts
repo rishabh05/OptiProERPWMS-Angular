@@ -656,10 +656,15 @@ export class Commonservice {
     var jObject = {
       PalletCode: JSON.stringify([{
         CompanyDBId: localStorage.getItem("CompID"), 
-        WhseCode: localStorage.getItem("whseId"),
+        OPTM_WHSCODE: localStorage.getItem("whseId"),
         OPTM_SHIPMENT_CODE: OPTM_SHIPMENT_CODE
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetShipmentContainers", jObject, this.httpOptions);
+  }
+
+  SaveLoadTaskInformation(containerData): Observable<any> {
+    var jObject = { PalletCode: JSON.stringify(containerData) };
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/SaveLoadTaskInformation", jObject, this.httpOptions);
   }
 }

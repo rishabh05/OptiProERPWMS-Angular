@@ -550,14 +550,14 @@ export class PickingItemDetailsComponent implements OnInit {
           // this.GetNextPickList();
           this.showLookupLoader = false;
           if (data[0].Successmsg == "SUCCESSFULLY") {
-            this.toastr.success('', "Pick List submitted successfully");
+            this.toastr.success('', this.translate.instant("PickSubmitMsg"));
             this.GetNextPickList();
           } else {
             this.toastr.error('', data[0].ErrorMsg);
           }
           this.clearDataAfterSubmit();
         } else {
-          // this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          // this.toastr.error('', this.translate.instant("PickSubmitMsg"));
         }
       },
       error => {

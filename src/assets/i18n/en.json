@@ -486,7 +486,14 @@
   "LoadContainers":"Load Containers",
   "ScanContainer":"Scan Container",
   "ScanLoadLocation":"Scan Load Location",
-
+  "InvalidContainerCode": "container code doesn't match.",
+  "InvalidDD": "Dock Door doesn't match.",
+  "NoContSubmit": "Please scan containers to submit",
+  "AllPickedCont": "You have scanned all the containers, now click submit.",
+  "AllContNotPicked": "You have not scanned all the containers.",
+  "contSaved": "Container saved.",
+  "PickSubmitMsg": "Pick List submitted successfully",
+  "shploadedMsg": "Shipment Loaded successfully",
   "Outbound_CustomerExistMessge": "Customer does not exist!",
   "Dummy": "Dummy"
 }

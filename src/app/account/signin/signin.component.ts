@@ -100,7 +100,7 @@ export class SigninComponent implements OnInit {
                 },
                 (err: HttpErrorResponse) => {
                     console.log(err.message);
-                    alert("HttpErrorResponse:" + err.message);
+                  //  alert("HttpErrorResponse:" + err.message);
                 }
             );
         }

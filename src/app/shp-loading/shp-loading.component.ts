@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Commonservice } from '../services/commonservice.service';
 import { Router } from '../../../node_modules/@angular/router';
 import { ToastrService } from '../../../node_modules/ngx-toastr';
@@ -15,9 +15,13 @@ export class ShpLoadingComponent implements OnInit {
   ScanContainer: string;
   ScanLoadLocation: string;
   PT_ShipmentId: string;
+  LoadLocation: string;
   LoadContainersList: any[] = [];
   LastStep = 2;
   showLoader: boolean = false;
+  FirstCont: any;
+  @ViewChild('focusOnCont') focusOnCont;
+  @ViewChild('focusOnDockDoor') focusOnDockDoor;
 
   constructor(private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService) {
     let userLang = navigator.language.split('-')[0];
@@ -30,8 +34,8 @@ export class ShpLoadingComponent implements OnInit {
   ngOnInit() {
   }
 
-  onShipmentIDChange(){
-    if(this.PT_ShipmentId == "" || this.PT_ShipmentId == undefined){
+  onShipmentIDChange() {
+    if (this.PT_ShipmentId == "" || this.PT_ShipmentId == undefined) {
       return;
     }
     this.showLoader = true;
@@ -44,10 +48,22 @@ export class ShpLoadingComponent implements OnInit {
               this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
-          // if(data.leng)
-          this.toastr.error('', this.translate.instant("InvalidShipmentCode"));
+          if (data.OPTM_SHPMNT_HDR.length > 0) {
+            this.PT_ShipmentId = data.OPTM_SHPMNT_HDR[0].OPTM_SHIPMENT_CODE;
+            this.LoadLocation = "D1";//data.OPTM_SHPMNT_HDR[0].OPTM_DOCKDOORID;
+            this.LoadContainersList = data.OPTM_CONT_HDR;
+            this.FirstCont = this.LoadContainersList[0];
+          } else {
+            this.toastr.error('', this.translate.instant("InvalidShipmentCode"));
+            this.PT_ShipmentId = "";
+            this.LoadLocation = "";
+            this.LoadContainersList = [];
+          }
         } else {
           this.toastr.error('', this.translate.instant("InvalidShipmentCode"));
+          this.PT_ShipmentId = "";
+          this.LoadLocation = "";
+          this.LoadContainersList = [];
         }
       },
       error => {
@@ -62,9 +78,78 @@ export class ShpLoadingComponent implements OnInit {
     );
   }
 
-  onSubmitClick(){
+  onContainerChange() {
+    if (this.ScanContainer == "" || this.ScanContainer == undefined) {
+      return;
+    }
+    let result = this.LoadContainersList.find(element => element.OPTM_CONTCODE == this.ScanContainer)
+    if (result != undefined) {
+      if (this.containerData.length > 0) {
+        let result = this.containerData.find(element => element.OPTM_CONTCODE == this.ScanContainer)
+        if (result == undefined) {
+          this.nextStep();
+        } else {
+          this.toastr.error('', this.translate.instant("DataAlreadySaved"));
+          this.ScanContainer = "";
+        }
+      }else{
+        this.nextStep();
+      }
+    } else {
+      this.toastr.error('', this.translate.instant("InvalidContainerCode"));
+      this.ScanContainer = "";
+    }
+  }
+
+  setfocus(){
+    if (this.currentStep == 1) {
+      setTimeout(() => {
+        this.focusOnCont.nativeElement.focus();
+      }, 500)
+    }else if (this.currentStep == 2) {
+      setTimeout(() => {
+        this.focusOnDockDoor.nativeElement.focus();
+      }, 500)
+    }
+  }
+
+  onLoadLocationChange() {
+    if (this.ScanLoadLocation == "" || this.ScanLoadLocation == undefined) {
+      return;
+    }
+    if (this.ScanLoadLocation === this.LoadLocation) {
+      this.addScannedContainer(this.PT_ShipmentId, this.ScanContainer);
+      this.prevStep();
+      this.toastr.success('', this.translate.instant("contSaved"));
+      this.ScanContainer = "";
+      this.ScanLoadLocation = "";
+      if(this.LoadContainersList.length == this.containerData.length){
+        this.toastr.success('', this.translate.instant("AllPickedCont"));
+      }
+    } else {
+      this.toastr.error('', this.translate.instant("InvalidDD"));
+      this.ScanLoadLocation = "";
+    }
+  }
+
+  containerData: any[] = [];
+  addScannedContainer(OPTM_SHIPMENT_CODE, OPTM_CONTCODE) {
+    this.containerData.push({
+      CompanyDBId: localStorage.getItem("CompID"),
+      OPTM_SHIPMENT_CODE: OPTM_SHIPMENT_CODE,
+      OPTM_CONTCODE: OPTM_CONTCODE
+    });
+  }
+
+  onSubmitClick() {
+    if(this.containerData.length <= 0){
+      this.toastr.error('', this.translate.instant("NoContSubmit"));
+      return;
+    }else if(this.LoadContainersList.length != this.containerData.length){
+      this.toastr.error('', this.translate.instant("AllContNotPicked"));
+    }
     this.showLoader = true;
-    this.commonservice.onShipmentIDChange(this.PT_ShipmentId).subscribe(
+    this.commonservice.SaveLoadTaskInformation(this.containerData).subscribe(
       (data: any) => {
         this.showLoader = false;
         if (data != undefined) {
@@ -73,8 +158,12 @@ export class ShpLoadingComponent implements OnInit {
               this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
-          // if(data.leng)
-          this.toastr.error('', this.translate.instant("InvalidShipmentCode"));
+          if (data[0].Successmsg == "SUCCESSFULLY") {
+            this.toastr.success('', this.translate.instant("shploadedMsg"));
+          } else {
+            this.toastr.error('', data[0].ErrorMsg);
+          }
+          this.clearDataAfterSubmit();
         } else {
           this.toastr.error('', this.translate.instant("InvalidShipmentCode"));
         }
@@ -91,12 +180,21 @@ export class ShpLoadingComponent implements OnInit {
     );
   }
 
-  nextStep(){
-    this.currentStep = this.currentStep + 1;
+  clearDataAfterSubmit() {
+    this.containerData = [];
+    this.LoadContainersList = [];
+    this.PT_ShipmentId = "";
+    this.LoadLocation = "";
   }
 
-  prevStep(){
+  nextStep() {
+    this.currentStep = this.currentStep + 1;
+    this.setfocus();
+  }
+
+  prevStep() {
     this.currentStep = this.currentStep - 1;
+    this.setfocus();
   }
 
   OnCancelClick() {
