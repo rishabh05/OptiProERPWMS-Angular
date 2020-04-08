@@ -32,11 +32,12 @@ export class PickTaskService {
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetPicklist", jObject, this.commonService.httpOptions);
   }
 
-  GetDataBasedOnPickList(OPTM_TASK_CODE): Observable<any> {
+  GetDataBasedOnPickList(OPTM_TASK_CODE, OPTM_PICKLIST_CODE): Observable<any> {
     let jObject = {
       PalletCode: JSON.stringify([{
         CompanyDBId: localStorage.getItem("CompID"),
-        OPTM_TASK_CODE: OPTM_TASK_CODE
+        OPTM_TASK_CODE: OPTM_TASK_CODE,
+        OPTM_PICKLIST_CODE: OPTM_PICKLIST_CODE
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetDataBasedOnPickList", jObject, this.commonService.httpOptions);
@@ -91,15 +92,7 @@ export class PickTaskService {
   * @param binNo 
   * @param noOfCopies 
   */
-  CancelPickList(OPTM_PICKLIST_CODE): Observable<any> {
-    var jObject = {
-      PrintingObject: JSON.stringify([{
-        CompanyDBId: localStorage.getItem("CompID"),
-        OPTM_PICKLIST_CODE: OPTM_PICKLIST_CODE
-      }])
-    };
-    return this.httpclient.post(this.config_params.service_url + "/api/PickList/CancelPickList", jObject, this.commonService.httpOptions);
-  }
+  
 
   GetPalletListsForGRPO(opType: number, itemCode: string, BinCode: string): Observable<any> {
     var jObject = {

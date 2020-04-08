@@ -218,6 +218,10 @@ export class Commonservice {
       toastr.error('', message);
     }
     
+    if(JSON.parse(localStorage.getItem("ShipDetail")) != "" && JSON.parse(localStorage.getItem("ShipDetail")) != undefined && JSON.parse(localStorage.getItem("ShipDetail")) != null){
+      this.CancelPickList((JSON.parse(localStorage.getItem("ShipDetail"))).OPTM_PICKLIST_CODE);
+    }
+    
     sessionStorage.removeItem('isLoggedIn');
     sessionStorage.removeItem('selectedComp');
     sessionStorage.removeItem('loggedInUser');
@@ -231,6 +235,16 @@ export class Commonservice {
     this.clearInboundData()
     this.router.navigate(['/account']);
 
+  }
+
+  CancelPickList(OPTM_PICKLIST_CODE): Observable<any> {
+    var jObject = {
+      PalletCode: JSON.stringify([{
+        CompanyDBId: localStorage.getItem("CompID"),
+        OPTM_PICKLIST_CODE: OPTM_PICKLIST_CODE
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/CancelPickList", jObject, this.httpOptions);
   }
 
   // Refresh List

@@ -81,7 +81,7 @@ export class PickingItemListComponent implements OnInit {
     this.picktaskService.clearLocaStorage();
     this.ShipDetail = JSON.parse(localStorage.getItem("ShipDetail"));
     this.shipmentno = this.translate.instant("PickListCode") + ": " + this.ShipDetail.OPTM_PICKLIST_CODE;
-    this.getPickTaskList(this.ShipDetail.OPTM_TASK_CODE);
+    this.getPickTaskList(this.ShipDetail.OPTM_TASK_CODE, this.ShipDetail.OPTM_PICKLIST_CODE);
   }
 
   cellClickHandler(row) {
@@ -96,9 +96,9 @@ export class PickingItemListComponent implements OnInit {
   }
 
   
-  getPickTaskList(OPTM_TASK_CODE) {
+  getPickTaskList(OPTM_TASK_CODE, OPTM_PICKLIST_CODE) {
     this.showLoader = true;
-    this.picktaskService.GetDataBasedOnPickList(OPTM_TASK_CODE).subscribe(
+    this.picktaskService.GetDataBasedOnPickList(OPTM_TASK_CODE, OPTM_PICKLIST_CODE).subscribe(
       (data: any) => {
         this.showLoader = false;
         if (data != undefined) {

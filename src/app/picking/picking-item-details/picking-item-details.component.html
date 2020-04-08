@@ -33,6 +33,15 @@
                                 <br>
                                 <span class="po-item-name">{{Location}}: {{locationValue}}</span>
                             </span>
+                            <div class="form-group row" *ngIf="addItemtoCont">
+                                <label for="inputPassword" class="col-sm-4 col-form-label">{{ContainerToteTitle}}</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group input-group-sm">
+                                        <input #scanPTshipmentId type="text" class="form-control form-control-sm" id="CreatedContOrTote" name="CreatedContOrTote" [(ngModel)]="CreatedContOrTote"
+                                            placeholder="{{ContainerTotePlaceHolder}}" (blur)="CreateContainerOrTote()" [disabled]=containercreated>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="item-sec">
                             <div class="item-steps">
@@ -52,6 +61,9 @@
                                 <div *ngIf="currentStep == 4" class="item-input-section">
                                     <input #focusOnQty type="number" placeholder="{{'PT_EnterQty'|translate}}" min=0 (blur)="onQtyChange()" name="pickQty" [(ngModel)]="pickQty">
                                 </div>
+                                <div *ngIf="currentStep == 5" class="item-input-section">
+                                    <input #focusOnScanCont type="text" placeholder="{{'ContainerCodePlaceholder'|translate}}" (blur)="ConfirmContainerOrTote()" name="ScannedContOrTote" [(ngModel)]="ScannedContOrTote">
+                                </div>                                
                                 <!--/ step inputs -->
 
                                 <!-- step input option icons -->
@@ -60,9 +72,10 @@
                                         <div class="keyboard-icon">
                                             <i class="k-icon k-i-group-box" aria-hidden="true"></i>
                                         </div>
+                                        <div *ngIf="currentStep == 4" class="text-center scan-text">{{currentStepText}}</div>
                                     </div>
                                     <div class="or-class step-flex-item" *ngIf="currentStep != 4">
-                                        <span class="or-text">OR</span>
+                                        <span class="or-text">{{'OR'|translate}}</span>
                                         <span class="or-line"></span>
                                     </div>
                                     <div *ngIf="currentStep != 4" class="scanner-box step-flex-item">
