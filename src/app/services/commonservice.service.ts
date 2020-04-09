@@ -681,4 +681,46 @@ export class Commonservice {
     var jObject = { PalletCode: JSON.stringify(containerData) };
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/SaveLoadTaskInformation", jObject, this.httpOptions);
   }
+
+  GetPickTaskSelectedSteps(OPTM_TRANS_CATEGORY): Observable<any> {
+    let jObject = {
+      PalletCode: JSON.stringify([{
+        CompanyDBId: localStorage.getItem("CompID"),
+        OPTM_TRANS_CATEGORY: OPTM_TRANS_CATEGORY
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetPickTaskSelectedSteps", jObject, this.httpOptions);
+  }
+
+  GetSelectedSteps(OPTM_TRANS_CATEGORY) {
+    this.GetPickTaskSelectedSteps(OPTM_TRANS_CATEGORY).subscribe(
+      (data: any) => {
+        if (data != undefined) {
+          if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+            this.RemoveLicenseAndSignout(this.toastr, this.router,
+              "Session expire");
+            return;
+          }
+          // this.showLookupLoader = false;
+          // this.pickListSteps = data.OPTM_TRANS_STEPS;
+          localStorage.setItem("PickListSteps", JSON.stringify(data.OPTM_TRANS_STEPS));
+
+        } else {
+          // this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+        }
+      },
+      error => {
+      }
+    );
+  }
+
+  GetConfigurationParam(): Observable<any> {
+    let jObject = {
+      PalletCode: JSON.stringify([{
+        CompanyDBId: localStorage.getItem("CompID"),
+        OPTM_APPLICABLE_WHSE: localStorage.getItem("whseId")
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetConfigurationParam", jObject, this.httpOptions);
+  }
 }

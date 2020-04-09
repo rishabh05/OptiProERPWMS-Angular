@@ -20,6 +20,7 @@ export class ShpLoadingComponent implements OnInit {
   LastStep = 2;
   showLoader: boolean = false;
   FirstCont: any;
+  PickListSteps: any[] = [];
   @ViewChild('focusOnCont') focusOnCont;
   @ViewChild('focusOnDockDoor') focusOnDockDoor;
 
@@ -32,6 +33,30 @@ export class ShpLoadingComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.commonservice.GetSelectedSteps("Loading");
+    setTimeout(() => {
+      this.setPickingSteps();
+    }, 1000)
+    
+  }
+
+  setPickingSteps() {
+    this.PickListSteps = JSON.parse(localStorage.getItem("PickListSteps"));
+    if (this.PickListSteps != undefined && this.PickListSteps.length > 0) {
+      this.currentStep = this.getStepNo(this.PickListSteps[0].OPTM_STEP_CODE);
+      this.maxStep = this.PickListSteps.length;
+    }
+  }
+
+  getStepNo(OPTM_STEP_CODE): any {
+    switch (OPTM_STEP_CODE) {
+      case "Confirm_Container_To_Load":
+        return 1;
+      case "Confirm_Location_Where_Loaded":
+        return 2;
+      default:
+        return 1;
+    }
   }
 
   onShipmentIDChange() {
@@ -92,7 +117,7 @@ export class ShpLoadingComponent implements OnInit {
           this.toastr.error('', this.translate.instant("DataAlreadySaved"));
           this.ScanContainer = "";
         }
-      }else{
+      } else {
         this.nextStep();
       }
     } else {
@@ -101,12 +126,12 @@ export class ShpLoadingComponent implements OnInit {
     }
   }
 
-  setfocus(){
+  setfocus() {
     if (this.currentStep == 1) {
       setTimeout(() => {
         this.focusOnCont.nativeElement.focus();
       }, 500)
-    }else if (this.currentStep == 2) {
+    } else if (this.currentStep == 2) {
       setTimeout(() => {
         this.focusOnDockDoor.nativeElement.focus();
       }, 500)
@@ -123,7 +148,7 @@ export class ShpLoadingComponent implements OnInit {
       this.toastr.success('', this.translate.instant("contSaved"));
       this.ScanContainer = "";
       this.ScanLoadLocation = "";
-      if(this.LoadContainersList.length == this.containerData.length){
+      if (this.LoadContainersList.length == this.containerData.length) {
         this.toastr.success('', this.translate.instant("AllPickedCont"));
       }
     } else {
@@ -142,10 +167,10 @@ export class ShpLoadingComponent implements OnInit {
   }
 
   onSubmitClick() {
-    if(this.containerData.length <= 0){
+    if (this.containerData.length <= 0) {
       this.toastr.error('', this.translate.instant("NoContSubmit"));
       return;
-    }else if(this.LoadContainersList.length != this.containerData.length){
+    } else if (this.LoadContainersList.length != this.containerData.length) {
       this.toastr.error('', this.translate.instant("AllContNotPicked"));
     }
     this.showLoader = true;
@@ -187,14 +212,30 @@ export class ShpLoadingComponent implements OnInit {
     this.LoadLocation = "";
   }
 
+  stepIndex = 0;
+  maxStep = 0;
   nextStep() {
-    this.currentStep = this.currentStep + 1;
-    this.setfocus();
+    if (this.stepIndex < this.maxStep) {
+      this.stepIndex = this.stepIndex + 1;
+      if (this.stepIndex >= 0 && this.stepIndex < this.PickListSteps.length) {
+        this.currentStep = this.getStepNo(this.PickListSteps[this.stepIndex].OPTM_STEP_CODE);
+        if (this.stepIndex == this.PickListSteps.length - 1) {
+          this.LastStep = this.currentStep;
+        }
+      }
+      this.setfocus();
+      // this.changeText(this.currentStep)
+    }
   }
 
   prevStep() {
-    this.currentStep = this.currentStep - 1;
-    this.setfocus();
+    this.stepIndex = this.stepIndex - 1;
+    if (this.stepIndex >= 0 && this.stepIndex < this.PickListSteps.length) {
+      this.currentStep = this.getStepNo(this.PickListSteps[this.stepIndex].OPTM_STEP_CODE);
+    }
+    if (this.currentStep >= 1) {
+      // this.changeText(this.currentStep)
+    }
   }
 
   OnCancelClick() {

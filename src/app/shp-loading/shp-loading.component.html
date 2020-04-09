@@ -92,9 +92,9 @@
 
               <!-- step bars -->
               <div class="item-steps-bar">
-                <!-- <span *ngFor="let c of CurrentTaskSteps" [ngClass]="{active:currentStep == 1}" class="step"></span> -->
-                <span [ngClass]="{active:currentStep == 1}" class="step"></span>
-                <span [ngClass]="{active:currentStep == 2}" class="step"></span>
+                <span *ngFor="let c of PickListSteps" [ngClass]="{active:currentStep == 1}" class="step"></span>
+                <!-- <span [ngClass]="{active:currentStep == 1}" class="step"></span>
+                <span [ngClass]="{active:currentStep == 2}" class="step"></span> -->
               </div>
               <!--/ step bars -->
             </div>

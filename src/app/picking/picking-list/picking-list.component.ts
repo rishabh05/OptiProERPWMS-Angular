@@ -21,6 +21,7 @@ export class PickingListComponent implements OnInit {
   Pick_Type: string;
   pickTypeIndex: any = 1;
   showGrid: boolean = false;
+  confiParams: any[] = [];
 
   constructor(private picktaskService: PickTaskService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService) {
     let userLang = navigator.language.split('-')[0];
@@ -82,7 +83,7 @@ export class PickingListComponent implements OnInit {
 
     this.PackTypeKeyList = ["Batch_Picking", "Cluster_Picking", "Container_Picking", "Discrete_Picking", "Zone_Picking"];
 
-    this.GetPickTaskSelectedSteps();
+    this.commonservice.GetSelectedSteps("Picking");
 
     if (localStorage.getItem("PickType") != "") {
       this.Pick_Type = localStorage.getItem("PickType");
@@ -101,6 +102,17 @@ export class PickingListComponent implements OnInit {
     localStorage.setItem("From", "shiplist");
     localStorage.setItem("TaskDetail", "");
     this.router.navigate(['home/picking/picking-item-details']);
+  }
+
+  checkIfPickProcessAuto(dataItem) {
+    this.confiParams = JSON.parse(localStorage.getItem('ConfigurationParam'));
+    let result = this.confiParams.find(e => e.OPTM_PARAM_NAME == "Param_Picking_Process" && e.OPTM_PARAM_VALUE == "Push-Automatic")
+    if (result != undefined) {
+      localStorage.setItem("ShipDetail", JSON.stringify(dataItem));
+      localStorage.setItem("From", "shiplist");
+      localStorage.setItem("TaskDetail", "");
+      this.router.navigate(['home/picking/picking-item-details']);
+    }
   }
 
   showPickTaskList(row) {
@@ -124,6 +136,7 @@ export class PickingListComponent implements OnInit {
           this.ShipmentList = data.Table;
           if (this.ShipmentList.length > 0) {
             this.showGrid = true;
+            this.checkIfPickProcessAuto(this.ShipmentList[0]);
           } else {
             this.showGrid = false;
             this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
@@ -148,36 +161,7 @@ export class PickingListComponent implements OnInit {
   }
 
 
-  GetPickTaskSelectedSteps() {
-    this.showLoader = true;
-    this.picktaskService.GetPickTaskSelectedSteps().subscribe(
-      (data: any) => {
-        this.showLoader = false;
-        if (data != undefined) {
-          if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
-            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
-              this.translate.instant("CommonSessionExpireMsg"));
-            return;
-          }
-          this.showLookupLoader = false;
-          this.pickListSteps = data.OPTM_TRANS_STEPS;
-          localStorage.setItem("PickListSteps", JSON.stringify(this.pickListSteps));
 
-        } else {
-          this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
-        }
-      },
-      error => {
-        this.showLoader = false;
-        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
-        }
-        else {
-          this.toastr.error('', error);
-        }
-      }
-    );
-  }
 
   ShowBatchSerials() {
 
@@ -193,6 +177,6 @@ export class PickingListComponent implements OnInit {
     this.GetPicklist(this.pickTypeIndex);
     localStorage.setItem("PickType", event);
     localStorage.setItem("PickTypeIndex", this.pickTypeIndex);
-    
+
   }
 }

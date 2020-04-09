@@ -56,15 +56,6 @@ export class PickTaskService {
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/IsValidBatchSerial", jObject, this.commonService.httpOptions);
   }
 
-  GetPickTaskSelectedSteps(): Observable<any> {
-    let jObject = {
-      PalletCode: JSON.stringify([{
-        CompanyDBId: localStorage.getItem("CompID")
-      }])
-    };
-    return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetPickTaskSelectedSteps", jObject, this.commonService.httpOptions);
-  }
-
   SubmitPickList(oSubmitPOLots: any): Observable<any> {
     var jObject = { PalletCode: JSON.stringify(oSubmitPOLots) };
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/SavePickTaskInformation", jObject, this.commonService.httpOptions);
