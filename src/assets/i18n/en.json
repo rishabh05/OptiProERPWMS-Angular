@@ -482,6 +482,7 @@
   "DockDoorConfirmMessage": "Please Confirm your delivery with the correct Dock Door!",
   "ContainerCode":"Container Code",
   "ContainerCodePlaceholder": "Enter/Scan Container Code",
+  "TotePlaceholder": "Enter/Scan Tote",
   "ContainerType":"Container Type",
   "LoadLocation":"Load Location",
   "LoadContainers":"Load Containers",
@@ -501,9 +502,12 @@
   "ToteBlankMsg": "Tote can't be blank.",
   "CCCreated": "Container Code created.",
   "CCDoesntMatch": "Container Code doesn't match.",
+  "ToteDoesntMatch": "Tote doesn't match.",
   "ToteCreated": "Tote created.",
-  "ScanCont": "Scan Packing Container",
+  "ScanCont": "Scan Container",
+  "ScanTote": "Scan Tote",
   "Tote": "Tote",
   "EnterTote": "Enter/Scan Tote",
+  "NoNextPick": "There is no next pick available to process.",
   "Dummy": "Dummy"
 }

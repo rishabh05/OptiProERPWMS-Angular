@@ -219,7 +219,7 @@ export class Commonservice {
     }
     
     if(JSON.parse(localStorage.getItem("ShipDetail")) != "" && JSON.parse(localStorage.getItem("ShipDetail")) != undefined && JSON.parse(localStorage.getItem("ShipDetail")) != null){
-      this.CancelPickList((JSON.parse(localStorage.getItem("ShipDetail"))).OPTM_PICKLIST_CODE);
+     // this.CancelPickList((JSON.parse(localStorage.getItem("ShipDetail"))).OPTM_PICKLIST_CODE);
     }
     
     sessionStorage.removeItem('isLoggedIn');

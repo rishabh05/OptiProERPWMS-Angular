@@ -114,7 +114,7 @@
     text-align: center;
     margin-bottom: 5px;
 }
-.scan-text{ font-size: 24px;} 
+.scan-text{ font-size: 20px;} 
 .bar-code{    line-height: 80px;    
 i {
     font-size: 68px;
@@ -212,4 +212,7 @@ body kendo-grid .k-grid-pager{
     font-size: 68px;
 }
 
-
+.my-custom-icon-class::before {
+    content: "\e13a"; /* Adds a glyph using the Unicode character number */
+    font-size: 68px;
+}

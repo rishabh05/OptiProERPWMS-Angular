@@ -23,7 +23,7 @@
                             <span class="po-details">
                                 <div class="item-name-row">
                                     <span class="po-item-name">{{'Pick'|translate}}: {{pickTaskName}}</span>
-                                    <span class="po-item-name">{{currentTaskNo}}/{{totalPickTask}}</span>
+                                    <span class="po-item-name">{{completedTaskCount}}/{{totalPickTaskCount}}</span>
                                     <span>{{'Quantity'|translate}}: {{totalpickQty}}/{{openQty}}</span>
                                 </div>
                                 <span class="po-item-name">{{itemcodeLabel}}: {{itemcodeValue}}</span> &nbsp;&nbsp;
@@ -62,7 +62,7 @@
                                     <input #focusOnQty type="number" placeholder="{{'PT_EnterQty'|translate}}" min=0 (blur)="onQtyChange()" name="pickQty" [(ngModel)]="pickQty">
                                 </div>
                                 <div *ngIf="currentStep == 5" class="item-input-section">
-                                    <input #focusOnScanCont type="text" placeholder="{{'ContainerCodePlaceholder'|translate}}" (blur)="ConfirmContainerOrTote()" name="ScannedContOrTote" [(ngModel)]="ScannedContOrTote">
+                                    <input #focusOnScanCont type="text" placeholder="{{ContainerCodePlaceholderValue}}" (blur)="ConfirmContainerOrTote()" name="ScannedContOrTote" [(ngModel)]="ScannedContOrTote">
                                 </div>                                
                                 <!--/ step inputs -->
 
@@ -82,12 +82,14 @@
                                         <div class="bar-code">
                                             <i class="k-icon k-i-greyscale" aria-hidden="true"></i>
                                         </div>
-                                        <div class="text-center scan-text">{{currentStepText}}</div>
+                                        <!-- <div class="text-center scan-text">{{currentStepText}}</div> -->
                                     </div>
+                                    
                                 </div>
                                 <!--/ step input option icons -->
                             </div>
-
+                            <div *ngIf="currentStep != 4" class="text-center scan-text">{{currentStepText}}</div>
+                              <br>
                             <!-- step navigation Arrow placement -->
                             <div>
                                 <i *ngIf="currentStep > 1" (click)="prevStep()" class="k-icon k-i-arrow-chevron-left" aria-hidden="true"></i>
@@ -126,7 +128,7 @@
 </div>
 
 <span [hidden]="hideLookup">
-    <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
+    <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData'></app-lookup>
 </span>
 
 <kendo-dialog [width]="500" *ngIf="dialogOpened" (close)="close_kendo_dialog()">

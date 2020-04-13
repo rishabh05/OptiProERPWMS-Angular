@@ -27,7 +27,7 @@
             <div class="row pick-list-row">
                 <div class="col-12 pick-list-col">
                     <div class="new-custom-grid">
-                        <kendo-grid [data]="ShipmentList" (cellClick)="onShipmentSelection($event)" [pageSize]="pageSize" [skip]="skip" [pageable]="pagable" *ngIf="showGrid">
+                        <kendo-grid [kendoGridBinding]="ShipmentList" (cellClick)="onShipmentSelection($event)" [pageSize]="pageSize" [skip]="skip" [pageable]="pagable" *ngIf="showGrid">
                             <kendo-grid-column [media]="mobileMedia" class="opti_mobile-grid-td">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <dl class="grid-mobile-card">
