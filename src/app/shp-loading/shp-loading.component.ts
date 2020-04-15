@@ -21,6 +21,9 @@ export class ShpLoadingComponent implements OnInit {
   showLoader: boolean = false;
   FirstCont: any;
   PickListSteps: any[] = [];
+  containerData: any[] = [];
+  stepIndex = 0;
+  maxStep = 0;
   @ViewChild('focusOnCont') focusOnCont;
   @ViewChild('focusOnDockDoor') focusOnDockDoor;
 
@@ -37,7 +40,7 @@ export class ShpLoadingComponent implements OnInit {
     setTimeout(() => {
       this.setPickingSteps();
     }, 1000)
-    
+
   }
 
   setPickingSteps() {
@@ -45,6 +48,7 @@ export class ShpLoadingComponent implements OnInit {
     if (this.PickListSteps != undefined && this.PickListSteps.length > 0) {
       this.currentStep = this.getStepNo(this.PickListSteps[0].OPTM_STEP_CODE);
       this.maxStep = this.PickListSteps.length;
+      this.changeText(this.currentStep)
     }
   }
 
@@ -75,20 +79,16 @@ export class ShpLoadingComponent implements OnInit {
           }
           if (data.OPTM_SHPMNT_HDR.length > 0) {
             this.PT_ShipmentId = data.OPTM_SHPMNT_HDR[0].OPTM_SHIPMENT_CODE;
-            this.LoadLocation = "D1";//data.OPTM_SHPMNT_HDR[0].OPTM_DOCKDOORID;
+            this.LoadLocation = data.OPTM_SHPMNT_HDR[0].OPTM_DOCKDOORID;
             this.LoadContainersList = data.OPTM_CONT_HDR;
             this.FirstCont = this.LoadContainersList[0];
           } else {
             this.toastr.error('', this.translate.instant("InvalidShipmentCode"));
-            this.PT_ShipmentId = "";
-            this.LoadLocation = "";
-            this.LoadContainersList = [];
+            this.clearFields();
           }
         } else {
           this.toastr.error('', this.translate.instant("InvalidShipmentCode"));
-          this.PT_ShipmentId = "";
-          this.LoadLocation = "";
-          this.LoadContainersList = [];
+          this.clearFields();
         }
       },
       error => {
@@ -103,6 +103,13 @@ export class ShpLoadingComponent implements OnInit {
     );
   }
 
+  clearFields() {
+    this.PT_ShipmentId = "";
+    this.LoadLocation = "";
+    this.LoadContainersList = [];
+    this.FirstCont = {OPTM_CONTCODE: ''};
+  }
+
   onContainerChange() {
     if (this.ScanContainer == "" || this.ScanContainer == undefined) {
       return;
@@ -112,13 +119,21 @@ export class ShpLoadingComponent implements OnInit {
       if (this.containerData.length > 0) {
         let result = this.containerData.find(element => element.OPTM_CONTCODE == this.ScanContainer)
         if (result == undefined) {
-          this.nextStep();
+          if (this.iterateSteps) {
+            this.nextSteptoIterate();
+          } else {
+            this.nextStep();
+          }
         } else {
           this.toastr.error('', this.translate.instant("DataAlreadySaved"));
           this.ScanContainer = "";
         }
       } else {
-        this.nextStep();
+        if (this.iterateSteps) {
+          this.nextSteptoIterate();
+        } else {
+          this.nextStep();
+        }
       }
     } else {
       this.toastr.error('', this.translate.instant("InvalidContainerCode"));
@@ -144,26 +159,26 @@ export class ShpLoadingComponent implements OnInit {
     }
     if (this.ScanLoadLocation === this.LoadLocation) {
       this.addScannedContainer(this.PT_ShipmentId, this.ScanContainer);
-      this.prevStep();
-      this.toastr.success('', this.translate.instant("contSaved"));
-      this.ScanContainer = "";
-      this.ScanLoadLocation = "";
-      if (this.LoadContainersList.length == this.containerData.length) {
-        this.toastr.success('', this.translate.instant("AllPickedCont"));
-      }
+      this.stepIndex = -1;
+      this.nextSteptoIterate();
     } else {
       this.toastr.error('', this.translate.instant("InvalidDD"));
       this.ScanLoadLocation = "";
     }
   }
 
-  containerData: any[] = [];
   addScannedContainer(OPTM_SHIPMENT_CODE, OPTM_CONTCODE) {
     this.containerData.push({
       CompanyDBId: localStorage.getItem("CompID"),
       OPTM_SHIPMENT_CODE: OPTM_SHIPMENT_CODE,
       OPTM_CONTCODE: OPTM_CONTCODE
     });
+    this.toastr.success('', this.translate.instant("contSaved"));
+    this.ScanContainer = "";
+    this.ScanLoadLocation = "";
+    if (this.LoadContainersList.length == this.containerData.length) {
+      this.toastr.success('', this.translate.instant("AllPickedCont"));
+    }
   }
 
   onSubmitClick() {
@@ -185,6 +200,7 @@ export class ShpLoadingComponent implements OnInit {
           }
           if (data[0].Successmsg == "SUCCESSFULLY") {
             this.toastr.success('', this.translate.instant("shploadedMsg"));
+            this.clearFields();
           } else {
             this.toastr.error('', data[0].ErrorMsg);
           }
@@ -212,8 +228,35 @@ export class ShpLoadingComponent implements OnInit {
     this.LoadLocation = "";
   }
 
-  stepIndex = 0;
-  maxStep = 0;
+  iterateSteps = false;
+  nextSteptoIterate() {
+    this.iterateSteps = true;
+    if (this.stepIndex < this.maxStep - 1) {
+      this.stepIndex = this.stepIndex + 1;
+      if (this.stepIndex >= 0 && this.stepIndex < this.PickListSteps.length) {
+        if (this.PickListSteps[this.stepIndex].OPTM_ITERATE == "Y") {
+          this.currentStep = this.getStepNo(this.PickListSteps[this.stepIndex].OPTM_STEP_CODE);
+          if (this.stepIndex == this.PickListSteps.length - 1) {
+            this.LastStep = this.currentStep;
+          }
+        } else {
+          if (this.stepIndex == this.PickListSteps.length - 1) {
+            this.LastStep = this.currentStep;
+            this.addScannedContainer(this.PT_ShipmentId, this.ScanContainer);
+          } else {
+            this.nextSteptoIterate();
+          }
+        }
+      }
+      this.setfocus();
+      // this.changeText(this.currentStep)
+    }
+  }
+
+  checkIfQtyFullFiled() {
+
+  }
+
   nextStep() {
     if (this.stepIndex < this.maxStep) {
       this.stepIndex = this.stepIndex + 1;
@@ -224,7 +267,17 @@ export class ShpLoadingComponent implements OnInit {
         }
       }
       this.setfocus();
-      // this.changeText(this.currentStep)
+      this.changeText(this.currentStep)
+    }
+  }
+
+  currentStepText = "";
+  changeText(step) {
+    if (step == 1) {
+      this.currentStepText = this.translate.instant("ScanCont");
+    }
+    else if (step == 2) {
+      this.currentStepText = this.translate.instant("ScanLoadLoc");
     }
   }
 
@@ -234,7 +287,7 @@ export class ShpLoadingComponent implements OnInit {
       this.currentStep = this.getStepNo(this.PickListSteps[this.stepIndex].OPTM_STEP_CODE);
     }
     if (this.currentStep >= 1) {
-      // this.changeText(this.currentStep)
+      this.changeText(this.currentStep)
     }
   }
 

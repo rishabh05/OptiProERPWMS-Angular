@@ -555,7 +555,7 @@ export class LookupComponent implements OnInit {
         type: 'text'
       }      
     ];
-    this.lookupTitle = this.translate.instant("Palletmessage.Lot");
+    this.lookupTitle = this.translate.instant("Container_Detail");
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
         this.dialogOpened = true;

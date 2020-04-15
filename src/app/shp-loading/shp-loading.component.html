@@ -52,15 +52,7 @@
                   <input #focusOnDockDoor type="text" placeholder="{{'ScanLoadLocation'|translate}}" (blur)="onLoadLocationChange()" name="ScanLoadLocation"
                     [(ngModel)]="ScanLoadLocation">
                 </div>
-                <!-- <div *ngIf="currentStep == 3" class="item-input-section">
-                  <input #focusOnSerNo type="text" placeholder="{{'PT_Enter_ContBtchSer'|translate}}" (blur)="onLotChange()" name="PT_Enter_ContBtchSer"
-                    [(ngModel)]="PT_Enter_ContBtchSer">
-                </div>
-                <div *ngIf="currentStep == 4" class="item-input-section">
-                  <input #focusOnQty type="number" placeholder="{{'PT_EnterQty'|translate}}" min=0 (blur)="onQtyChange()" name="pickQty" [(ngModel)]="pickQty">
-                </div> -->
-                <!--/ step inputs -->
-
+                
                 <!-- step input option icons -->
                 <div class="step-flex">
                   <div class="keyboard-box step-flex-item">
@@ -68,7 +60,7 @@
                       <i class="k-icon k-i-group-box" aria-hidden="true"></i>
                     </div>
                   </div>
-                  <div class="or-class step-flex-item" *ngIf="currentStep != 4">
+                  <div class="or-class step-flex-item">
                     <span class="or-text">OR</span>
                     <span class="or-line"></span>
                   </div>
@@ -76,9 +68,10 @@
                     <div class="bar-code">
                       <i class="k-icon k-i-greyscale" aria-hidden="true"></i>
                     </div>
-                    <div class="text-center scan-text">{{currentStepText}}</div>
+                    
                   </div>
                 </div>
+                <div class="text-center scan-text">{{currentStepText}}</div>
                 <!--/ step input option icons -->
               </div>
 

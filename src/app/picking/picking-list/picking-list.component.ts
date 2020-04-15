@@ -108,11 +108,11 @@ export class PickingListComponent implements OnInit {
     this.confiParams = JSON.parse(localStorage.getItem('ConfigurationParam'));
     let result = this.confiParams.find(e => e.OPTM_PARAM_NAME == "Param_Picking_Process" && e.OPTM_PARAM_VALUE == "Push-Automatic")
     if (result != undefined) {
-      // localStorage.setItem("ShipDetail", JSON.stringify(dataItem));
-      // localStorage.setItem("From", "shiplist");
-      // localStorage.setItem("TaskDetail", "");
-      // localStorage.setItem("Param", "Auto");
-      // this.router.navigate(['home/picking/picking-item-details']);
+      localStorage.setItem("ShipDetail", JSON.stringify(dataItem));
+      localStorage.setItem("From", "shiplist");
+      localStorage.setItem("TaskDetail", "");
+      localStorage.setItem("Param", "Auto");
+      this.router.navigate(['home/picking/picking-item-details']);
     }else{
       localStorage.setItem("Param", "");
     }
@@ -176,6 +176,7 @@ export class PickingListComponent implements OnInit {
     localStorage.setItem("PickTypeKey", this.PackTypeKeyList[this.pickTypeIndex]);
     this.pickTypeIndex = this.pickTypeIndex + 1;
     if (event == this.PackTypeList[2]) {
+      
     }
     this.GetPicklist(this.pickTypeIndex);
     localStorage.setItem("PickType", event);

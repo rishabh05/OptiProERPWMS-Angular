@@ -509,5 +509,7 @@
   "Tote": "Tote",
   "EnterTote": "Enter/Scan Tote",
   "NoNextPick": "There is no next pick available to process.",
+  "Container_Detail":"Container Detail",
+  "ScanLoadLoc":"Scan Load Location",
   "Dummy": "Dummy"
 }
