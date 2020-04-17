@@ -237,10 +237,10 @@ export class Commonservice {
 
   }
 
-  CancelPickList(OPTM_PICKLIST_CODE): Observable<any> {
+  CancelPickList(OPTM_PICKLIST_CODE, compId): Observable<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
-        CompanyDBId: localStorage.getItem("CompID"),
+        CompanyDBId: compId,
         OPTM_PICKLIST_CODE: OPTM_PICKLIST_CODE
       }])
     };

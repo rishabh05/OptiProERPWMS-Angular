@@ -26,6 +26,7 @@ export class PickingItemDetailsComponent implements OnInit {
   PickTaskDetail: any;
   showLookupLoader: boolean = true;
   showLoader: boolean = false;
+  compId = "";
   threeSteps: boolean = true;
   IsContPicking: boolean = false;
   pickTaskName: string;
@@ -66,6 +67,7 @@ export class PickingItemDetailsComponent implements OnInit {
   whsCode: string;
   UserGrp: string;
   BatchSerDetail: any;
+  pickedAllDty = false;
 
   @ViewChild('focusOnSerNo') focusOnSerNo;
   @ViewChild('focusOnItemCode') focusOnItemCode;
@@ -94,7 +96,7 @@ export class PickingItemDetailsComponent implements OnInit {
   ngOnInit() {
     this.ShipmentList[0] = JSON.parse(localStorage.getItem("ShipDetail"));
     this.PickListSteps = JSON.parse(localStorage.getItem("PickListSteps"));
-
+    this.compId = localStorage.getItem("CompID");
     this.PickOperationList = ["", "Pick_To_Tote", "Pick_To_Container", ""];
     // this.ShipmentList[0] = this.ShipmentList[0];
     if (localStorage.getItem("TaskDetail") != undefined && localStorage.getItem("TaskDetail") != "" && localStorage.getItem("TaskDetail") != "null") {
@@ -355,9 +357,9 @@ export class PickingItemDetailsComponent implements OnInit {
       this.stepIndex = this.stepIndex + 1;
       if (this.stepIndex >= 0 && this.stepIndex < this.CurrentTaskSteps.length) {
         this.currentStep = this.getStepNo(this.CurrentTaskSteps[this.stepIndex].OPTM_STEP_CODE);
-        if (this.stepIndex == this.CurrentTaskSteps.length - 1) {
-          this.LastStep = this.currentStep;
-        }
+        // if (this.stepIndex == this.CurrentTaskSteps.length - 1) {
+        //   this.LastStep = this.currentStep;
+        // }
       }
       this.setStepfocus();
       this.changeText(this.currentStep)
@@ -386,12 +388,12 @@ export class PickingItemDetailsComponent implements OnInit {
       if (this.stepIndex >= 0 && this.stepIndex < this.CurrentTaskSteps.length) {
         if (this.CurrentTaskSteps[this.stepIndex].OPTM_ITERATE == "Y") {
           this.currentStep = this.getStepNo(this.CurrentTaskSteps[this.stepIndex].OPTM_STEP_CODE);
-          if (this.stepIndex == this.CurrentTaskSteps.length - 1) {
-            this.LastStep = this.currentStep;
-          }
+          // if (this.stepIndex == this.CurrentTaskSteps.length - 1) {
+          //   this.LastStep = this.currentStep;
+          // }
         } else {
           if (this.stepIndex == this.CurrentTaskSteps.length - 1) {
-            this.LastStep = this.currentStep;
+           // this.LastStep = this.currentStep;
             this.checkIfQtyFullFiled()
           } else {
             this.nextSteptoIterate();
@@ -728,15 +730,26 @@ export class PickingItemDetailsComponent implements OnInit {
       this.nextSteptoIterate();
       return;
     } else {
+      if (this.stepIndex == this.CurrentTaskSteps.length - 1) {
+        this.LastStep = this.currentStep;
+        this.pickedAllDty = true;
+      }
       this.toastr.success('', this.translate.instant("AllQtyPickedMsg"));
     }
   }
 
   onSaveClick() {
+    this.pickedAllDty = false;
     if (Number(this.totalpickQty) != Number(this.openQty)) {
       this.toastr.error('', this.translate.instant("QtyNotFullFillMsg"));
       return;
     }
+
+    if(this.ScannedContOrTote == "" || this.ScannedContOrTote == undefined){
+      this.toastr.error('', this.translate.instant("CCBlankMsg"));
+      return;
+    }
+
     this.preparePickTaskData();
     this.clearStepsFields();
     this.PT_Enter_Location = "";
@@ -918,7 +931,7 @@ export class PickingItemDetailsComponent implements OnInit {
       return;
     }
     this.showLoader = true;
-    this.commonservice.CancelPickList(this.ShipmentList[0].OPTM_PICKLIST_CODE).subscribe(
+    this.commonservice.CancelPickList(this.ShipmentList[0].OPTM_PICKLIST_CODE, this.compId).subscribe(
       (data: any) => {
         this.showLoader = false;
         if (data != undefined) {
