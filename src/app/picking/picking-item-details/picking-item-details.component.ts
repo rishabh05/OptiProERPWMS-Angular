@@ -528,6 +528,7 @@ export class PickingItemDetailsComponent implements OnInit {
               this.toastr.success('', this.translate.instant("Cont_Accepted"));
               if (Number(this.totalpickQty) == Number(this.openQty)) {
                 this.toastr.success('', this.translate.instant("AllQtyPickedMsg"));
+                this.checkIfQtyFullFiled();
               } else {
                 this.clearStepsFields();
                 this.nextSteptoIterate();
@@ -745,10 +746,10 @@ export class PickingItemDetailsComponent implements OnInit {
       return;
     }
 
-    if(this.ScannedContOrTote == "" || this.ScannedContOrTote == undefined){
-      this.toastr.error('', this.translate.instant("CCBlankMsg"));
-      return;
-    }
+    // if(this.ScannedContOrTote == "" || this.ScannedContOrTote == undefined){
+    //   this.toastr.error('', this.translate.instant("CCBlankMsg"));
+    //   return;
+    // }
 
     this.preparePickTaskData();
     this.clearStepsFields();

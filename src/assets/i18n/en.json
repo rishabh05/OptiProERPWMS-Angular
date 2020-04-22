@@ -259,7 +259,7 @@
   "AddToGRPO": "Add To GRPO",
   "AddToDeleiver": "Add To Delivery",
   "Deleiver": "Deliver",
-  "DeleiverySuccess": "Item delivery successful",
+  "DeleiverySuccess": "Shipment delivered",
   "DoYouWantToDeleteConf": "Do you want to delete?",
   "All": "All",
   "Current": "Current",
@@ -421,7 +421,7 @@
   "Plt_PalletizeErrMsg": "System is facing problem in palletize operation. Please try again.",
   "Plt_TransferErrMsg": "System is facing problem in transfer operation. Please try again.",
   "outbound_Delivery": "Delivery",
-  "Outbound_Delivery_through_Shipment": "Delivery by Shipment",
+  "Outbound_Delivery_through_Shipment": "Deliver Shipments",
   "outbound_Dock_DoorNo": "Dock Door Code",
   "Outbound_Dock_Door_List": "Dock Door List",
 
@@ -511,5 +511,6 @@
   "NoNextPick": "There is no next pick available to process.",
   "Container_Detail":"Container Detail",
   "ScanLoadLoc":"Scan Load Location",
+  "NoRecord": "Please save record to submit.",
   "Dummy": "Dummy"
 }

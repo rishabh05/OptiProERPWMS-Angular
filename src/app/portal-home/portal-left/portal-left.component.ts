@@ -55,13 +55,13 @@ export class PortalLeftComponent implements OnInit {
         this.selectedThemeColor = data;
       }
     );
-    
+
     this.getAllMenus();
     this.GetConfigurationParam();
     UIHelper.manageNavigationPanel(document.getElementById('sidebarCollapse-alt'));
   }
 
-  GetConfigurationParam(){
+  GetConfigurationParam() {
     this.commonService.GetConfigurationParam().subscribe(
       data => {
         if (data != null && data.OPTM_CONF_PARAM != undefined) {
@@ -176,10 +176,15 @@ export class PortalLeftComponent implements OnInit {
       localStorage.setItem("PickListSteps", "");
     } else if (module == "ShpLoading") {
       localStorage.setItem("PickListSteps", "");
+    } else if (module == "shipment") {
+      this.goToLink("http://localhost:6601/#/home/dashboard");
     }
     this.router.navigate(['home/' + module]);
   }
 
+  goToLink(url: string) {
+    window.open(url, "_blank");
+  }
   /** 
    * 
    */
