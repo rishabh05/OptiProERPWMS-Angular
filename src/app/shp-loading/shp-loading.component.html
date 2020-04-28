@@ -85,7 +85,9 @@
 
               <!-- step bars -->
               <div class="item-steps-bar">
-                <span *ngFor="let c of PickListSteps" [ngClass]="{active:currentStep == 1}" class="step"></span>
+                <ng-container  *ngFor="let c of PickListSteps; let i =index" >
+                <span [ngClass]="{active:currentStep == i+1}" class="step"></span>
+              </ng-container>
                 <!-- <span [ngClass]="{active:currentStep == 1}" class="step"></span>
                 <span [ngClass]="{active:currentStep == 2}" class="step"></span> -->
               </div>
@@ -96,7 +98,8 @@
       </div>
     </div>
     <div class="fix-footer-btnBar">
-      <div class="col-sm-12 col-12">
+      <div class="col-sm-12 col-12">       
+         
         <button class="btn btn-outline-secondary btn-sm btn-transparent btn-icon mr-1" type="button" (click)="OnCancelClick()">
           <i class="opti-icon-arrow-back"></i>
         </button>

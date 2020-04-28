@@ -100,7 +100,10 @@
 
                             <!-- step bars -->
                             <div class="item-steps-bar">
-                                <span *ngFor="let c of CurrentTaskSteps" [ngClass]="{active:currentStep == 1}" class="step"></span>
+                                    <ng-container  *ngFor="let c of CurrentTaskSteps; let i =index" >
+                                            <span [ngClass]="{active:currentStep == i+1}" class="step"></span>
+                                          </ng-container>
+                                <!-- <span *ngFor="let c of CurrentTaskSteps" [ngClass]="{active:currentStep == 1}" class="step"></span> -->
                                 <!-- <span [ngClass]="{active:currentStep == 2}" class="step"></span>
                                 <span [ngClass]="{active:currentStep == 3}" class="step"></span>
                                 <span *ngIf="this.OPTM_Tracking == 'N' && currentStep == 4" [ngClass]="{active:currentStep == 4}" class="step"></span>
