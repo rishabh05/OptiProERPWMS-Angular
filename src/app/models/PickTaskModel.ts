@@ -11,8 +11,9 @@ export class PickTaskModel {
     public OPTM_USER: string;
     public OPTM_TOTE_NUMBER: string;
     public OPTM_ISCONT: string;
+    public OPTM_IS_CONT_CREATED: boolean;
 
-    constructor(OPTM_ShipId: string, OPTM_PickTaskId: string, OPTM_Whs: string, OPTM_Location: string, OPTM_ContBtchSer: string, OPTM_Qty: number, Container, OPTM_USER, OPTM_ISCONT, toteValue
+    constructor(OPTM_ShipId: string, OPTM_PickTaskId: string, OPTM_Whs: string, OPTM_Location: string, OPTM_ContBtchSer: string, OPTM_Qty: number, Container, OPTM_USER, OPTM_ISCONT, toteValue, OPTM_IS_CONT_CREATED
     ) {
         this.CompanyDBId = localStorage.getItem("CompID");
         this.OPTM_PICKLIST_CODE = OPTM_ShipId;
@@ -25,5 +26,6 @@ export class PickTaskModel {
         this.OPTM_USER = OPTM_USER;
         this.OPTM_TOTE_NUMBER= toteValue;
         this.OPTM_ISCONT = OPTM_ISCONT;
+        this.OPTM_IS_CONT_CREATED = OPTM_IS_CONT_CREATED;
     }
 }

@@ -65,13 +65,14 @@ export class PickTaskService {
    * check and scan code.
    * @param whsCode 
    */
-  GetNextPickList(OPTM_WHSECODE: string, OPTM_PICKTYPE, OPTM_USERGRP) {
+  GetNextPickList(OPTM_WHSECODE: string, OPTM_PICKTYPE, OPTM_USERGRP, OPTM_PICKLIST_ID) {
     var jObject = {
       PalletCode: JSON.stringify([{
         OPTM_WHSECODE: OPTM_WHSECODE,
         OPTM_USERGRP: OPTM_USERGRP,
         OPTM_PICKTYPE: OPTM_PICKTYPE,
-        CompanyDBId: localStorage.getItem("CompID")
+        CompanyDBId: localStorage.getItem("CompID"),
+        OPTM_PICKLIST_ID: OPTM_PICKLIST_ID
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetNextPickList", jObject, this.commonService.httpOptions);

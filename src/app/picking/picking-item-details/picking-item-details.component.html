@@ -3,9 +3,11 @@
         <div class="opti_container_inner" [perfectScrollbar]=" ">
             <div>
                 <div *ngFor="let item of ShipmentList" class="custom-card-view">
+
                     <a class="custom-task-btn k-button btn-success" (click)="showPickTaskList(dataItem)">
                         <i class=" k-icon k-i-track-changes"></i>
                     </a>
+
                     <div class="custom-dl-list">
                         <dt>{{'PickListCode'|translate}}</dt>
                         <dd>{{item.OPTM_PICKLIST_CODE}}</dd>
@@ -37,8 +39,9 @@
                                 <label for="inputPassword" class="col-sm-4 col-form-label">{{ContainerToteTitle}}</label>
                                 <div class="col-sm-8">
                                     <div class="input-group input-group-sm">
-                                        <input #scanPTshipmentId type="text" class="form-control form-control-sm" id="CreatedContOrTote" name="CreatedContOrTote" [(ngModel)]="CreatedContOrTote"
-                                            placeholder="{{ContainerTotePlaceHolder}}" (blur)="CreateContainerOrTote()" [disabled]=containercreated>
+                                        <input #scanPTshipmentId type="text" class="form-control form-control-sm" id="CreatedContOrTote" name="CreatedContOrTote"
+                                            [(ngModel)]="CreatedContOrTote" placeholder="{{ContainerTotePlaceHolder}}" (blur)="CreateContainerOrTote()"
+                                            [disabled]=containercreated>
                                     </div>
                                 </div>
                             </div>
@@ -59,11 +62,13 @@
                                         [(ngModel)]="PT_Enter_ContBtchSer" [disabled]=pickedAllDty>
                                 </div>
                                 <div *ngIf="currentStep == 4" class="item-input-section">
-                                    <input #focusOnQty type="number" placeholder="{{'PT_EnterQty'|translate}}" min=0 (blur)="onQtyChange()" name="pickQty" [(ngModel)]="pickQty" [disabled]=pickedAllDty>
+                                    <input #focusOnQty type="number" placeholder="{{'PT_EnterQty'|translate}}" min=0 (blur)="onQtyChange()" name="pickQty" [(ngModel)]="pickQty"
+                                        [disabled]=pickedAllDty>
                                 </div>
                                 <div *ngIf="currentStep == 5" class="item-input-section">
-                                    <input #focusOnScanCont type="text" placeholder="{{ContainerCodePlaceholderValue}}" (blur)="ConfirmContainerOrTote()" name="ScannedContOrTote" [(ngModel)]="ScannedContOrTote" [disabled]=pickedAllDty>
-                                </div>                                
+                                    <input #focusOnScanCont type="text" placeholder="{{ContainerCodePlaceholderValue}}" (blur)="ConfirmContainerOrTote()" name="ScannedContOrTote"
+                                        [(ngModel)]="ScannedContOrTote" [disabled]=pickedAllDty>
+                                </div>
                                 <!--/ step inputs -->
 
                                 <!-- step input option icons -->
@@ -84,12 +89,12 @@
                                         </div>
                                         <!-- <div class="text-center scan-text">{{currentStepText}}</div> -->
                                     </div>
-                                    
+
                                 </div>
                                 <!--/ step input option icons -->
                             </div>
                             <div *ngIf="currentStep != 4" class="text-center scan-text">{{currentStepText}}</div>
-                              <br>
+                            <br>
                             <!-- step navigation Arrow placement -->
                             <div>
                                 <i *ngIf="currentStep > 1" (click)="prevStep()" class="k-icon k-i-arrow-chevron-left" aria-hidden="true"></i>
@@ -121,6 +126,9 @@
                 </button>
                 <button class="btn btn-success k-button btn-sm btn-icon-with-text" type="button" (click)="onSubmitClick()">
                     <span class="k-icon k-i-check" role="presentation"></span>{{'Submit'|translate}}</button>
+
+                <button class="btn btn-success k-button btn-sm btn-icon-with-text" type="button" (click)="getNextPick()">
+                    <span role="presentation"></span>Next Pick</button>
             </div>
         </div>
     </form>
