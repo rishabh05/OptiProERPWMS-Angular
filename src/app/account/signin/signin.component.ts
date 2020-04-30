@@ -242,7 +242,8 @@ export class SigninComponent implements OnInit {
                     localStorage.setItem("CompID", this.selectedItem);
                     localStorage.setItem("whseId", this.selectedWhse);
                     localStorage.setItem("Token", this.licenseData[0].Token);
-                    localStorage.setItem("PalletizationEnabled", this.licenseData[0].PalletizationEnabled);
+                    localStorage.setItem("PalletizationEnabled", "True");
+                    //localStorage.setItem("isShipmentApplicable","True");
                     localStorage.setItem("AutoPalletIdGenerationChecked", this.licenseData[0].AutoPalletIdGenerationChecked);
 
                     localStorage.setItem("DefaultValues", JSON.stringify(this.licenseData[0].DefaultValues));

@@ -16,7 +16,7 @@
                   placeholder="{{'Plt_FromPalletNo'|translate}}" (blur)="onPalletChange('from_pallet')">
                 <div class="input-group-append">
                   <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="getFromPalletList('from_pallet')">
-                    <i class="opti-icon-hammenu"></i>
+                    <i class="opti-icon-search"></i>
                   </button>
                 </div>
                 <div class="ml-1 d-flex">
@@ -39,7 +39,7 @@
                   placeholder="{{'Plt_ToPalletNo'|translate}}" (blur)="onPalletChange('to_pallet')">
                 <div class="input-group-append">
                   <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="getPalletList('to_pallet')">
-                    <i class="opti-icon-hammenu"></i>
+                    <i class="opti-icon-search"></i>
                   </button>
                 </div>
                 <div class="ml-1 d-flex">
@@ -89,7 +89,7 @@
                   [(ngModel)]="itemCode" (blur)="OnItemCodeChange()">
                 <div class="input-group-append  has-seprate-btn">
                   <button class="k-button k-primary btn" type="button" (click)="OnItemCodeLookupClick()">
-                    <i class="opti-icon-hammenu"></i>
+                    <i class="opti-icon-search"></i>
                   </button>
 
                   <button id="PalSplit_ItemScanButton" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
@@ -115,7 +115,7 @@
                   [(ngModel)]="batchSerialNo" (blur)="OnLotsChange()" placeholder="{{'BatchSerial_No'|translate}}">
                 <div class="input-group-append has-seprate-btn">
                   <button class="k-button k-primary btn" (click)="OnBatchSerialLookupClick()" type="button">
-                    <i class="opti-icon-hammenu"></i>
+                    <i class="opti-icon-search"></i>
                   </button>
                   <button id="PalSplit_BatchSerialScanButton" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
                     type="button">

@@ -671,10 +671,21 @@ export class OutOrderComponent implements OnInit {
           both:
           for(let index = 0; index < arrSODETAIL.length; index++){
             const e1 = arrSODETAIL[index];
-            if(o.Item.TRACKING == "S"){
-              if (e1.LotNumber === o.Meterial.LOTNO && e1.Bin === o.Meterial.BINNO) {
+            if(o.Item.TRACKING == "S" || o.Item.TRACKING == "N"){
+                //=====when its serial tracked then check already added start===
+              if (o.Item.TRACKING == "S") {
+               if (e1.LotNumber === o.Meterial.LOTNO && e1.Bin === o.Meterial.BINNO) {
+                hasDetail = true; //need to show error
+               }
+              }
+            //=====when its serial tracked then check already added end===
+            //=====when its non tracked then check already added start===
+            if (o.Item.TRACKING == "N") {
+              if (e1.Bin === o.Meterial.BINNO) {
                 hasDetail = true; //need to show error
               }
+            }
+            //=====when its non tracked then check already added end===
             }else{
               for(let idx = 0; idx < arrSOHEADER.length; idx++){
                   const headerElement =arrSOHEADER[idx]

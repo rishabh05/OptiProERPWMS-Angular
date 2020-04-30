@@ -473,6 +473,13 @@
   "DockDoorConfirmMessage": "Please Confirm your delivery with the correct Dock Door!",
   "ContainerCode":"Container Code",
   "ContainerType":"Container Type",
-
+  "ByContainer": "By Container",
+  "Container": "Container",
+  "ContainerList":"Container List",
+  "ContainerRequired": "Container Code field cannot be blank.",
+  "ContainerAlreadySelected": "Container already selected. Choose another Container. ",
+  "InValidContainerCode": "Invalid Container code",
+  "SelectedContainers": "Selected Containers",
+  "Option_Shipment": "Shipment",
   "Dummy": "Dummy"
 }

@@ -651,4 +651,25 @@ export class Commonservice {
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetPalletsWithRowsPresent", jObject, this.httpOptions);
   }
+
+  GetContainerWithRowsPresent(): Observable<any> {
+    var jObject = {
+      PalletCode: JSON.stringify([{
+        COMPANYDBNAME: localStorage.getItem("CompID"), 
+        WhseCode: localStorage.getItem("whseId")
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetContainersWithRowsPresent", jObject, this.httpOptions);
+  }
+
+  GetContainerDataForWhseTrns(containerCode: string): Observable<any> {
+    var jObject = {
+      PalletCode: JSON.stringify([{
+        COMPANYDBNAME: localStorage.getItem("CompID"),
+        CONTAINERCODE: containerCode,
+        WhseCode: localStorage.getItem("whseId")
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetContainerDataForWhseTrns", jObject, this.httpOptions);
+  }
 }

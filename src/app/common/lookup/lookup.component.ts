@@ -167,6 +167,9 @@ export class LookupComponent implements OnInit {
     } else if (this.lookupfor == "DockDoorList"){
       this.showDockDoorList();
     }
+    else if (this.lookupfor == "ContainerList"){
+      this.containerList();
+    }
 
     this.clearFilters();
     this.isColumnFilter = false
@@ -771,6 +774,24 @@ export class LookupComponent implements OnInit {
       // }
     ];
     this.lookupTitle = this.translate.instant("Plt_PalletList");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
+
+  containerList() {
+    this.table_head = [
+      {
+        field: 'OPTM_CONTCODE',
+        title: this.translate.instant("ContainerCode"),
+        type: 'text',
+        width: '100'
+      }
+     
+    ];
+    this.lookupTitle = this.translate.instant("ContainerList");
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
         this.dialogOpened = true;

@@ -16,7 +16,7 @@
                   [(ngModel)]="itemCode" (blur)="OnItemCodeChange()">
                 <div class="input-group-append  has-seprate-btn">
                   <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="OnItemCodeLookupClick()">
-                    <i class="opti-icon-hammenu"></i>
+                    <i class="opti-icon-search"></i>
                   </button>
 
                   <button tabIndex="-1" id="palletize_ItemScanBtn" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
@@ -40,7 +40,7 @@
                   (blur)="OnLotsChange()" #BatchNoInput name='batchSrNo' placeholder="{{'BatchSerial_No'|translate}}">
                 <div class="input-group-append has-seprate-btn">
                   <button tabIndex="-1" class="k-button k-primary btn" (mousedown)="OnBatchSerialLookupClick()" type="button">
-                    <i class="opti-icon-hammenu"></i>
+                    <i class="opti-icon-search"></i>
                   </button>
                   <button tabIndex="-1" id="palletize_BatchSrScanBtn" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
                     type="button">
@@ -63,7 +63,7 @@
                   placeholder="{{'Plt_PalletNo'|translate}}">
                 <div class="input-group-append has-seprate-btn">
                   <button tabIndex="-1" class="k-button k-primary btn" (mousedown)="getPalletList()" type="button">
-                    <i class="opti-icon-hammenu"></i>
+                    <i class="opti-icon-search"></i>
                   </button>
                   <button tabIndex="-1" type="button" id="palletize_PalletScanBtn" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                     <i class="opti-icon-qr-code fs-24"></i>
