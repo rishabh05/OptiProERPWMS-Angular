@@ -304,6 +304,17 @@ export class Commonservice {
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/IsPalletValid", jObject, this.httpOptions).toPromise();
   }
 
+  isContainerValid(containerCode: string): Promise<any> {
+    var jObject = {
+      PalletCode: JSON.stringify([{
+        COMPANYDBNAME: localStorage.getItem("CompID"),
+        WhseCode: localStorage.getItem("whseId"),
+        PalletCode: containerCode
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/IsPalletValid", jObject, this.httpOptions).toPromise();
+  }
+
   getItemCodeList(): Observable<any> {
     var jObject = { ITEMCODE: '', ITEMNAME: '', WHSCODE: localStorage.getItem("whseId"), CompanyDBName: localStorage.getItem("CompID") }
     return this.httpclient.post(this.config_params.service_url + "/api/GoodsIssue/AllItemLookup", jObject, this.httpOptions);
@@ -664,6 +675,28 @@ export class Commonservice {
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetPalletsWithRowsPresent", jObject, this.httpOptions);
+  }
+  
+  GetContainerWithRowsPresent(containerId:any): Observable<any> {
+    var jObject = {
+      PalletCode: JSON.stringify([{
+        COMPANYDBNAME: localStorage.getItem("CompID"), 
+        WhseCode: localStorage.getItem("whseId"),
+        ContainerCode: containerId
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetContainersWithRowsPresent", jObject, this.httpOptions);
+  }
+
+  GetContainerDataForWhseTrns(containerCode: string): Observable<any> {
+    var jObject = {
+      PalletCode: JSON.stringify([{
+        COMPANYDBNAME: localStorage.getItem("CompID"),
+        CONTAINERCODE: containerCode,
+        WhseCode: localStorage.getItem("whseId")
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetContainerDataForWhseTrns", jObject, this.httpOptions);
   }
 
   onShipmentIDChange(OPTM_SHIPMENT_CODE): Observable<any> {

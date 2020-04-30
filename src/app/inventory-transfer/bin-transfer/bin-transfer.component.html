@@ -5,7 +5,7 @@
             <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
                 {{PageTitle}}
             </h3>
-            <div class="row" *ngIf="isPalletizationEnable">
+            <div class="row" *ngIf="(isPalletizationEnable || isShipmentContainerEnable)">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6" *ngIf="showBinFields">
                     <div class="row mt-3">
                         <!-- <label for="inputPassword" class="col-sm-3 col-form-label">{{'ScanInputs'|translate}}</label> -->
@@ -13,16 +13,19 @@
                             <fieldset class="d-block w-100">
                                 <div class="d-flex align-items-center w-100">
                                     <div class="d-flex align-items-center" (mousedown)="onRadioMouseDown('byItem')">
-                                            <!-- (click)="handleCheckChange($event)" -->
-
                                         <input type="radio" #byItemRadio name="byItem"  id="byItem" (click)="handleCheckChange($event)"
                                             class="k-radio" [checked]="radioSelected == 0"   />
                                         <label class="k-radio-label" for="byItem">{{'Plt_ByItem'|translate}}</label>
                                     </div>
-                                    <div class="d-flex align-items-center ml-3" (mousedown)="onRadioMouseDown('byPallet')">
+                                    <div *ngIf="isPalletizationEnable" class="d-flex align-items-center ml-3" (mousedown)="onRadioMouseDown('byPallet')">
                                         <input type="radio" #byItemRadio name="byPlt"
                                             id="byPallet" class="k-radio" (click)="handleCheckChange($event)" [checked]="radioSelected == 1"  />
                                         <label class="k-radio-label" for="byPallet">{{'Plt_ByPallet'|translate}}</label>
+                                    </div>
+                                    <div  *ngIf="isShipmentContainerEnable" class="d-flex align-items-center ml-3" (mousedown)="onRadioMouseDown('ByContainer')">
+                                        <input type="radio" #byContainerRadio name="ByContainer"
+                                            id="ByContainer" class="k-radio" (click)="handleCheckChange($event)" [checked]="radioSelected == 2"  />
+                                        <label class="k-radio-label" for="byContainer">{{'ByContainer'|translate}}</label>
                                     </div>
                                 </div>
                             </fieldset>
@@ -30,6 +33,8 @@
                     </div>
                 </div>
             </div>
+
+            <!--if selected radio is  by item start -->
             <div class="row mt-3" *ngIf="radioSelected == 0">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
                     <div class="form-group row">
@@ -42,7 +47,7 @@
                                 <div class="input-group-append">
                                     <button tabIndex="-1" class="k-button k-primary btn" type="button"
                                         (mousedown)="OnItemCodeLookupClick()">
-                                        <i class="opti-icon-hammenu"></i>
+                                        <i class="opti-icon-search"></i>
                                     </button>
                                 </div>
                                 <div class="ml-1 d-flex">
@@ -77,7 +82,7 @@
                                     (blur)="OnLotChangeBlur()">
                                 <div class="input-group-append">
                                     <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="ShowLOTList()">
-                                        <i class="opti-icon-hammenu"></i>
+                                        <i class="opti-icon-search"></i>
                                     </button>
                                 </div>
                                 <div class="ml-1 d-flex">
@@ -99,7 +104,7 @@
                                     [(ngModel)]="fromBin" (blur)="OnFromBinChangeBlur()">
                                 <div class="input-group-append">
                                     <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="ShowFromBins()">
-                                        <i class="opti-icon-hammenu"></i>
+                                        <i class="opti-icon-search"></i>
                                     </button>
                                 </div>
                                 <div class="ml-1 d-flex">
@@ -121,7 +126,7 @@
                                     (blur)="OnToBinChangeBlur()">
                                 <div class="input-group-append">
                                     <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="ShowToBins()">
-                                        <i class="opti-icon-hammenu"></i>
+                                        <i class="opti-icon-search"></i>
                                     </button>
                                 </div>
                                 <div class="ml-1 d-flex">
@@ -164,6 +169,10 @@
                 </div>
             </div>
 
+            <!--if selected radio is  by item end -->
+
+
+            <!--if selected radio is  by pallet start -->
             <div class="row mt-3" *ngIf="radioSelected == 1"> 
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
                     <div class="form-group row">
@@ -175,18 +184,19 @@
                                     (blur)="onPalletChangeBlur()">
                                 <div class="input-group-append has-seprate-btn">
                                     <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="getPalletList()">
-                                        <i class="opti-icon-hammenu"></i>
+                                        <i class="opti-icon-search"></i>
                                     </button>
-                                    <button tabIndex="-1" class="k-button k-primary btn separate-btn" type="button"
-                                        (mousedown)="showSelectedPallets()" *ngIf="selectedPallets.length>0">
-                                        <i class="opti-icon-view-batch mr-1"></i>{{'Plt_Pallets'|translate}}
-                                    </button>
-                                </div>
+                                   
+                                </div> 
                                 <div class="ml-1 d-flex">
                                     <button tabIndex="-1" type="button" id="binTransferByPalletPalletNoScanBtn" (mousedown)="onInboundScan()"
                                         class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
+                                    <button tabIndex="-1" class="k-button k-primary btn separate-btn" type="button"
+                                    (mousedown)="showSelectedPallets()" *ngIf="selectedPallets.length>0">
+                                    <i class="opti-icon-view-batch mr-1"></i>{{'Plt_Pallets'|translate}}
+                                </button>
                                 </div>
                             </div>
                         </div>
@@ -199,10 +209,10 @@
                             <div class="input-group input-group-sm">
                                 <input type="text" #scanToBinOther class="form-control form-control-sm" id="binTransferByPalletToBinNoInput"
                                     placeholder="{{'InvTransfer_ToBin'|translate}}" name="toBin" [(ngModel)]="toBin"
-                                    (blur)="OnToBinChangeBlur()">
+                                    (blur)="OnToBinChange()">
                                 <div class="input-group-append has-seprate-btn">
                                     <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="ShowToBins()">
-                                        <i class="opti-icon-hammenu"></i>
+                                        <i class="opti-icon-search"></i>
                                     </button>
                                     <div class="d-flex">
                                         <button tabIndex="-1" type="button" id="binTransferByPlletToBinScanbtn" (mousedown)="onInboundScan()"
@@ -213,7 +223,7 @@
                                     <button tabIndex="-1"  class="k-button k-primary btn separate-btn ml-1 custom-icon-button" type="button"
                                         *ngIf="!isNonTrack" (mousedown)="onAddPalletClick()">
                                         <span
-                                            class="k-icon k-i-plus-outline fs-12"></span>{{'Plt_Pallets'|translate}}
+                                            class="k-icon k-i-plus-outline fs-12 mr-1"></span>{{'Plt_Pallets'|translate}}
                                     </button>
                                 </div>
                             </div>
@@ -230,6 +240,83 @@
                     </div>
                 </div>
             </div>
+            <!--if selected radio is  by pallet end -->
+
+
+            
+            <!--if selected radio is  by pallet start -->
+            <div class="row mt-3" *ngIf="radioSelected == 2"> 
+                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'ContainerId'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input type="text" #scanPallet class="form-control form-control-sm" id= "binTransferScanContainerNoInput"
+                                    placeholder="{{'ContainerId'|translate}}" name="ContainerCode" [(ngModel)]="containerCode"
+                                    (blur)="onContainerChange()">
+                                <div class="input-group-append has-seprate-btn">
+                                    <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="getContainerList()">
+                                        <i class="opti-icon-search"></i>
+                                    </button>
+                                  
+                                </div>
+                                <div class="ml-1 d-flex">
+                                    <button tabIndex="-1" type="button" id="binTransferByPalletPalletNoScanBtn" (mousedown)="onInboundScan()"
+                                        class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                        <i class="opti-icon-qr-code fs-24 "></i>
+                                    </button>
+                                    <button tabIndex="-1" class="k-button k-primary btn separate-btn" type="button"
+                                    (mousedown)="showSelectedContainers()" *ngIf="selectedContainers.length>0">
+                                    <i class="opti-icon-view-batch mr-1"></i>{{'Container'|translate}}
+                                </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputPassword"
+                            class="col-sm-3 col-form-label">{{'InvTransfer_ToBin'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input type="text" #scanToBinOther class="form-control form-control-sm" id="binTransferByPalletToBinNoInput"
+                                    placeholder="{{'InvTransfer_ToBin'|translate}}" name="toBin" [(ngModel)]="toBin"
+                                    (blur)="OnToBinChangeBlur()">
+                                <div class="input-group-append has-seprate-btn">
+                                    <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="ShowToBins()">
+                                        <i class="opti-icon-search"></i>
+                                    </button>
+                                    <div class="d-flex">
+                                        <button tabIndex="-1" type="button" id="binTransferByPlletToBinScanbtn" (mousedown)="onInboundScan()"
+                                            class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                            <i class="opti-icon-qr-code fs-24"></i>
+                                        </button>
+                                    </div>
+                                    <button tabIndex="-1"  class="k-button k-primary btn separate-btn ml-1 custom-icon-button" type="button"
+                                        *ngIf="!isNonTrack" (mousedown)="onAddContainerClick()">
+                                        <span
+                                            class="k-icon k-i-plus-outline fs-12 mr-1"></span>{{'Container'|translate}}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputPassword"
+                            class="col-sm-3 col-form-label">{{'InvTransfer_Reason'|translate}}</label>
+                        <div class="col-sm-9">
+                            <input #scanReasonByPallet type="text" class="form-control form-control-sm"
+                                placeholder="{{'InvTransfer_Reason'|translate}}" name="Remarks" [(ngModel)]="Remarks">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--if selected radio is  by pallet end -->
+
+            
+
+            <!--if selected radio is  by container end -->
         </div>
         <div class="fix-footer-btnBar">
             <div class="col-sm-12 col-12">
@@ -241,7 +328,9 @@
 
                 <button type="button" class="btn btn-primary k-button btn-sm btn-icon-with-text" (mousedown)="AddLineLots('add')"
                     *ngIf="radioSelected==0">
-                    <span class="k-icon k-i-plus" role="presentation"></span> {{'AddMore'|translate}}</button>
+                    <span class="k-icon k-i-plus" role="presentation"></span> {{'AddMore'|translate}}
+                </button>
+
                 <button type="button" class="btn btn-primary k-button btn-sm btn-icon-with-text mr-1"
                     (mousedown)="ShowSavedData()">
                     <span class="k-icon k-i-preview" role="presentation"></span>
@@ -361,7 +450,7 @@
                             <kendo-grid-column media="(min-width: 768px)" field="ToBin"
                                 title="{{'InvTransfer_ToBin'|translate}}" [width]="160"></kendo-grid-column>
                             <kendo-grid-column media="(min-width: 768px)" field="Delete" headerClass="text-center"
-                                class="text-center" title="" width="30">
+                                class="text-center" title="" width="30" *ngIf="radioSelected == 0 || !(isPalletizationEnable || isShipmentContainerEnable)">
                                 <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                     <button type="button" class="btn btn-danger k-button btn-sm btn-icon"
                                         (mousedown)="ViewLinesRowDeleteClick(rowIndex, gridItem)">
@@ -381,12 +470,12 @@
             </div>
             <div class="col-sm-12 col-12">
 
-                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="deleteAll()">
+                <button *ngIf="radioSelected == 0 || !(isPalletizationEnable || isShipmentContainerEnable)" type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="deleteAll()">
                     <span class="k-icon k-i-delete" role="presentation"></span> {{'DeleteAll'|translate}}</button>
 
                 <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text" (click)="OnOKClick()">
                     <span class="k-icon k-i-check" role="presentation"></span> {{'Ok'|translate}}</button>
-
+                    
             </div>
         </div>
     </form>
@@ -477,6 +566,65 @@
             <span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
     </kendo-dialog-actions>
 </kendo-dialog>
+
+
+
+
+
+
+<!--Dialog for show selected Containers start-->
+<kendo-dialog [width]="750" *ngIf="containerDialogOpened" (close)="close('containerDialog')" [minWidth]="250">
+    <kendo-dialog-titlebar>
+        {{'SelectedContainers'|translate}}
+    </kendo-dialog-titlebar>
+    <kendo-grid [resizable]="true" [pageSize]="pageSize" [pageable]="pagable" [sortable]="true"
+        [filterable]=isColumnFilter [groupable]=isColumnGroup [selectable]="true" [data]="selectedContainers"
+        style="max-height:200px" class="no-shadow" #gridItem>
+
+        <!-- grid for mobile start -->
+        <kendo-grid-column media="(max-width: 767px)" title="{{'ContainerCode'|translate}}" class="opti_mobile-grid-td">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <dl class="opti_mobile_grid_dl">
+                    <dt>{{'ContainerId'|translate}}</dt>
+                    <dd>{{ dataItem.Code }}</dd>
+                </dl>
+                <dl class="opti_mobile_grid_dl">
+
+                    <dt class="d-flex align-items-center">
+                        <button class="btn btn-danger k-button btn-sm btn-icon ml-auto" type="button"
+                            (mousedown)="ContainerDeleteClick(rowIndex, gridItem)">
+                            <span class="k-icon k-i-delete"></span>
+                        </button>
+                    </dt>
+                </dl>
+            </ng-template>
+        </kendo-grid-column>
+        <!-- grid for mobile end -->
+
+        <kendo-grid-column media="(min-width: 768px)" field="Code" title="{{'ContainerCode'|translate}}">
+        </kendo-grid-column>
+        <kendo-grid-column media="(min-width: 768px)" field="" headerClass="text-center" class="text-center" width="40">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                <button class="btn btn-danger k-button btn-sm btn-icon" type="button"
+                    (mousedown)="ContainerDeleteClick(rowIndex, gridItem)">
+                    <span class="k-icon k-i-delete"></span>
+                </button>
+            </ng-template>
+        </kendo-grid-column>
+    </kendo-grid>
+    <kendo-dialog-actions class="text-right">
+        <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (mousedown)="close('containerDialog')">
+            <span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
+    </kendo-dialog-actions>
+</kendo-dialog>
+<!--Dialog for show selected Containers end-->
+
+
+
+
+
+
+
 
 <span [hidden]="showLookupLoader">
     <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
