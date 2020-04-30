@@ -185,7 +185,14 @@ export class OutCutomerComponent implements OnInit {
     return items;
   }
 
-  onCustomerCodeBlur() {
+  onCustomerCodeBlur(){
+    if(this.isValidateCalled){
+      return;
+    }
+    this.onCustomerCode();
+  }
+
+  async onCustomerCode(): Promise<any> {
     if (this.customerCode == undefined || this.customerCode == null || this.customerCode == '') {
       return
     }
@@ -193,15 +200,17 @@ export class OutCutomerComponent implements OnInit {
       this.orderCollection.length > 0) {
       return;
     }
- 
-
-    this.outboundservice.getCustomer(this.customerCode).subscribe(
+    var result = false;
+    await this.outboundservice.getCustomer(this.customerCode).then(
       resp => {
+        console.log("inside onCustomerCode outboundservice.getCustomer");
         if (resp.length == 0) {
           this.customerCode = null
           this.customerName = ''
           this.orderNumber = "";
           this.scanCustomerCode.nativeElement.focus()
+          this.toastr.error('', this.translate.instant("Outbound_CustomerExistMessge"));
+          result = false;
         }
         else {
           if (this.customerCode != resp[0].CUSTCODE) {
@@ -219,6 +228,7 @@ export class OutCutomerComponent implements OnInit {
           localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
           CurrentOutBoundData.CustomerData = outbound.CustomerData;
           this.outbound = outbound;
+          result = true;
         }
       },
       error => {
@@ -228,8 +238,10 @@ export class OutCutomerComponent implements OnInit {
         else {
           this.toastr.error('', error);
         }
+        result = false
       }
     );
+    return result
   }
 
   getLookupValue(lookupValue: any) {
@@ -445,6 +457,21 @@ export class OutCutomerComponent implements OnInit {
     )
   }
 
+  // openSelectedDeleveryItem($event){
+  //   console.log("selected delivery item"); 
+  //   localStorage.setItem("selectedSOAfterAddToDelivery", $event.selectedRows[0].dataItem.DOCNUM);
+  //   this.prepareTempCollectionForSelectedDelivery($event.selectedRows[0].dataItem.DOCNUM,$event.selectedRows[0].dataItem.DOCENTRY)
+    
+  // }
+
+  // async openCustSO(clearOrder: boolean = false) {
+  //   var result = await this.validateBeforeSubmit();
+  //   this.isValidateCalled = false;
+  //   console.log("validate result: " + result);
+  //   if (result != undefined && result == false) {
+  //     return;
+  //   }
+  // }
   /**
    * Open delivery detail screens after click on add to delivery item list.
    * @param $event 
@@ -456,11 +483,21 @@ export class OutCutomerComponent implements OnInit {
 
   }
 
-  public openCustSO(clearOrder: boolean = false) {
-
+  async openCustSO(clearOrder: boolean = false) {
+    var result = await this.validateBeforeSubmit();
+    this.isValidateCalled = false;
+    console.log("validate result: " + result);
+    if (result != undefined && result == false) {
+      return;
+    }
     // Clear otred data
     // if (this.outbound)
     //   this.outbound.OrderData = null;
+
+    if(this.customerCode == undefined || this.customerCode == ''){
+      return;
+    }
+
     if (this.orderNumber != null) {
       localStorage.setItem("IsSOAvailable", "True");
     }
@@ -838,15 +875,24 @@ export class OutCutomerComponent implements OnInit {
   public showSOIetDetail = false;
   public selectedCustomer: any;
 
-  public onOrderNoBlur() {
+  onOrderNoBlur(){
+    if(this.isValidateCalled){
+      return;
+    }
+    this.onOrderNo();
+  }
+  async onOrderNo(): Promise<any> {
     this.showLookup = false;
     if (this.orderNumber == "" || this.orderNumber == undefined) {
       return;
     }
     let whseId = localStorage.getItem("whseId");
     this.showLookupLoader = true;
-    this.outboundservice.GetCustomerDetailFromSO("", this.orderNumber, whseId).subscribe(
+    var result = false
+    await this.outboundservice.GetCustomerDetailFromSO("", this.orderNumber, whseId).then(
       resp => {
+        console.log("inside onOrderNo outboundservice.GetCustomerDetailFromSO");
+
         this.showLookupLoader = false;
         if (resp != null && resp != undefined && resp.length > 0) {
           if (resp[0].ErrorMsg == "7001") {
@@ -854,7 +900,7 @@ export class OutCutomerComponent implements OnInit {
             this.showLookupLoader = false;
             return;
           }
-
+          result = true
           this.customerCode = resp[0].CARDCODE
           this.customerName = resp[0].CARDNAME
 
@@ -902,14 +948,17 @@ export class OutCutomerComponent implements OnInit {
           this.toastr.error('', this.translate.instant("Outbound_InvalidSO"));
           this.orderNumber = "";
           this.scanSO.nativeElement.focus()
+          result = false
         }
 
       },
       error => {
         this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
         this.showLookupLoader = false;
+        result = false
       }
     );
+    return result
   }
 
   public openOrderLookup() {
@@ -959,7 +1008,23 @@ export class OutCutomerComponent implements OnInit {
     if (inputValue.length > 0) {
       this.customerCode = inputValue;
     }
-    this.onCustomerCodeBlur();
+    this.onCustomerCode();
+  }
+
+  isValidateCalled: boolean = false;
+  async validateBeforeSubmit():Promise<any>{
+    this.isValidateCalled = true;
+    var currentFocus = document.activeElement.id;
+    console.log("validateBeforeSubmit current focus: "+currentFocus);
+    
+    if(currentFocus != undefined){
+      if(currentFocus == "outCustomerCustomerCodeInput"){
+        return this.onCustomerCode();
+      }
+      else if(currentFocus == "outCustomerSOInput"){
+        return this.onOrderNo();
+      }
+    }
   }
 
 
@@ -1001,6 +1066,49 @@ export class OutCutomerComponent implements OnInit {
     localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
     this.router.navigateByUrl('home/outbound/outorder', { skipLocationChange: true });
   }
+
+
+
+
+
+  /**
+   * New This method create temp array for selected SO for furthre updation in that SO.
+   * @param selectedDocNum 
+   * @param selectedDocEntry 
+   */
+  // prepareTempCollectionForSelectedDelivery(selectedDocNum: any, selectedDocEntry: any) {
+  //   let deliveryDataForSelectedSO: any = [];
+  //   let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+
+  //   if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
+  //     this.outbound = JSON.parse(outboundData);
+  //     if (this.outbound != undefined && this.outbound != null) {
+  //       if (this.outbound && this.outbound.DeleiveryCollection !== undefined &&
+  //         this.outbound.DeleiveryCollection !== null) {
+  //         // create Order data object from selected Order.
+  //         var orderData: any = {
+  //           CARDCODE: this.outbound.CustomerData.CustomerCode,
+  //           CARDNAME: this.outbound.CustomerData.customerName, DOCDUEDATE: "04/24/2019",
+  //           DOCNUM: selectedDocNum.toString(), SHIPPINGTYPE: "", SHIPTOCODE: ""
+  //         }
+  //         // after we create delivery collection clear temp collection.
+  //         this.outbound.OrderData = orderData;
+  //         //create temp collection for selected delivery item..
+  //         for (let index = 0; index < this.outbound.DeleiveryCollection.length; index++) {
+  //           const d = this.outbound.DeleiveryCollection[index];
+  //           if (d.Item.DOCENTRY == selectedDocEntry && d.Order.DOCNUM == selectedDocNum) {
+  //             deliveryDataForSelectedSO.push(d);
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  //   // after we create delivery collection clear temp collection.
+  //   this.outbound.TempMeterials = deliveryDataForSelectedSO;
+  //   // //lsOutbound
+  //   localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+  //   this.router.navigateByUrl('home/outbound/outorder', { skipLocationChange: true });
+  // }
 
 
 

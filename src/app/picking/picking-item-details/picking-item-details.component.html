@@ -3,10 +3,12 @@
         <div class="opti_container_inner" [perfectScrollbar]=" ">
             <div>
                 <div *ngFor="let item of ShipmentList" class="custom-card-view">
+
                     <a class="custom-task-btn k-button btn-success" (click)="showPickTaskList(dataItem)">
                         <i class=" k-icon k-i-track-changes"></i>
                     </a>
-                    <div class="custom-dl-list"> 
+
+                    <div class="custom-dl-list">
                         <dt>{{'PickListCode'|translate}}</dt>
                         <dd>{{item.OPTM_PICKLIST_CODE}}</dd>
                     </div>
@@ -16,28 +18,6 @@
                     </div>
                 </div>
             </div>
-            <!-- <div class="new-custom-grid">
-                <kendo-grid [data]="ShipmentList" (cellClick)="onShipmentSelection($event)" [pageSize]="1" [skip]="skip">
-                    <kendo-grid-column [media]="mobileMedia" class="opti_mobile-grid-td">
-                        <ng-template kendoGridCellTemplate let-dataItem>
-                            <dl class="grid-mobile-card">
-                                <button class="task-btn" (click)="showPickTaskList(dataItem)">
-                                    <i class=" k-icon k-i-track-changes"></i>
-                                </button>
-                                <div class="di-list">
-                                    <dt>{{'PickListCode'|translate}}</dt>
-                                    <dd>{{ dataItem.OPTM_PICKLIST_CODE}}</dd>
-                                </div>
-                                <div class="di-list">
-                                    <dt>{{'TaskListCode'|translate}}</dt>
-                                    <dd>{{ dataItem.OPTM_TASK_CODE}}</dd>
-                                </div>
-                            </dl>
-                        </ng-template>
-                    </kendo-grid-column>
-                </kendo-grid>
-            </div> -->
-
             <div class="row">
                 <div class="col-12">
                     <div class="po-details-comp">
@@ -45,59 +25,96 @@
                             <span class="po-details">
                                 <div class="item-name-row">
                                     <span class="po-item-name">{{'Pick'|translate}}: {{pickTaskName}}</span>
-                                    <span class="po-item-name">{{index+1}}/{{totalPickTask}}</span>
+                                    <span class="po-item-name">{{completedTaskCount}}/{{totalPickTaskCount}}</span>
                                     <span>{{'Quantity'|translate}}: {{totalpickQty}}/{{openQty}}</span>
                                 </div>
                                 <span class="po-item-name">{{itemcodeLabel}}: {{itemcodeValue}}</span> &nbsp;&nbsp;
-                                <button (click)="ShowBatchSerials()">
+                                <button (click)="ShowBatchSerials()" *ngIf="!IsContPicking">
                                     <i class=" k-icon k-i-track-changes"></i>
                                 </button>
                                 <br>
                                 <span class="po-item-name">{{Location}}: {{locationValue}}</span>
                             </span>
+                            <div class="form-group row" *ngIf="addItemtoCont">
+                                <label for="inputPassword" class="col-sm-4 col-form-label">{{ContainerToteTitle}}</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group input-group-sm">
+                                        <input #scanPTshipmentId type="text" class="form-control form-control-sm" id="CreatedContOrTote" name="CreatedContOrTote"
+                                            [(ngModel)]="CreatedContOrTote" placeholder="{{ContainerTotePlaceHolder}}" (blur)="CreateContainerOrTote()"
+                                            [disabled]=containercreated>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="item-sec">
                             <div class="item-steps">
-                                <div *ngIf="currentStep == 1 && showLocation" class="item-input-section">
+                                <!-- step inputs -->
+                                <div *ngIf="currentStep == 1" class="item-input-section">
                                     <input #focusOnLocation type="text" placeholder="{{'PT_Enter_Location'|translate}}" (blur)="onLocationChange()" name="PT_Enter_Location"
-                                        [(ngModel)]="PT_Enter_Location">
-                                    <!-- <i class="k-icon k-i-group-box" aria-hidden="true"></i> -->
+                                        [(ngModel)]="PT_Enter_Location" [disabled]=pickedAllDty>
                                 </div>
                                 <div *ngIf="currentStep == 2" class="item-input-section">
-                                    <input #focusOnSerNo type="text" placeholder="{{'PT_Enter_ContBtchSer'|translate}}" (blur)="onLotChange()" name="PT_Enter_ContBtchSer"
-                                        [(ngModel)]="PT_Enter_ContBtchSer">
-                                    <i class="k-icon k-i-group-box" aria-hidden="true"></i>
+                                    <input #focusOnItemCode type="text" placeholder="{{'PT_ItemCode'|translate}}" (blur)="onItemChange()" name="PT_ItemCode"
+                                        [(ngModel)]="PT_ItemCode" [disabled]=pickedAllDty>
                                 </div>
                                 <div *ngIf="currentStep == 3" class="item-input-section">
-                                    <input type="number" placeholder="{{'PT_EnterQty'|translate}}" min=0 (blur)="onQtyChange()" name="pickQty" [(ngModel)]="pickQty">
-                                   
+                                    <input #focusOnSerNo type="text" placeholder="{{'PT_Enter_ContBtchSer'|translate}}" (blur)="onLotChange()" name="PT_Enter_ContBtchSer"
+                                        [(ngModel)]="PT_Enter_ContBtchSer" [disabled]=pickedAllDty>
                                 </div>
+                                <div *ngIf="currentStep == 4" class="item-input-section">
+                                    <input #focusOnQty type="number" placeholder="{{'PT_EnterQty'|translate}}" min=0 (blur)="onQtyChange()" name="pickQty" [(ngModel)]="pickQty"
+                                        [disabled]=pickedAllDty>
+                                </div>
+                                <div *ngIf="currentStep == 5" class="item-input-section">
+                                    <input #focusOnScanCont type="text" placeholder="{{ContainerCodePlaceholderValue}}" (blur)="ConfirmContainerOrTote()" name="ScannedContOrTote"
+                                        [(ngModel)]="ScannedContOrTote" [disabled]=pickedAllDty>
+                                </div>
+                                <!--/ step inputs -->
+
+                                <!-- step input option icons -->
                                 <div class="step-flex">
                                     <div class="keyboard-box step-flex-item">
-                                       <div class="keyboard-icon"><i class="k-icon k-i-group-box" aria-hidden="true"></i> </div> 
+                                        <div class="keyboard-icon">
+                                            <i class="k-icon k-i-group-box" aria-hidden="true"></i>
+                                        </div>
+                                        <div *ngIf="currentStep == 4" class="text-center scan-text">{{currentStepText}}</div>
                                     </div>
-                                    <div class="or-class step-flex-item" *ngIf="currentStep != 3">
-                                        <span class="or-text">OR</span>
+                                    <div class="or-class step-flex-item" *ngIf="currentStep != 4">
+                                        <span class="or-text">{{'OR'|translate}}</span>
                                         <span class="or-line"></span>
                                     </div>
-                                    <div class="scanner-box step-flex-item">
-                                        <div class="bar-code" *ngIf="currentStep != 3">
+                                    <div *ngIf="currentStep != 4" class="scanner-box step-flex-item">
+                                        <div class="bar-code">
                                             <i class="k-icon k-i-greyscale" aria-hidden="true"></i>
                                         </div>
-                                        <i *ngIf="currentStep > 1" (click)="prevStep()" class="k-icon k-i-arrow-chevron-left" aria-hidden="true"></i>
-                                        <i *ngIf="currentStep != maxStep" (click)="nextStep()" class="k-icon k-i-arrow-chevron-right" aria-hidden="true"></i>
-    
-                                        <i *ngIf="currentStep == maxStep" (click)="onSaveClick('/po-order-details')" class="k-icon k-i-save" aria-hidden="true"></i>
-                                        <div class="scan-text">{{currentStepText}}</div>
+                                        <!-- <div class="text-center scan-text">{{currentStepText}}</div> -->
                                     </div>
-                                 </div>
-                                
+
+                                </div>
+                                <!--/ step input option icons -->
                             </div>
+                            <div *ngIf="currentStep != 4" class="text-center scan-text">{{currentStepText}}</div>
+                            <br>
+                            <!-- step navigation Arrow placement -->
+                            <div>
+                                <i *ngIf="currentStep > 1" (click)="prevStep()" class="k-icon k-i-arrow-chevron-left" aria-hidden="true"></i>
+                                <i *ngIf="currentStep != LastStep" (click)="nextStep()" class="k-icon k-i-arrow-chevron-right" aria-hidden="true"></i>
+                                <i *ngIf="currentStep == LastStep" (click)="onSaveClick('/po-order-details')" class="k-icon k-i-save" aria-hidden="true"></i>
+                            </div>
+                            <!--/ step navigation -->
+
+                            <!-- step bars -->
                             <div class="item-steps-bar">
-                                <span [ngClass]="{active:currentStep == 1}" *ngIf="showLocation" class="step"></span>
-                                <span *ngIf="this.OPTM_Tracking != 'N'" [ngClass]="{active:currentStep == 2}" class="step"></span>
-                                <span *ngIf="threeSteps" [ngClass]="{active:currentStep == 3}" class="step"></span>
+                                    <ng-container  *ngFor="let c of CurrentTaskSteps; let i =index" >
+                                            <span [ngClass]="{active:currentStep == i+1}" class="step"></span>
+                                          </ng-container>
+                                <!-- <span *ngFor="let c of CurrentTaskSteps" [ngClass]="{active:currentStep == 1}" class="step"></span> -->
+                                <!-- <span [ngClass]="{active:currentStep == 2}" class="step"></span>
+                                <span [ngClass]="{active:currentStep == 3}" class="step"></span>
+                                <span *ngIf="this.OPTM_Tracking == 'N' && currentStep == 4" [ngClass]="{active:currentStep == 4}" class="step"></span>
+                                <span *ngIf="threeSteps" [ngClass]="{active:currentStep == 4}" class="step"></span> -->
                             </div>
+                            <!--/ step bars -->
                         </div>
                     </div>
                 </div>
@@ -112,6 +129,9 @@
                 </button>
                 <button class="btn btn-success k-button btn-sm btn-icon-with-text" type="button" (click)="onSubmitClick()">
                     <span class="k-icon k-i-check" role="presentation"></span>{{'Submit'|translate}}</button>
+
+                <button class="btn btn-success k-button btn-sm btn-icon-with-text" type="button" (click)="getNextPick()">
+                    <span role="presentation"></span>Next Pick</button>
             </div>
         </div>
     </form>
@@ -119,7 +139,7 @@
 </div>
 
 <span [hidden]="hideLookup">
-    <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
+    <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData'></app-lookup>
 </span>
 
 <kendo-dialog [width]="500" *ngIf="dialogOpened" (close)="close_kendo_dialog()">
@@ -135,15 +155,15 @@
                             <dt>{{'PT_TaskId'|translate}}</dt>
                             <dd>{{ dataItem.OPTM_TASKID }}</dd>
 
-                            <dt>{{'ItemCode'|translate}}</dt>
+                            <dt>{{itemcodeLabel}}</dt>
                             <dd>{{ dataItem.OPTM_ITEMCODE }}</dd>
                         </div>
                         <div class="di-list">
-                            <dt>{{'Quantity'|translate}}</dt>
-                            <dd>{{ dataItem.OPTM_PLANNED_QTY }}</dd>
+                            <!-- <dt>{{'Quantity'|translate}}</dt>
+                            <dd>{{ dataItem.OPTM_PLANNED_QTY }}</dd> -->
 
                             <dt>{{'PT_PlanDate'|translate}}</dt>
-                            <dd>{{ dataItem.OPTM_PLANNEDATETIME }}</dd>
+                            <dd>{{dataItem.OPTM_PLANNEDATETIME | date:dateFormat}}</dd>
                         </div>
                     </dl>
                 </ng-template>

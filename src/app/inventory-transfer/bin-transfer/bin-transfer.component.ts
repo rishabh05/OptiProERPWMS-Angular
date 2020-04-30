@@ -245,30 +245,39 @@ export class BinTransferComponent implements OnInit {
     );
   }
 
-  OnItemCodeChange() {
+  OnItemCodeChangeBlur() {
+    if(this.isValidateCalled){
+      return;
+    }
+    this.OnItemCodeChange();
+  }
+
+  async OnItemCodeChange() : Promise<any>{
     if (this.itemCode == "" || this.itemCode == undefined) {
       return;
     }
     this.showLoader = true;
-    this.inventoryTransferService.GetItemCode(this.itemCode).subscribe(
+    var result = false;
+    await this.inventoryTransferService.GetItemCode(this.itemCode).then(
       data => {
         this.showLoader = false;
-        if (data != undefined && data.length > 0) {
-          // console.log("" + data);
+        console.log("inside item code validate");
+        if (data != undefined && data.length > 0) {          
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
-            return;
+              result = false;
           }
           this.itemCode = data[0].ItemCode;
           if (this.itemCode != null && this.itemCode != undefined && this.itemCode != '') {
             this.getItemInfo();
           }
-
+          result = true;
         } else {
           this.toastr.error('', this.translate.instant("InvalidItemCode"));
           this.itemCode = "";
           this.scanItemCode.nativeElement.focus();
+          result = false;
         }
       },
       error => {
@@ -278,8 +287,10 @@ export class BinTransferComponent implements OnInit {
         else {
           this.toastr.error('', error);
         }
+        result = false;
       }
     );
+    return result;
   }
 
   getItemInfo() {
@@ -304,9 +315,6 @@ export class BinTransferComponent implements OnInit {
           this.transferQty = "0.000";
           this.onHandQty = 0.000;
           this.CheckTrackingandVisiblity();
-          // if (localStorage.getItem("fromscreen") == "WhsTransfer") {
-          //   this.getDefaultBin();
-          // }
           this.formatOnHandQty();
           this.formatTransferNumbers();
           if (this.ItemTracking == 'N') {
@@ -338,15 +346,20 @@ export class BinTransferComponent implements OnInit {
     );
   }
 
-  OnLotChange() {
+  OnLotChangeBlur() {
+    if(this.isValidateCalled){
+      return;
+    }
+    this.OnLotChange();
+  }
 
-
-
+  async OnLotChange():Promise<any>{
     if (this.lotValue == "" || this.lotValue == undefined) {
       return;
     }
     this.showLoader = true;
-    this.inventoryTransferService.getLotInfo(this.fromBin, this.itemCode, this.lotValue).subscribe(
+    var result = false;
+    await this.inventoryTransferService.getLotInfo(this.fromBin, this.itemCode, this.lotValue).then(
       data => {
         this.showLoader = false;
         if (data != null) {
@@ -363,6 +376,7 @@ export class BinTransferComponent implements OnInit {
             this.formatTransferNumbers();
             this.formatOnHandQty();
             this.fromBin = "";
+            result = false;
           }
           else {
             this.lotValue = data[0].LOTNO;
@@ -378,6 +392,7 @@ export class BinTransferComponent implements OnInit {
             } else {
               this.fromBin = data[0].BINNO;
             }
+            result = true;
           }
         }
       },
@@ -388,8 +403,10 @@ export class BinTransferComponent implements OnInit {
         else {
           this.toastr.error('', error);
         }
+        result = false;
       }
     );
+    return result;
   }
 
   getDefaultFromBin() {
@@ -584,15 +601,23 @@ export class BinTransferComponent implements OnInit {
     );
   }
 
+  OnFromBinChangeBlur() {
+    if(this.isValidateCalled){
+      return;
+    }
+    this.OnFromBinChange();
+  }
 
-  OnFromBinChange() {
+  async OnFromBinChange(): Promise<any> {  
     if (this.fromBin == "" || this.fromBin == undefined) {
       return;
     }
     this.showLoader = true;
-    this.inventoryTransferService.isFromBinExists(this.ItemTracking, this.fromBin, this.itemCode, this.lotValue).subscribe(
+    var result = false;
+    await this.inventoryTransferService.isFromBinExists(this.ItemTracking, this.fromBin, this.itemCode, this.lotValue).then(
       data => {
         this.showLoader = false;
+        console.log("inside isFromBinExists")
         if (data != null) {
           if (data.length > 0) {
             if (this.ItemTracking == "N") {
@@ -603,26 +628,29 @@ export class BinTransferComponent implements OnInit {
               this.LotWhsCode = data[0].WHSCODE;
               this.formatOnHandQty();
               this.formatTransferNumbers();
+              result = true;
             }
             else {
               if (data[0].Result == "0") {
                 this.toastr.error('', this.translate.instant("INVALIDBIN"));
-                return;
+                this.fromBin = "";
+                result = false;
               }
               else {
                 this.fromBin = data[0].ID;
                 if (this.toBin == this.fromBin) {
                   this.toastr.error('', this.translate.instant("FrmNToBinCantSame"));
                   this.fromBin = "";
-                  return;
+                  result = false;
                 }
+                result = true;
               }
             }
           }
           else {
             this.fromBin = "";
             this.toastr.error('', this.translate.instant("INVALIDBIN"));
-            return;
+            result = false;
           }
         }
       },
@@ -633,38 +661,50 @@ export class BinTransferComponent implements OnInit {
         else {
           this.toastr.error('', error);
         }
+        result = false;
       }
     );
+    return result;
   }
 
-  OnToBinChange() {
-    if (this.toBin == "" || this.toBin == undefined) {
+  OnToBinChangeBlur() {
+    if(this.isValidateCalled){
       return;
     }
+    this.OnToBinChange();
+  }
+
+  async OnToBinChange():Promise<any> {
+    if (this.toBin == "" || this.toBin == undefined) {
+      return false;
+    }
+    var result = false;
     this.showLoader = true;
-    this.inventoryTransferService.isToBinExist(this.toBin, localStorage.getItem("towhseId")).subscribe(
+    await this.inventoryTransferService.isToBinExist(this.toBin, localStorage.getItem("towhseId")).then(
       data => {
         this.showLoader = false;
+        console.log("inside isToBinExist")
         if (data != null) {
           if (data.length > 0) {
             if (data[0].Result == "0") {
               this.toastr.error('', this.translate.instant("INVALIDBIN"));
               this.toBin = "";
-              return;
+              result = false;
             }
             else {
               this.toBin = data[0].ID;
               if (this.toBin == this.fromBin) {
                 this.toastr.error('', this.translate.instant("FrmNToBinCantSame"));
                 this.toBin = "";
-                return;
+                result = false;
               }
+              result = true;
             }
           }
           else {
             this.toBin = "";
             this.toastr.error('', this.translate.instant("INVALIDBIN"));
-            return;
+            result = false;
           }
         }
       },
@@ -675,8 +715,10 @@ export class BinTransferComponent implements OnInit {
         else {
           this.toastr.error('', error);
         }
+        result = false;
       }
     );
+    return result;
   }
 
   ShowToBins() {
@@ -728,7 +770,16 @@ export class BinTransferComponent implements OnInit {
     return -1;
   }
 
-  AddLineLots() {
+  async AddLineLots(value: string) {
+    if(value=="add"){
+      //validateBeforeSubmit calling twice in case of submit.. so i commented it.
+      var result = await this.validateBeforeSubmit();
+      this.isValidateCalled = false;
+      console.log("validate result: " + result);
+      if (result != undefined && result == false) {
+        return result;
+      }
+    }
     this.operationType = "add";
 
     if (localStorage.getItem("fromscreen") == "InventoryTransferRequest") {
@@ -784,7 +835,14 @@ export class BinTransferComponent implements OnInit {
     }
   }
 
-  SubmitPutAway() {
+  async SubmitPutAway() {
+    var result = await this.validateBeforeSubmit();
+    this.isValidateCalled = false;
+    console.log("validate result: " + result);
+    if (result != undefined && result == false) {
+      return;
+    }
+    
     console.log("radio selection: " + this.radioSelected);
     if (this.radioSelected == 1) { // radio selection == 1 for by pallet
       if (this.TransferedItemsDetail.length == 0) {
@@ -808,14 +866,15 @@ export class BinTransferComponent implements OnInit {
         this.showValidation = false;
       }
 
-      var _is = this.AddLineLots();
       this.operationType = "submit";
+      var _is = this.AddLineLots("submit");
 
       if (_is != undefined && !_is) {
         return;
       }
       this.SubmitFinally();
     }
+  //});    
   }
   }
 
@@ -989,7 +1048,7 @@ export class BinTransferComponent implements OnInit {
     if (this.ItemTracking == "B") {
       if (this.lotValue == "") {
         if (this.showValidation) {
-          this.toastr.error('', this.translate.instant("Lotcannotbeblank"));
+          this.toastr.error('', this.translate.instant("PhyCount_SerialLotcannotbeblank"));
         }
         return false;
       }
@@ -997,7 +1056,7 @@ export class BinTransferComponent implements OnInit {
     if (this.ItemTracking == "S") {
       if (this.lotValue == "") {
         if (this.showValidation) {
-          this.toastr.error('', this.translate.instant("SerialNoCantBlank"));
+          this.toastr.error('', this.translate.instant("InvTransfer_SerialNoCantBlank"));
         }
         return false;
       }
@@ -1365,7 +1424,7 @@ export class BinTransferComponent implements OnInit {
   getContainerList(){
     this.showLoader = true;
     this.showLookupLoader = true;
-    this.commonservice.GetContainerWithRowsPresent().subscribe(
+    this.commonservice.GetContainerWithRowsPresent("").subscribe(
       (data: any) => {
         this.showLoader = false;
         this.showLookupLoader = false;
@@ -1400,7 +1459,7 @@ export class BinTransferComponent implements OnInit {
       return;
     }
     this.showLoader = true;
-    this.commonservice.isPalletValid(this.containerCode).subscribe(
+    this.commonservice.GetContainerWithRowsPresent(this.containerCode).subscribe(
       (data: any) => {
         this.showLoader = false;
         // console.log(data);
@@ -1470,33 +1529,39 @@ export class BinTransferComponent implements OnInit {
     );
   }
 
-  onPalletChange() {
+  onPalletChangeBlur(){
+    if(this.isValidateCalled){
+      return
+    }
+    this.onPalletChange();
+  }
 
+  async onPalletChange(): Promise<any>{
     if (this.palletNo == undefined || this.palletNo == "") {
       return;
     }
     this.showLoader = true;
-    this.commonservice.isPalletValid(this.palletNo).subscribe(
+    var result = false;
+    await this.commonservice.isPalletValid(this.palletNo).then(
       (data: any) => {
         this.showLoader = false;
-        // console.log(data);
+        console.log("inside isPalletValid");
         if (data != null) {
           if (data.length > 0) {
             this.palletNo = data[0].Code;
-            //this.selectedPallets.push(data[0]);
-            //this.getPalletData();
+            result = true;
           } else {
             this.toastr.error('', this.translate.instant("InValidPalletNo"));
             this.palletNo = "";
             this.scanPallet.nativeElement.focus();
-            return;
+            result = false;
           }
         }
         else {
           this.toastr.error('', this.translate.instant("InValidPalletNo"));
           this.palletNo = "";
           this.scanPallet.nativeElement.focus();
-          return;
+          result = false;
         }
       },
       error => {
@@ -1509,8 +1574,10 @@ export class BinTransferComponent implements OnInit {
         else {
           this.toastr.error('', error);
         }
+        result = false;
       }
     );
+    return result;
   }
 
   getPalletData() {
@@ -1653,8 +1720,6 @@ export class BinTransferComponent implements OnInit {
     this.showDialog("DeletePallet", this.translate.instant("yes"), this.translate.instant("no"),
       this.translate.instant("DeleteRecordsMsg"));
   }
-
-
   ContainerDeleteClick(rowindex, gridData: any) {
     this.gridData = gridData;
     this.rowindex = rowindex;
@@ -1662,7 +1727,10 @@ export class BinTransferComponent implements OnInit {
       this.translate.instant("DeleteRecordsMsg"));
   }
 
-  onAddPalletClick() {
+  async onAddPalletClick() {
+    await this.validateBeforeSubmit();
+    this.isValidateCalled = false;
+
     if (this.palletNo == undefined || this.palletNo == "") {
       this.toastr.error('', this.translate.instant("Plt_PalletRequired"));
       return;
@@ -1785,5 +1853,32 @@ export class BinTransferComponent implements OnInit {
       this.lotValue = inputValue;
     }
     this.OnLotChange();
+  }
+
+  isValidateCalled: boolean = false;
+  lastFocussedField: any;
+  async validateBeforeSubmit():Promise<any>{
+    this.isValidateCalled = true;
+    var currentFocus = document.activeElement.id;
+    console.log("validateBeforeSubmit current focus: "+currentFocus);
+    
+    if(currentFocus != undefined){
+      this.lastFocussedField = currentFocus;
+      if(currentFocus == "binTransferItemCodeScan"){
+        return this.OnItemCodeChange();
+      } else if(currentFocus == "binTransferBatchNoInput"){
+        return this.OnLotChange();
+      } else if(currentFocus == "binTransferFromBinInput"){
+        return this.OnFromBinChange();
+      } else if(currentFocus == "binTransferToBinInput"){
+        return this.OnToBinChange();
+      } else if(currentFocus == "binTransferScanByPalletPalletNoInput") {
+        return this.onPalletChange();
+      } else if(currentFocus == "binTransferByPalletToBinNoInput") {
+        return this.OnToBinChange();
+      } else if(currentFocus == "transferQty"){
+        this.transferQty = Number(this.transferQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));
+      } 
+    }
   }
 }

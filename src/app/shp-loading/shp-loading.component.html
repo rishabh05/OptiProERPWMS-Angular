@@ -1,0 +1,112 @@
+<div class="opti_container position-relative bg-white rounded">
+  <form class="form-with-fix-btnBar" *ngIf="!viewLines">
+    <div class="opti_container_inner" [perfectScrollbar]=" ">
+      <h3 class="border-bottom no-border-mobile d-flex pt-1 pb-3 mb-4">
+        {{'SHP_Loading'|translate}}
+    </h3>
+      <div class="row">
+        <div class="col-12">
+          <div class="po-details-comp">
+            <div class="po-details-sec">
+              <div class="form-group row">
+                <label for="inputPassword" class="col-sm-4 col-form-label">{{'PT_ShipmentId'|translate}}</label>
+                <div class="col-sm-8">
+                  <div class="input-group input-group-sm">
+                    <input #scanPTshipmentId type="text" class="form-control form-control-sm" id="PT_ShipmentId" name="PT_ShipmentId" [(ngModel)]="PT_ShipmentId"
+                      placeholder="{{'PT_ShipmentId'|translate}}" (blur)="onShipmentIDChange()">
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputPassword" class="col-sm-4 col-form-label">{{'LoadLocation'|translate}}</label>
+                <div class="col-sm-8">
+                  <div class="input-group input-group-sm">
+                    <input type="text" class="form-control form-control-sm" id="LoadLocation" name="LoadLocation" [(ngModel)]="LoadLocation"
+                      [disabled]=true>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputPassword" class="col-sm-4 col-form-label">{{'LoadContainers'|translate}}</label>
+                <div class="col-sm-8">
+                  <div class="input-group input-group-sm">
+                    <!-- <kendo-dropdownlist [data]="LoadContainersList" id="LoadContainers" 
+                      name="LoadContainers" [(ngModel)]="{{LoadContainers.OPTM_CONTCODE}}"> -->
+
+                      <kendo-dropdownlist class="form-control" 
+                      [data]="LoadContainersList" textField="OPTM_CONTCODE" valueField="OPTM_CONTCODE"   name="FirstCont"
+                      [(ngModel)]="FirstCont"></kendo-dropdownlist>                      
+
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="item-sec">
+              <div class="item-steps">
+                <!-- step inputs -->
+                <div *ngIf="currentStep == 1" class="item-input-section">
+                  <input #focusOnCont type="text" placeholder="{{'ScanContainer'|translate}}" (blur)="onContainerChange()" name="ScanContainer"
+                    [(ngModel)]="ScanContainer">
+                </div>
+                <div *ngIf="currentStep == 2" class="item-input-section">
+                  <input #focusOnDockDoor type="text" placeholder="{{'ScanLoadLocation'|translate}}" (blur)="onLoadLocationChange()" name="ScanLoadLocation"
+                    [(ngModel)]="ScanLoadLocation">
+                </div>
+                
+                <!-- step input option icons -->
+                <div class="step-flex">
+                  <div class="keyboard-box step-flex-item">
+                    <div class="keyboard-icon">
+                      <i class="k-icon k-i-group-box" aria-hidden="true"></i>
+                    </div>
+                  </div>
+                  <div class="or-class step-flex-item">
+                    <span class="or-text">OR</span>
+                    <span class="or-line"></span>
+                  </div>
+                  <div *ngIf="currentStep != 4" class="scanner-box step-flex-item">
+                    <div class="bar-code">
+                      <i class="k-icon k-i-greyscale" aria-hidden="true"></i>
+                    </div>
+                    
+                  </div>
+                </div>
+                <div class="text-center scan-text">{{currentStepText}}</div>
+                <!--/ step input option icons -->
+              </div>
+
+              <!-- step navigation Arrow placement -->
+              <div>
+                <i *ngIf="currentStep > 1" (click)="prevStep()" class="k-icon k-i-arrow-chevron-left" aria-hidden="true"></i>
+                <i *ngIf="currentStep != LastStep" (click)="nextStep()" class="k-icon k-i-arrow-chevron-right" aria-hidden="true"></i>
+                <i *ngIf="false" (click)="onSaveClick('/po-order-details')" class="k-icon k-i-save" aria-hidden="true"></i>
+              </div>
+              <!--/ step navigation -->
+
+              <!-- step bars -->
+              <div class="item-steps-bar">
+                <ng-container  *ngFor="let c of PickListSteps; let i =index" >
+                <span [ngClass]="{active:currentStep == i+1}" class="step"></span>
+              </ng-container>
+                <!-- <span [ngClass]="{active:currentStep == 1}" class="step"></span>
+                <span [ngClass]="{active:currentStep == 2}" class="step"></span> -->
+              </div>
+              <!--/ step bars -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fix-footer-btnBar">
+      <div class="col-sm-12 col-12">       
+         
+        <button class="btn btn-outline-secondary btn-sm btn-transparent btn-icon mr-1" type="button" (click)="OnCancelClick()">
+          <i class="opti-icon-arrow-back"></i>
+        </button>
+        <button class="btn btn-success k-button btn-sm btn-icon-with-text" type="button" (click)="onSubmitClick()">
+          <span class="k-icon k-i-check" role="presentation"></span>{{'Submit'|translate}}</button>
+      </div>
+    </div>
+  </form>
+
+</div>

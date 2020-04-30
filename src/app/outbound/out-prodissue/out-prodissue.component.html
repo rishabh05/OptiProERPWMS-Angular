@@ -244,7 +244,7 @@
             </div>
             <div class="col-sm-12 col-12">
                 <!-- *ngIf="selectedMeterials && selectedMeterials.length>0" -->
-                <button type="button" (click)="back(0)" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
+                <button type="button" (mousedown)="back(0)" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
                 <button type="button" *ngIf="showSaveButton && !fromProduction"
                     (click)="addMetToCollection()" class="btn btn-success k-button btn-sm btn-icon-with-text" [disabled]=fromShipment><span
@@ -258,7 +258,7 @@
 
                   
                 <button type="button" *ngIf="selectedMeterials && selectedMeterials.length>0 && fromProduction"
-                    (click)="submitProduction()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
+                    (mousedown)="submitProduction()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-check"></span>
                     {{'Issue'|translate}}</button>
                 <!-- <div class="clearfix mt-1 d-block d-sm-none"></div> -->

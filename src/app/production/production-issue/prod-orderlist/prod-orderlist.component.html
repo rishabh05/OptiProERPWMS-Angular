@@ -56,14 +56,14 @@
                             <!-- grid for mobile start -->
                             <kendo-grid-column media="(max-width: 767px)" title="{{'Items'|translate}}" class="opti_mobile-grid-td">
                                 <ng-template kendoGridCellTemplate let-dataItem>
-                                    <dl class="opti_mobile_grid_dl">
+                                    <dl class="opti_mobile_grid_dl" (touchend)="openPOByUOM(dataItem, dataItem.ItemCode)">
                                         <dt>{{'ItemCode'|translate}}</dt>
                                         <dd>{{ dataItem.ITEMCODE }}</dd>
 
                                         <dt>{{'IssuedQty'|translate}}</dt>
                                         <dd>{{ dataItem.RPTQTY|numberFormat }}</dd>
                                     </dl>
-                                    <dl class="opti_mobile_grid_dl">
+                                    <dl class="opti_mobile_grid_dl" (touchend)="openPOByUOM(dataItem, dataItem.ItemCode)">
                                         <dt class="d-flex align-items-center">{{'BalanceQty'|translate}} <span class="opti_arrow-grid-detail float-right text-center opti_vertical-align ml-auto">›</span></dt>
                                         <dd>{{ dataItem.BalQty|numberFormat }}</dd>
                                     </dl>

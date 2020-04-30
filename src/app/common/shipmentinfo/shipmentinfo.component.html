@@ -62,7 +62,10 @@
     <kendo-grid [data]="dataItem.ContainerItems">
       <!-- <kendo-grid-column field="OPTM_CONTAINERID"  title="{{'ContainerId'|translate}}"></kendo-grid-column> -->
       <kendo-grid-column field="OPTM_ITEMCODE"  title="{{'ItemCode'|translate}}"></kendo-grid-column>
-      <kendo-grid-column field="OPTM_QUANTITY" class="grid-right-align-column" title="{{'Quantity'|translate}}">
+      <kendo-grid-column field="OPTM_QUANTITY" class = "text-right" class="grid-right-align-column" title="{{'Quantity'|translate}}">
+          <ng-template kendoGridCellTemplate let-dataItem>  
+              {{dataItem.OPTM_QUANTITY | numberFormat}}
+          </ng-template>
       </kendo-grid-column>
       <!-- <kendo-grid-column field="OPTM_ITEMCODE" [width]="90" class="grid-right-align-column" title="{{'ItemCode'|translate}}">
       </kendo-grid-column>

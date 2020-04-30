@@ -13,7 +13,7 @@
                     <div class="col-sm-9">
                         <div class="input-group input-group-sm">
                             <input type="text" class="form-control form-control-sm" #fromBinIp id="BinLabelFromBinInput"
-                             [(ngModel)] ='fromBin' (blur)="OnFromBinChange()" name ='fromBin' placeholder="{{'InvTransfer_FromBin'|translate}}">
+                             [(ngModel)] ='fromBin' (blur)="OnFromBinChangeBlur()" name ='fromBin' placeholder="{{'InvTransfer_FromBin'|translate}}">
                             <div class="input-group-append">
                                 <button tabIndex="-1" class="k-button k-primary btn" type="button"  (mousedown)="OnFromBinLookupClick()">
                                     <i class="opti-icon-hammenu"></i>
@@ -32,7 +32,7 @@
                   <label for="inputPassword" class="col-sm-3 col-form-label">{{'InvTransfer_ToBin'|translate}}</label>
                   <div class="col-sm-9">
                       <div class="input-group input-group-sm">
-                          <input #scanToBin type="text"   id="BinLabelToBinInput" (blur)="OnToBinChange()" class="form-control form-control-sm" [(ngModel)]='toBin' #toBinIp=ngModel
+                          <input #scanToBin type="text"   id="BinLabelToBinInput" (blur)="OnToBinChangeBlur()" class="form-control form-control-sm" [(ngModel)]='toBin' #toBinIp=ngModel
                            name ='toBin' placeholder="{{'InvTransfer_ToBin'|translate}}">
                           <div class="input-group-append">
                               <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="OnToBinLookupClick()">
@@ -63,9 +63,9 @@
             <hr />
         </div>
         <div class="col-sm-12 col-12">
-            <button type="button" (click)="OnCancelClick()" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
+            <button type="button" (mousedown)="OnCancelClick()" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
                     class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
-            <button type="button" (click)="OnPrintClick()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
+            <button type="button" (mousedown)="OnPrintClick()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
                     class="k-icon k-i-printer" role="presentation"></span> {{'Print'|translate}}</button>
         
         

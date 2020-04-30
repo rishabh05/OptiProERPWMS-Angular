@@ -36,9 +36,9 @@ export class InboundService {
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetVendorList", jObject, this.commonService.httpOptions);
   }
 
-  IsVendorExists(vendor: string): Observable<any> {
+  IsVendorExists(vendor: string): Promise<any> {
     var jObject = { VendorCode: JSON.stringify([{ UserId: '', CompanyDBId: localStorage.getItem("CompID"), VendorCode: vendor }]) };
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsVendorExists", jObject, this.commonService.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsVendorExists", jObject, this.commonService.httpOptions).toPromise();
   }
 
   getItemList(futurepo: boolean, vendercode: string, po: string): Observable<any> {
@@ -68,9 +68,9 @@ export class InboundService {
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetPOList", jObject, this.commonService.httpOptions);
   }
 
-  IsPOExists(poCode: string, cardCode: string): Observable<any> {
+  IsPOExists(poCode: string, cardCode: string): Promise<any> {
     var jObject = { POCode: JSON.stringify([{ UserId: '', CompanyDBId: localStorage.getItem("CompID"), POCode: poCode, CardCode: cardCode }]) };
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsPOExists", jObject, this.commonService.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsPOExists", jObject, this.commonService.httpOptions).toPromise();
   }
 
   GetOpenPOLines(futurepo: boolean, itemCode: string, po: string): Observable<any> {
@@ -150,14 +150,14 @@ export class InboundService {
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetTargetBins", jObject, this.commonService.httpOptions);
   }
 
-  binChange(targetWhs: string, binCode: string): Observable<any> {
+  binChange(targetWhs: string, binCode: string): Promise<any> {
     var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), BinCode: binCode, ItemCode: '', WhsCode: targetWhs }]) };
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsBinExist", jObject, this.commonService.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsBinExist", jObject, this.commonService.httpOptions).toPromise();
   } 
 
-  isBinExistForProduction(targetWhs: string, binCode: string, Status: string): Observable<any> {
+  isBinExistForProduction(targetWhs: string, binCode: string, Status: string): Promise<any> {
     var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), BinCode: binCode, Status: Status, ItemCode: '', WhseCode: targetWhs }]) };
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/isBinExistForProduction", jObject, this.commonService.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/isBinExistForProduction", jObject, this.commonService.httpOptions).toPromise();
   } 
  
   SubmitGoodsReceiptPO(oSubmitPOLots: any): Observable<any> {
@@ -211,9 +211,9 @@ export class InboundService {
    * check and scan code.
    * @param whsCode 
    */
-  checkAndScanCode(vendCode:string,scanInputString){
+  checkAndScanCode(vendCode:string,scanInputString): Promise<any>{
     var jObject = {Gs1Token: JSON.stringify([{Vsvendorid:vendCode,StrScan:scanInputString,CompanyDBId:localStorage.getItem("CompID")}])};
-    return this.httpclient.post(this.config_params.service_url + "/api/Gs1/GS1SETUP", jObject, this.commonService.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/Gs1/GS1SETUP", jObject, this.commonService.httpOptions).toPromise();
   }
 
     /**
@@ -243,7 +243,7 @@ export class InboundService {
   }
 
 
-  IsPalletValidForGRPO(palletCode: string, itemCode: string, BinCode: string): Observable<any> {
+  IsPalletValidForGRPO(palletCode: string, itemCode: string, BinCode: string): Promise<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
         COMPANYDBNAME: localStorage.getItem("CompID"),
@@ -253,7 +253,7 @@ export class InboundService {
         BinCode: BinCode
       }])
     };
-    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/IsPalletValidForGRPO", jObject, this.commonService.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/IsPalletValidForGRPO", jObject, this.commonService.httpOptions).toPromise();
   }
 }
 

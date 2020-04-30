@@ -55,9 +55,28 @@ export class PortalLeftComponent implements OnInit {
         this.selectedThemeColor = data;
       }
     );
-    this.getAllMenus();
 
+    this.getAllMenus();
+    this.GetConfigurationParam();
     UIHelper.manageNavigationPanel(document.getElementById('sidebarCollapse-alt'));
+  }
+
+  GetConfigurationParam() {
+    this.commonService.GetConfigurationParam().subscribe(
+      data => {
+        if (data != null && data.OPTM_CONF_PARAM != undefined) {
+          localStorage.setItem('ConfigurationParam', JSON.stringify(data.OPTM_CONF_PARAM));
+        }
+      },
+      error => {
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonService.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
   }
 
 
@@ -66,11 +85,11 @@ export class PortalLeftComponent implements OnInit {
     //  if(!menuLoaded){
     this.menuService.getAllMenus().subscribe(
       data => {
-        if (data != null){
+        if (data != null) {
           this.displayMenuOptions(data.Modules);
           this.allOptionMenus = data.Modules
         }
-          
+
         window.localStorage.setItem('IsMenuLoaded', 'true');
       },
       error => {
@@ -88,17 +107,17 @@ export class PortalLeftComponent implements OnInit {
   displayMenuOptions(menus: any[]) {
     menus.forEach(element => {
       var thisRefs = this;
-      console.log("forEach: element.id: "+document.getElementById(element.id))
-        if (document.getElementById(element.id) != null) {
-          document.getElementById(element.id).style.display = 'flex';
-          if(document.getElementById(element.id).childNodes.length > 0 && document.querySelectorAll('#'+element.id+".dropdown")[0] !=undefined){
-            (<HTMLElement>document.querySelectorAll('#'+element.id+".dropdown")[0].childNodes[0]).onclick = function(){
-            for (var i = 0; i < document.querySelectorAll('#'+element.id+".dropdown")[0].childNodes[2].childNodes.length; i++) {
-              var menuId = (<HTMLElement>document.querySelectorAll('#'+element.id+".dropdown")[0].childNodes[2].childNodes[i]).id;
-              if(thisRefs.isMenuVisible(menuId)){
-                (<HTMLElement>document.querySelectorAll('#'+element.id+".dropdown")[0].childNodes[2].childNodes[i]).style.display = 'flex';
+      console.log("forEach: element.id: " + document.getElementById(element.id))
+      if (document.getElementById(element.id) != null) {
+        document.getElementById(element.id).style.display = 'flex';
+        if (document.getElementById(element.id).childNodes.length > 0 && document.querySelectorAll('#' + element.id + ".dropdown")[0] != undefined) {
+          (<HTMLElement>document.querySelectorAll('#' + element.id + ".dropdown")[0].childNodes[0]).onclick = function () {
+            for (var i = 0; i < document.querySelectorAll('#' + element.id + ".dropdown")[0].childNodes[2].childNodes.length; i++) {
+              var menuId = (<HTMLElement>document.querySelectorAll('#' + element.id + ".dropdown")[0].childNodes[2].childNodes[i]).id;
+              if (thisRefs.isMenuVisible(menuId)) {
+                (<HTMLElement>document.querySelectorAll('#' + element.id + ".dropdown")[0].childNodes[2].childNodes[i]).style.display = 'flex';
               } else {
-                (<HTMLElement>document.querySelectorAll('#'+element.id+".dropdown")[0].childNodes[2].childNodes[i]).style.display = 'none';
+                (<HTMLElement>document.querySelectorAll('#' + element.id + ".dropdown")[0].childNodes[2].childNodes[i]).style.display = 'none';
               }
             }
           };
@@ -107,23 +126,23 @@ export class PortalLeftComponent implements OnInit {
     });
   }
 
-  isMenuVisible(menu: string){
-    for(var i=0;i<this.allOptionMenus.length;i++){
-      if(this.allOptionMenus[i].id == menu){
+  isMenuVisible(menu: string) {
+    for (var i = 0; i < this.allOptionMenus.length; i++) {
+      if (this.allOptionMenus[i].id == menu) {
         return true;
       }
     }
     return false;
   }
-// from whre number is for out bound 1 for delivery, 2 for delivery from shipment
+  // from whre number is for out bound 1 for delivery, 2 for delivery from shipment
 
   /**
    * 
    * @param event 
    * @param module 
    */
-  listClick(event, module, fromWhere: number =   0) {
-    
+  listClick(event, module, fromWhere: number = 0) {
+
     this.selectedItem = module;
     this.closeRightSidebar(event);
     localStorage.setItem("ProdReceptItem", '');
@@ -131,30 +150,41 @@ export class PortalLeftComponent implements OnInit {
     localStorage.setItem("GoodsReceiptModel", '');
     localStorage.setItem("AvailableRejectQty", 0 + "");
 
-    if(module == "outbound"){
+    if (module == "outbound") {
       // manage delivery and shipment via delivery option in same outbound 
-      if(fromWhere==1){
+      if (fromWhere == 1) {
         localStorage.setItem("deliveryOptionType", '1');
         module = module + '/outcustomer'
-      }else if(fromWhere==2){
+      } else if (fromWhere == 2) {
         localStorage.setItem("deliveryOptionType", '2');
         module = module + '/deliveryThroughShipment'
       }
       this.onOutboundClick();
-    }else if(module == "inbound"){
+    } else if (module == "inbound") {
       this.onInboundClick();
-    }else if(module == "whsTransfer"){
+    } else if (module == "whsTransfer") {
       localStorage.setItem("fromscreen", "WhsTransfer");
-    }else if(module == "InventoryTransferRequest"){
+    } else if (module == "InventoryTransferRequest") {
       localStorage.setItem("fromscreen", "InventoryTransferRequest");
-    }else if(module == "binTransfer"){
+    } else if (module == "binTransfer") {
       localStorage.setItem("fromscreen", "");
       localStorage.setItem("towhseId", localStorage.getItem("whseId"));
       localStorage.setItem("fromwhseId", localStorage.getItem("whseId"));
+    } else if (module == "picking") {
+      localStorage.setItem("PickType", "");
+      localStorage.setItem("PickTypeIndex", "");
+      localStorage.setItem("PickListSteps", "");
+    } else if (module == "ShpLoading") {
+      localStorage.setItem("PickListSteps", "");
+    } else if (module == "shipment") {
+      this.goToLink("http://localhost:6601/#/home/dashboard");
     }
     this.router.navigate(['home/' + module]);
   }
 
+  goToLink(url: string) {
+    window.open(url, "_blank");
+  }
   /** 
    * 
    */
@@ -162,10 +192,10 @@ export class PortalLeftComponent implements OnInit {
     let currentSidebarInfo: CurrentSidebarInfo = new CurrentSidebarInfo();
     currentSidebarInfo.SideBarStatus = false;
     this.commonService.setCurrentSideBar(currentSidebarInfo);
-    if(UIHelper.isMobile()==true){ 
+    if (UIHelper.isMobile() == true) {
       document.getElementById('opti_RightPanelID').classList.remove('opti_menusidebar-mobile-open');
       document.getElementById('opti_LeftPanelID').classList.remove('opti_menusidebar-mobile-open');
-    } 
+    }
   }
 
   binClick() {

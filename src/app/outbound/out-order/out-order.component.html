@@ -68,7 +68,7 @@
                         <label for="orderNumber" class="col-sm-3 col-form-label">{{'Plt_PalletNo'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" #PalletNo name="pltNo" (blur)="onPalletChange()" value=''
+                                <input type="text" #PalletNo name="pltNo" (blur)="onPalletChangeBlur()" value=''
                                     [(ngModel)]="palletNo" class="form-control form-control-sm" id="outOrderPalletNoInput"
                                     placeholder="{{'Plt_PalletNo'|translate}}">
                                 <div class="input-group-append has-seprate-btn">
@@ -191,7 +191,7 @@
                             <kendo-grid-column media="(max-width: 767px)" title="{{'Items'|translate}}"
                                 class="opti_mobile-grid-td">
                                 <ng-template kendoGridCellTemplate let-dataItem>
-                                    <dl class="opti_mobile_grid_dl">
+                                    <dl class="opti_mobile_grid_dl" (touchend)="openPOByUOM(dataItem,dataItem.ITEMCODE)">
                                             <dt class="d-flex align-items-center">{{'LINENUM'|translate}} <span
                                                 class="opti_arrow-grid-detail float-right text-center opti_vertical-align ml-auto">›</span>
                                         </dt>
@@ -202,7 +202,7 @@
 
                                    
                                     </dl>
-                                    <dl class="opti_mobile_grid_dl">
+                                    <dl class="opti_mobile_grid_dl" (touchend)="openPOByUOM(dataItem,dataItem.ITEMCODE)">
                                         <dt class="d-flex align-items-center">{{'OpenQty'|translate}} <span
                                                 class="opti_arrow-grid-detail float-right text-center opti_vertical-align ml-auto">›</span>
                                         </dt>
@@ -267,7 +267,7 @@
                 <button type="button" *ngIf="showDeleiveryAndAdd && fromWhere!='itr' && !fromShipment" (click)="DeliveryClick()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-check" role="presentation"></span> {{'Deleiver'|translate}}</button>
                 
-                <button type="button" *ngIf="fromWhere=='itr'" (click)="cancel()" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
+                <button type="button" *ngIf="fromWhere=='itr'" (mousedown)="cancel()" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
 
                 <button type="button" *ngIf="showDeleiveryAndAdd && fromWhere=='itr' && !fromShipment" (click)="itrClick()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span

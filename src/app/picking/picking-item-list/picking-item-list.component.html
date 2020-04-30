@@ -23,12 +23,12 @@
                                             <dt>{{'PT_TaskId'|translate}}</dt>
                                             <dd>{{ dataItem.OPTM_TASKID }}</dd>
                                         </div>
-                                        <div class="di-list">
+                                        <!-- <div class="di-list">
                                             <dt>{{'PT_TaskType'|translate}}</dt>
                                             <dd>{{ dataItem.OPTM_TASKTYPE }}</dd>
-                                        </div>
+                                        </div> -->
                                         <div class="di-list">
-                                            <dt>{{'ItemCode'|translate}}</dt>
+                                            <dt>{{itemcodeLabel}}</dt>
                                             <dd>{{ dataItem.OPTM_ITEMCODE }}</dd>
                                         </div>
                                         <div class="di-list">
@@ -41,22 +41,29 @@
                                         </div>
                                         <div class="di-list">
                                             <dt>{{'PT_PlanDate'|translate}}</dt>
-                                            <dd>{{ dataItem.OPTM_PLANNEDATETIME }}</dd>
+                                            <dd>{{ dataItem.OPTM_PLANNEDATETIME | date:dateFormat}}</dd>
                                         </div>
                                     </dl>
                                 </ng-template>
                             </kendo-grid-column>
                             <kendo-grid-column [media]="desktopMedia" field="OPTM_TASKID" title="{{'PT_TaskId'|translate}}">
                             </kendo-grid-column>
-                            <kendo-grid-column [media]="desktopMedia" field="OPTM_TASKTYPE" title="{{'PT_TaskType'|translate}}">
-                            </kendo-grid-column>
-                            <kendo-grid-column [media]="desktopMedia" field="OPTM_ITEMCODE" title="{{'ItemCode'|translate}}">
+                            <!-- <kendo-grid-column [media]="desktopMedia" field="OPTM_TASKTYPE" title="{{'PT_TaskType'|translate}}">
+                            </kendo-grid-column> -->
+                            <kendo-grid-column [media]="desktopMedia" field="OPTM_ITEMCODE" title="{{itemcodeLabel}}">
                             </kendo-grid-column>
                             <kendo-grid-column [media]="desktopMedia" field="OPTM_SRC_WHSE" title="{{'PT_Warehouse'|translate}}">
                             </kendo-grid-column>
-                            <kendo-grid-column [media]="desktopMedia" field="OPTM_TASK_QTY" title="{{'Quantity'|translate}}">
+                            <kendo-grid-column class="text-right" [media]="desktopMedia" field="OPTM_TASK_QTY" title="{{'Quantity'|translate}}">
+                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                            <span >
+                                                {{dataItem.OPTM_TASK_QTY|numberFormat}}</span>
+                                        </ng-template>
                             </kendo-grid-column>
                             <kendo-grid-column [media]="desktopMedia" field="OPTM_PLANNEDATETIME" title="{{'PT_PlanDate'|translate}}">
+                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                            {{dataItem.OPTM_PLANNEDATETIME | date:dateFormat}}
+                                        </ng-template>
                             </kendo-grid-column>
                         </kendo-grid>
                     </div>

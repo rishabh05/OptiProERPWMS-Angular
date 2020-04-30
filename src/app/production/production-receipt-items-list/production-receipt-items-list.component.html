@@ -69,14 +69,14 @@
                         <!-- grid for mobile start -->
                         <kendo-grid-column media="(max-width: 767px)" class="opti_mobile-grid-td">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex='rowIndex'>
-                                <dl class="opti_mobile_grid_dl">
+                                <dl class="opti_mobile_grid_dl" (touchend)="onGridItemClick(dataItem)">
                                     <dt *ngIf="tracking!='N'">{{'ItemCode'|translate}}</dt>
                                     <dd *ngIf="tracking!='N'">{{ dataItem.ITEMCODE }}</dd>
 
                                     <dt>{{'OpenQty'|translate}}</dt>
                                     <dd>{{ dataItem.OPENQTY }}</dd>
                                 </dl>
-                                <dl class="opti_mobile_grid_dl">
+                                <dl class="opti_mobile_grid_dl" (touchend)="onGridItemClick(dataItem)">
                                     <dt class="d-flex align-items-center">{{'Status'|translate}}
                                         <button (click)="confirmDialogForDeleteAcceptItem(rowIndex,gridItem)" class="btn btn-danger k-button btn-sm btn-icon ml-auto"
                                             type="button">

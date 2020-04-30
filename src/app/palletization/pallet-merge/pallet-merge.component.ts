@@ -120,7 +120,14 @@ export class PalletMergeComponent implements OnInit {
     );
   }
 
-  onPalletChange(from: string) {
+  onPalletChangeBlur(from: string){
+    if(this.isValidateCalled){
+      return;
+    }
+    this.onPalletChange(from);
+  }
+
+  async onPalletChange(from: string) : Promise<any>{
     var plt;
     if (from == "from_pallet") {
       plt = this.fromPalletNo;
@@ -138,14 +145,14 @@ export class PalletMergeComponent implements OnInit {
     }
 
     this.showLoader = true;
-    this.commonservice.isPalletValid(plt).subscribe(
+    var result = false;
+    await this.commonservice.isPalletValid(plt).then(
       (data: any) => {
         this.showLoader = false;
-      //  console.log(data);
+        console.log("inside isPalletValid "+from);
         if (data != null) {
           if (data.length > 0) {
             if (from == "from_pallet") {
-              // this.fromPalletNo = data[0].Code;
               this.fromPalletNo = "";
               if (!this.containPallet(this.selectedFromPallets, data[0].Code)) {
                 this.selectedFromPallets.push(data[0]);
@@ -155,9 +162,11 @@ export class PalletMergeComponent implements OnInit {
               if (this.containPallet(this.selectedFromPallets, this.toPalletNo)) {
                 this.toastr.error('', this.translate.instant("Plt_AlreadySelected"));
                 this.toPalletNo = '';
-                return;
+                result = false;
+                return result;
               }
             }
+            result = true;
           } else {
             this.toastr.error('', this.translate.instant("InValidPalletNo"));
             if (from == "to_pallet") {
@@ -167,7 +176,7 @@ export class PalletMergeComponent implements OnInit {
               this.fromPalletNo = "";
               this.scanFromPallet.nativeElement.focus()
             }
-            return;
+            result = false;
           }
         }
         else {
@@ -179,7 +188,7 @@ export class PalletMergeComponent implements OnInit {
             this.fromPalletNo = "";
             this.scanFromPallet.nativeElement.focus()
           }
-          return;
+          result = false;
         }
       },
       error => {
@@ -190,8 +199,10 @@ export class PalletMergeComponent implements OnInit {
         else {
           this.toastr.error('', error);
         }
+        result = false;
       }
     );
+    return result
   }
 
   getLookupValue(lookupValue: any) {
@@ -233,15 +244,18 @@ export class PalletMergeComponent implements OnInit {
     this.translate.instant("Plt_CreateNewPallet"));
   }
 
-  depalletize() {
-
-  }
-
   back(fromwhereval: number) {
     this.router.navigate(['home/dashboard', { skipLocationChange: true }]);
   }
 
-  mergePallet() {
+  async mergePallet() {
+    var result = await this.validateBeforeSubmit();
+    this.isValidateCalled = false;
+    console.log("validate result: " + result);
+    if (result != undefined && result == false) {
+      return;
+    }
+
     if (this.selectedFromPallets.length == 0 || this.toPalletNo == '') {
       return
     }
@@ -403,5 +417,20 @@ export class PalletMergeComponent implements OnInit {
         }
       }
     );
+  }
+
+  isValidateCalled: boolean = false;
+  async validateBeforeSubmit():Promise<any>{
+    this.isValidateCalled = true;
+    var currentFocus = document.activeElement.id;
+    console.log("validateBeforeSubmit current focus: "+currentFocus);
+    
+    if(currentFocus != undefined){
+      if(currentFocus == "fromPalletNoInput"){
+        return this.onPalletChange("from_pallet");
+      } else if(currentFocus == "toPalletNoInput"){
+        return this.onPalletChange("to_pallet");
+      }
+    }
   }
 }

@@ -218,6 +218,10 @@ export class Commonservice {
       toastr.error('', message);
     }
     
+    if(JSON.parse(localStorage.getItem("ShipDetail")) != "" && JSON.parse(localStorage.getItem("ShipDetail")) != undefined && JSON.parse(localStorage.getItem("ShipDetail")) != null){
+     // this.CancelPickList((JSON.parse(localStorage.getItem("ShipDetail"))).OPTM_PICKLIST_CODE);
+    }
+    
     sessionStorage.removeItem('isLoggedIn');
     sessionStorage.removeItem('selectedComp');
     sessionStorage.removeItem('loggedInUser');
@@ -231,6 +235,16 @@ export class Commonservice {
     this.clearInboundData()
     this.router.navigate(['/account']);
 
+  }
+
+  CancelPickList(OPTM_PICKLIST_CODE, compId): Observable<any> {
+    var jObject = {
+      PalletCode: JSON.stringify([{
+        CompanyDBId: compId,
+        OPTM_PICKLIST_CODE: OPTM_PICKLIST_CODE
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/CancelPickList", jObject, this.httpOptions);
   }
 
   // Refresh List
@@ -279,7 +293,7 @@ export class Commonservice {
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/CreateNewPallet", jObject, this.httpOptions);
   }
 
-  isPalletValid(palletCode: string): Observable<any> {
+  isPalletValid(palletCode: string): Promise<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
         COMPANYDBNAME: localStorage.getItem("CompID"),
@@ -287,7 +301,18 @@ export class Commonservice {
         PalletCode: palletCode
       }])
     };
-    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/IsPalletValid", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/IsPalletValid", jObject, this.httpOptions).toPromise();
+  }
+
+  isContainerValid(containerCode: string): Promise<any> {
+    var jObject = {
+      PalletCode: JSON.stringify([{
+        COMPANYDBNAME: localStorage.getItem("CompID"),
+        WhseCode: localStorage.getItem("whseId"),
+        PalletCode: containerCode
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/IsPalletValid", jObject, this.httpOptions).toPromise();
   }
 
   getItemCodeList(): Observable<any> {
@@ -295,9 +320,9 @@ export class Commonservice {
     return this.httpclient.post(this.config_params.service_url + "/api/GoodsIssue/AllItemLookup", jObject, this.httpOptions);
   }
 
-  getItemInfo(itemCode: string): Observable<any> {
+  getItemInfo(itemCode: string): Promise<any> {
     var jObject = { ITEMCODE: JSON.stringify([{ CompanyDbName: localStorage.getItem("CompID"), ITEMCODE: itemCode, WHSCODE: localStorage.getItem("whseId") }]) };
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodsReceipt/GetItemInfo", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodsReceipt/GetItemInfo", jObject, this.httpOptions).toPromise();
   }
 
   // Palletization APIs 
@@ -562,7 +587,7 @@ export class Commonservice {
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/PalletTransaction", jObject, this.httpOptions);
   }
 
-  IsValidItemsFromPallet(palletCode: string, itemCode: string): Observable<any> {
+  IsValidItemsFromPallet(palletCode: string, itemCode: string): Promise<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
         COMPANYDBNAME: localStorage.getItem("CompID"),
@@ -571,10 +596,10 @@ export class Commonservice {
         WhseCode: localStorage.getItem("whseId")
       }])
     };
-    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/IsValidItemsFromPallet", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/IsValidItemsFromPallet", jObject, this.httpOptions).toPromise();
   }
 
-  IsValidBatchandSerialItemsFromPallet(batchNo: string, itemCode: string, palletCode: string): Observable<any> {
+  IsValidBatchandSerialItemsFromPallet(batchNo: string, itemCode: string, palletCode: string): Promise<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
         COMPANYDBNAME: localStorage.getItem("CompID"),
@@ -584,7 +609,7 @@ export class Commonservice {
         WhseCode: localStorage.getItem("whseId")
       }])
     };
-    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/IsValidBatchandSerialItemsFromPallet", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/IsValidBatchandSerialItemsFromPallet", jObject, this.httpOptions).toPromise();
   }
 
   GetPalletListForOutBound(itemCode: string): Observable<any> {
@@ -598,7 +623,7 @@ export class Commonservice {
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetPalletListForOutBound", jObject, this.httpOptions);
   }
 
-  IsPalletValidForOutBound(palletCode: string, itemCodeArray: string): Observable<any> {
+  IsPalletValidForOutBound(palletCode: string, itemCodeArray: string): Promise<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
         COMPANYDBNAME: localStorage.getItem("CompID"),
@@ -607,7 +632,7 @@ export class Commonservice {
         PALLETCODE: palletCode
       }])
     };
-    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/IsPalletValidForOutBound", jObject, this.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/Pallet/IsPalletValidForOutBound", jObject, this.httpOptions).toPromise();
   }
 
   GetPalletDataForWhseTrns(palletCode: string): Observable<any> {
@@ -651,12 +676,13 @@ export class Commonservice {
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetPalletsWithRowsPresent", jObject, this.httpOptions);
   }
-
-  GetContainerWithRowsPresent(): Observable<any> {
+  
+  GetContainerWithRowsPresent(containerId:any): Observable<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
         COMPANYDBNAME: localStorage.getItem("CompID"), 
-        WhseCode: localStorage.getItem("whseId")
+        WhseCode: localStorage.getItem("whseId"),
+        ContainerCode: containerId
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetContainersWithRowsPresent", jObject, this.httpOptions);
@@ -671,5 +697,63 @@ export class Commonservice {
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetContainerDataForWhseTrns", jObject, this.httpOptions);
+  }
+
+  onShipmentIDChange(OPTM_SHIPMENT_CODE): Observable<any> {
+    var jObject = {
+      PalletCode: JSON.stringify([{
+        CompanyDBId: localStorage.getItem("CompID"), 
+        OPTM_WHSCODE: localStorage.getItem("whseId"),
+        OPTM_SHIPMENT_CODE: OPTM_SHIPMENT_CODE
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetShipmentContainers", jObject, this.httpOptions);
+  }
+
+  SaveLoadTaskInformation(containerData): Observable<any> {
+    var jObject = { PalletCode: JSON.stringify(containerData) };
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/SaveLoadTaskInformation", jObject, this.httpOptions);
+  }
+
+  GetPickTaskSelectedSteps(OPTM_TRANS_CATEGORY): Observable<any> {
+    let jObject = {
+      PalletCode: JSON.stringify([{
+        CompanyDBId: localStorage.getItem("CompID"),
+        OPTM_TRANS_CATEGORY: OPTM_TRANS_CATEGORY
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetPickTaskSelectedSteps", jObject, this.httpOptions);
+  }
+
+  GetSelectedSteps(OPTM_TRANS_CATEGORY) {
+    this.GetPickTaskSelectedSteps(OPTM_TRANS_CATEGORY).subscribe(
+      (data: any) => {
+        if (data != undefined) {
+          if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+            this.RemoveLicenseAndSignout(this.toastr, this.router,
+              "Session expire");
+            return;
+          }
+          // this.showLookupLoader = false;
+          // this.pickListSteps = data.OPTM_TRANS_STEPS;
+          localStorage.setItem("PickListSteps", JSON.stringify(data.OPTM_TRANS_STEPS));
+
+        } else {
+          // this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+        }
+      },
+      error => {
+      }
+    );
+  }
+
+  GetConfigurationParam(): Observable<any> {
+    let jObject = {
+      PalletCode: JSON.stringify([{
+        CompanyDBId: localStorage.getItem("CompID"),
+        OPTM_APPLICABLE_WHSE: localStorage.getItem("whseId")
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetConfigurationParam", jObject, this.httpOptions);
   }
 }

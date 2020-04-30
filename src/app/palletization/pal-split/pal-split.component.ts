@@ -146,7 +146,14 @@ export class PalSplitComponent implements OnInit {
     // alert("scan click");
   }
 
-  onPalletChange(from: string) {
+  onPalletChangeBlur(from: string) {
+    if(this.isValidateCalled){
+      return;
+    }
+    this.onPalletChange(from);
+  }
+
+  async onPalletChange(from: string): Promise<any>{
 
     var plt;
     if (from == "from_pallet") {
@@ -169,23 +176,23 @@ export class PalSplitComponent implements OnInit {
     }
 
     this.showLoader = true;
-    this.commonservice.isPalletValid(plt).subscribe(
+    var result = false
+    await this.commonservice.isPalletValid(plt).then(
       (data: any) => {
         this.showLoader = false;
-       // console.log(data);
+        console.log("inside isPalletValid "+from);
         if (data != null) {
           if (data.length > 0) {
             if (from == "from_pallet") {
               this.fromPalletNo = data[0].Code;
               this.savedPalletsArray = [];
               this.resetVariables();
+              result = true;
             } else if (from == "to_pallet") {
               this.toPalletNo = data[0].Code;
               this.batchSerialNo = '';
               this.qty = 0;
-              // if (!this.containPallet(this.selectedToPallets, data[0].Code)) {
-              //   this.selectedToPallets.push(data[0]);
-              // }
+              result = true;
             }
           } else {
             this.toastr.error('', this.translate.instant("InValidPalletNo"));
@@ -196,7 +203,7 @@ export class PalSplitComponent implements OnInit {
               this.fromPalletNo = "";
               this.scanFromPallet.nativeElement.focus();
             }
-            return;
+            result = false;
           }
         }
         else {
@@ -208,7 +215,7 @@ export class PalSplitComponent implements OnInit {
             this.fromPalletNo = "";
             this.scanFromPallet.nativeElement.focus();
           }
-          return;
+          result = false;
         }
       },
       error => {
@@ -219,8 +226,10 @@ export class PalSplitComponent implements OnInit {
         else {
           this.toastr.error('', error);
         }
+        result = false;
       }
     );
+    return result;
   }
 
   getLookupValue(lookupValue: any) {
@@ -274,13 +283,9 @@ export class PalSplitComponent implements OnInit {
   }
 
   getPalletData(fromPalletNo: string) {
-    // this.showHideGridToggle = false;
-    // this.showHideBtnTxt = this.translate.instant("showGrid");
-    // this.showLoader = true;
     this.commonservice.GetPalletData(fromPalletNo).subscribe(
       (data: any) => {
         this.showLoader = false;
-       // console.log(data);
         if (data != null) {
           this.palletData = data;
         }
@@ -302,9 +307,15 @@ export class PalSplitComponent implements OnInit {
   }
 
   splitPallet(event: any) {
+    // var result = await this.validateBeforeSubmit();
+    // this.isValidateCalled = false;
+    // if (result != undefined && result == false) {
+    //   console.log("validate result: " + result);
+    //   return;
+    // }
+
     if (this.toPalletNo == this.fromPalletNo) {
       this.toastr.error('', this.translate.instant("Plt_PalletShouldNotSame"));
-      //this.scanFromPallet.nativeElement.focus();
       return;
     }
 
@@ -398,8 +409,14 @@ export class PalSplitComponent implements OnInit {
     this.toPalletNo = '';
   }
 
-  OnLotsChange() {
+  OnLotsChangeBlur(){
+    if(this.isValidateCalled){
+      return;
+    }
+    this.OnLotsChange();
+  }
 
+  async OnLotsChange(): Promise<any> {
     if (this.batchSerialNo == "" || this.batchSerialNo == undefined) {
       return;
     }
@@ -416,13 +433,13 @@ export class PalSplitComponent implements OnInit {
       return;
     }
 
-
     this.showLoader = true;
-    this.commonservice.IsValidBatchandSerialItemsFromPallet(this.batchSerialNo, this.itemCode,
-      this.fromPalletNo).subscribe(
+    var result = false;
+    await this.commonservice.IsValidBatchandSerialItemsFromPallet(this.batchSerialNo, this.itemCode,
+      this.fromPalletNo).then(
         (data: any) => {
+          console.log("inside IsValidBatchandSerialItemsFromPallet");
           this.showLoader = false;
-         // console.log(data);
           if (data != null) {
             if (data.length > 0) {
               this.batchSerialNo = data[0].LOTNO;
@@ -431,18 +448,19 @@ export class PalSplitComponent implements OnInit {
               this.fromBinNo = data[0].BINNO;
               this.openQty = Number.parseInt(data[0].TOTALQTY);
               this.validateRemainigQuantity();
+              result = true;
             } else {
               this.batchSerialNo = "";
               this.qty = 0;
               this.toastr.error('', this.translate.instant("Plt_InValidBatchSerial"));
-              return;
+              result = false;
             }
           }
           else {
             this.batchSerialNo = "";
             this.qty = 0;
             this.toastr.error('', this.translate.instant("Plt_InValidBatchSerial"));
-            return;
+            result = false;
           }
         },
         error => {
@@ -453,11 +471,20 @@ export class PalSplitComponent implements OnInit {
           else {
             this.toastr.error('', error);
           }
+          result = false;
         }
       );
+      return result;
   }
 
-  addQuantity() {
+  async addQuantity() {
+    var result = await this.validateBeforeSubmit();
+    this.isValidateCalled = false;
+    console.log("validate result: " + result);
+    if (result != undefined && result == false) {
+      return;
+    }
+
     if (this.fromPalletNo == "" || this.fromPalletNo == undefined) {
       this.toastr.error('', this.translate.instant("Plt_FromPalletRequired"));
       return;
@@ -468,10 +495,6 @@ export class PalSplitComponent implements OnInit {
       return;
     }
 
-    // if (this.moveQty == 0) {
-    //   this.toastr.error('', this.translate.instant("Plt_MoveQtyRequired"));
-    //   return;
-    // }
     if (this.batchSerialNo == "" || this.batchSerialNo == undefined) {
       this.toastr.error('', this.translate.instant("SelectBatchSerial"));
       return;
@@ -481,6 +504,7 @@ export class PalSplitComponent implements OnInit {
       this.toastr.error('', this.translate.instant("Inbound_EnterQuantityErrMsg"));
       return;
     }
+
     if (this.qty < 0) {
       this.toastr.error('', this.translate.instant("ProdReceipt_QtyGraterThenZero"));
       return;
@@ -627,9 +651,15 @@ export class PalSplitComponent implements OnInit {
     );
   }
 
-  OnItemCodeChange() {
+  OnItemCodeChangeBlur(){
+    if(this.isValidateCalled){
+      return;
+    }
+    this.OnItemCodeChange();
+  }
+
+  async OnItemCodeChange() : Promise<any>{
     if (this.itemCode == "" || this.itemCode == undefined) {
-      // this.toastr.error('', this.translate.instant("InvalidItemCode"));
       return;
     }
     if (this.fromPalletNo == "" || this.fromPalletNo == undefined) {
@@ -639,11 +669,12 @@ export class PalSplitComponent implements OnInit {
     }
 
     this.showLoader = true;
-    this.commonservice.IsValidItemsFromPallet(this.fromPalletNo, this.itemCode).subscribe(
+    var result = false;
+    await this.commonservice.IsValidItemsFromPallet(this.fromPalletNo, this.itemCode).then(
       data => {
+        console.log("inside IsValidItemsFromPallet");
         this.showLoader = false;
         if (data != undefined && data.length > 0) {
-         // console.log("" + data);
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
@@ -658,11 +689,13 @@ export class PalSplitComponent implements OnInit {
           } else {
             this.isSerailTrackedItem = false;
           }
+          result = true;
         } else {
           this.toastr.error('', this.translate.instant("InvalidItemCode"));
           this.itemCode = "";
           this.batchSerialNo = '';
           this.qty = 0;
+          result = false;
         }
       },
       error => {
@@ -672,8 +705,10 @@ export class PalSplitComponent implements OnInit {
         else {
           this.toastr.error('', error);
         }
+        result = false;
       }
     );
+    return result;
   }
 
   resetVariables() {
@@ -807,6 +842,25 @@ export class PalSplitComponent implements OnInit {
         this.toWhse = localStorage.getItem("whseId");
         this.createNewPallet($event.PalletNo, $event.BinNo);
         break
+      }
+    }
+  }
+
+  isValidateCalled: boolean = false;
+  async validateBeforeSubmit():Promise<any>{
+    this.isValidateCalled = true;
+    var currentFocus = document.activeElement.id;
+    console.log("validateBeforeSubmit current focus: "+currentFocus);
+    
+    if(currentFocus != undefined){
+      if(currentFocus == "PalSplitFromPltInput"){
+        return this.onPalletChange("from_pallet");
+      } else if(currentFocus == "PalSplitToPltInput"){
+        return this.onPalletChange("to_pallet");
+      } else if(currentFocus == "PalSplitItemCodeInput"){
+        return this.OnItemCodeChange();
+      } else if(currentFocus == "PalSplitBatchSrInput") {
+        return this.OnLotsChange();
       }
     }
   }

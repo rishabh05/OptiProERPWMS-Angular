@@ -14,7 +14,7 @@
                             <div class="input-group input-group-sm">
 
                                 <input type="text" class="form-control form-control-sm" name='customerCode' id="itemLabelItemCodeInput"
-                                 [(ngModel)]="itemCode"  (blur)="OnItemCodeChange()" #itemCodeIp placeholder="{{'ItemCode'|translate}}">
+                                 [(ngModel)]="itemCode"  (blur)="OnItemCodeChangeBlur()" #itemCodeIp placeholder="{{'ItemCode'|translate}}">
                                 <div class="input-group-append">
                                     <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="OnItemCodeLookupClick()">
                                         <i class="opti-icon-search"></i>
@@ -35,7 +35,7 @@
                             <div class="input-group input-group-sm">
 
                                 <input type="text" class="form-control form-control-sm" #batchSrBinIp name='binNoInput' id="itemLabelBatchSerialInput"
-                                    placeholder="{{'BatchSrBinNo'|translate}}" [(ngModel)]="binNo" (blur)="OnLotsChange()">
+                                    placeholder="{{'BatchSrBinNo'|translate}}" [(ngModel)]="binNo" (blur)="OnLotsChangeBlur()">
                                 <div class="input-group-append">
                                     <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="OnBatchSerialLookupClick()">
                                         <i class="opti-icon-search"></i>
@@ -66,9 +66,9 @@
                 <hr />
             </div>
             <div class="col-sm-12 col-12">
-                <button type="button" (click)="OnCancelClick()" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
+                <button type="button" (mousedown)="OnCancelClick()" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
-                <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text" (click)="OnPrintClick()"><span
+                <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text" (mousedown)="OnPrintClick()"><span
                         class="k-icon k-i-printer" role="presentation"></span> {{'Print'|translate}}</button>
             
                 <button type="button" id="hid_btnItemLabelItemCodeScanBtn" style="visibility:hidden"

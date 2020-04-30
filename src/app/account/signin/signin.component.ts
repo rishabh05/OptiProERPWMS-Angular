@@ -100,7 +100,7 @@ export class SigninComponent implements OnInit {
                 },
                 (err: HttpErrorResponse) => {
                     console.log(err.message);
-                    alert("HttpErrorResponse:" + err.message);
+                    //  alert("HttpErrorResponse:" + err.message);
                 }
             );
         }
@@ -117,7 +117,7 @@ export class SigninComponent implements OnInit {
                 }
             },
             error => {
-                this.toastr.error('', 'There is some error to connect with server', error);
+                //      this.toastr.error('', 'There is some error to connect with server', error);
                 this.showLoader = false;
             });
 
@@ -228,15 +228,15 @@ export class SigninComponent implements OnInit {
     }
 
     private handleLicenseDataSuccessResponse() {
-        console.log("log","handleLicense: start");
+        console.log("log", "handleLicense: start");
         // alert("in handle license data success response");
         this.selectedWhse = document.getElementById("whseId").innerText.trim();
         this.showLoader = false;
         if (this.licenseData.length > 1) {
-            console.log("log","handleLicense: start data>1");
+            console.log("log", "handleLicense: start data>1");
             if (this.licenseData[1].ErrMessage == "" || this.licenseData[1].ErrMessage == null) {
                 if (this.licenseData[0].Message == "True") {
-                    console.log("log","handleLicense:message true");
+                    console.log("log", "handleLicense:message true");
                     this.selectedItem = document.getElementById("compId").innerText.trim();
                     localStorage.setItem("GUID", this.licenseData[1].GUID);
                     localStorage.setItem("CompID", this.selectedItem);
@@ -276,19 +276,19 @@ export class SigninComponent implements OnInit {
                         this.setCookie('CompID', "", 365);
                         this.setCookie('whseId', "", 365);
                     }
-                    console.log("log","handleLicense:abouve routing");
+                    console.log("log", "handleLicense:abouve routing");
                     this.router.navigate(['home/dashboard']);
-                } else if(this.licenseData[0].Message == "NotFound") {
+                } else if (this.licenseData[0].Message == "NotFound") {
                     this.toastr.error('', this.translate.instant("SignIn_Msg_NotFound"));
                     this.showFullPageLoader = false;
-                } else if(this.licenseData[0].Message == "Unauthorized") {
+                } else if (this.licenseData[0].Message == "Unauthorized") {
                     this.toastr.error('', this.translate.instant("SignIn_Msg_Unauthorized"));
                     this.showFullPageLoader = false;
-                } else if(this.licenseData[0].Message == "BadRequest") {
+                } else if (this.licenseData[0].Message == "BadRequest") {
                     this.toastr.error('', this.translate.instant("SignIn_Msg_BadRequest"));
                     this.showFullPageLoader = false;
                 } else {
-                    console.log("log","handleLicense:else");
+                    console.log("log", "handleLicense:else");
                     this.toastr.error('', this.translate.instant("SignIn_Msg_Default"));
                     this.showFullPageLoader = false;
                 }
@@ -297,8 +297,14 @@ export class SigninComponent implements OnInit {
                 this.toastr.error('', this.translate.instant("SignIn_Msg_Default"));
             }
         } else {
+            if (this.licenseData.length > 0 &&
+                this.licenseData[0].ErrMessage != "" && this.licenseData[0].ErrMessage != null) {
+                    this.toastr.error('', this.licenseData[0].ErrMessage);
+            }else{
+                this.toastr.error('', this.translate.instant("SignIn_Msg_Default"));
+            }
             this.showFullPageLoader = false;
-            this.toastr.error('', this.translate.instant("SignIn_Msg_Default"));
+            
         }
     }
 

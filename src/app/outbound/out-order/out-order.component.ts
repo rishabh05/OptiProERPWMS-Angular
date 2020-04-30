@@ -1255,7 +1255,7 @@ export class OutOrderComponent implements OnInit {
     }
     this.showLookup = false;
     var itemCodeArray = Array.prototype.map.call(this.soItemsDetail, function (item) { return "'" + item.ITEMCODE + "'"; }).join(",");
-    this.commonservice.IsPalletValidForOutBound(this.palletNo, itemCodeArray).subscribe(
+    this.commonservice.IsPalletValidForOutBound(this.palletNo, itemCodeArray).then(
       (data: any) => {
      //   console.log(data);
         if (data != null) {
@@ -1721,7 +1721,7 @@ export class OutOrderComponent implements OnInit {
         return;
       }
       this.showLookupLoader = true;
-      this.inventoryTransferService.isToBinExist(this.toBinNo, this.toWhse).subscribe(
+      this.inventoryTransferService.isToBinExist(this.toBinNo, this.toWhse).then(
         data => {
           this.showLookupLoader = false;
           if (data != null) {

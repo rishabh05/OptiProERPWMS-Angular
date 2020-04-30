@@ -43,31 +43,37 @@
             </li>
 
             <!--outbound options start.-->
-            <li class="dropdown" dropdown id="SLS" [autoClose]="false"  [ngStyle]="{'display':'none'}" [insideClick]="true">
-              
+            <li class="dropdown" dropdown id="SLS" [autoClose]="false" [ngStyle]="{'display':'none'}" [insideClick]="true">
+
                 <a dropdownToggle class="dropdown-toggle">
-                    <svg viewBox="0 0 8500 6050" class="icon"><use xlink:href="#outbound"></use></svg>
-                <span class="text">{{'Outbound'|translate}}</span>
-            </a>
-            <ul *dropdownMenu class="dropdown-menu" role="menu">
-                <li id="15035" role="menuitem" (click)="listClick($event, 'outbound', 1)" [ngStyle]="{'display':'none'}">
-                    <a class="dropdown-item">
-                        <svg viewBox="0 0 1837 1123" class="icon"><use xlink:href="#outDelivery"></use></svg>
-                        <span class="text">{{'outbound_Delivery'|translate}}</span>                       
-                    </a>
-                </li>
-                <!-- <li id="15109" role="menuitem" (click)="listClick($event, 'inventory-transfer/binTransfer')" > -->
-                <li id="15036" role="menuitem" (click)="listClick($event, 'outbound', 2)" [ngStyle]="{'display':'none'}">
-                    <a class="dropdown-item">
-                        <svg viewBox="0 0 1837 1123" class="icon"><use xlink:href="#deliveryThroughShipment"></use></svg>
-                        <span class="text">{{'Outbound_Delivery_through_Shipment'|translate}}</span>
-                    </a>
-                </li>
-              
-            </ul>
+                    <svg viewBox="0 0 8500 6050" class="icon">
+                        <use xlink:href="#outbound"></use>
+                    </svg>
+                    <span class="text">{{'Outbound'|translate}}</span>
+                </a>
+                <ul *dropdownMenu class="dropdown-menu" role="menu">
+                    <li id="15035" role="menuitem" (click)="listClick($event, 'outbound', 1)" [ngStyle]="{'display':'none'}">
+                        <a class="dropdown-item">
+                            <svg viewBox="0 0 1837 1123" class="icon">
+                                <use xlink:href="#outDelivery"></use>
+                            </svg>
+                            <span class="text">{{'outbound_Delivery'|translate}}</span>
+                        </a>
+                    </li>
+                    <!-- <li id="15109" role="menuitem" (click)="listClick($event, 'inventory-transfer/binTransfer')" > -->
+                    <li id="15036" role="menuitem" (click)="listClick($event, 'outbound', 2)" [ngStyle]="{'display':'none'}">
+                        <a class="dropdown-item">
+                            <svg viewBox="0 0 1837 1123" class="icon">
+                                <use xlink:href="#deliveryThroughShipment"></use>
+                            </svg>
+                            <span class="text">{{'Outbound_Delivery_through_Shipment'|translate}}</span>
+                        </a>
+                    </li>
+
+                </ul>
             </li>
             <!--outbound options end.-->
-            <li id="PICKlIST" (click)="listClick($event, 'picking')" [ngClass]="{'active': selectedItem == 'picking'}" [ngStyle]="{'display':'flex'}">
+            <li id="PICKlIST" (click)="listClick($event, 'picking')" [ngClass]="{'active': selectedItem == 'picking'}" [ngStyle]="{'display':'none'}">
                 <a>
                     <svg viewBox="0 0 8500 6050" class="icon">
                         <use xlink:href="#outbound"></use>
@@ -75,7 +81,15 @@
                     <span class="text">{{'PickList'|translate}}</span>
                 </a>
             </li>
-            <li class="dropdown" dropdown id="INV" [ngStyle]="{'display':'none'}"  [autoClose]="false" [insideClick]="true">
+            <li id="ShpLoading" (click)="listClick($event, 'ShpLoading')" [ngClass]="{'active': selectedItem == 'ShpLoading'}" [ngStyle]="{'display':'flex'}">
+                <a>
+                    <svg viewBox="0 0 8500 6050" class="icon">
+                        <use xlink:href="#outbound"></use>
+                    </svg>
+                    <span class="text">{{'SHP_Loading'|translate}}</span>
+                </a>
+            </li>
+            <li class="dropdown" dropdown id="INV" [ngStyle]="{'display':'none'}" [autoClose]="false" [insideClick]="true">
                 <a dropdownToggle class="dropdown-toggle">
                     <svg viewBox="0 0 7473 6193" class="icon">
                         <use xlink:href="#inventoryTransferALt"></use>
@@ -119,7 +133,8 @@
                     </li>
                 </ul>
             </li>
-            <li class="dropdown" dropdown id="PALLET" *ngIf="isPalletizationEnable"  [autoClose]="false" [ngStyle]="{'display':'none'}" [insideClick]="true">
+            <li class="dropdown" dropdown id="PALLET" *ngIf="isPalletizationEnable" [autoClose]="false" [ngStyle]="{'display':'none'}"
+                [insideClick]="true">
                 <a dropdownToggle class="dropdown-toggle">
                     <svg viewBox="0 0 7187 6527" class="icon">
                         <use xlink:href="#palletizeMain"></use>
@@ -169,7 +184,7 @@
                     </li>
                 </ul>
             </li>
-            <li class="dropdown" dropdown id="INVADJ"  [autoClose]="false" [ngStyle]="{'display':'none'}" [insideClick]="true">
+            <li class="dropdown" dropdown id="INVADJ" [autoClose]="false" [ngStyle]="{'display':'none'}" [insideClick]="true">
                 <a dropdownToggle class="dropdown-toggle">
                     <svg viewBox="0 0 502.422 502.422" class="icon">
                         <use xlink:href="#adjustment"></use>
@@ -187,7 +202,7 @@
                     </li>
                 </ul>
             </li>
-            <li class="dropdown" dropdown id="PRO"  [autoClose]="false" [ngStyle]="{'display':'none'}" [insideClick]="true">
+            <li class="dropdown" dropdown id="PRO" [autoClose]="false" [ngStyle]="{'display':'none'}" [insideClick]="true">
                 <a dropdownToggle class="dropdown-toggle">
                     <svg viewBox="0 0 6990 7110" class="icon">
                         <use xlink:href="#production"></use>
@@ -213,7 +228,7 @@
                     </li>
                 </ul>
             </li>
-            <li class="dropdown" dropdown id="LBLRPT"  [autoClose]="false" [ngStyle]="{'display':'none'}" [insideClick]="true">
+            <li class="dropdown" dropdown id="LBLRPT" [autoClose]="false" [ngStyle]="{'display':'none'}" [insideClick]="true">
                 <a dropdownToggle class="dropdown-toggle">
                     <svg viewBox="0 0 429.279 429.279" class="icon">
                         <use xlink:href="#printing"></use>
@@ -247,6 +262,15 @@
                     </li>
                 </ul>
             </li>
+
+            <!-- <li id="PUR" (click)="listClick($event, 'shipment')" [ngClass]="{'active': selectedItem == 'shipment'}" [ngStyle]="{'display':'flex'}">
+                <a>
+                    <svg viewBox="0 0 503.322 503.322" class="icon">
+                        <use xlink:href="#inbound"></use>
+                    </svg>
+                    <span class="text">Shipment</span>
+                </a>
+            </li> -->
         </ul>
 
     </section>

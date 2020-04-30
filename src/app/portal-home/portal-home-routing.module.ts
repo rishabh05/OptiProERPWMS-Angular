@@ -12,12 +12,6 @@ import { PalletMergeComponent } from '../palletization/pallet-merge/pallet-merge
 import { DepalletizeComponent } from '../palletization/depalletize/depalletize.component';
 import { PalletizeComponent } from '../palletization/palletize/palletize.component';
 import { InventoryTransferbyITRMasterComponent } from 'src/app/inventory-transfer/inventory-transferby-itrmaster/inventory-transferby-itrmaster.component';
-import { ITRLIstComponent } from '../inventory-transfer/itrlist/itrlist.component';
-// import { InboundDetailsComponent } from '../inbound/inbound-details/inbound-details.component';
-// import { OutCutomerComponent } from '../outbound/out-cutomer/out-cutomer.component';
-// import { OutOrderComponent } from '../outbound/out-order/out-order.component';
-// import { OutProdissueComponent } from '../outbound/out-prodissue/out-prodissue.component';
-// import { OutboundModule } from '../outbound/outbound.module';
 
 const routes: Routes = [
 
@@ -50,6 +44,7 @@ const routes: Routes = [
       { path:'pallet-merge', component:PalletMergeComponent },
       { path:'depalletize', component:DepalletizeComponent },
       { path:'palletize', component:PalletizeComponent },
+      { path: 'ShpLoading', loadChildren: "../shp-loading/shp-loading.module#ShpLoadingModule" },
     ]
     
   }

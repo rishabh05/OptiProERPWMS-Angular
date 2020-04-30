@@ -13,7 +13,7 @@
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
                                 <input type="text" class="form-control form-control-sm" name="VendCode" [(ngModel)]="VendCode" placeholder="{{'VendorCode'|translate}}"
-                                    (blur)="OnVendorChange()" #VendScanInputField [disabled]=showGRPOGridAndBtn id="InboundDetailVendScanInputField">
+                                    (blur)="OnVendorChangeBlur()" #VendScanInputField [disabled]=showGRPOGridAndBtn id="InboundDetailVendScanInputField">
                                 <div class="input-group-append">
                                     <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="onVendorLookupClick()" [disabled]=showGRPOGridAndBtn>
                                         <i class="opti-icon-search"></i>
@@ -40,7 +40,7 @@
                             <div class="col-sm-9">
                                 <div class="input-group input-group-sm">
                                     <input type="text" #poScanInputField class="form-control form-control-sm" name="poCode" [(ngModel)]="poCode" placeholder="{{'Inbound_PO#'|translate}}"
-                                        (blur)="OnPOChange()" id="inboundDetailPOScanInputField">
+                                        (blur)="OnPOChangeBlur()" id="inboundDetailPOScanInputField">
                                     <div class="input-group-append">
                                         <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="onPOlookupClick()">
                                             <i class="opti-icon-search"></i>
@@ -59,8 +59,8 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">{{'Inbound_VendRefNo'|translate}}</label>
                             <div class="col-sm-9">
                                 <div class="input-group input-group-sm">
-                                    <input #scanVenderRefNo type="text" class="form-control form-control-sm" name="VendRefNo" [(ngModel)]="VendRefNo" placeholder="{{'Inbound_VendRefNo'|translate}}"
-                                        (blur)="OnVendRefNoChange()">
+                                    <input #scanVenderRefNo type="text" class="form-control form-control-sm" id="venderRefNo" name="VendRefNo" [(ngModel)]="VendRefNo" placeholder="{{'Inbound_VendRefNo'|translate}}"
+                                        (blur)="OnVendRefNoChangeBlur()">
     
                                 </div>
                             </div>
@@ -116,12 +116,12 @@
                 <hr />
             </div>
             <div class="col-sm-12 col-12">
-                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="OnCancelClick()">
+                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (mousedown)="OnCancelClick()">
                     <span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
-                <button *ngIf="showGRPOGridAndBtn" class="btn btn-success k-button btn-sm btn-icon-with-text" type="button" (click)="receive()">
+                <button *ngIf="showGRPOGridAndBtn" class="btn btn-success k-button btn-sm btn-icon-with-text" type="button" (mousedown)="receive()">
                     <span class="k-icon k-i-check" role="presentation"></span> {{'Receive'|translate}}</button>
 
-                <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" (click)="onNextClick()" [disabled]="!showNext"
+                <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" (mousedown)="onNextClick()" [disabled]="!showNext"
                     skipLocationChange>
                     <i class="opti-icon-arrow-next"></i>
                 </button>

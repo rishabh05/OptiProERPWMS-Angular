@@ -45,6 +45,11 @@ export class LabelPrintReportsService {
     return this.httpclient.post(this.config_params.service_url + "/api/GoodsReceipt/IsItemExists", jObject, this.commonService.httpOptions);
   }
 
+  isItemExistsPromise( item:string): Promise<any> {
+    var jObject = { ITEMCODE: JSON.stringify([{ COMPANYDBNAME: localStorage.getItem("CompID"), ItemCode: item }]) };
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodsReceipt/IsItemExists", jObject, this.commonService.httpOptions).toPromise();
+  }
+
   /**
    * get tracking type for the item.
    * @param item 
@@ -81,10 +86,20 @@ export class LabelPrintReportsService {
    * @param item 
    * @param binNo 
    */
-  getLotScanListWithoutWhseBinAndItemWise( item:string,binNo:string){
+  getLotScanListWithoutWhseBinAndItemWise( item:string,binNo:string): Observable<any>{
    var jObject = { DeliveryToken: JSON.stringify([{ LOTNO: binNo, CompanyDBId: localStorage.getItem("CompID"), ITEMCODE: item, WhsCode: '', ALLBINS: true, LOTISSUEMETHOD: '1', SUPPORTTRX: '15' }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetLotScanListWithoutWhseBinAndItemWise", jObject, this.commonService.httpOptions);
   }
+
+  /**
+   * get lot scan list.
+   * @param item 
+   * @param binNo 
+   */
+  getLotScanListWithoutWhseBinAndItemWisePromise( item:string,binNo:string): Promise<any>{
+    var jObject = { DeliveryToken: JSON.stringify([{ LOTNO: binNo, CompanyDBId: localStorage.getItem("CompID"), ITEMCODE: item, WhsCode: '', ALLBINS: true, LOTISSUEMETHOD: '1', SUPPORTTRX: '15' }]) };
+     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetLotScanListWithoutWhseBinAndItemWise", jObject, this.commonService.httpOptions).toPromise();
+   }
 
   /**
    * get the value for no. of copies for print.
@@ -159,10 +174,10 @@ export class LabelPrintReportsService {
    * check bin is exists or not.
    * @param item 
    */
-  isBinExists( bin:string): Observable<any> {
+  isBinExists( bin:string): Promise<any> {
     var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), BinCode: bin, 
       ItemCode: '', WhsCode: localStorage.getItem("whseId"), ALLBINS: true }]) };
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsBinExist", jObject, this.commonService.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsBinExist", jObject, this.commonService.httpOptions).toPromise();
   }
 
   

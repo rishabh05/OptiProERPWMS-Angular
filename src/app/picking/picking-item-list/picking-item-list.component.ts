@@ -73,6 +73,7 @@ export class PickingItemListComponent implements OnInit {
   public skip = 0;
   public mobileMedia = "(max-width: 767px)";
   public desktopMedia = "(min-width: 768px)";
+  itemcodeLabel: string = "Item Code";
   // GRID VARIABLE
 
 
@@ -80,7 +81,7 @@ export class PickingItemListComponent implements OnInit {
     this.picktaskService.clearLocaStorage();
     this.ShipDetail = JSON.parse(localStorage.getItem("ShipDetail"));
     this.shipmentno = this.translate.instant("PickListCode") + ": " + this.ShipDetail.OPTM_PICKLIST_CODE;
-    this.getPickTaskList(this.ShipDetail.OPTM_TASK_CODE);
+    this.getPickTaskList(this.ShipDetail.OPTM_TASK_CODE, this.ShipDetail.OPTM_PICKLIST_CODE);
   }
 
   cellClickHandler(row) {
@@ -94,9 +95,10 @@ export class PickingItemListComponent implements OnInit {
     this.router.navigate(['home/picking/picking-list']);
   }
 
-  getPickTaskList(OPTM_TASK_CODE) {
+  
+  getPickTaskList(OPTM_TASK_CODE, OPTM_PICKLIST_CODE) {
     this.showLoader = true;
-    this.picktaskService.GetDataBasedOnPickList(OPTM_TASK_CODE).subscribe(
+    this.picktaskService.GetDataBasedOnPickList(OPTM_TASK_CODE, OPTM_PICKLIST_CODE).subscribe(
       (data: any) => {
         this.showLoader = false;
         if (data != undefined) {
@@ -108,6 +110,15 @@ export class PickingItemListComponent implements OnInit {
           this.showLookupLoader = false;
           this.PickTaskDetail = data;
           this.PickTaskList = data.OPTM_WHSTASKLIST;
+          if (localStorage.getItem("PickType") == this.translate.instant("Container_Picking")) {
+            for(var i=0; i<this.PickTaskList.length; i++){
+              this.PickTaskList[i].OPTM_ITEMCODE = data.OPTM_WHSTASK_DTL[i].OPTM_CONTCODE;
+              this.PickTaskList[i].OPTM_TASK_QTY = data.OPTM_WHSTASK_DTL[i].OPTM_PLANNED_QTY;
+            }
+            this.itemcodeLabel = "Container Code";
+          }else{
+            this.itemcodeLabel = "Item Code";
+          }
           if(this.PickTaskList.length > this.pageSize){
             this.pagable = true;
           }
