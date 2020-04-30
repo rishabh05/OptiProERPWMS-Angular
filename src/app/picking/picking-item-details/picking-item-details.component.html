@@ -105,9 +105,9 @@
 
                             <!-- step bars -->
                             <div class="item-steps-bar">
-                                    <ng-container  *ngFor="let c of CurrentTaskSteps; let i =index" >
-                                            <span [ngClass]="{active:currentStep == i+1}" class="step"></span>
-                                          </ng-container>
+                                <ng-container *ngFor="let c of CurrentTaskSteps; let i =index">
+                                    <span [ngClass]="{active:currentStep == i+stepIncrementValue}" class="step"></span>
+                                </ng-container>
                                 <!-- <span *ngFor="let c of CurrentTaskSteps" [ngClass]="{active:currentStep == 1}" class="step"></span> -->
                                 <!-- <span [ngClass]="{active:currentStep == 2}" class="step"></span>
                                 <span [ngClass]="{active:currentStep == 3}" class="step"></span>
@@ -127,11 +127,14 @@
                 <button class="btn btn-outline-secondary btn-sm btn-transparent btn-icon mr-1" type="button" (click)="onBackClick()">
                     <i class="opti-icon-arrow-back"></i>
                 </button>
-                <button class="btn btn-success k-button btn-sm btn-icon-with-text" type="button" (click)="onSubmitClick()">
-                    <span class="k-icon k-i-check" role="presentation"></span>{{'Submit'|translate}}</button>
+                <!-- <button class="btn btn-success k-button btn-sm btn-icon-with-text" type="button" (click)="onSubmitClick()">
+                    <span class="k-icon k-i-check" role="presentation"></span>{{'Submit'|translate}}</button> -->
 
                 <button class="btn btn-success k-button btn-sm btn-icon-with-text" type="button" (click)="getNextPick()">
                     <span role="presentation"></span>Next Pick</button>
+
+                <button class="btn btn-success k-button btn-sm btn-icon-with-text" type="button" (click)="skipPickTask()">
+                    <span role="presentation"></span>Next Pick Task</button>
             </div>
         </div>
     </form>

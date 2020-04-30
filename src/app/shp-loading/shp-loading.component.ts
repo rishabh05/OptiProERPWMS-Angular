@@ -15,7 +15,10 @@ export class ShpLoadingComponent implements OnInit {
   ScanContainer: string;
   ScanLoadLocation: string;
   PT_ShipmentId: string;
+  shipmentCode: string;
   LoadLocation: string;
+  OPTM_WHSCODE: string;
+  OPTM_BINCODE: string;
   LoadContainersList: any[] = [];
   LastStep = 2;
   showLoader: boolean = false;
@@ -24,6 +27,8 @@ export class ShpLoadingComponent implements OnInit {
   containerData: any[] = [];
   stepIndex = 0;
   maxStep = 0;
+  dialogOpened = false;
+
   @ViewChild('focusOnCont') focusOnCont;
   @ViewChild('focusOnDockDoor') focusOnDockDoor;
 
@@ -64,11 +69,11 @@ export class ShpLoadingComponent implements OnInit {
   }
 
   onShipmentIDChange() {
-    if (this.PT_ShipmentId == "" || this.PT_ShipmentId == undefined) {
+    if (this.shipmentCode == "" || this.shipmentCode == undefined) {
       return;
     }
     this.showLoader = true;
-    this.commonservice.onShipmentIDChange(this.PT_ShipmentId).subscribe(
+    this.commonservice.onShipmentIDChange(this.shipmentCode).subscribe(
       (data: any) => {
         this.showLoader = false;
         if (data != undefined) {
@@ -78,10 +83,16 @@ export class ShpLoadingComponent implements OnInit {
             return;
           }
           if (data.OPTM_SHPMNT_HDR.length > 0) {
-            this.PT_ShipmentId = data.OPTM_SHPMNT_HDR[0].OPTM_SHIPMENT_CODE;
+            this.shipmentCode = data.OPTM_SHPMNT_HDR[0].OPTM_SHIPMENT_CODE;
+            this.PT_ShipmentId = data.OPTM_SHPMNT_HDR[0].OPTM_SHIPMENTID;
             this.LoadLocation = data.OPTM_SHPMNT_HDR[0].OPTM_DOCKDOORID;
+            this.OPTM_WHSCODE = data.OPTM_SHPMNT_HDR[0].OPTM_WHSCODE;
+            this.OPTM_BINCODE = data.OPTM_SHPMNT_HDR[0].OPTM_BINCODE;
             this.LoadContainersList = data.OPTM_CONT_HDR;
             this.FirstCont = this.LoadContainersList[0];
+            if(this.LoadContainersList.length == 0){
+              this.dialogOpened = true;
+            }
           } else {
             this.toastr.error('', this.translate.instant("InvalidShipmentCode"));
             this.clearFields();
@@ -105,6 +116,7 @@ export class ShpLoadingComponent implements OnInit {
 
   clearFields() {
     this.PT_ShipmentId = "";
+    this.shipmentCode = "";
     this.LoadLocation = "";
     this.LoadContainersList = [];
     this.FirstCont = {OPTM_CONTCODE: ''};
@@ -158,7 +170,7 @@ export class ShpLoadingComponent implements OnInit {
       return;
     }
     if (this.ScanLoadLocation === this.LoadLocation) {
-      this.addScannedContainer(this.PT_ShipmentId, this.ScanContainer);
+      this.addScannedContainer(this.shipmentCode, this.ScanContainer);
       this.stepIndex = -1;
       this.nextSteptoIterate();
     } else {
@@ -225,6 +237,7 @@ export class ShpLoadingComponent implements OnInit {
     this.containerData = [];
     this.LoadContainersList = [];
     this.PT_ShipmentId = "";
+    this.shipmentCode = "";
     this.LoadLocation = "";
   }
 
@@ -242,7 +255,7 @@ export class ShpLoadingComponent implements OnInit {
         } else {
           if (this.stepIndex == this.PickListSteps.length - 1) {
             this.LastStep = this.currentStep;
-            this.addScannedContainer(this.PT_ShipmentId, this.ScanContainer);
+            this.addScannedContainer(this.shipmentCode, this.ScanContainer);
           } else {
             this.nextSteptoIterate();
           }
@@ -294,4 +307,124 @@ export class ShpLoadingComponent implements OnInit {
   OnCancelClick() {
     this.router.navigate(['home/dashboard']);
   }
+
+  onConfirmClick(){
+    if(this.containerCode == "" || this.containerCode == undefined || this.containerCode == null){
+      this.toastr.error('', this.translate.instant("ContainerCodeBlankMsg"))
+      return;
+    }
+    this.close_kendo_dialog();
+  }
+
+  close_kendo_dialog() {
+    this.dialogOpened = false;
+  }
+
+
+  containerCode: string;
+  generateContainer() {
+    if(this.containerCode == "" || this.containerCode == undefined || this.containerCode == null){
+      this.toastr.error('', this.translate.instant("ContainerCodeBlankMsg"))
+      return;
+    }
+    this.PrepareModelAndCreateCont(this.containerCode);
+  }
+
+  PrepareModelAndCreateCont(containerCode: any) {
+    var oSaveModel: any = {};
+    oSaveModel.HeaderTableBindingData = [];
+    oSaveModel.OtherItemsDTL = [];
+    oSaveModel.OtherBtchSerDTL = [];
+
+    //Push data of header table into BatchSerial model
+    oSaveModel.HeaderTableBindingData.push({
+      OPTM_SHIPMENTID: this.PT_ShipmentId,
+      OPTM_SONO: "",
+      OPTM_CONTAINERID: "",
+      OPTM_CONTTYPE: "Manual",
+      OPTM_CONTAINERCODE: "" + containerCode,
+      OPTM_WEIGHT: "",
+      OPTM_AUTOCLOSE_ONFULL: "Y",
+      OPTM_AUTORULEID: "Manual",
+      OPTM_WHSE: this.OPTM_WHSCODE,
+      OPTM_BIN: this.OPTM_BINCODE,
+      OPTM_CREATEDBY: localStorage.getItem("UserId"),
+      OPTM_MODIFIEDBY: '',
+      Length: length,
+      Width: "",
+      Height: "",
+      ItemCode: "",
+      NoOfPacks: "1",
+      OPTM_TASKID: 0, //changed
+      CompanyDBId: localStorage.getItem("CompID"),
+      Username: localStorage.getItem("UserId"),
+      UserId: localStorage.getItem("UserId"),
+      GUID: localStorage.getItem("GUID"),
+      Action: "N",
+      OPTM_PARENTCODE: "",
+      OPTM_GROUP_CODE: 0,
+      OPTM_CREATEMODE: "3",
+      OPTM_PERPOSE: "Y",
+      OPTM_FUNCTION: "Shipping",
+      OPTM_OBJECT: "Container",
+      OPTM_WONUMBER: 0,
+      OPTM_TASKHDID: 0,
+      OPTM_OPERATION: "",
+      OPTM_QUANTITY: 1,
+      OPTM_SOURCE: 3,
+      OPTM_ParentContainerType: "",
+      OPTM_ParentPerQty: "",
+      IsWIPCont: false
+    });
+
+    oSaveModel.OtherItemsDTL.push({
+      OPTM_ITEMCODE: "",
+      OPTM_QUANTITY: "",
+      OPTM_CONTAINER: "",
+      OPTM_AVLQUANTITY: 0,
+      OPTM_INVQUANTITY: 0,
+      OPTM_BIN: '',
+      OPTM_CONTAINERID: "",
+      OPTM_TRACKING: "",
+      OPTM_WEIGHT: ""
+    });
+
+    oSaveModel.OtherBtchSerDTL.push({
+      OPTM_BTCHSER: "",
+      OPTM_QUANTITY: "",
+      OPTM_ITEMCODE: ""
+    });
+    
+    this.commonservice.CreateContainerForPacking(oSaveModel).subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        if (data != undefined) {
+          if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
+          if (data.OUTPUT[0].RESULT == "Data Saved") {
+            this.toastr.success('', this.translate.instant("ContainerCreatedSuccessMsg"));
+            this.containerCode = "";
+            this.onShipmentIDChange();
+          } else {
+            this.toastr.error('', data.OUTPUT[0].RESULT);
+          }
+        } else {
+          // this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+        }
+      },
+      error => {
+        this.showLoader = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
+
 }

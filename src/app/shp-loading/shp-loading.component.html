@@ -9,11 +9,11 @@
           <div class="po-details-comp">
             <div class="po-details-sec">
               <div class="form-group row">
-                <label for="inputPassword" class="col-sm-4 col-form-label">{{'PT_ShipmentId'|translate}}</label>
+                <label for="inputPassword" class="col-sm-4 col-form-label">{{'ShipmentID'|translate}}</label>
                 <div class="col-sm-8">
                   <div class="input-group input-group-sm">
-                    <input #scanPTshipmentId type="text" class="form-control form-control-sm" id="PT_ShipmentId" name="PT_ShipmentId" [(ngModel)]="PT_ShipmentId"
-                      placeholder="{{'PT_ShipmentId'|translate}}" (blur)="onShipmentIDChange()">
+                    <input #scanPTshipmentId type="text" class="form-control form-control-sm" id="shipmentCode" name="shipmentCode" [(ngModel)]="shipmentCode"
+                      placeholder="{{'shipmentCode'|translate}}" (blur)="onShipmentIDChange()">
                   </div>
                 </div>
               </div>
@@ -110,3 +110,24 @@
   </form>
 
 </div>
+
+<kendo-dialog [width]="500" *ngIf="dialogOpened" (close)="close_kendo_dialog()">
+    <div class="new-custom-grid">
+        <kendo-dialog-titlebar>
+            {{'ScanContAssignShp'|translate}}
+        </kendo-dialog-titlebar>
+        <div class="px-3">
+            <div class="form-group row mt-2">
+                <div class="input-group input-group-sm">
+                    <label class="col-sm-4 col-form-label">{{'ContainerCode'|translate}}</label>
+                    <input type="text" id="containerCode" name="containerCode" class="col-sm-8 form-control form-control-sm mr-3"
+                        [(ngModel)]="containerCode" placeholder="{{'Enter_Container_Code'|translate}}" (blur)="generateContainer()">
+                </div>
+            </div>
+        </div>
+    
+        <kendo-dialog-actions>
+            <button class="ml-1" kendoButton (click)="onConfirmClick()" primary="true">Confirm</button>
+        </kendo-dialog-actions>
+    </div>
+</kendo-dialog>

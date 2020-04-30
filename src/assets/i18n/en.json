@@ -512,5 +512,9 @@
   "Container_Detail":"Container Detail",
   "ScanLoadLoc":"Scan Load Location",
   "NoRecord": "Please save record to submit.",
+  "ScanContAssignShp": "Scan Container and Assign to Shipment", 
+  "Enter_Container_Code": "Enter Container Code",
+  "ContainerCodeBlankMsg": "Container code can't be blank.",
+  "AlreadyPickQty":"Total quantities of this batch number already picked, so please choose other batch number.",
   "Dummy": "Dummy"
 }
