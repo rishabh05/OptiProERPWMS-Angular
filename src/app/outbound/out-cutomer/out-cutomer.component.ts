@@ -1170,9 +1170,13 @@ export class OutCutomerComponent implements OnInit {
           
           if(resp.ItemHeader!=null && resp.ItemHeader!=undefined && resp.ItemHeader.length>0 &&
             resp.ItemDetail!=null && resp.ItemDetail!=undefined && resp.ItemDetail.length>0){
+              
               this.dockDoorCode = resp.ItemHeader[0].OPTM_DOCKDOORID;
               this.dockDoorFromShipment = resp.ItemHeader[0].OPTM_DOCKDOORID;
               this.parseAndGenerateDeliveryDataFromShipment(resp);
+          }else{
+            this.shipmentId = "";
+            this.toastr.error('', this.translate.instant("ShipmentNotAvailable"));
           }
            
 

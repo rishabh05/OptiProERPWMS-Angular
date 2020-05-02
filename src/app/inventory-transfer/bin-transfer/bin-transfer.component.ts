@@ -942,6 +942,7 @@ export class BinTransferComponent implements OnInit {
                 oWhsTransAddLot.UDF = [];
                 this.TransferedItemsDetail = [];
                 this.selectedPallets = [];
+                this.selectedContainers = [];
                 this.clearData();
               }
               else {
@@ -1387,6 +1388,7 @@ export class BinTransferComponent implements OnInit {
       this.selectedPallets = [];
       this.clearData();
       this.manageCheckChange();
+      this.selectedContainers = [];
     } else {
       this.checkChangeEvent.preventDefault();
       this.showDialog("RadioBtnChange", this.translate.instant("yes"), this.translate.instant("no"),
