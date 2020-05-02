@@ -524,5 +524,6 @@
   "Enter_Container_Code": "Enter Container Code",
   "ContainerCodeBlankMsg": "Container code can't be blank.",
   "AlreadyPickQty":"Total quantities of this batch number already picked, so please choose other batch number.",
+  "InvTransfer_ContainerSameBinMsg": "Container already belongs to selected To Bin.",
   "Dummy": "Dummy"
 }
