@@ -72,6 +72,7 @@ export class BinTransferComponent implements OnInit {
   checkChangeEvent: any;
   showBinFields: boolean = true;
   binOfSelectedPallet: any = "";
+  binOfSelectedContainer: any = "";
   palletList: any = [];
   containerList: any = [];
   @ViewChild("scanItemCode") scanItemCode;
@@ -1202,6 +1203,12 @@ export class BinTransferComponent implements OnInit {
       }else if (this.lookupfor == "ContainerList"){
          this.containerId = $event[0];
          this.containerCode = $event[1];
+         for (let i = 0; i < this.containerList.length; i++) {
+          if (this.containerCode == this.containerList[i].OPTM_CONTCODE) {
+            this.binOfSelectedContainer = this.containerList[i].OPTM_BIN;
+            break;
+          }
+        }
       }
       this.formatTransferNumbers();
       this.formatOnHandQty(); 
@@ -1780,9 +1787,13 @@ export class BinTransferComponent implements OnInit {
       this.toastr.error('', this.translate.instant("InvTransfer_ToBinMsg"));
       return;
     }
+    if (this.binOfSelectedContainer == this.toBin) {
+      this.toastr.error('', this.translate.instant("InvTransfer_ContainerSameBinMsg"));
+      return;
+    }
 
     for (let i = 0; i < this.selectedContainers.length; i++) {
-      if (this.containerCode == this.selectedContainers[i].containerCode) {
+      if (this.containerCode == this.selectedContainers[i].Code) {
         this.containerCode = "";
         this.toastr.error('', this.translate.instant("ContainerAlreadySelected"));
         return

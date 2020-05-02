@@ -19,6 +19,7 @@ export class SOHEADER {
     NumAtCard: string ="";
     TrackingNumber: string ="";
     DOCENTRY:string;
+    SelectedShipmentID:string;
 }
 
 export class SODETAIL {

@@ -689,6 +689,9 @@ export class OutCutomerComponent implements OnInit {
             } else {
               hdr.TrackingNumber = "";
             }
+            if(this.deliveryOptionType==2){
+              hdr.SelectedShipmentID = this.shipmentId;
+            }
             arrSOHEADER.push(hdr);
           }
           //================logic to add delivery line.

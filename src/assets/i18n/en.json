@@ -520,5 +520,6 @@
   "Container_Detail":"Container Detail",
   "ScanLoadLoc":"Scan Load Location",
   "NoRecord": "Please save record to submit.",
+  "InvTransfer_ContainerSameBinMsg": "Container already belongs to selected To Bin.",
   "Dummy": "Dummy"
 }
