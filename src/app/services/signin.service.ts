@@ -81,4 +81,40 @@ export class SigninService {
      }
     return this.httpclient.post(this.config_params.service_url + this.lisenceDataUrl, jObject, this.commonService.httpOptions);
   }
+
+  getBinRanges(compId: string): Observable<any> {
+     
+    let jObject = {
+      CompanyName: JSON.stringify([{
+        Username: localStorage.getItem("UserId"),
+        CompanyDBId: compId
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/WMSlogin/GetWHS", jObject,
+      this.commonService.httpOptions);
+  }
+
+  getRoleList(compId: string): Observable<any> {
+     
+    let jObject = {
+      CompanyName: JSON.stringify([{
+        Username: localStorage.getItem("UserId"),
+        CompanyDBId: compId
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/WMSlogin/GetWHS", jObject,
+      this.commonService.httpOptions);
+  }
+
+  getZoneList(compId: string): Observable<any> {
+     
+    let jObject = {
+      CompanyName: JSON.stringify([{
+        Username: localStorage.getItem("UserId"),
+        CompanyDBId: compId
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/WMSlogin/GetWHS", jObject,
+      this.commonService.httpOptions);
+  }
 }

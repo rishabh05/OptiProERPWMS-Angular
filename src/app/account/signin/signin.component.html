@@ -21,17 +21,7 @@
                     </div>
 
                     <form class="k-form" #signInForm="ngForm">
-                        <!-- <label class="k-form-field">
-                          <span class="opti_form-label">{{ 'Login_Username'|translate}}
-                          <span *ngIf="emailId.errors?.required && (emailId.dirty || emailId.touched)" 
-                          class="float-right opti_error-msg" >{{'Login_UnBlankErrMsg'|translate}}</span>
-                         
-                          </span> 
-                          <input type="text" id="emailID"  name ="email" required [(ngModel)]="userName"
-                            #emailId = ngModel class="k-textbox"  value="" placeholder="{{ 'Login_EnterUsername'|translate}}"
-                            [readonly]=readonlyFlag
-                            />  
-                        </label>  -->
+                        
                         <div class="col-auto">
                             <span class="opti_form-label">
                               <!-- {{ 'Login_Username'|translate}} -->
@@ -51,21 +41,8 @@
                             />  
                             </div>
                           </div>
-
-                        <!-- <label class="k-form-field">
-                          <span class="opti_form-label">{{ 'Login_Password'|translate}}
-                              <span  *ngIf="pwd.errors && (pwd.dirty || pwd.touched)"   class="float-right opti_error-msg">{{'Login_PwdBlankErrMsg'|translate}}</span>
-                              <span  *ngIf="this.isError==true &&  (pwd.dirty || pwd.touched) && (emailId.dirty || emailId.touched) && !pwd.errors?.required" class="float-right opti_error-msg">Invalid credentials.</span>
-                              
-                          </span>
-                          <input name = "password" required [(ngModel)]="password" 
-                          #pwd = ngModel type="password" class="k-textbox" value="" 
-                          placeholder="{{'Login_EnterPassword'|translate}}" [readonly]=readonlyFlag />
-                        </label> -->
                         <div class="col-auto">
                             <span class="opti_form-label">
-                              <!-- {{ 'Login_Password'|translate}} -->
-                              <span  *ngIf="pwd.errors && (pwd.dirty || pwd.touched)"   class="float-right opti_error-msg">{{'Login_PwdBlankErrMsg'|translate}}</span>
                               <span  *ngIf="this.isError==true &&  (pwd.dirty || pwd.touched) && (emailId.dirty || emailId.touched) && !pwd.errors?.required" class="float-right opti_error-msg">Invalid credentials.</span>
                             </span>
                             <label class="sr-only" for="inlineFormInputGroup">{{ 'Login_Password'|translate}}</label>
@@ -104,35 +81,44 @@
                                   ></kendo-dropdownlist>
                                 </label>
     
-                                
+                                <label class="k-form-field">
+                                    <span class="opti_form-label">{{'Role'|translate}} </span>
+                                    <kendo-dropdownlist class="form-control form-control-sm"
+                                     [data]="roleList" (click)="showRoleList()" 
+                                     textField="OPTM_WHSE"
+                                     valueField="BPLid"
+                                     id="Role"
+                                     name = "selectedRole"
+                                     [(ngModel)]="selectedRole"
+                                    ></kendo-dropdownlist>
+                                  </label>
+
+                                  <label class="k-form-field">
+                                    <span class="opti_form-label">{{'Zone'|translate}} </span>
+                                    <kendo-dropdownlist class="form-control form-control-sm"
+                                     [data]="zoneList" (click)="showZoneList()" 
+                                     textField="OPTM_WHSE"
+                                     valueField="BPLid"
+                                     id="Zone"
+                                     name = "selectedZone"
+                                     [(ngModel)]="selectedZone"
+                                    ></kendo-dropdownlist>
+                                  </label>
+
+                                  <label class="k-form-field">
+                                    <span class="opti_form-label">{{'BinRange'|translate}} </span>
+                                    <kendo-dropdownlist class="form-control form-control-sm"
+                                     [data]="binRangeList" (click)="showBinRangeList()" 
+                                     textField="OPTM_WHSE"
+                                     valueField="BPLid"
+                                     id="BinRange"
+                                     name = "selectedBin"
+                                     [(ngModel)]="selectedBin"
+                                    ></kendo-dropdownlist>
+                                  </label>
                             </ng-container>
                             </div>
-                        <!-- <ng-container *ngIf="isCompleteLoginVisible">
-                            <label class="k-form-field">
-                              <span class="opti_form-label">{{'Login_Company'|translate}} </span>
-                              <kendo-dropdownlist class="form-control form-control-sm"
-                              
-                               [data]="companyName" name="selectedItem"
-                               [(ngModel)]="selectedItem"
-                               id="compId"
-                               ></kendo-dropdownlist>
-                            </label>
-
-                            <label class="k-form-field">
-                              <span class="opti_form-label">{{'Login_Warehouse'|translate}} </span>
-                              <kendo-dropdownlist class="form-control form-control-sm"
-                               [data]="whsList" (click)="setWarehouseList()" 
-                               textField="OPTM_WHSE"
-                               valueField="BPLid"
-                               id="whseId"
-                               name = "defaultWHS"
-                               [(ngModel)]="defaultWHS"
-                              ></kendo-dropdownlist>
-                            </label>
-
-                            
-                        </ng-container> -->
-                        <!-- end if condition -->
+                        
                         <div class="col-auto">
                         <label class="k-form-field" *ngIf="isCompleteLoginVisible">
                             <div class="opti_checkbox-container">

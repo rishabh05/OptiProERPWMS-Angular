@@ -99,7 +99,7 @@
                             <div>
                                 <i *ngIf="currentStep > 1" (click)="prevStep()" class="k-icon k-i-arrow-chevron-left" aria-hidden="true"></i>
                                 <i *ngIf="currentStep != LastStep" (click)="nextStep()" class="k-icon k-i-arrow-chevron-right" aria-hidden="true"></i>
-                                <i *ngIf="currentStep == LastStep" (click)="onSaveClick('/po-order-details')" class="k-icon k-i-save" aria-hidden="true"></i>
+                                <i *ngIf="currentStep == LastStep && totalpickQty == openQty" (click)="onSaveClick('/po-order-details')" class="k-icon k-i-save" aria-hidden="true"></i>
                             </div>
                             <!--/ step navigation -->
 

@@ -371,7 +371,7 @@ export class ShpLoadingComponent implements OnInit {
       OPTM_TASKHDID: 0,
       OPTM_OPERATION: "",
       OPTM_QUANTITY: 1,
-      OPTM_SOURCE: 3,
+      OPTM_SOURCE: 4,
       OPTM_ParentContainerType: "",
       OPTM_ParentPerQty: "",
       IsWIPCont: false

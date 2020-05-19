@@ -6,10 +6,8 @@ import { Commonservice } from '../../services/commonservice.service';
 import { ValidateUser } from '../../models/account/ValidateUser';
 import { LicenseData } from '../../models/account/LicenseData';
 import { WHS } from '../../models/account/WHS';
-
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-
 
 @Component({
     selector: 'app-signin',
@@ -21,7 +19,6 @@ export class SigninComponent implements OnInit {
     showLoader: boolean = false;
     showFullPageLoader: boolean = false;
     isError: boolean = false;
-
     invalidCredentialMsg: string = "";
     userNotExist: boolean = false;
 
@@ -41,7 +38,13 @@ export class SigninComponent implements OnInit {
     selectedItem: string = "";
     selectedWhse: string = "";
     whsList: WHS[] = [];
+    zoneList: any[] = [];
+    roleList: any[] = [];
+    binRangeList: any[] = [];
     defaultWHS: any;
+    selectedRole: any;
+    selectedZone: any;
+    selectedBin: any;
     public companyName: Array<string> = [];
     readonlyFlag: boolean = false;
     public arrConfigData: any[];
@@ -56,9 +59,11 @@ export class SigninComponent implements OnInit {
         translate.onLangChange.subscribe((event: LangChangeEvent) => {
             this.selectedItem = translate.instant("Login_SelectCompany");
             this.defaultWHS = { OPTM_WHSE: translate.instant("SelectWarehouse"), BPLid: 0 };
+            this.selectedBin = { OPTM_WHSE: translate.instant("SelectBin"), BPLid: 0 };
+            this.selectedRole = { OPTM_WHSE: translate.instant("SelectRole"), BPLid: 0 };
+            this.selectedZone = { OPTM_WHSE: translate.instant("SelectZone"), BPLid: 0 };
         });
         this.commonService.loadConfig();
-
     }
 
     @ViewChild('myCanvas') myCanvas;
@@ -66,6 +71,9 @@ export class SigninComponent implements OnInit {
     ngOnInit() {
         this.selectedItem = this.translate.instant("Login_SelectCompany");
         this.defaultWHS = { OPTM_WHSE: this.translate.instant("SelectWarehouse"), BPLid: 0 }
+        this.selectedBin = { OPTM_WHSE: this.translate.instant("SelectBin"), BPLid: 0 };
+        this.selectedRole = { OPTM_WHSE: this.translate.instant("SelectRole"), BPLid: 0 };
+        this.selectedZone = { OPTM_WHSE: this.translate.instant("SelectZone"), BPLid: 0 };
 
         this.showFullPageLoader = false;
         // Get cookie start
@@ -83,15 +91,12 @@ export class SigninComponent implements OnInit {
         element.className = "";
         element.classList.add("opti_body-login");
         element.classList.add("opti_account-module");
-        //localStorage.setItem("service_url","http://172.16.6.134/OptiProWMS/");
         if (localStorage.getItem("service_url") != null && localStorage.getItem("service_url") != undefined
             && localStorage.getItem("service_url") != "") {
-
-            var url: any = { 'service_url': localStorage.getItem("service_url") }
-            // alert("serviceURL not null:"+JSON.stringify(url));
+            // sessionStorage.setItem('ConfigData', localStorage.getItem("service_url"));
+            this.signinService.loadConfig();
             this.getPSURL(); //call method after seting configDataObject.
         } else {
-            // alert("serviceURL null:"+JSON.stringify(url));
             this.httpClientSer.get('./assets/config.json').subscribe(
                 data => {
                     sessionStorage.setItem('ConfigData', JSON.stringify(data[0]));
@@ -120,8 +125,6 @@ export class SigninComponent implements OnInit {
                 //      this.toastr.error('', 'There is some error to connect with server', error);
                 this.showLoader = false;
             });
-
-
     }
 
 
@@ -199,6 +202,9 @@ export class SigninComponent implements OnInit {
         this.setCookie('cookiePassword', "", 365);
         this.setCookie('CompID', "", 365);
         this.setCookie('whseId', "", 365);
+        this.setCookie('Role', "", 365);
+        this.setCookie('Zone', "", 365);
+        this.setCookie('BinRange', "", 365);
         this.companyName = [];
         this.selectedItem = this.translate.instant("Login_SelectCompany");
         this.defaultWHS = { OPTM_WHSE: this.translate.instant("SelectWarehouse"), BPLid: 0 };
@@ -243,7 +249,12 @@ export class SigninComponent implements OnInit {
                     localStorage.setItem("whseId", this.selectedWhse);
                     localStorage.setItem("Token", this.licenseData[0].Token);
                     localStorage.setItem("PalletizationEnabled", "True");
-                    localStorage.setItem("isShipmentApplicable","True");
+                    localStorage.setItem("isShipmentApplicable", "True");
+
+                    localStorage.setItem("SelectedRole", this.selectedRole.OPTM_WHSE);
+                    localStorage.setItem("SelectedZone", this.selectedZone.OPTM_WHSE);
+                    localStorage.setItem("SelectedBinRange", this.selectedBin.OPTM_WHSE);
+
                     localStorage.setItem("AutoPalletIdGenerationChecked", this.licenseData[0].AutoPalletIdGenerationChecked);
 
                     localStorage.setItem("DefaultValues", JSON.stringify(this.licenseData[0].DefaultValues));
@@ -270,11 +281,17 @@ export class SigninComponent implements OnInit {
                         this.setCookie('cookiePassword', this.password, 365);
                         this.setCookie('CompID', this.selectedItem, 365);
                         this.setCookie('whseId', this.selectedWhse, 365);
+                        this.setCookie('Role', this.selectedRole.OPTM_WHSE, 365);
+                        this.setCookie('Zone', this.selectedZone.OPTM_WHSE, 365);
+                        this.setCookie('BinRange', this.selectedBin.OPTM_WHSE, 365);
                     } else {
                         this.setCookie('cookieEmail', "", 365);
                         this.setCookie('cookiePassword', "", 365);
                         this.setCookie('CompID', "", 365);
                         this.setCookie('whseId', "", 365);
+                        this.setCookie('Role', "", 365);
+                        this.setCookie('Zone', "", 365);
+                        this.setCookie('BinRange', "", 365);
                     }
                     console.log("log", "handleLicense:abouve routing");
                     this.router.navigate(['home/dashboard']);
@@ -299,12 +316,12 @@ export class SigninComponent implements OnInit {
         } else {
             if (this.licenseData.length > 0 &&
                 this.licenseData[0].ErrMessage != "" && this.licenseData[0].ErrMessage != null) {
-                    this.toastr.error('', this.licenseData[0].ErrMessage);
-            }else{
+                this.toastr.error('', this.licenseData[0].ErrMessage);
+            } else {
                 this.toastr.error('', this.translate.instant("SignIn_Msg_Default"));
             }
             this.showFullPageLoader = false;
-            
+
         }
     }
 
@@ -330,6 +347,9 @@ export class SigninComponent implements OnInit {
             if (this.getCookie('CompID') == this.companyName[i]) {
                 this.selectedItem = this.companyName[i];
                 this.setWarehouseList();
+                this.showZoneList();
+                this.showRoleList();
+                this.showBinRangeList();
             }
         }
     }
@@ -339,15 +359,12 @@ export class SigninComponent implements OnInit {
         if (document.getElementById("compId") != null) {
             this.selectedItem = document.getElementById("compId").innerText.trim();
         }
-
         this.signinService.getWHS(this.selectedItem).subscribe(
             data => {
                 this.whsList = data.Table;
                 for (var i = 0; i < this.whsList.length; i++) {
                     if (this.getCookie('whseId') == this.whsList[i].OPTM_WHSE) {
                         this.defaultWHS = { OPTM_WHSE: this.whsList[i].OPTM_WHSE, BPLid: 0 };
-                        //this.selectedWhse = this.defaultWHS.OPTM_WHSE;
-                        //localStorage.setItem("whseId", this.selectedWhse);
                     }
                 }
             },
@@ -359,6 +376,71 @@ export class SigninComponent implements OnInit {
         );
     }
 
+    public showRoleList() {
+        if(this.defaultWHS == undefined || this.defaultWHS == ""){
+            this.toastr.error('', this.translate.instant("Login_SelectwarehouseMsg"))
+            return;
+        }
+        this.signinService.getRoleList(this.selectedItem).subscribe(
+            data => {
+                this.roleList = data.Table;
+                for (var i = 0; i < this.whsList.length; i++) {
+                    if (this.getCookie('Role') == this.whsList[i].OPTM_WHSE) {
+                        this.selectedRole = { OPTM_WHSE: this.whsList[i].OPTM_WHSE, BPLid: 0 };
+                    }
+                }
+            },
+            error => {
+                if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+                    this.commonService.unauthorizedToken(error, this.translate.instant("token_expired"));
+                }
+            }
+        );
+    }
+
+    public showZoneList() {
+        if(this.defaultWHS == undefined || this.defaultWHS == ""){
+            this.toastr.error('', this.translate.instant("Login_SelectwarehouseMsg"))
+            return;
+        }
+        this.signinService.getZoneList(this.selectedItem).subscribe(
+            data => {
+                this.zoneList = data.Table;
+                for (var i = 0; i < this.whsList.length; i++) {
+                    if (this.getCookie('Zone') == this.whsList[i].OPTM_WHSE) {
+                        this.selectedZone = { OPTM_WHSE: this.whsList[i].OPTM_WHSE, BPLid: 0 };
+                    }
+                }
+            },
+            error => {
+                if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+                    this.commonService.unauthorizedToken(error, this.translate.instant("token_expired"));
+                }
+            }
+        );
+    }
+
+    public showBinRangeList() {
+        if(this.defaultWHS == undefined || this.defaultWHS == ""){
+            this.toastr.error('', this.translate.instant("Login_SelectwarehouseMsg"))
+            return;
+        }
+        this.signinService.getBinRanges(this.selectedItem).subscribe(
+            data => {
+                this.binRangeList = data.Table;
+                for (var i = 0; i < this.whsList.length; i++) {
+                    if (this.getCookie('BinRange') == this.whsList[i].OPTM_WHSE) {
+                        this.selectedBin = { OPTM_WHSE: this.whsList[i].OPTM_WHSE, BPLid: 0 };
+                    }
+                }
+            },
+            error => {
+                if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+                    this.commonService.unauthorizedToken(error, this.translate.instant("token_expired"));
+                }
+            }
+        );
+    }
 
     private validateFields(): boolean {
         if (this.selectedItem == this.translate.instant("Login_SelectCompany") || this.selectedItem == '') {
@@ -366,10 +448,28 @@ export class SigninComponent implements OnInit {
             this.toastr.error('', this.translate.instant("Login_SelectCompanyMsg"), this.commonService.toast_config.iconClasses.error);
             return true;
         }
-        if (document.getElementById("whseId").innerText.trim() == this.translate.instant("SelectWarehouse") ||
+        else if (document.getElementById("whseId").innerText.trim() == this.translate.instant("SelectWarehouse") ||
             document.getElementById("whseId").innerText.trim() == "") {
             this.showLoader = false;
             this.toastr.error('', this.translate.instant("Login_SelectwarehouseMsg"), this.commonService.toast_config.iconClasses.error);
+            return true;
+        }
+        else if (document.getElementById("Role").innerText.trim() == this.translate.instant("SelectRole") ||
+            document.getElementById("Role").innerText.trim() == "") {
+            this.showLoader = false;
+            this.toastr.error('', this.translate.instant("SelectRoleMsg"), this.commonService.toast_config.iconClasses.error);
+            return true;
+        }
+        else if (document.getElementById("Zone").innerText.trim() == this.translate.instant("SelectZone") ||
+            document.getElementById("Zone").innerText.trim() == "") {
+            this.showLoader = false;
+            this.toastr.error('', this.translate.instant("SelectZoneMsg"), this.commonService.toast_config.iconClasses.error);
+            return true;
+        }
+        else if (document.getElementById("BinRange").innerText.trim() == this.translate.instant("SelectBin") ||
+            document.getElementById("BinRange").innerText.trim() == "") {
+            this.showLoader = false;
+            this.toastr.error('', this.translate.instant("SelectBinMsg"), this.commonService.toast_config.iconClasses.error);
             return true;
         }
         return false;

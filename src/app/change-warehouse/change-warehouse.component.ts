@@ -15,9 +15,15 @@ export class ChangeWarehouseComponent implements OnInit {
 
   whsList: WHS[] = [];
   defaultWHS: any;
+  selectedZone: any;
+  selectedRole: any;
+  selectedBin: any;
   
   constructor( private commonService: Commonservice,private signinService: SigninService, private router: Router,private toastr: ToastrService,private translate: TranslateService) {
     this.defaultWHS = { OPTM_WHSE: localStorage.getItem("whseId"), BPLid: 0 };
+    this.selectedRole = { OPTM_WHSE: localStorage.getItem("SelectedRole"), BPLid: 0 };
+    this.selectedZone = { OPTM_WHSE: localStorage.getItem("SelectedZone"), BPLid: 0 };
+    this.selectedBin = { OPTM_WHSE: localStorage.getItem("SelectedBinRange"), BPLid: 0 };
   }
 
   ngOnInit() {
@@ -28,12 +34,6 @@ export class ChangeWarehouseComponent implements OnInit {
     this.signinService.getWHS(localStorage.getItem("CompID")).subscribe(
       data => {
         this.whsList = data.Table;
-        // for (var i = 0; i < this.whsList.length; i++) {
-        //   if (this.getCookie('whseId') == this.whsList[i].OPTM_WHSE) {
-        //     this.defaultWHS = this.whsList[i];
-        //   }
-        // }
-       // this.defaultWHS = localStorage.getItem("whseId");
       },
       error => {
         if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
@@ -49,6 +49,9 @@ export class ChangeWarehouseComponent implements OnInit {
   onSubmitClick(){
     localStorage.setItem("whseId", this.defaultWHS.OPTM_WHSE);
     this.setCookie('whseId', this.defaultWHS.OPTM_WHSE, 365);
+    this.setCookie('Role', this.selectedRole.OPTM_WHSE, 365);
+    this.setCookie('Zone', this.selectedRole.OPTM_WHSE, 365);
+    this.setCookie('BinRange', this.selectedRole.OPTM_WHSE, 365);
     this.commonService.refreshTopBarValue(localStorage.getItem("whseId"));
     this.router.navigate(['home/dashboard']);
   }

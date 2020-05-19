@@ -759,26 +759,28 @@ export class PickingItemDetailsComponent implements OnInit {
 
     this.preparePickTaskData();
     this.clearStepsFields();
-    // this.PT_Enter_Location = "";
-    // this.PT_ItemCode = "";
-    // this.PT_Enter_ContBtchSer = "";
-    // this.pickQty = undefined;
-    // this.ScannedContOrTote = "";
+    this.PT_Enter_Location = "";
+    this.PT_ItemCode = "";
+    this.PT_Enter_ContBtchSer = "";
+    this.pickQty = undefined;
+    this.ScannedContOrTote = "";
     this.nextStep();
     this.whsCode = this.PickTaskList[this.index].OPTM_SRC_WHSE;
     this.UserGrp = this.PickTaskList[this.index].OPTM_USER_GRP;
-    if (this.completedTaskCount == this.totalPickTaskCount) {
-      this.onSubmitClick();
-      return;
-    }
-    this.clearFields();
-    this.index = this.index + 1;
-    if (this.index >= this.PickTaskList.length) {
-      this.index = 0;
-    }
-    this.setVales(this.index);
-    this.toastr.success('', this.translate.instant("SavePickedTask"));
-    this.setfocus();
+  //  if (this.completedTaskCount == this.totalPickTaskCount) {
+  //   this.onSubmitClick();
+  //     return;
+  //  }else{
+    this.onSubmitClick();
+  //  }
+    // this.clearFields();
+    // this.index = this.index + 1;
+    // if (this.index >= this.PickTaskList.length) {
+    //   this.index = 0;
+    // }
+    // this.setVales(this.index);
+    // this.toastr.success('', this.translate.instant("SavePickedTask"));
+    // this.setfocus();
   }
 
 
@@ -811,8 +813,16 @@ export class PickingItemDetailsComponent implements OnInit {
           this.showLookupLoader = false;
           if (data[0].Successmsg == "SUCCESSFULLY") {
             this.toastr.success('', this.translate.instant("PickSubmitMsg"));
-            this.ShipmentList[0].OPTM_PICKLIST_CODE = "";
-            this.GetNextPickList();
+            if (this.completedTaskCount == this.totalPickTaskCount) {
+              this.ShipmentList[0].OPTM_PICKLIST_CODE = "";
+              this.GetNextPickList(this.ShipmentList[0].OPTM_PICKLIST_ID);
+            }else{
+              this.completedTaskCount = 0;
+              this.index = 0;
+              this.containercreated = false;
+              this.clearFields();
+              this.getPickTaskList(this.ShipmentList[0].OPTM_TASK_CODE, this.ShipmentList[0].OPTM_PICKLIST_CODE);
+            }            
           } else {
             this.toastr.error('', data[0].ErrorMsg);
           }
@@ -838,14 +848,12 @@ export class PickingItemDetailsComponent implements OnInit {
 
   getNextPick() {
     this.CancelPickList();
-    setTimeout(() => {
-      this.GetNextPickList();
-    }, 300);
+    this.GetNextPickList(this.ShipmentList[0].OPTM_PICKLIST_ID);
   }
 
-  GetNextPickList() {
+  GetNextPickList(picklistID) {
     this.showLoader = true;
-    this.picktaskService.GetNextPickList(this.whsCode, localStorage.getItem("PickTypeIndex"), this.UserGrp, this.ShipmentList[0].OPTM_PICKLIST_ID).subscribe(
+    this.picktaskService.GetNextPickList(this.whsCode, localStorage.getItem("PickTypeIndex"), this.UserGrp, picklistID).subscribe(
       (data: any) => {
         this.showLoader = false;
         if (data != undefined) {
@@ -927,7 +935,7 @@ export class PickingItemDetailsComponent implements OnInit {
     } else {
       this.router.navigate(['home/picking/picking-item-list'])
     }
-    this.CancelPickList();
+    // this.CancelPickList();
   }
 
   ngOnDestroy() {

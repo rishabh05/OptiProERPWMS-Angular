@@ -9,32 +9,41 @@
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
 
                     <div class="form-group row">
-                        <!-- <label for="inputPassword" class="col-sm-3 col-form-label">{{'SelectWarehouse'|translate}}</label>
-                    <div class="col-sm-9">
-                            <kendo-dropdownlist 
-                            [data]="whsList" 
-                            textField="OPTM_WHSE"
-                            valueField="BPLid"
-                            id="whseId"
-                            name = "defaultWHS"
-                            [(ngModel)]="defaultWHS"
-                            (selectionChange)="OnOptionChange($event)"
-                           ></kendo-dropdownlist>
-                    </div> -->
                         <label label for="inputPassword" class="col-sm-3 col-form-label">
                             <span class="opti_form-label">{{'SelectWarehouse'|translate}}</span>
                         </label>
                         <div class="col-sm-9">
-                            <!-- <kendo-dropdownlist class="form-control form-control-sm" [data]="whsList" [textField]="'OPTM_WHSE'"
-                             [valueField]="'BPLid'" id="whseId" name="defaultWHS" [(ngModel)]="defaultWHS" ></kendo-dropdownlist> -->
-                             <kendo-dropdownlist
-                                [data]="whsList"
-                                textField="OPTM_WHSE"
-                                valueField="BPLid"
-                                id="whseId"
-                                name="defaultWHS"
-                                [(ngModel)]="defaultWHS"
-                            >
+                            <kendo-dropdownlist [data]="whsList" textField="OPTM_WHSE" valueField="BPLid" id="whseId" name="defaultWHS" [(ngModel)]="defaultWHS">
+                            </kendo-dropdownlist>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label label for="inputPassword" class="col-sm-3 col-form-label">
+                            <span class="opti_form-label">{{'SelectRole'|translate}}</span>
+                        </label>
+                        <div class="col-sm-9">
+                            <kendo-dropdownlist [data]="whsList" textField="OPTM_WHSE" valueField="BPLid" id="whseId" name="defaultWHS" [(ngModel)]="defaultWHS">
+                            </kendo-dropdownlist>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label label for="inputPassword" class="col-sm-3 col-form-label">
+                            <span class="opti_form-label">{{'SelectZone'|translate}}</span>
+                        </label>
+                        <div class="col-sm-9">
+                            <kendo-dropdownlist [data]="whsList" textField="OPTM_WHSE" valueField="BPLid" id="whseId" name="defaultWHS" [(ngModel)]="defaultWHS">
+                            </kendo-dropdownlist>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label label for="inputPassword" class="col-sm-3 col-form-label">
+                            <span class="opti_form-label">{{'SelectBin'|translate}}</span>
+                        </label>
+                        <div class="col-sm-9">
+                            <kendo-dropdownlist [data]="whsList" textField="OPTM_WHSE" valueField="BPLid" id="whseId" name="defaultWHS" [(ngModel)]="defaultWHS">
                             </kendo-dropdownlist>
                         </div>
                     </div>
