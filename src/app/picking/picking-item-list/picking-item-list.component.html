@@ -28,8 +28,8 @@
                                             <dd>{{ dataItem.OPTM_TASKTYPE }}</dd>
                                         </div> -->
                                         <div class="di-list">
-                                            <dt>{{itemcodeLabel}}</dt>
-                                            <dd>{{ dataItem.OPTM_ITEMCODE }}</dd>
+                                            <dt>{{codeLabel}}</dt>
+                                            <dd>{{ dataItem.CODE }}</dd>
                                         </div>
                                         <div class="di-list">
                                             <dt>{{'PT_Warehouse'|translate}}</dt>
@@ -50,7 +50,7 @@
                             </kendo-grid-column>
                             <!-- <kendo-grid-column [media]="desktopMedia" field="OPTM_TASKTYPE" title="{{'PT_TaskType'|translate}}">
                             </kendo-grid-column> -->
-                            <kendo-grid-column [media]="desktopMedia" field="OPTM_ITEMCODE" title="{{itemcodeLabel}}">
+                            <kendo-grid-column [media]="desktopMedia" field="CODE" title="{{codeLabel}}">
                             </kendo-grid-column>
                             <kendo-grid-column [media]="desktopMedia" field="OPTM_SRC_WHSE" title="{{'PT_Warehouse'|translate}}">
                             </kendo-grid-column>
