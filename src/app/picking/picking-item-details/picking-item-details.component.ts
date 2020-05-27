@@ -71,6 +71,7 @@ export class PickingItemDetailsComponent implements OnInit {
   stepIncrementValue = 1;
   ContainerCodePlaceholderValue: string;
   OPTM_STARTDATETIME: Date;
+  Type: string;
 
   @ViewChild('focusOnSerNo') focusOnSerNo;
   @ViewChild('focusOnItemCode') focusOnItemCode;
@@ -216,8 +217,10 @@ export class PickingItemDetailsComponent implements OnInit {
     this.OPTM_Tracking = this.PickTaskList[index].OPTM_TRACKING;
     this.locationValue = this.PickTaskList[index].OPTM_SRC_BIN;
     this.OPTM_STARTDATETIME = new Date();
+    this.itemcodeLabel = "Code";
     if (localStorage.getItem("PickType") == this.translate.instant("Container_Picking")) {
-      this.itemcodeLabel = this.translate.instant("ContainerId");
+      this.Type = "Container"
+      // this.itemcodeLabel = "Code";//this.translate.instant("ContainerId");
       this.totalPickTaskCount = this.PickTaskList.length;
       this.itemcodeValue = this.PickTaskList[index].OPTM_ITEMCODE = this.PickTaskDetail.OPTM_WHSTASK_DTL.find(e => e.OPTM_TASKID == this.pickTaskName).OPTM_CONTCODE;
       for(var i=0; i<this.PickTaskList.length; i++){
@@ -226,7 +229,8 @@ export class PickingItemDetailsComponent implements OnInit {
       this.IsContPicking = false;
       this.setPickingSteps(localStorage.getItem("PickTypeKey"), this.ShipmentList[0].OPTM_PICK_OPER);
     } else {
-      this.itemcodeLabel = this.translate.instant("ItemCode");
+      this.Type = "Item"
+      // this.itemcodeLabel = "Code";//this.translate.instant("ItemCode");
       this.itemcodeValue = this.PickTaskList[index].OPTM_ITEMCODE;
       this.IsContPicking = false;
       let OPTM_MSTR_TRANS_TYPE = "";
@@ -1052,5 +1056,33 @@ export class PickingItemDetailsComponent implements OnInit {
 
   close_kendo_dialog() {
     this.dialogOpened = false;
+  }
+
+  PickListStatus: string
+  updatePicklistStatus(){   
+    this.picktaskService.UpdatePickListStatusBasedOnSelected(4, this.ShipmentList[0].OPTM_PICKLIST_ID, 2).subscribe(
+      (data: any) => {
+        // this.showLoader = false;
+        if (data != undefined) {
+          if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
+          // if(data.OUT)
+        } else {
+          // this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+        }
+      },
+      error => {
+        this.showLoader = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
   }
 }
