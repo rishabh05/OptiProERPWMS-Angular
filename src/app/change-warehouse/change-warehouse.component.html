@@ -13,7 +13,9 @@
                             <span class="opti_form-label">{{'SelectWarehouse'|translate}}</span>
                         </label>
                         <div class="col-sm-9">
-                            <kendo-dropdownlist [data]="whsList" textField="OPTM_WHSE" valueField="BPLid" id="whseId" name="defaultWHS" [(ngModel)]="defaultWHS">
+                            <kendo-dropdownlist [data]="whsList" textField="OPTM_WHSE" 
+                            (valueChange) = "onWhseChange($event)"
+                            valueField="BPLid" id="whseId" name="defaultWHS" [(ngModel)]="defaultWHS">
                             </kendo-dropdownlist>
                         </div>
                     </div>
@@ -23,27 +25,36 @@
                             <span class="opti_form-label">{{'SelectRole'|translate}}</span>
                         </label>
                         <div class="col-sm-9">
-                            <kendo-dropdownlist [data]="whsList" textField="OPTM_WHSE" valueField="BPLid" id="whseId" name="defaultWHS" [(ngModel)]="defaultWHS">
+                            <kendo-dropdownlist [data]="roleList" textField="OPTM_ROLEID" valueField="BPLid"
+                             id="RoleId" name="selectedRole" [(ngModel)]="selectedRole"
+                             (valueChange) = "onRoleChange($event)"
+                             (click)="showRoleList()" >
                             </kendo-dropdownlist>
                         </div>
                     </div>
 
-                    <div class="form-group row">
+                    <div class="form-group row" *ngIf="showZone"> 
                         <label label for="inputPassword" class="col-sm-3 col-form-label">
                             <span class="opti_form-label">{{'SelectZone'|translate}}</span>
                         </label>
                         <div class="col-sm-9">
-                            <kendo-dropdownlist [data]="whsList" textField="OPTM_WHSE" valueField="BPLid" id="whseId" name="defaultWHS" [(ngModel)]="defaultWHS">
+                            <kendo-dropdownlist [data]="zoneList" textField="OPTM_WHSZONE" 
+                            valueField="BPLid" id="ZoneId" name="selectedZone"
+                            (valueChange) = "onZoneChange($event)"
+                             [(ngModel)]="selectedZone"  (click)="showZoneList()"  >
                             </kendo-dropdownlist>
                         </div>
                     </div>
 
-                    <div class="form-group row">
+                    <div class="form-group row" *ngIf="showBinRange">
                         <label label for="inputPassword" class="col-sm-3 col-form-label">
                             <span class="opti_form-label">{{'SelectBin'|translate}}</span>
                         </label>
                         <div class="col-sm-9">
-                            <kendo-dropdownlist [data]="whsList" textField="OPTM_WHSE" valueField="BPLid" id="whseId" name="defaultWHS" [(ngModel)]="defaultWHS">
+                            <kendo-dropdownlist [data]="binRangeList" (click)="showBinRangeList()" 
+                            textField="OPTM_BIN_RANGE" valueField="BPLid" id="BinId"  
+                            (valueChange) = "onBinRangeChange($event)"
+                             name="selectedBin" [(ngModel)]="selectedBin">
                             </kendo-dropdownlist>
                         </div>
                     </div>

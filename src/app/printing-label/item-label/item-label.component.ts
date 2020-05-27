@@ -461,15 +461,24 @@ export class ItemLabelComponent implements OnInit {
             this.base64String = 'data:application/pdf;base64,' + this.base64String;
             this.displayPDF = true;
             this.commonservice.refreshDisplyPDF(true);
-
+ 
           } else {
-            this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
+            if(data.Error!=undefined && data.Error!=null ){
+              this.toastr.error('', data.Error[0].ERRORMSG);
+            }else{
+              this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+            }
           }
 
           console.log("filename:" + this.fileName);
           console.log("filename:" + this.base64String);
         } else {
-          this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          if(data.Error!=undefined && data.Error!=null ){
+            this.toastr.error('', data.Error[0].ERRORMSG);
+          }else{
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          }
+          
         }
       },
       error => {

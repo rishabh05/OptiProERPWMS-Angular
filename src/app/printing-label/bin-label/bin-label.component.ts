@@ -303,7 +303,11 @@ export class BinLabelComponent implements OnInit {
            this.commonservice.refreshDisplyPDF(true);
 
           }else{
-            this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
+            if(data.Error!=undefined && data.Error!=null ){
+              this.toastr.error('', data.Error[0].ERRORMSG);
+            }else{
+              this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+            }
            }
          // console.log("filename:" + this.fileName);
           //console.log("filename:" + this.base64String);  

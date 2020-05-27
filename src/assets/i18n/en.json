@@ -537,5 +537,19 @@
   "InvTransfer_ContainerSameBinMsg": "Container already belongs to selected To Bin.",
   "ContainerCreatedSuccessMsg": "Container created successfully.",
   "NoPickMsg": "No pick available for this pick type.",
+  "Login_SelectZoneMsg": "Please select Zone.",
+  "Login_SelectRole": "Please select Role.",
+  "Login_SelectBinRange": "Please select Bin.",
+  "PackPackingNo":"Packing #",
+  "Type":"Type",
+  "NewPacking":"New Packing#",
+  "CreateNewPacking":"Create New Packing",
+  "PackingNoAlreadyInUse": "Packing number already in use",
+  "PackingType":"Packing Type",
+  "PackingNoNotAvailable":"Packing No. not available.",
+
+  "PackingNoAlreadyTaken":"Packing number already taken",
+  "SelectPacking":"Select Packing",
+  
   "Dummy": "Dummy"
 }
