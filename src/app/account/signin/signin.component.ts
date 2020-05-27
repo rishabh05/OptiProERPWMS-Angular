@@ -41,6 +41,9 @@ export class SigninComponent implements OnInit {
     zoneList: any[] = [];
     roleList: any[] = [];
     binRangeList: any[] = [];
+    
+    binPermissionList:any[] = [];
+    defaultZone: any;
     defaultWHS: any;
     selectedRole: any;
     selectedZone: any;
@@ -59,9 +62,9 @@ export class SigninComponent implements OnInit {
         translate.onLangChange.subscribe((event: LangChangeEvent) => {
             this.selectedItem = translate.instant("Login_SelectCompany");
             this.defaultWHS = { OPTM_WHSE: translate.instant("SelectWarehouse"), BPLid: 0 };
-            this.selectedBin = { OPTM_WHSE: translate.instant("SelectBin"), BPLid: 0 };
-            this.selectedRole = { OPTM_WHSE: translate.instant("SelectRole"), BPLid: 0 };
-            this.selectedZone = { OPTM_WHSE: translate.instant("SelectZone"), BPLid: 0 };
+            this.selectedBin = { OPTM_BIN_RANGE: translate.instant("SelectBin"), BPLid: 0 };
+            this.selectedRole = { OPTM_ROLEID: translate.instant("SelectRole"), BPLid: 0 };
+            this.selectedZone = { OPTM_WHSZONE: translate.instant("SelectZone"), BPLid: 0 };
         });
         this.commonService.loadConfig();
     }
@@ -71,9 +74,9 @@ export class SigninComponent implements OnInit {
     ngOnInit() {
         this.selectedItem = this.translate.instant("Login_SelectCompany");
         this.defaultWHS = { OPTM_WHSE: this.translate.instant("SelectWarehouse"), BPLid: 0 }
-        this.selectedBin = { OPTM_WHSE: this.translate.instant("SelectBin"), BPLid: 0 };
-        this.selectedRole = { OPTM_WHSE: this.translate.instant("SelectRole"), BPLid: 0 };
-        this.selectedZone = { OPTM_WHSE: this.translate.instant("SelectZone"), BPLid: 0 };
+        this.selectedBin = { OPTM_BIN_RANGE: this.translate.instant("SelectBin"), BPLid: 0 };
+        this.selectedRole = { OPTM_ROLEID: this.translate.instant("SelectRole"), BPLid: 0 };
+        this.selectedZone = { OPTM_WHSZONE: this.translate.instant("SelectZone"), BPLid: 0 };
 
         this.showFullPageLoader = false;
         // Get cookie start
@@ -251,9 +254,9 @@ export class SigninComponent implements OnInit {
                     localStorage.setItem("PalletizationEnabled", "True");
                     localStorage.setItem("isShipmentApplicable", "True");
 
-                    localStorage.setItem("SelectedRole", this.selectedRole.OPTM_WHSE);
-                    localStorage.setItem("SelectedZone", this.selectedZone.OPTM_WHSE);
-                    localStorage.setItem("SelectedBinRange", this.selectedBin.OPTM_WHSE);
+                    localStorage.setItem("SelectedRole", this.selectedRole.OPTM_ROLEID);
+                    localStorage.setItem("SelectedZone", this.selectedZone.OPTM_WHSZONE);
+                    localStorage.setItem("SelectedBinRange", this.selectedBin.OPTM_BIN_RANGE);
 
                     localStorage.setItem("AutoPalletIdGenerationChecked", this.licenseData[0].AutoPalletIdGenerationChecked);
 
@@ -281,9 +284,9 @@ export class SigninComponent implements OnInit {
                         this.setCookie('cookiePassword', this.password, 365);
                         this.setCookie('CompID', this.selectedItem, 365);
                         this.setCookie('whseId', this.selectedWhse, 365);
-                        this.setCookie('Role', this.selectedRole.OPTM_WHSE, 365);
-                        this.setCookie('Zone', this.selectedZone.OPTM_WHSE, 365);
-                        this.setCookie('BinRange', this.selectedBin.OPTM_WHSE, 365);
+                        this.setCookie('Role', this.selectedRole.OPTM_ROLEID, 365);
+                        this.setCookie('Zone', this.selectedZone.OPTM_WHSZONE, 365);
+                        this.setCookie('BinRange', this.selectedBin.OPTM_BIN_RANGE, 365);
                     } else {
                         this.setCookie('cookieEmail', "", 365);
                         this.setCookie('cookiePassword', "", 365);
@@ -346,18 +349,21 @@ export class SigninComponent implements OnInit {
         for (var i = 0; i < this.companyName.length; i++) {
             if (this.getCookie('CompID') == this.companyName[i]) {
                 this.selectedItem = this.companyName[i];
-                this.setWarehouseList();
-                this.showZoneList();
-                this.showRoleList();
-                this.showBinRangeList();
+                this.setWarehouseList(true);
             }
         }
     }
 
 
-    public setWarehouseList() {
+    public setWarehouseList(isDirectCall:boolean=false) {
         if (document.getElementById("compId") != null) {
             this.selectedItem = document.getElementById("compId").innerText.trim();
+        }
+        if(isDirectCall!=true){
+            if(this.selectedItem==this.translate.instant("Login_SelectCompany")){
+                this.toastr.error('', this.translate.instant("Login_SelectCompanyMsg"))
+                return;
+            }
         }
         this.signinService.getWHS(this.selectedItem).subscribe(
             data => {
@@ -367,6 +373,11 @@ export class SigninComponent implements OnInit {
                         this.defaultWHS = { OPTM_WHSE: this.whsList[i].OPTM_WHSE, BPLid: 0 };
                     }
                 }
+                this.showRoleList(true);
+                 //call permission api after whse select.
+                if(isDirectCall)this.checkBinPermissionList(true); 
+               
+                
             },
             error => {
                 if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
@@ -376,19 +387,21 @@ export class SigninComponent implements OnInit {
         );
     }
 
-    public showRoleList() {
-        if(this.defaultWHS == undefined || this.defaultWHS == ""){
-            this.toastr.error('', this.translate.instant("Login_SelectwarehouseMsg"))
-            return;
+    public showRoleList(isDirectCall:boolean = false) {
+        if(isDirectCall!=true){
+            if(this.selectedItem==this.translate.instant("Login_SelectCompany")){
+                this.toastr.error('', this.translate.instant("Login_SelectCompanyMsg"))
+                return;
+            }
         }
         this.signinService.getRoleList(this.selectedItem).subscribe(
             data => {
                 this.roleList = data.Table;
-                for (var i = 0; i < this.whsList.length; i++) {
-                    if (this.getCookie('Role') == this.whsList[i].OPTM_WHSE) {
-                        this.selectedRole = { OPTM_WHSE: this.whsList[i].OPTM_WHSE, BPLid: 0 };
+                for (var i = 0; i < this.roleList.length; i++) {
+                    if (this.getCookie('Role') == this.roleList[i].OPTM_ROLEID) {
+                        this.selectedRole = { OPTM_ROLEID: this.roleList[i].OPTM_ROLEID, BPLid: 0 };
                     }
-                }
+                } 
             },
             error => {
                 if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
@@ -398,19 +411,29 @@ export class SigninComponent implements OnInit {
         );
     }
 
-    public showZoneList() {
-        if(this.defaultWHS == undefined || this.defaultWHS == ""){
-            this.toastr.error('', this.translate.instant("Login_SelectwarehouseMsg"))
-            return;
+    public showZoneList(isDirectCall:boolean=false) {
+       
+        if(isDirectCall!=true){
+            if(this.selectedItem==this.translate.instant("Login_SelectCompany")){
+                this.toastr.error('', this.translate.instant("Login_SelectCompanyMsg"))
+                return;
+            }
+            if(this.defaultWHS == undefined || this.defaultWHS == ""){
+                this.toastr.error('', this.translate.instant("Login_SelectwarehouseMsg"))
+                return;
+            }
         }
-        this.signinService.getZoneList(this.selectedItem).subscribe(
+
+        var whse=this.defaultWHS.OPTM_WHSE//nedd to pass whse actual value
+        this.signinService.getZoneList(this.selectedItem,whse).subscribe(
             data => {
                 this.zoneList = data.Table;
-                for (var i = 0; i < this.whsList.length; i++) {
-                    if (this.getCookie('Zone') == this.whsList[i].OPTM_WHSE) {
-                        this.selectedZone = { OPTM_WHSE: this.whsList[i].OPTM_WHSE, BPLid: 0 };
+                for (var i = 0; i < this.zoneList.length; i++) {
+                    if (this.getCookie('Zone') == this.zoneList[i].OPTM_WHSZONE) {
+                        this.selectedZone = { OPTM_WHSZONE: this.zoneList[i].OPTM_WHSZONE, BPLid: 0 };
                     }
                 }
+                if(isDirectCall && this.showBinRange)this.showBinRangeList(true)
             },
             error => {
                 if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
@@ -420,17 +443,58 @@ export class SigninComponent implements OnInit {
         );
     }
 
-    public showBinRangeList() {
-        if(this.defaultWHS == undefined || this.defaultWHS == ""){
-            this.toastr.error('', this.translate.instant("Login_SelectwarehouseMsg"))
-            return;
+    public showBinRangeList(isDirectCall:boolean=false) {
+        if(isDirectCall!=true){
+            if(this.selectedItem==this.translate.instant("Login_SelectCompany")){
+                this.toastr.error('', this.translate.instant("Login_SelectCompanyMsg"))
+                return;
+            }
+            if(this.defaultWHS == undefined || this.defaultWHS == ""){
+                this.toastr.error('', this.translate.instant("Login_SelectwarehouseMsg"))
+                return;
+            }
+            if(this.selectedZone == undefined || this.selectedZone == ""){
+                this.toastr.error('', this.translate.instant("Login_SelectZoneMsg"))
+                return;
+            }
+
         }
-        this.signinService.getBinRanges(this.selectedItem).subscribe(
+        var whse=this.defaultWHS.OPTM_WHSE
+        this.signinService.getBinRanges(whse,this.selectedItem,this.selectedZone.OPTM_WHSZONE).subscribe(
             data => {
                 this.binRangeList = data.Table;
                 for (var i = 0; i < this.whsList.length; i++) {
-                    if (this.getCookie('BinRange') == this.whsList[i].OPTM_WHSE) {
-                        this.selectedBin = { OPTM_WHSE: this.whsList[i].OPTM_WHSE, BPLid: 0 };
+                    if (this.getCookie('BinRange') == this.binRangeList[i].OPTM_BIN_RANGE) {
+                        this.selectedBin = { OPTM_BIN_RANGE: this.binRangeList[i].OPTM_BIN_RANGE, BPLid: 0 };
+                    }
+                }
+            },
+            error => {
+                if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+                    this.commonService.unauthorizedToken(error, this.translate.instant("token_expired"));
+                }
+            }
+        ); 
+    }
+    showZone:boolean = false;
+    showBinRange:boolean = false;
+    public checkBinPermissionList(isDirectCall:boolean=false) {
+        if(this.defaultWHS == undefined || this.defaultWHS == ""){
+            this.toastr.error('', this.translate.instant("Login_SelectwarehouseMsg"))
+            return;
+        }
+        this.signinService.getBinPermissionList(this.selectedItem,this.defaultWHS.OPTM_WHSE).subscribe(
+            data => {
+                this.binPermissionList = data;
+                if(this.binPermissionList!=null && this.binPermissionList!=undefined && this.binPermissionList.length>0){
+                    if(this.binPermissionList[0].OPTM_PARAM_VALUE=="Bin Range"){
+                        this.showBinRange = true;
+                        this.showZone = true;
+                        if(this.showZone) this.showZoneList(isDirectCall)
+                    } else if(this.binPermissionList[0].OPTM_PARAM_VALUE=="Zone" || this.binPermissionList[0].OPTM_PARAM_VALUE=="zone" ){
+                        this.showZone = true;
+                        this.showBinRange = false;
+                       if(this.showZone) this.showZoneList(isDirectCall)
                     }
                 }
             },
@@ -440,6 +504,12 @@ export class SigninComponent implements OnInit {
                 }
             }
         );
+    }
+
+    onWhsChange($event){ 
+        console.log("event change");
+        this.checkBinPermissionList()
+
     }
 
     private validateFields(): boolean {

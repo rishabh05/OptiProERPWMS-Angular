@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Commonservice } from './commonservice.service';
+import { CommonConstants } from '../const/common-constants';
 
 @Injectable({
   providedIn: 'root'
@@ -82,31 +83,58 @@ export class SigninService {
     return this.httpclient.post(this.config_params.service_url + this.lisenceDataUrl, jObject, this.commonService.httpOptions);
   }
 
-  getBinRanges(compId: string): Observable<any> {
-     
+
+  getBinRanges(whse:String,compId:string,zone: string): Observable<any> {
     let jObject = {
       CompanyName: JSON.stringify([{
-        Username: localStorage.getItem("UserId"),
-        CompanyDBId: compId
+        Warehouse: whse,
+        Company: compId,
+        UserCode:localStorage.getItem("UserId"),
+        Zone:zone
       }])
     };
-    return this.httpclient.post(this.config_params.service_url + "/api/WMSlogin/GetWHS", jObject,
+    return this.httpclient.post(this.config_params.service_url + "/api/WMSlogin/GetBinDataByUser", jObject,
       this.commonService.httpOptions);
   }
 
   getRoleList(compId: string): Observable<any> {
-     
     let jObject = {
       CompanyName: JSON.stringify([{
-        Username: localStorage.getItem("UserId"),
-        CompanyDBId: compId
+        UserCode: localStorage.getItem("UserId"),
+        Company: compId
       }])
     };
-    return this.httpclient.post(this.config_params.service_url + "/api/WMSlogin/GetWHS", jObject,
+    return this.httpclient.post(this.config_params.service_url + "/api/WMSlogin/GetRoles", jObject,
       this.commonService.httpOptions);
   }
 
-  getZoneList(compId: string): Observable<any> {
+  getZoneList(compId: string,whseId:string): Observable<any> {
+    let jObject = {
+      CompanyName: JSON.stringify([{
+        Warehouse: whseId,
+        Company: compId,
+        UserCode:localStorage.getItem("UserId")
+      }])
+    };//'/api/login/GetZoneData'
+    return this.httpclient.post(this.config_params.service_url + "/api/WMSlogin/GetZoneDataByUser", jObject,
+      this.commonService.httpOptions);
+  }
+
+  getBinPermissionList(compId: string,whse:String): Observable<any> {
+     
+    let jObject = {
+      CompanyName: JSON.stringify([{
+        CompanyDBId: compId,
+        WH:whse,
+        Product:CommonConstants.PRODCT_NAME
+
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/WMSlogin/IsZoneBinPermissionByUser", jObject,
+      this.commonService.httpOptions);
+  }
+
+  getBinDataByZone(compId: string): Observable<any> {
      
     let jObject = {
       CompanyName: JSON.stringify([{
