@@ -96,6 +96,7 @@ export class PickingItemDetailsComponent implements OnInit {
   // GRID VARIABLE
 
   ngOnInit() {
+    console.log("1  "+new Date().toLocaleTimeString());
     this.ShipmentList[0] = JSON.parse(localStorage.getItem("ShipDetail"));
     this.PickListSteps = JSON.parse(localStorage.getItem("PickListSteps"));
     this.compId = localStorage.getItem("CompID");
@@ -177,6 +178,7 @@ export class PickingItemDetailsComponent implements OnInit {
 
   getPickTaskList(OPTM_TASK_CODE, OPTM_PICKLIST_ID) {
     this.showLoader = true;
+    console.log("2  "+new Date().toLocaleTimeString());
     this.picktaskService.GetDataBasedOnPickList(OPTM_TASK_CODE, OPTM_PICKLIST_ID).subscribe(
       (data: any) => {
         this.showLoader = false;
@@ -189,7 +191,9 @@ export class PickingItemDetailsComponent implements OnInit {
           this.showLookupLoader = false;
           this.PickTaskList = data.OPTM_WHSTASKLIST;
           this.PickTaskDetail = data;
-          this.setVales(this.index);
+          console.log("3  "+new Date().toLocaleTimeString());
+          this.setValues(this.index);
+          console.log("4  "+new Date().toLocaleTimeString());
         } else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         }
@@ -206,7 +210,7 @@ export class PickingItemDetailsComponent implements OnInit {
     );
   }
 
-  setVales(index) {
+  setValues(index) {
     this.pickTaskName = this.PickTaskList[index].OPTM_TASKID;
     this.openQty = this.PickTaskList[index].OPTM_TASK_QTY;
     this.OPTM_Tracking = this.PickTaskList[index].OPTM_TRACKING;
@@ -486,7 +490,7 @@ export class PickingItemDetailsComponent implements OnInit {
     if(this.index == this.PickTaskList.length){
       this.index = 0;
     }
-    this.setVales(this.index);
+    this.setValues(this.index);
   }
 
   onLotChange() {
@@ -781,7 +785,7 @@ export class PickingItemDetailsComponent implements OnInit {
     // if (this.index >= this.PickTaskList.length) {
     //   this.index = 0;
     // }
-    // this.setVales(this.index);
+    // this.setValues(this.index);
     // this.toastr.success('', this.translate.instant("SavePickedTask"));
     // this.setfocus();
   }
