@@ -339,6 +339,7 @@ export class SigninComponent implements OnInit {
             return true;
         }
         localStorage.setItem("UserId", this.userName);
+        localStorage.setItem("UserGroup", "Picker");
         this.isCompleteLoginVisible = true;
         this.readonlyFlag = true;
 
@@ -524,24 +525,24 @@ export class SigninComponent implements OnInit {
             this.toastr.error('', this.translate.instant("Login_SelectwarehouseMsg"), this.commonService.toast_config.iconClasses.error);
             return true;
         }
-        else if (document.getElementById("Role").innerText.trim() == this.translate.instant("SelectRole") ||
-            document.getElementById("Role").innerText.trim() == "") {
-            this.showLoader = false;
-            this.toastr.error('', this.translate.instant("SelectRoleMsg"), this.commonService.toast_config.iconClasses.error);
-            return true;
-        }
-        else if (document.getElementById("Zone").innerText.trim() == this.translate.instant("SelectZone") ||
-            document.getElementById("Zone").innerText.trim() == "") {
-            this.showLoader = false;
-            this.toastr.error('', this.translate.instant("SelectZoneMsg"), this.commonService.toast_config.iconClasses.error);
-            return true;
-        }
-        else if (document.getElementById("BinRange").innerText.trim() == this.translate.instant("SelectBin") ||
-            document.getElementById("BinRange").innerText.trim() == "") {
-            this.showLoader = false;
-            this.toastr.error('', this.translate.instant("SelectBinMsg"), this.commonService.toast_config.iconClasses.error);
-            return true;
-        }
+        // else if (document.getElementById("Role").innerText.trim() == this.translate.instant("SelectRole") ||
+        //     document.getElementById("Role").innerText.trim() == "") {
+        //     this.showLoader = false;
+        //     this.toastr.error('', this.translate.instant("SelectRoleMsg"), this.commonService.toast_config.iconClasses.error);
+        //     return true;
+        // }
+        // else if (document.getElementById("Zone").innerText.trim() == this.translate.instant("SelectZone") ||
+        //     document.getElementById("Zone").innerText.trim() == "") {
+        //     this.showLoader = false;
+        //     this.toastr.error('', this.translate.instant("SelectZoneMsg"), this.commonService.toast_config.iconClasses.error);
+        //     return true;
+        // }
+        // else if (document.getElementById("BinRange").innerText.trim() == this.translate.instant("SelectBin") ||
+        //     document.getElementById("BinRange").innerText.trim() == "") {
+        //     this.showLoader = false;
+        //     this.toastr.error('', this.translate.instant("SelectBinMsg"), this.commonService.toast_config.iconClasses.error);
+        //     return true;
+        // }
         return false;
     }
     /**

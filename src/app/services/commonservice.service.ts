@@ -237,11 +237,11 @@ export class Commonservice {
 
   }
 
-  CancelPickList(OPTM_PICKLIST_CODE, compId): Observable<any> {
+  CancelPickList(OPTM_PICKLIST_ID, compId): Observable<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
         CompanyDBId: compId,
-        OPTM_PICKLIST_CODE: OPTM_PICKLIST_CODE
+        OPTM_PICKLIST_ID: OPTM_PICKLIST_ID
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/CancelPickList", jObject, this.httpOptions);
@@ -760,5 +760,33 @@ export class Commonservice {
   CreateContainerForPacking(oSaveModel): Observable<any> {
     let jObject = {PalletCode: JSON.stringify(oSaveModel)}; 
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/CreateContainerForPacking", jObject, this.httpOptions);
+  }
+
+  CancelPickListAPI(OPTM_PICKLIST_ID, compId, translate) {
+    if (OPTM_PICKLIST_ID == "" || OPTM_PICKLIST_ID == undefined) {
+      return;
+    }
+    // this.showLoader = true;
+    this.CancelPickList(OPTM_PICKLIST_ID, compId).subscribe(
+      (data: any) => {
+        // this.showLoader = false;
+        if (data != undefined) {
+          if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+            this.RemoveLicenseAndSignout(this.toastr, this.router,
+              translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
+        }
+      },
+      error => {
+        // this.showLoader = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.unauthorizedToken(error, translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
   }
 }

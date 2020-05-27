@@ -32,12 +32,13 @@ export class PickTaskService {
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetPicklist", jObject, this.commonService.httpOptions);
   }
 
-  GetDataBasedOnPickList(OPTM_TASK_CODE, OPTM_PICKLIST_CODE): Observable<any> {
+  GetDataBasedOnPickList(OPTM_TASK_CODE, OPTM_PICKLIST_ID): Observable<any> {
     let jObject = {
       PalletCode: JSON.stringify([{
         CompanyDBId: localStorage.getItem("CompID"),
         OPTM_TASK_CODE: OPTM_TASK_CODE,
-        OPTM_PICKLIST_CODE: OPTM_PICKLIST_CODE
+        OPTM_PICKLIST_ID: OPTM_PICKLIST_ID,
+        OPTM_USER_GRP: localStorage.getItem("UserGroup")
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetDataBasedOnPickList", jObject, this.commonService.httpOptions);
@@ -50,7 +51,7 @@ export class PickTaskService {
         ITEMCODE: ITEMCODE,
         LOTNO: LOTNO,
         OPTM_SRC_BIN: OPTM_SRC_BIN,
-        OPTM_CREATEDBY: localStorage.getItem("UserId")
+        OPTM_CREATEDBY: localStorage.getItem("UserGroup")
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/IsValidBatchSerial", jObject, this.commonService.httpOptions);

@@ -73,15 +73,17 @@ export class PickingItemListComponent implements OnInit {
   public skip = 0;
   public mobileMedia = "(max-width: 767px)";
   public desktopMedia = "(min-width: 768px)";
-  itemcodeLabel: string = "Item Code";
+  codeLabel: string = "Item Code";
+  compId: string;
   // GRID VARIABLE
 
 
   ngOnInit() {
     this.picktaskService.clearLocaStorage();
+    this.compId = localStorage.getItem("CompID");
     this.ShipDetail = JSON.parse(localStorage.getItem("ShipDetail"));
     this.shipmentno = this.translate.instant("PickListCode") + ": " + this.ShipDetail.OPTM_PICKLIST_CODE;
-    this.getPickTaskList(this.ShipDetail.OPTM_TASK_CODE, this.ShipDetail.OPTM_PICKLIST_CODE);
+    this.getPickTaskList(this.ShipDetail.OPTM_TASK_CODE, this.ShipDetail.OPTM_PICKLIST_ID);
   }
 
   cellClickHandler(row) {
@@ -96,9 +98,9 @@ export class PickingItemListComponent implements OnInit {
   }
 
   
-  getPickTaskList(OPTM_TASK_CODE, OPTM_PICKLIST_CODE) {
+  getPickTaskList(OPTM_TASK_CODE, OPTM_PICKLIST_ID) {
     this.showLoader = true;
-    this.picktaskService.GetDataBasedOnPickList(OPTM_TASK_CODE, OPTM_PICKLIST_CODE).subscribe(
+    this.picktaskService.GetDataBasedOnPickList(OPTM_TASK_CODE, OPTM_PICKLIST_ID).subscribe(
       (data: any) => {
         this.showLoader = false;
         if (data != undefined) {
@@ -112,12 +114,13 @@ export class PickingItemListComponent implements OnInit {
           this.PickTaskList = data.OPTM_WHSTASKLIST;
           if (localStorage.getItem("PickType") == this.translate.instant("Container_Picking")) {
             for(var i=0; i<this.PickTaskList.length; i++){
-              this.PickTaskList[i].OPTM_ITEMCODE = data.OPTM_WHSTASK_DTL[i].OPTM_CONTCODE;
-              this.PickTaskList[i].OPTM_TASK_QTY = data.OPTM_WHSTASK_DTL[i].OPTM_PLANNED_QTY;
+              this.PickTaskList[i].CODE = data.OPTM_WHSTASK_DTL.find(e=>e.OPTM_TASKID == this.PickTaskList[i].OPTM_TASKID).OPTM_CONTCODE;//[i].OPTM_CONTCODE;
+              // this.PickTaskList[i].OPTM_TASK_QTY = data.OPTM_WHSTASK_DTL[i].OPTM_PLANNED_QTY;
             }
-            this.itemcodeLabel = "Container Code";
+            this.codeLabel = "Container Code";
           }else{
-            this.itemcodeLabel = "Item Code";
+            this.codeLabel = "Item Code";
+            this.PickTaskList[i].CODE = this.PickTaskList[i].OPTM_ITEMCODE;
           }
           if(this.PickTaskList.length > this.pageSize){
             this.pagable = true;
@@ -136,5 +139,9 @@ export class PickingItemListComponent implements OnInit {
         }
       }
     );
+  }
+
+  ngOnDestroy() {
+    this.commonservice.CancelPickListAPI(this.ShipDetail.OPTM_PICKLIST_ID, this.compId, this.translate);
   }
 }
