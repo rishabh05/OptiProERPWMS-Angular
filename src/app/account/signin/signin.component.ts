@@ -339,7 +339,7 @@ export class SigninComponent implements OnInit {
             return true;
         }
         localStorage.setItem("UserId", this.userName);
-        localStorage.setItem("UserGroup", "Picker");
+        localStorage.setItem("UserGroup", this.userDetails[0].OPTM_GROUPCODE);
         this.isCompleteLoginVisible = true;
         this.readonlyFlag = true;
 
@@ -352,7 +352,7 @@ export class SigninComponent implements OnInit {
                 this.selectedItem = this.companyName[i];
                 this.setWarehouseList(true);
             }
-        }
+        } 
     }
 
 

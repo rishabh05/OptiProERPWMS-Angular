@@ -29,7 +29,7 @@ export class PickTaskModel {
         this.OPTM_TOTE_NUMBER= toteValue;
         this.OPTM_ISCONT = OPTM_ISCONT;
         this.OPTM_IS_CONT_CREATED = OPTM_IS_CONT_CREATED;
-        this.OPTM_RESID_ACT = localStorage.getItem("CompID");
+        this.OPTM_RESID_ACT = localStorage.getItem("UserId");
         this.OPTM_STARTDATETIME = OPTM_STARTDATETIME;
     }
 }
