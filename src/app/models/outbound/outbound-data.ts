@@ -1,3 +1,5 @@
+import { PackingModel } from './PackingModel';
+
 export class OutboundData {
     CustomerData: any;
     OrderData: any;
@@ -7,7 +9,10 @@ export class OutboundData {
     DeleiveryCollection: Array<any> = [];
     TempMeterials:Array<any>=[];
     PalletItems:Array<any> = [];
+    packingCollection:Array<PackingModel> = [];
+    AllCreatedPackings:Array<PackingModel> = [];
     ITRToBinNo: any;
+    selectedPackingItem:PackingModel=null;
 }
 
 export class CurrentOutBoundData {

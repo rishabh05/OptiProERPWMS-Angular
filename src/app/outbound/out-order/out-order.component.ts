@@ -11,6 +11,7 @@ import { SODETAIL, SOHEADER, DeliveryToken } from 'src/app/models/outbound/out-d
 import { MeterialModel } from 'src/app/models/outbound/meterial-model';
 import { InventoryTransferService } from 'src/app/services/inventory-transfer.service';
 import { InboundService } from 'src/app/services/inbound.service';
+import { PackingModel } from 'src/app/models/outbound/PackingModel';
 
 
 @Component({
@@ -75,11 +76,13 @@ export class OutOrderComponent implements OnInit {
   @ViewChild('scanItemCode') scanItemCode;
   fromShipment: boolean = false;
 
-
+  showPackingAlertForNTFirstTime:boolean = false;
+  public selectedPackingModel:PackingModel = new PackingModel() ;
   constructor(private inboundService: InboundService, private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService,
     private inventoryTransferService: InventoryTransferService) { }
 
   ngOnInit() {
+    console.log("oninit outorder")
     if (localStorage.getItem(CommonConstants.FROM_DTS) == "true") {
       this.fromShipment = true;
     }
@@ -88,13 +91,9 @@ export class OutOrderComponent implements OnInit {
     } else {
       this.isPalletizationEnable = false;
     }
-
-    // lsOutbound
-    // console.log("from where",this.fromWhere);  
     if (localStorage.getItem("ComingFrom") == "itr") {
       this.fromWhere = "itr";
       this.pagetitle = this.translate.instant("InvTransfer_ByITR");
-
     } else {
       let companyName = '';
       let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
@@ -103,12 +102,19 @@ export class OutOrderComponent implements OnInit {
         this.outbound = JSON.parse(outboundData);
         this.selectedCustomer = this.outbound.CustomerData;
         companyName = this.selectedCustomer.CustomerCode;
+        if(this.outbound.selectedPackingItem!=null && this.outbound.selectedPackingItem!=undefined){
+          this.selectedPackingModel = this.outbound.selectedPackingItem;
+        }else{
+          this.selectedPackingModel = new PackingModel();
+          this.selectedPackingModel.PkgNo = ''
+          this.selectedPackingModel.PkgType = ''
+        }
+        
       }
       this.pagetitle = this.translate.instant("Outbound_DeleiveryToCustomer") + ": " + companyName;
       // means from outbound
     }
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
-    // console.log("Order:data", outboundData);
     if (outboundData != null && outboundData != undefined && outboundData != '' && outboundData != 'null') {
       this.outbound = JSON.parse(outboundData);
       this.selectedCustomer = this.outbound.CustomerData;
@@ -116,9 +122,6 @@ export class OutOrderComponent implements OnInit {
         && this.outbound.OrderData.DOCNUM !== undefined && this.outbound.OrderData.DOCNUM !== null) {
         this.orderNumber = this.outbound.OrderData.DOCNUM;
         this.docEntry = this.outbound.OrderData.DOCENTRY;
-
-        // this.openSOOrderList(); 
-
         if (localStorage.getItem("ComingFrom") == "itr") {
           this.itrCode = this.orderNumber;
           //this.toBinNo = this.outbound.ITRToBinNo.ToBin
@@ -146,9 +149,7 @@ export class OutOrderComponent implements OnInit {
       }
       this.calculatePickQty();
     }
-
     this.setSavedPelletDataToGrid();
-    // document.getElementById("itemcodeid").focus();
   }
 
   ngAfterViewInit(): void {
@@ -263,7 +264,19 @@ export class OutOrderComponent implements OnInit {
       //nothing to do
       return;
     } else {
-      if (this.lookupfor == "PalletList") {
+      if (this.lookupfor == "packingList") {
+        this.selectedPackingModel = new PackingModel();
+        this.selectedPackingModel.PkgNo = lookupValue.PkgNo;
+        this.selectedPackingModel.PkgType = lookupValue.PkgType;
+        this.showLookup = false;
+        var outbound: any;
+        let outboundData = localStorage.getItem(CommonConstants.OutboundData);
+        if (outboundData != undefined && outboundData != '') {
+        outbound = JSON.parse(outboundData);
+        outbound.selectedPackingItem=this.selectedPackingModel;
+        localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));}
+  
+      }else  if (this.lookupfor == "PalletList") {
         this.showLookupLoader = false;
         this.palletNo = lookupValue.Code;
         this.getPalletData();
@@ -278,7 +291,8 @@ export class OutOrderComponent implements OnInit {
           this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
           this.openSOOrderList();
           this.scanSO.nativeElement.focus()
-        } else if (this.lookupfor == "ITRList") {
+        } else 
+        if (this.lookupfor == "ITRList") {
           this.resetITRFields();
           //
           this.toWhse = lookupValue.ToWhsCode;
@@ -309,10 +323,22 @@ export class OutOrderComponent implements OnInit {
       }
     }
   }
-
+   
+  
   public openPOByUOM(selectdeData: any, ) {
     console.log("openPOByUOM method run........");
-    //  let selectdeData = selection.selectedRows[0].dataItem;
+
+    // if(selectdeData.TRACKING=="N" && (this.selectedPackingModel.PkgNo==null ||
+    //   this.selectedPackingModel.PkgNo==undefined ||  this.selectedPackingModel.PkgNo=="")){
+    //   if(!this.showPackingAlertForNTFirstTime){
+      
+    //   this.showDialog("PackingAlert","Ok","Cancel",
+    //   "If you want to add packing detail for this item then select packing first")
+    //   this.showPackingAlertForNTFirstTime = true;
+    //   return;
+    //   }
+    // }
+  //  let selectdeData = selection.selectedRows[0].dataItem;
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
     if (outboundData != undefined && outboundData != '') {
       this.outbound = JSON.parse(outboundData);
@@ -1373,8 +1399,6 @@ export class OutOrderComponent implements OnInit {
                 deletedTempObjectsList.push(ObjectFromTempCollection[0])
             }
             //=======collection of deleted temp items from pallet end==========
-
-
             //======update the quantity of items on rows after delete pallet start.=======
             for (let i = 0; i < this.soItemsDetail.length; i++) {
               var qty = 0;
@@ -1387,9 +1411,6 @@ export class OutOrderComponent implements OnInit {
               }
             }
             //======update the quantity of items on rows after delete pallet end.=======
-
-
-
             //=================code to remove pallet items from saved pallet items list.
             var dbPalletItems = this.outbound.PalletItems;
             for (let a = 0; a < dbPalletItems.length; a++) {
@@ -1438,6 +1459,8 @@ export class OutOrderComponent implements OnInit {
         case ("Transfer ITR"):
           this.deleiver();
           break;
+        case ("PackingAlert"):
+          break;
         case ("ClearTempArray"):
 
           let obd = localStorage.getItem(CommonConstants.OutboundData);
@@ -1471,8 +1494,10 @@ export class OutOrderComponent implements OnInit {
             this.deleiver(this.outbound.OrderData.DOCNUM);
             break;
           case ("ClearTempArray"):
-            this.fromEvent = "";
-            break;
+                this.fromEvent =  "";
+                break;
+          case ("packingAlert"):
+               break;
         }
       }
     }
@@ -1940,7 +1965,130 @@ export class OutOrderComponent implements OnInit {
   }
 
 
-  onHiddenOutOrderItemCodeScanClick() {
+
+
+
+  showPackingLookup:boolean = false;
+  selectPackingNumber1(){
+   //manage from local array and show list
+   let outboundData = localStorage.getItem(CommonConstants.OutboundData);
+   if (outboundData != undefined && outboundData != '') {
+     this.outbound = JSON.parse(outboundData);
+     this.serviceData = this.outbound.packingCollection;
+     if(this.serviceData.length==0){
+      this.toastr.error('', this.translate.instant("PackingNotAvailable"));
+      return;
+     }else{
+         this.lookupfor = "packingList";
+         //this.showPackingLookup = true;
+         this.showLookup = true;
+         this.showLookupLoader = true;
+     }
+    }
+  }
+
+  selectPackingNumber() {
+    //manage from local array and show list
+    let outboundData = localStorage.getItem(CommonConstants.OutboundData);
+    if (outboundData != undefined && outboundData != '') {
+      this.outbound = JSON.parse(outboundData);
+      this.serviceData = this.outbound.packingCollection;
+      const map = new Map();
+      var result=[];
+      for (const packingLookupItem of this.outbound.packingCollection) {
+        if(!map.has(packingLookupItem.PkgNo)){
+            map.set(packingLookupItem.PkgNo, true);    // set any value to Map
+            result.push(
+               packingLookupItem
+            );
+        }
+      }
+      this.serviceData = result;
+      if (this.serviceData.length == 0) {
+        this.toastr.error('', this.translate.instant("PackingNotAvailable"));
+        return;
+      } else {
+        this.lookupfor = "packingList";
+        this.showLookup = true;
+        this.showLookupLoader = false;
+      }
+    }
+  }
+  
+  onPackingNoChange(){
+   if(this.checkPackingNoExistInDb(this.selectedPackingModel.PkgNo)){
+    this.getSelectedPackingNoModel(this.selectedPackingModel.PkgNo)
+   }else{
+    this.selectedPackingModel = new PackingModel();
+    this.toastr.error('', this.translate.instant("PackingNoNotAvailable"));
+   }
+    //manage from local array and show list
+  }
+  checkPackingNoExistInDb(packingNo: String): boolean {
+    var outbound: any;
+    let outboundData = localStorage.getItem(CommonConstants.OutboundData);
+    if (outboundData != undefined && outboundData != '') {
+      outbound = JSON.parse(outboundData);
+      var packingCollection: any = outbound.packingCollection;
+      var items = packingCollection.filter(pItem => pItem.PkgNo == packingNo);
+      if (items.length > 0) return true;
+    }
+    return false;
+  }
+    getSelectedPackingNoModel(packingNo: String): PackingModel {
+      var outbound: any;
+      let outboundData = localStorage.getItem(CommonConstants.OutboundData);
+      if (outboundData != undefined && outboundData != '') {
+        outbound = JSON.parse(outboundData);
+        var packingCollection: any = outbound.packingCollection;
+        var items = packingCollection.filter(pItem => pItem.PkgNo == packingNo);
+        var model: PackingModel = new PackingModel()
+        model = items[0]
+        return model
+      }
+    }
+  
+  
+  
+
+
+  inputDialogFor: any;
+  btnYes: any;
+  btnNo: any;
+  titleMessage: any;
+  newPackingNoDialogFlag: boolean = false;
+  onNewPackingDialog() {
+    this.inputDialogFor = "CreateNewPacking";
+    this.btnYes = this.translate.instant("Done");
+    this.btnNo = this.translate.instant("Cancel");
+    this.newPackingNoDialogFlag = true;
+    this.titleMessage = this.translate.instant("CreateNewPacking");
+   
+  }
+
+  getNewPackingDialogOutPut($event){
+    debugger;
+    if ($event != null && $event == "close") {
+      //nothing to do
+      this.newPackingNoDialogFlag = false;
+      return;
+    }else{
+      var outbound: any;
+    let outboundData = localStorage.getItem(CommonConstants.OutboundData);
+    if (outboundData != undefined && outboundData != '') {
+      outbound = JSON.parse(outboundData);
+      this.selectedPackingModel = new PackingModel();
+      this.selectedPackingModel = outbound.selectedPackingItem;
+    }
+    }
+    this.newPackingNoDialogFlag = false;
+  }
+ 
+ 
+
+
+
+  onHiddenOutOrderItemCodeScanClick(){
     var inputValue = (<HTMLInputElement>document.getElementById('outOrderItemcodeinput')).value;
     if (inputValue.length > 0) {
       this.ItemCode = inputValue;

@@ -609,8 +609,6 @@ export class OutCutomerComponent implements OnInit {
     this.shipmentId = '';
   }
  
-
-
   prepareDeleiveryCollection() {
     // dock door confirmation when delivery through shipment.
     if(this.deliveryOptionType==2){
@@ -762,6 +760,7 @@ export class OutCutomerComponent implements OnInit {
         deliveryToken.SOHEADER = arrSOHEADER;
         deliveryToken.SODETAIL = arrSODETAIL;
         deliveryToken.UDF = [];
+        deliveryToken.PackingData = this.getPackingDataFromLocalStorage()
       }
       this.showLookupLoader = true;
       this.outboundservice.addDeleivery(deliveryToken).subscribe(
@@ -799,6 +798,21 @@ export class OutCutomerComponent implements OnInit {
     }
   }
 
+  getPackingDataFromLocalStorage() {
+    let selectedPackingItems=[]
+    let outboundData = localStorage.getItem(CommonConstants.OutboundData);
+    if (outboundData != undefined && outboundData != '') {
+      var outbound = JSON.parse(outboundData);
+      var packingCollection: any = outbound.packingCollection;
+      selectedPackingItems = packingCollection.filter(pi =>pi.ItemCode!=null && pi.ItemCode!= undefined );
+    }
+    var serialNo:number=0;
+    for(let i=0;i<selectedPackingItems.length;i++){
+      serialNo =serialNo+1;
+      selectedPackingItems[i].PkgId= serialNo
+    }
+    return selectedPackingItems;
+  }
   async manageShipQty(arrSOHEADER: SOHEADER[]): Promise<SOHEADER[]> {
     let tarrSOHEADER: SOHEADER[] = [];
 

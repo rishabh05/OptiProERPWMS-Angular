@@ -36,11 +36,6 @@ export class InputDialogComponent implements OnInit {
       this.autoGeneratePalletEnable = true;
     }
 
-    // if (localStorage.getItem("PalletizationEnabled") == "True" && localStorage.getItem("PalletizationEnabledForItem") == "True") {
-    //   this.isPalletizationEnable = true;
-    // } else {
-    //   this.isPalletizationEnable = false;
-    // }
 
     this.showLookup = true;
     this.showNoButton = true;
