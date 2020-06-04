@@ -550,6 +550,9 @@
 
   "PackingNoAlreadyTaken":"Packing number already taken",
   "SelectPacking":"Select Packing",
+  "PrintOptions": "Print Options",
+  "PackList": "PackList",
+  "BOL": "BOL",
   
   "Dummy": "Dummy"
 }

@@ -431,7 +431,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
 
   public displayPDF(dNo: string) {
     this.showLoader = true;
-    this.inboundService.printingServiceForSubmitGRPO(dNo).subscribe(
+    this.inboundService.printingServiceForSubmitGRPO(dNo, 6).subscribe(
       (data: any) => {
         this.showLoader = false;
         if (data != undefined) { 
@@ -453,7 +453,6 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
             this.base64String = 'data:application/pdf;base64,' + this.base64String;
             this.displayPDF1 = true;
             //this.commonservice.refreshDisplyPDF(true); 
-
           } else {
             // no data available then redirect to first screen.
             //this.inboundMasterComponent.inboundComponent = 1;

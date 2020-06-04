@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { OutboundData, CurrentOutBoundData } from 'src/app/models/outbound/outbound-data';
 import { CommonConstants } from 'src/app/const/common-constants';
 import { SOHEADER, SODETAIL, DeliveryToken } from 'src/app/models/outbound/out-del-req';
+import { InboundService } from 'src/app/services/inbound.service';
 
 
 
@@ -42,7 +43,7 @@ export class OutCutomerComponent implements OnInit {
   public CustRefNo: any = "";
   public shipmentId: any = ""; 
   public dockDoorCode: any = "";
- 
+  delNo: any = "";
   public dockDoorFromShipment: any = "";
   public deliveryOptionType: any = '1';
   @ViewChild('scanSO') scanSO;
@@ -51,7 +52,7 @@ export class OutCutomerComponent implements OnInit {
   @ViewChild('scanTracking') scanTracking;
   public pageTitle:String = "";
   showShipmentInfo: boolean = false;
-  constructor(private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) { }
+  constructor(private inboundService: InboundService, private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) { }
 
   ngOnInit() {
     this.customerName = '';
@@ -581,11 +582,17 @@ export class OutCutomerComponent implements OnInit {
 
     // Yes
     if ($event.Status === 'yes') {
-      this.removeOrderMain(this.delIdx, this.delGrd);
+      if($event.From == "receiveSinglePDFDialog"){
+        this.printDialog = true
+      } else {
+        this.removeOrderMain(this.delIdx, this.delGrd);
+      }
     }
     // No
     else if ($event.Status === 'no') {
-
+      if($event.From == "receiveSinglePDFDialog"){
+        this.clearOutbound()
+      }
     }
     // Cross
     else {
@@ -760,11 +767,13 @@ export class OutCutomerComponent implements OnInit {
       this.outboundservice.addDeleivery(deliveryToken).subscribe(
         data => {
           if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
+            this.delNo = data[0].SuccessNo
             this.showLookupLoader = false;
             this.trackingId = "";
             this.CustRefNo = "";
             this.toastr.success('', this.translate.instant("DeleiverySuccess") + " : " + data[0].SuccessNo);
-            this.clearOutbound();
+            // this.clearOutbound();
+            this.showPrintConfirmDialog();
           } else if (data[0].ErrorMsg == "7001") {
             this.showLookupLoader = false;
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
@@ -1551,9 +1560,63 @@ export class OutCutomerComponent implements OnInit {
   
   }
 
+  printDialog: boolean = false
+  showPDF: boolean = false;
+  base64String: string = "";
+  fileName: string = "";
+  displayPDF1: boolean = false;
+  dialogFor: string = "";
+  public displayPDF(dNo: string, value: any) {
+    this.showLookupLoader = true;
+    this.inboundService.printingServiceForSubmitGRPO(dNo, value).subscribe(
+      (data: any) => {
+        this.showLookupLoader = false;
+        this.printDialog = false;
+        if (data != undefined) {
+          // console.log("" + data);
+          if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
 
+          if (data.Detail != null && data.Detail != undefined && data.Detail[0] != null && data.Detail[0] != undefined) {
+            this.fileName = data.Detail[0].FileName;
+            this.base64String = data.Detail[0].Base64String;
+          }
 
+          if (this.base64String != null && this.base64String != "") {
+            this.base64String = 'data:application/pdf;base64,' + this.base64String;
+            this.displayPDF1 = true;
+          } else {
+          }
+        } else {
+          this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+        }
+      },
+      error => {
+        this.showLookupLoader = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
 
+  showPrintConfirmDialog() {
+    this.yesButtonText = this.translate.instant("yes");
+    this.noButtonText = this.translate.instant("no");
+    this.dialogFor = "receiveSinglePDFDialog";
+    this.dialogMsg = "Do you want to print report?";//this.translate.instant("Inbound_PrintAllLabelsAfterSubmit");
+    this.showConfirmDialog = true; // show dialog 
+  }
+
+  buttonClick(event) {
+    this.displayPDF(""+this.delNo, event)
+  }
 
 
 
@@ -1611,19 +1674,6 @@ export class OutCutomerComponent implements OnInit {
 //     }
 //   );
 // }
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 

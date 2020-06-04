@@ -230,6 +230,7 @@
     <div class="opti_spinner"></div>
 </div>
 
+
 <!-- Dialog -->
 <span *ngIf="showConfirmDialog">
     <app-comon-confirm-dialog [titleMessage]="dialogMsg" [fromWhere]="dialogFor" [noButtonText]="noButtonText"
@@ -238,3 +239,32 @@
 <span *ngIf="showShipmentInfo==true">
  <app-shipmentinfo  [serviceData]='ShipmentInfoData' [useContainer]='useContainer' (lookupOutputEvent)="getShipmentLookupEvent($event)"></app-shipmentinfo>
 </span> 
+
+<!--Pick list pack list and Bol PDF-->
+<div>
+    <app-display-pdf *ngIf="displayPDF1" [base64String]='base64String' [fileName]='fileName' (pdfClose)="closePDF($event)"></app-display-pdf>
+</div>
+
+
+<kendo-dialog [width]="750" *ngIf="printDialog" (close)="close('dialog')" [minWidth]="250" [width]="450">
+    <kendo-dialog-titlebar>
+        {{'PrintOptions'|translate}}
+    </kendo-dialog-titlebar>
+    <div class="px-3">
+        <div class="form-group row">
+            <div class="input-group input-group-sm">
+                <button class="btn btn-primary k-button btn-sm btn-icon-with-text" type="button" (click)="buttonClick(13)">{{'PickList'|translate}}
+                </button>
+                <button class="btn btn-primary k-button btn-sm btn-icon-with-text" type="button" (click)="buttonClick(12)">{{'PackList'|translate}}
+                </button>
+                <button class="btn btn-primary k-button btn-sm btn-icon-with-text" type="button" (click)="buttonClick(11)">{{'BOL'|translate}}
+                </button>
+            </div>
+        </div>
+    </div>
+    <kendo-dialog-actions class="text-right">
+        <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="close('dialog')">
+            <span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
+    </kendo-dialog-actions>
+</kendo-dialog>
+<!--Pick list pack list and Bol PDF-->
