@@ -12,7 +12,7 @@
                         <dt>{{'PickListCode'|translate}}</dt>
                         <dd>{{item.OPTM_PICKLIST_CODE}}</dd>
                     </div>
-                    <div class="custom-dl-list">
+                    <div class="custom-dl-list" *ngIf="false">
                         <dt>{{'TaskListCode'|translate}}</dt>
                         <dd>{{item.OPTM_TASK_CODE}}</dd>
                     </div>
@@ -24,7 +24,7 @@
                         <div class="po-details-sec">
                             <span class="po-details">
                                 <div class="item-name-row">
-                                    <span class="po-item-name">{{'Task'|translate}}: {{pickTaskName}} ({{pickTaskName}})</span>
+                                    <span class="po-item-name">{{'Task'|translate}}: {{pickTaskName}} ({{Type}})</span>
                                     <span class="po-item-name">{{completedTaskCount}}/{{totalPickTaskCount}}</span>
                                     <span>{{'Quantity'|translate}}: {{totalpickQty}}/{{openQty}}</span>
                                 </div>

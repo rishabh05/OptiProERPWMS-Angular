@@ -104,7 +104,8 @@ export class SigninService {
         Company: compId
       }])
     };
-    return this.httpclient.post(this.config_params.service_url + "/api/WMSlogin/GetRoles", jObject,
+    
+    return this.httpclient.post(this.config_params.service_url + "/api/WMSlogin/GetRoless", jObject,
       this.commonService.httpOptions);
   }
 

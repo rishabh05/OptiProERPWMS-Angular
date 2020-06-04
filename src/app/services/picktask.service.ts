@@ -113,5 +113,17 @@ export class PickTaskService {
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/IsPalletValidForGRPO", jObject, this.commonService.httpOptions);
   }
+
+  UpdatePickListStatusBasedOnSelected(OPTM_STATUS, OPTM_PICKLIST_ID, OPTM_STATUS1): Observable<any> {
+    let jObject = {
+      PalletCode: JSON.stringify([{
+        CompanyDBId: localStorage.getItem("CompID"),
+        OPTM_STATUS: OPTM_STATUS,
+        OPTM_PICKLIST_ID: OPTM_PICKLIST_ID,
+        OPTM_STATUS1: OPTM_STATUS1
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/UpdatePickListStatusBasedOnSelected", jObject, this.commonService.httpOptions);
+  }
 }
 
