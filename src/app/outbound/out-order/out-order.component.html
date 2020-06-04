@@ -148,12 +148,82 @@
                     </div>
                 </div>
             </div>
+
+            <div class="row mt-3">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+                    <div class="form-group row">
+
+                        <label class="col-sm-3 col-form-label">{{'PackingNo'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="d-flex">
+                                <div class="input-group input-group-sm">
+                                    <input #scanBatchSerial type="text" [(ngModel)]='selectedPackingModel.PkgNo'
+                                        id="packingNo" name="packNo" value=''
+                                        class="form-control form-control-sm" (blur)="onPackingNoChange()"
+                                        placeholder="{{'PackingNo'|translate}}">
+                                    <div class="input-group-append">
+                                        <button tabindex="-1" class="k-button k-primary btn " type="button"
+                                            (mousedown)="selectPackingNumber()">
+                                            <i class="opti-icon-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="ml-1 d-flex">
+                                    <button tabindex="-1" id="outboundProdIssueScanPackingNo"
+                                        (mousedown)="scanPackingNo()"
+                                        class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
+                                        type="button">
+                                        <i class="opti-icon-qr-code fs-24"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-0">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">{{'Type'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="d-flex">
+                                <div class="input-group input-group-sm">
+                                    <input #typeValue type="text" [(ngModel)]='selectedPackingModel.PkgType' id="typeValue"
+                                        name="typeValue" value='' class="form-control form-control-sm"
+                                        [disabled]=true placeholder="{{'Type'|translate}}">
+                                
+                                </div>
+                                <div class="ml-1 d-flex">
+                                   </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+<!-- New Packing Create-->
+<div class="row">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
+        <div class="form-group row mt-2 mt-md-0">
+            <label class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9">
+                <label class="textunderline"
+                    (click)="onNewPackingDialog()">{{'NewPacking'|translate}}</label>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
             <div>
                 <!-- temporary grid for show selected pallet -->
             <div class="row">
                 <div class="col-sm-12">
-                    <kendo-grid  *ngIf="showTemporaryViews && showPalletGrid" class="no-shadow" [data]="savedPalletItems" [resizable]="true" [pageSize]="pageSize"
-                        [pageable]="pagable" [sortable]="true" [selectable]="true" id="newGrid"
+                    <kendo-grid  *ngIf="showTemporaryViews && showPalletGrid" class="no-shadow" [data]="savedPalletItems" 
+                    [resizable]="true" [pageSize]="pageSize" [pageable]="pagable" [sortable]="true" [selectable]="true" id="newGrid"
                         #newGrid>
                         <!-- grid for mobile start -->
                         <kendo-grid-column media="(max-width: 767px)" title="{{'ProdIssue_SelectedMaterials'|translate}}" class="opti_mobile-grid-td">
@@ -365,4 +435,11 @@
 <span *ngIf="showConfirmDialog">
     <app-comon-confirm-dialog [titleMessage]="dialogMsg" [fromWhere]="dialogFor" [noButtonText]="noButtonText"
         [yesButtonText]="yesButtonText" (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
+</span>
+
+<!--Create New Packing Input Dialog-->
+<span *ngIf="newPackingNoDialogFlag">
+    <app-new-packing-input-dialog [titleMessage]="titleMessage" [yesButtonText]="btnYes"
+        [fromWhere]="inputDialogFor" [noButtonText]="btnNo" 
+        (packingDialogOutput)="getNewPackingDialogOutPut($event)"></app-new-packing-input-dialog>
 </span>

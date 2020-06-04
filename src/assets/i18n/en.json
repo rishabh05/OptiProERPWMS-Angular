@@ -541,7 +541,7 @@
   "Login_SelectBinRange": "Please select Bin.",
   "PackPackingNo":"Packing #",
   "Type":"Type",
-  "NewPacking":"New Packing#",
+  "NewPacking":"New Packing",
   "CreateNewPacking":"Create New Packing",
   "PackingNoAlreadyInUse": "Packing number already in use",
   "PackingType":"Packing Type",
@@ -549,6 +549,10 @@
 
   "PackingNoAlreadyTaken":"Packing number already taken",
   "SelectPacking":"Select Packing",
-  
+  "PackingNotAvailable":"No packing no. available you can add from 'New Packing'.",
+  "ShowPackingDetails":"Show Packing Details",
+  "PackingQtyNotMoreThenPickedQty":"Packing quantity can not be grater then picked quantity.",
+  "PackingDetailUpdated":"Packings updated successfully!",
+  "PackingDetails":"Packing Details",
   "Dummy": "Dummy"
 }

@@ -15,9 +15,10 @@ import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
 import { InputsModule } from '@progress/kendo-angular-inputs';
 import { DialogModule } from '@progress/kendo-angular-dialog';
 import { DeliveryThroughShipmentComponent } from './delivery-through-shipment/delivery-through-shipment.component';
+import { NewPackingInputDialogComponent } from './new-packing-input-dialog/new-packing-input-dialog.component';
  
 @NgModule({
-  declarations: [ OutCutomerComponent, OutOrderComponent, OutProdissueComponent, DeliveryThroughShipmentComponent],
+  declarations: [ OutCutomerComponent, OutOrderComponent, OutProdissueComponent, DeliveryThroughShipmentComponent, NewPackingInputDialogComponent],
   imports: [   
     FormsModule,
     CommonModule,
@@ -30,6 +31,6 @@ import { DeliveryThroughShipmentComponent } from './delivery-through-shipment/de
     DialogModule,
     InputsModule
   ], 
-  exports:[OutCutomerComponent,OutOrderComponent,OutProdissueComponent]
+  exports:[OutCutomerComponent,OutOrderComponent,OutProdissueComponent,NewPackingInputDialogComponent]
 })
 export class OutboundModule { }

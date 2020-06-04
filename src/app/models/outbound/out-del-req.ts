@@ -1,3 +1,4 @@
+import { PackingModel } from './PackingModel';
 
 
 export class SOHEADER {
@@ -37,6 +38,7 @@ export class DeliveryToken {
     constructor() { }
     SOHEADER: SOHEADER[];
     SODETAIL: SODETAIL[];
+    PackingData:PackingModel[];
     UDF: any[];
 }
 

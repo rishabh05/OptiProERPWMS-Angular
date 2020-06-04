@@ -1,0 +1,35 @@
+<kendo-dialog *ngIf="opened"(close)="close('cancel')" [width]="550">
+  <kendo-dialog-titlebar>
+      {{'CreateNewPacking'|translate}}
+  </kendo-dialog-titlebar>
+  <div class="px-3">
+      <div class="form-group row">
+          <div class="input-group input-group-sm">
+              <input type="text" id="NewPacking" name="NewPacking" class="form-control form-control-sm" 
+              [(ngModel)]="packingNo"
+                  placeholder="{{'NewPacking'|translate}}" (blur)="OnPackingChange()">
+       
+          </div>
+      </div>
+      <div class="form-group row">
+          <div class="input-group input-group-sm">
+              <input type="text" class="form-control form-control-sm" placeholder="{{'Type'|translate}}" name="type"
+                  [(ngModel)]="type" (blur)="OnTypeChange()">
+              <div class="input-group-append  has-seprate-btn">
+                  <button class="k-button k-primary btn" type="button" (click)="OnTypeLookupClick()">
+                      <i class="opti-icon-hammenu"></i>
+                  </button>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <kendo-dialog-actions>
+      <button kendoButton *ngIf="showNoButton" (click)="close('no')">{{noButtonText}}</button>
+      <button class="ml-1" kendoButton (click)="OnDoneClick('yes')" primary="true">{{yesButtonText}}</button>
+  </kendo-dialog-actions>
+</kendo-dialog>
+
+<span [hidden]="!showLookup">
+  <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupkey)="getLookupValue($event)"></app-lookup>
+</span>

@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { OutRequest } from '../models/outbound/request-model';
 import { Commonservice } from './commonservice.service';
+import { CommonConstants } from '../const/common-constants';
 
 @Injectable({
   providedIn: 'root'
@@ -179,5 +180,38 @@ export class OutboundService {
 
     return this.httpclient.post(this.config_params.service_url + "/api/GoodsReceipt/GetItemCode", jObject, this.commonService.httpOptions);
   }
+
+   
+
+
+  public isPackingNoExists(code: string): Observable<any> {
+    this.outRequest.CompanyDBId = localStorage.getItem("CompID");
+    var body: any = { DeliveryToken:JSON.stringify( [{ CompanyDBId: this.outRequest.CompanyDBId, CUSTCODE: code }] )};
+    return this.httpclient.post(this.config_params.service_url + "/api/Delivery/Customer", body, this.commonService.httpOptions);
+  }
+  
+  public GetPackSlipType(number: String,type: String): Observable<any> {
+    this.outRequest.CompanyDBId = localStorage.getItem("CompID");
+    var body: any = { DeliveryToken:JSON.stringify( [{ CompanyDBId: this.outRequest.CompanyDBId,
+      PackType:type,}] )};
+    return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetPackSlipType", body, this.commonService.httpOptions);
+  }
+  public CreatePackingSlip(number: String,type: String,DocEntry:String){
+    this.outRequest.CompanyDBId = localStorage.getItem("CompID");
+    var body: any = { DeliveryToken:JSON.stringify( [{ CompanyDBId: this.outRequest.CompanyDBId, Number: number,
+      Type:type,UsernameforLic:localStorage.getItem("UserId"),DocEntry:DocEntry}] )};
+    return this.httpclient.post(this.config_params.service_url + "/api/Delivery/CreatePackingSlip", body, this.commonService.httpOptions);
+
+  }
+
+  
+  public GetPackNoBasedOnDelivery(PackNo: String,DocEntry:String){
+    this.outRequest.CompanyDBId = localStorage.getItem("CompID");
+    var body: any = { DeliveryToken:JSON.stringify( [{ CompanyDBId: this.outRequest.CompanyDBId, PackNo: PackNo,
+      DocEntry:DocEntry}] )};
+    return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetPackNoBasedOnDelivery", body, this.commonService.httpOptions);
+
+  }
+
 }
 

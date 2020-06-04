@@ -50,6 +50,7 @@ export class LookupComponent implements OnInit {
   selectedValues: Array<any> = [];
   public mySelection: number[] = [];
 
+  SelectedPackingNo:String='';
 
   lookupPagable: boolean = false;
   lookupPageSize: number = 10;
@@ -171,6 +172,13 @@ export class LookupComponent implements OnInit {
     }
     else if (this.lookupfor == "ContainerList"){
       this.containerList();
+    } else if (this.lookupfor == "packingType"){
+      this.packingTypeList();
+     }
+    else if (this.lookupfor == "packingList"){
+      this.packingLookupItemList();
+    } if (this.lookupfor == "packingDetails"){
+      this.packingDetailList();
     }
 
     this.clearFilters();
@@ -821,6 +829,89 @@ export class LookupComponent implements OnInit {
       }
     }
   }
+
+  packingTypeList() {
+    this.table_head = [
+      // {
+      //   field: 'PkgNo',
+      //   title: this.translate.instant("PackingNo"),
+      //   type: 'text',
+      //   width: '100'
+      // },
+      {
+        field: 'PkgType',
+        title: this.translate.instant("PackingType"),
+        type: 'text',
+        width: '100'
+      }
+    ];
+    this.lookupTitle = this.translate.instant("PackingType");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
+
+    packingLookupItemList() {
+      this.table_head = [
+        {
+          field: 'PkgNo',
+          title: this.translate.instant("PackPackingNo"),
+          type: 'text',
+          width: '100'
+        },
+        {
+          field: 'PkgType',
+          title: this.translate.instant("PackingType"),
+          type: 'text',
+          width: '100'
+        }
+       
+      ];
+      this.lookupTitle = this.translate.instant("SelectPacking");
+      if (this.serviceData !== undefined) {
+        if (this.serviceData.length > 0) {
+          this.dialogOpened = true;
+        }
+      }
+  }
+
+  packingDetailList() {
+    this.table_head = [
+      {
+        field: 'PkgNo',
+        title: this.translate.instant("PackPackingNo"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'PkgType',
+        title: this.translate.instant("PackingType"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'ItemCode',
+        title: this.translate.instant("ItemCode"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'Quantity',
+        title: this.translate.instant("Quantity"),
+        type: 'text',
+        width: '100'
+      }
+     
+    ];
+    this.lookupTitle = this.translate.instant("PackingDetails");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+}
 
   showITRList() {
     this.table_head = [
