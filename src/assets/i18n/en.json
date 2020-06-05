@@ -559,5 +559,6 @@
   "PackingQtyNotMoreThenPickedQty":"Packing quantity can not be grater then picked quantity.",
   "PackingDetailUpdated":"Packings updated successfully!",
   "PackingDetails":"Packing Details",
+  "NoPackingInfoAvailable":"No packing info available.",
   "Dummy": "Dummy"
 }

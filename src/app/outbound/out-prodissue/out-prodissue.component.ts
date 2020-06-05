@@ -693,9 +693,13 @@ export class OutProdissueComponent implements OnInit {
           } else {
             meterial.MeterialPickQty = avaliableMeterialQty;
           }
-          this.selectedMeterials.push(meterial); // after updating the qty push the material to seleted material with updated qty.
-          this.addItemsToPacking(this.selected.ITEMCODE, this.selected.TRACKING, meterial, this.selected.CARDCODE,
+          this.selectedMeterials.push(meterial);
+           // after updating the qty push the material to seleted material with updated qty.
+          if(this.selectedPackingModel!=null && this.selectedPackingModel!=undefined &&
+            this.selectedPackingModel.PkgNo!=""){
+           this.addItemsToPacking(this.selected.ITEMCODE, this.selected.TRACKING, meterial, this.selected.CARDCODE,
             this.selected.DOCENTRY, this.selected.LINENUM)
+           }
           //apply paging..
           this.pagable = this.selectedMeterials.length > this.pageSize;
           pickedMeterialQty = pickedMeterialQty + meterial.MeterialPickQty;
@@ -760,7 +764,7 @@ export class OutProdissueComponent implements OnInit {
   }
 
   saveNonTrackedOnSaveClick(){
-    
+
   }
 
   // Save click
@@ -838,12 +842,12 @@ export class OutProdissueComponent implements OnInit {
     this.outbound.packingCollection = packingCollection;
     localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
     
-    // if (this.fromProduction == true && fromIFPSave == true) {
-    //   this.back(2);
-    // } else if (this.fromProduction == false) {
-    //   this.saveSelectedPackingToLocalStorage()
-    //   this.back(-1);
-    // }
+    if (this.fromProduction == true && fromIFPSave == true) {
+      this.back(2);
+    } else if (this.fromProduction == false) {
+      this.saveSelectedPackingToLocalStorage()
+      this.back(-1);
+    }
   }
 
   checkPackingDetailIsOk():boolean{
@@ -1480,6 +1484,10 @@ export class OutProdissueComponent implements OnInit {
     var packingDetails: any;
     if (this.outbound != undefined && this.outbound != null) {
       packingDetails = this.outbound.packingCollection;
+      if(packingDetails==null || packingDetails==undefined || packingDetails.length==0){
+        this.toastr.error('', this.translate.instant("NoPackingInfoAvailable"));
+        return;
+      }
       localStorage.setItem("orignalArrayBeforeEdit", JSON.stringify( this.outbound.packingCollection));
       if (packingDetails != null && packingDetails != undefined) {
         //show packing details in lookup.

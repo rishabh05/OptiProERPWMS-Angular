@@ -753,6 +753,7 @@ export class OutOrderComponent implements OnInit {
         deliveryToken.SOHEADER = arrSOHEADER;
         deliveryToken.SODETAIL = arrSODETAIL;
         deliveryToken.UDF = [];
+        deliveryToken.PackingData = this.getPackingDataFromLocalStorage()
       }
       //==delivery submit final code===
       this.outboundservice.addDeleivery(deliveryToken).subscribe(
@@ -2120,7 +2121,7 @@ export class OutOrderComponent implements OnInit {
     this.onITRChange();
   }
 
-  buttonClick(event) {
+  printOptionsClick(event) {
     this.displayPDF(""+this.delNo, event)
   }
 
@@ -2135,7 +2136,7 @@ export class OutOrderComponent implements OnInit {
     this.inboundService.printingServiceForSubmitGRPO(dNo, value).subscribe(
       (data: any) => {
         this.showLookupLoader = false;
-        this.printDialog = false;
+      //  this.printDialog = false;
         if (data != undefined) {
           // console.log("" + data);
           if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
@@ -2184,4 +2185,32 @@ export class OutOrderComponent implements OnInit {
     this.dialogMsg = "Do you want to print report?";//this.translate.instant("Inbound_PrintAllLabelsAfterSubmit");
     this.showConfirmDialog = true; // show dialog 
   }
+
+  getPackingDataFromLocalStorage() {
+    let selectedPackingItems=[]
+    let outboundData = localStorage.getItem(CommonConstants.OutboundData);
+    if (outboundData != undefined && outboundData != '') {
+      var outbound = JSON.parse(outboundData);
+      var packingCollection: any = outbound.packingCollection;
+      selectedPackingItems = packingCollection.filter(pi =>pi.ItemCode!=null && pi.ItemCode!= undefined );
+    }
+    var serialNo:number=0;
+    for(let i=0;i<selectedPackingItems.length;i++){
+      serialNo =serialNo+1;
+      selectedPackingItems[i].PkgId= serialNo
+    }
+    return selectedPackingItems;
+  }
+
+
+
+  closePDF() {
+    this.displayPDF1 = false;
+    console.log("PDF dialog is closed");
+  }
+  closePrintDialog(){
+    this.printDialog = false;
+    this.clearOutbound();
+  }
+
 }

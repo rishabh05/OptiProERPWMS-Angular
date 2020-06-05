@@ -11,8 +11,9 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Outbound_SO'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input #scanSO type="text" name="orderNumber" id="OutOrderOrderNoInput" (blur)="onOrderNoBlur()"
-                                    value='' [(ngModel)]="orderNumber" class="form-control form-control-sm" [disabled]=disableSO
+                                <input #scanSO type="text" name="orderNumber" id="OutOrderOrderNoInput"
+                                    (blur)="onOrderNoBlur()" value='' [(ngModel)]="orderNumber"
+                                    class="form-control form-control-sm" [disabled]=disableSO
                                     placeholder="{{'Outbound_SO'|translate}}">
                                 <div class="input-group-append has-seprate-btn">
                                     <button tabindex="-1" [disabled]=disableSO class="k-button k-primary btn"
@@ -20,7 +21,8 @@
                                         <i class="opti-icon-search"></i>
                                     </button>
 
-                                    <button tabindex="-1" type="button" id="outOrderSOScan" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                    <button tabindex="-1" type="button" id="outOrderSOScan"
+                                        class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
                                     <!-- <button tabindex="-1" class="k-button k-primary btn separate-btn" 
@@ -40,19 +42,22 @@
             <div class="row" *ngIf="fromWhere=='itr'">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
                     <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'InvTransfer_ITR'|translate}}</label>
+                        <label for="inputPassword"
+                            class="col-sm-3 col-form-label">{{'InvTransfer_ITR'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
                                 <input #DocNum type="text" class="form-control form-control-sm" name="docNum"
-                                    [(ngModel)]=docNum placeholder="{{'InvTransfer_ITR'|translate}}" (blur)="onITRChange()"
-                                    id="outOrderItrCodeInput">
+                                    [(ngModel)]=docNum placeholder="{{'InvTransfer_ITR'|translate}}"
+                                    (blur)="onITRChange()" id="outOrderItrCodeInput">
                                 <div class="input-group-append has-seprate-btn">
-                                    <button tabindex="-1" class="k-button k-primary btn" type="button" (mousedown)="onITRlookupClick()">
+                                    <button tabindex="-1" class="k-button k-primary btn" type="button"
+                                        (mousedown)="onITRlookupClick()">
                                         <i class="opti-icon-search"></i>
                                     </button>
                                 </div>
                                 <div class="ml-1 d-flex">
-                                    <button tabindex="-1" type="button" id="OutOrderItrCodeScanBtn" (mousedown)="onOrderScan()"
+                                    <button tabindex="-1" type="button" id="OutOrderItrCodeScanBtn"
+                                        (mousedown)="onOrderScan()"
                                         class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
@@ -70,8 +75,8 @@
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
                                 <input type="text" #PalletNo name="pltNo" (blur)="onPalletChangeBlur()" value=''
-                                    [(ngModel)]="palletNo" class="form-control form-control-sm" id="outOrderPalletNoInput"
-                                    placeholder="{{'Plt_PalletNo'|translate}}">
+                                    [(ngModel)]="palletNo" class="form-control form-control-sm"
+                                    id="outOrderPalletNoInput" placeholder="{{'Plt_PalletNo'|translate}}">
                                 <div class="input-group-append has-seprate-btn">
                                     <button tabindex="-1" class="k-button k-primary btn" (mousedown)="getPalletList()"
                                         type="button">
@@ -85,7 +90,8 @@
                                         (mousedown)="showSelectedPallets()" *ngIf="savedPalletItems.length>0">
                                         <i class="opti-icon-view-batch mr-1"></i>{{'Plt_Pallets'|translate}}
                                     </button>
-                                    <button tabindex="-1" type="button" id="outOrderPalletScanButton" (mousedown)="onPalletScan()"
+                                    <button tabindex="-1" type="button" id="outOrderPalletScanButton"
+                                        (mousedown)="onPalletScan()"
                                         class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
@@ -102,8 +108,9 @@
                         <label for="orderNumber" class="col-sm-3 col-form-label">{{'ItemCode'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input #scanItemCode type="text" id="outOrderItemcodeinput" name="ItemCode" (blur)="onItemChange()"
-                                    value='' [(ngModel)]="ItemCode" class="form-control form-control-sm" placeholder="{{'ItemCode'|translate}}">
+                                <input #scanItemCode type="text" id="outOrderItemcodeinput" name="ItemCode"
+                                    (blur)="onItemChange()" value='' [(ngModel)]="ItemCode"
+                                    class="form-control form-control-sm" placeholder="{{'ItemCode'|translate}}">
                                 <div class="input-group-append has-seprate-btn ml-1">
                                     <!-- <button class="k-button k-primary btn" (click)="getPalletList()" type="button">
                                         <i class="opti-icon-search"></i>
@@ -113,7 +120,8 @@
                                         *ngIf="savedPalletItems.length>0">
                                         <i class="opti-icon-view-batch mr-1"></i>{{'Plt_Pallets'|translate}}
                                     </button> -->
-                                    <button tabindex="-1" type="button" id="OutOrderItemCodeScanButton" (mousedown)="onItemScan()"
+                                    <button tabindex="-1" type="button" id="OutOrderItemCodeScanButton"
+                                        (mousedown)="onItemScan()"
                                         class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
@@ -130,8 +138,9 @@
                         <label for="orderNumber" class="col-sm-3 col-form-label">{{'Item'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" name="itemNo" (blur)="OnItemCodeChange()" value='' [(ngModel)]="selectedItem"
-                                    class="form-control form-control-sm" placeholder="{{'Item'|translate}}">
+                                <input type="text" name="itemNo" (blur)="OnItemCodeChange()" value=''
+                                    [(ngModel)]="selectedItem" class="form-control form-control-sm"
+                                    placeholder="{{'Item'|translate}}">
                                 <div class="input-group-append has-seprate-btn">
                                     <button tabindex="-1" class="k-button k-primary btn" (mousedown)="getItemList()"
                                         type="button">
@@ -141,7 +150,8 @@
                                                 (click)="openSOOrderList()" type="button">
                                                 <i class="opti-icon-search"></i>
                                             </button> -->
-                                    <button tabindex="-1" type="button" id="OutOrderItemscanButton" (mousedown)="onItemScan()"
+                                    <button tabindex="-1" type="button" id="OutOrderItemscanButton"
+                                        (mousedown)="onItemScan()"
                                         class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
@@ -160,17 +170,19 @@
                         <div class="col-sm-9">
                             <div class="d-flex">
                                 <div class="input-group input-group-sm">
-                                    <input #scanBatchSerial type="text" [(ngModel)]='selectedPackingModel.PkgNo' id="packingNo"
-                                        name="packNo" value='' class="form-control form-control-sm" (blur)="onPackingNoChange()"
-                                        placeholder="{{'PackingNo'|translate}}">
+                                    <input #scanBatchSerial type="text" [(ngModel)]='selectedPackingModel.PkgNo'
+                                        id="packingNo" name="packNo" value='' class="form-control form-control-sm"
+                                        (blur)="onPackingNoChange()" placeholder="{{'PackingNo'|translate}}">
                                     <div class="input-group-append">
-                                        <button tabindex="-1" class="k-button k-primary btn " type="button" (mousedown)="selectPackingNumber()">
+                                        <button tabindex="-1" class="k-button k-primary btn " type="button"
+                                            (mousedown)="selectPackingNumber()">
                                             <i class="opti-icon-search"></i>
                                         </button>
                                     </div>
                                 </div>
                                 <div class="ml-1 d-flex">
-                                    <button tabindex="-1" id="outboundProdIssueScanPackingNo" (mousedown)="scanPackingNo()"
+                                    <button tabindex="-1" id="outboundProdIssueScanPackingNo"
+                                        (mousedown)="scanPackingNo()"
                                         class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
                                         type="button">
                                         <i class="opti-icon-qr-code fs-24"></i>
@@ -189,9 +201,9 @@
                         <div class="col-sm-9">
                             <div class="d-flex">
                                 <div class="input-group input-group-sm">
-                                    <input #typeValue type="text" [(ngModel)]='selectedPackingModel.PkgType' id="typeValue"
-                                        name="typeValue" value='' class="form-control form-control-sm" [disabled]=true
-                                        placeholder="{{'Type'|translate}}">
+                                    <input #typeValue type="text" [(ngModel)]='selectedPackingModel.PkgType'
+                                        id="typeValue" name="typeValue" value='' class="form-control form-control-sm"
+                                        [disabled]=true placeholder="{{'Type'|translate}}">
 
                                 </div>
                                 <div class="ml-1 d-flex">
@@ -208,7 +220,8 @@
                     <div class="form-group row mt-2 mt-md-0">
                         <label class="col-sm-3 col-form-label"></label>
                         <div class="col-sm-9">
-                            <label class="textunderline" (click)="onNewPackingDialog()">{{'NewPacking'|translate}}</label>
+                            <label class="textunderline"
+                                (click)="onNewPackingDialog()">{{'NewPacking'|translate}}</label>
                         </div>
                     </div>
 
@@ -221,157 +234,175 @@
                 <!-- temporary grid for show selected pallet -->
                 <div class="row">
                     <div class="col-sm-12">
-                        <kendo-grid *ngIf="showTemporaryViews && showPalletGrid" class="no-shadow" [data]="savedPalletItems"
-                            [resizable]="true" [pageSize]="pageSize" [pageable]="pagable" [sortable]="true"
-                            [selectable]="true" id="newGrid" #newGrid>
+                        <kendo-grid *ngIf="showTemporaryViews && showPalletGrid" class="no-shadow"
+                            [data]="savedPalletItems" [resizable]="true" [pageSize]="pageSize" [pageable]="pagable"
+                            [sortable]="true" [selectable]="true" id="newGrid" #newGrid>
                             <!-- grid for mobile start -->
-                            <kendo-grid-column media="(max-width: 767px)" title="{{'ProdIssue_SelectedMaterials'|translate}}"
-                                class="opti_mobile-grid-td">
+                            <kendo-grid-column media="(max-width: 767px)"
+                                title="{{'ProdIssue_SelectedMaterials'|translate}}" class="opti_mobile-grid-td">
                             </kendo-grid-column>
                             <!-- grid for mobile end -->
-                            <kendo-grid-column media="(min-width: 768px)" field="Pallet" title="{{'Outbound_Pallet'| translate}}"
-                                [width]="30"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE" title="{{'ItemCode'|translate}}"
-                                [width]="30"></kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" field="Pallet"
+                                title="{{'Outbound_Pallet'| translate}}" [width]="30"></kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE"
+                                title="{{'ItemCode'|translate}}" [width]="30"></kendo-grid-column>
                             <kendo-grid-column media="(min-width: 768px)" field="QTY" title="{{'Quantity'|translate}}"
                                 [width]="30"></kendo-grid-column>
                         </kendo-grid>
                     </div>
                 </div>
             </div>
-                <div *ngIf="showSOIetDetail==true && orderNumber!=undefined">
-                    <!-- Serial tracked item -->
-                    <div class="row" *ngIf="soItemsDetail!=undefined && soItemsDetail!=null && soItemsDetail.length>0 ">
-                        <div class="col-12 col-sm-12 col-md-12">
-                            <div class="d-flex align-items-center">
-                                <h4 class="mt-2 mb-2  mt-md-0">{{'Items'|translate}}</h4>
-                                <ul class="color-label mt-2 mt-md-0 ml-auto mb-2">
-                                    <li><span class="color-block blue"></span><span>Batch</span></li>
-                                    <li><span class="color-block red"></span><span>Serial</span></li>
-                                    <li><span class="color-block "></span><span>None</span></li>
-                                </ul>
-                            </div>
-                            <div class="col-12 mb-2 border-bottom"></div>
-                            <kendo-grid class="no-shadow" [kendoGridBinding]="soItemsDetail" [resizable]="true"
-                                [pageSize]="pageSize" [pageable]="pagable" [sortable]="true" [filterable]=isColumnFilter
-                                [groupable]=isColumnGroup [height]=gridHeight [selectable]="true" [rowClass]="rowCallback"
-                                #gridItem>
-
-                                <!-- grid for mobile start -->
-                                <kendo-grid-column media="(max-width: 767px)" title="{{'Items'|translate}}" class="opti_mobile-grid-td">
-                                    <ng-template kendoGridCellTemplate let-dataItem>
-                                        <dl class="opti_mobile_grid_dl" (touchend)="openPOByUOM(dataItem,dataItem.ITEMCODE)">
-                                            <dt class="d-flex align-items-center">{{'LINENUM'|translate}} <span class="opti_arrow-grid-detail float-right text-center opti_vertical-align ml-auto">›</span>
-                                            </dt>
-                                            <dd>{{ dataItem.ROWNUM|numberFormat }}</dd>
-
-                                            <dt>{{'ItemCode'|translate}}</dt>
-                                            <dd>{{ dataItem.ITEMCODE }}</dd>
-
-
-                                        </dl>
-                                        <dl class="opti_mobile_grid_dl" (touchend)="openPOByUOM(dataItem,dataItem.ITEMCODE)">
-                                            <dt class="d-flex align-items-center">{{'OpenQty'|translate}} <span class="opti_arrow-grid-detail float-right text-center opti_vertical-align ml-auto">›</span>
-                                            </dt>
-                                            <dd>{{ dataItem.OPENQTY|numberFormat }}</dd>
-
-                                            <dt>{{'PickQty'|translate}}</dt>
-                                            <dd>{{ dataItem.RPTQTY|numberFormat }}</dd>
-                                        </dl>
-                                    </ng-template>
-                                </kendo-grid-column>
-                                <!-- grid for mobile end -->
-
-                                <kendo-grid-column media="(min-width: 768px)" field="ROWNUM" title="{{'LINENUM'|translate}}"
-                                    [width]="6">
-                                    <ng-template kendoGridCellTemplate let-dataItem>
-                                        <a class="col-template-mousedown" (mousedown)="openPOByUOM(dataItem,dataItem.ITEMCODE)">{{dataItem.ROWNUM}}</a>
-                                    </ng-template>
-                                </kendo-grid-column>
-                                <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE" title="{{'ItemCode'|translate}}"
-                                    [width]="6">
-                                    <ng-template kendoGridCellTemplate let-dataItem>
-                                        <a class="col-template-mousedown" (mousedown)="openPOByUOM(dataItem,dataItem.ITEMCODE)">{{dataItem.ITEMCODE}}</a>
-                                    </ng-template>
-
-                                </kendo-grid-column>
-                                <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" headerClass="text-right"
-                                    class="text-right" [width]="6" title="{{'OpenQty'|translate}}">
-                                    <ng-template kendoGridCellTemplate let-dataItem>
-                                        <a class="col-template-mousedown" (mousedown)="openPOByUOM(dataItem,dataItem.ITEMCODE)">{{dataItem.OPENQTY
-                                            | numberFormat}}</a>
-                                    </ng-template>
-                                </kendo-grid-column>
-                                <kendo-grid-column media="(min-width: 768px)" field="RPTQTY" headerClass="text-right"
-                                    class="text-right" [width]="6" format="{0:n3}" title="{{'PickQty'|translate}}">
-                                    <ng-template kendoGridCellTemplate let-dataItem>
-                                        <a class="col-template-mousedown" (mousedown)="openPOByUOM(dataItem,dataItem.ITEMCODE)">{{dataItem.RPTQTY
-                                            | numberFormat}}</a>
-                                    </ng-template>
-                                </kendo-grid-column>
-
-
-                            </kendo-grid>
+            <div *ngIf="showSOIetDetail==true && orderNumber!=undefined">
+                <!-- Serial tracked item -->
+                <div class="row" *ngIf="soItemsDetail!=undefined && soItemsDetail!=null && soItemsDetail.length>0 ">
+                    <div class="col-12 col-sm-12 col-md-12">
+                        <div class="d-flex align-items-center">
+                            <h4 class="mt-2 mb-2  mt-md-0">{{'Items'|translate}}</h4>
+                            <ul class="color-label mt-2 mt-md-0 ml-auto mb-2">
+                                <li><span class="color-block blue"></span><span>Batch</span></li>
+                                <li><span class="color-block red"></span><span>Serial</span></li>
+                                <li><span class="color-block "></span><span>None</span></li>
+                            </ul>
                         </div>
+                        <div class="col-12 mb-2 border-bottom"></div>
+                        <kendo-grid class="no-shadow" [kendoGridBinding]="soItemsDetail" [resizable]="true"
+                            [pageSize]="pageSize" [pageable]="pagable" [sortable]="true" [filterable]=isColumnFilter
+                            [groupable]=isColumnGroup [height]=gridHeight [selectable]="true" [rowClass]="rowCallback"
+                            #gridItem>
+
+                            <!-- grid for mobile start -->
+                            <kendo-grid-column media="(max-width: 767px)" title="{{'Items'|translate}}"
+                                class="opti_mobile-grid-td">
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                    <dl class="opti_mobile_grid_dl"
+                                        (touchend)="openPOByUOM(dataItem,dataItem.ITEMCODE)">
+                                        <dt class="d-flex align-items-center">{{'LINENUM'|translate}} <span
+                                                class="opti_arrow-grid-detail float-right text-center opti_vertical-align ml-auto">›</span>
+                                        </dt>
+                                        <dd>{{ dataItem.ROWNUM|numberFormat }}</dd>
+
+                                        <dt>{{'ItemCode'|translate}}</dt>
+                                        <dd>{{ dataItem.ITEMCODE }}</dd>
+
+
+                                    </dl>
+                                    <dl class="opti_mobile_grid_dl"
+                                        (touchend)="openPOByUOM(dataItem,dataItem.ITEMCODE)">
+                                        <dt class="d-flex align-items-center">{{'OpenQty'|translate}} <span
+                                                class="opti_arrow-grid-detail float-right text-center opti_vertical-align ml-auto">›</span>
+                                        </dt>
+                                        <dd>{{ dataItem.OPENQTY|numberFormat }}</dd>
+
+                                        <dt>{{'PickQty'|translate}}</dt>
+                                        <dd>{{ dataItem.RPTQTY|numberFormat }}</dd>
+                                    </dl>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <!-- grid for mobile end -->
+
+                            <kendo-grid-column media="(min-width: 768px)" field="ROWNUM" title="{{'LINENUM'|translate}}"
+                                [width]="6">
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                    <a class="col-template-mousedown"
+                                        (mousedown)="openPOByUOM(dataItem,dataItem.ITEMCODE)">{{dataItem.ROWNUM}}</a>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE"
+                                title="{{'ItemCode'|translate}}" [width]="6">
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                    <a class="col-template-mousedown"
+                                        (mousedown)="openPOByUOM(dataItem,dataItem.ITEMCODE)">{{dataItem.ITEMCODE}}</a>
+                                </ng-template>
+
+                            </kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" headerClass="text-right"
+                                class="text-right" [width]="6" title="{{'OpenQty'|translate}}">
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                    <a class="col-template-mousedown"
+                                        (mousedown)="openPOByUOM(dataItem,dataItem.ITEMCODE)">{{dataItem.OPENQTY
+                                            | numberFormat}}</a>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" field="RPTQTY" headerClass="text-right"
+                                class="text-right" [width]="6" format="{0:n3}" title="{{'PickQty'|translate}}">
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                    <a class="col-template-mousedown"
+                                        (mousedown)="openPOByUOM(dataItem,dataItem.ITEMCODE)">{{dataItem.RPTQTY
+                                            | numberFormat}}</a>
+                                </ng-template>
+                            </kendo-grid-column>
+
+
+                        </kendo-grid>
                     </div>
-
                 </div>
+
             </div>
-            <div class="fix-footer-btnBar">
-                <div class="col-sm-12 col-12">
-                    <hr />
-                </div>
-                <div class="col-sm-12 col-12">
+        </div>
+        <div class="fix-footer-btnBar">
+            <div class="col-sm-12 col-12">
+                <hr />
+            </div>
+            <div class="col-sm-12 col-12">
 
-                    <button type="button" *ngIf="fromWhere!='itr' " class="btn btn-outline-secondary btn-sm btn-transparent btn-icon mr-1"
-                        (click)="openOutboundCustomer()" roterLink="binTransfer" skipLocationChange><i class="opti-icon-arrow-back"></i></button>
+                <button type="button" *ngIf="fromWhere!='itr' "
+                    class="btn btn-outline-secondary btn-sm btn-transparent btn-icon mr-1"
+                    (click)="openOutboundCustomer()" roterLink="binTransfer" skipLocationChange><i
+                        class="opti-icon-arrow-back"></i></button>
 
-                    <!-- *ngIf='outbound.TempMeterials!==undefined && outbound.TempMeterials!==null && outbound.TempMeterials.length>0;'' -->
-                    <button type="button" *ngIf="showDeleiveryAndAdd && fromWhere!='itr' && !fromShipment" (click)="addToDeleiver()"
-                        class="btn btn-primary k-button btn-sm btn-icon-with-text ml-1"><span class="k-icon k-i-plus-outline"
-                            role="presentation"></span>
-                        {{'AddToDeleiver'|translate}}</button>
+                <!-- *ngIf='outbound.TempMeterials!==undefined && outbound.TempMeterials!==null && outbound.TempMeterials.length>0;'' -->
+                <button type="button" *ngIf="showDeleiveryAndAdd && fromWhere!='itr' && !fromShipment"
+                    (click)="addToDeleiver()" class="btn btn-primary k-button btn-sm btn-icon-with-text ml-1"><span
+                        class="k-icon k-i-plus-outline" role="presentation"></span>
+                    {{'AddToDeleiver'|translate}}</button>
 
-                    <button type="button" *ngIf="showDeleiveryAndAdd && fromWhere!='itr' && !fromShipment" (click)="DeliveryClick()"
-                        class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-check" role="presentation"></span>
-                        {{'Deleiver'|translate}}</button>
+                <button type="button" *ngIf="showDeleiveryAndAdd && fromWhere!='itr' && !fromShipment"
+                    (click)="DeliveryClick()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
+                        class="k-icon k-i-check" role="presentation"></span>
+                    {{'Deleiver'|translate}}</button>
 
-                    <button type="button" *ngIf="fromWhere=='itr'" (mousedown)="cancel()" class="btn btn-danger k-button btn-sm btn-icon-with-text"><span
-                            class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
+                <button type="button" *ngIf="fromWhere=='itr'" (mousedown)="cancel()"
+                    class="btn btn-danger k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-close-outline"
+                        role="presentation"></span> {{'Cancel'|translate}}</button>
 
-                    <button type="button" *ngIf="showDeleiveryAndAdd && fromWhere=='itr' && !fromShipment" (click)="itrClick()"
-                        class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-check" role="presentation"></span>
-                        {{'Submit'|translate}}</button>
-                    <!-- <button type="button" (click)="showPalletsList()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
+                <button type="button" *ngIf="showDeleiveryAndAdd && fromWhere=='itr' && !fromShipment"
+                    (click)="itrClick()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
+                        class="k-icon k-i-check" role="presentation"></span>
+                    {{'Submit'|translate}}</button>
+                <!-- <button type="button" (click)="showPalletsList()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
                         class="k-icon k-i-check" role="presentation"></span>{{btnText}}</button> -->
-                    <!-- <button type="button" *ngIf="showDeleiveryAndAdd" (click)="deliveryConfirmation()"
+                <!-- <button type="button" *ngIf="showDeleiveryAndAdd" (click)="deliveryConfirmation()"
                     class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-check"
                         role="presentation"></span> {{'Deleiver'|translate}}</button> -->
-                    <button *ngIf="showTemporaryViews && !fromShipment" type="button" (click)="showPalletsList()" class="btn btn-success k-button btn-sm btn-icon-with-text"><span
-                            class="k-icon k-i-check" role="presentation"></span>{{btnText}}</button>
+                <button *ngIf="showTemporaryViews && !fromShipment" type="button" (click)="showPalletsList()"
+                    class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-check"
+                        role="presentation"></span>{{btnText}}</button>
 
 
 
-                    <button type="button" id="hid_btnOutOrderSoScanScanBtn" style="visibility:hidden" (click)="onHiddenOutOrderSOScanClick()"
-                        class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
-                        <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn
-                    </button>
-                    <button type="button" id="hid_btnOutOrderPalletScanScanBtn" style="visibility:hidden" (click)="onHiddenOutOrderPalletScanClick()"
-                        class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
-                        <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn
-                    </button>
-                    <button type="button" id="hid_btnOutOrderItemCodeScanScanBtn" style="visibility:hidden" (click)="onHiddenOutOrderItemCodeScanClick()"
-                        class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
-                        <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn
-                    </button>
+                <button type="button" id="hid_btnOutOrderSoScanScanBtn" style="visibility:hidden"
+                    (click)="onHiddenOutOrderSOScanClick()"
+                    class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
+                    <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn
+                </button>
+                <button type="button" id="hid_btnOutOrderPalletScanScanBtn" style="visibility:hidden"
+                    (click)="onHiddenOutOrderPalletScanClick()"
+                    class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
+                    <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn
+                </button>
+                <button type="button" id="hid_btnOutOrderItemCodeScanScanBtn" style="visibility:hidden"
+                    (click)="onHiddenOutOrderItemCodeScanClick()"
+                    class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
+                    <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn
+                </button>
 
-                    <!--for ITR-->
-                    <button type="button" id="hid_btnITRScanBtn" style="visibility:hidden" (click)="onHiddenITRScanClick()"
-                        class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
-                        <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn
-                    </button>
-                </div>
+                <!--for ITR-->
+                <button type="button" id="hid_btnITRScanBtn" style="visibility:hidden" (click)="onHiddenITRScanClick()"
+                    class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
+                    <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn
+                </button>
             </div>
+        </div>
     </form>
 </div>
 
@@ -379,9 +410,9 @@
     <kendo-dialog-titlebar>
         {{'Plt_SelectedPallets'|translate}}
     </kendo-dialog-titlebar>
-    <kendo-grid [resizable]="true" [pageSize]="pageSize" [pageable]="pagable" [sortable]="true" [filterable]=isColumnFilter
-        [groupable]=isColumnGroup [selectable]="true" [data]="palletList" style="max-height:200px" class="no-shadow"
-        #gridItem>
+    <kendo-grid [resizable]="true" [pageSize]="pageSize" [pageable]="pagable" [sortable]="true"
+        [filterable]=isColumnFilter [groupable]=isColumnGroup [selectable]="true" [data]="palletList"
+        style="max-height:200px" class="no-shadow" #gridItem>
 
         <!-- grid for mobile start -->
         <kendo-grid-column media="(max-width: 767px)" title="{{'Plt_Pallets'|translate}}" class="opti_mobile-grid-td">
@@ -392,7 +423,8 @@
                 </dl>
                 <dl class="opti_mobile_grid_dl">
                     <dt class="d-flex align-items-center">
-                        <button class="btn btn-danger k-button btn-sm btn-icon ml-auto" type="button" (click)="showSelectedPallets(rowIndex, gridItem)">
+                        <button class="btn btn-danger k-button btn-sm btn-icon ml-auto" type="button"
+                            (click)="showSelectedPallets(rowIndex, gridItem)">
                             <span class="k-icon k-i-delete"></span>
                         </button>
                     </dt>
@@ -405,7 +437,8 @@
         </kendo-grid-column>
         <kendo-grid-column media="(min-width: 768px)" field="" headerClass="text-center" class="text-center" width="40">
             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                <button class="btn btn-danger k-button btn-sm btn-icon" type="button" (click)="PalletDeleteClick(rowIndex, gridItem)">
+                <button class="btn btn-danger k-button btn-sm btn-icon" type="button"
+                    (click)="PalletDeleteClick(rowIndex, gridItem)">
                     <span class="k-icon k-i-delete"></span>
                 </button>
             </ng-template>
@@ -434,21 +467,24 @@
 
 
 <!--hari pdf display code.-->
-<kendo-dialog [width]="750" *ngIf="printDialog" (close)="close('dialog')" [minWidth]="250" [width]="450">
+<kendo-dialog [width]="750" *ngIf="printDialog" (close)="closePrintDialog('dialog')" [minWidth]="250" [width]="450">
     <kendo-dialog-titlebar>
         {{'PrintOptions'|translate}}
     </kendo-dialog-titlebar>
     <div class="px-3">
         <div class="form-group row">
             <div class="input-group input-group-sm">
-                <button class="btn btn-primary k-button btn-sm btn-icon-with-text" type="button" (click)="buttonClick(13)">{{'PickList'|translate}}
+                <button class="btn btn-primary k-button btn-sm btn-icon-with-text" type="button"
+                    (click)="printOptionsClick(13)">{{'PickList'|translate}}
                 </button>
-                <button class="btn btn-primary k-button btn-sm btn-icon-with-text" type="button" (click)="buttonClick(12)">{{'PackList'|translate}}
+                <button class="btn btn-primary k-button btn-sm btn-icon-with-text" type="button"
+                    (click)="printOptionsClick(12)">{{'PackList'|translate}}
                 </button>
-                <button class="btn btn-primary k-button btn-sm btn-icon-with-text" type="button" (click)="buttonClick(11)">{{'BOL'|translate}}
+                <button class="btn btn-primary k-button btn-sm btn-icon-with-text" type="button"
+                    (click)="printOptionsClick(11)">{{'BOL'|translate}}
                 </button>
             </div>
-        </div>
+        </div> 
     </div>
     <kendo-dialog-actions class="text-right">
         <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="close('dialog')">
@@ -456,9 +492,6 @@
     </kendo-dialog-actions>
 </kendo-dialog>
 
-<div>
-    <app-display-pdf *ngIf="displayPDF1" [base64String]='base64String' [fileName]='fileName' (pdfClose)="closePDF($event)"></app-display-pdf>
-</div>
 <!--hari pdf display code.-->
 
 <!--Create New Packing Input Dialog-->
@@ -466,3 +499,8 @@
     <app-new-packing-input-dialog [titleMessage]="titleMessage" [yesButtonText]="btnYes" [fromWhere]="inputDialogFor"
         [noButtonText]="btnNo" (packingDialogOutput)="getNewPackingDialogOutPut($event)"></app-new-packing-input-dialog>
 </span>
+
+<div>
+    <app-display-pdf *ngIf="displayPDF1" [base64String]='base64String' [fileName]='fileName' 
+    (pdfClose)="closePDF($event)"></app-display-pdf>
+</div>
