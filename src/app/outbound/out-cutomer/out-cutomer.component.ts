@@ -591,7 +591,7 @@ export class OutCutomerComponent implements OnInit {
     // No
     else if ($event.Status === 'no') {
       if($event.From == "receiveSinglePDFDialog"){
-        this.clearOutbound()
+      
       }
     }
     // Cross
@@ -771,7 +771,7 @@ export class OutCutomerComponent implements OnInit {
             this.trackingId = "";
             this.CustRefNo = "";
             this.toastr.success('', this.translate.instant("DeleiverySuccess") + " : " + data[0].SuccessNo);
-            // this.clearOutbound();
+             this.clearOutbound();
             this.showPrintConfirmDialog();
           } else if (data[0].ErrorMsg == "7001") {
             this.showLookupLoader = false;
@@ -1585,7 +1585,7 @@ export class OutCutomerComponent implements OnInit {
     this.inboundService.printingServiceForSubmitGRPO(dNo, value).subscribe(
       (data: any) => {
         this.showLookupLoader = false;
-        this.printDialog = false;
+       // this.printDialog = false;
         if (data != undefined) {
           // console.log("" + data);
           if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
@@ -1628,13 +1628,17 @@ export class OutCutomerComponent implements OnInit {
     this.showConfirmDialog = true; // show dialog 
   }
 
-  buttonClick(event) {
+  printOptionsClick(event) {
     this.displayPDF(""+this.delNo, event)
   }
 
-
-
-
+  closePDF() {
+    this.displayPDF1 = false;
+    console.log("PDF dialog is closed");
+  }
+  closePrintDialog(){
+    this.printDialog = false;
+  }
 
 
 
