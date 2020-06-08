@@ -114,13 +114,14 @@ export class PickingItemListComponent implements OnInit {
           this.PickTaskList = data.OPTM_WHSTASKLIST;
           if (localStorage.getItem("PickType") == this.translate.instant("Container_Picking")) {
             for(var i=0; i<this.PickTaskList.length; i++){
-              this.PickTaskList[i].CODE = data.OPTM_WHSTASK_DTL.find(e=>e.OPTM_TASKID == this.PickTaskList[i].OPTM_TASKID).OPTM_CONTCODE;//[i].OPTM_CONTCODE;
-              // this.PickTaskList[i].OPTM_TASK_QTY = data.OPTM_WHSTASK_DTL[i].OPTM_PLANNED_QTY;
+              this.PickTaskList[i].CODE = data.OPTM_WHSTASK_DTL.find(e=>e.OPTM_TASKID == this.PickTaskList[i].OPTM_TASKID).OPTM_CONTCODE;
             }
             this.codeLabel = "Container Code";
           }else{
             this.codeLabel = "Item Code";
-            this.PickTaskList[i].CODE = this.PickTaskList[i].OPTM_ITEMCODE;
+            for(var i=0; i<this.PickTaskList.length; i++){
+              this.PickTaskList[i].CODE = this.PickTaskList[i].OPTM_ITEMCODE;
+            }            
           }
           if(this.PickTaskList.length > this.pageSize){
             this.pagable = true;

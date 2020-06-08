@@ -192,6 +192,11 @@ export class PickingItemDetailsComponent implements OnInit {
           this.showLookupLoader = false;
           this.PickTaskList = data.OPTM_WHSTASKLIST;
           this.PickTaskDetail = data;
+          if(this.PickTaskList.length == 0){
+            this.toastr.error('', "No task available for this picklist");
+            this.onBackClick();
+            return;
+          }
           console.log("3  " + new Date().toLocaleTimeString());
           this.setValues(this.index);
           console.log("4  " + new Date().toLocaleTimeString());
@@ -214,6 +219,11 @@ export class PickingItemDetailsComponent implements OnInit {
   setValues(index) {
     this.pickTaskName = this.PickTaskList[index].OPTM_TASKID;
     this.openQty = this.PickTaskList[index].OPTM_TASK_QTY;
+    if(this.openQty == 0){
+      this.toastr.error('', "No task available for this picklist");
+      this.onBackClick();
+      return;
+    }
     this.OPTM_Tracking = this.PickTaskList[index].OPTM_TRACKING;
     this.locationValue = this.PickTaskList[index].OPTM_SRC_BIN;
     this.OPTM_STARTDATETIME = new Date();
@@ -228,19 +238,21 @@ export class PickingItemDetailsComponent implements OnInit {
       }
       this.IsContPicking = false;
       this.setPickingSteps(localStorage.getItem("PickTypeKey"), this.ShipmentList[0].OPTM_PICK_OPER);
-    } else {
-      this.Type = "Item"
+    } else {      
       // this.itemcodeLabel = "Code";//this.translate.instant("ItemCode");
       this.itemcodeValue = this.PickTaskList[index].OPTM_ITEMCODE;
       this.IsContPicking = false;
       let OPTM_MSTR_TRANS_TYPE = "";
       if (this.OPTM_Tracking == 'S') {
         OPTM_MSTR_TRANS_TYPE = "Serial_Picking"
+        this.Type = "Serial"
       } else if (this.OPTM_Tracking == 'B') {
         OPTM_MSTR_TRANS_TYPE = "Batch_Picking";
+        this.Type = "Batch"
       } else {
         OPTM_MSTR_TRANS_TYPE = "Item_Picking";
         this.IsContPicking = true;
+        this.Type = "Item"
       }
       if ((this.PickTaskDetail.OPTM_WHSTASK_BTCHSER.length <= 0) || this.PickTaskDetail.OPTM_WHSTASK_BTCHSER.find(e => e.OPTM_ITEMCODE == this.itemcodeValue) == undefined) {
         this.IsContPicking = true;
@@ -335,12 +347,16 @@ export class PickingItemDetailsComponent implements OnInit {
         return;
       } else if (this.currentStep == this.CONT_BTCH_SER_STEP && (this.PT_Enter_ContBtchSer == undefined || this.PT_Enter_ContBtchSer == "")) {
         return;
+      }else if (this.currentStep == this.QTY_STEP && this.pickQty == undefined) {
+        return;
       }
       this.stepIndex = this.stepIndex + 1;
       if (this.stepIndex >= 0 && this.stepIndex < this.CurrentTaskSteps.length) {
         let step = this.getStepNo(this.CurrentTaskSteps[this.stepIndex].OPTM_STEP_CODE);
         this.stepIncrementValue = step - this.currentStep;
+       console.log("increment val  "+this.stepIncrementValue)
         this.currentStep = step;
+        console.log("step  "+step+"   this.stepIndex    "+this.stepIndex)
         if (this.stepIndex == this.CurrentTaskSteps.length - 1) {
           this.LastStep = this.currentStep;
         }
