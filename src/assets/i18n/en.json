@@ -521,7 +521,7 @@
   "CCCreated": "Container Code created.",
   "CCDoesntMatch": "Container Code doesn't match.",
   "ToteDoesntMatch": "Tote doesn't match.",
-  "ToteCreated": "Tote created.",
+  "ToteCreated": "Tote assigned.",
   "ScanCont": "Scan Container",
   "ScanTote": "Scan Tote",
   "Tote": "Tote",
@@ -551,7 +551,7 @@
   "PackingNoAlreadyTaken":"Packing number already taken",
   "SelectPacking":"Select Packing",
   "PrintOptions": "Print Options",
-  "PackList": "PackList",
+  "PackList": "Pack List",
   "BOL": "BOL",
   
   "PackingNotAvailable":"No packing no. available you can add from 'New Packing'.",
