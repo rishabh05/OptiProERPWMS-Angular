@@ -47,6 +47,7 @@ export class NewPackingInputDialogComponent implements OnInit {
     //this.validateAndGetPackValue(true,this.packingNo,this.docEntry)
    if(this.checkPackingNoExistInDb(this.packingNo)){
     this.toastr.error('', this.translate.instant("PackingNoAlreadyTaken"));
+    this.packingNo = '';
    }else{
          // we can take it.
    }
@@ -60,7 +61,12 @@ export class NewPackingInputDialogComponent implements OnInit {
   this.validateAndGetTypeValue(true,"",this.type)
  }
  validateAndGetTypeValue(fromblur:any = false,packNo: any, types: any) {
+  if(fromblur && types=="")
+  {
+    return;
+  }
   
+
    this.outboundservice.GetPackSlipType(packNo, types).subscribe(
      (resp: any) => {
        if (resp != null && resp.length > 0) {
@@ -127,6 +133,11 @@ export class NewPackingInputDialogComponent implements OnInit {
   }
   
   OnDoneClick(){
+    if(this.packingNo==undefined || this.packingNo==null || this.packingNo=="" ||
+    this.type==undefined || this.type==null || this.type=="" ){
+      this.toastr.error('', this.translate.instant("packNoAndTypeValidate"));
+      return;
+    }
     var outbound: any;
     let outboundData = localStorage.getItem(CommonConstants.OutboundData);
     if (outboundData != undefined && outboundData != '') {
@@ -135,7 +146,7 @@ export class NewPackingInputDialogComponent implements OnInit {
       var model: PackingModel  = new PackingModel();
       model.PkgNo = this.packingNo;
       model.PkgType = this.type
-      outbound.packingCollection.push(model)
+      outbound.packingCollection.push(model) 
       outbound.AllCreatedPackings.push(model)
       outbound.selectedPackingItem=model;
       localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));

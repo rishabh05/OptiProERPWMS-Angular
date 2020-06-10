@@ -560,5 +560,7 @@
   "PackingDetailUpdated":"Packings updated successfully!",
   "PackingDetails":"Packing Details",
   "NoPackingInfoAvailable":"No packing info available.",
+  "ReadjustPackingQty":"Please readjust your packing quantity.",
+  "packNoAndTypeValidate":"Packing No. and Type can not be empty.",
   "Dummy": "Dummy"
 }

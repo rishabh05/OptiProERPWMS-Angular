@@ -454,10 +454,7 @@
     <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupkey)="getLookupValue($event)"></app-lookup>
 </span>
 
-<!-- Loader -->
-<div class="opti_loader full-section" *ngIf="showLookupLoader==true">
-    <div class="opti_spinner"></div>
-</div>
+
 
 <!-- Dialog -->
 <span *ngIf="showConfirmDialog">
@@ -492,7 +489,11 @@
     </kendo-dialog-actions>
 </kendo-dialog>
 
+
+
 <!--hari pdf display code.-->
+
+
 
 <!--Create New Packing Input Dialog-->
 <span *ngIf="newPackingNoDialogFlag">
@@ -503,4 +504,8 @@
 <div>
     <app-display-pdf *ngIf="displayPDF1" [base64String]='base64String' [fileName]='fileName' 
     (pdfClose)="closePDF($event)"></app-display-pdf>
+</div>
+<!-- Loader -->
+<div class="opti_loader full-section" *ngIf="showLookupLoader==true">
+    <div class="opti_spinner"></div>
 </div>

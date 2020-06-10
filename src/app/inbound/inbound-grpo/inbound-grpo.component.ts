@@ -2254,7 +2254,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
   public displayPDF(dNo: string) {
     this.showLoader = true;
-    this.inboundService.printingServiceForSubmitGRPO(dNo).subscribe(
+    this.inboundService.printingServiceForSubmitGRPO(dNo,6).subscribe(
       (data: any) => {
         this.showLoader = false;
         if (data != undefined) {

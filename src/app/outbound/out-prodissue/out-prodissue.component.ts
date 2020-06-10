@@ -695,11 +695,13 @@ export class OutProdissueComponent implements OnInit {
           }
           this.selectedMeterials.push(meterial);
            // after updating the qty push the material to seleted material with updated qty.
-          if(this.selectedPackingModel!=null && this.selectedPackingModel!=undefined &&
-            this.selectedPackingModel.PkgNo!=""){
-           this.addItemsToPacking(this.selected.ITEMCODE, this.selected.TRACKING, meterial, this.selected.CARDCODE,
-            this.selected.DOCENTRY, this.selected.LINENUM)
-           }
+          if (this.selectedPackingModel != null && this.selectedPackingModel != undefined &&
+            this.selectedPackingModel.PkgNo != "") {
+            if (this.selected.TRACKING != 'N') {
+              this.addItemsToPacking(this.selected.ITEMCODE, this.selected.TRACKING, meterial, this.selected.CARDCODE,
+                this.selected.DOCENTRY, this.selected.LINENUM)
+            }
+          }
           //apply paging..
           this.pagable = this.selectedMeterials.length > this.pageSize;
           pickedMeterialQty = pickedMeterialQty + meterial.MeterialPickQty;
@@ -767,11 +769,36 @@ export class OutProdissueComponent implements OnInit {
 
   }
 
+  readjustPackingForNonTracked:boolean = false;
+  bypassNonTrackedItemSave:boolean = false;
   // Save click
   addMetToCollection(fromIFPSave: boolean = false) {
     var packingCollection;
-    if(this.selected.TRACKING){
-   // selected material le kar non tracked ko karna h..
+    if (this.selected.TRACKING == 'N') {
+      if (this.checkIfAlreadyPreasentQtyForNonTracked()) {
+
+      } else {
+        if (!this.bypassNonTrackedItemSave) {
+          console.log("selectedMeterials", this.selectedMeterials.toString());
+          if (this.selectedPackingModel != null && this.selectedPackingModel != undefined &&
+            this.selectedPackingModel.PkgNo != "") {
+            for (let i = 0; i < this.selectedMeterials.length; i++) {
+              var meterial = this.selectedMeterials[i];
+              this.addItemsToPacking(this.selected.ITEMCODE, this.selected.TRACKING, meterial, this.selected.CARDCODE,
+                this.selected.DOCENTRY, this.selected.LINENUM)
+            }
+            //add non tracked items to packing
+          }
+          if (!this.validateNonTrackedItemQtyOnSave()) {
+            this.showPackingMismatchAlert = true;
+            this.readjustPackingForNonTracked = true;
+            return;
+          } else {
+
+          }
+          // selected material le kar non tracked ko karna h..
+        }
+      }
     }
     if(this.checkPackingDetailIsOk()){
       packingCollection = this.outbound.packingCollection;
@@ -819,7 +846,6 @@ export class OutProdissueComponent implements OnInit {
             this.outbound.TempMeterials.push(item)
           }
         }
-
       }
       else {
         this.outbound.TempMeterials = [];
@@ -838,15 +864,56 @@ export class OutProdissueComponent implements OnInit {
         }
       }
     }
-    // //lsOutbound
     this.outbound.packingCollection = packingCollection;
     localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
-    
     if (this.fromProduction == true && fromIFPSave == true) {
       this.back(2);
     } else if (this.fromProduction == false) {
       this.saveSelectedPackingToLocalStorage()
       this.back(-1);
+    }
+  }
+
+  checkIfAlreadyPreasentQtyForNonTracked(): boolean {
+    var isPresent = false;
+    if (this.outbound != undefined && this.outbound != null) {
+      var packingCollection = this.outbound.packingCollection;
+      var filteredItemsForThisScreen = packingCollection.filter(pi => (pi.ItemCode == this.selected.ITEMCODE
+        && pi.DocEntry == this.docEntry && pi.LineNum == this.selected.LINENUM && pi.Quantity>0));
+      if (filteredItemsForThisScreen != null && filteredItemsForThisScreen != undefined &&
+        filteredItemsForThisScreen.length > 0) {
+        isPresent = true;
+      }
+    }
+     return isPresent; 
+  }
+  validateNonTrackedItemQtyOnSave() :boolean{
+    var savedPackingForThisItem: any;
+    if (this.outbound != undefined && this.outbound != null) {
+      savedPackingForThisItem = this.outbound.packingCollection;
+      if (savedPackingForThisItem != null && savedPackingForThisItem != undefined 
+        && savedPackingForThisItem.length>0) {
+        //show packing details in lookup.
+        var selectedPackingItemsForThisScreen = savedPackingForThisItem.filter(pi => (pi.ItemCode == this.selected.ITEMCODE
+          && pi.DocEntry == this.docEntry));
+        var packingNotUsedAtThisScreen = [];
+        var qty = 0;
+       
+        for (let i = 0; i < selectedPackingItemsForThisScreen.length; i++) {
+          qty = qty + parseInt(selectedPackingItemsForThisScreen[i].Quantity);
+        }
+        if (qty > this._pickedMeterialQty) {
+          this.toastr.error('', this.translate.instant("ReadjustPackingQty"));
+          return false;
+         // this.packingData = tempPackingForEditJson;
+        } else{ 
+          return true;
+        }
+      }else{
+        return true;
+      }
+    }else{
+      return true;
     }
   }
 
@@ -1419,13 +1486,13 @@ export class OutProdissueComponent implements OnInit {
   showPackingLookup: boolean = false;
   selectPackingNumber() {
     //manage from local array and show list
-    //let outboundData = localStorage.getItem(CommonConstants.OutboundData);
-   // if (outboundData != undefined && outboundData != '') {
-      //this.outbound = JSON.parse(outboundData);
-      this.lookupData = this.outbound.packingCollection;
+    let outboundData = localStorage.getItem(CommonConstants.OutboundData);
+    if (outboundData != undefined && outboundData != '') {
+      var outbound = JSON.parse(outboundData);
+      this.lookupData = outbound.packingCollection;
       const map = new Map();
       var result = [];
-      for (const packingLookupItem of this.outbound.packingCollection) {
+      for (const packingLookupItem of outbound.packingCollection) {
         if (!map.has(packingLookupItem.PkgNo)) {
           map.set(packingLookupItem.PkgNo, true);    // set any value to Map
           result.push(
@@ -1441,7 +1508,7 @@ export class OutProdissueComponent implements OnInit {
         this.lookupFor = "packingList";
         this.showPackingLookup = true;
       }
-    //}
+    }
   }
 
   onPackingNoChange() {
@@ -1484,31 +1551,34 @@ export class OutProdissueComponent implements OnInit {
     var packingDetails: any;
     if (this.outbound != undefined && this.outbound != null) {
       packingDetails = this.outbound.packingCollection;
-      if(packingDetails==null || packingDetails==undefined || packingDetails.length==0){
+      if((packingDetails==null || packingDetails==undefined || packingDetails.length==0) &&
+      this.addedNewPackingDuringOperationsOnThisScreen().length==0){
         this.toastr.error('', this.translate.instant("NoPackingInfoAvailable"));
         return;
       }
       localStorage.setItem("orignalArrayBeforeEdit", JSON.stringify( this.outbound.packingCollection));
+      
       if (packingDetails != null && packingDetails != undefined) {
         //show packing details in lookup.
         var selectedPackingItemsForThisScreen = packingDetails.filter(pi => (pi.ItemCode == this.selected.ITEMCODE
-          &&  pi.DocEntry == this.docEntry));
-        var packingNotUsedAtThisScreen=[];
-        for(let j=0;j<packingDetails.length;j++){
+          && pi.DocEntry == this.docEntry));
+        var packingNotUsedAtThisScreen = [];
+        for (let j = 0; j < packingDetails.length; j++) {
           var pos = selectedPackingItemsForThisScreen.findIndex(item => (item.PkgNo == packingDetails[j].PkgNo))
-          if(pos==-1){
+          if (pos == -1) {
             packingNotUsedAtThisScreen.push(packingDetails[j]);
           }
         }// set value for new items.
-        for(let j=0;j<packingNotUsedAtThisScreen.length;j++){
-              packingNotUsedAtThisScreen[j].ItemCode = this.selected.ITEMCODE;
-              packingNotUsedAtThisScreen[j].CARDCODE = this.selected.CARDCODE;
-              packingNotUsedAtThisScreen[j].ItemTracking = this.selected.TRACKING;
-              packingNotUsedAtThisScreen[j].Quantity = 0;
-              packingNotUsedAtThisScreen[j].DocEntry = this.selected.DOCENTRY;
-              packingNotUsedAtThisScreen[j].LineNum = this.selected.LINENUM
-          }
-        } 
+        // packingNotUsedAtThisScreen.push.apply(packingNotUsedAtThisScreen,this.addedNewPackingDuringOperationsOnThisScreen())
+        for (let j = 0; j < packingNotUsedAtThisScreen.length; j++) {
+          packingNotUsedAtThisScreen[j].ItemCode = this.selected.ITEMCODE;
+          packingNotUsedAtThisScreen[j].CARDCODE = this.selected.CARDCODE;
+          packingNotUsedAtThisScreen[j].ItemTracking = this.selected.TRACKING;
+          packingNotUsedAtThisScreen[j].Quantity = 0;
+          packingNotUsedAtThisScreen[j].DocEntry = this.selected.DOCENTRY;
+          packingNotUsedAtThisScreen[j].LineNum = this.selected.LINENUM
+        }
+      } 
         //==================================
           // remove repeating packing.
         const map = new Map();
@@ -1523,16 +1593,26 @@ export class OutProdissueComponent implements OnInit {
         }  
         packingNotUsedAtThisScreen = result;
         //==================================
-
-
           var arrayToDisplay =[];
           arrayToDisplay.push.apply(arrayToDisplay, selectedPackingItemsForThisScreen);
           arrayToDisplay.push.apply(arrayToDisplay, packingNotUsedAtThisScreen);
+         
+          
+          for(const newItm of this.addedNewPackingDuringOperationsOnThisScreen()){
+            var position = arrayToDisplay.findIndex(item => (item.PkgNo == newItm.PkgNo ))
+            if(position==-1){
+              newItm.ItemCode = this.selected.ITEMCODE;
+              newItm.CARDCODE = this.selected.CARDCODE;
+              newItm.ItemTracking = this.selected.TRACKING;
+              newItm.Quantity = 0;
+              newItm.DocEntry = this.selected.DOCENTRY;
+              newItm.LineNum = this.selected.LINENUM
+              arrayToDisplay.push(newItm)
+            }
+          }
           this.showPackingInfo = true;
           this.packingData = arrayToDisplay;
           localStorage.setItem("tempPackingList", JSON.stringify(this.packingData));
-         
-          //this.lookupFor = "packingDetails"
         }
      }
    
@@ -1551,11 +1631,17 @@ export class OutProdissueComponent implements OnInit {
       this.toastr.error('', this.translate.instant("PackingQtyNotMoreThenPickedQty"));
      // this.packingData = tempPackingForEditJson;
     } else {
+      
       this.outbound.packingCollection= this.updateArrayAsPerUserChanges(this.packingData,orignalArrayJson)
         var packingCollectionItems = this.outbound.packingCollection
        localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
        this.toastr.success('', this.translate.instant("PackingDetailUpdated"));
        this.closePackinDialog();
+       if(this.selected.TRACKING == 'N' && this.readjustPackingForNonTracked){
+            this.bypassNonTrackedItemSave = true;
+       }else{
+         this.bypassNonTrackedItemSave = false;
+       }
     }
   } 
 
@@ -1737,4 +1823,19 @@ export class OutProdissueComponent implements OnInit {
     this.showPackingMismatchAlert = false;
     this.ShowPackingDetails();
   }
+
+  addedNewPackingDuringOperationsOnThisScreen():any{
+    var addedPackings:any;
+    var newAddedPackings:any =[];
+    let outboundData = localStorage.getItem(CommonConstants.OutboundData);
+    if (outboundData != undefined && outboundData != '') {
+      this.outbound = JSON.parse(outboundData);
+      addedPackings = this.outbound.packingCollection;
+      newAddedPackings= addedPackings.filter(i => i.PkgNo != null  && i.PkgType != null &&
+        (i.ItemCode==null || i.ItemCode==undefined) )
+
+    } 
+    return newAddedPackings;
+  }
 } 
+
