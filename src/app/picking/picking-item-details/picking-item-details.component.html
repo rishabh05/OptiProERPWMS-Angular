@@ -145,6 +145,10 @@
     <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData'></app-lookup>
 </span>
 
+<div class="opti_loader full-section" *ngIf="showLoader">
+    <div class="opti_spinner"></div>
+</div>
+
 <kendo-dialog [width]="500" *ngIf="dialogOpened" (close)="close_kendo_dialog()">
     <div class="new-custom-grid">
         <kendo-dialog-titlebar>

@@ -107,7 +107,6 @@ export class PortalLeftComponent implements OnInit {
   displayMenuOptions(menus: any[]) {
     menus.forEach(element => {
       var thisRefs = this;
-      console.log("forEach: element.id: " + document.getElementById(element.id))
       if (document.getElementById(element.id) != null) {
         document.getElementById(element.id).style.display = 'flex';
         if (document.getElementById(element.id).childNodes.length > 0 && document.querySelectorAll('#' + element.id + ".dropdown")[0] != undefined) {
