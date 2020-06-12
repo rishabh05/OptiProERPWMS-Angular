@@ -464,7 +464,7 @@
 
 
 <!--hari pdf display code.-->
-<kendo-dialog [width]="750" *ngIf="printDialog" (close)="closePrintDialog('dialog')" [minWidth]="250" [width]="450">
+<kendo-dialog  *ngIf="printDialog" (close)="closePrintDialog('dialog')" [minWidth]="250" [width]="450">
     <kendo-dialog-titlebar>
         {{'PrintOptions'|translate}}
     </kendo-dialog-titlebar>
@@ -487,7 +487,14 @@
         <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="close('dialog')">
             <span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
     </kendo-dialog-actions>
+    <div class="opti_loader full-section" *ngIf="showPDFLoading==true">
+        <div class="opti_spinner"></div>
+    </div>
 </kendo-dialog>
+<!-- Loader -->
+<div class="opti_loader full-section" *ngIf="showLookupLoader==true">
+    <div class="opti_spinner"></div>
+</div>
 
 
 
@@ -504,8 +511,4 @@
 <div>
     <app-display-pdf *ngIf="displayPDF1" [base64String]='base64String' [fileName]='fileName' 
     (pdfClose)="closePDF($event)"></app-display-pdf>
-</div>
-<!-- Loader -->
-<div class="opti_loader full-section" *ngIf="showLookupLoader==true">
-    <div class="opti_spinner"></div>
 </div>

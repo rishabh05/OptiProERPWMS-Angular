@@ -562,5 +562,9 @@
   "NoPackingInfoAvailable":"No packing info available.",
   "ReadjustPackingQty":"Please readjust your packing quantity.",
   "packNoAndTypeValidate":"Packing No. and Type can not be empty.",
+  "Inbound_through_PO": "Inbound through PO",
+  "Inbound_through_API": "Inbound through API",
+  "VendorCodeAPI": "Vendor Code API",
+  "Inbound_InvoiceNo": "Invoice Number",
   "Dummy": "Dummy"
 }

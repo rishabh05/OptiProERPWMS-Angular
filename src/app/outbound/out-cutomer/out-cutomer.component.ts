@@ -52,6 +52,8 @@ export class OutCutomerComponent implements OnInit {
   @ViewChild('scanTracking') scanTracking;
   public pageTitle:String = "";
   showShipmentInfo: boolean = false;
+
+  showPDFLoading:boolean = false;
   constructor(private inboundService: InboundService, private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) { }
 
   ngOnInit() {
@@ -1581,10 +1583,10 @@ export class OutCutomerComponent implements OnInit {
   displayPDF1: boolean = false;
   dialogFor: string = "";
   public displayPDF(dNo: string, value: any) {
-    this.showLookupLoader = true;
+    this.showPDFLoading = true;
     this.inboundService.printingServiceForSubmitGRPO(dNo, value).subscribe(
       (data: any) => {
-        this.showLookupLoader = false;
+        this.showPDFLoading = false;
        // this.printDialog = false;
         if (data != undefined) {
           // console.log("" + data);

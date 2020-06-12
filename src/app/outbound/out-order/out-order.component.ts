@@ -38,6 +38,7 @@ export class OutOrderComponent implements OnInit {
   batchTrackedItems: any;
   noneTrackedItems: any;
   showLookupLoader: boolean = false;
+  showPDFLoading: boolean = false;
   showConfirmDialog: boolean;
   showDeleiveryAndAdd: boolean;
   itrCode: string = "";
@@ -80,7 +81,6 @@ export class OutOrderComponent implements OnInit {
   public selectedPackingModel:PackingModel = new PackingModel() ;
   constructor(private inboundService: InboundService, private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService,
     private inventoryTransferService: InventoryTransferService) { }
-
   ngOnInit() {
     console.log("oninit outorder")
     if (localStorage.getItem(CommonConstants.FROM_DTS) == "true") {
@@ -2132,10 +2132,10 @@ export class OutOrderComponent implements OnInit {
   fileName: string = "";
   displayPDF1: boolean = false;
   public displayPDF(dNo: string, value: any) {
-    this.showLookupLoader = true;
+    this.showPDFLoading = true;
     this.inboundService.printingServiceForSubmitGRPO(dNo, value).subscribe(
       (data: any) => {
-        this.showLookupLoader = false;
+        this.showPDFLoading = false;
       //  this.printDialog = false;
         if (data != undefined) {
           // console.log("" + data);

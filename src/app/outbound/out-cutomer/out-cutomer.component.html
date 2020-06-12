@@ -263,6 +263,10 @@
         <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="closePrintDialog()">
             <span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
     </kendo-dialog-actions>
+
+    <div class="opti_loader full-section" *ngIf="showPDFLoading==true">
+        <div class="opti_spinner"></div>
+    </div>
 </kendo-dialog>
 <!--Pick list pack list and Bol PDF-->
 <div>
