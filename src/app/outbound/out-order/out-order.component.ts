@@ -2068,7 +2068,6 @@ export class OutOrderComponent implements OnInit {
   }
 
   getNewPackingDialogOutPut($event){
-    debugger;
     if ($event != null && $event == "close") {
       //nothing to do
       this.newPackingNoDialogFlag = false;
