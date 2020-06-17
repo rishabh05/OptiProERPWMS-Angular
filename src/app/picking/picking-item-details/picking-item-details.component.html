@@ -50,23 +50,23 @@
                             <div class="item-steps">
                                 <!-- step inputs -->
                                 <div *ngIf="currentStep == 1" class="item-input-section">
-                                    <input #focusOnLocation type="text" placeholder="{{'PT_Enter_Location'|translate}}" (blur)="onLocationChange()" name="PT_Enter_Location"
+                                    <input #focusOnLocation type="text" placeholder="{{'PT_Enter_Location'|translate}}" (change)="onLocationChange()" name="PT_Enter_Location"
                                         [(ngModel)]="PT_Enter_Location" [disabled]=pickedAllDty>
                                 </div>
                                 <div *ngIf="currentStep == 2" class="item-input-section">
-                                    <input #focusOnItemCode type="text" placeholder="{{'PT_ItemCode'|translate}}" (blur)="onItemChange()" name="PT_ItemCode"
+                                    <input #focusOnItemCode type="text" placeholder="{{'PT_ItemCode'|translate}}" (change)="onItemChange()" name="PT_ItemCode"
                                         [(ngModel)]="PT_ItemCode" [disabled]=pickedAllDty>
                                 </div>
                                 <div *ngIf="currentStep == 3" class="item-input-section">
-                                    <input #focusOnSerNo type="text" placeholder="{{'PT_Enter_ContBtchSer'|translate}}" (blur)="onLotChange()" name="PT_Enter_ContBtchSer"
+                                    <input #focusOnSerNo type="text" placeholder="{{'PT_Enter_ContBtchSer'|translate}}" (change)="onLotChange()" name="PT_Enter_ContBtchSer"
                                         [(ngModel)]="PT_Enter_ContBtchSer" [disabled]=pickedAllDty>
                                 </div>
                                 <div *ngIf="currentStep == 4" class="item-input-section">
-                                    <input #focusOnQty type="number" placeholder="{{'PT_EnterQty'|translate}}" min=0 (blur)="onQtyChange()" name="pickQty" [(ngModel)]="pickQty"
+                                    <input #focusOnQty type="number" placeholder="{{'PT_EnterQty'|translate}}" min=0 (change)="onQtyChange()" name="pickQty" [(ngModel)]="pickQty"
                                         [disabled]=pickedAllDty>
                                 </div>
                                 <div *ngIf="currentStep == 5" class="item-input-section">
-                                    <input #focusOnScanCont type="text" placeholder="{{ContainerCodePlaceholderValue}}" (blur)="ConfirmContainerOrTote()" name="ScannedContOrTote"
+                                    <input #focusOnScanCont type="text" placeholder="{{ContainerCodePlaceholderValue}}" (change)="ConfirmContainerOrTote()" name="ScannedContOrTote"
                                         [(ngModel)]="ScannedContOrTote" [disabled]=pickedAllDty>
                                 </div>
                                 <!--/ step inputs -->
