@@ -333,6 +333,20 @@ export class PickingItemDetailsComponent implements OnInit {
   }
 
   nextStepRunning = false;
+  handlenextStep(){
+    if (this.currentStep == this.ITEM_STEP) {
+      this.onItemChange();
+    } else if (this.currentStep == this.CONT_BTCH_SER_STEP) {
+      this.onLotChange();
+    } else if (this.currentStep == this.QTY_STEP) {
+      this.onQtyChange();
+    }
+    else if (this.currentStep == this.CONFIRM_CONTAINER_STEP) {
+     this.ConfirmContainerOrTote();
+    } else if (this.currentStep == this.LOCATION_STEP) {
+     this.onLocationChange();
+    }
+  }
 
   nextStep() {
     if (this.nextStepRunning) {
@@ -535,11 +549,13 @@ export class PickingItemDetailsComponent implements OnInit {
     }
   }
 
+  cycleIndex = 0;
   onLocationChange() {
     if (this.PT_Enter_Location == undefined || this.PT_Enter_Location == "") {
       return;
     }
     if (this.PT_Enter_Location === this.PickTaskList[this.index].OPTM_SRC_BIN) {// location
+
       if (this.iterateSteps) {
         this.nextSteptoIterate();
       } else {
@@ -616,9 +632,9 @@ export class PickingItemDetailsComponent implements OnInit {
             if (this.PT_Enter_ContBtchSer === this.PickTaskDetail.OPTM_WHSTASK_BTCHSER[i].OPTM_BTCHSER) {
               batserAdded = true;
               this.addBatchSerials();
-              if (!this.threeSteps) {
-                this.PT_Enter_ContBtchSer = "";
-              }
+              // if (!this.threeSteps) {
+              //   this.PT_Enter_ContBtchSer = "";
+              // }
               break;
             }
           }
@@ -642,12 +658,10 @@ export class PickingItemDetailsComponent implements OnInit {
         // if (this.OPTM_Tracking == 'S') {
         this.ContBtchSerArray.push(this.PT_Enter_ContBtchSer);
         this.totalpickQty = this.totalpickQty + 1;
-
-        this.BtchNoneArray.push(new BtchNoneModel(this.PT_Enter_Location, this.PT_Enter_ContBtchSer, this.pickQty, this.ScannedContOrTote));
         this.ItemDetail.push({
           OPTM_TASKID: this.PickTaskList[this.index].OPTM_TASKID,
           OPTM_ITEMCODE: this.itemcodeValue,
-          OPTM_ACTUAL_QTY: this.pickQty,
+          OPTM_ACTUAL_QTY: 1,
           OPTM_BTCHSER: this.PT_Enter_ContBtchSer,
           OPTM_RESID_ACT: localStorage.getItem("UserId"),
           OPTM_STARTDATETIME: this.OPTM_STARTDATETIME.toLocaleDateString()
@@ -720,7 +734,8 @@ export class PickingItemDetailsComponent implements OnInit {
                 OPTM_CONTAINER_ID: "",
                 OPTM_QTY: 1,
                 OPTM_BTCHSER: this.PT_Enter_ContBtchSer,
-                OPTM_CREATEDBY: localStorage.getItem("UserId")
+                OPTM_CREATEDBY: localStorage.getItem("UserId"),
+                OPTM_STARTDATETIME: this.OPTM_STARTDATETIME.toLocaleDateString()
               });
             }
           } else {
@@ -762,12 +777,14 @@ export class PickingItemDetailsComponent implements OnInit {
           if (result == undefined) {
             if (Number(this.pickQty) > Number(BtchSerDtl.OPTM_PLANNED_QTY)) {
               this.toastr.error('', this.translate.instant("QtyExceed"));
+              this.pickQty = undefined
               this.setfocus();
               return;
             }
           } else {
             if ((Number(this.pickQty) + Number(result.OPTM_Qty)) > Number(BtchSerDtl.OPTM_PLANNED_QTY)) {
               this.toastr.error('', this.translate.instant("QtyExceed"));
+              this.pickQty = undefined
               this.setfocus();
               return;
             }
@@ -776,6 +793,7 @@ export class PickingItemDetailsComponent implements OnInit {
       } else {
         if (Number(this.pickQty) > Number(this.BatchSerDetail.TOTALQTY)) {
           this.toastr.error('', this.translate.instant("QtyExceed"));
+          this.pickQty = undefined
           this.setfocus();
           return;
         }
@@ -853,6 +871,7 @@ export class PickingItemDetailsComponent implements OnInit {
           return;
         }
       } else if (this.OPTM_Tracking == 'N') {
+        
         this.BtchNoneArray.push(new BtchNoneModel(this.PT_Enter_Location, this.PT_Enter_ContBtchSer, this.pickQty, this.ScannedContOrTote));
         this.ItemDetail.push({
           OPTM_TASKID: this.PickTaskList[this.index].OPTM_TASKID,

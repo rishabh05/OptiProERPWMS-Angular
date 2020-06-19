@@ -627,7 +627,7 @@
 
 
 <span [hidden]="showLookupLoader">
-    <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
+    <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupkey)="getlookupSelectedItem($event)" (lookupvalue)="getLookupValue($event)"></app-lookup>
 </span>
 
 <!-- <span *ngIf="showPalletLookup == false">

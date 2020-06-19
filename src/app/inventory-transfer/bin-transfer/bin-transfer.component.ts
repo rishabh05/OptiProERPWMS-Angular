@@ -1102,6 +1102,20 @@ export class BinTransferComponent implements OnInit {
     return true;
   }
 
+  getlookupSelectedItem(event){
+    if (this.lookupfor == "SBTrackFromBin") {
+      this.fromBin = event.BINNO;
+      this.transferQty = event.TOTALQTY;
+      this.onHandQty = event.TOTALQTY;
+      this.scanToBin.nativeElement.focus();
+    } else if (this.lookupfor == "NTrackFromBin") {
+      this.fromBin = event.BINNO;
+      this.transferQty = event.TOTALQTY;
+      this.onHandQty = event.TOTALQTY;
+      this.scanToBin.nativeElement.focus();
+    } 
+  }
+
   getLookupValue($event) {
     if ($event != null && $event == "close") {
       if (this.lookupfor == "ItemsList") {
@@ -1146,13 +1160,9 @@ export class BinTransferComponent implements OnInit {
         this.onHandQty = 0.000;
         if (this.ItemTracking == 'N') {
           this.getDefaultFromBin();
-          //     this.getDefaultToBin();
         }else{
           this.getDefaultToBin();
         }
-        // if (localStorage.getItem("fromscreen") == "WhsTransfer") {
-        //   this.getDefaultBin();
-        // }
         this.CheckTrackingandVisiblity();
         setTimeout(() => {
           if(this.ItemTracking == 'N'){
@@ -1180,19 +1190,9 @@ export class BinTransferComponent implements OnInit {
         this.palletNo = ""
         this.actualLotNo = $event[0];
         this.scanFromBin.nativeElement.focus();
-        // this.palletNo = $event[12];
-        // this.actualLotNo = $event[13];
-      } else if (this.lookupfor == "SBTrackFromBin") {
-        this.fromBin = $event[3];
-        this.transferQty = $event[6];
-        this.onHandQty = $event[6];
-        this.scanToBin.nativeElement.focus();
-      } else if (this.lookupfor == "NTrackFromBin") {
-        this.fromBin = $event[3];
-        this.transferQty = $event[6];
-        this.onHandQty = $event[6];
-        this.scanToBin.nativeElement.focus();
-      } else if (this.lookupfor == "toBinsList") {
+      }
+      
+      else if (this.lookupfor == "toBinsList") {
         this.toBin = $event[0];
         //this.prepareByPalletData();
         if (this.radioSelected == 0) {
