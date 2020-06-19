@@ -1,3 +1,4 @@
+
 import { Component, OnInit } from '@angular/core';
 import { Commonservice } from '../../services/commonservice.service';
 import { Router } from '@angular/router';
@@ -107,6 +108,7 @@ export class PortalLeftComponent implements OnInit {
   displayMenuOptions(menus: any[]) {
     menus.forEach(element => {
       var thisRefs = this;
+      console.log("forEach: element.id: " + document.getElementById(element.id))
       if (document.getElementById(element.id) != null) {
         document.getElementById(element.id).style.display = 'flex';
         if (document.getElementById(element.id).childNodes.length > 0 && document.querySelectorAll('#' + element.id + ".dropdown")[0] != undefined) {
@@ -161,6 +163,14 @@ export class PortalLeftComponent implements OnInit {
       this.onOutboundClick();
     } else if (module == "inbound") {
       this.onInboundClick();
+
+      if (fromWhere == 1) {
+        localStorage.setItem("inboundOptionType", '1');
+        //module = module + '/outcustomer'
+      } else if (fromWhere == 2) {
+        localStorage.setItem("inboundOptionType", '2');
+        module = module + '/inboundAPI'
+      }
     } else if (module == "whsTransfer") {
       localStorage.setItem("fromscreen", "WhsTransfer");
     } else if (module == "InventoryTransferRequest") {

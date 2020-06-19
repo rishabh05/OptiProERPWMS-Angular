@@ -22,14 +22,14 @@ import * as $ from 'jquery';
 export class InboundPolistComponent implements OnInit {
   RecvbBinvalue: string;
   futurepo: boolean = false;
-  poCode: string = "";
+  poCode: string = ""; 
   showLookupLoader: boolean = true;
   serviceData: any[];
   lookupfor: string;
   itemCode: string = "";
   Name: string;
   // NonItemsDetail: any[];
-  // BatchItemsDetail: any[];
+  // BatchItemsDetail: any[]; 
   // SerialItemsDetail: any[];
   showSerialTrackItem: boolean = false;
   showBatchTrackItem: boolean = false;
@@ -52,6 +52,12 @@ export class InboundPolistComponent implements OnInit {
   showConfirmDialog = false;
   defaultPageSize: number = 10;
   @ViewChild('scanItemCode') scanItemCode;
+
+  // caption related labels.
+  PONo:any;
+  future_PO_Invoice:any;
+
+  inboundFromWhere: any = false;
 
 
 
@@ -84,8 +90,29 @@ export class InboundPolistComponent implements OnInit {
     translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
   }
-
+   
   ngOnInit() {
+
+
+    this.inboundFromWhere = localStorage.getItem("inboundOptionType");
+    if(this.inboundFromWhere==1){
+      this.PONo =  this.translate.instant("Inbound_PO#");
+      this.future_PO_Invoice = this.translate.instant("Inbound_FuturePOs");
+      // change captions and api calling according to normal inbound.
+    }else if(this.inboundFromWhere==2){
+      
+      this.PONo =  this.translate.instant("Inbound_InvoiceNo");
+      this.future_PO_Invoice = this.translate.instant("Inbound_FutureInvoices");
+        // change captions and api calling according to normal inbound.
+    }
+
+    // set future po to check if already checked.
+    if(localStorage.getItem("isFuturePOChecked")== "true"){
+      this.futurepo = true;
+    }else{
+      this.futurepo = false;
+    }
+
     var ponumber = localStorage.getItem("PONumber");
     if (ponumber != undefined && ponumber != null && ponumber != "") {
       this.poCode = ponumber;
@@ -119,7 +146,7 @@ export class InboundPolistComponent implements OnInit {
     // this.openConfirmationDialog();
     this.showLoader = true;
     this.inboundService.getPOList(this.futurepo,
-      this.inboundMasterComponent.selectedVernder, this.itemCode).subscribe(
+      this.inboundMasterComponent.selectedVernder, this.itemCode,this.inboundFromWhere).subscribe(
         (data: any) => {
           this.showLoader = false;
           //  console.log("get polist response:");
@@ -132,7 +159,12 @@ export class InboundPolistComponent implements OnInit {
             this.showLookupLoader = false;
             this.serviceData = data.Table;
             //    console.log("get polist response serviceData:", this.serviceData);
+          var ibFromWhere:any = localStorage.getItem("inboundOptionType");
+          if(ibFromWhere==1){
             this.lookupfor = "POList";
+          }else{
+            this.lookupfor = "POListForInvoice";
+          }
           } else {
             this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
           }
@@ -149,15 +181,16 @@ export class InboundPolistComponent implements OnInit {
         }
       );
   }
+  //future po change.
   toggleVisibility(e) {
-    //console.log("checkuncheck:",this.futurepo);
-
+    console.log("checkuncheck:",this.futurepo);
+    localStorage.setItem("isFuturePOChecked", JSON.stringify(this.futurepo));
   }
   onItemlookupClick() {
     //console.log("item lookup click :");
     this.showLoader = true;
     this.inboundService.getItemList(this.futurepo, this.inboundMasterComponent.selectedVernder,
-      this.poCode).subscribe(
+      this.poCode,this.inboundFromWhere).subscribe(
         (data: any) => {
           this.showLoader = false;
           // console.log(data);
@@ -195,7 +228,7 @@ export class InboundPolistComponent implements OnInit {
     //console.log("search click : in open poline method :openPOLines()");
     this.showLoader = true;
     this.inboundService.GetOpenPOLines(this.futurepo, this.itemCode,
-      this.poCode).subscribe(
+      this.poCode,this.inboundFromWhere).subscribe(
         (data: any) => {
           this.showLoader = false;
           // console.log("api call resonse section :openPOLines()");
@@ -301,7 +334,7 @@ export class InboundPolistComponent implements OnInit {
 
     this.showLoader = true;
     var result = false;
-    await this.inboundService.IsPOExists(this.poCode, "").then(
+    await this.inboundService.IsPOExists(this.poCode, "",this.inboundFromWhere).then(
       data => {
         this.showLoader = false;
         if (data != null) {
@@ -343,7 +376,7 @@ export class InboundPolistComponent implements OnInit {
       return;
     }
     else {
-      if (this.lookupfor == "POList") {
+      if (this.lookupfor == "POList" || this.lookupfor == "POListForInvoice") {
         this.poCode = $event[0];
         this.Name = $event[1];
         this.openPOLines()
@@ -626,8 +659,9 @@ export class InboundPolistComponent implements OnInit {
 
             addpo = false;
           }
-
+   
           this.addToGRPOArray.POReceiptLots.push({
+            OPTM_TYPE:this.oSavedPOLotsArray.POReceiptLots[i].OPTM_TYPE,
             DiServerToken: localStorage.getItem("Token"),
             PONumber: this.oSavedPOLotsArray.POReceiptLots[i].PONumber,
             DocEntry: this.oSavedPOLotsArray.POReceiptLots[i].DocEntry,

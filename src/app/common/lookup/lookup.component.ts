@@ -123,7 +123,7 @@ export class LookupComponent implements OnInit {
       this.showVendorList();
     }
     else if (this.lookupfor == "POList") {
-      this.showPOList();
+      this.showPOList(1);
     }
     else if (this.lookupfor == "POItemList") {
       this.showPOItemList();
@@ -179,6 +179,8 @@ export class LookupComponent implements OnInit {
       this.packingLookupItemList();
     } if (this.lookupfor == "packingDetails"){
       this.packingDetailList();
+    } else  if (this.lookupfor == "POListForInvoice"){
+      this.showPOList(2);
     }
 
     this.clearFilters();
@@ -467,11 +469,22 @@ export class LookupComponent implements OnInit {
     }
   }
 
-  showPOList() {
+  showPOList( fromWhere:any) {
+    var poNoTitle = '';
+    var LookupTitle = '';
+    
+    if(fromWhere==1){
+      poNoTitle= this.translate.instant("Inbound_PO#")
+      LookupTitle= this.translate.instant("Inbound_POList")
+    }else{
+      poNoTitle= this.translate.instant("Inbound_InvoiceNo")
+      LookupTitle= this.translate.instant("InvoiceList")
+      
+    }
     this.table_head = [
       {
         field: 'DocNum',
-        title: this.translate.instant("Inbound_PO#"),
+        title:poNoTitle,
         type: 'numeric',
         width: '100'
       },
@@ -480,21 +493,9 @@ export class LookupComponent implements OnInit {
         title: this.translate.instant("DelDate"),
         type: 'date',
         width: '100'
-      }//,
-      // {
-      //   field: 'CardCode',
-      //   title: this.translate.instant("VendorCode"),
-      //   type: 'text',
-      //   width: '100'
-      // },
-      // {
-      //   field: 'CardName',
-      //   title: this.translate.instant("VendorName"),
-      //   type: 'text',
-      //   width: '100'
-      // }
+      }
     ];
-    this.lookupTitle = this.translate.instant("Inbound_POList");
+    this.lookupTitle = LookupTitle;
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
         this.dialogOpened = true;

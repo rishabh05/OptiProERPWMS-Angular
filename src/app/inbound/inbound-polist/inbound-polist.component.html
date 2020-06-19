@@ -9,7 +9,7 @@
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
 
                     <div class="form-group row align-items-center">
-                        <label for="inputPassword" class="col-4 col-sm-3 col-form-label py-0">{{'Inbound_FuturePOs'|translate}}</label>
+                        <label for="inputPassword" class="col-4 col-sm-3 col-form-label py-0">{{future_PO_Invoice}}</label>
                         <div class="col-8 col-sm-9">
                             <div class="opti_input-group-checkbox">
                                 <input type="checkbox" id="ch7" (change)="toggleVisibility($event)" class="k-checkbox" name="future" [(ngModel)]="futurepo" />
@@ -20,7 +20,7 @@
 
 
                     <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'Inbound_PO#'|translate}}</label>
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{PONo}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
                                 <input #poScanInputField type="text" class="form-control form-control-sm" name="poCode" [(ngModel)]=poCode placeholder="{{'Inbound_PO#'|translate}}"

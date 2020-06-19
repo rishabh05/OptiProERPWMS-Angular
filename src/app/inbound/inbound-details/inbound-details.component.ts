@@ -25,6 +25,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
   VendCode: string;
   VendCode1: string;
   VendName: string;
+  futurepo: boolean = false;
   showLoader: boolean = false;
   showGRPOGridAndBtn: boolean = false;
   public Polist: any[] = [];
@@ -41,6 +42,10 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
   fileName: string = "";
   displayPDF1: boolean = false;
   detailsAvailable: boolean = false;
+  // caption related labels.
+  PONo:any;
+  addGRPODetailGridTitle: any;
+  future_PO_Invoice:any;
   ngAfterViewInit(): void {
     this.vendInputScanField.nativeElement.focus();
   }
@@ -52,8 +57,27 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
     translate.onLangChange.subscribe((event: LangChangeEvent) => {
     });
   }
-
+  inboundFromWhere: any = false;
   ngOnInit() {
+    this.inboundFromWhere = localStorage.getItem("inboundOptionType");
+    if(this.inboundFromWhere==1){
+      this.PONo =  this.translate.instant("Inbound_PO#");
+      this.future_PO_Invoice = this.translate.instant("Inbound_FuturePOs");
+      this.addGRPODetailGridTitle =  this.translate.instant("Inbound_PurchaseOrderNumber");
+      // change captions and api calling according to normal inbound.
+    }else if(this.inboundFromWhere==2){
+      this.future_PO_Invoice = this.translate.instant("Inbound_FutureInvoices");
+      this.PONo =  this.translate.instant("Inbound_InvoiceNo");
+      this.addGRPODetailGridTitle =  this.translate.instant("Inbound_InvoiceNo");
+        // change captions and api calling according to normal inbound.
+    }
+    // set future po to check if already checked.
+    if(localStorage.getItem("isFuturePOChecked")== "true"){
+      this.futurepo = true;
+    }else{
+      this.futurepo = false;
+    }
+
     this.VendCode = localStorage.getItem("VendCode");
     this.VendName = localStorage.getItem("VendName");
     if(this.VendCode != ""){
@@ -65,6 +89,11 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
   }
 
  
+   //future po change.
+  toggleVisibility(e) {
+  console.log("checkuncheck:",this.futurepo);
+  localStorage.setItem("isFuturePOChecked", JSON.stringify(this.futurepo));
+  }
 
   dateAvailableToReceieve() {
     var dataModel = localStorage.getItem("addToGRPOPONumbers");
@@ -242,7 +271,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
     }
     else {
 
-      if (this.lookupfor == "POList") {
+      if (this.lookupfor == "POList" || this.lookupfor == "POListForInvoice") {
         this.poCode = $event[0];
         // this.Name = $event[1];
         this.VendCode = $event[1];
@@ -517,7 +546,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
     }
     this.showLoader = true;
     var result = false;
-    await this.inboundService.IsPOExists(this.poCode, "").then(
+    await this.inboundService.IsPOExists(this.poCode, "",this.inboundFromWhere).then(
       data => {
         this.showLoader = false;
         if (data != null) {
@@ -560,7 +589,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
   onPOlookupClick() {
     this.showLoader = true;
     this.inboundService.getPOList(false,
-      this.VendCode, "").subscribe(
+      this.VendCode, "",this.inboundFromWhere).subscribe(
         (data: any) => {
           this.showLoader = false;
           if (data != undefined) {
@@ -572,6 +601,13 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
             this.showLookupLoader = false;
             this.serviceData = data.Table;
             this.lookupfor = "POList";
+            var ibFromWhere:any = localStorage.getItem("inboundOptionType");
+            if(ibFromWhere==1){
+              this.lookupfor = "POList";
+            }else{
+              this.lookupfor = "POListForInvoice";
+            }
+            
           } else {
             this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
           }

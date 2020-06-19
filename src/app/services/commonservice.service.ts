@@ -266,6 +266,7 @@ export class Commonservice {
     localStorage.setItem("PONumber", "");
     localStorage.setItem("primaryAutoLots", "");
     localStorage.setItem("VendRefNo", "");
+    localStorage.setItem("isFuturePOChecked", "false")
   }
 
   getPalletList(opType: number, itemCode: string): Observable<any> {

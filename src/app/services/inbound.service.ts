@@ -41,19 +41,21 @@ export class InboundService {
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsVendorExists", jObject, this.commonService.httpOptions).toPromise();
   }
 
-  getItemList(futurepo: boolean, vendercode: string, po: string): Observable<any> {
+  getItemList(futurepo: boolean, vendercode: string, po: string, optmType:string): Observable<any> {
     let jObject = {
       GoodsReceiptToken: JSON.stringify([{
         UserId: '',
         CompanyDBId: localStorage.getItem("CompID"), WhseCode: localStorage.getItem("whseId"),
         VendorCode: vendercode,
-        FuturePO: futurepo, PO: po
+        FuturePO: futurepo, 
+        PO: po,
+        OPTM_TYPE: optmType
       }])
-    };
+    }; 
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetItemList", jObject, this.commonService.httpOptions);
   }
 
-  getPOList(futurepo: boolean, vendercode: string, itemcode: string): Observable<any> {
+  getPOList(futurepo: boolean, vendercode: string, itemcode: string, optmType:string): Observable<any> {
    // console.log("get polist method :");
     let jObject = {
       GoodsReceiptToken: JSON.stringify([{
@@ -61,19 +63,22 @@ export class InboundService {
         CompanyDBId: localStorage.getItem("CompID"), WhseCode: localStorage.getItem("whseId"),
         ItemCode: itemcode, VendorCode: vendercode,
         FuturePO: futurepo, IsCustom: false, GUID: localStorage.getItem("GUID"),
-        UsernameForLic: localStorage.getItem("UserId")
+        UsernameForLic: localStorage.getItem("UserId"),
+        OPTM_TYPE: optmType
+        
       }])
     };
     //console.log("get polist method call api :");
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetPOList", jObject, this.commonService.httpOptions);
   }
 
-  IsPOExists(poCode: string, cardCode: string): Promise<any> {
-    var jObject = { POCode: JSON.stringify([{ UserId: '', CompanyDBId: localStorage.getItem("CompID"), POCode: poCode, CardCode: cardCode }]) };
+  IsPOExists(poCode: string, cardCode: string,optmType:string): Promise<any> {
+    var jObject = { POCode: JSON.stringify([{ UserId: '', CompanyDBId: localStorage.getItem("CompID"), POCode: poCode,
+     CardCode: cardCode,OPTM_TYPE: optmType }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsPOExists", jObject, this.commonService.httpOptions).toPromise();
   }
 
-  GetOpenPOLines(futurepo: boolean, itemCode: string, po: string): Observable<any> {
+  GetOpenPOLines(futurepo: boolean, itemCode: string, po: string, optmType:string): Observable<any> {
     let jObject = {
       GoodsReceiptToken: JSON.stringify([{
         UserId: '',
@@ -81,7 +86,9 @@ export class InboundService {
         DOCNUM: po,
         ItemCode: itemCode,
         WhsCode: localStorage.getItem("whseId"),
-        FuturePO: futurepo
+        FuturePO: futurepo,
+        OPTM_TYPE: optmType
+        //1 po , 2 ar
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetOpenPOLines", jObject, this.commonService.httpOptions);

@@ -121,6 +121,10 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   @ViewChild('scanBatchSerial') scanBatchSerial: ElementRef;
   @ViewChild('scanQty') scanQty;
 
+  // caption related labels.
+  Inbound_ReceiveForPO:any;
+  inboundFromWhere: any = false;
+
   constructor(private inboundService: InboundService, private commonservice: Commonservice,
     private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent, private productionService: ProductionService) {
@@ -140,6 +144,17 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+
+    this.inboundFromWhere = localStorage.getItem("inboundOptionType");
+    if(this.inboundFromWhere==1){
+      this.Inbound_ReceiveForPO =  this.translate.instant("Inbound_ReceiveForPO");
+      // change captions and api calling according to normal inbound.
+    }else if(this.inboundFromWhere==2){
+      this.Inbound_ReceiveForPO =  this.translate.instant("InboundReceiveInvoice");
+        // change captions and api calling according to normal inbound.
+    }
+
+
     if (localStorage.getItem("AutoPalletIdGenerationChecked") == "True") {
       this.autoGeneratePalletEnable = true;
     }
@@ -1586,6 +1601,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
 
     oSubmitPOLotsObj.POReceiptLots.push({
+      OPTM_TYPE:this.inboundFromWhere,
       DiServerToken: localStorage.getItem("Token"),
       PONumber: this.Ponumber,
       DocEntry: this.DocEntry,

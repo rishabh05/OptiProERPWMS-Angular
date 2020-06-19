@@ -12,11 +12,12 @@ import { InboundPolistComponent } from './inbound-polist/inbound-polist.componen
 import { InboundGRPOComponent } from './inbound-grpo/inbound-grpo.component';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
 import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
+import { InboundThroughAPIComponent } from './inbound-through-api/inbound-through-api.component';
 //import { PrintingLabelModule } from '../inbound/inbound-routing.module';
 
 @NgModule({
   declarations: [InboundDetailsComponent, InboundMasterComponent, InboundPolistComponent, 
-    InboundGRPOComponent],
+    InboundGRPOComponent, InboundThroughAPIComponent],
   imports: [
     CommonModule,
     GridModule,

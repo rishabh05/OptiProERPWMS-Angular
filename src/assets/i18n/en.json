@@ -562,9 +562,15 @@
   "NoPackingInfoAvailable":"No packing info available.",
   "ReadjustPackingQty":"Please readjust your packing quantity.",
   "packNoAndTypeValidate":"Packing No. and Type can not be empty.",
-  "Inbound_through_PO": "Inbound through PO",
-  "Inbound_through_API": "Inbound through API",
+  "Inbound_through_PO": "Through PO",
+  "Inbound_through_API": "Through AP Invoice",
   "VendorCodeAPI": "Vendor Code API",
-  "Inbound_InvoiceNo": "Invoice Number",
+  "Inbound_InvoiceNo": "Invoice #",
+  "InvoiceList": "Invoice List",
+  "Inbound_FutureInvoices": "Future Invoices",
+  "InboundReceiveInvoice:": "Receive for Invoice:",
+  "Outbound_Through_SO": "Through SO",
+  "Outbound_Through_Shipment": "Through Shipment",
   "Dummy": "Dummy"
 }
+ 

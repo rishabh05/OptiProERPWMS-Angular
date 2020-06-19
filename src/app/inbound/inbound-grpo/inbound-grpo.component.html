@@ -3,7 +3,8 @@
         <div class="opti_container_inner" [perfectScrollbar]=" ">
 
             <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
-                Receive for PO: {{Ponumber}}
+            <div *ngIf='inboundFromWhere==1'> Receive for PO : {{Ponumber}} </div>
+            <div *ngIf='inboundFromWhere==2'>Receive for Invoice: {{Ponumber}} </div>
             </h3>
 
 
