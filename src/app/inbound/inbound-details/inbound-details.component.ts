@@ -588,7 +588,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
 
   onPOlookupClick() {
     this.showLoader = true;
-    this.inboundService.getPOList(false,
+    this.inboundService.getPOList(this.futurepo,
       this.VendCode, "",this.inboundFromWhere).subscribe(
         (data: any) => {
           this.showLoader = false;
