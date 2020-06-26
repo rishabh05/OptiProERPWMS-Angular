@@ -251,7 +251,7 @@ export class SigninComponent implements OnInit {
                     localStorage.setItem("CompID", this.selectedItem);
                     localStorage.setItem("whseId", this.selectedWhse);
                     localStorage.setItem("Token", this.licenseData[0].Token);
-                    localStorage.setItem("PalletizationEnabled", "True");
+                    localStorage.setItem("PalletizationEnabled", this.licenseData[0].PalletizationEnabled);
                     localStorage.setItem("isShipmentApplicable", "True");
 
                     localStorage.setItem("SelectedRole", this.selectedRole.OPTM_ROLEID);
