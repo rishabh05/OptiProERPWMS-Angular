@@ -1,6 +1,7 @@
 export class PickTaskModel {
 
     public OPTM_PICKLIST_CODE: string;
+    public OPTM_PICKLIST_ID: number;
     public OPTM_TASKID: string;
     public OPTM_WHSE: string;
     public OPTM_BIN: string;
@@ -15,11 +16,13 @@ export class PickTaskModel {
     public OPTM_RESID_ACT: string;
     public OPTM_STARTDATETIME: string;
     public PickType: number;
+    public User_Group: string;
 
-    constructor(OPTM_ShipId: string, OPTM_PickTaskId: string, OPTM_Whs: string, OPTM_Location: string, OPTM_ContBtchSer: string, OPTM_Qty: number, Container, OPTM_USER, OPTM_ISCONT, toteValue, OPTM_IS_CONT_CREATED, OPTM_STARTDATETIME, PickTypeIndex
+    constructor(intPicklistID: number, OPTM_ShipId: string, OPTM_PickTaskId: string, OPTM_Whs: string, OPTM_Location: string, OPTM_ContBtchSer: string, OPTM_Qty: number, Container, OPTM_USER, OPTM_ISCONT, toteValue, OPTM_IS_CONT_CREATED, OPTM_STARTDATETIME, PickTypeIndex, strUserGr
     ) {
         this.CompanyDBId = localStorage.getItem("CompID");
         this.OPTM_PICKLIST_CODE = OPTM_ShipId;
+        this.OPTM_PICKLIST_ID = intPicklistID;
         this.OPTM_TASKID = OPTM_PickTaskId;
         this.OPTM_WHSE = OPTM_Whs;
         this.OPTM_BIN = OPTM_Location;
@@ -33,5 +36,6 @@ export class PickTaskModel {
         this.OPTM_RESID_ACT = localStorage.getItem("UserId");
         this.OPTM_STARTDATETIME = OPTM_STARTDATETIME;
         this.PickType = PickTypeIndex;
+        this.User_Group = strUserGr;
     }
 }
