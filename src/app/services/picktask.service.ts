@@ -21,12 +21,13 @@ export class PickTaskService {
     localStorage.setItem("PickItemIndex", "");
     localStorage.setItem("TaskDetail", "");
   }
-
   GetPicklist(OPTM_PICK_TYPE): Observable<any> {
     let jObject = {
       PalletCode: JSON.stringify([{
         CompanyDBId: localStorage.getItem("CompID"),
-        OPTM_PICK_TYPE: OPTM_PICK_TYPE
+        OPTM_PICK_TYPE: OPTM_PICK_TYPE,
+        loggedinWH: localStorage.getItem("whseId"),
+        loggedinUserGR: localStorage.getItem("UserGroup")
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetPicklist", jObject, this.commonService.httpOptions);
@@ -66,14 +67,15 @@ export class PickTaskService {
    * check and scan code.
    * @param whsCode 
    */
-  GetNextPickList(OPTM_WHSECODE: string, OPTM_PICKTYPE, OPTM_USERGRP, OPTM_PICKLIST_ID) {
+  GetNextPickList(OPTM_PICKTYPE, OPTM_PICKLIST_ID,currentPickListFlg) {
     var jObject = {
       PalletCode: JSON.stringify([{
-        OPTM_WHSECODE: OPTM_WHSECODE,
-        OPTM_USERGRP: OPTM_USERGRP,
+        OPTM_WHSECODE: localStorage.getItem("whseId"),
+        OPTM_USERGRP: localStorage.getItem("UserGroup"),
         OPTM_PICKTYPE: OPTM_PICKTYPE,
         CompanyDBId: localStorage.getItem("CompID"),
-        OPTM_PICKLIST_ID: OPTM_PICKLIST_ID
+        OPTM_PICKLIST_ID: OPTM_PICKLIST_ID,
+        currentPickListFlg: currentPickListFlg
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetNextPickList", jObject, this.commonService.httpOptions);
