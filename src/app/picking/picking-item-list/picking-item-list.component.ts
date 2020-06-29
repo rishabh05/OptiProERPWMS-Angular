@@ -143,6 +143,6 @@ export class PickingItemListComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.commonservice.CancelPickListAPI(this.ShipDetail.OPTM_PICKLIST_ID, this.compId, this.translate);
+    // this.commonservice.CancelPickListAPI(this.ShipDetail.OPTM_PICKLIST_ID, this.compId, this.translate);
   }
 }
