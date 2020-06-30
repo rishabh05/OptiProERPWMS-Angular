@@ -761,6 +761,7 @@ export class OutOrderComponent implements OnInit {
           this.showLookupLoader = false;
           if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
             this.delNo = data[0].SuccessNo;
+            this.responseDocEntry =  data[0].DocEntry
             this.toastr.success('', this.translate.instant("DeleiverySuccess") + " : " + data[0].SuccessNo);
             // this.printDialog = true  
             this.showPrintConfirmDialog();
@@ -2121,10 +2122,11 @@ export class OutOrderComponent implements OnInit {
   }
 
   printOptionsClick(event) {
-    this.displayPDF(""+this.delNo, event)
+    this.displayPDF(""+this.responseDocEntry, event)
   }
 
   delNo: any = "";
+  responseDocEntry: any = "";  
   printDialog: boolean = false
   showPDF: boolean = false;
   base64String: string = "";

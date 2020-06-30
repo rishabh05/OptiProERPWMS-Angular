@@ -44,6 +44,7 @@ export class OutCutomerComponent implements OnInit {
   public shipmentId: any = ""; 
   public dockDoorCode: any = "";
   delNo: any = "";
+  responseDocEntry:any = "";
   public dockDoorFromShipment: any = "";
   public deliveryOptionType: any = '1';
   @ViewChild('scanSO') scanSO;
@@ -769,6 +770,7 @@ export class OutCutomerComponent implements OnInit {
         data => {
           if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
             this.delNo = data[0].SuccessNo
+           this.responseDocEntry =  data[0].DocEntry
             this.showLookupLoader = false;
             this.trackingId = "";
             this.CustRefNo = "";
@@ -1631,7 +1633,7 @@ export class OutCutomerComponent implements OnInit {
   }
 
   printOptionsClick(event) {
-    this.displayPDF(""+this.delNo, event)
+    this.displayPDF(""+this.responseDocEntry, event)
   }
 
   closePDF() {
