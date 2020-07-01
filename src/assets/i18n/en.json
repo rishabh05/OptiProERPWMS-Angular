@@ -565,7 +565,7 @@
   "ReadjustPackingQty":"Please readjust your packing quantity.",
   "packNoAndTypeValidate":"Packing No. and Type can not be empty.",
   "Inbound_through_PO": "PO Receipt",
-  "Inbound_through_API": "Through AP Invoice",
+  "Inbound_through_API": "AP Invoice",
   "VendorCodeAPI": "Vendor Code API",
   "Inbound_InvoiceNo": "Invoice #", 
   "InvoiceList": "Invoice List",
