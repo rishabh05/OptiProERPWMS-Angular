@@ -452,6 +452,8 @@
   "PT_Enter_Location":"Enter Location",
   "PT_Enter_ContBtchSer":"Enter Cont./Batch/Serial No.",
   "PT_Scan_To_Location":"Scan To Location",
+  "PL_Scan_Drop_Location":"Scan Drop Location",
+  "PL_Enter_Drop_Location":"Enter Drop Location",
   "PT_ScantoLotNumber":"Scan to Lot Number",
   "PT_EnterQty":"Enter Quantity",
   "PT_Location_not_match":"Location doesn't match.",

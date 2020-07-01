@@ -35,7 +35,7 @@
                                 <br>
                                 <span class="po-item-name">{{Location}}: {{locationValue}}</span>
                                 <br>
-                                <span class="po-item-name">{{PickDropBinLabel}}: {{PlannedPickDropBin}}</span>
+                                <span class="po-item-name">{{PickListDropBinLabel}}: {{PickListDropBin}}</span>
                             </span>
                             <div class="form-group row" *ngIf="addItemtoCont">
                                 <label for="inputPassword" class="col-sm-4 col-form-label">{{ContainerToteTitle}}</label>
@@ -71,6 +71,10 @@
                                     <input #focusOnScanCont type="text" placeholder="{{ContainerCodePlaceholderValue}}" (change)="ConfirmContainerOrTote()" name="ScannedContOrTote"
                                         [(ngModel)]="ScannedContOrTote" [disabled]=pickedAllDty>
                                 </div>
+                                <div *ngIf="currentStep == 11" class="item-input-section">
+                                    <input #focusOnDropLocation type="text" placeholder="{{'PL_Enter_Drop_Location'|translate}}" (change)="ConfirmDropLocation()" name="ScannedDropBin"
+                                        [(ngModel)]="ScannedDropBin" [disabled]=pickedAllDty>
+                                </div>
                                 <!--/ step inputs -->
 
                                 <!-- step input option icons -->
@@ -102,6 +106,7 @@
                                 <i *ngIf="currentStep > 1" (click)="prevStep()" class="k-icon k-i-arrow-chevron-left" aria-hidden="true"></i>
                                 <i *ngIf="currentStep != LastStep" (click)="nextStep()" class="k-icon k-i-arrow-chevron-right" aria-hidden="true"></i>
                                 <i *ngIf="currentStep == LastStep && totalpickQty == openQty" (click)="onSaveClick('/po-order-details')" class="k-icon k-i-save" aria-hidden="true"></i>
+                                <i *ngIf="currentStep == CONFIRM_DROP_BIN_STEP" (click)="onPickDropConfirmation()" class="k-icon k-i-save" aria-hidden="true"></i>
                             </div>
                             <!--/ step navigation -->
 
