@@ -142,6 +142,8 @@ export class PickingItemDetailsComponent implements OnInit {
     
     if (this.PickListClosureSteps == undefined || this.PickListClosureSteps.length == 0) {
       this.toastr.error("Srini", 'Picklist closure steps not defined. Cannot continue.')
+      this.onBackClick();
+      return;
     }
     if (this.CurrentTaskSteps != undefined && this.CurrentTaskSteps.length > 0) {
       this.currentStep = this.getStepNo(this.CurrentTaskSteps[0].OPTM_STEP_CODE);
@@ -212,8 +214,8 @@ export class PickingItemDetailsComponent implements OnInit {
     //Set Picklist Status after fetching from database
     this.PickListStatus = data.TASK_COUNTS_BY_STATUS[0].PICKLIST_STATUS
     //Srini 29-Jun-2020. Set the Task Counts from Database after every Task submission
-    this.totalPickTaskCount = data.TASK_COUNTS_BY_STATUS[0].Total_Tasks_In_GR
-    this.completedTaskCount = data.TASK_COUNTS_BY_STATUS[0].Picked_Tasks_In_GR
+    this.totalPickTaskCount = data.TASK_COUNTS_BY_STATUS[0].TOTAL_TASKS_IN_GR
+    this.completedTaskCount = data.TASK_COUNTS_BY_STATUS[0].PICKED_TASKS_IN_GR
     this.PickDropBin = data.OPTM_WHSTASKLIST[0].OPTM_TARGET_BIN
     this.PartPickDropBin = data.OPTM_WHSTASKLIST[0].OPTM_PART_PICK_DROP_BIN
     if (this.PartPickDropBin == '') {
