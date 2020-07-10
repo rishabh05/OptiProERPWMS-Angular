@@ -798,7 +798,6 @@ export class PickingItemDetailsComponent implements OnInit {
           if (data.Table.length > 0) {
             this.PT_Enter_ContBtchSer = data.Table[0].LOTNO;
             this.BatchSerDetail = data.Table[0];
-            this.addBatchSerials();
             if (this.OPTM_Tracking == 'S' && this.PT_Enter_ContBtchSer != "") {
               this.BtchSerDtlData.push({
                 OPTM_TASKID: this.PickTaskList[this.index].OPTM_TASKID,
@@ -811,6 +810,7 @@ export class PickingItemDetailsComponent implements OnInit {
                 OPTM_STARTDATETIME: this.OPTM_STARTDATETIME.toLocaleDateString()
               });
             }
+            this.addBatchSerials();            
           } else {
             this.PT_Enter_ContBtchSer = "";
             this.toastr.error('', this.translate.instant("ProdReceipt_InvalidBatchSerial"));
@@ -959,8 +959,8 @@ export class PickingItemDetailsComponent implements OnInit {
 
     if (Number(this.totalpickQty) != Number(this.openQty)) {
       this.clearStepsFields();
-      this.clearScanningFields();
       this.nextSteptoIterate();
+      this.clearScanningFields();
       return;
     } else {
       if (this.stepIndex == this.CurrentTaskSteps.length - 1) {
@@ -1038,7 +1038,7 @@ export class PickingItemDetailsComponent implements OnInit {
         case this.DROP_BIN_STEP:
           this.currentStepText = this.translate.instant("PL_Scan_Drop_Location");
         case this.CONFIRM_DROP_BIN_STEP:
-        this.toastr.error('Srini', 'Confirm Pick Drop Location');
+        this.toastr.success('Srini', 'Confirm Pick Drop Location');
       }
     } else if (this.countOfNowPickedTasks > 0){
       //User has picked at least on one task after moving to this Picklist.
@@ -1048,7 +1048,7 @@ export class PickingItemDetailsComponent implements OnInit {
       this.PickListDropBin = this.PartPickDropBin;
       this.currentStep = this.CONFIRM_DROP_BIN_STEP;
       //Show user confirm drop bin location
-      this.toastr.error('Srini', 'Confirm Pick Drop Location');
+      this.toastr.success('Srini', 'Confirm Pick Drop Location');
     }        
   }
 
@@ -1383,12 +1383,25 @@ export class PickingItemDetailsComponent implements OnInit {
               this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
-          if (data.OPEN_TASKS[0].Open_Tasks > 0) {
-            this.OpenTaskCount = data.OPEN_TASKS[0].Open_Tasks;   
+          if (data.OPEN_TASKS[0].OPEN_TASKS > 0) {
+            this.OpenTaskCount = data.OPEN_TASKS[0].OPEN_TASKS;   
             if (this.OpenTaskCount = 0) {
               this.toastr.error('Srini', 'No open tasks on Picklist. Cannot process');
               return;
-            }       
+            }else{
+              if (this.OpenTaskCount = 1) {
+                //This is the last task open in the Picklist and is picked. 
+                //Drop picklist contents to Target location
+                this.PickListDropBin = this.PickDropBin;
+              } else if (this.OpenTaskCount > 1) {
+                //This is not the last task open in the Picklist. Some others may have to pick more tasks.
+                //But all picks in this user list are done from the picklist.
+                //Drop the Pick Contents in the Transfer location so next group can pick it up
+                this.PickListDropBin = this.TransferDropBin;
+              }       
+              this.intStepSeq = 0;
+              this.ProcessPicklistNextClosureStep();              
+            }         
           }
         } else {
           // this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
