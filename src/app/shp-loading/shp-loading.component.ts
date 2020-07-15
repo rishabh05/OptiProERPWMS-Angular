@@ -364,7 +364,7 @@ export class ShpLoadingComponent implements OnInit {
       OPTM_PARENTCODE: "",
       OPTM_GROUP_CODE: 0,
       OPTM_CREATEMODE: "3",
-      OPTM_PERPOSE: "Y",
+      OPTM_PURPOSE: "Y",
       OPTM_FUNCTION: "Shipping",
       OPTM_OBJECT: "Container",
       OPTM_WONUMBER: 0,

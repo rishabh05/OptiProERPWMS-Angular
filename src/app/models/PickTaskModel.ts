@@ -17,8 +17,9 @@ export class PickTaskModel {
     public OPTM_STARTDATETIME: string;
     public PickType: number;
     public User_Group: string;
+    public Pick_Drop_Bin: string;
 
-    constructor(intPicklistID: number, OPTM_ShipId: string, OPTM_PickTaskId: string, OPTM_Whs: string, OPTM_Location: string, OPTM_ContBtchSer: string, OPTM_Qty: number, Container, OPTM_USER, OPTM_ISCONT, toteValue, OPTM_IS_CONT_CREATED, OPTM_STARTDATETIME, PickTypeIndex, strUserGr
+    constructor(intPicklistID: number, OPTM_ShipId: string, OPTM_PickTaskId: string, OPTM_Whs: string, OPTM_Location: string, OPTM_ContBtchSer: string, OPTM_Qty: number, Container, OPTM_USER, OPTM_ISCONT, toteValue, OPTM_IS_CONT_CREATED, OPTM_STARTDATETIME, PickTypeIndex, strUserGr, Pick_Drop_Bin
     ) {
         this.CompanyDBId = localStorage.getItem("CompID");
         this.OPTM_PICKLIST_CODE = OPTM_ShipId;
@@ -37,5 +38,6 @@ export class PickTaskModel {
         this.OPTM_STARTDATETIME = OPTM_STARTDATETIME;
         this.PickType = PickTypeIndex;
         this.User_Group = strUserGr;
+        this.Pick_Drop_Bin = Pick_Drop_Bin;
     }
 }

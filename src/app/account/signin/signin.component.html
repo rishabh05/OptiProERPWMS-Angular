@@ -131,8 +131,8 @@
                         <div class="col-auto">
                         <div class="text-right">
                             <button type="submit" id=connectbtn class="k-button k-primary opti_fullwidth mt-2" *ngIf="!isCompleteLoginVisible" (click)="login()">{{'Login_Connect'|translate}}</button>
-                            <button type="button" id=connectbtn *ngIf="isCompleteLoginVisible" class="k-button k-primary opti_fullwidth" (click)="onResetClick(signInForm)">{{'Login_Reset'|translate}}</button>
-                            <button type="submit" id=connectbtn *ngIf="isCompleteLoginVisible" class="k-button k-primary opti_fullwidth mt-3" (click)="login()">{{'Login_Login'|translate}}</button>                            
+                            <button type="button" id=connectbtn *ngIf="isCompleteLoginVisible" class="k-button k-primary opti_fullwidth" (click)="login()">{{'Login_Login'|translate}}</button>
+                            <button type="submit" id=connectbtn *ngIf="isCompleteLoginVisible" class="k-button k-primary opti_fullwidth mt-3" (click)="onResetClick(signInForm)">{{'Login_Reset'|translate}}</button>                            
                         </div>
                         </div>
                     </form>
