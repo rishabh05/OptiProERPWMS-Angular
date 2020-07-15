@@ -47,7 +47,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div> 
+                        </div>
                         <div class="item-sec">
                             <div class="item-steps">
                                 <!-- step inputs -->
@@ -64,16 +64,16 @@
                                         [(ngModel)]="PT_Enter_ContBtchSer" [disabled]=pickedAllDty trim>
                                 </div>
                                 <div *ngIf="currentStep == 4" class="item-input-section">
-                                    <input #focusOnQty type="number" placeholder="{{'PT_EnterQty'|translate}}" min=0 (change)="onQtyChange()" name="pickQty" [(ngModel)]="pickQty"
-                                        [disabled]=pickedAllDty>
+                                    <input #focusOnQty type="number" placeholder="{{'PT_EnterQty'|translate}}" min=0 (change)="onQtyChange()" name="pickQty"
+                                        [(ngModel)]="pickQty" [disabled]=pickedAllDty>
                                 </div>
                                 <div *ngIf="currentStep == 5" class="item-input-section">
                                     <input #focusOnScanCont type="text" placeholder="{{ContainerCodePlaceholderValue}}" (change)="ConfirmContainerOrTote()" name="ScannedContOrTote"
                                         [(ngModel)]="ScannedContOrTote" [disabled]=pickedAllDty trim="blur">
                                 </div>
                                 <div *ngIf="currentStep == 11" class="item-input-section">
-                                    <input #focusOnDropLocation type="text" placeholder="{{'PL_Enter_Drop_Location'|translate}}" (change)="ConfirmDropLocation()" name="ScannedDropBin"
-                                        [(ngModel)]="ScannedDropBin" [disabled]=pickedAllDty>
+                                    <input #focusOnDropLocation type="text" placeholder="{{'PL_Enter_Drop_Location'|translate}}" (change)="ConfirmDropLocation()"
+                                        name="ScannedDropBin" [(ngModel)]="ScannedDropBin" [disabled]=pickedAllDty>
                                 </div>
                                 <!--/ step inputs -->
 
@@ -105,8 +105,9 @@
                             <div>
                                 <i *ngIf="currentStep > 1" (click)="prevStep()" class="k-icon k-i-arrow-chevron-left" aria-hidden="true"></i>
                                 <i *ngIf="currentStep != LastStep" (click)="nextStep()" class="k-icon k-i-arrow-chevron-right" aria-hidden="true"></i>
-                                <i *ngIf="currentStep == LastStep && totalpickQty == openQty" (click)="onSaveClick('/po-order-details')" class="k-icon k-i-save" aria-hidden="true"></i>
-                                <i *ngIf="currentStep == CONFIRM_DROP_BIN_STEP" (click)="onPickDropConfirmation()" class="k-icon k-i-save" aria-hidden="true"></i>
+                                <i *ngIf="currentStep == LastStep && totalpickQty == openQty" (click)="onSaveClick('/po-order-details')" class="k-icon k-i-save"
+                                    aria-hidden="true"></i>
+                                <!-- <i *ngIf="currentStep == CONFIRM_DROP_BIN_STEP" (click)="onPickDropConfirmation()" class="k-icon k-i-save" aria-hidden="true"></i> -->
                             </div>
                             <!--/ step navigation -->
 
@@ -142,6 +143,9 @@
 
                 <button class="btn btn-success k-button btn-sm btn-icon-with-text" type="button" (click)="skipPickTask()">
                     <span role="presentation"></span>Next Pick Task</button>
+
+                <button class="btn btn-success k-button btn-sm btn-icon-with-text" type="button" (click)="onPickDropConfirmation()" [disabled]="currentStep != 12">
+                    <span role="presentation"></span>Submit Picklist</button>
             </div>
         </div>
     </form>
