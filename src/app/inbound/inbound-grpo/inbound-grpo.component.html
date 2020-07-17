@@ -191,7 +191,7 @@
                                 <input type="number" #scanQty name="qty"
                                      placeholder="{{'Quantity'|translate}}" 
                                     [ngModel]="qty | numberFormat" 
-                                    (ngModelChange)="qty=$event"
+                                    (blur) = onQtyBlur(scanQty) 
                                     min="0"
                                     class="text-right form-control form-control-sm">
                                 <div class="ml-1 d-flex">

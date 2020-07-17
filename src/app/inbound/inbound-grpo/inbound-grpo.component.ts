@@ -142,8 +142,16 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     }, 100);
     // this.itemCodeInput.nativeElement.focus();
   }
+  formatVal=''
 
+  onQtyBlur(scanQty){
+    this.qty = scanQty.value
+  }
   ngOnInit() {
+
+    var precision = localStorage.getItem("DecimalPrecision");
+    this.formatVal = 'n'+precision;
+    console.log("decimal precision"+this.formatVal);
 
     this.inboundFromWhere = localStorage.getItem("inboundOptionType");
     if(this.inboundFromWhere==1){
