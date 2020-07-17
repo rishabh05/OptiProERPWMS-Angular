@@ -44,6 +44,7 @@ export class OutCutomerComponent implements OnInit {
   public shipmentId: any = ""; 
   public dockDoorCode: any = "";
   delNo: any = "";
+  invoiceStatus: any = ""
   responseDocEntry:any = "";
   public dockDoorFromShipment: any = "";
   public deliveryOptionType: any = '1';
@@ -611,7 +612,7 @@ export class OutCutomerComponent implements OnInit {
     this.showLookup = false;
     this.shipmentId = '';
   }
- 
+  isDeliveryContainerPacking:boolean = false;
   prepareDeleiveryCollection() {
     // dock door confirmation when delivery through shipment.
     if(this.deliveryOptionType==2){
@@ -765,18 +766,37 @@ export class OutCutomerComponent implements OnInit {
         deliveryToken.UDF = [];
         deliveryToken.PackingData = this.getPackingDataFromLocalStorage()
       }
+      if(deliveryToken.PackingData.length>0){
+        this.isDeliveryContainerPacking = true;
+      }
       this.showLookupLoader = true;
       this.outboundservice.addDeleivery(deliveryToken).subscribe(
         data => {
           if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
             this.delNo = data[0].SuccessNo
            this.responseDocEntry =  data[0].DocEntry
+           this.invoiceStatus = data[0].InvoiceStatus;
             this.showLookupLoader = false;
             this.trackingId = "";
             this.CustRefNo = "";
             this.toastr.success('', this.translate.instant("DeleiverySuccess") + " : " + data[0].SuccessNo);
              this.clearOutbound();
-            this.showPrintConfirmDialog();
+            
+
+             if(this.invoiceStatus=="N" ||  this.invoiceStatus=="n" ){
+             // this.toastr.error('', this.translate.instant("ARINvoiceNotCreated") + " : " + data[0].SuccessNo);
+            }else{
+              if(this.invoiceStatus=="Y" ||  this.invoiceStatus=="y" ){
+              //  this.toastr.success('', this.translate.instant("ARINvoiceSucess") + " : " + data[0].SuccessNo);
+              }
+            }
+            //this code will be in 186 machine.
+            if(this.isDeliveryContainerPacking){ 
+              this.showPrintConfirmDialog();
+            }
+            // for mormal deployment we will show report dialog with otions need to uncomment in html.
+            //this.showPrintConfirmDialog();
+            
           } else if (data[0].ErrorMsg == "7001") {
             this.showLookupLoader = false;
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,

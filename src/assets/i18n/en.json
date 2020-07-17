@@ -573,6 +573,8 @@
   "InboundReceiveInvoice:": "Receive for Invoice:",
   "Outbound_Through_SO": "SO Delivery",
   "Outbound_Through_Shipment": "Shipment Delivery",
+  "ARINvoiceNotCreated": "AR Invoice for this delivery is not created due to missing tax code.",
+  "ARINvoiceSucess": "AR Invoice for this delivery has been  created successfully.",
   "Dummy": "Dummy"
 }
  
