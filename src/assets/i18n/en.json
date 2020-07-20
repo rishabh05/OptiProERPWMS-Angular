@@ -580,6 +580,8 @@
   "ConfirmPickDropLocation": "Confirm Pick Drop Location",
   "No_open_tasks_Picklist": "No open tasks on Picklist. Cannot process",
 
+  "ARINvoiceNotCreated": "AR Invoice for this delivery is not created due to missing tax code.",
+  "ARINvoiceSucess": "AR Invoice for this delivery has been  created successfully.",
   "Dummy": "Dummy"
 }
  

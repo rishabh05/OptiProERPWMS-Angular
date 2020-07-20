@@ -12,7 +12,7 @@ export class NumberFormatPipe implements PipeTransform {
     var decSeperator = localStorage.getItem("DecimalSeparator");
     var thSeperator = localStorage.getItem("ThousandSeparator");
     var dateFormat = localStorage.getItem("DATEFORMAT");
-    if(value == null && value == undefined && value.toString() ==""){
+    if(value == null && value == undefined){
       return value;
     }
     var arr = value.toString().trim().split(decSeperator);
