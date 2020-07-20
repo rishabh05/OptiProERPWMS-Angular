@@ -723,11 +723,13 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     // if (this.ScanInputs == null || this.ScanInputs == undefined || this.ScanInputs == "") {
     //   return;
     // }
-    if (!Number.isInteger(this.qty)) {
-      this.toastr.error('', this.translate.instant("DecimalQuantity"));
-      this.scanQty.nativeElement.focus();
-      return;
-    }
+    if (this.openPOLineModel[0].TRACKING == "S") {
+      if (!Number.isInteger(this.qty)) {
+        this.toastr.error('', this.translate.instant("DecimalQuantity"));
+        this.scanQty.nativeElement.focus();
+        return;
+      }
+    } 
     if (this.RecvbBinvalue == "" || this.RecvbBinvalue == undefined) {
       this.toastr.error('', this.translate.instant("INVALIDBIN"));
       return;
@@ -838,11 +840,13 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       this.toastr.error('', this.translate.instant("Inbound_EnterQuantityErrMsg"));
       return;
     }
+    if (this.openPOLineModel[0].TRACKING == "S") {
     if (!Number.isInteger(this.qty)) {
       this.toastr.error('', this.translate.instant("DecimalQuantity"));
       this.scanQty.nativeElement.focus();
       return;
     }
+  }
     if (this.RecvbBinvalue == "" || this.RecvbBinvalue == undefined) {
       this.toastr.error('', this.translate.instant("INVALIDBIN"));
       return;
