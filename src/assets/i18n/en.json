@@ -573,6 +573,13 @@
   "InboundReceiveInvoice:": "Receive for Invoice:",
   "Outbound_Through_SO": "SO Delivery",
   "Outbound_Through_Shipment": "Shipment Delivery",
+
+  "SubmitPicklist": "Submit Picklist",
+  "NextPickTask": "Next Pick Task",
+  "NextPick": "Next Pick",
+  "ConfirmPickDropLocation": "Confirm Pick Drop Location",
+  "No_open_tasks_Picklist": "No open tasks on Picklist. Cannot process",
+
   "Dummy": "Dummy"
 }
  

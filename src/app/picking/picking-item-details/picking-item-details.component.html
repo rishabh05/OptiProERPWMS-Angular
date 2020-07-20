@@ -43,7 +43,7 @@
                                     <div class="input-group input-group-sm">
                                         <input #scanPTshipmentId type="text" class="form-control form-control-sm" id="CreatedContOrTote" name="CreatedContOrTote"
                                             [(ngModel)]="CreatedContOrTote" placeholder="{{ContainerTotePlaceHolder}}" (blur)="CreateContainerOrTote()"
-                                            [disabled]=containercreated>
+                                            [disabled]=containercreated trim="blur">
                                     </div>
                                 </div>
                             </div>
@@ -52,7 +52,7 @@
                             <div class="item-steps">
                                 <!-- step inputs -->
                                 <div *ngIf="currentStep == 1" class="item-input-section">
-                                    <input #focusOnLocation type="text" placeholder="{{'PT_Enter_Location'|translate}}" (change)="onLocationChange()" name="PT_Enter_Location"
+                                    <input #focusOnLocation type="text" placeholder="{{'PT_Enter_Location'|translate}}" (blur)="onLocationChange()" name="PT_Enter_Location"
                                         [(ngModel)]="PT_Enter_Location" [disabled]=pickedAllDty trim="blur">
                                 </div>
                                 <div *ngIf="currentStep == 2" class="item-input-section">
@@ -72,7 +72,7 @@
                                         [(ngModel)]="ScannedContOrTote" [disabled]=pickedAllDty trim="blur">
                                 </div>
                                 <div *ngIf="currentStep == 11" class="item-input-section">
-                                    <input #focusOnDropLocation type="text" placeholder="{{'PL_Enter_Drop_Location'|translate}}" (change)="ConfirmDropLocation()"
+                                    <input #focusOnDropLocation type="text" placeholder="{{'PL_Enter_Drop_Location'|translate}}" (blur)="ConfirmDropLocation()"
                                         name="ScannedDropBin" [(ngModel)]="ScannedDropBin" [disabled]=pickedAllDty>
                                 </div>
                                 <!--/ step inputs -->
@@ -103,8 +103,8 @@
                             <br>
                             <!-- step navigation Arrow placement -->
                             <div>
-                                <i *ngIf="currentStep > 1" (click)="prevStep()" class="k-icon k-i-arrow-chevron-left" aria-hidden="true"></i>
-                                <i *ngIf="currentStep != LastStep" (click)="nextStep()" class="k-icon k-i-arrow-chevron-right" aria-hidden="true"></i>
+                                <i *ngIf="currentStep > 1 && currentStep < DROP_BIN_STEP" (click)="prevStep()" class="k-icon k-i-arrow-chevron-left" aria-hidden="true"></i>
+                                <i *ngIf="currentStep != LastStep  && currentStep < DROP_BIN_STEP" (click)="nextStep()" class="k-icon k-i-arrow-chevron-right" aria-hidden="true"></i>
                                 <i *ngIf="currentStep == LastStep && totalpickQty == openQty" (click)="onSaveClick('/po-order-details')" class="k-icon k-i-save"
                                     aria-hidden="true"></i>
                                 <!-- <i *ngIf="currentStep == CONFIRM_DROP_BIN_STEP" (click)="onPickDropConfirmation()" class="k-icon k-i-save" aria-hidden="true"></i> -->
@@ -127,25 +127,21 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
         <div class="fix-footer-btnBar">
             <div class="col-sm-12 col-12">
                 <button class="btn btn-outline-secondary btn-sm btn-transparent btn-icon mr-1" type="button" (click)="onBackClick()">
                     <i class="opti-icon-arrow-back"></i>
                 </button>
-                <!-- <button class="btn btn-success k-button btn-sm btn-icon-with-text" type="button" (click)="onSubmitClick()">
-                    <span class="k-icon k-i-check" role="presentation"></span>{{'Submit'|translate}}</button> -->
 
                 <button class="btn btn-success k-button btn-sm btn-icon-with-text" type="button" (click)="getNextPick()">
-                    <span role="presentation"></span>Next Pick</button>
+                    <span role="presentation"></span>{{'NextPick'|translate}}</button>
 
                 <button class="btn btn-success k-button btn-sm btn-icon-with-text" type="button" (click)="skipPickTask()">
-                    <span role="presentation"></span>Next Pick Task</button>
+                    <span role="presentation"></span>{{'NextPickTask'|translate}}</button>
 
                 <button class="btn btn-success k-button btn-sm btn-icon-with-text" type="button" (click)="onPickDropConfirmation()" [disabled]="currentStep != 12">
-                    <span role="presentation"></span>Submit Picklist</button>
+                    <span role="presentation"></span>{{'SubmitPicklist'|translate}}</button>
             </div>
         </div>
     </form>
