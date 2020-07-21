@@ -261,19 +261,21 @@ export class ProdOrderlistComponent implements OnInit {
 
       for (let i = 0; i < this.soItemsDetail.length; i++) {
         const soelement = this.soItemsDetail[i];
-        let totalPickQty: number = 0;
+        var totalPickQty: number = 0;
 
-        if (this.outbound && this.outbound.TempMeterials && this.outbound.TempMeterials.length > 0) {
+        if (this.outbound && this.outbound.TempMeterials && 
+          this.outbound.TempMeterials.length > 0) {
 
           for (let j = 0; j < this.outbound.TempMeterials.length; j++) {
 
             const element = this.outbound.TempMeterials[j];
             //console.log("My Element", element);
-            if (soelement.ROWNUM === element.Item.ROWNUM && soelement.ITEMCODE === element.Item.ITEMCODE && this.outbound.OrderData.DOCNUM === element.Order.DOCNUM) {
-              totalPickQty = totalPickQty + parseInt(element.Meterial.MeterialPickQty);
+            if (soelement.ITEMCODE === element.Item.ITEMCODE && soelement.DOCENTRY === element.Item.DOCENTRY) {
+              var no: any= Number(element.Meterial.MeterialPickQty);
+              totalPickQty = totalPickQty + no; 
             }
           }
-        }
+        } 
 
         // Total Qty of Item
         soelement.RPTQTY = totalPickQty;

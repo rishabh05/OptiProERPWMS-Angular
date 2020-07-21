@@ -717,14 +717,15 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     }
 
     if (this.qty == 0 || this.qty == undefined) {
-      this.toastr.error('', this.translate.instant("Inbound_EnterQuantityErrMsg"));
+      //this.toastr.error('', this.translate.instant("Inbound_EnterQuantityErrMsg"));
       return;
     }
     // if (this.ScanInputs == null || this.ScanInputs == undefined || this.ScanInputs == "") {
     //   return;
     // }
-    if (this.openPOLineModel[0].TRACKING == "S") {
-      if (!Number.isInteger(this.qty)) {
+    if (this.openPOLineModel[0].TRACKING == "S") { 
+      var numQty = Number(this.qty)
+      if (numQty%1!=0) {
         this.toastr.error('', this.translate.instant("DecimalQuantity"));
         this.scanQty.nativeElement.focus();
         return;
