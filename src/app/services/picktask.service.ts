@@ -52,6 +52,7 @@ export class PickTaskService {
         ITEMCODE: ITEMCODE,
         LOTNO: LOTNO,
         OPTM_SRC_BIN: OPTM_SRC_BIN,
+        OPTM_WHSECODE: localStorage.getItem("whseId"),
         OPTM_CREATEDBY: localStorage.getItem("UserGroup")
       }])
     };
@@ -137,5 +138,15 @@ export class PickTaskService {
     };
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetCountOfOpenTasksInPickList", jObject, this.commonService.httpOptions);
   }  
+
+  getServerDate(): Observable<any> {
+    let jObject = {
+      PalletCode: JSON.stringify([{
+        CompanyDBId: localStorage.getItem("CompID"),
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/getServerDate", jObject, this.commonService.httpOptions);
+  }
+  
 }
 
