@@ -66,6 +66,7 @@ export class OutProdissueComponent implements OnInit {
   public pageSize: number = Commonservice.pageSize;
   public pageTitle: any = "";
   showOtherLookup: boolean = false;
+  formatVal=''
   constructor(private ourboundService: OutboundService, private router: Router,
     private toastr: ToastrService, private translate: TranslateService, private inventoryTransferService: InventoryTransferService,
     private commonservice: Commonservice, private productionService: ProductionService) {
@@ -79,13 +80,15 @@ export class OutProdissueComponent implements OnInit {
   toWhse: string = "";
   showSaveButton: boolean = false;
   @ViewChild('scanToBin') scanToBin;
-  @ViewChild('scanBatchSerial') scanBatchSerial;
+  @ViewChild('scanBatchSerial') scanBatchSerial; 
 
   SelectedPackingNo: any;
   docEntry: any;
-  fromShipment: boolean = false;
+  fromShipment: boolean = false; 
   ngOnInit() {
-
+    var precision = localStorage.getItem("DecimalPrecision");
+    this.formatVal = 'n'+precision;
+    console.log("decimal precision"+this.formatVal);
     if (localStorage.getItem(CommonConstants.FROM_DTS) == "true") {
       this.fromShipment = true;
     }

@@ -138,5 +138,15 @@ export class PickTaskService {
     };
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetCountOfOpenTasksInPickList", jObject, this.commonService.httpOptions);
   }  
+
+  getServerDate(): Observable<any> {
+    let jObject = {
+      PalletCode: JSON.stringify([{
+        CompanyDBId: localStorage.getItem("CompID"),
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/getServerDate", jObject, this.commonService.httpOptions);
+  }
+  
 }
 

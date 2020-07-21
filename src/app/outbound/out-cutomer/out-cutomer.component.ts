@@ -1201,6 +1201,7 @@ export class OutCutomerComponent implements OnInit {
               this.dockDoorCode = resp.ItemHeader[0].OPTM_DOCKDOORID;
               this.dockDoorFromShipment = resp.ItemHeader[0].OPTM_DOCKDOORID;
               this.parseAndGenerateDeliveryDataFromShipment(resp);
+              this.getShipmentDataItemDetails();
           }else{
             this.shipmentId = "";
             this.toastr.error('', this.translate.instant("ShipmentNotAvailable"));
@@ -1443,11 +1444,11 @@ export class OutCutomerComponent implements OnInit {
    ContainerItems:any =[];
    ContainerBatchSerial:any =[];
    ShipmentInfoData:any;
-  public getShipmentDataItemDetails() {
+  public getShipmentDataItemDetails(showLookup:any = true) {
     if(this.shipmentId == undefined || this.shipmentId == null ||
       this.shipmentId== ""){
          return;
-      }
+    }
    var ContainerBtchSer:any =[];
     this.showLookup = false;
     this.showLookupLoader = true;
@@ -1461,31 +1462,22 @@ export class OutCutomerComponent implements OnInit {
             this.showLookupLoader = false;
             return;
           }
-          this.showShipmentInfo = true;
+          if(showLookup){
+            this.showShipmentInfo = true;
+          }else{
+            this.showShipmentInfo = false;
+          }
+          
            this.ShipmentItems = resp.ShipmentItems;
            this.ShipmentBtchSer= resp.ShipmentBtchSer;
            this.ContainerItems= resp.ContainerItems;
            this.ContainerHeader= resp.ContainerHeader;
            this.ContainerBatchSerial= resp.ContainerBtchSer;
-          // this.lookupfor = "ShipmentList";
-          // this.showLookup = true;
           for(let i=0;i<this.ShipmentItems.length; i++){
             this.ShipmentItems[i]["ShipmentItemBatchSerial"] = []
           }
-          // for(let j=0;j<this.ShipmentItems.length; j++){
-          //   for(let k=0;k<this.ShipmentItems[j].ShipmentItemBatchSerial.length; k++){
-          //   this.ShipmentItems[j].ShipmentItemBatchSerial[j]["batchSerialLines"] = []
-          //   }
-          // }
- 
-          // for(let i=0;i<this.ContainerItems.length; i++){
-          //   this.ContainerItems[i]["ContainerItemsData"] = []
-          // }
-
           //abhi container ki array use nahi kari hai..
           this.ShipmentItems = this.setShipmentItemsBatchSerials(this.ShipmentItems,this.ShipmentBtchSer);
-         // this.ShipmentItems = this.setShipmentInnerItemsBatchSerials(this.ShipmentItems,this.ShipmentBtchSer);
-
           // set Container Data
            for(let i=0;i<this.ContainerItems.length; i++){
              this.ContainerItems[i]["ContainerItemsBatchSerial"] = []
@@ -1493,8 +1485,6 @@ export class OutCutomerComponent implements OnInit {
           for(let i=0;i<this.ContainerHeader.length; i++){
             this.ContainerHeader[i]["ContainerItems"] = []
           }
-          
-
           this.ContainerHeader = this.setContainerItemsToHeader(this.ContainerHeader,this.ContainerItems);
           this.ContainerHeader = this.setContainerItemBatchSerials(this.ContainerHeader,this.ContainerBatchSerial);
          if(this.useContainer){
@@ -1503,14 +1493,10 @@ export class OutCutomerComponent implements OnInit {
           this.ShipmentInfoData = this.ShipmentItems;
          }
           
-          //this.useContainer = true;
-          //ContainerItemsBatchSerial
         } else {
           this.toastr.error('', this.translate.instant("ShipmentNotAvailable"));
-         // this.orderNumber = "";
-         // this.scanShipmentId.nativeElement.focus()
         }
-  
+        this.prepareContainerPackingData(this.ContainerHeader,this.ContainerItems);
       },
       error => {
         this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
@@ -1518,6 +1504,36 @@ export class OutCutomerComponent implements OnInit {
       }
     );
   }
+
+  //packing data for container.
+  prepareContainerPackingData(containerHeader:any,containerItems: any){
+    var packingCollectionItems = this.outbound.packingCollection;
+    var tempPackingArray = [];
+    var num =0;
+    for(let i=0; i<containerHeader.length;i++){
+     
+      for(let j=0; j<containerItems.length;j++){
+        if(containerHeader[i].OPTM_CONTCODE == containerItems[j].OPTM_CONTCODE){
+          tempPackingArray.push({
+            CARDCODE:this.customerCode,
+            DocEntry:'',
+            ItemCode:'',
+            ItemTracking:'',
+            LineNum:'',
+            PkgNo:num+1,
+            PkgType:containerItems[j].OPTM_CONTTYPE,
+            Quantity:containerItems[j].OPTM_QUANTITY
+          })
+        }
+      }
+    }
+     //lsOutbound
+    let outboundData = localStorage.getItem(CommonConstants.OutboundData);
+    if (outboundData != undefined && outboundData != '') {
+    this.outbound = JSON.parse(outboundData);
+    this.outbound.packingCollection = tempPackingArray
+    }
+  } 
 
   setShipmentInnerItemsBatchSerials(ShipmentItems:any,ShipmentBtchSer:any):any{
     for(let i =0; i<ShipmentItems.length;i++){

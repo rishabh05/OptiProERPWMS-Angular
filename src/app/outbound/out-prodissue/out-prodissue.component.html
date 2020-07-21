@@ -255,7 +255,7 @@
                                         <dd *ngIf="OrderType!='S'">
                                             <kendo-numerictextbox #txtMet name="data"
                                                 class="form-control form-control-sm text-right!important"
-                                                [format]="'n3'" [(value)]="dataItem.MeterialPickQty" [step]="step"
+                                                [format]="formatVal" [(value)]="dataItem.MeterialPickQty" [step]="step"
                                                 (blur)="onIssueMeterialQtyChange(idx,txtMet)"></kendo-numerictextbox>
                                            </dd>
                                     </dl>
@@ -284,7 +284,7 @@
                                         [attr.disabled]="gridSelectedMeterial.data[idx].PALLETNO ? '' : null" #txtMet
                                         name="data" (blur)="onIssueMeterialQtyChange(idx,txtMet)"
                                         class="form-control text-right form-control-sm text-right!important"
-                                        [format]="'n3'" [(value)]="dataItem.MeterialPickQty" [step]="step">
+                                        [format]="formatVal" [(value)]="dataItem.MeterialPickQty" [step]="step">
                                     </kendo-numerictextbox>
                                 </ng-template>
                             </kendo-grid-column>
@@ -428,7 +428,7 @@
            
            
            class="form-control form-control-sm text-right"
-           [format]="'n3'" [(ngModel)]='dataItem.Quantity' 
+           [format]="formatVal" [(ngModel)]='dataItem.Quantity' 
            placeholder="{{'Quantity'|translate}}">"></kendo-numerictextbox>
         </ng-template>
       </kendo-grid-column>
