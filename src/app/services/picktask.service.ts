@@ -52,6 +52,7 @@ export class PickTaskService {
         ITEMCODE: ITEMCODE,
         LOTNO: LOTNO,
         OPTM_SRC_BIN: OPTM_SRC_BIN,
+        OPTM_WHSECODE: localStorage.getItem("whseId"),
         OPTM_CREATEDBY: localStorage.getItem("UserGroup")
       }])
     };

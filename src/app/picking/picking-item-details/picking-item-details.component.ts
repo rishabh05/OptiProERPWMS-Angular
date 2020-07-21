@@ -667,6 +667,7 @@ export class PickingItemDetailsComponent implements OnInit {
     this.pickedAllDty = false;
     this.index = this.index + 1;
     if (this.index == this.PickTaskList.length) {
+      this.toastr.info('Srini', "Reached end of Picklist");
       this.index = 0;
     }
     this.setValues(this.index);
