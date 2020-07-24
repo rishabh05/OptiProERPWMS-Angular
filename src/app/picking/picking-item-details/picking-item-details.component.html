@@ -73,7 +73,7 @@
                                 </div>
                                 <div *ngIf="currentStep == 11" class="item-input-section">
                                     <input #focusOnDropLocation type="text" placeholder="{{'PL_Enter_Drop_Location'|translate}}" (blur)="ConfirmDropLocation()"
-                                        name="ScannedDropBin" [(ngModel)]="ScannedDropBin" [disabled]=pickedAllDty>
+                                        name="ScannedDropBin" [(ngModel)]="ScannedDropBin" [disabled]=pickedAllDty trim="blur">
                                 </div>
                                 <!--/ step inputs -->
 

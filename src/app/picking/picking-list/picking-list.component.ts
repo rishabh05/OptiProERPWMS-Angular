@@ -79,9 +79,11 @@ export class PickingListComponent implements OnInit {
   initialize() {
     this.PackTypeList = [this.translate.instant("Batch_Picking"),
     this.translate.instant("Cluster_Picking"), this.translate.instant("Container_Picking"),
-    this.translate.instant("Discreate_Picking"), this.translate.instant("Zone_Picking")];
+    this.translate.instant("Discreate_Picking")];
+    //this.translate.instant("Discreate_Picking"), this.translate.instant("Zone_Picking")];
 
-    this.PackTypeKeyList = ["Batch_Picking", "Cluster_Picking", "Container_Picking", "Discrete_Picking", "Zone_Picking"];
+    this.PackTypeKeyList = ["Batch_Picking", "Cluster_Picking", "Container_Picking", "Discrete_Picking"];
+    //this.PackTypeKeyList = ["Batch_Picking", "Cluster_Picking", "Container_Picking", "Discrete_Picking", "Zone_Picking"];
 
     this.commonservice.GetSelectedSteps("Picking");
 
