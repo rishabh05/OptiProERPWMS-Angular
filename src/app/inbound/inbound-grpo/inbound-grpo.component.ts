@@ -124,7 +124,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   // caption related labels.
   Inbound_ReceiveForPO:any;
   inboundFromWhere: any = false;
-
+  @ViewChild('scanQty') scanQtyRef: ElementRef;
   constructor(private inboundService: InboundService, private commonservice: Commonservice,
     private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent, private productionService: ProductionService) {
@@ -143,8 +143,20 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     // this.itemCodeInput.nativeElement.focus();
   }
   formatVal=''
-
-  onQtyBlur(scanQty){
+  qtyFieldBlurFire: boolean = false;
+  async onQtyBlur(scanQty,fromHtml:boolean = false) :Promise<any>{
+    if(!this.qtyFieldBlurFire){
+      if(fromHtml){
+        this.qty = scanQty.value;
+      }else{
+        this.qty = scanQty.nativeElement.value;
+      }
+     // this.qtyFieldBlurFire = true; 
+    }
+    
+    return this.qtyFieldBlurFire; 
+  }
+  onQtyChange(scanQty){
     this.qty = scanQty.value
   }
   ngOnInit() {
@@ -715,9 +727,14 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     if (result != undefined && result == false) {
       return;
     }
+    // if(this.qty== undefined) {
+    //   var result1 = await  this.onQtyBlur(this.scanQtyRef)
+    //   this.qtyFieldBlurFire = false
+    // }
+    var result1 = await  this.onQtyBlur(this.scanQtyRef)
 
     if (this.qty == 0 || this.qty == undefined) {
-      //this.toastr.error('', this.translate.instant("Inbound_EnterQuantityErrMsg"));
+     this.toastr.error('', this.translate.instant("Inbound_EnterQuantityErrMsg"));
       return;
     }
     // if (this.ScanInputs == null || this.ScanInputs == undefined || this.ScanInputs == "") {
@@ -747,7 +764,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     this.LineId = [];
     if (this.isNonTrack) {
       this.addNonTrackQty(this.qty);
-
+      this.scanQtyRef.nativeElement.value = undefined
       this.qty = undefined;
       this.ScanInputs = "";
       if (this.recvingQuantityBinArray.length > 0) {
@@ -1678,7 +1695,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     //   });
     // }
     localStorage.setItem("Line", "" + (Number(localStorage.getItem("Line")) + 1));
-
+    oSubmitPOLotsObj.Header = []
     oSubmitPOLotsObj.Header.push({
       NumAtCard: localStorage.getItem("VendRefNo")
     });
@@ -2933,10 +2950,11 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
               });
             }
           }
-
+          this.addToGRPOArray.Header = [];
           this.addToGRPOArray.Header.push({
             NumAtCard: localStorage.getItem("VendRefNo")
           });
+
         }
       }
       localStorage.setItem("AddToGRPO", JSON.stringify(this.addToGRPOArray));

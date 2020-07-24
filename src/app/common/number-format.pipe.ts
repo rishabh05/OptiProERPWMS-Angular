@@ -15,6 +15,9 @@ export class NumberFormatPipe implements PipeTransform {
     if(value == null && value == undefined){
       return value;
     }
+    if(value == ""){
+      value = 0;
+    }
     var arr = value.toString().trim().split(decSeperator);
     formattedNo = this.addDigitSeperatorToNo(arr[0], thSeperator);
     //logic to add . and ifs after place digit manage.

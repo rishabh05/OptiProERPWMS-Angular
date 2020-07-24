@@ -191,8 +191,10 @@
                                 <input type="number" #scanQty name="qty"
                                      placeholder="{{'Quantity'|translate}}" 
                                     [ngModel]="qty | numberFormat" 
-                                    (blur) = onQtyBlur(scanQty) 
-                                    min="0"
+                                    (blur) = onQtyBlur(scanQty,true) 
+                                    
+                                    
+                                    min="0" tabindex="-1"
                                     class="text-right form-control form-control-sm">
                                 <div class="ml-1 d-flex">
                                     <button tabindex="-1" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0"
