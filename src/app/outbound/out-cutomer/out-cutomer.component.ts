@@ -9,7 +9,7 @@ import { CommonConstants } from 'src/app/const/common-constants';
 import { SOHEADER, SODETAIL, DeliveryToken } from 'src/app/models/outbound/out-del-req';
 import { InboundService } from 'src/app/services/inbound.service';
 
-
+// This file called from Outbound -> SO delivery and Shipment delivery
 
 @Component({
   selector: 'app-out-cutomer',
@@ -17,7 +17,7 @@ import { InboundService } from 'src/app/services/inbound.service';
   styleUrls: ['./out-cutomer.component.scss']
 })
 export class OutCutomerComponent implements OnInit {
-  useContainer:boolean = false;
+  useContainer: boolean = false;
   dialogMsg: string = "Do you want to delete?"
   yesButtonText: string = "Yes";
   noButtonText: string = "No";
@@ -41,45 +41,58 @@ export class OutCutomerComponent implements OnInit {
   pageSize: number = 10;
   public trackingId: any = "";
   public CustRefNo: any = "";
-  public shipmentId: any = ""; 
+  public shipmentId: any = "";
   public dockDoorCode: any = "";
   delNo: any = "";
-  responseDocEntry:any = "";
+  invoiceStatus: any = ""
+  responseDocEntry: any = "";
   public dockDoorFromShipment: any = "";
   public deliveryOptionType: any = '1';
   @ViewChild('scanSO') scanSO;
   @ViewChild('scanShipmentId') scanShipmentId;
   @ViewChild('scanCustomerCode') scanCustomerCode;
   @ViewChild('scanTracking') scanTracking;
-  public pageTitle:String = "";
+  public pageTitle: String = "";
   showShipmentInfo: boolean = false;
 
-  showPDFLoading:boolean = false;
-  constructor(private inboundService: InboundService, private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) { }
+  showPDFLoading: boolean = false;
+  constructor(private inboundService: InboundService, private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) {
+    let option = localStorage.getItem("deliveryOptionType");
+    this.deliveryOptionType = option;
+    if (this.deliveryOptionType == '1') {
+      this.pageTitle = this.translate.instant("Outbound_Delivery")
+    } else if (this.deliveryOptionType == '2') {
+      this.pageTitle = this.translate.instant("Outbound_Delivery_through_Shipment")
+    }
+  }
 
   ngOnInit() {
     this.customerName = '';
     this.customerCode = '';
     this.showLookup = false;
+    this.ShipmentHDR = [];
 
     let option = localStorage.getItem("deliveryOptionType");
     this.deliveryOptionType = option;
-    if(this.deliveryOptionType == '1'){
+    if (this.deliveryOptionType == '1') {
       this.pageTitle = this.translate.instant("Outbound_Delivery")
       this.setOutboundPageInfo()
       // set page ui for outbound.
-    }else if(this.deliveryOptionType =='2'){
+    } else if (this.deliveryOptionType == '2') {
       // set page ui for shipment.
       this.pageTitle = this.translate.instant("Outbound_Delivery_through_Shipment")
       this.setShipmentPageInfo();
     }
+    this.updateSalesOrderList();
+  }
+
+  updateSalesOrderList() {
     // lsOutbound
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
     if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
       this.outbound = JSON.parse(outboundData);
       if (this.outbound != undefined && this.outbound != null) {
-        if (this.outbound
-          && this.outbound.CustomerData !== undefined && this.outbound.CustomerData !== null) {
+        if (this.outbound.CustomerData !== null) {
           this.customerCode = this.outbound.CustomerData.CustomerCode;
           this.customerName = this.outbound.CustomerData.CustomerName;
           this.CustRefNo = this.outbound.CustomerData.CustRefNo;
@@ -96,10 +109,10 @@ export class OutCutomerComponent implements OnInit {
     }
   }
 
-  public setShipmentPageInfo(){
+  public setShipmentPageInfo() {
 
   }
-  public setOutboundPageInfo(){
+  public setOutboundPageInfo() {
 
   }
 
@@ -143,19 +156,16 @@ export class OutCutomerComponent implements OnInit {
     outbound.TempMeterials = [];
   }
 
-  ngAfterViewInit(): void { 
+  ngAfterViewInit(): void {
     //this.scanCustomerCode.nativeElement.focus()
   }
 
   getUniqueValuesByProperty(data: any[]): any[] {
     let items: any[] = [];
-
     for (let index = 0; index < data.length; index++) {
       const element = data[index];
-
       if (items.length > 0) {
         let sameItem = items.filter(i => element.Item.DOCNUM === i.DOCNUM);
-
         if (sameItem.length <= 0) {
           items.push(element.Item);
         }
@@ -167,30 +177,8 @@ export class OutCutomerComponent implements OnInit {
     return items;
   }
 
-  getUniqueValuesByProperty1(data: any[]): any[] {
-
-    let items: any[] = [];
-
-    for (let index = 0; index < data.length; index++) {
-      const element = data[index];
-
-      if (items.length > 0) {
-        let sameItem = items.filter(i => element.Item.DOCNUM === i.DOCNUM
-          && element.Item.Tracking === i.Tracking);
-
-        if (sameItem.length <= 0) {
-          items.push(element.Item);
-        }
-      }
-      else {
-        items.push(element.Item);
-      }
-    }
-    return items;
-  }
-
-  onCustomerCodeBlur(){
-    if(this.isValidateCalled){
+  onCustomerCodeBlur() {
+    if (this.isValidateCalled) {
       return;
     }
     this.onCustomerCode();
@@ -225,7 +213,7 @@ export class OutCutomerComponent implements OnInit {
           this.customerName = resp[0].CUSTNAME;
           outbound.CustomerData = {
             CustomerCode: this.customerCode, CustomerName: this.customerName, TrackingId: this.trackingId,
-            CustRefNo: this.CustRefNo, ShipmentId:''
+            CustRefNo: this.CustRefNo, ShipmentId: ''
           };
 
           // lsOutbound
@@ -249,7 +237,6 @@ export class OutCutomerComponent implements OnInit {
   }
 
   getLookupValue(lookupValue: any) {
-
     if (lookupValue != null && lookupValue == "close") {
       //nothing to do
       return;
@@ -261,17 +248,7 @@ export class OutCutomerComponent implements OnInit {
         this.orderNumber = this.selectedCustomerElement[0];
         this.customerCode = this.selectedCustomerElement[2];
         this.customerName = this.selectedCustomerElement[1];
-        // old code =======================
-        // outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName, TrackingId:this.trackingId,
-        //  CustRefNo:this.CustRefNo};
-        // CurrentOutBoundData.CustomerData = outbound.CustomerData;
-        // this.outbound = outbound;
-        // outbound.OrderData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
-        // outbound.OrderData.DOCNUM = this.orderNumber;
-        // localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
-        // old code =======================
-
-
+       
         //===================================
         let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
         if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
@@ -287,7 +264,7 @@ export class OutCutomerComponent implements OnInit {
             //console.log("outbound","Outbound ka else...")
             //if order is not present first time case.
             let outbound: OutboundData = new OutboundData();
-            outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName,ShipmentId:'' };
+            outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName, ShipmentId: '' };
             outbound.OrderData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
             outbound.OrderData.DOCNUM = this.orderNumber;
             localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
@@ -295,7 +272,7 @@ export class OutCutomerComponent implements OnInit {
         } else {
           // if first time.
           let outbound: OutboundData = new OutboundData();
-          outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName,ShipmentId:'' };
+          outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName, ShipmentId: '' };
           outbound.OrderData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
           outbound.OrderData.DOCNUM = this.orderNumber;
           localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
@@ -309,21 +286,16 @@ export class OutCutomerComponent implements OnInit {
         this.shipmentId = lookupValue[0];
         this.dockDoorCode = lookupValue[4];
         var useContainer = lookupValue[5];
-        if(useContainer =="Y" ||useContainer =="y"){
-          this.useContainer = true;  
-        }else{
+        if (useContainer == "Y" || useContainer == "y") {
+          this.useContainer = true;
+        } else {
           this.useContainer = false;
         }
-        // for(var i=0;i<this.serviceData.length;i++){
-        //   if(this.serviceData[i]== this.shipmentId){
-        //    var shipmentId = this.serviceData[i]
-        //   }
-        // } 
         this.isShipmentValid(this.shipmentId);
-       // this.getShipmentDetail(); 
-      } else if (this.lookupfor =="DockDoorList"){
+      } else if (this.lookupfor == "DockDoorList") {
         this.dockDoorCode = lookupValue[0];
-;      }else {
+        ;
+      } else {
         this.selectedCustomerElement = lookupValue;
         if (this.customerCode != this.selectedCustomerElement[0]) {
           this.orderNumber = "";
@@ -334,7 +306,7 @@ export class OutCutomerComponent implements OnInit {
         //outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
         outbound.CustomerData = {
           CustomerCode: this.customerCode, CustomerName: this.customerName,
-          TrackingId: this.trackingId, CustRefNo: this.CustRefNo,ShipmentId:''
+          TrackingId: this.trackingId, CustRefNo: this.CustRefNo, ShipmentId: ''
         };
         // lsOutbound
         localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
@@ -345,7 +317,7 @@ export class OutCutomerComponent implements OnInit {
     }
   }
 
-  public getDockDoorList(){
+  public getDockDoorList() {
     this.showLookup = false;
     this.showLookupLoader = true;
     this.outboundservice.getDockDoorList().subscribe(
@@ -363,7 +335,7 @@ export class OutCutomerComponent implements OnInit {
         } else {
           this.toastr.error('', this.translate.instant("ShipmentNotAvailable"));
           this.orderNumber = "";
-         // this.scanShipmentId.nativeElement.focus()
+          // this.scanShipmentId.nativeElement.focus()
         }
       },
       error => {
@@ -373,47 +345,48 @@ export class OutCutomerComponent implements OnInit {
     );
   }
 
-    public isValidDockDoor(ddId: any) {
-      if(this.dockDoorCode==undefined || this.dockDoorCode==null || this.dockDoorCode==""){
-        return;
-      }
-      this.showLookup = false;
-      this.showLookupLoader = true;
-      this.outboundservice.isValidDockDoorId(this.dockDoorCode).subscribe(
-        resp => {
-          this.showLookupLoader = false;
-          if (resp != null && resp != undefined) {
-            if (resp[0]!=null && resp[0]!=undefined && resp[0].ErrorMsg!=null &&
-              resp[0].ErrorMsg!=undefined &&  resp[0].ErrorMsg == "7001") {
-              this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
-              this.showLookupLoader = false;
-              return;
-            }
-            if(resp!=null && resp.length==0){
-              this.toastr.error('', this.translate.instant("DockDoorNotAvailable"));
-              this.dockDoorCode = "";
-              return;
-            } 
-            
-            if(resp[0]!=null && resp[0].OPTM_DOCKDOORID!=null && resp[0].OPTM_DOCKDOORID!=undefined){
-              this.dockDoorCode = resp[0].OPTM_DOCKDOORID;
-              
-            }
-          } else {
+  public isValidDockDoor(ddId: any) {
+    if (this.dockDoorCode == undefined || this.dockDoorCode == null || this.dockDoorCode == "") {
+      return;
+    }
+    this.showLookup = false;
+    this.showLookupLoader = true;
+    this.outboundservice.isValidDockDoorId(this.dockDoorCode).subscribe(
+      resp => {
+        this.showLookupLoader = false;
+        if (resp != null && resp != undefined) {
+          if (resp[0] != null && resp[0] != undefined && resp[0].ErrorMsg != null &&
+            resp[0].ErrorMsg != undefined && resp[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
+            this.showLookupLoader = false;
+            return;
+          }
+          if (resp != null && resp.length == 0) {
             this.toastr.error('', this.translate.instant("DockDoorNotAvailable"));
             this.dockDoorCode = "";
-           // this.scanShipmentId.nativeElement.focus()
+            return;
           }
-        },
-        error => {
-          this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
-          this.showLookupLoader = false;
+
+          if (resp[0] != null && resp[0].OPTM_DOCKDOORID != null && resp[0].OPTM_DOCKDOORID != undefined) {
+            this.dockDoorCode = resp[0].OPTM_DOCKDOORID;
+
+          }
+        } else {
+          this.toastr.error('', this.translate.instant("DockDoorNotAvailable"));
+          this.dockDoorCode = "";
+          // this.scanShipmentId.nativeElement.focus()
         }
-      );
-    }
-    onDockDoorBlur(){
-      this.isValidDockDoor(this.dockDoorCode);
-    }
+      },
+      error => {
+        this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
+        this.showLookupLoader = false;
+      }
+    );
+  }
+
+  onDockDoorBlur() {
+    this.isValidDockDoor(this.dockDoorCode);
+  }
 
   public openCustomerLookup() {
     this.showLookupLoader = true;
@@ -436,7 +409,6 @@ export class OutCutomerComponent implements OnInit {
           }
         }
         else {
-
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
           this.showLookupLoader = false;
           this.showLookup = false;
@@ -461,21 +433,6 @@ export class OutCutomerComponent implements OnInit {
     )
   }
 
-  // openSelectedDeleveryItem($event){
-  //   console.log("selected delivery item"); 
-  //   localStorage.setItem("selectedSOAfterAddToDelivery", $event.selectedRows[0].dataItem.DOCNUM);
-  //   this.prepareTempCollectionForSelectedDelivery($event.selectedRows[0].dataItem.DOCNUM,$event.selectedRows[0].dataItem.DOCENTRY)
-    
-  // }
-
-  // async openCustSO(clearOrder: boolean = false) {
-  //   var result = await this.validateBeforeSubmit();
-  //   this.isValidateCalled = false;
-  //   console.log("validate result: " + result);
-  //   if (result != undefined && result == false) {
-  //     return;
-  //   }
-  // }
   /**
    * Open delivery detail screens after click on add to delivery item list.
    * @param $event 
@@ -484,7 +441,6 @@ export class OutCutomerComponent implements OnInit {
     //console.log("selected delivery item");
     localStorage.setItem("selectedSOAfterAddToDelivery", $event.selectedRows[0].dataItem.DOCNUM);
     this.prepareTempCollectionForSelectedDelivery($event.selectedRows[0].dataItem.DOCNUM, $event.selectedRows[0].dataItem.DOCENTRY)
-
   }
 
   async openCustSO(clearOrder: boolean = false) {
@@ -494,18 +450,14 @@ export class OutCutomerComponent implements OnInit {
     if (result != undefined && result == false) {
       return;
     }
-    // Clear otred data
-    // if (this.outbound)
-    //   this.outbound.OrderData = null;
-
-    if(this.customerCode == undefined || this.customerCode == ''){
+    if (this.customerCode == undefined || this.customerCode == '') {
       return;
     }
 
     if (this.orderNumber != null) {
       localStorage.setItem("IsSOAvailable", "True");
     }
-    localStorage.setItem("selectedSOAfterAddToDelivery",null);
+    localStorage.setItem("selectedSOAfterAddToDelivery", null);
     if (clearOrder == true) {
       let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
       if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
@@ -534,7 +486,6 @@ export class OutCutomerComponent implements OnInit {
     this.router.navigateByUrl('home/outbound/outorder', { skipLocationChange: true });
   }
 
-
   customerRefNoBlur() {
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
     if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
@@ -547,13 +498,13 @@ export class OutCutomerComponent implements OnInit {
         var trackingId = this.outbound.CustomerData.TrackingId;
         this.outbound.CustomerData = {
           CustomerCode: customerCode, CustomerName: customerName,
-          TrackingId: trackingId, CustRefNo: CustRefNo, ShipmentId:this.shipmentId
+          TrackingId: trackingId, CustRefNo: CustRefNo, ShipmentId: this.shipmentId
         };
         localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
       }
     }
-
   }
+  
   trackingIdBlur() {
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
     if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
@@ -566,13 +517,13 @@ export class OutCutomerComponent implements OnInit {
         var trackingId = this.trackingId;
         this.outbound.CustomerData = {
           CustomerCode: customerCode, CustomerName: customerName,
-          TrackingId: trackingId, CustRefNo: CustRefNo, ShipmentId:this.shipmentId
+          TrackingId: trackingId, CustRefNo: CustRefNo, ShipmentId: this.shipmentId
         };
         localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
       }
     }
-
   }
+
   public cancel() {
     // lsOutbound
     localStorage.setItem(CommonConstants.OutboundData, null)
@@ -585,7 +536,7 @@ export class OutCutomerComponent implements OnInit {
 
     // Yes
     if ($event.Status === 'yes') {
-      if($event.From == "receiveSinglePDFDialog"){
+      if ($event.From == "receiveSinglePDFDialog") {
         this.printDialog = true
       } else {
         this.removeOrderMain(this.delIdx, this.delGrd);
@@ -593,8 +544,8 @@ export class OutCutomerComponent implements OnInit {
     }
     // No
     else if ($event.Status === 'no') {
-      if($event.From == "receiveSinglePDFDialog"){
-      
+      if ($event.From == "receiveSinglePDFDialog") {
+
       }
     }
     // Cross
@@ -611,11 +562,12 @@ export class OutCutomerComponent implements OnInit {
     this.showLookup = false;
     this.shipmentId = '';
   }
- 
+
+  isDeliveryContainerPacking: boolean = false;
   prepareDeleiveryCollection() {
     // dock door confirmation when delivery through shipment.
-    if(this.deliveryOptionType==2){
-      if(this.dockDoorCode!=this.dockDoorFromShipment){
+    if (this.deliveryOptionType == 2) {
+      if (this.dockDoorCode != this.dockDoorFromShipment) {
         this.toastr.error('', this.translate.instant("DockDoorConfirmMessage"));
         return;
       }
@@ -627,8 +579,7 @@ export class OutCutomerComponent implements OnInit {
     }
     if (this.outbound != null && this.outbound != undefined
       && this.outbound.DeleiveryCollection != null && this.outbound.DeleiveryCollection != undefined
-      && this.outbound.DeleiveryCollection.length > 0 ) 
-      {
+      && this.outbound.DeleiveryCollection.length > 0) {
       //let tempDeleiveryCollection: any[] = this.outbound.DeleiveryCollection;
       let arrSOHEADER: SOHEADER[] = [];
       let arrSODETAIL: SODETAIL[] = [];
@@ -697,8 +648,8 @@ export class OutCutomerComponent implements OnInit {
             } else {
               hdr.TrackingNumber = "";
             }
-            if(this.deliveryOptionType==2){
-              hdr.SelectedShipmentID = this.shipmentId;
+            if (this.deliveryOptionType == 2) {
+              hdr.SelectedShipmentID = element.Order.ShipmentCode;
             }
             arrSOHEADER.push(hdr);
           }
@@ -719,7 +670,7 @@ export class OutCutomerComponent implements OnInit {
 
               //=====when its non tracked then check already added start===
               if (o.Item.TRACKING == "N") {
-                if (e1.Bin === o.Meterial.BINNO) {
+                if (e1.Bin === o.Meterial.BINNO && e1.DOCENTRY == o.Item.DOCENTRY) { // added docEntry condition on 21072020
                   hasDetail = true; //need to show error
                 }
               }
@@ -728,16 +679,16 @@ export class OutCutomerComponent implements OnInit {
               for (let idx = 0; idx < arrSOHEADER.length; idx++) {
                 const headerElement = arrSOHEADER[idx]
                 if (headerElement.LineNo === o.Item.LINENUM && headerElement.DOCENTRY === o.Item.DOCENTRY) {
-                 
-                 for(let innerIdx = 0; innerIdx<arrSODETAIL.length; innerIdx++){
-                  if (arrSODETAIL[innerIdx].LotNumber === o.Meterial.LOTNO && headerElement.LineNo === o.Item.LINENUM && 
-                    headerElement.DOCENTRY === o.Item.DOCENTRY && arrSODETAIL[innerIdx].DOCENTRY === o.Item.DOCENTRY){
-                    // it means already taken.
-                    hasDetail = true;
-                    break both;
+
+                  for (let innerIdx = 0; innerIdx < arrSODETAIL.length; innerIdx++) {
+                    if (arrSODETAIL[innerIdx].LotNumber === o.Meterial.LOTNO && headerElement.LineNo === o.Item.LINENUM &&
+                      headerElement.DOCENTRY === o.Item.DOCENTRY && arrSODETAIL[innerIdx].DOCENTRY === o.Item.DOCENTRY) {
+                      // it means already taken.
+                      hasDetail = true;
+                      break both;
+                    }
                   }
-                 }
-                  parentLineNum = headerElement.Line; 
+                  parentLineNum = headerElement.Line;
                   break both;
                 }
               }
@@ -765,22 +716,41 @@ export class OutCutomerComponent implements OnInit {
         deliveryToken.UDF = [];
         deliveryToken.PackingData = this.getPackingDataFromLocalStorage()
       }
+      if (deliveryToken.PackingData.length > 0) {
+        this.isDeliveryContainerPacking = true;
+      }
       this.showLookupLoader = true;
       this.outboundservice.addDeleivery(deliveryToken).subscribe(
         data => {
           if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
             this.delNo = data[0].SuccessNo
-           this.responseDocEntry =  data[0].DocEntry
+            this.responseDocEntry = data[0].DocEntry
+            this.invoiceStatus = data[0].InvoiceStatus;
             this.showLookupLoader = false;
             this.trackingId = "";
             this.CustRefNo = "";
             this.toastr.success('', this.translate.instant("DeleiverySuccess") + " : " + data[0].SuccessNo);
-             this.clearOutbound();
-            this.showPrintConfirmDialog();
+            this.clearOutbound();
+
+
+            if (this.invoiceStatus == "N" || this.invoiceStatus == "n") {
+              // this.toastr.error('', this.translate.instant("ARINvoiceNotCreated") + " : " + data[0].SuccessNo);
+            } else {
+              if (this.invoiceStatus == "Y" || this.invoiceStatus == "y") {
+                //  this.toastr.success('', this.translate.instant("ARINvoiceSucess") + " : " + data[0].SuccessNo);
+              }
+            }
+            //this code will be in 186 machine.
+            if (this.isDeliveryContainerPacking) {
+              this.showPrintConfirmDialog();
+            }
+            // for mormal deployment we will show report dialog with otions need to uncomment in html.
+            //this.showPrintConfirmDialog();
+
           } else if (data[0].ErrorMsg == "7001") {
             this.showLookupLoader = false;
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
-            this.translate.instant("CommonSessionExpireMsg"));
+              this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
           else {
@@ -803,17 +773,17 @@ export class OutCutomerComponent implements OnInit {
   }
 
   getPackingDataFromLocalStorage() {
-    let selectedPackingItems=[]
+    let selectedPackingItems = []
     let outboundData = localStorage.getItem(CommonConstants.OutboundData);
     if (outboundData != undefined && outboundData != '') {
       var outbound = JSON.parse(outboundData);
       var packingCollection: any = outbound.packingCollection;
-      selectedPackingItems = packingCollection.filter(pi =>pi.ItemCode!=null && pi.ItemCode!= undefined );
+      selectedPackingItems = packingCollection.filter(pi => pi.ItemCode != null && pi.ItemCode != undefined);
     }
-    var serialNo:number=0;
-    for(let i=0;i<selectedPackingItems.length;i++){
-      serialNo =serialNo+1;
-      selectedPackingItems[i].PkgId= serialNo
+    var serialNo: number = 0;
+    for (let i = 0; i < selectedPackingItems.length; i++) {
+      serialNo = serialNo + 1;
+      selectedPackingItems[i].PkgId = serialNo
     }
     return selectedPackingItems;
   }
@@ -856,10 +826,8 @@ export class OutCutomerComponent implements OnInit {
         linedtl.parentLine = index;
         tmpDtlList.push(linedtl);
       }
-
       hdr.Line = index;
       tmpHdr.push(hdr);
-
     }
   }
 
@@ -867,7 +835,6 @@ export class OutCutomerComponent implements OnInit {
   removeOrder(idx: any, grd: any) {
     this.delGrd = grd;
     this.delIdx = idx;
-
     this.showConfirmDialog = true;
   }
 
@@ -905,8 +872,8 @@ export class OutCutomerComponent implements OnInit {
   public showSOIetDetail = false;
   public selectedCustomer: any;
 
-  onOrderNoBlur(){
-    if(this.isValidateCalled){
+  onOrderNoBlur() {
+    if (this.isValidateCalled) {
       return;
     }
     this.onOrderNo();
@@ -955,7 +922,7 @@ export class OutCutomerComponent implements OnInit {
               //console.log("outbound","Outbound ka else...")
               //if order is not present first time case.
               let outbound: OutboundData = new OutboundData();
-              outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName, ShipmentId:this.shipmentId };
+              outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName, ShipmentId: this.shipmentId };
               outbound.OrderData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
               outbound.OrderData.DOCNUM = this.orderNumber;
               localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
@@ -963,7 +930,7 @@ export class OutCutomerComponent implements OnInit {
           } else {
             // if first time.
             let outbound: OutboundData = new OutboundData();
-            outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName , ShipmentId:this.shipmentId};
+            outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName, ShipmentId: this.shipmentId };
             outbound.OrderData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
             outbound.OrderData.DOCNUM = this.orderNumber;
             localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
@@ -1042,16 +1009,16 @@ export class OutCutomerComponent implements OnInit {
   }
 
   isValidateCalled: boolean = false;
-  async validateBeforeSubmit():Promise<any>{
+  async validateBeforeSubmit(): Promise<any> {
     this.isValidateCalled = true;
     var currentFocus = document.activeElement.id;
-    console.log("validateBeforeSubmit current focus: "+currentFocus);
-    
-    if(currentFocus != undefined){
-      if(currentFocus == "outCustomerCustomerCodeInput"){
+    console.log("validateBeforeSubmit current focus: " + currentFocus);
+
+    if (currentFocus != undefined) {
+      if (currentFocus == "outCustomerCustomerCodeInput") {
         return this.onCustomerCode();
       }
-      else if(currentFocus == "outCustomerSOInput"){
+      else if (currentFocus == "outCustomerSOInput") {
         return this.onOrderNo();
       }
     }
@@ -1098,50 +1065,6 @@ export class OutCutomerComponent implements OnInit {
   }
 
 
-
-
-
-  /**
-   * New This method create temp array for selected SO for furthre updation in that SO.
-   * @param selectedDocNum 
-   * @param selectedDocEntry 
-   */
-  // prepareTempCollectionForSelectedDelivery(selectedDocNum: any, selectedDocEntry: any) {
-  //   let deliveryDataForSelectedSO: any = [];
-  //   let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
-
-  //   if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
-  //     this.outbound = JSON.parse(outboundData);
-  //     if (this.outbound != undefined && this.outbound != null) {
-  //       if (this.outbound && this.outbound.DeleiveryCollection !== undefined &&
-  //         this.outbound.DeleiveryCollection !== null) {
-  //         // create Order data object from selected Order.
-  //         var orderData: any = {
-  //           CARDCODE: this.outbound.CustomerData.CustomerCode,
-  //           CARDNAME: this.outbound.CustomerData.customerName, DOCDUEDATE: "04/24/2019",
-  //           DOCNUM: selectedDocNum.toString(), SHIPPINGTYPE: "", SHIPTOCODE: ""
-  //         }
-  //         // after we create delivery collection clear temp collection.
-  //         this.outbound.OrderData = orderData;
-  //         //create temp collection for selected delivery item..
-  //         for (let index = 0; index < this.outbound.DeleiveryCollection.length; index++) {
-  //           const d = this.outbound.DeleiveryCollection[index];
-  //           if (d.Item.DOCENTRY == selectedDocEntry && d.Order.DOCNUM == selectedDocNum) {
-  //             deliveryDataForSelectedSO.push(d);
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-  //   // after we create delivery collection clear temp collection.
-  //   this.outbound.TempMeterials = deliveryDataForSelectedSO;
-  //   // //lsOutbound
-  //   localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
-  //   this.router.navigateByUrl('home/outbound/outorder', { skipLocationChange: true });
-  // }
-
-
-
   //--------------------add So field--
 
   public getShipmentList() {
@@ -1164,7 +1087,7 @@ export class OutCutomerComponent implements OnInit {
         } else {
           this.toastr.error('', this.translate.instant("ShipmentNotAvailable"));
           this.orderNumber = "";
-         // this.scanShipmentId.nativeElement.focus()
+          // this.scanShipmentId.nativeElement.focus()
         }
 
       },
@@ -1177,41 +1100,46 @@ export class OutCutomerComponent implements OnInit {
 
 
   public isShipmentValid(shipmentId: any) {
-    if(shipmentId==undefined || shipmentId==null || shipmentId==""){
+    if (shipmentId == undefined || shipmentId == null || shipmentId == "") {
       return;
     }
     this.showLookup = false;
     this.showLookupLoader = true;
     this.outboundservice.isValidShipmentId(shipmentId).subscribe(
       resp => {
-        this.showLookupLoader = false; 
+        this.showLookupLoader = false;
         if (resp != null && resp != undefined) {
-          if (resp[0]!=null && resp[0]!=undefined && resp[0].ErrorMsg!=null &&
-            resp[0].ErrorMsg!=undefined &&  resp[0].ErrorMsg == "7001") {
-            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
+          if (resp[0] != null && resp[0] != undefined && resp[0].ErrorMsg != null &&
+            resp[0].ErrorMsg != undefined && resp[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));
             this.showLookupLoader = false;
+            return;
+          }
+          let index = this.ShipmentHDR.findIndex(e => e.ShipmentCode == this.shipmentId);
+          if (index > -1) {
+            this.toastr.error('', 'Shipment already selected');
             return;
           }
           // reset for this shipment id.
           this.resetOldShipmentData();
-          
-          if(resp.ItemHeader!=null && resp.ItemHeader!=undefined && resp.ItemHeader.length>0 &&
-            resp.ItemDetail!=null && resp.ItemDetail!=undefined && resp.ItemDetail.length>0){
-              
-              this.dockDoorCode = resp.ItemHeader[0].OPTM_DOCKDOORID;
-              this.dockDoorFromShipment = resp.ItemHeader[0].OPTM_DOCKDOORID;
-              this.parseAndGenerateDeliveryDataFromShipment(resp);
-              this.getShipmentDataItemDetails();
-          }else{
+
+          if (resp.ItemHeader != null && resp.ItemHeader != undefined && resp.ItemHeader.length > 0 &&
+            resp.ItemDetail != null && resp.ItemDetail != undefined && resp.ItemDetail.length > 0) {
+
+            this.dockDoorCode = resp.ItemHeader[0].OPTM_DOCKDOORID;
+            this.dockDoorFromShipment = resp.ItemHeader[0].OPTM_DOCKDOORID;
+            this.parseAndGenerateDeliveryDataFromShipment(resp);
+            this.getShipmentDataItemDetails();
+          } else {
             this.shipmentId = "";
             this.toastr.error('', this.translate.instant("ShipmentNotAvailable"));
           }
-           
+
 
         } else {
           this.toastr.error('', this.translate.instant("ShipmentNotAvailable"));
           this.shipmentId = "";
-         // this.scanShipmentId.nativeElement.focus()
+          // this.scanShipmentId.nativeElement.focus()
         }
 
       },
@@ -1234,18 +1162,21 @@ export class OutCutomerComponent implements OnInit {
 
   //-------------------get shipment detail.
 
-  resetOldShipmentData(){
+  resetOldShipmentData() {
     this.orderCollection = [];
     let outbound: OutboundData = new OutboundData();
     outbound.CustomerData = {
-      CustomerCode: "", CustomerName:"", TrackingId: "",
-      CustRefNo: "", ShipmentId:""
+      CustomerCode: "", CustomerName: "", TrackingId: "",
+      CustRefNo: "", ShipmentId: ""
     };
     outbound.TempMeterials = [];
-      
   }
+
   parseAndGenerateDeliveryDataFromShipment(shipmentResponse: any) {
     let outbound: OutboundData = new OutboundData();
+    if (JSON.parse(localStorage.getItem(CommonConstants.OutboundData)) != undefined) {
+      outbound = JSON.parse(localStorage.getItem(CommonConstants.OutboundData));
+    }
     if (shipmentResponse != null && shipmentResponse != undefined && shipmentResponse != "" &&
       shipmentResponse != "null" && shipmentResponse.ItemHeader != undefined && shipmentResponse.ItemHeader != null &&
       shipmentResponse.ItemHeader != "" && shipmentResponse.ItemHeader.length > 0) {
@@ -1253,7 +1184,7 @@ export class OutCutomerComponent implements OnInit {
       this.customerName = shipmentResponse.ItemHeader[0].CARDNAME;
       outbound.CustomerData = {
         CustomerCode: this.customerCode, CustomerName: this.customerName, TrackingId: this.trackingId,
-        CustRefNo: this.CustRefNo, ShipmentId:this.shipmentId
+        CustRefNo: this.CustRefNo, ShipmentId: this.shipmentId
       };
     }
     var arrItemHeader: any[] = shipmentResponse.ItemHeader;
@@ -1265,25 +1196,25 @@ export class OutCutomerComponent implements OnInit {
         if (arrItemHeader[i].ITEMCODE === arrItemDetail[j].ITEMCODE) {
           //  check if all the batch serial allocated for this lot or not.
           if (parseFloat(arrItemDetail[j].MeterialPickQty) == parseFloat(arrItemDetail[j].TOTALQTY)) {
-                // nothing to do for current object.
+            // nothing to do for current object.
           } else {
-            var pickedQty =0;
+            var pickedQty = 0;
             // crate a temp record and take the respective calculated qty from the current detail object.
             var diff = parseFloat(arrItemDetail[j].TOTALQTY) - parseFloat(arrItemDetail[j].MeterialPickQty);
-            if(diff >= parseFloat(arrItemHeader[i].OPENQTY)) {
-              arrItemDetail[j].MeterialPickQty  = parseFloat(arrItemDetail[j].MeterialPickQty) + parseFloat(arrItemHeader[i].OPENQTY)
+            if (diff >= parseFloat(arrItemHeader[i].OPENQTY)) {
+              arrItemDetail[j].MeterialPickQty = parseFloat(arrItemDetail[j].MeterialPickQty) + parseFloat(arrItemHeader[i].OPENQTY)
               pickedQty = parseFloat(arrItemHeader[i].OPENQTY);
-            }else{
-              arrItemDetail[j].MeterialPickQty  = parseFloat(arrItemDetail[j].MeterialPickQty) + diff;
-              pickedQty = diff ;
-            }    
+            } else {
+              arrItemDetail[j].MeterialPickQty = parseFloat(arrItemDetail[j].MeterialPickQty) + diff;
+              pickedQty = diff;
+            }
             //--------------------create temp object row start.-----------------------------
             var orderData: any = {
               CARDCODE: arrItemHeader[i].CARDCODE, DOCDUEDATE: arrItemHeader[i].DOCDUEDATE,
-              DOCNUM: arrItemHeader[i].DOCNUM, SHIPPINGTYPE: "", SHIPTOCODE: ""
-            } 
+              DOCNUM: arrItemHeader[i].DOCNUM, SHIPPINGTYPE: "", SHIPTOCODE: "", ShipmentCode: this.shipmentId
+            }
             // prepare item data.
-            var itemData: any = { 
+            var itemData: any = {
               ROWNUM: arrItemHeader[i].ROWNUM, ITEMCODE: arrItemHeader[i].ITEMCODE,
               LINENUM: arrItemHeader[i].LINENUM, ITEMNAME: arrItemHeader[i].ITEMNAME, OPENQTY: arrItemHeader[i].OPENQTY,
               RPTQTY: arrItemHeader[i].RPTQTY, UOM: arrItemHeader[i].UOM, DOCDUEDATE: arrItemHeader[i].DOCDUEDATE,
@@ -1292,7 +1223,7 @@ export class OutCutomerComponent implements OnInit {
               DOCNUM: arrItemHeader[i].DOCNUM, GTINNO: arrItemHeader[i].GTINNO, U_LOTISSUEMETHOD: arrItemHeader[i].U_LOTISSUEMETHOD,
               CONTAINERSIZE: arrItemHeader[i].CONTAINERSIZE, ACTUALOPENQTY: arrItemHeader[i].ACTUALOPENQTY, INVENTORYUOM: arrItemHeader[i].INVENTORYUOM,
               QUANTITY: arrItemHeader[i].QUANTITY, LINESTATUS: arrItemHeader[i].LINESTATUS, COUNT: arrItemHeader[i].COUNT,
-              ITEMCOUNT: arrItemHeader[i].ITEMCOUNT, REMQTY: arrItemHeader[i].REMQTY, CARDCODE: arrItemHeader[i].CARDCODE
+              ITEMCOUNT: arrItemHeader[i].ITEMCOUNT, REMQTY: arrItemHeader[i].REMQTY, CARDCODE: arrItemHeader[i].CARDCODE, ShipmentCode: this.shipmentId
             }
             // prepare material data.
             var materialData: any = {
@@ -1300,13 +1231,13 @@ export class OutCutomerComponent implements OnInit {
               WHSCODE: arrItemDetail[j].WHSCODE, BINNO: arrItemDetail[j].BINNO, TOTALQTY: arrItemDetail[j].TOTALQTY,
               EXPDATE: arrItemDetail[j].EXPDATE, SYSNUMBER: arrItemDetail[j].SYSNUMBER,
               PALLETNO: arrItemDetail[j].PALLETNO, ACTLOTNO: arrItemDetail[j].ACTLOTNO,
-              MeterialPickQty: pickedQty
+              MeterialPickQty: pickedQty, ShipmentCode: this.shipmentId
             }
             //--------------------create temp object row end.-----------------------------
             let tempItemRecord = { Order: orderData, Item: itemData, Meterial: materialData };
             outbound.TempMeterials.push(tempItemRecord);
           }
-        }else{ 
+        } else {
           //nothing to do.
         }
       }
@@ -1322,16 +1253,16 @@ export class OutCutomerComponent implements OnInit {
     localStorage.setItem(CommonConstants.FROM_DTS, JSON.stringify(true));
 
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
-        if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
-          this.outbound = JSON.parse(outboundData);
-        }
-        if (this.outbound.DeleiveryCollection !== undefined && this.outbound.DeleiveryCollection !== null && this.outbound.DeleiveryCollection.length > 0) {
-          this.orderCollection = this.getUniqueValuesByProperty(this.outbound.DeleiveryCollection);
-          if (this.orderCollection.length > this.pageSize) {
-            this.pagable = true;
-            this.toastr.success('', this.translate.instant("ShipmentreadyToDeliver"));
-          }
-        }
+    if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
+      this.outbound = JSON.parse(outboundData);
+    }
+    if (this.outbound.DeleiveryCollection !== undefined && this.outbound.DeleiveryCollection !== null && this.outbound.DeleiveryCollection.length > 0) {
+      this.orderCollection = this.getUniqueValuesByProperty(this.outbound.DeleiveryCollection);
+      if (this.orderCollection.length > this.pageSize) {
+        this.pagable = true;
+        this.toastr.success('', this.translate.instant("ShipmentreadyToDeliver"));
+      }
+    }
 
   }
 
@@ -1380,13 +1311,13 @@ export class OutCutomerComponent implements OnInit {
    * Create shipment detail data.
    */
   showShipmenInformation() {
-    
-     this.showShipmentInfo = true;
+
+    this.showShipmentInfo = true;
   }
-   serviceData1:any = [{
+  serviceData1: any = [{
     "ContainerId": 1,
     "ContainerName": "C1",
-    "Items": [ 
+    "Items": [
       {
         "ItemCode": 1,
         "ItemName": "Child_Batch",
@@ -1438,65 +1369,79 @@ export class OutCutomerComponent implements OnInit {
     ]
   }];
 
-   ShipmentItems:any =[];
-   ShipmentBtchSer:any =[];
-   ContainerHeader:any =[];
-   ContainerItems:any =[];
-   ContainerBatchSerial:any =[];
-   ShipmentInfoData:any;
-  public getShipmentDataItemDetails(showLookup:any = true) {
-    if(this.shipmentId == undefined || this.shipmentId == null ||
-      this.shipmentId== ""){
-         return;
+  ShipmentHDR = [];
+  ShipmentItems: any = [];
+  ShipmentBtchSer: any = [];
+  ContainerHeader: any = [];
+  ContainerItems: any = [];
+  ContainerBatchSerial: any = [];
+  ShipmentInfoData: any;
+  public getShipmentDataItemDetails(showLookup: any = true) {
+    if (this.shipmentId == undefined || this.shipmentId == null ||
+      this.shipmentId == "") {
+      return;
     }
-   var ContainerBtchSer:any =[];
+    var ContainerBtchSer: any = [];
     this.showLookup = false;
     this.showLookupLoader = true;
-    this.outboundservice.getShipmentDetail(this.shipmentId+"").subscribe(
+    this.outboundservice.getShipmentDetail(this.shipmentId + "").subscribe(
       resp => {
         this.showLookupLoader = false;
-        console.log("shipment Resp:",resp);
+        console.log("shipment Resp:", resp);
         if (resp != null && resp != undefined) {
-          if (resp[0]!=null && resp[0].ErrorMsg != null && resp[0].ErrorMsg == "7001") {
+          if (resp[0] != null && resp[0].ErrorMsg != null && resp[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
             this.showLookupLoader = false;
             return;
           }
-          if(showLookup){
-            this.showShipmentInfo = true;
-          }else{
-            this.showShipmentInfo = false;
-          }
-          
-           this.ShipmentItems = resp.ShipmentItems;
-           this.ShipmentBtchSer= resp.ShipmentBtchSer;
-           this.ContainerItems= resp.ContainerItems;
-           this.ContainerHeader= resp.ContainerHeader;
-           this.ContainerBatchSerial= resp.ContainerBtchSer;
-          for(let i=0;i<this.ShipmentItems.length; i++){
+          // if (showLookup) {
+          //   this.showShipmentInfo = true;
+          // } else {
+          //   this.showShipmentInfo = false;
+          // }        
+
+          this.ShipmentHDR.push({
+            ShipmentCode: this.shipmentId,
+            ShipmentId: this.shipmentId,
+            UseContainer: this.useContainer
+          })
+          this.ShipmentItems = resp.ShipmentItems;
+          this.ShipmentBtchSer = resp.ShipmentBtchSer;
+          this.ContainerItems = resp.ContainerItems;
+          this.ContainerHeader = resp.ContainerHeader;
+          this.ContainerBatchSerial = resp.ContainerBtchSer;
+          for (let i = 0; i < this.ShipmentItems.length; i++) {
             this.ShipmentItems[i]["ShipmentItemBatchSerial"] = []
           }
           //abhi container ki array use nahi kari hai..
-          this.ShipmentItems = this.setShipmentItemsBatchSerials(this.ShipmentItems,this.ShipmentBtchSer);
+          this.ShipmentItems = this.setShipmentItemsBatchSerials(this.ShipmentItems, this.ShipmentBtchSer);
           // set Container Data
-           for(let i=0;i<this.ContainerItems.length; i++){
-             this.ContainerItems[i]["ContainerItemsBatchSerial"] = []
-           }
-          for(let i=0;i<this.ContainerHeader.length; i++){
+          for (let i = 0; i < this.ContainerItems.length; i++) {
+            this.ContainerItems[i]["ContainerItemsBatchSerial"] = []
+          }
+          for (let i = 0; i < this.ContainerHeader.length; i++) {
             this.ContainerHeader[i]["ContainerItems"] = []
           }
-          this.ContainerHeader = this.setContainerItemsToHeader(this.ContainerHeader,this.ContainerItems);
-          this.ContainerHeader = this.setContainerItemBatchSerials(this.ContainerHeader,this.ContainerBatchSerial);
-         if(this.useContainer){
-          this.ShipmentInfoData = this.ContainerHeader;
-         }else{
-          this.ShipmentInfoData = this.ShipmentItems;
-         }
-          
+
+          this.ContainerHeader = this.setContainerItemsToHeader(this.ContainerHeader, this.ContainerItems);
+          this.ContainerHeader = this.setContainerItemBatchSerials(this.ContainerHeader, this.ContainerBatchSerial);
+
+          // if (this.useContainer) {
+          //   this.ShipmentHDR[this.ShipmentHDR.length - 1]["ContainerHeader"] = this.ContainerHeader;
+          // } else {
+          //   this.ShipmentHDR[this.ShipmentHDR.length - 1]["ShipmentItems"] = this.ShipmentItems;
+          // }
+
+          // if (this.useContainer) {
+            this.ShipmentHDR[this.ShipmentHDR.length - 1]["ContainerHeader"] = this.ContainerHeader;
+          // } else {
+            this.ShipmentHDR[this.ShipmentHDR.length - 1]["ShipmentItems"] = this.ShipmentItems;
+          // }
+
         } else {
           this.toastr.error('', this.translate.instant("ShipmentNotAvailable"));
         }
-        this.prepareContainerPackingData(this.ContainerHeader,this.ContainerItems);
+        this.prepareContainerPackingData(this.ContainerHeader, this.ContainerItems);
       },
       error => {
         this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
@@ -1505,65 +1450,77 @@ export class OutCutomerComponent implements OnInit {
     );
   }
 
+  showShipments() {
+    this.showShipmentInfo = true;
+    // if (this.useContainer) {
+    //   this.ShipmentInfoData = this.ShipmentHDR;
+    // } else {
+    //   this.ShipmentInfoData = this.ShipmentItems;
+    // }
+    this.ShipmentInfoData = this.ShipmentHDR;
+  }
+
+
+
   //packing data for container.
-  prepareContainerPackingData(containerHeader:any,containerItems: any){
+  prepareContainerPackingData(containerHeader: any, containerItems: any) {
     var packingCollectionItems = this.outbound.packingCollection;
     var tempPackingArray = [];
-    var num =0;
-    for(let i=0; i<containerHeader.length;i++){
-     
-      for(let j=0; j<containerItems.length;j++){
-        if(containerHeader[i].OPTM_CONTCODE == containerItems[j].OPTM_CONTCODE){
+    var num = 0;
+    for (let i = 0; i < containerHeader.length; i++) {
+
+      for (let j = 0; j < containerItems.length; j++) {
+        if (containerHeader[i].OPTM_CONTCODE == containerItems[j].OPTM_CONTCODE) {
           tempPackingArray.push({
-            CARDCODE:this.customerCode,
-            DocEntry:'',
-            ItemCode:'',
-            ItemTracking:'',
-            LineNum:'',
-            PkgNo:num+1,
-            PkgType:containerItems[j].OPTM_CONTTYPE,
-            Quantity:containerItems[j].OPTM_QUANTITY
+            CARDCODE: this.customerCode,
+            DocEntry: '',
+            ItemCode: '',
+            ItemTracking: '',
+            LineNum: '',
+            PkgNo: num + 1,
+            PkgType: containerItems[j].OPTM_CONTTYPE,
+            Quantity: containerItems[j].OPTM_QUANTITY
           })
         }
       }
     }
-     //lsOutbound
+    //lsOutbound
     let outboundData = localStorage.getItem(CommonConstants.OutboundData);
     if (outboundData != undefined && outboundData != '') {
-    this.outbound = JSON.parse(outboundData);
-    this.outbound.packingCollection = tempPackingArray
+      this.outbound = JSON.parse(outboundData);
+      this.outbound.packingCollection = tempPackingArray
     }
-  } 
+  }
 
-  setShipmentInnerItemsBatchSerials(ShipmentItems:any,ShipmentBtchSer:any):any{
-    for(let i =0; i<ShipmentItems.length;i++){
-      for(let k=0;k<this.ShipmentItems[i].ShipmentItemBatchSerial.length; k++){
-      
-      let itemLines = ShipmentBtchSer.filter(data =>
-        ShipmentItems[i].OPTM_ITEMCODE === data.OPTM_ITEMCODE 
-      );
-      this.ShipmentItems[i].ShipmentItemBatchSerial[k].batchSerialLines = ShipmentBtchSer;
+  setShipmentInnerItemsBatchSerials(ShipmentItems: any, ShipmentBtchSer: any): any {
+    for (let i = 0; i < ShipmentItems.length; i++) {
+      for (let k = 0; k < this.ShipmentItems[i].ShipmentItemBatchSerial.length; k++) {
+
+        let itemLines = ShipmentBtchSer.filter(data =>
+          ShipmentItems[i].OPTM_ITEMCODE === data.OPTM_ITEMCODE
+        );
+        this.ShipmentItems[i].ShipmentItemBatchSerial[k].batchSerialLines = ShipmentBtchSer;
       }
     }
-    return  ShipmentItems;
+    return ShipmentItems;
   }
-  setShipmentItemsBatchSerials(ShipmentItems:any,ShipmentBtchSer:any):any{
-    for(let i =0; i<ShipmentItems.length;i++){
-      var item =  ShipmentItems[i];
+  setShipmentItemsBatchSerials(ShipmentItems: any, ShipmentBtchSer: any): any {
+    for (let i = 0; i < ShipmentItems.length; i++) {
+      var item = ShipmentItems[i];
       let itemLines = ShipmentBtchSer.filter(data =>
-        item.OPTM_ITEMCODE === data.OPTM_ITEMCODE 
+        item.OPTM_ITEMCODE === data.OPTM_ITEMCODE
       );
       item["ShipmentItemBatchSerial"] = itemLines;
     }
-    return  ShipmentItems;
+    return ShipmentItems;
   }
 
   setContainerItemBatchSerials(ContainerHeader: any, ContainerBtchSer: any): any {
     for (let p = 0; p < ContainerHeader.length; p++) {
       for (let q = 0; q < ContainerHeader[p].ContainerItems.length; q++) {
- 
-       var  hdrContainerId = ContainerHeader[p].ContainerItems[q].OPTM_CONTAINERID;
-       var hdrItemCode = ContainerHeader[p].ContainerItems[q].OPTM_ITEMCODE;
+
+        var hdrContainerId = ContainerHeader[p].ContainerItems[q].OPTM_CONTAINERID;
+        var hdrItemCode = ContainerHeader[p].ContainerItems[q].OPTM_ITEMCODE;
         let containerItemBatchSerialLines = ContainerBtchSer.filter(data =>
           hdrContainerId == data.OPTM_CONTAINERID &&
           hdrItemCode == data.OPTM_ITEMCODE
@@ -1574,24 +1531,27 @@ export class OutCutomerComponent implements OnInit {
     return ContainerHeader;
   }
 
-  setContainerItemsToHeader(ContainerHeaders:any,ContainerItems:any):any{
-    for(let i =0; i<ContainerHeaders.length;i++){
-      var headerItem =  ContainerHeaders[i];
-      let containerItemLines = ContainerItems.filter(data => 
-        headerItem.OPTM_CONTCODE === data.OPTM_CONTAINERID 
+  setContainerItemsToHeader(ContainerHeaders: any, ContainerItems: any): any {
+    for (let i = 0; i < ContainerHeaders.length; i++) {
+      var headerItem = ContainerHeaders[i];
+      let containerItemLines = ContainerItems.filter(data =>
+        headerItem.OPTM_CONTCODE === data.OPTM_CONTAINERID
       );
       headerItem.ContainerItems = containerItemLines;
     }
-    return  ContainerHeaders;
+    return ContainerHeaders;
   }
 
-  getShipmentLookupEvent(eventValue){
+  getShipmentLookupEvent(eventValue) {
     if (eventValue != null && eventValue == "close") {
       //nothing to do
       this.showShipmentInfo = false;
       return;
     }
-  
+  }
+
+  shipmentRowDeleteEvent(index) {
+
   }
 
   printDialog: boolean = false
@@ -1605,7 +1565,7 @@ export class OutCutomerComponent implements OnInit {
     this.inboundService.printingServiceForSubmitGRPO(dNo, value).subscribe(
       (data: any) => {
         this.showPDFLoading = false;
-       // this.printDialog = false;
+        // this.printDialog = false;
         if (data != undefined) {
           // console.log("" + data);
           if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
@@ -1649,69 +1609,16 @@ export class OutCutomerComponent implements OnInit {
   }
 
   printOptionsClick(event) {
-    this.displayPDF(""+this.responseDocEntry, event)
+    this.displayPDF("" + this.responseDocEntry, event)
   }
 
   closePDF() {
     this.displayPDF1 = false;
     console.log("PDF dialog is closed");
   }
-  closePrintDialog(){
+  closePrintDialog() {
     this.printDialog = false;
   }
-
-
-
-
-
-// not using this method becaulse api which is using here is not correct.
-
-// public getShipmentDetail() {
-//   this.showLookup = false;
-//   if (this.shipmentId == "" || this.shipmentId == undefined || this.shipmentId == null) {
-//     return;
-//   }
-//   let whseId = localStorage.getItem("whseId");
-//   this.showLookupLoader = true;
-//   this.outboundservice.getShipmentDetail(this.shipmentId).subscribe(
-//     resp => {
-//       this.showLookupLoader = false;
-//       if (resp != null && resp != undefined) {
-//         this.resetOldShipmentData();
-//         if (resp.ShipmentItems.length > 0) {
-//           if(resp.ShipmentBtchSer.length>0 || (resp.ContainerHeader.length>0 && resp.ContainerItems.length>0)){
-//             this.parseAndGenerateDeliveryDataFromShipment(resp);
-//           }else{
-//             this.toastr.error('', this.translate.instant("ShipmentHasNoData"));
-//           }
-          
-//         } else {
-//           if(resp.ItemHeader.length==0 ||resp.ItemDetail.length==0 ){
-//             this.resetOldShipmentData();
-
-//             this.toastr.error('', this.translate.instant("ShipmentHasNoData"));
-//           }else{
-//           if (resp[0].ErrorMsg == "7001") {
-//             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
-//             this.showLookupLoader = false;
-//             return;
-//           }
-//         }
-//         }
-//       } else {
-//         this.toastr.error('', this.translate.instant("ShipmentNoInfo"));
-//         this.orderNumber = "";
-//        // this.scanShipmentId.nativeElement.focus();
-//         this.shipmentId = "";
-//       }
-
-//     },
-//     error => {
-//       this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
-//       this.showLookupLoader = false;
-//     }
-//   );
-// }
 }
 
 

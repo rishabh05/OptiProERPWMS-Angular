@@ -6,7 +6,7 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { InboundMasterComponent } from '../inbound-master.component';
 import { StatePersistingServiceService } from 'src/app/services/state-persisting-service.service';
-
+import { CommonConstants } from 'src/app/const/common-constants';
 @Component({
   selector: 'app-inbound-details',
   templateUrl: './inbound-details.component.html',
@@ -25,6 +25,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
   VendCode: string;
   VendCode1: string;
   VendName: string;
+  vendRefNo: string;
   futurepo: boolean = false;
   showLoader: boolean = false;
   showGRPOGridAndBtn: boolean = false;
@@ -80,6 +81,8 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
 
     this.VendCode = localStorage.getItem("VendCode");
     this.VendName = localStorage.getItem("VendName");
+    this.VendRefNo = localStorage.getItem("VendRefNo");
+    
     if(this.VendCode != ""){
       this.showNext = true;
     }else{
@@ -210,6 +213,8 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
     if (this.VendCode == "" || this.VendCode == undefined) {
       return;
     }
+
+
     this.showLoader = true;
     var result = false;
     await this.inboundService.IsVendorExists(this.VendCode).then(
@@ -297,6 +302,30 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
 
   async onNextClick() {
     var result = await this.validateBeforeSubmit();
+
+    //this.OnVendRefNoChange();
+    let vrNO = localStorage.getItem(CommonConstants.VendRefNo);
+    if (vrNO != undefined && vrNO != '') {
+      if(this.VendRefNo.length <= 100){
+        localStorage.setItem(CommonConstants.VendRefNo, this.VendRefNo);
+      }else{
+        this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+      }
+   }else{
+    if(this.VendRefNo.length <= 100){
+      localStorage.setItem(CommonConstants.VendRefNo, this.VendRefNo);
+    }else{
+      this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+    } 
+   }
+
+
+
+    // if(this.VendRefNo.length <= 100){
+    //   localStorage.setItem("VendRefNo", this.VendRefNo);
+    // }else{
+    //   this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+    // }
     this.isValidateCalled = false;
     console.log("validate result: " + result);
     if (result != undefined && result == false) {
@@ -633,11 +662,21 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
   }
 
   OnVendRefNoChange() {
-    if(this.VendRefNo.length <= 100){
-      localStorage.setItem("VendRefNo", this.VendRefNo);
-    }else{
-      this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
-    }
+    
+    // if(this.VendRefNo.length <= 100){
+    //   localStorage.setItem("VendRefNo", this.VendRefNo);
+    // }else{
+    //   this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+    // }
+
+  //   let vrNO = localStorage.getItem(CommonConstants.VendRefNo);
+  //   if (vrNO != undefined && vrNO != '') {
+  //     if(this.VendRefNo.length <= 100){
+  //       localStorage.setItem(CommonConstants.VendRefNo, this.VendRefNo);
+  //     }else{
+  //       this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+  //     }
+  //  }
   }
 
   onHiddenVendCodeScanClick(){

@@ -729,7 +729,7 @@ export class InboundPolistComponent implements OnInit {
               });
             }
           }
-
+          this.addToGRPOArray.Header = [];
           this.addToGRPOArray.Header.push({
             NumAtCard: localStorage.getItem("VendRefNo")
           });

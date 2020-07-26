@@ -67,7 +67,7 @@
                             <label for="inputPassword" class="col-sm-3 col-form-label">{{'Inbound_VendRefNo'|translate}}</label>
                             <div class="col-sm-9">
                                 <div class="input-group input-group-sm">
-                                    <input #scanVenderRefNo type="text" class="form-control form-control-sm" id="venderRefNo" name="VendRefNo" [(ngModel)]="VendRefNo" placeholder="{{'Inbound_VendRefNo'|translate}}"
+                                    <input #scanVenderRefNo type="text" tabIndex="-1" class="form-control form-control-sm" id="venderRefNo" name="VendRefNo" [(ngModel)]="VendRefNo" placeholder="{{'Inbound_VendRefNo'|translate}}"
                                         (blur)="OnVendRefNoChangeBlur()">
     
                                 </div>
@@ -129,7 +129,7 @@
                 <button *ngIf="showGRPOGridAndBtn" class="btn btn-success k-button btn-sm btn-icon-with-text" type="button" (mousedown)="receive()">
                     <span class="k-icon k-i-check" role="presentation"></span> {{'Receive'|translate}}</button>
 
-                <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" (mousedown)="onNextClick()" [disabled]="!showNext"
+                <button type="button" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" (click)="onNextClick()" [disabled]="!showNext"
                     skipLocationChange>
                     <i class="opti-icon-arrow-next"></i>
                 </button>

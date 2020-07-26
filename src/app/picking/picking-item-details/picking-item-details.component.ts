@@ -930,7 +930,7 @@ export class PickingItemDetailsComponent implements OnInit {
 
     // Manage qty with Batch
     if (this.OPTM_Tracking == 'B') {
-      if (this.PickTaskDetail.OPTM_WHSTASK_BTCHSER.length > 0) {
+      if (this.PickTaskDetail.OPTM_WHSTASK_BTCHSER != undefined && this.PickTaskDetail.OPTM_WHSTASK_BTCHSER.length > 0 && this.PickTaskDetail.OPTM_WHSTASK_BTCHSER.find(e => e.OPTM_ITEMCODE == this.itemcodeValue && e.OPTM_BTCHSER != '') != undefined) {
         let BtchSerDtl = this.PickTaskDetail.OPTM_WHSTASK_BTCHSER.find(e => e.OPTM_BTCHSER == this.PT_Enter_ContBtchSer && e.OPTM_TASKID == this.pickTaskName && e.OPTM_ITEMCODE == this.itemcodeValue);
         if (BtchSerDtl == undefined) {
 
