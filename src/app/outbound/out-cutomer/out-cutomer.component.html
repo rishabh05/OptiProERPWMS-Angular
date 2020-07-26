@@ -22,7 +22,7 @@
                                         <i class="opti-icon-search"></i>
                                     </button>
                                     <button tabIndex="-1" class="k-button k-primary btn separate-btn ship-btn" type="button"
-                                    (mousedown)="getShipmentDataItemDetails()" >
+                                    (mousedown)="showShipments()" >
                                     <i class="opti-icon-view-batch mr-1"></i>{{'Shipment_Detail'|translate}}
                                     </button>
                                 </div>
@@ -81,13 +81,13 @@
                             <div class="input-group input-group-sm">
                                 <input #dockDoorID (blur)="onDockDoorBlur()" id="outDockDoorNoInput"
                                     type="text" class="form-control form-control-sm" name='DockDoorCode'
-                                    [(ngModel)]="dockDoorCode" placeholder="{{'outbound_Dock_DoorNo'|translate}}">
-                                <div class="input-group-append">
+                                    [(ngModel)]="dockDoorCode" placeholder="{{'outbound_Dock_DoorNo'|translate}}" disabled>
+                                <!-- <div class="input-group-append">
                                     <button tabIndex="-1"
-                                        class="k-button k-primary btn" (mousedown)="getDockDoorList()" type="button">
+                                        class="k-button k-primary btn" (mousedown)="getDockDoorList()" type="button" disabled>
                                         <i class="opti-icon-search"></i>
                                     </button>
-                                </div>
+                                </div> -->
 
                                 <div class="ml-1 d-flex">
                                     <button tabIndex="-1" type="button" id="outDockDoorScan" 
@@ -174,7 +174,7 @@
                             <kendo-grid-column media="(min-width: 768px)" field="DOCNUM" title="Order No">
                             </kendo-grid-column>
                             <kendo-grid-column headerClass="text-center" class="text-center" media="(min-width: 768px)"
-                                field="DOCNUM" [width]="80" title="{{'Delete'|translate}}">
+                                field="DOCNUM" [width]="80" title="{{'Delete'|translate}}" *ngIf="deliveryOptionType==1">
                                 <ng-template kendoGridCellTemplate let-idx="rowIndex">
                                     <button id="removeSelectedMeterial" (click)="removeOrder(idx,gridItem)"
                                         class="btn btn-danger k-button btn-sm btn-icon">
@@ -237,7 +237,8 @@
         [yesButtonText]="yesButtonText" (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
 </span>
 <span *ngIf="showShipmentInfo==true">
- <app-shipmentinfo  [serviceData]='ShipmentInfoData' [useContainer]='useContainer' (lookupOutputEvent)="getShipmentLookupEvent($event)"></app-shipmentinfo>
+ <app-shipmentinfo  [serviceData]='ShipmentInfoData' [useContainer]='useContainer' (lookupOutputEvent)="getShipmentLookupEvent($event)" 
+ (lookupRowDeleteEvent)="shipmentRowDeleteEvent($event)"></app-shipmentinfo>
 </span> 
 
 
@@ -250,12 +251,12 @@
     <div class="px-3">
         <div class="form-group row">
             <div class="input-group input-group-sm">
-                <button class="btn btn-primary k-button btn-sm btn-icon-with-text" type="button" (click)="printOptionsClick(13)">{{'PickList'|translate}}
-                </button>
+                <!-- <button class="btn btn-primary k-button btn-sm btn-icon-with-text" type="button" (click)="printOptionsClick(13)">{{'PickList'|translate}}
+                </button> -->
                 <button class="btn btn-primary k-button btn-sm btn-icon-with-text" type="button" (click)="printOptionsClick(12)">{{'PackList'|translate}}
                 </button>
-                <button class="btn btn-primary k-button btn-sm btn-icon-with-text" type="button" (click)="printOptionsClick(11)">{{'BOL'|translate}}
-                </button>
+                <!-- <button class="btn btn-primary k-button btn-sm btn-icon-with-text" type="button" (click)="printOptionsClick(11)">{{'BOL'|translate}}
+                </button> -->
             </div>
         </div>
     </div>
