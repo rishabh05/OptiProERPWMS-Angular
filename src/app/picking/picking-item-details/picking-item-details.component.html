@@ -43,7 +43,7 @@
                                     <div class="input-group input-group-sm">
                                         <input #scanPTshipmentId type="text" class="form-control form-control-sm" id="CreatedContOrTote" name="CreatedContOrTote"
                                             [(ngModel)]="CreatedContOrTote" placeholder="{{ContainerTotePlaceHolder}}" (blur)="CreateContainerOrTote()"
-                                            [disabled]=containercreated trim="blur">
+                                            [disabled]="containercreated" trim="blur">
                                     </div>
                                 </div>
                             </div>

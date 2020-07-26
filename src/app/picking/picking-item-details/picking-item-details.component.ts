@@ -84,6 +84,7 @@ export class PickingItemDetailsComponent implements OnInit {
   Type: string;
   OpenTaskCount: number = 2;
   intStepSeq: number = 0;
+  blnSaveClicked: boolean = false;
 
   @ViewChild('focusOnSerNo') focusOnSerNo;
   @ViewChild('focusOnItemCode') focusOnItemCode;
@@ -168,11 +169,53 @@ export class PickingItemDetailsComponent implements OnInit {
       return;
     }
     if (this.ShipmentList[0].OPTM_PICK_OPER == "2") {
-      this.toastr.success("", this.translate.instant("CCCreated"))
+      this.ValidatePackingContainer();
+        
+      //this.toastr.success("", this.translate.instant("CCCreated"))
     } else {
       this.toastr.success("", this.translate.instant("ToteCreated"))
+      this.containercreated = true;
     }
-    this.containercreated = true;
+    //this.containercreated = true;
+  }
+
+  ValidatePackingContainer() {
+    this.showLoader = true;
+    // console.log("2  " + new Date().toLocaleTimeString());
+    this.picktaskService.ValidatePackingContainer(this.CreatedContOrTote).subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        if (data != undefined) {
+          if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
+          this.showLookupLoader = false;
+          if (data != "") {
+            this.CreatedContOrTote = '';
+            this.toastr.error("", data);
+            this.containercreated = false;            
+          } else {
+            this.toastr.success("", this.translate.instant("CCCreated"))
+            this.containercreated = true;
+          }          
+        } else {
+          this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          return;
+        }
+      },
+      error => {
+        this.showLoader = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+        return;
+      }
+    );
   }
 
   getStepNo(OPTM_STEP_CODE): any {
@@ -703,6 +746,9 @@ export class PickingItemDetailsComponent implements OnInit {
       for (var i = 0; i < this.PickTaskDetail.OPTM_WHSTASK_DTL.length; i++) {
         if (this.PickTaskDetail.OPTM_WHSTASK_DTL[i].OPTM_TASKID == this.PickTaskList[this.index].OPTM_TASKID) {
           if (this.PT_Enter_ContBtchSer === this.PickTaskDetail.OPTM_WHSTASK_DTL[i].OPTM_CONTCODE) {
+            if (this.PickTaskDetail.OPTM_WHSTASK_DTL[i].OPTM_DAMAGE_FLG == 1) {
+              this.toastr.error('Srini', "Scanned Container Damaged");
+            }
             batserAdded = true;
             let result = this.ContBtchSerArray.find(element => element == this.PT_Enter_ContBtchSer);
             if (result == undefined) {
@@ -837,8 +883,8 @@ export class PickingItemDetailsComponent implements OnInit {
               this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
-          this.showLookupLoader = false;
-          if (data.Table.length > 0) {
+          this.showLookupLoader = false;          
+          if (data.Table != undefined && data.Table.length > 0) {
             this.PT_Enter_ContBtchSer = data.Table[0].LOTNO;
             this.BatchSerDetail = data.Table[0];
             // if (this.OPTM_Tracking == 'S' && this.PT_Enter_ContBtchSer != "") {
@@ -853,7 +899,7 @@ export class PickingItemDetailsComponent implements OnInit {
             //     OPTM_STARTDATETIME: this.OPTM_STARTDATETIME
             //   });
             // }
-            this.addBatchSerials();
+            this.addBatchSerials();            
           } else {
             this.PT_Enter_ContBtchSer = "";
             this.toastr.error('', this.translate.instant("ProdReceipt_InvalidBatchSerial"));
@@ -1062,14 +1108,16 @@ export class PickingItemDetailsComponent implements OnInit {
     // this.nextStep();
     this.whsCode = this.PickTaskList[this.index].OPTM_SRC_WHSE;
     this.UserGrp = this.PickTaskList[this.index].OPTM_USER_GRP;
+    this.blnSaveClicked = true;
 
     //Srini. Added Below
-    this.completedTaskCount = this.completedTaskCount + 1
-    if (this.completedTaskCount == this.totalPickTaskCount) {
+    //this.completedTaskCount = this.completedTaskCount + 1
+    if ((this.completedTaskCount + 1) == this.totalPickTaskCount) {
       //Srini. Call function to show Drop BIN and its confirmation  
       //Normal completion of Picklist
       this.GetCountOfOpenTasksInPickList();
-      if (this.OpenTaskCount = 1) {
+      /*
+      if (this.OpenTaskCount == 1) {
         //This is the last task open in the Picklist and is picked. 
         //Drop picklist contents to Target location
         this.PickListDropBin = this.PickDropBin;
@@ -1081,6 +1129,7 @@ export class PickingItemDetailsComponent implements OnInit {
       }
       this.intStepSeq = 0;
       this.ProcessPicklistNextClosureStep();
+      */
       //Srini Addition ends here
     } else {
       // Srini Added Above
@@ -1090,7 +1139,10 @@ export class PickingItemDetailsComponent implements OnInit {
 
   //Added By Srini 30-Jun-2020
   ProcessPicklistNextClosureStep() {
-    if (this.completedTaskCount == this.totalPickTaskCount) {
+    //If user tries to go to next Picklist while working on Last pick task but does not want to save
+    //the last pick information as he has not clicked on Save button. Then check if any tasks are processed
+    //before clicking the next picklist button. If yes then drop the contents to Part pick bin
+    if (this.blnSaveClicked && ((this.completedTaskCount + 1) == this.totalPickTaskCount)) {
       this.currentStep = this.getStepNo(this.PickListClosureSteps[this.intStepSeq].OPTM_STEP_CODE);
       switch (this.currentStep) {
         case this.DROP_BIN_STEP:
@@ -1099,8 +1151,8 @@ export class PickingItemDetailsComponent implements OnInit {
           this.toastr.success('Srini', this.translate.instant("ConfirmPickDropLocation"));
       }
     } else if (this.countOfNowPickedTasks > 0) {
-      //User has picked at least on one task after moving to this Picklist.
-      //He has not just moved through the atsks without completing any of them
+      //User has picked at least one task after moving to this Picklist.
+      //He has not just moved through the tasks without completing any of them
       //Picking not completed on Picklist. But user is going out of Picklist
       //Drop at Part Picked location for later pickup.
       this.PickListDropBin = this.PartPickDropBin;
@@ -1112,6 +1164,8 @@ export class PickingItemDetailsComponent implements OnInit {
 
   onPickDropConfirmation() {
     //Submit Final Pick Task and Update Target Bin Location on all Tasks related to this User Group
+    //Update final Pick Drop Bin in the dataset before saving.
+    this.SubmitPickTaskData[0].Pick_Drop_Bin = this.PickListDropBin;
     this.onSubmitClick();
   }
 
@@ -1153,6 +1207,7 @@ export class PickingItemDetailsComponent implements OnInit {
           this.showLookupLoader = false;
           if (data.OUTPUT[0].Successmsg == "SUCCESSFULLY") {
             this.countOfNowPickedTasks = this.countOfNowPickedTasks + 1;
+            this.completedTaskCount = this.completedTaskCount + 1;
             this.clearScanningFields();
             this.toastr.success('', this.translate.instant("PickSubmitMsg"));
             if (this.completedTaskCount == this.totalPickTaskCount) {
@@ -1186,6 +1241,12 @@ export class PickingItemDetailsComponent implements OnInit {
 
   getNextPick() {
     this.CancelPickList();
+    
+    if (this.countOfNowPickedTasks > 0) {
+      //There are tasks that are processed but not dropped in any bin
+      this.ProcessPicklistNextClosureStep();
+      return;
+    }
     this.GetNextPickList(this.ShipmentList[0].OPTM_PICKLIST_ID, false);
   }
 
@@ -1446,13 +1507,13 @@ export class PickingItemDetailsComponent implements OnInit {
               this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
-          if (data.OPEN_TASKS[0].OPEN_TASKS > 0) {
+          if (data.OPEN_TASKS.length > 0) {
             this.OpenTaskCount = data.OPEN_TASKS[0].OPEN_TASKS;
-            if (this.OpenTaskCount = 0) {
+            if (this.OpenTaskCount == 0) {
               this.toastr.error('Srini', this.translate.instant("No_open_tasks_Picklist"));
               return;
             } else {
-              if (this.OpenTaskCount = 1) {
+              if (this.OpenTaskCount == 1) {
                 //This is the last task open in the Picklist and is picked. 
                 //Drop picklist contents to Target location
                 this.PickListDropBin = this.PickDropBin;
