@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class NumberFormatPipe implements PipeTransform {
 
-  transform(value: number, args?: any): any {
+  transform(value: any, args?: any): any {
     
     let formattedNo = ""; 
     var precision = localStorage.getItem("DecimalPrecision");
@@ -15,9 +15,9 @@ export class NumberFormatPipe implements PipeTransform {
     if(value == null && value == undefined){
       return value;
     }
-    // if(value == ""){
-    //   value = 0;
-    // }
+    if(value == ""){
+      value = 0;
+    }
     var arr = value.toString().trim().split(decSeperator);
     formattedNo = this.addDigitSeperatorToNo(arr[0], thSeperator);
     //logic to add . and ifs after place digit manage.

@@ -6,8 +6,7 @@
     Shipment details:
   </kendo-dialog-titlebar>
 
-  <!-- Shipment Info grid start -->
-  <kendo-grid *ngIf="false" [data]="serviceData" [skip]="skip" #gridUser [pageable]="true" [selectable]="true" [pageSize]="5">
+  <!-- <kendo-grid *ngIf="false" [data]="serviceData" [skip]="skip" #gridUser [pageable]="true" [selectable]="true" [pageSize]="5">
     <kendo-grid-column field="ShipmentId" title="ShipmentId"></kendo-grid-column>
     <kendo-grid-column field="ShipmentCode" title="{{'ContainerCode'|translate}}"></kendo-grid-column>
     <kendo-grid-column field="" headerClass="text-center" class="text-center" [width]="10" title="">
@@ -33,8 +32,6 @@
           </ng-template>
         </kendo-grid-column>
         <ng-template kendoGridDetailTemplate let-dataItem>
-          <!-- Shipment Item Batch/Serial Info grid start -->
-          <!-- <h5>Shipment Items Batch/Serial Info:</h5>   -->
           <kendo-grid [data]="dataItem.ShipmentItemBatchSerial">
             <kendo-grid-column field="OPTM_SHIPMENTID" title="{{'ShipmentId'|translate}}"></kendo-grid-column>
             <kendo-grid-column field="OPTM_DTLLINEID" title="Line Id"></kendo-grid-column>
@@ -48,12 +45,10 @@
               </ng-template>
             </kendo-grid-column>
           </kendo-grid>
-          <!-- Shipment Item Batch/Serial Info grid start -->
         </ng-template>
       </kendo-grid>
     </ng-template>
-  </kendo-grid>
-  <!-- Shipment Info grid start -->
+  </kendo-grid> -->
 
 
   <!-- Shipment grid start -->
@@ -62,7 +57,7 @@
     <kendo-grid-column field="ShipmentCode" title="{{'ShipmentCode'|translate}}"></kendo-grid-column>
     <kendo-grid-column field="" headerClass="text-center" class="text-center" [width]="100" title="">
       <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-        <button type="button" class="btn btn-danger k-button btn-sm btn-icon" (mousedown)="openConfirmForDelete(rowIndex, gridUser)">
+        <button type="button" class="btn btn-danger k-button btn-sm btn-icon" (mousedown)="openConfirmForDelete(dataItem.ShipmentCode, gridUser)">
           <span class="k-icon k-i-delete" role="presentation"></span>
         </button>
       </ng-template>
