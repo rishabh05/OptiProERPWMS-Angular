@@ -727,10 +727,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     if (result != undefined && result == false) {
       return;
     }
-    // if(this.qty== undefined) {
-    //   var result1 = await  this.onQtyBlur(this.scanQtyRef)
-    //   this.qtyFieldBlurFire = false
-    // }
+
     var result1 = await  this.onQtyBlur(this.scanQtyRef)
 
     if (this.qty == 0 || this.qty == undefined) {
@@ -2954,7 +2951,6 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
           this.addToGRPOArray.Header.push({
             NumAtCard: localStorage.getItem("VendRefNo")
           });
-
         }
       }
       localStorage.setItem("AddToGRPO", JSON.stringify(this.addToGRPOArray));

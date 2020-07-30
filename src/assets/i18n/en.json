@@ -583,6 +583,7 @@
 
   "ARINvoiceNotCreated": "AR Invoice for this delivery is not created due to missing tax code.",
   "ARINvoiceSucess": "AR Invoice for this delivery has been  created successfully.",
+  "Inbound_InvoiceExistMessage": "Invoice# does not exist.",
   "Dummy": "Dummy"
 }
  

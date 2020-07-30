@@ -589,7 +589,12 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
           }
           else {
             this.poCode = "";
-            this.toastr.error('', this.translate.instant("Inbound_POExistMessage"));
+            if(this.inboundFromWhere==2){
+              this.toastr.error('', this.translate.instant("Inbound_InvoiceExistMessage"));
+            }else{
+              this.toastr.error('', this.translate.instant("Inbound_POExistMessage"));
+            }
+            
             this.poScanInputField.nativeElement.focus()
             result = false;
           }
@@ -626,6 +631,10 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
               this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
                 this.translate.instant("CommonSessionExpireMsg"));
               return;
+            }
+            if(data.Table==undefined || data.Table==null ||  data.Table.length==0){
+              this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+              return;  
             }
             this.showLookupLoader = false;
             this.serviceData = data.Table;
