@@ -128,7 +128,7 @@ export class BinLabelComponent implements OnInit {
           for (let index = 0; index < this.serviceData.length; index++) {
             if(this.fromBin == this.serviceData[index].BINNO){
               shouldAdd = true;
-              continue;
+              //continue;
             } 
             if(shouldAdd){ 
               serviceDataTemp.push(this.serviceData[index]);
