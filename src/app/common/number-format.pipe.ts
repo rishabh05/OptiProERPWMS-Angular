@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class NumberFormatPipe implements PipeTransform {
 
-  transform(value: number, args?: any): any {
+  transform(value: any, args?: any): any {
     
     let formattedNo = ""; 
     var precision = localStorage.getItem("DecimalPrecision");

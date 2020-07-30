@@ -13,10 +13,11 @@ export class ShipmentinfoComponent implements OnInit {
   @Input() serviceData: any;
   @Input() useContainer: any;
  
-
   lookupPagable: boolean = true; 
   lookupPageSize: number = 10;
   @Output() lookupOutputEvent = new EventEmitter();
+  @Output() lookupRowDeleteEvent = new EventEmitter();
+
   ngOnInit() {
   }
   constructor(private toastr: ToastrService,  translate: TranslateService, private router: Router) {
@@ -30,6 +31,12 @@ export class ShipmentinfoComponent implements OnInit {
   closeDialog(){
     this.showDialog = false;
     this.lookupOutputEvent.emit('close')
+  }
+
+  openConfirmForDelete(rowindex, gridData: any){
+    this.serviceData.splice(rowindex, 1);
+    gridData.data = this.serviceData;
+    this.lookupRowDeleteEvent.emit(rowindex);
   }
 
 }

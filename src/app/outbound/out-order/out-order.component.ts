@@ -13,6 +13,7 @@ import { InventoryTransferService } from 'src/app/services/inventory-transfer.se
 import { InboundService } from 'src/app/services/inbound.service';
 import { PackingModel } from 'src/app/models/outbound/PackingModel';
 
+// This file called from Outbound -> SO delivery, Shipment delivery, IT by ITR.
 
 @Component({
   selector: 'app-out-order',
@@ -610,7 +611,7 @@ export class OutOrderComponent implements OnInit {
   }
 
 
-
+  isDeliveryContainerPacking:boolean = false;
   prepareDeleiveryCollectionAndDeliver(orderId: any) {
 
     if (this.outbound != null && this.outbound != undefined
@@ -755,16 +756,37 @@ export class OutOrderComponent implements OnInit {
         deliveryToken.UDF = [];
         deliveryToken.PackingData = this.getPackingDataFromLocalStorage()
       }
+      if(deliveryToken.PackingData.length>0){
+        this.isDeliveryContainerPacking = true;
+      }
       //==delivery submit final code===
       this.outboundservice.addDeleivery(deliveryToken).subscribe(
         data => {
           this.showLookupLoader = false;
           if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
             this.delNo = data[0].SuccessNo;
+            this.invoiceStatus = data[0].InvoiceStatus;
+            
             this.responseDocEntry =  data[0].DocEntry
             this.toastr.success('', this.translate.instant("DeleiverySuccess") + " : " + data[0].SuccessNo);
             // this.printDialog = true  
-            this.showPrintConfirmDialog();
+
+
+            if(this.invoiceStatus=="N" ||  this.invoiceStatus=="n" ){
+             // this.toastr.error('', this.translate.instant("ARINvoiceNotCreated") + " : " + data[0].SuccessNo);
+            }else{
+              if(this.invoiceStatus=="Y" ||  this.invoiceStatus=="y" ){
+              //  this.toastr.success('', this.translate.instant("ARINvoiceSucess") + " : " + data[0].SuccessNo);
+              }
+            }
+            //this code will be in 186 machine.
+            if(this.isDeliveryContainerPacking){ 
+              this.showPrintConfirmDialog();
+            }
+
+            // for mormal deployment we will show report dialog with otions need to uncomment in html.
+            //this.showPrintConfirmDialog();
+
           } else if (data[0].ErrorMsg == "7001") {
             this.showLookupLoader = false;
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
@@ -2130,7 +2152,7 @@ export class OutOrderComponent implements OnInit {
   printOptionsClick(event) {
     this.displayPDF(""+this.responseDocEntry, event)
   }
-
+  invoiceStatus: any = ""
   delNo: any = "";
   responseDocEntry: any = "";  
   printDialog: boolean = false
