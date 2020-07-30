@@ -759,7 +759,7 @@ export class PhysicalCountComponent implements OnInit {
       }
     }
 
-    if (!isLotSerExist) {
+    if (!isLotSerExist && this.batchserno != "") {
       oAddPhysicalCountData.LotSerial.push({
         DocEntry: "" + this.DocEntry,
         DocNo: this.DocNo,
