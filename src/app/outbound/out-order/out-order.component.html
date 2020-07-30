@@ -462,6 +462,11 @@
         [yesButtonText]="yesButtonText" (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
 </span>
 
+<!-- Dialog -->
+<span *ngIf="showConfirmDialogForITRPrint">
+    <app-comon-confirm-dialog [titleMessage]="dialogMsg" [fromWhere]="dialogFor" [noButtonText]="noButtonText"
+        [yesButtonText]="yesButtonText" (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
+</span>
 
 <!--hari pdf display code.-->
 <kendo-dialog  *ngIf="printDialog" (close)="closePrintDialog('dialog')" [minWidth]="250" [width]="450">

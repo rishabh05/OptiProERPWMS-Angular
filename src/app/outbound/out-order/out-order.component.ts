@@ -1481,6 +1481,10 @@ export class OutOrderComponent implements OnInit {
 
           this.fromEvent = "";
           break;
+
+        case ("printDialogForITR"):
+          this.displayPDF(""+this.responseDocEntry, 14)
+          break;
       }
     } else {
       if ($event.Status == "no") {
@@ -1913,6 +1917,7 @@ export class OutOrderComponent implements OnInit {
               this.toastr.success('', this.translate.instant("InvTransfer_ITRTransferSuccess") + " : " + data[0].SuccessNo);
               localStorage.setItem(CommonConstants.OutboundData, null);
               this.resetITRFields();
+              this.responseDocEntry = data[0].SuccessNo;
               this.itrCode = ''
               this.orderNumber = ''
               //reset global object for itr success.====
@@ -1921,6 +1926,7 @@ export class OutOrderComponent implements OnInit {
               var customerCode = "";
               var customerName = "";
               this.outbound.CustomerData = { CustomerCode: customerCode, CustomerName: customerName, TrackingId: "", CustRefNo: "" };
+              this.showPrintConfirmDialogForITR()
             } else {
               this.toastr.error('', data[0].ErrorMsg);
             }
@@ -2183,6 +2189,14 @@ export class OutOrderComponent implements OnInit {
     this.yesButtonText = this.translate.instant("yes");
     this.noButtonText = this.translate.instant("no");
     this.dialogFor = "receiveSinglePDFDialog";
+    this.dialogMsg = "Do you want to print report?";//this.translate.instant("Inbound_PrintAllLabelsAfterSubmit");
+    this.showConfirmDialog = true; // show dialog 
+  }
+
+  showPrintConfirmDialogForITR() {
+    this.yesButtonText = this.translate.instant("yes");
+    this.noButtonText = this.translate.instant("no");
+    this.dialogFor = "printDialogForITR";
     this.dialogMsg = "Do you want to print report?";//this.translate.instant("Inbound_PrintAllLabelsAfterSubmit");
     this.showConfirmDialog = true; // show dialog 
   }
