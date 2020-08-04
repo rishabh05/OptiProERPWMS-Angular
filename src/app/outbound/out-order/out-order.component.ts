@@ -71,6 +71,7 @@ export class OutOrderComponent implements OnInit {
   pagetitle: any = "";
   isPalletizationEnable: boolean = false
   disableSO: boolean = false;
+  fromITR: boolean = false;
   docEntry: any;   // this variable is used only for single itr submit request for multiple we have to change implementation.
   @ViewChild('scanSO') scanSO;
   @ViewChild('DocNum') DocNum;
@@ -94,8 +95,10 @@ export class OutOrderComponent implements OnInit {
     }
     if (localStorage.getItem("ComingFrom") == "itr") {
       this.fromWhere = "itr";
+      this.fromITR = true;
       this.pagetitle = this.translate.instant("InvTransfer_ByITR");
     } else {
+      this.fromITR = false;
       let companyName = '';
       let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
       if (outboundData != null && outboundData != undefined && outboundData != ''

@@ -323,7 +323,7 @@ export class ProdOrderlistComponent implements OnInit {
 
           const element = tempMeterialCollection[j];
 
-          if (d.Item.DOCENTRY == element.Item.DOCENTRY && d.Order.DOCNUM == element.Order.DOCNUM) {
+          if (d.Item.DOCENTRY == element.Item.DOCENTRY) {
 
             tempMeterialCollection.slice(index, 1);
           }
@@ -338,8 +338,8 @@ export class ProdOrderlistComponent implements OnInit {
 
           let hasitem = this.outbound.DeleiveryCollection.filter(d =>
             d.Item.DOCENTRY === tm.Item.DOCENTRY &&
+            d.Item.ItemCode === tm.Item.ItemCode &&
             d.Item.TRACKING === tm.Item.TRACKING &&
-            d.Order.DOCNUM === tm.Order.DOCNUM &&
             d.Meterial.LOTNO === tm.Meterial.LOTNO &&
             d.Meterial.BINNO === tm.Meterial.BINNO
           );
