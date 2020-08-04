@@ -248,7 +248,7 @@ export class OutCutomerComponent implements OnInit {
         this.orderNumber = this.selectedCustomerElement[0];
         this.customerCode = this.selectedCustomerElement[2];
         this.customerName = this.selectedCustomerElement[1];
-       
+
         //===================================
         let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
         if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
@@ -504,7 +504,7 @@ export class OutCutomerComponent implements OnInit {
       }
     }
   }
-  
+
   trackingIdBlur() {
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
     if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
@@ -1263,11 +1263,7 @@ export class OutCutomerComponent implements OnInit {
         this.toastr.success('', this.translate.instant("ShipmentreadyToDeliver"));
       }
     }
-
   }
-
-
-
 
   /**
    * This method create a temp data collection from shipment response.
@@ -1304,70 +1300,14 @@ export class OutCutomerComponent implements OnInit {
       let tempItemRecord = { Order: orderData, Item: itemData, Meterial: materialData };
       outbound.TempMeterials.push(tempItemRecord);
     }
-
   }
 
   /**
    * Create shipment detail data.
    */
   showShipmenInformation() {
-
     this.showShipmentInfo = true;
   }
-  serviceData1: any = [{
-    "ContainerId": 1,
-    "ContainerName": "C1",
-    "Items": [
-      {
-        "ItemCode": 1,
-        "ItemName": "Child_Batch",
-        "ItemLines": [
-          {
-            "ItemCode": "Child_Batch",
-            "BatchSerial": "b1",
-            "Qty": 2,
-          },
-          {
-            "ItemCode": "Child_Batch",
-            "BatchSerial": "b1",
-            "Qty": 1,
-          },
-          {
-            "ItemCode": "Child_Batch",
-            "BatchSerial": "b1",
-            "Qty": 2,
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "ContainerId": 2,
-    "ContainerName": "C2",
-    "Items": [
-      {
-        "ItemCode": 1,
-        "ItemName": "Child_Serial",
-        "ItemLines": [
-          {
-            "ItemCode": "Child_Serial",
-            "BatchSerial": "s1",
-            "Qty": 1,
-          },
-          {
-            "ItemCode": "Child_Serial",
-            "BatchSerial": "s2",
-            "Qty": 1,
-          },
-          {
-            "ItemCode": "Child_Serial",
-            "BatchSerial": "s3",
-            "Qty": 1,
-          }
-        ]
-      }
-    ]
-  }];
 
   ShipmentHDR = [];
   ShipmentItems: any = [];
@@ -1425,19 +1365,8 @@ export class OutCutomerComponent implements OnInit {
 
           this.ContainerHeader = this.setContainerItemsToHeader(this.ContainerHeader, this.ContainerItems);
           this.ContainerHeader = this.setContainerItemBatchSerials(this.ContainerHeader, this.ContainerBatchSerial);
-
-          // if (this.useContainer) {
-          //   this.ShipmentHDR[this.ShipmentHDR.length - 1]["ContainerHeader"] = this.ContainerHeader;
-          // } else {
-          //   this.ShipmentHDR[this.ShipmentHDR.length - 1]["ShipmentItems"] = this.ShipmentItems;
-          // }
-
-          // if (this.useContainer) {
-            this.ShipmentHDR[this.ShipmentHDR.length - 1]["ContainerHeader"] = this.ContainerHeader;
-          // } else {
-            this.ShipmentHDR[this.ShipmentHDR.length - 1]["ShipmentItems"] = this.ShipmentItems;
-          // }
-
+          this.ShipmentHDR[this.ShipmentHDR.length - 1]["ContainerHeader"] = this.ContainerHeader;
+          this.ShipmentHDR[this.ShipmentHDR.length - 1]["ShipmentItems"] = this.ShipmentItems;
         } else {
           this.toastr.error('', this.translate.instant("ShipmentNotAvailable"));
         }
@@ -1452,15 +1381,8 @@ export class OutCutomerComponent implements OnInit {
 
   showShipments() {
     this.showShipmentInfo = true;
-    // if (this.useContainer) {
-    //   this.ShipmentInfoData = this.ShipmentHDR;
-    // } else {
-    //   this.ShipmentInfoData = this.ShipmentItems;
-    // }
     this.ShipmentInfoData = this.ShipmentHDR;
   }
-
-
 
   //packing data for container.
   prepareContainerPackingData(containerHeader: any, containerItems: any) {
@@ -1550,8 +1472,22 @@ export class OutCutomerComponent implements OnInit {
     }
   }
 
-  shipmentRowDeleteEvent(index) {
-
+  shipmentRowDeleteEvent(shipmentCode) {
+    let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+    if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
+      this.outbound = JSON.parse(outboundData);
+    }
+    let result = this.outbound.DeleiveryCollection.filter(e=> e.Item.ShipmentCode == shipmentCode)
+    let index = this.outbound.DeleiveryCollection.findIndex(e=> e.Item.ShipmentCode == shipmentCode)
+    this.outbound.DeleiveryCollection.splice(index, result.length);
+    localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+    if (this.outbound.DeleiveryCollection !== undefined && this.outbound.DeleiveryCollection !== null && this.outbound.DeleiveryCollection.length > 0) {
+      this.orderCollection = this.getUniqueValuesByProperty(this.outbound.DeleiveryCollection);
+      if (this.orderCollection.length > this.pageSize) {
+        this.pagable = true;
+        this.toastr.success('', this.translate.instant("ShipmentreadyToDeliver"));
+      }
+    }
   }
 
   printDialog: boolean = false

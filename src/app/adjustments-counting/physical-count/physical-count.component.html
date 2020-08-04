@@ -33,12 +33,11 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Scan'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="d-flex">
-                                <input #scanPC class="form-control form-control-sm"  type="text" 
-                                id="scanInputFieldPC" name="ScanInputs" 
-                                [(ngModel)]=ScanInputs (blur)="onScanCodeChange()" placeholder="{{scanPlaceholder}}" />
+                                <input #scanPC class="form-control form-control-sm" type="text" id="scanInputFieldPC" name="ScanInputs" [(ngModel)]=ScanInputs
+                                    (blur)="onScanCodeChange()" placeholder="{{scanPlaceholder}}" />
                                 <div class="ml-1 d-flex">
-                                    <button tabindex="-1" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button"
-                                    id="scanButtonPC"  (mousedown)="onScanPC()" >
+                                    <button tabindex="-1" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button" id="scanButtonPC"
+                                        (mousedown)="onScanPC()">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
                                 </div>
@@ -49,9 +48,8 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'ItemCode'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input #scanItemCode type="text" class="form-control form-control-sm" id="itemCodeInputPC" name="ItemCode"
-                                 [(ngModel)]="ItemCode" placeholder="{{'ItemCode'|translate}}"
-                                    (blur)="OnItemChangeBlur()">
+                                <input #scanItemCode type="text" class="form-control form-control-sm" id="itemCodeInputPC" name="ItemCode" [(ngModel)]="ItemCode"
+                                    placeholder="{{'ItemCode'|translate}}" (blur)="OnItemChangeBlur()">
                                 <div class="input-group-append has-seprate-btn">
                                     <button tabindex="-1" class="k-button k-primary btn" type="button" (mousedown)="onItemlookupClick()">
                                         <i class="opti-icon-search"></i>
@@ -60,12 +58,12 @@
                                         *ngIf="showitemlist">
                                         <i class="opti-icon-detail-view"></i>
                                     </button>
-                                    
-                                        <button tabindex="-1" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button"
-                                        id="scanBtnItemCodePC"  (mousedown)="onScanPC()" >
-                                            <i class="opti-icon-qr-code fs-24"></i>
-                                        </button>
-                                    
+
+                                    <button tabindex="-1" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button" id="scanBtnItemCodePC"
+                                        (mousedown)="onScanPC()">
+                                        <i class="opti-icon-qr-code fs-24"></i>
+                                    </button>
+
                                 </div>
                             </div>
                         </div>
@@ -80,27 +78,26 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Name'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" name="itemName" 
-                                [(ngModel)]="itemName" [disabled]=true>
+                                <input type="text" class="form-control form-control-sm" name="itemName" [(ngModel)]="itemName" [disabled]=true>
                             </div>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'BinNo'|translate}}</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control form-control-sm" name="BinNo" [(ngModel)]="BinNo" placeholder="{{'BinNo'|translate}}" [disabled]=true>
-                            
+                            <input type="text" class="form-control form-control-sm" name="BinNo" [(ngModel)]="BinNo" placeholder="{{'BinNo'|translate}}"
+                                [disabled]=true>
+
                         </div>
-                        
+
                     </div>
 
                     <div class="form-group row" *ngIf="!isNonTrack">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{batchNoPlaceholder}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input #scanBatchSerial type="text" class="form-control form-control-sm" name="batchserno" id="batchSerialInputPC"
-                                 [(ngModel)]="batchserno" placeholder="{{batchNoPlaceholder}}"
-                                autocomplete="off" (blur)="OnLotChangeBlur()">
+                                <input #scanBatchSerial type="text" class="form-control form-control-sm" name="batchserno" id="batchSerialInputPC" [(ngModel)]="batchserno"
+                                    placeholder="{{batchNoPlaceholder}}" autocomplete="off" (blur)="OnLotChangeBlur()">
 
                                 <div class="input-group-append has-seprate-btn">
                                     <button tabindex="-1" class="k-button k-primary btn" type="button" (mousedown)="ShowBatachSerList()">
@@ -109,8 +106,7 @@
                                     <button tabindex="-1" class="k-button k-primary btn separate-btn" type="button" (mousedown)="showLotSerList()" *ngIf="showbatchser">
                                         <i class="opti-icon-view-batch mr-1"></i>{{batchSrBtn}}
                                     </button>
-                                    <button tabindex="-1" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button"
-                                    id="scanBtnSrNoPC"   >
+                                    <button tabindex="-1" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button" id="scanBtnSrNoPC">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
                                 </div>
@@ -121,7 +117,8 @@
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'OnHandQty'|translate}}</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control form-control-sm text-right" name="QtyOnHand" [(ngModel)]="QtyOnHand" placeholder="{{'OnHandQty'|translate}}" [disabled]=true>
+                            <input type="text" class="form-control form-control-sm text-right" name="QtyOnHand" [(ngModel)]="QtyOnHand" placeholder="{{'OnHandQty'|translate}}"
+                                [disabled]=true>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -129,14 +126,13 @@
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
                                 <input #scanCountedQty type="number" class="form-control form-control-sm text-right" name='CountedQty' id="countedQtyInputPC"
-                                 [(ngModel)]="CountedQty" placeholder="{{'PhyCount_CountedQty'|translate}}"
-                                    (blur)="onCountedQtyChangedBlur()">
+                                    [(ngModel)]="CountedQty" placeholder="{{'PhyCount_CountedQty'|translate}}" (blur)="onCountedQtyChangedBlur()">
                                 <div class="input-group-append">
                                     <button tabindex="-1" class="k-button k-primary btn custom-icon-button" type="button" *ngIf="!isNonTrack" (mousedown)="onAddItemClick()">
                                         <span class="k-icon k-i-plus-outline "></span>{{batchSrBtn}}
                                     </button>
-                                    <button tabindex="-1" class=" btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button"
-                                    id="scanBtnCountedQtyPC"  (mousedown)="onScanPC()" >
+                                    <button tabindex="-1" class=" btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button" id="scanBtnCountedQtyPC"
+                                        (mousedown)="onScanPC()">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
                                 </div>
@@ -230,27 +226,28 @@
                 <hr />
             </div>
             <div class="col-sm-12 col-12">
-              <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (mousedown)="onCancelClick()">
+                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (mousedown)="onCancelClick()">
                     <span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
-               
+
                 <button type="button" class="k-button k-primary k-button btn-sm btn-icon-with-text" (mousedown)="onAddItemClick()">
                     <span class="k-icon k-i-plus-outline" role="presentation"></span> {{'Item'|translate}}</button>
-                <button type="button"  class="k-button k-primary k-button btn-sm btn-icon-with-text"  (mousedown)="onSaveClick()">
+                <button type="button" class="k-button k-primary k-button btn-sm btn-icon-with-text" (mousedown)="onSaveClick()">
                     <span class="k-icon k-i-save" role="presentation"></span> {{'PhyCount_Save&Next'|translate}}</button>
-                    <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text" (mousedown)="onSubmitClick()">
-                            <span class="k-icon k-i-check" role="presentation"></span> {{'Submit'|translate}}</button>
+                <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text" (mousedown)="onSubmitClick()">
+                    <span class="k-icon k-i-check" role="presentation"></span> {{'Submit'|translate}}</button>
 
                 <div class="clearfix mt-1 d-block d-sm-none"></div>
-      
-                    <button type="button" id="hiddenScanButtonPC" style="visibility:hidden" (click)="onHiddenScanClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
-                            SB </button>
-                    <button type="button" id="hiddenScanButtonItemCodePC" style="visibility:hidden" (click)="onHiddenScanItemCodeClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
-                            SB </button>
-                    <button type="button" id="hiddenScanButtonSrNoPC" style="visibility:hidden" (click)="onHiddenScanSrNoClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
-                            SB </button>   
-                    <button type="button" id="hiddenScanButtonCountedQtyPC" style="visibility:hidden" (click)="onHiddenScanCountedQtyClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
-                             SB </button>      
-                       
+
+                <button type="button" id="hiddenScanButtonPC" style="visibility:hidden" (click)="onHiddenScanClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                    SB </button>
+                <button type="button" id="hiddenScanButtonItemCodePC" style="visibility:hidden" (click)="onHiddenScanItemCodeClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                    SB </button>
+                <button type="button" id="hiddenScanButtonSrNoPC" style="visibility:hidden" (click)="onHiddenScanSrNoClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                    SB </button>
+                <button type="button" id="hiddenScanButtonCountedQtyPC" style="visibility:hidden" (click)="onHiddenScanCountedQtyClick()"
+                    class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                    SB </button>
+
             </div>
         </div>
         <div class="fix-footer-btnBar" *ngIf="showSavedItems">
@@ -300,14 +297,16 @@
         </kendo-grid-column>
         <!-- grid for mobile end -->
 
-        <kendo-grid-column *ngIf="ItemTracking != 'N'" media="(min-width: 768px)" field="LotNo" title="{{'BatchSerial_No'|translate}}" width="130">
+        <kendo-grid-column *ngIf="ItemTracking != 'N'" media="(min-width: 768px)" field="LotNo" title="{{'BatchSerial_No'|translate}}"
+            width="130">
         </kendo-grid-column>
         <kendo-grid-column media="(min-width: 768px)" field="BinNo" title="{{'BinNo'|translate}}" width="230">
         </kendo-grid-column>
-        <kendo-grid-column media="(min-width: 768px)" field="QtyCounted" title="{{'PhyCount_CountedQty'|translate}}"
-        class="text-right" headerClass="text-right">
+        <kendo-grid-column media="(min-width: 768px)" field="QtyCounted" title="{{'PhyCount_CountedQty'|translate}}" class="text-right"
+            headerClass="text-right">
         </kendo-grid-column>
-        <kendo-grid-column media="(min-width: 768px)" field="InWhsQty" title="{{'OnHandQty'|translate}}" width="100" class="text-right" headerClass="text-right">
+        <kendo-grid-column media="(min-width: 768px)" field="InWhsQty" title="{{'OnHandQty'|translate}}" width="100" class="text-right"
+            headerClass="text-right">
         </kendo-grid-column>
         <kendo-grid-column media="(min-width: 768px)" field="" headerClass="text-center" class="text-center" width="80">
             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">

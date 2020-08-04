@@ -10,6 +10,7 @@ import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { Template } from '@angular/compiler/src/render3/r3_ast';
 import { Location } from '@angular/common';
 import { FieldAccessorPipe } from '@progress/kendo-angular-grid/dist/es2015/rendering/common/field-accessor.pipe';
+import { InboundService } from 'src/app/services/inbound.service';
 
 @Component({
   selector: 'app-bin-transfer',
@@ -44,6 +45,7 @@ export class BinTransferComponent implements OnInit {
   PageTitle: string;
   ModalContent: string;
   TransferedItemsDetail: any[] = [];
+  respSuccssDocNo:any;
   @Input() fromScreen: any;
   @Output() cancelevent = new EventEmitter();
   batchNoPlaceholder: string = "";
@@ -90,7 +92,7 @@ export class BinTransferComponent implements OnInit {
   containerCode:any = '';
   containerData: any = [];
   constructor(private commonservice: Commonservice, private activatedRoute: ActivatedRoute,
-    private router: Router, private inventoryTransferService: InventoryTransferService,
+    private router: Router, private inventoryTransferService: InventoryTransferService,private inboundService: InboundService,
     private toastr: ToastrService, private translate: TranslateService,
     private modalService: BsModalService, private _location: Location, ) {
     let userLang = navigator.language.split('-')[0];
@@ -935,7 +937,14 @@ export class BinTransferComponent implements OnInit {
               }
               //-----------------------------------End for the Function Check for Licence--------------------------------
               if (data[0].ErrorMsg == "") {
+               // var showGRPOREport =data[0].GRPOPrintReport
+                var showITRReport =data[0].ITRPrintReport
                 this.toastr.success('', this.translate.instant("InvTransfer_ItemsTranSuccessfully") + " " + data[0].SuccessNo);
+                this.respSuccssDocNo = data[0].SuccessNo
+                if(showITRReport){
+                  this.showPrintConfirmDialog();
+                }
+             
                 oWhsTransAddLot = {};
                 oWhsTransAddLot.Header = [];
                 oWhsTransAddLot.Detail = [];
@@ -982,12 +991,14 @@ export class BinTransferComponent implements OnInit {
               //-----------------------------------End for the Function Check for Licence--------------------------------
               if (data[0].ErrorMsg == "") {
                 this.toastr.success('', this.translate.instant("InvTransfer_ItemsTranSuccessfully") + " " + data[0].SuccessNo);
+                this.respSuccssDocNo = data[0].SuccessNo
                 oWhsTransAddLot = {};
                 oWhsTransAddLot.Header = [];
                 oWhsTransAddLot.Detail = [];
                 oWhsTransAddLot.UDF = [];
                 this.TransferedItemsDetail = [];
                 this.selectedPallets = [];
+                this.showPrintConfirmDialog();
                 this.clearData();
               }
               else {
@@ -1359,7 +1370,11 @@ export class BinTransferComponent implements OnInit {
             }
           }, 200)
           break;
-      }
+          case("showPDFReport"):
+           // this.printDialog = true
+            this.displayPDF(this.respSuccssDocNo,14);
+            break;
+       }
     } else {
       if ($event.Status == "no") {
         switch ($event.From) {
@@ -1368,6 +1383,8 @@ export class BinTransferComponent implements OnInit {
           case ("deleteAll"):
             break;
           case ("overwriteQty"):
+            break;
+          case("showPDFReport"):
             break;
         }
       }
@@ -1894,4 +1911,79 @@ export class BinTransferComponent implements OnInit {
       } 
     }
   }
-}
+
+
+
+
+
+
+
+  printDialog: boolean = false
+  showPDF: boolean = false;
+  base64String: string = "";
+  fileName: string = "";
+  displayPDF1: boolean = false;
+  showPDFLoading:boolean = false;
+  public displayPDF(dNo: string, value: any) {
+    this.showPDFLoading = true;
+    this.inboundService.printingServiceForSubmitGRPO(dNo, value).subscribe(
+      (data: any) => {
+        this.showPDFLoading = false;
+       // this.printDialog = false;
+        if (data != undefined) {
+          // console.log("" + data);
+          if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
+
+          if (data.Detail != null && data.Detail != undefined && data.Detail[0] != null && data.Detail[0] != undefined) {
+            this.fileName = data.Detail[0].FileName;
+            this.base64String = data.Detail[0].Base64String;
+          }
+
+          if (this.base64String != null && this.base64String != "") {
+            this.base64String = 'data:application/pdf;base64,' + this.base64String;
+            this.displayPDF1 = true;
+          } else {
+
+          }
+        } else {
+          this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+        }
+      },
+      error => {
+        this.showLookupLoader = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
+
+  showPrintConfirmDialog() {
+    this.yesButtonText = this.translate.instant("yes");
+    this.noButtonText = this.translate.instant("no");
+    this.dialogFor = "showPDFReport";
+    this.dialogMsg = "Do you want to print report?";//this.translate.instant("Inbound_PrintAllLabelsAfterSubmit");
+    this.showConfirmDialog = true; // show dialog 
+  }
+
+  printOptionsClick(event) {
+    //need to pass id in display  pdf
+    this.displayPDF("", event)
+  }
+
+  closePDF() { 
+    this.displayPDF1 = false;
+    console.log("PDF dialog is closed");
+  }
+  closePrintDialog(){
+    this.printDialog = false;
+  }
+
+} 
