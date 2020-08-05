@@ -71,10 +71,11 @@ export class OutboundService {
     return this.httpclient.post(this.config_params.service_url + "/api/Shipment/IsValidShipmentID", body, this.commonService.httpOptions);
   }
   
-  public getShipmentIdList(): Observable<any> { 
+  public getShipmentIdList(OPTM_BPCODE, OPTM_DOCKDOORID): Observable<any> { 
     this.outRequest = new OutRequest();
     this.outRequest.CompanyDBId = localStorage.getItem("CompID");
-    var body: any = { PalletCode:JSON.stringify( [{ COMPANYDBNAME: this.outRequest.CompanyDBId}] )};
+    var body: any = { PalletCode:JSON.stringify( [{ COMPANYDBNAME: this.outRequest.CompanyDBId,
+      OPTM_BPCODE: OPTM_BPCODE, OPTM_DOCKDOORID: OPTM_DOCKDOORID}] )};
     return this.httpclient.post(this.config_params.service_url + "/api/Shipment/GetShipmentId", body, this.commonService.httpOptions);
   }
 

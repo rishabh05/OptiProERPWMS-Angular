@@ -1070,7 +1070,7 @@ export class OutCutomerComponent implements OnInit {
   public getShipmentList() {
     this.showLookup = false;
     this.showLookupLoader = true;
-    this.outboundservice.getShipmentIdList().subscribe(
+    this.outboundservice.getShipmentIdList(this.customerCode, this.dockDoorCode).subscribe(
       resp => {
         this.showLookupLoader = false;
         if (resp != null && resp != undefined && resp.length > 0) {
