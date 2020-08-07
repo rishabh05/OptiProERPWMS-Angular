@@ -1334,11 +1334,6 @@ export class OutCutomerComponent implements OnInit {
             this.showLookupLoader = false;
             return;
           }
-          // if (showLookup) {
-          //   this.showShipmentInfo = true;
-          // } else {
-          //   this.showShipmentInfo = false;
-          // }        
 
           this.ShipmentHDR.push({
             ShipmentCode: this.shipmentId,
@@ -1367,6 +1362,13 @@ export class OutCutomerComponent implements OnInit {
           this.ContainerHeader = this.setContainerItemBatchSerials(this.ContainerHeader, this.ContainerBatchSerial);
           this.ShipmentHDR[this.ShipmentHDR.length - 1]["ContainerHeader"] = this.ContainerHeader;
           this.ShipmentHDR[this.ShipmentHDR.length - 1]["ShipmentItems"] = this.ShipmentItems;
+
+          let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+          if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
+            this.outbound = JSON.parse(outboundData);
+          }
+          this.outbound.ShipmentHDR = this.ShipmentHDR;
+          localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
         } else {
           this.toastr.error('', this.translate.instant("ShipmentNotAvailable"));
         }
@@ -1381,6 +1383,11 @@ export class OutCutomerComponent implements OnInit {
 
   showShipments() {
     this.showShipmentInfo = true;
+    let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+    if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
+      this.outbound = JSON.parse(outboundData);
+    }
+    this.ShipmentHDR = this.outbound.ShipmentHDR;
     this.ShipmentInfoData = this.ShipmentHDR;
   }
 
@@ -1477,8 +1484,12 @@ export class OutCutomerComponent implements OnInit {
     if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
       this.outbound = JSON.parse(outboundData);
     }
-    let result = this.outbound.DeleiveryCollection.filter(e=> e.Item.ShipmentCode == shipmentCode)
-    let index = this.outbound.DeleiveryCollection.findIndex(e=> e.Item.ShipmentCode == shipmentCode)
+    if (this.outbound.ShipmentHDR != undefined) {
+      let removeIndex = this.outbound.ShipmentHDR.findIndex(e => e.Item.ShipmentCode == shipmentCode)
+      this.outbound.ShipmentHDR.splice(removeIndex, 1);
+    }
+    let result = this.outbound.DeleiveryCollection.filter(e => e.Item.ShipmentCode == shipmentCode)
+    let index = this.outbound.DeleiveryCollection.findIndex(e => e.Item.ShipmentCode == shipmentCode)
     this.outbound.DeleiveryCollection.splice(index, result.length);
     localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
     if (this.outbound.DeleiveryCollection !== undefined && this.outbound.DeleiveryCollection !== null && this.outbound.DeleiveryCollection.length > 0) {

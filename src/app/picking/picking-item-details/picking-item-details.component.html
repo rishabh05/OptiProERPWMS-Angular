@@ -5,8 +5,12 @@
                 <div *ngFor="let item of ShipmentList" class="custom-card-view">
 
                     <a class="custom-task-btn k-button btn-success" (click)="showPickTaskList(dataItem)">
-                        <i class=" k-icon k-i-track-changes"></i>
+                        <i class="k-icon k-i-track-changes"></i>
                     </a>
+                    <!-- <button (click)="ShowBatchSerials()" *ngIf="!IsContPicking">
+                        <i class="opti-icon-view-batch mr"></i>
+                    </button>                 
+                k-icon k-i-track-changes    -->
 
                     <div class="custom-dl-list">
                         <dt>{{'PickListCode'|translate}}</dt>
@@ -30,7 +34,7 @@
                                 </div>
                                 <span class="po-item-name">{{itemcodeLabel}}: {{itemcodeValue}}</span> &nbsp;&nbsp;
                                 <button (click)="ShowBatchSerials()" *ngIf="!IsContPicking">
-                                    <i class=" k-icon k-i-track-changes"></i>
+                                    <i class="opti-icon-view-batch mr"></i>
                                 </button>
                                 <br>
                                 <span class="po-item-name">{{Location}}: {{locationValue}}</span>
@@ -52,19 +56,19 @@
                             <div class="item-steps">
                                 <!-- step inputs -->
                                 <div *ngIf="currentStep == 1" class="item-input-section">
-                                    <input #focusOnLocation type="text" placeholder="{{'PT_Enter_Location'|translate}}" (blur)="onLocationChange()" name="PT_Enter_Location"
+                                    <input #focusOnLocation type="text" placeholder="{{'Ph_Enter_Location'|translate}}" (blur)="onLocationChange()" name="PT_Enter_Location"
                                         [(ngModel)]="PT_Enter_Location" [disabled]=pickedAllDty trim="blur">
                                 </div>
                                 <div *ngIf="currentStep == 2" class="item-input-section">
-                                    <input #focusOnItemCode type="text" placeholder="{{'PT_ItemCode'|translate}}" (change)="onItemChange()" name="PT_ItemCode"
+                                    <input #focusOnItemCode type="text" placeholder="{{'Ph_EnterItemCode'|translate}}" (change)="onItemChange()" name="PT_ItemCode"
                                         [(ngModel)]="PT_ItemCode" [disabled]=pickedAllDty trim="blur">
                                 </div>
                                 <div *ngIf="currentStep == 3" class="item-input-section">
-                                    <input #focusOnSerNo type="text" placeholder="{{'PT_Enter_ContBtchSer'|translate}}" (change)="onLotChange()" name="PT_Enter_ContBtchSer"
+                                    <input #focusOnSerNo type="text" placeholder="{{cont_batch_serial_placeholder}}" (change)="onLotChange()" name="PT_Enter_ContBtchSer"
                                         [(ngModel)]="PT_Enter_ContBtchSer" [disabled]=pickedAllDty trim>
                                 </div>
                                 <div *ngIf="currentStep == 4" class="item-input-section">
-                                    <input #focusOnQty type="number" placeholder="{{'PT_EnterQty'|translate}}" min=0 (change)="onQtyChange()" name="pickQty"
+                                    <input #focusOnQty type="number" placeholder="{{'Ph_EnterQty'|translate}}" min=0 (change)="onQtyChange()" name="pickQty"
                                         [(ngModel)]="pickQty" [disabled]=pickedAllDty>
                                 </div>
                                 <div *ngIf="currentStep == 5" class="item-input-section">
@@ -103,9 +107,9 @@
                             <br>
                             <!-- step navigation Arrow placement -->
                             <div>
-                                <i *ngIf="currentStep > 1 && currentStep < DROP_BIN_STEP" (click)="prevStep()" class="k-icon k-i-arrow-chevron-left" aria-hidden="true"></i>
-                                <i *ngIf="currentStep != LastStep  && currentStep < DROP_BIN_STEP" (click)="nextStep()" class="k-icon k-i-arrow-chevron-right" aria-hidden="true"></i>
-                                <i *ngIf="currentStep == LastStep && totalpickQty == openQty" (click)="onSaveClick('/po-order-details')" class="k-icon k-i-save"
+                                <i *ngIf="currentStep > 1 && currentStep < DROP_BIN_STEP && !pickedAllDty" (click)="prevStep()" class="k-icon k-i-arrow-chevron-left" aria-hidden="true"></i>
+                                <i *ngIf="currentStep != LastStep  && currentStep < DROP_BIN_STEP && !pickedAllDty" (click)="nextStep()" class="k-icon k-i-arrow-chevron-right" aria-hidden="true"></i>
+                                <i *ngIf="pickedAllDty" (click)="onSaveClick('/po-order-details')" class="k-icon k-i-save"
                                     aria-hidden="true"></i>
                                 <!-- <i *ngIf="currentStep == CONFIRM_DROP_BIN_STEP" (click)="onPickDropConfirmation()" class="k-icon k-i-save" aria-hidden="true"></i> -->
                             </div>

@@ -53,8 +53,8 @@
 
   <!-- Shipment grid start -->
   <kendo-grid [data]="serviceData" [skip]="skip" #gridUser [pageable]="true" [selectable]="true" [pageSize]="5">
-    <!-- <kendo-grid-column field="ShipmentId" title="ShipmentId"></kendo-grid-column> -->
     <kendo-grid-column field="ShipmentCode" title="{{'ShipmentCode'|translate}}"></kendo-grid-column>
+    <kendo-grid-column field="UseContainer" title="{{'Use_Container'|translate}}"></kendo-grid-column>
     <kendo-grid-column field="" headerClass="text-center" class="text-center" [width]="100" title="">
       <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
         <button type="button" class="btn btn-danger k-button btn-sm btn-icon" (mousedown)="openConfirmForDelete(dataItem.ShipmentCode, gridUser)">

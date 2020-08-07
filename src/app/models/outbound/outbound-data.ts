@@ -13,6 +13,7 @@ export class OutboundData {
     AllCreatedPackings:Array<PackingModel> = [];
     ITRToBinNo: any;
     selectedPackingItem:PackingModel=null;
+    ShipmentHDR = [];
 }
 
 export class CurrentOutBoundData {

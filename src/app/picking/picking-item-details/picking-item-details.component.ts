@@ -85,6 +85,9 @@ export class PickingItemDetailsComponent implements OnInit {
   OpenTaskCount: number = 2;
   intStepSeq: number = 0;
   blnSaveClicked: boolean = false;
+  //------placeholder---
+  cont_batch_serial_placeholder: string;
+
 
   @ViewChild('focusOnSerNo') focusOnSerNo;
   @ViewChild('focusOnItemCode') focusOnItemCode;
@@ -137,7 +140,6 @@ export class PickingItemDetailsComponent implements OnInit {
   }
 
   setPickingSteps(OPTM_MSTR_TRANS_TYPE, PickOperationIndex) {
-    //this.CurrentTaskSteps = this.PickListSteps.filter(element => (element.OPTM_MSTR_TRANS_TYPE == OPTM_MSTR_TRANS_TYPE && element.OPTM_APPLCBLE_IN_OPN == this.PickOperationList[Number(PickOperationIndex)]) || (element.OPTM_MSTR_TRANS_TYPE == OPTM_MSTR_TRANS_TYPE && element.OPTM_APPLCBLE_IN_OPN == this.PickOperationList[3]));
     this.CurrentTaskSteps = this.PickListSteps.filter(element => (((element.OPTM_MSTR_TRANS_TYPE == OPTM_MSTR_TRANS_TYPE && element.OPTM_APPLCBLE_IN_OPN == this.PickOperationList[Number(PickOperationIndex)]) || (element.OPTM_MSTR_TRANS_TYPE == OPTM_MSTR_TRANS_TYPE && element.OPTM_APPLCBLE_IN_OPN == this.PickOperationList[3])) && element.OPTM_APPLICABLE_BO == 2));
     this.PickListClosureSteps = this.PickListSteps.filter(element => (element.OPTM_APPLICABLE_BO == 1));
 
@@ -328,7 +330,7 @@ export class PickingItemDetailsComponent implements OnInit {
       }
     );
   }
-
+  
   setValues(index) {
     this.pickTaskName = this.PickTaskList[index].OPTM_TASKID;
     this.openQty = this.PickTaskList[index].OPTM_TASK_QTY;
@@ -352,17 +354,19 @@ export class PickingItemDetailsComponent implements OnInit {
       }
       this.IsContPicking = false;
       this.setPickingSteps(localStorage.getItem("PickTypeKey"), this.ShipmentList[0].OPTM_PICK_OPER);
+      this.cont_batch_serial_placeholder = this.translate.instant("Ph_Enter_Cont_Code")
     } else {
-      // this.itemcodeLabel = "Code";//this.translate.instant("ItemCode");
       this.itemcodeValue = this.PickTaskList[index].OPTM_ITEMCODE;
       this.IsContPicking = false;
       let OPTM_MSTR_TRANS_TYPE = "";
       if (this.OPTM_Tracking == 'S') {
         OPTM_MSTR_TRANS_TYPE = "Serial_Picking"
         this.Type = "Serial"
+        this.cont_batch_serial_placeholder = this.translate.instant("Ph_Enter_Sr_No")
       } else if (this.OPTM_Tracking == 'B') {
         OPTM_MSTR_TRANS_TYPE = "Batch_Picking";
         this.Type = "Batch"
+        this.cont_batch_serial_placeholder = this.translate.instant("Ph_Enter_Bt_No")
       } else {
         OPTM_MSTR_TRANS_TYPE = "Item_Picking";
         this.IsContPicking = true;
@@ -378,7 +382,7 @@ export class PickingItemDetailsComponent implements OnInit {
       this.addItemtoCont = true;
       this.ContainerTotePlaceHolder = this.translate.instant("EnterTote");
       this.ContainerToteTitle = this.translate.instant("Tote");
-      this.ContainerCodePlaceholderValue = this.translate.instant("TotePlaceholder");
+      this.ContainerCodePlaceholderValue = this.translate.instant("ph_EnterTote");
       if (this.ShipmentList[0].OPTM_CONTCODE != "" && this.ShipmentList[0].OPTM_CONTCODE != null) {
         this.CreatedContOrTote = this.ShipmentList[0].OPTM_CONTCODE
         this.containerAlreadyCreated = this.containercreated = true;
@@ -387,7 +391,7 @@ export class PickingItemDetailsComponent implements OnInit {
       }
     } else if (this.ShipmentList[0].OPTM_PICK_OPER == "2") {
       this.addItemtoCont = true;
-      this.ContainerTotePlaceHolder = this.translate.instant("ContainerCodePlaceholder");
+      this.ContainerTotePlaceHolder = this.translate.instant("ph_Enter_ContainerCode");
       this.ContainerToteTitle = this.translate.instant("ContainerCode");
       this.ContainerCodePlaceholderValue = this.translate.instant("ContainerCodePlaceholder");
       if (this.ShipmentList[0].OPTM_CONTCODE != "" && this.ShipmentList[0].OPTM_CONTCODE != null) {
@@ -727,7 +731,9 @@ export class PickingItemDetailsComponent implements OnInit {
 
   skipPickTask() {
     this.clearFields();
-    this.clearStepsFields();
+    this.stepIndex = 0;
+    this.stepIncrementValue = 1;
+    this.iterateSteps = false;
     this.pickedAllDty = false;
     this.index = this.index + 1;
     if (this.index == this.PickTaskList.length) {
@@ -790,7 +796,15 @@ export class PickingItemDetailsComponent implements OnInit {
       }
     }
     if (!batserAdded) {
-      this.toastr.error('', this.translate.instant("PT_ContBtchSer_not_match"));
+      if (localStorage.getItem("PickType") == this.translate.instant("Container_Picking")) {
+        this.toastr.error('', this.translate.instant("Cont_not_match"));
+      }else{
+        if(this.OPTM_Tracking == 'S'){
+          this.toastr.error('', this.translate.instant("Ser_not_match"));
+        }else if(this.OPTM_Tracking == 'B'){
+          this.toastr.error('', this.translate.instant("Btch_not_match"));
+        }
+      }
       this.PT_Enter_ContBtchSer = "";
     }
     this.setfocus();
@@ -902,11 +916,19 @@ export class PickingItemDetailsComponent implements OnInit {
             this.addBatchSerials();            
           } else {
             this.PT_Enter_ContBtchSer = "";
-            this.toastr.error('', this.translate.instant("ProdReceipt_InvalidBatchSerial"));
+            if(this.OPTM_Tracking == 'B'){
+              this.toastr.error('', this.translate.instant("InvalidBatch"));
+            }else{
+              this.toastr.error('', this.translate.instant("InvalidSerial"));
+            }
           }
         } else {
           this.PT_Enter_ContBtchSer = "";
-          this.toastr.error('', this.translate.instant("ProdReceipt_InvalidBatchSerial"));
+          if(this.OPTM_Tracking == 'B'){
+            this.toastr.error('', this.translate.instant("InvalidBatch"));
+          }else{
+            this.toastr.error('', this.translate.instant("InvalidSerial"));
+          }          
         }
       },
       error => {
@@ -1070,6 +1092,7 @@ export class PickingItemDetailsComponent implements OnInit {
       if (this.stepIndex == this.CurrentTaskSteps.length - 1) {
         this.LastStep = this.currentStep;
         this.pickedAllDty = true;
+        this.currentStep = -1;
       }
       this.toastr.success('', this.translate.instant("AllQtyPickedMsg"));
     }
@@ -1103,9 +1126,9 @@ export class PickingItemDetailsComponent implements OnInit {
     }
 
     this.preparePickTaskData();
-    this.clearStepsFields();
-    // this.clearScanningFields();
-    // this.nextStep();
+    this.stepIndex = 0;
+    this.stepIncrementValue = 1;
+    this.iterateSteps = false;
     this.whsCode = this.PickTaskList[this.index].OPTM_SRC_WHSE;
     this.UserGrp = this.PickTaskList[this.index].OPTM_USER_GRP;
     this.blnSaveClicked = true;
@@ -1312,20 +1335,24 @@ export class PickingItemDetailsComponent implements OnInit {
 
   changeText(step) {
     if (step == this.LOCATION_STEP) {
-      this.currentStepText = this.translate.instant("PT_Scan_To_Location");
+      this.currentStepText = this.translate.instant("Ph_Scan_Location");
     }
     else if (step == this.ITEM_STEP) {
-      this.currentStepText = this.translate.instant("PT_ItemCode");
+      this.currentStepText = this.translate.instant("Ph_ScanItemCode");
     }
     else if (step == this.CONT_BTCH_SER_STEP) {
       if (localStorage.getItem("PickType") == this.translate.instant("Container_Picking")) {
-        this.currentStepText = this.translate.instant("ContainerCodePlaceholder");
+        this.currentStepText = this.translate.instant("ScanContainer");
       } else {
-        this.currentStepText = this.translate.instant("PT_ScantoLotNumber");
+        if (this.OPTM_Tracking == 'S') {
+          this.currentStepText = this.translate.instant("ScanSerial")
+        } else if (this.OPTM_Tracking == 'B') {
+          this.currentStepText = this.translate.instant("ScanBatch")
+        }
       }
     }
     else if (step == this.QTY_STEP) {
-      this.currentStepText = this.translate.instant("PT_EnterQty");
+      this.currentStepText = this.translate.instant("Ph_EnterQty");
     }
     else if (step == this.CONFIRM_CONTAINER_STEP) {
       if (this.ShipmentList[0].OPTM_PICK_OPER == "2") {

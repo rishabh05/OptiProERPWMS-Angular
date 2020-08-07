@@ -973,6 +973,30 @@ export class LookupComponent implements OnInit {
         field: 'OPTM_SHIPMENTID',
         title: this.translate.instant("ShipmentID"),
         type: 'text',
+        width: '170'
+      },
+      {
+        field: 'OPTM_BPCODE',
+        title: this.translate.instant("CustomerCode"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'OPTM_DOCKDOORID',
+        title: this.translate.instant("outbound_Dock_DoorNo"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'OPTM_SHIPTO',
+        title: this.translate.instant("PT_Ship_To"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'OPTM_USE_CONTAINER',
+        title: this.translate.instant("Use_Container"),
+        type: 'text',
         width: '100'
       }
     ];
