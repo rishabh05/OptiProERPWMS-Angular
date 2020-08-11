@@ -1163,7 +1163,6 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
     if (this.fromReceiptProduction) {
       //prepare model for receipt from production
-
       this.saveReceiptProdData(this.receiptData.status);
       this.screenBackEvent.emit('save');
     } else {
@@ -1255,43 +1254,6 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     }
     localStorage.setItem("GoodsReceiptModel", JSON.stringify(saveRecProdData));
   }
-
-
-  submitProductionReport(requestData: any) {
-    this.showLoader = true;
-    this.productionService.submitProductionRecepit(requestData).subscribe(
-      data => {
-        this.showLoader = false;
-        if (data != undefined) {
-          if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
-            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
-              this.translate.instant("CommonSessionExpireMsg"));
-            return;
-          }
-          //check and update response for entered serial no.
-          if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
-            // this.toastr.success( this.translate.instant("FGRSuccessMessage") +data[0].SuccessNo);
-            this.toastr.success('', this.translate.instant("ProdReceipt_FGRSuccessMessage") + " " + data[0].SuccessNo);
-            //  this.resetAfterSubmit();
-          } else {
-            if (data[0].ErrorMsg != "") {
-              // show errro.
-              this.toastr.error('', data[0].ErrorMsg);
-            }
-          }
-        }
-      },
-      error => {
-        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
-        }
-        else {
-          this.toastr.error('', error);
-        }
-      },
-    );
-  }
-
 
   prepareCommonData() {
     var oSubmitPOLotsObj: any = {};

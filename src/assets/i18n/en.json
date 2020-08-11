@@ -161,6 +161,7 @@
   "ProdReceipt_FGRSuccessMessage": " Production Receipt generated successfully with document no.",
   "ProdReceipt_AssignedQuantity": "Assigned Quantity",
   "ProdReceipt_InvalidBatchSerial": "Invalid Batch/Serial No.",
+  "OrderQtyError": "Sufficient quantity not available to post.",
 
   "9":"Production Issue",
   "ProdIssue_ProductionIssueSuccess": "Production issue generated successfully with document no. ",
