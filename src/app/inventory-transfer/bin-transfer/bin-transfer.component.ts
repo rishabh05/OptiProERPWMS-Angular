@@ -941,8 +941,10 @@ export class BinTransferComponent implements OnInit {
                 var showITRReport =data[0].ITRPrintReport
                 this.toastr.success('', this.translate.instant("InvTransfer_ItemsTranSuccessfully") + " " + data[0].SuccessNo);
                 this.respSuccssDocNo = data[0].SuccessNo
-                if(showITRReport){
+                if(showITRReport=='y' && showITRReport=='Y'){
                   this.showPrintConfirmDialog();
+                }else{
+
                 }
              
                 oWhsTransAddLot = {};
@@ -970,7 +972,7 @@ export class BinTransferComponent implements OnInit {
           }
         }
       );
-    } else 
+    } else {
     // if("something"){
     //     // code to submit container request.
     //   }else{
@@ -992,13 +994,15 @@ export class BinTransferComponent implements OnInit {
               if (data[0].ErrorMsg == "") {
                 this.toastr.success('', this.translate.instant("InvTransfer_ItemsTranSuccessfully") + " " + data[0].SuccessNo);
                 this.respSuccssDocNo = data[0].SuccessNo
+                var showITRReport =data[0].ITRPrintReport
                 oWhsTransAddLot = {};
                 oWhsTransAddLot.Header = [];
                 oWhsTransAddLot.Detail = [];
                 oWhsTransAddLot.UDF = [];
                 this.TransferedItemsDetail = [];
                 this.selectedPallets = [];
-                this.showPrintConfirmDialog();
+                if(showITRReport=='y' && showITRReport=='Y'){
+                this.showPrintConfirmDialog();}
                 this.clearData();
               }
               else {
@@ -1017,7 +1021,7 @@ export class BinTransferComponent implements OnInit {
           }
         }
       );
-    //}
+    }
   }
 
   showOverwriteConfirmDailog() {

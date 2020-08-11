@@ -106,6 +106,14 @@ export class InboundService {
     };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetAutoLot", jObject, this.commonService.httpOptions);
   }
+  IsGenealogyApplicable(): Observable<any> {
+    let jObject = {
+      GoodsReceiptToken: JSON.stringify([{
+        CompanyDBId: localStorage.getItem("CompID")
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsGenealogyApplicable", jObject, this.commonService.httpOptions);
+  }
 
   getUOMs(itemCode: string): Observable<any> {
     let jObject = {

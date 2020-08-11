@@ -186,8 +186,14 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Quantity'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="d-flex">
-                                <input type="number" #scanQty name="qty" placeholder="{{'Quantity'|translate}}" [ngModel]="qty | numberFormat" (blur)=onQtyBlur(scanQty,true)
-                                    min="0" tabindex="-1" class="text-right form-control form-control-sm">
+                                <input type="number" #scanQty name="qty"
+                                     placeholder="{{'Quantity'|translate}}" 
+                                    [(ngModel)]="qty" 
+                                    (blur) = onQtyBlur(scanQty,true) 
+                                    
+                                    
+                                    min="0" tabindex="-1"
+                                    class="text-right form-control form-control-sm">
                                 <div class="ml-1 d-flex">
                                     <button tabindex="-1" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0" type="button" (mousedown)="addQuantity(event)">
                                         <i class="opti-icon-add1 fs-24"></i>
@@ -250,21 +256,35 @@
                         </kendo-grid-column>
                         <!-- grid for mobile end -->
 
-                        <kendo-grid-column media="(min-width: 768px)" field="VendorLot" [width]="18" title="{{mfrGridColumnText}}">
+                        <kendo-grid-columnmedia="(min-width: 768px)" field="VendorLot" [width]="18" title="{{mfrGridColumnText}}">
                             <ng-template kendoGridCellTemplate let-dataItem let-idx='rowIndex'>
-                                <input type="text" class="form-control form-control-sm" name="dataItem.VendorLot" value={{dataItem.VendorLot}} id="display_name"
-                                    #display_name (blur)="updateVendorLot(display_name, display_name.value, idx)" [disabled]="isDisabledScanInput">
+                                <input type="text" class="form-control form-control-sm" name="dataItem.VendorLot1" value={{dataItem.VendorLot}}
+                                    id="display_name1" #display_name1 
+                                (input)="updateVendorLot(display_name, display_name.value, idx)"
+                                    [disabled]="isDisabledScanInput">
                             </ng-template>
                         </kendo-grid-column>
 
-                        <kendo-grid-column media="(min-width: 768px)" field="LotNumber" [width]="18" title="{{SRBatchColumnText}}">
+                       
+
+                        <kendo-grid-column  *ngIf="!fromReceiptProduction" media="(min-width: 768px)" field="LotNumber" [width]="18" title="{{SRBatchColumnText}}">
                             <ng-template kendoGridCellTemplate let-dataItem let-idx='rowIndex'>
                                 <input type="text" class="form-control form-control-sm" name="dataItem.LotNumber" value={{dataItem.LotNumber}} (blur)="updateLotNumber(display_name, display_name.value, idx, gridItem)"
                                     [disabled]="isDisabledLotNoField" id="display_name" #display_name>
                             </ng-template>
                         </kendo-grid-column>
 
-                        <kendo-grid-column *ngIf="isPalletizationEnable" media="(min-width: 768px)" field="PalletCode" [width]="18" title="{{'Plt_PalletNo'|translate}}"></kendo-grid-column>
+                        <kendo-grid-column  *ngIf="fromReceiptProduction" media="(min-width: 768px)" field="LotNumber" [width]="18" title="{{SRBatchColumnText}}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-idx='rowIndex'>
+                                <input type="text" class="form-control form-control-sm" name="dataItem.LotNumber" value={{dataItem.LotNumber}}
+                                (blur)="updateLotNumber(display_name, display_name.value, idx, gridItem)"
+                                    [disabled]="isDisabledLotNoField" id="display_name" #display_name 
+                                    >
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-column *ngIf="isPalletizationEnable" media="(min-width: 768px)" field="PalletCode"
+                            [width]="18" title="{{'Plt_PalletNo'|translate}}"></kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="Bin" [width]="18" title="{{'BinNo'|translate}}"></kendo-grid-column>
                         <kendo-grid-column media="(min-width: 768px)" field="LotQty" headerClass="text-right" class="text-right" [width]="18" title="{{'Quantity'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem>

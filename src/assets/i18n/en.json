@@ -593,6 +593,7 @@
   "ARINvoiceSucess": "AR Invoice for this delivery has been  created successfully.",
   "Inbound_InvoiceExistMessage": "Invoice# does not exist.",
   "Use_Container": "Use Container",
+  "ReceiveForPO": "Receive for PO",
   "Dummy": "Dummy"
 }
  
