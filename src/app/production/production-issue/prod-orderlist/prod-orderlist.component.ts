@@ -390,7 +390,8 @@ export class ProdOrderlistComponent implements OnInit {
         let lineDeleiveryCollection = this.outbound.DeleiveryCollection.filter(d =>
           element.Order.DOCNUM === d.Order.DOCNUM &&
           element.Item.DOCENTRY === d.Item.DOCENTRY &&
-          element.Item.TRACKING === d.Item.TRACKING
+          element.Item.TRACKING === d.Item.TRACKING &&
+          element.Item.LineId === d.Item.LineId 
         );
 
         // Process Order Item and Tracking collection

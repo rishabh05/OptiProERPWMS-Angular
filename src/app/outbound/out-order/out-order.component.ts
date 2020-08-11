@@ -1943,6 +1943,7 @@ export class OutOrderComponent implements OnInit {
               localStorage.setItem(CommonConstants.OutboundData, null);
               this.resetITRFields();
               this.responseDocEntry = data[0].SuccessNo;
+              var showITRReport =data[0].ITRPrintReport
               this.itrCode = ''
               this.orderNumber = ''
               //reset global object for itr success.====
@@ -1951,7 +1952,9 @@ export class OutOrderComponent implements OnInit {
               var customerCode = "";
               var customerName = "";
               this.outbound.CustomerData = { CustomerCode: customerCode, CustomerName: customerName, TrackingId: "", CustRefNo: "" };
-              this.showPrintConfirmDialogForITR()
+              if(showITRReport=='y' && showITRReport=='Y'){
+               this.showPrintConfirmDialogForITR()
+              }
             } else {
               this.toastr.error('', data[0].ErrorMsg);
             }

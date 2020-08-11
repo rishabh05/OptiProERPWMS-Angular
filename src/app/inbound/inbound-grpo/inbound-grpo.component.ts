@@ -36,7 +36,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   uomSelectedVal: UOM;
   UOMList: UOM[];
   showLoader: boolean = false;
-  qty: number = undefined;
+  qty: any = undefined;
   showButton: boolean = false;
   showRecButton: boolean = false;
   recvingQuantityBinArray: RecvingQuantityBin[] = [];
@@ -124,7 +124,10 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   // caption related labels.
   Inbound_ReceiveForPO:any;
   inboundFromWhere: any = false;
+  screentitle:any=''
   @ViewChild('scanQty') scanQtyRef: ElementRef;
+
+  isGenealogyApplicable: boolean;
   constructor(private inboundService: InboundService, private commonservice: Commonservice,
     private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent, private productionService: ProductionService) {
@@ -145,21 +148,26 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   formatVal=''
   qtyFieldBlurFire: boolean = false;
   async onQtyBlur(scanQty,fromHtml:boolean = false) :Promise<any>{
-    if(!this.qtyFieldBlurFire){
-      if(fromHtml){
-        this.qty = scanQty.value;
-      }else{
-        this.qty = scanQty.nativeElement.value;
-      }
-     // this.qtyFieldBlurFire = true; 
-    }
+  //  this.qty = scanQty.value;
+  
+    this.qty =this.qty.toFixed(Number(localStorage.getItem("DecimalPrecision")))
+    console.log("blur format",this.qty);
+    // if(!this.qtyFieldBlurFire){
+    //   if(fromHtml){
+    //     this.qty = scanQty.value;
+    //   }else{
+    //     this.qty = scanQty.nativeElement.value;  
+    //   }
+      // this.qtyFieldBlurFire = true;
+    // }
+    return '';
     
-    return this.qtyFieldBlurFire; 
   }
   onQtyChange(scanQty){
     this.qty = scanQty.value
   }
   ngOnInit() {
+    this.IsGeneologyApplicable()
 
     var precision = localStorage.getItem("DecimalPrecision");
     this.formatVal = 'n'+precision;
@@ -656,7 +664,9 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
 
     if (localStorage.getItem('FromReceiptProd') == 'true') {
+      if(this.isGenelogyEnabled=="Y"){
       this.checkAndValidateSerial(lotTemplateVar, value, rowindex);
+      }
     } else {
 
       let result = this.recvingQuantityBinArray.find(element => element.LotNumber == value);
@@ -719,7 +729,30 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       }
     );
   }
-
+  IsGeneologyApplicable() {
+    this.inboundService.IsGenealogyApplicable().subscribe(
+      (data: any) => {
+        console.log(data);
+        if (data!= undefined) {
+          this.isGenelogyEnabled = data;
+        } else if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+          this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+            this.translate.instant("CommonSessionExpireMsg"));
+          return;
+        }
+      
+      },
+      error => {
+        console.log("Error: ", error);
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
   async addQuantity() {
     var result = await this.validateBeforeSubmit();
     this.isValidateCalled = false;
@@ -728,7 +761,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    var result1 = await  this.onQtyBlur(this.scanQtyRef)
+   // var result1 = await  this.onQtyBlur(this.scanQtyRef)
 
     if (this.qty == 0 || this.qty == undefined) {
      this.toastr.error('', this.translate.instant("Inbound_EnterQuantityErrMsg"));
@@ -778,25 +811,26 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       }
       this.updateReceiveQty();
     } else {
-
       if (!this.fromReceiptProduction) {
         this.getAutoLot(this.openPOLineModel[0].ITEMCODE, this.qty);
       } else {
-        this.AddUpdateBatSerNo(null);
+        if(this.isGenelogyEnabled!="Y"){
+          this.getAutoLot(this.openPOLineModel[0].ITEMCODE, this.qty);
+        }else{
+          this.AddUpdateBatSerNo(null);
+        }
       }
     }
   }
-
+  isGenelogyEnabled :any = "N";
   AddUpdateBatSerNo(autoLots: any[]) {
     if (this.radioSelected == 0) {
       this.MfrSerial = this.ScanInputs;
     } else if (this.radioSelected == 1) {
       this.searlNo = this.ScanInputs;
     }
-    // let autoLots = JSON.parse(localStorage.getItem("primaryAutoLots"));
     if (this.isSerial) {
       while (this.qty > 0 && this.qty != 0) {
-
         if (autoLots != null && autoLots != null && autoLots.length > 0 && autoLots[0].AUTOLOT == "Y") {
           this.LastSerialNumber = [];
           this.LineId = [];
