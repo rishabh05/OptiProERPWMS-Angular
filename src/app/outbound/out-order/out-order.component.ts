@@ -1952,7 +1952,7 @@ export class OutOrderComponent implements OnInit {
               var customerCode = "";
               var customerName = "";
               this.outbound.CustomerData = { CustomerCode: customerCode, CustomerName: customerName, TrackingId: "", CustRefNo: "" };
-              if(showITRReport=='y' && showITRReport=='Y'){
+              if(showITRReport=='y' || showITRReport=='Y'){
                this.showPrintConfirmDialogForITR()
               }
             } else {

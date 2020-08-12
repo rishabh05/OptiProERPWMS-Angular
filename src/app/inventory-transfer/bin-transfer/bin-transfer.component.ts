@@ -941,7 +941,7 @@ export class BinTransferComponent implements OnInit {
                 var showITRReport =data[0].ITRPrintReport
                 this.toastr.success('', this.translate.instant("InvTransfer_ItemsTranSuccessfully") + " " + data[0].SuccessNo);
                 this.respSuccssDocNo = data[0].SuccessNo
-                if(showITRReport=='y' && showITRReport=='Y'){
+                if(showITRReport=='y' || showITRReport=='Y'){
                   this.showPrintConfirmDialog();
                 }else{
 
@@ -1001,7 +1001,7 @@ export class BinTransferComponent implements OnInit {
                 oWhsTransAddLot.UDF = [];
                 this.TransferedItemsDetail = [];
                 this.selectedPallets = [];
-                if(showITRReport=='y' && showITRReport=='Y'){
+                if(showITRReport=='y' || showITRReport=='Y'){
                 this.showPrintConfirmDialog();}
                 this.clearData();
               }
