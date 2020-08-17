@@ -921,6 +921,18 @@ export class LookupComponent implements OnInit {
         title: this.translate.instant("InvTransfer_ITRRequestNo"),
         type: 'text',
         width: '100'
+      },
+      {
+        field: 'DocDueDate',
+        title: this.translate.instant("DueDate"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'Comments',
+        title: this.translate.instant("Comments"),
+        type: 'text',
+        width: '300'
       }
     ];
     this.lookupTitle = this.translate.instant("InvTransfer_ITRList");
