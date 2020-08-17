@@ -27,7 +27,7 @@ export class ChangeWarehouseComponent implements OnInit {
   showZone: boolean = false;
   constructor(private commonService: Commonservice, private signinService: SigninService,
     private router: Router, private toastr: ToastrService, private translate: TranslateService) {
-    this.defaultWHS = { OPTM_WHSE: localStorage.getItem("whseId"), BPLid: 0 };
+    this.defaultWHS = { OPTM_WHSE: sessionStorage.getItem("whseId"), BPLid: 0 };
     this.selectedRole = { OPTM_ROLEID: localStorage.getItem("SelectedRole"), BPLid: 0 };
     this.selectedZone = { OPTM_WHSZONE: localStorage.getItem("SelectedZone"), BPLid: 0 };
     this.selectedBin = { OPTM_BIN_RANGE: localStorage.getItem("SelectedBinRange"), BPLid: 0 };
@@ -39,7 +39,7 @@ export class ChangeWarehouseComponent implements OnInit {
       localStorage.getItem("SelectedZone") != undefined && localStorage.getItem("SelectedZone") != "") {
       this.showZone = true;
     }
-    this.selectedItem = localStorage.getItem("CompID")
+    this.selectedItem = sessionStorage.getItem("CompID")
   }
 
   ngOnInit() {
@@ -51,7 +51,7 @@ export class ChangeWarehouseComponent implements OnInit {
   }
 
   public setWarehouseList() {
-    this.signinService.getWHS(localStorage.getItem("CompID")).subscribe(
+    this.signinService.getWHS(sessionStorage.getItem("CompID")).subscribe(
       data => {
         this.whsList = data.Table;
       },
@@ -205,7 +205,7 @@ export class ChangeWarehouseComponent implements OnInit {
   onSubmitClick() {
     if (!this.validateDropDowns()) return false;
 
-    localStorage.setItem("whseId", this.defaultWHS.OPTM_WHSE);
+    sessionStorage.setItem("whseId", this.defaultWHS.OPTM_WHSE);
     localStorage.setItem("SelectedRole", this.selectedRole.OPTM_ROLEID);
     localStorage.setItem("SelectedZone", this.selectedZone.OPTM_WHSZONE);
     localStorage.setItem("SelectedBinRange", this.selectedBin.OPTM_BIN_RANGE);
@@ -213,7 +213,7 @@ export class ChangeWarehouseComponent implements OnInit {
     this.setCookie('Role', this.selectedRole.OPTM_ROLEID, 365);
     this.setCookie('Zone', this.selectedRole.OPTM_WHSZONE, 365);
     this.setCookie('BinRange', this.selectedRole.OPTM_BIN_RANGE, 365);
-    this.commonService.refreshTopBarValue(localStorage.getItem("whseId"));
+    this.commonService.refreshTopBarValue(sessionStorage.getItem("whseId"));
     this.router.navigate(['home/dashboard']);
   }
 
