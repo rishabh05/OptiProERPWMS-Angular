@@ -123,6 +123,10 @@ export class ProdOrderlistComponent implements OnInit {
     if (this.orderNumber == null || this.orderNumber == undefined || this.orderNumber == "") {
       return;
     }
+
+    if (this.orderNo == null || this.orderNo == undefined || this.orderNo == "") {
+      return;
+    }
     this.showLoader = true;
     this.productionService.GetBOMItemForProductionIssue(this.orderNo).subscribe(
       (data: any) => {
@@ -370,10 +374,10 @@ export class ProdOrderlistComponent implements OnInit {
       let prodIssueModel: ProductionIssueModel = new ProductionIssueModel();
 
       // Hdr
-      let comDbId = localStorage.getItem('CompID');
-      let token = localStorage.getItem('Token');
-      let guid: string = localStorage.getItem('GUID');
-      let uid: string = localStorage.getItem('UserId');
+      let comDbId = sessionStorage.getItem("CompID");
+      let token = sessionStorage.getItem("Token");
+      let guid: string = sessionStorage.getItem("GUID");
+      let uid: string = sessionStorage.getItem("UserId");
       let hdrLine: number = 0;
       let limit = -1;
       let hdrLineVal = -1;
@@ -391,7 +395,7 @@ export class ProdOrderlistComponent implements OnInit {
           element.Order.DOCNUM === d.Order.DOCNUM &&
           element.Item.DOCENTRY === d.Item.DOCENTRY &&
           element.Item.TRACKING === d.Item.TRACKING &&
-          element.Item.LineId === d.Item.LineId 
+          element.Item.LineId === d.Item.LineId
         );
 
         // Process Order Item and Tracking collection
@@ -506,9 +510,9 @@ export class ProdOrderlistComponent implements OnInit {
               } else if (data[0].ErrorNo != undefined && data[0].ErrorNo == "0") {
                 //Error in updating optipro tables. SAP succefully updated.
                 this.toastr.error('', "Error in updating optipro tables. SAP succefully updated");
-                               
+
               }
-              this.resetIssueProduction(); 
+              this.resetIssueProduction();
               // show errro.
               this.toastr.error('', data[0].ErrorMsg);
             }

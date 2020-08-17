@@ -152,10 +152,10 @@ export class BinTransferComponent implements OnInit {
 
 
 
-    // if (localStorage.getItem("towhseId") == localStorage.getItem("whseId")) {
+    // if (localStorage.getItem("towhseId") == sessionStorage.getItem("whseId")) {
     //   this.PageTitle = this.translate.instant("BinTransfer");
     // } else {
-    //   this.PageTitle = this.translate.instant("WarehouseTransfer") + this.translate.instant("InvTransfer_From") + localStorage.getItem("whseId") + this.translate.instant("InvTransfer_To") + localStorage.getItem("towhseId");
+    //   this.PageTitle = this.translate.instant("WarehouseTransfer") + this.translate.instant("InvTransfer_From") + sessionStorage.getItem("whseId") + this.translate.instant("InvTransfer_To") + localStorage.getItem("towhseId");
     // }
     this.formatTransferNumbers();
     this.formatOnHandQty();
@@ -537,7 +537,7 @@ export class BinTransferComponent implements OnInit {
 
   ShowLOTList() {
     this.showLoader = true;
-    this.inventoryTransferService.getLotList(localStorage.getItem("whseId"), this.fromBin, this.itemCode, this.lotValue).subscribe(
+    this.inventoryTransferService.getLotList(sessionStorage.getItem("whseId"), this.fromBin, this.itemCode, this.lotValue).subscribe(
       data => {
         this.showLoader = false;
         if (data != undefined && data.length > 0) {
@@ -908,12 +908,12 @@ export class BinTransferComponent implements OnInit {
       WhseCode: localStorage.getItem("fromwhseId"),
       ToWhsCode: localStorage.getItem("towhseId"), //oToWhs,
       Type: type,
-      DiServerToken: localStorage.getItem("Token"), //companyDBObject.DIServerToken,
-      CompanyDBId: localStorage.getItem("CompID"), //companyDBObject.CompanyDbName,
+      DiServerToken: sessionStorage.getItem("Token"), //companyDBObject.DIServerToken,
+      CompanyDBId: sessionStorage.getItem("CompID"), //companyDBObject.CompanyDbName,
       TransType: "WHS",
       //--------------------Adding Parameters for the Licence--------------------------------------------
-      GUID: localStorage.getItem("GUID"),
-      UsernameForLic: localStorage.getItem("UserId"),
+      GUID: sessionStorage.getItem("GUID"),
+      UsernameForLic: sessionStorage.getItem("UserId"),
       BaseEntry: "",
       BaseType: "0"
       //------------------End for the Licence Parameter------------------------------------------------------

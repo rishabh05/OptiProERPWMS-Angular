@@ -12,7 +12,7 @@ export interface ColumnSetting {
     width?: string;
     headerClass?: string;
     class?: string;
-  }
+  } 
 
 // Example of Data as model, can be used for non updating data (exaple - names, task type and etc)
 export class CommonData {
@@ -145,7 +145,32 @@ export class CommonData {
         if (sessionStorage.getItem('isLoggedIn') == null) {
             window.location.href = login_page;
         }
+    }  
+
+    LicenseCheckTriggerEnum() {
+        return [
+            { Value: "1", Name: "FirstLogin" },
+            { Value: "2", Name: "RemoveSession" },
+            { Value: "3", Name: "PersistSession" }
+        ];
     }
 
-   
+    public getLicenseCheckTriggerText(value: String) {
+        var meanValue:any=''
+        switch (value) {
+            case this.LicenseCheckTriggerEnum()[0].Name: {
+                meanValue = this.LicenseCheckTriggerEnum()[0].Value;
+                break;
+            }
+            case this.LicenseCheckTriggerEnum()[1].Name: {
+                meanValue = this.LicenseCheckTriggerEnum()[1].Value;
+                break;
+            }
+            case this.LicenseCheckTriggerEnum()[2].Name: {
+                meanValue = this.LicenseCheckTriggerEnum()[2].Value;
+                break;
+            }
+        }
+        return meanValue;
+    }
 }

@@ -585,10 +585,10 @@ export class OutCutomerComponent implements OnInit {
       let arrSODETAIL: SODETAIL[] = [];
       let deliveryToken: DeliveryToken = new DeliveryToken();
       // Hdr
-      let comDbId = localStorage.getItem('CompID');
-      let token = localStorage.getItem('Token');
-      let guid: string = localStorage.getItem('GUID');
-      let uid: string = localStorage.getItem('UserId');
+      let comDbId = sessionStorage.getItem("CompID");
+      let token = sessionStorage.getItem("Token");
+      let guid: string = sessionStorage.getItem("GUID");
+      let uid: string = sessionStorage.getItem("UserId");
       let hdrLine: number = 0;
       let limit = -1;
       let hdrLineVal = 0;
@@ -883,7 +883,7 @@ export class OutCutomerComponent implements OnInit {
     if (this.orderNumber == "" || this.orderNumber == undefined) {
       return;
     }
-    let whseId = localStorage.getItem("whseId");
+    let whseId = sessionStorage.getItem("whseId");
     this.showLookupLoader = true;
     var result = false
     await this.outboundservice.GetCustomerDetailFromSO("", this.orderNumber, whseId).then(
@@ -959,7 +959,7 @@ export class OutCutomerComponent implements OnInit {
   }
 
   public openOrderLookup() {
-    let whseId = localStorage.getItem("whseId");
+    let whseId = sessionStorage.getItem("whseId");
     this.outboundservice.getCustomerSOList(this.customerCode, "", whseId).subscribe(
       resp => {
         if (resp != null && resp.length > 0) {

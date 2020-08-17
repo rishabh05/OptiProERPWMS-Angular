@@ -22,7 +22,7 @@ export class MenuService {
   
 
   getAllMenus(): Observable<any> {
-    var jObject = { CompanyDBId: localStorage.getItem("CompID"), UserId: localStorage.getItem("UserId"), }
+    var jObject = { CompanyDBId: sessionStorage.getItem("CompID"), UserId: sessionStorage.getItem("UserId"), }
     return this.httpclient.post(this.config_params.service_url +  "/api/Menu/AllModule", jObject,
       this.commonService.httpOptions);
   }

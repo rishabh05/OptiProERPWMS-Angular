@@ -78,7 +78,7 @@ export class InputDialogComponent implements OnInit {
 
   public ShowAllBins(callFrom: string) {
     this.showLoader = true;
-    this.inboundService.GetTargetBins('N', localStorage.getItem("whseId")).subscribe(
+    this.inboundService.GetTargetBins('N', sessionStorage.getItem("whseId")).subscribe(
       (data: any) => {
         this.showLoader = false;
        // console.log(data);
@@ -155,7 +155,7 @@ export class InputDialogComponent implements OnInit {
       return;
     }
     this.showLoader = true;
-    this.inboundService.binChange(localStorage.getItem("whseId"), this.binNo).then(
+    this.inboundService.binChange(sessionStorage.getItem("whseId"), this.binNo).then(
       data => {
         this.showLoader = false;
         if (data != null) {

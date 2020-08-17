@@ -23,6 +23,7 @@
   "Login_SelectwarehouseMsg": "Please select warehouse.",
   "Login_Reset":"Reset",
   "Login_licenseFailed": "License failed",
+  "Already_Loggin_Msg": "You are already logged in. Close current session?",
   
   "2":"Home -> Left side Menus",
   "Inbound": "Inbound",

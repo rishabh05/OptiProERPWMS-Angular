@@ -141,6 +141,11 @@
         </div>
     </div>
 
+    <span *ngIf="showConfirmDialog">
+            <app-comon-confirm-dialog [titleMessage]="dialogMsg" [yesButtonText]="yesButtonText" [fromWhere]="dialogFor" [noButtonText]="noButtonText"
+                (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
+        </span>
+
     <!-- Full page loader start -->
     <div class="opti_FullPageLoader" *ngIf="showFullPageLoader==true">
         <div class="blob blob-0"></div>

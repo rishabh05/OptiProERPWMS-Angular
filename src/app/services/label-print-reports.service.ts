@@ -32,7 +32,7 @@ export class LabelPrintReportsService {
    */
   getItemCode(): Observable<any> {
     //var jObject = { COMPANYDBNAME: companyDBObject.CompanyDbName };
-    var jObject = { CompanyDBName: localStorage.getItem("CompID") }
+    var jObject = { CompanyDBName: sessionStorage.getItem("CompID") }
     return this.httpclient.post(this.config_params.service_url + "/api/GoodsReceipt/AllItemLookup", jObject, this.commonService.httpOptions);
   }
   
@@ -41,12 +41,12 @@ export class LabelPrintReportsService {
    * @param item 
    */
   isItemExists( item:string): Observable<any> {
-    var jObject = { ITEMCODE: JSON.stringify([{ COMPANYDBNAME: localStorage.getItem("CompID"), ItemCode: item }]) };
+    var jObject = { ITEMCODE: JSON.stringify([{ COMPANYDBNAME: sessionStorage.getItem("CompID"), ItemCode: item }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodsReceipt/IsItemExists", jObject, this.commonService.httpOptions);
   }
 
   isItemExistsPromise( item:string): Promise<any> {
-    var jObject = { ITEMCODE: JSON.stringify([{ COMPANYDBNAME: localStorage.getItem("CompID"), ItemCode: item }]) };
+    var jObject = { ITEMCODE: JSON.stringify([{ COMPANYDBNAME: sessionStorage.getItem("CompID"), ItemCode: item }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodsReceipt/IsItemExists", jObject, this.commonService.httpOptions).toPromise();
   }
 
@@ -55,7 +55,7 @@ export class LabelPrintReportsService {
    * @param item 
    */
   getItemTracking ( item:string): Observable<any> {
-    var jObject = { ITEMCODE: JSON.stringify([{ COMPANYDBNAME: localStorage.getItem("CompID"), ItemCode: item }]) };
+    var jObject = { ITEMCODE: JSON.stringify([{ COMPANYDBNAME: sessionStorage.getItem("CompID"), ItemCode: item }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodsReceipt/GetItemTracking", jObject, this.commonService.httpOptions);
     
   }
@@ -66,7 +66,7 @@ export class LabelPrintReportsService {
    * @param item 
    */
   getLotsList( item:string): Observable<any> {
-    var jObject = { LabelPrintToken: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), ItemCode: item, WhsCode: localStorage.getItem("whseId") , ALLBINS: true, LOTISSUEMETHOD: '1', SUPPORTTRX: '15' }]) };
+    var jObject = { LabelPrintToken: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), ItemCode: item, WhsCode: sessionStorage.getItem("whseId") , ALLBINS: true, LOTISSUEMETHOD: '1', SUPPORTTRX: '15' }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/LabelPrint/GetAllLotsForItemLabelReport", jObject, this.commonService.httpOptions);
   }
 
@@ -77,7 +77,7 @@ export class LabelPrintReportsService {
     */
    checkBinForItemLabelReport( item:string,binNo:string): Observable<any> {
     //var jObject = null;
-    var jObject = { LabelPrintToken: JSON.stringify([{ BINNO: binNo, CompanyDBId: localStorage.getItem("CompID"), ItemCode: item, WhsCode: '', ALLBINS: true, LOTISSUEMETHOD: '1', SUPPORTTRX: '15' }]) };
+    var jObject = { LabelPrintToken: JSON.stringify([{ BINNO: binNo, CompanyDBId: sessionStorage.getItem("CompID"), ItemCode: item, WhsCode: '', ALLBINS: true, LOTISSUEMETHOD: '1', SUPPORTTRX: '15' }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/LabelPrint/CheckBinForItemLabelReport", jObject, this.commonService.httpOptions);
   }
   
@@ -87,7 +87,7 @@ export class LabelPrintReportsService {
    * @param binNo 
    */
   getLotScanListWithoutWhseBinAndItemWise( item:string,binNo:string): Observable<any>{
-   var jObject = { DeliveryToken: JSON.stringify([{ LOTNO: binNo, CompanyDBId: localStorage.getItem("CompID"), ITEMCODE: item, WhsCode: '', ALLBINS: true, LOTISSUEMETHOD: '1', SUPPORTTRX: '15' }]) };
+   var jObject = { DeliveryToken: JSON.stringify([{ LOTNO: binNo, CompanyDBId: sessionStorage.getItem("CompID"), ITEMCODE: item, WhsCode: '', ALLBINS: true, LOTISSUEMETHOD: '1', SUPPORTTRX: '15' }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetLotScanListWithoutWhseBinAndItemWise", jObject, this.commonService.httpOptions);
   }
 
@@ -97,7 +97,7 @@ export class LabelPrintReportsService {
    * @param binNo 
    */
   getLotScanListWithoutWhseBinAndItemWisePromise( item:string,binNo:string): Promise<any>{
-    var jObject = { DeliveryToken: JSON.stringify([{ LOTNO: binNo, CompanyDBId: localStorage.getItem("CompID"), ITEMCODE: item, WhsCode: '', ALLBINS: true, LOTISSUEMETHOD: '1', SUPPORTTRX: '15' }]) };
+    var jObject = { DeliveryToken: JSON.stringify([{ LOTNO: binNo, CompanyDBId: sessionStorage.getItem("CompID"), ITEMCODE: item, WhsCode: '', ALLBINS: true, LOTISSUEMETHOD: '1', SUPPORTTRX: '15' }]) };
      return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetLotScanListWithoutWhseBinAndItemWise", jObject, this.commonService.httpOptions).toPromise();
    }
 
@@ -105,7 +105,7 @@ export class LabelPrintReportsService {
    * get the value for no. of copies for print.
    */
   getCopyCountForItemLabelReport(){
-    var jObject = { Print: JSON.stringify([{ USERID: localStorage.getItem("UserId"), COMPANYDBNAME: localStorage.getItem("CompID"), RPTID: "Item Label Report" }]) };
+    var jObject = { Print: JSON.stringify([{ USERID: sessionStorage.getItem("UserId"), COMPANYDBNAME: sessionStorage.getItem("CompID"), RPTID: "Item Label Report" }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/Printing/GetCopyCount", jObject, this.commonService.httpOptions);
    }
 
@@ -116,10 +116,10 @@ export class LabelPrintReportsService {
     * @param noOfCopies 
     */
    printingServiceForItemLabel(item:string,binNo:string,noOfCopies:string){
-    var jObject = { PrintingObject: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), 
-     USERID: localStorage.getItem("UserId"), ITEMCODE: item, LOTNO: binNo,
-     RPTID: 1, NOOFLABELS: noOfCopies, WHSCODE:  localStorage.getItem("whseId"), 
-     GUID:  localStorage.getItem("GUID"), UsernameForLic: localStorage.getItem("UserId")}]) };
+    var jObject = { PrintingObject: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), 
+     USERID: sessionStorage.getItem("UserId"), ITEMCODE: item, LOTNO: binNo,
+     RPTID: 1, NOOFLABELS: noOfCopies, WHSCODE:  sessionStorage.getItem("whseId"), 
+     GUID:  sessionStorage.getItem("GUID"), UsernameForLic: sessionStorage.getItem("UserId")}]) };
     return this.httpclient.post(this.config_params.service_url + "/api/Printing/WMSPrintingService", jObject, this.commonService.httpOptions);
    }
   
@@ -130,8 +130,8 @@ export class LabelPrintReportsService {
    */
   getFromBinsList(): Observable<any> {
     //var jObject = null;
-    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), ItemCode: '', WhsCode: localStorage.getItem("whseId"),
-     ALLBINS: true, GUID: localStorage.getItem("GUID"), UsernameForLic: localStorage.getItem("UserId") }]) };
+    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), ItemCode: '', WhsCode: sessionStorage.getItem("whseId"),
+     ALLBINS: true, GUID: sessionStorage.getItem("GUID"), UsernameForLic: sessionStorage.getItem("UserId") }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetBins", jObject, this.commonService.httpOptions);
   }
 
@@ -141,10 +141,10 @@ export class LabelPrintReportsService {
    * @param item 
    */
   getToBinsList(): Observable<any> {
-    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), ItemCode: '', WhsCode: localStorage.getItem("whseId"), 
-    ALLBINS: true, GUID: localStorage.getItem("GUID"), UsernameForLic:  localStorage.getItem("UserId") }]) };
-    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), ItemCode: '', WhsCode: localStorage.getItem("whseId"),
-     ALLBINS: true, GUID: localStorage.getItem("GUID"), UsernameForLic: localStorage.getItem("UserId") }]) };
+    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), ItemCode: '', WhsCode: sessionStorage.getItem("whseId"), 
+    ALLBINS: true, GUID: sessionStorage.getItem("GUID"), UsernameForLic:  sessionStorage.getItem("UserId") }]) };
+    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), ItemCode: '', WhsCode: sessionStorage.getItem("whseId"),
+     ALLBINS: true, GUID: sessionStorage.getItem("GUID"), UsernameForLic: sessionStorage.getItem("UserId") }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetBins", jObject, this.commonService.httpOptions);
   }
   
@@ -152,7 +152,7 @@ export class LabelPrintReportsService {
    * get the value for no. of copies for print.
    */
   getCopyCountForBinLabelReport(){
-    var jObject = { Print: JSON.stringify([{ USERID: localStorage.getItem("UserId"), COMPANYDBNAME: localStorage.getItem("CompID"), RPTID: "Bin Label Report" }]) };
+    var jObject = { Print: JSON.stringify([{ USERID: sessionStorage.getItem("UserId"), COMPANYDBNAME: sessionStorage.getItem("CompID"), RPTID: "Bin Label Report" }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/Printing/GetCopyCount", jObject, this.commonService.httpOptions);
    }
 
@@ -163,9 +163,9 @@ export class LabelPrintReportsService {
     * @param noOfCopies 
     */
    printingServiceForBinLabel(fromBin:string,toBin:string,noOfCopies:string){
-    var jObject ={ PrintingObject: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), USERID: localStorage.getItem("UserId"),
+    var jObject ={ PrintingObject: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), USERID: sessionStorage.getItem("UserId"),
     BINFROM: fromBin, BINTO: toBin, RPTID: 2, NOOFLABELS: noOfCopies, 
-    GUID: localStorage.getItem("GUID"), UsernameForLic: localStorage.getItem("UserId") }])};
+    GUID: sessionStorage.getItem("GUID"), UsernameForLic: sessionStorage.getItem("UserId") }])};
     return this.httpclient.post(this.config_params.service_url + "/api/Printing/WMSPrintingService", jObject, this.commonService.httpOptions);
    }
 
@@ -175,8 +175,8 @@ export class LabelPrintReportsService {
    * @param item 
    */
   isBinExists( bin:string): Promise<any> {
-    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), BinCode: bin, 
-      ItemCode: '', WhsCode: localStorage.getItem("whseId"), ALLBINS: true }]) };
+    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), BinCode: bin, 
+      ItemCode: '', WhsCode: sessionStorage.getItem("whseId"), ALLBINS: true }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsBinExist", jObject, this.commonService.httpOptions).toPromise();
   }
 
@@ -187,7 +187,7 @@ export class LabelPrintReportsService {
   GetItemOrBatchDetail(item:string,lot:string,itemName:string){
     var jObject = {
       ITEMCODE: JSON.stringify([{
-          COMPANYDBNAME: localStorage.getItem("CompID"),WHSCODE: localStorage.getItem("whseId"),
+          COMPANYDBNAME: sessionStorage.getItem("CompID"),WHSCODE: sessionStorage.getItem("whseId"),
           ItemCode: item,LotNo: lot,ItemName: itemName}])};
     return this.httpclient.post(this.config_params.service_url + "/api/GoodsReceipt/GetItemOrBatchDetail", jObject, this.commonService.httpOptions);
    }
