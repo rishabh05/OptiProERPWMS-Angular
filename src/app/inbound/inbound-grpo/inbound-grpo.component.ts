@@ -297,7 +297,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
   GetDefaultBinOrBinWithQtyForProduction() {
     this.commonservice.GetDefaultBinOrBinWithQtyForProduction(this.ItemCode,
-      localStorage.getItem("whseId"), this.receiptData.status).subscribe(
+      sessionStorage.getItem("whseId"), this.receiptData.status).subscribe(
         data => {
           if (data != null) {
 
@@ -443,7 +443,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     this.showLoader = true;
     var result = false;
     if (localStorage.getItem('FromReceiptProd') == 'true') {
-      await this.inboundService.isBinExistForProduction(localStorage.getItem("whseId"), this.RecvbBinvalue, this.receiptData.status).then(
+      await this.inboundService.isBinExistForProduction(sessionStorage.getItem("whseId"), this.RecvbBinvalue, this.receiptData.status).then(
         (data: any) => {
           this.showLoader = false;
           console.log("inside inboundService.isBinExistForProduction");
@@ -492,7 +492,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         }
       );
     } else {
-      await this.inboundService.binChange(localStorage.getItem("whseId"), this.RecvbBinvalue).then(
+      await this.inboundService.binChange(sessionStorage.getItem("whseId"), this.RecvbBinvalue).then(
         (data: any) => {
           console.log("inside binChange");
           this.showLoader = false;
@@ -1625,21 +1625,21 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
     oSubmitPOLotsObj.POReceiptLots.push({
       OPTM_TYPE:this.inboundFromWhere,
-      DiServerToken: localStorage.getItem("Token"),
+      DiServerToken: sessionStorage.getItem("Token"),
       PONumber: this.Ponumber,
       DocEntry: this.DocEntry,
-      CompanyDBId: localStorage.getItem("CompID"),
+      CompanyDBId: sessionStorage.getItem("CompID"),
       LineNo: this.openPOLineModel[0].LINENUM,
       ShipQty: this.openPOLineModel[0].RPTQTY.toString(),
       OpenQty: this.openPOLineModel[0].OPENQTY.toString(),
-      WhsCode: localStorage.getItem("whseId"),
+      WhsCode: sessionStorage.getItem("whseId"),
       Tracking: this.openPOLineModel[0].TRACKING,
       ItemCode: this.openPOLineModel[0].ITEMCODE,
       LastSerialNumber: 0,
       Line: Number(localStorage.getItem("Line")),
-      GUID: localStorage.getItem("GUID"),
+      GUID: sessionStorage.getItem("GUID"),
       UOM: this.uomSelectedVal.UomEntry,
-      UsernameForLic: localStorage.getItem("UserId")
+      UsernameForLic: sessionStorage.getItem("UserId")
 
       //------end Of parameter For License----
     });
@@ -1985,7 +1985,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   public GetTargetBins() {
     this.targetBinClick = false;
     this.showLoader = true;
-    this.inboundService.GetTargetBins('N', localStorage.getItem("whseId")).subscribe(
+    this.inboundService.GetTargetBins('N', sessionStorage.getItem("whseId")).subscribe(
       (data: any) => {
         this.showLoader = false;
         // console.log(data);
@@ -2548,10 +2548,10 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       // nothing to do.
     } else {
       itemsData.push({
-        DiServerToken: localStorage.getItem("Token"),
-        CompanyDBId: localStorage.getItem("CompID"),
+        DiServerToken: sessionStorage.getItem("Token"),
+        CompanyDBId: sessionStorage.getItem("CompID"),
         Transaction: this.Transaction,
-        RECUSERID: localStorage.getItem("UserId"),
+        RECUSERID: sessionStorage.getItem("UserId"),
         ONLINEPOSTING: this.ONLINEPOSTING,
         BATCHNO: this.receiptData.OrderNo,
         LineNo: 0,//abhi k lea kea h need to check
@@ -2568,9 +2568,9 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         WhsCode: this.receiptData.WhsCode,
         Tracking: this.receiptData.TRACKING,
         IsPalletExist: this.isPalletizationEnable,
-        LoginId: localStorage.getItem("UserId"),
-        GUID: localStorage.getItem("GUID"),
-        UsernameForLic: localStorage.getItem("UserId"),
+        LoginId: sessionStorage.getItem("UserId"),
+        GUID: sessionStorage.getItem("GUID"),
+        UsernameForLic: sessionStorage.getItem("UserId"),
         WONO: this.receiptData.OrderNo
       });
     }
@@ -2583,10 +2583,11 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       // will return empty array
     } else {
       rejectItemsData.push({
-        DiServerToken: localStorage.getItem("Token"),
-        CompanyDBId: localStorage.getItem("CompID"),
+        DiServerToken: sessionStorage.getItem("Token"),
+        CompanyDBId: sessionStorage.getItem("CompID"),
         Transaction: this.Transaction,
-        RECUSERID: localStorage.getItem("UserId"),
+        RECUSERID: sessionStorage.getItem("UserId"),
+        UsernameForLic: sessionStorage.getItem("UserId"),
         ONLINEPOSTING: this.ONLINEPOSTING,
         BATCHNO: this.receiptData.OrderNo,
         LineNo: 1,//abhi k lea kea h need to check
@@ -2600,7 +2601,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         FGQTYTOPOST: this.receiptData.ORIGINALACTUALQUANTITY,//abhi k lea need to check
         Tracking: this.receiptData.TRACKING,
         IsPalletExist: this.isPalletizationEnable,
-        LoginId: localStorage.getItem("UserId"),
+        LoginId: sessionStorage.getItem("UserId"),
         RejectQTY: this.receiptData.OPENQTY,
         RecRjctedQty: "Y",
         Quantity: totalAcceptedRejectedQty,
@@ -2876,21 +2877,21 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
    
           this.addToGRPOArray.POReceiptLots.push({
             OPTM_TYPE:this.oSavedPOLotsArray.POReceiptLots[i].OPTM_TYPE,
-            DiServerToken: localStorage.getItem("Token"),
+            DiServerToken: sessionStorage.getItem("Token"),
             PONumber: this.oSavedPOLotsArray.POReceiptLots[i].PONumber,
             DocEntry: this.oSavedPOLotsArray.POReceiptLots[i].DocEntry,
-            CompanyDBId: localStorage.getItem("CompID"),
+            CompanyDBId: sessionStorage.getItem("CompID"),
             LineNo: this.oSavedPOLotsArray.POReceiptLots[i].LineNo,
             ShipQty: this.oSavedPOLotsArray.POReceiptLots[i].ShipQty,
             OpenQty: this.oSavedPOLotsArray.POReceiptLots[i].OpenQty,
-            WhsCode: localStorage.getItem("whseId"),
+            WhsCode: sessionStorage.getItem("whseId"),
             Tracking: this.oSavedPOLotsArray.POReceiptLots[i].Tracking,
             ItemCode: this.oSavedPOLotsArray.POReceiptLots[i].ItemCode,
             LastSerialNumber: 0,
             Line: this.oSavedPOLotsArray.POReceiptLots[i].Line,
-            GUID: localStorage.getItem("GUID"),
+            GUID: sessionStorage.getItem("GUID"),
             UOM: this.oSavedPOLotsArray.POReceiptLots[i].UOM,
-            UsernameForLic: localStorage.getItem("UserId")
+            UsernameForLic: sessionStorage.getItem("UserId")
           });
 
           for (var j = 0; j < this.oSavedPOLotsArray.POReceiptLotDetails.length; j++) {

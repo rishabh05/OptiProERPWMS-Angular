@@ -32,7 +32,7 @@ export class OutboundService {
   }
 
   public getCustomer(code: string): Promise<any> {
-    this.outRequest.CompanyDBId = localStorage.getItem("CompID");
+    this.outRequest.CompanyDBId = sessionStorage.getItem("CompID");
     var body: any = { DeliveryToken:JSON.stringify( [{ CompanyDBId: this.outRequest.CompanyDBId, CUSTCODE: code }] )};
     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/Customer", body, this.commonService.httpOptions).toPromise();
   }
@@ -60,20 +60,20 @@ export class OutboundService {
 
   public getShipmentDetail(shipmentId: string): Observable<any> {
     this.outRequest = new OutRequest();
-    this.outRequest.CompanyDBId = localStorage.getItem("CompID");
+    this.outRequest.CompanyDBId = sessionStorage.getItem("CompID");
     var body: any = { PalletCode:JSON.stringify( [{ COMPANYDBNAME: this.outRequest.CompanyDBId, OPTM_SHIPMENTID: shipmentId }] )};
     return this.httpclient.post(this.config_params.service_url + "/api/Shipment/GetItemContainerDataForShipment", body, this.commonService.httpOptions);
   }
   public isValidShipmentId(shipmentId: string): Observable<any> {
     this.outRequest = new OutRequest();
-    this.outRequest.CompanyDBId = localStorage.getItem("CompID");
+    this.outRequest.CompanyDBId = sessionStorage.getItem("CompID");
     var body: any = { PalletCode:JSON.stringify( [{ COMPANYDBNAME: this.outRequest.CompanyDBId, OPTM_SHIPMENTID: shipmentId }] )};
     return this.httpclient.post(this.config_params.service_url + "/api/Shipment/IsValidShipmentID", body, this.commonService.httpOptions);
   }
   
   public getShipmentIdList(OPTM_BPCODE, OPTM_DOCKDOORID): Observable<any> { 
     this.outRequest = new OutRequest();
-    this.outRequest.CompanyDBId = localStorage.getItem("CompID");
+    this.outRequest.CompanyDBId = sessionStorage.getItem("CompID");
     var body: any = { PalletCode:JSON.stringify( [{ COMPANYDBNAME: this.outRequest.CompanyDBId,
       OPTM_BPCODE: OPTM_BPCODE, OPTM_DOCKDOORID: OPTM_DOCKDOORID}] )};
     return this.httpclient.post(this.config_params.service_url + "/api/Shipment/GetShipmentId", body, this.commonService.httpOptions);
@@ -81,23 +81,23 @@ export class OutboundService {
 
   public getDockDoorList(): Observable<any> { 
     this.outRequest = new OutRequest();
-    this.outRequest.CompanyDBId = localStorage.getItem("CompID");
+    this.outRequest.CompanyDBId = sessionStorage.getItem("CompID");
     var body: any = { PalletCode:JSON.stringify( [{ COMPANYDBNAME: this.outRequest.CompanyDBId,
-      OPTM_WHSE: localStorage.getItem("whseId")}] )};
+      OPTM_WHSE: sessionStorage.getItem("whseId")}] )};
     return this.httpclient.post(this.config_params.service_url + "/api/Shipment/GetDataForDockDoor", body, this.commonService.httpOptions);
   }
 
   public isValidDockDoorId(dockDoorId: string): Observable<any> {
     this.outRequest = new OutRequest();
-    this.outRequest.CompanyDBId = localStorage.getItem("CompID");
+    this.outRequest.CompanyDBId = sessionStorage.getItem("CompID");
     var body: any = { PalletCode:JSON.stringify( [{ COMPANYDBNAME: this.outRequest.CompanyDBId, 
-      OPTM_WHSE: localStorage.getItem("whseId"), OPTM_DOCKDOORID:dockDoorId }] )};
+      OPTM_WHSE: sessionStorage.getItem("whseId"), OPTM_DOCKDOORID:dockDoorId }] )};
     return this.httpclient.post(this.config_params.service_url + "/api/Shipment/IsValidDockDoor", body, this.commonService.httpOptions);
   }
 
   public getShipmentInformation(): Observable<any> { 
     this.outRequest = new OutRequest();
-    this.outRequest.CompanyDBId = localStorage.getItem("CompID");
+    this.outRequest.CompanyDBId = sessionStorage.getItem("CompID");
     var body: any = { PalletCode:JSON.stringify( [{ COMPANYDBNAME: this.outRequest.CompanyDBId}] )};
     return this.httpclient.post(this.config_params.service_url + "/api/Shipment/GetShipmentId", body, this.commonService.httpOptions);
   }
@@ -123,8 +123,8 @@ export class OutboundService {
   public getAvaliableMeterial(itemCode: string, docentry: string) {
     var body: any = {
       DeliveryToken: JSON.stringify([{
-        COMPANYDBNAME: localStorage.getItem("CompID"),
-        WHSCODE: localStorage.getItem("whseId"), 
+        COMPANYDBNAME: sessionStorage.getItem("CompID"),
+        WHSCODE: sessionStorage.getItem("whseId"), 
         ITEMCODE: itemCode, 
         DocEntry: docentry,
         PalletCode: ""
@@ -135,7 +135,7 @@ export class OutboundService {
   }
 
   public getAvaliableMeterialForNoneTracked(itemCode: string) {
-    var body: any = { WHSCODE: JSON.stringify([{ COMPANYDBNAME: localStorage.getItem("CompID"), WHSCODE: localStorage.getItem("whseId"), ITEMCODE: itemCode }]) };
+    var body: any = { WHSCODE: JSON.stringify([{ COMPANYDBNAME: sessionStorage.getItem("CompID"), WHSCODE: sessionStorage.getItem("whseId"), ITEMCODE: itemCode }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/ProductionIssue/GetBinsToIssueForNonTrackItem", body, this.commonService.httpOptions);
   }
 
@@ -146,9 +146,9 @@ export class OutboundService {
 
   private prepareRequest(): any {
     //    this.outRequest = new OutRequest();
-    this.outRequest.CompanyDBId = localStorage.getItem("CompID");
-    this.outRequest.GUID = localStorage.getItem("GUID");
-    this.outRequest.UsernameForLic = localStorage.getItem("UserId");
+    this.outRequest.CompanyDBId = sessionStorage.getItem("CompID");
+    this.outRequest.GUID = sessionStorage.getItem("GUID");
+    this.outRequest.UsernameForLic = sessionStorage.getItem("UserId");
     return JSON.stringify([this.outRequest]);
   }
 
@@ -157,7 +157,7 @@ export class OutboundService {
    * @param whsCode 
    */
   checkAndScanCode(vendCode:string,scanInputString){
-    var jObject = {Gs1Token: JSON.stringify([{Vsvendorid:vendCode,StrScan:scanInputString,CompanyDBId:localStorage.getItem("CompID")}])};
+    var jObject = {Gs1Token: JSON.stringify([{Vsvendorid:vendCode,StrScan:scanInputString,CompanyDBId:sessionStorage.getItem("CompID")}])};
     return this.httpclient.post(this.config_params.service_url + "/api/Gs1/GS1SETUP", jObject, this.commonService.httpOptions);
   }
 
@@ -165,7 +165,7 @@ export class OutboundService {
 
   getAllPickPackAndOtherSerialBatchWithoutBin(itemCode:string,scanBin:string,
     scannedSerialValue,docEntry:string): Observable<any> {
-    var jObject = { DeliveryToken: JSON.stringify([{ COMPANYDBNAME: localStorage.getItem("CompID"), WHSCODE:  localStorage.getItem("whseId"), ITEMCODE: itemCode, BINNO: scanBin, SCANSERIAL: scannedSerialValue, 
+    var jObject = { DeliveryToken: JSON.stringify([{ COMPANYDBNAME: sessionStorage.getItem("CompID"), WHSCODE:  sessionStorage.getItem("whseId"), ITEMCODE: itemCode, BINNO: scanBin, SCANSERIAL: scannedSerialValue, 
       DocEntry: docEntry }]) };
       return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetAllPickPackAndOtherSerialBatchWithoutBin", jObject, this.commonService.httpOptions);
   }
@@ -173,9 +173,9 @@ export class OutboundService {
   public GetItemCode(itemcode: string): Observable<any> {
     var jObject = {
       ITEMCODE: JSON.stringify([{
-          ITEMCODE: itemcode, COMPANYDBNAME: localStorage.getItem("CompID"),
-          GUID: localStorage.getItem("GUID"),
-        UsernameForLic: localStorage.getItem("UserId")
+          ITEMCODE: itemcode, COMPANYDBNAME: sessionStorage.getItem("CompID"),
+          GUID: sessionStorage.getItem("GUID"),
+        UsernameForLic: sessionStorage.getItem("UserId")
       }])
     };
 
@@ -186,28 +186,28 @@ export class OutboundService {
 
 
   public isPackingNoExists(code: string): Observable<any> {
-    this.outRequest.CompanyDBId = localStorage.getItem("CompID");
+    this.outRequest.CompanyDBId = sessionStorage.getItem("CompID");
     var body: any = { DeliveryToken:JSON.stringify( [{ CompanyDBId: this.outRequest.CompanyDBId, CUSTCODE: code }] )};
     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/Customer", body, this.commonService.httpOptions);
   }
   
   public GetPackSlipType(number: String,type: String): Observable<any> {
-    this.outRequest.CompanyDBId = localStorage.getItem("CompID");
+    this.outRequest.CompanyDBId = sessionStorage.getItem("CompID");
     var body: any = { DeliveryToken:JSON.stringify( [{ CompanyDBId: this.outRequest.CompanyDBId,
       PackType:type,}] )};
     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetPackSlipType", body, this.commonService.httpOptions);
   }
   public CreatePackingSlip(number: String,type: String,DocEntry:String){
-    this.outRequest.CompanyDBId = localStorage.getItem("CompID");
+    this.outRequest.CompanyDBId = sessionStorage.getItem("CompID");
     var body: any = { DeliveryToken:JSON.stringify( [{ CompanyDBId: this.outRequest.CompanyDBId, Number: number,
-      Type:type,UsernameforLic:localStorage.getItem("UserId"),DocEntry:DocEntry}] )};
+      Type:type,UsernameforLic:sessionStorage.getItem("UserId"),DocEntry:DocEntry}] )};
     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/CreatePackingSlip", body, this.commonService.httpOptions);
 
   }
 
   
   public GetPackNoBasedOnDelivery(PackNo: String,DocEntry:String){
-    this.outRequest.CompanyDBId = localStorage.getItem("CompID");
+    this.outRequest.CompanyDBId = sessionStorage.getItem("CompID");
     var body: any = { DeliveryToken:JSON.stringify( [{ CompanyDBId: this.outRequest.CompanyDBId, PackNo: PackNo,
       DocEntry:DocEntry}] )};
     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetPackNoBasedOnDelivery", body, this.commonService.httpOptions);

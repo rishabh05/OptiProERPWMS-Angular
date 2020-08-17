@@ -119,7 +119,7 @@ export class PickingItemDetailsComponent implements OnInit {
     this.clearScanningFields();
     this.ShipmentList[0] = JSON.parse(localStorage.getItem("ShipDetail"));
     this.PickListSteps = JSON.parse(localStorage.getItem("PickListSteps"));
-    this.compId = localStorage.getItem("CompID");
+    this.compId = sessionStorage.getItem("CompID");
     this.PickOperationList = ["", "Pick_To_Tote", "Pick_To_Container", ""];
     if (localStorage.getItem("TaskDetail") != undefined && localStorage.getItem("TaskDetail") != "" && localStorage.getItem("TaskDetail") != "null") {
       this.index = Number(localStorage.getItem("PickItemIndex"));
@@ -830,7 +830,7 @@ export class PickingItemDetailsComponent implements OnInit {
           OPTM_CONTAINER_ID: contValue,
           OPTM_QTY: 1,
           OPTM_BTCHSER: this.PT_Enter_ContBtchSer,
-          OPTM_CREATEDBY: localStorage.getItem("UserId"),
+          OPTM_CREATEDBY: sessionStorage.getItem("UserId"),
           OPTM_STARTDATETIME: this.OPTM_STARTDATETIME
         });
 
@@ -839,7 +839,7 @@ export class PickingItemDetailsComponent implements OnInit {
           OPTM_ITEMCODE: this.itemcodeValue,
           OPTM_ACTUAL_QTY: 1,
           OPTM_BTCHSER: this.PT_Enter_ContBtchSer,
-          OPTM_RESID_ACT: localStorage.getItem("UserId"),
+          OPTM_RESID_ACT: sessionStorage.getItem("UserId"),
           OPTM_STARTDATETIME: this.OPTM_STARTDATETIME
         });
         // }
@@ -909,7 +909,7 @@ export class PickingItemDetailsComponent implements OnInit {
             //     OPTM_CONTAINER_ID: "",
             //     OPTM_QTY: 1,
             //     OPTM_BTCHSER: this.PT_Enter_ContBtchSer,
-            //     OPTM_CREATEDBY: localStorage.getItem("UserId"),
+            //     OPTM_CREATEDBY: sessionStorage.getItem("UserId"),
             //     OPTM_STARTDATETIME: this.OPTM_STARTDATETIME
             //   });
             // }
@@ -1025,7 +1025,7 @@ export class PickingItemDetailsComponent implements OnInit {
         OPTM_CONTAINER_ID: contValue,
         OPTM_QTY: this.pickQty,
         OPTM_BTCHSER: this.PT_Enter_ContBtchSer,
-        OPTM_CREATEDBY: localStorage.getItem("UserId"),
+        OPTM_CREATEDBY: sessionStorage.getItem("UserId"),
         OPTM_STARTDATETIME: this.OPTM_STARTDATETIME
       });
     } else {
@@ -1034,7 +1034,7 @@ export class PickingItemDetailsComponent implements OnInit {
         OPTM_ITEMCODE: this.itemcodeValue,
         OPTM_ACTUAL_QTY: this.pickQty,
         OPTM_BTCHSER: this.PT_Enter_ContBtchSer,
-        OPTM_RESID_ACT: localStorage.getItem("UserId"),
+        OPTM_RESID_ACT: sessionStorage.getItem("UserId"),
         OPTM_STARTDATETIME: this.OPTM_STARTDATETIME
       });
 
@@ -1045,7 +1045,7 @@ export class PickingItemDetailsComponent implements OnInit {
         OPTM_CONTAINER_ID: contValue,
         OPTM_QTY: this.pickQty,
         OPTM_BTCHSER: this.PT_Enter_ContBtchSer,
-        OPTM_CREATEDBY: localStorage.getItem("UserId"),
+        OPTM_CREATEDBY: sessionStorage.getItem("UserId"),
         OPTM_STARTDATETIME: this.OPTM_STARTDATETIME
       });
     }
@@ -1077,7 +1077,7 @@ export class PickingItemDetailsComponent implements OnInit {
           OPTM_ITEMCODE: this.itemcodeValue,
           OPTM_ACTUAL_QTY: this.pickQty,
           OPTM_BTCHSER: "",
-          OPTM_RESID_ACT: localStorage.getItem("UserId"),
+          OPTM_RESID_ACT: sessionStorage.getItem("UserId"),
           OPTM_STARTDATETIME: this.OPTM_STARTDATETIME
         });
       }
@@ -1430,16 +1430,16 @@ export class PickingItemDetailsComponent implements OnInit {
 
     if ((this.OPTM_Tracking == 'B' || this.OPTM_Tracking == 'N') && localStorage.getItem("PickType") != this.translate.instant("Container_Picking")) {
       for (var i = 0; i < this.BtchNoneArray.length; i++) {
-        this.SubmitPickTaskData.push(new PickTaskModel(this.ShipmentList[0].OPTM_PICKLIST_ID, this.ShipmentList[0].OPTM_PICKLIST_CODE, this.PickTaskList[this.index].OPTM_TASKID, localStorage.getItem("whseId"), this.BtchNoneArray[i].OPTM_Location, this.BtchNoneArray[i].OPTM_ContBtchSer, this.BtchNoneArray[i].OPTM_Qty, contValue, localStorage.getItem("UserId"), "N", toteValue, this.containerAlreadyCreated, this.OPTM_STARTDATETIME, localStorage.getItem("PickTypeIndex"), this.UserGrp, this.PickListDropBin));
+        this.SubmitPickTaskData.push(new PickTaskModel(this.ShipmentList[0].OPTM_PICKLIST_ID, this.ShipmentList[0].OPTM_PICKLIST_CODE, this.PickTaskList[this.index].OPTM_TASKID, sessionStorage.getItem("whseId"), this.BtchNoneArray[i].OPTM_Location, this.BtchNoneArray[i].OPTM_ContBtchSer, this.BtchNoneArray[i].OPTM_Qty, contValue, sessionStorage.getItem("UserId"), "N", toteValue, this.containerAlreadyCreated, this.OPTM_STARTDATETIME, localStorage.getItem("PickTypeIndex"), this.UserGrp, this.PickListDropBin));
       }
     } else {
       for (var i = 0; i < this.ContBtchSerArray.length; i++) {
         let result = this.PickListSteps.find(element => element.OPTM_TASKID == this.PickTaskList[this.index].OPTM_TASKID);
         if (result == undefined) {
           if (localStorage.getItem("PickType") == this.translate.instant("Container_Picking")) {
-            this.SubmitPickTaskData.push(new PickTaskModel(this.ShipmentList[0].OPTM_PICKLIST_ID, this.ShipmentList[0].OPTM_PICKLIST_CODE, this.PickTaskList[this.index].OPTM_TASKID, localStorage.getItem("whseId"), this.PT_Enter_Location, this.ContBtchSerArray[i], 1, contValue, localStorage.getItem("UserId"), "Y", toteValue, this.containerAlreadyCreated, this.OPTM_STARTDATETIME, localStorage.getItem("PickTypeIndex"), this.UserGrp, this.PickListDropBin));
+            this.SubmitPickTaskData.push(new PickTaskModel(this.ShipmentList[0].OPTM_PICKLIST_ID, this.ShipmentList[0].OPTM_PICKLIST_CODE, this.PickTaskList[this.index].OPTM_TASKID, sessionStorage.getItem("whseId"), this.PT_Enter_Location, this.ContBtchSerArray[i], 1, contValue, sessionStorage.getItem("UserId"), "Y", toteValue, this.containerAlreadyCreated, this.OPTM_STARTDATETIME, localStorage.getItem("PickTypeIndex"), this.UserGrp, this.PickListDropBin));
           } else {
-            this.SubmitPickTaskData.push(new PickTaskModel(this.ShipmentList[0].OPTM_PICKLIST_ID, this.ShipmentList[0].OPTM_PICKLIST_CODE, this.PickTaskList[this.index].OPTM_TASKID, localStorage.getItem("whseId"), this.PT_Enter_Location, this.ContBtchSerArray[i], 1, contValue, localStorage.getItem("UserId"), "N", toteValue, this.containerAlreadyCreated, this.OPTM_STARTDATETIME, localStorage.getItem("PickTypeIndex"), this.UserGrp, this.PickListDropBin));
+            this.SubmitPickTaskData.push(new PickTaskModel(this.ShipmentList[0].OPTM_PICKLIST_ID, this.ShipmentList[0].OPTM_PICKLIST_CODE, this.PickTaskList[this.index].OPTM_TASKID, sessionStorage.getItem("whseId"), this.PT_Enter_Location, this.ContBtchSerArray[i], 1, contValue, sessionStorage.getItem("UserId"), "N", toteValue, this.containerAlreadyCreated, this.OPTM_STARTDATETIME, localStorage.getItem("PickTypeIndex"), this.UserGrp, this.PickListDropBin));
           }
         } else {
           this.toastr.error('', this.translate.instant("DataAlreadySaved"));

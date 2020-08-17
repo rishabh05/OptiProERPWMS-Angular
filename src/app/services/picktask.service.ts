@@ -24,9 +24,9 @@ export class PickTaskService {
   GetPicklist(OPTM_PICK_TYPE): Observable<any> {
     let jObject = {
       PalletCode: JSON.stringify([{
-        CompanyDBId: localStorage.getItem("CompID"),
+        CompanyDBId: sessionStorage.getItem("CompID"),
         OPTM_PICK_TYPE: OPTM_PICK_TYPE,
-        loggedinWH: localStorage.getItem("whseId"),
+        loggedinWH: sessionStorage.getItem("whseId"),
         loggedinUserGR: localStorage.getItem("UserGroup")
       }])
     };
@@ -36,7 +36,7 @@ export class PickTaskService {
   GetDataBasedOnPickList(OPTM_TASK_CODE, OPTM_PICKLIST_ID): Observable<any> {
     let jObject = {
       PalletCode: JSON.stringify([{
-        CompanyDBId: localStorage.getItem("CompID"),
+        CompanyDBId: sessionStorage.getItem("CompID"),
         OPTM_TASK_CODE: OPTM_TASK_CODE,
         OPTM_PICKLIST_ID: OPTM_PICKLIST_ID,
         OPTM_USER_GRP: localStorage.getItem("UserGroup")
@@ -48,7 +48,7 @@ export class PickTaskService {
   ValidatePackingContainer(ScannedContCode: string): Observable<any> {
     let jObject = {
       PalletCode: JSON.stringify([{
-        CompanyDBId: localStorage.getItem("CompID"),
+        CompanyDBId: sessionStorage.getItem("CompID"),
         OPTM_CONTCODE: ScannedContCode
       }])
     };
@@ -58,11 +58,11 @@ export class PickTaskService {
   IsValidBatchSerial(ITEMCODE: string, LOTNO: string, OPTM_SRC_BIN: string): Observable<any> {
     let jObject = {
       PalletCode: JSON.stringify([{
-        CompanyDBId: localStorage.getItem("CompID"),
+        CompanyDBId: sessionStorage.getItem("CompID"),
         ITEMCODE: ITEMCODE,
         LOTNO: LOTNO,
         OPTM_SRC_BIN: OPTM_SRC_BIN,
-        OPTM_WHSECODE: localStorage.getItem("whseId"),
+        OPTM_WHSECODE: sessionStorage.getItem("whseId"),
         OPTM_CREATEDBY: localStorage.getItem("UserGroup")
       }])
     };
@@ -81,10 +81,10 @@ export class PickTaskService {
   GetNextPickList(OPTM_PICKTYPE, OPTM_PICKLIST_ID,currentPickListFlg) {
     var jObject = {
       PalletCode: JSON.stringify([{
-        OPTM_WHSECODE: localStorage.getItem("whseId"),
+        OPTM_WHSECODE: sessionStorage.getItem("whseId"),
         OPTM_USERGRP: localStorage.getItem("UserGroup"),
         OPTM_PICKTYPE: OPTM_PICKTYPE,
-        CompanyDBId: localStorage.getItem("CompID"),
+        CompanyDBId: sessionStorage.getItem("CompID"),
         OPTM_PICKLIST_ID: OPTM_PICKLIST_ID,
         currentPickListFlg: currentPickListFlg
       }])
@@ -103,9 +103,9 @@ export class PickTaskService {
   GetPalletListsForGRPO(opType: number, itemCode: string, BinCode: string): Observable<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
-        COMPANYDBNAME: localStorage.getItem("CompID"),
+        COMPANYDBNAME: sessionStorage.getItem("CompID"),
         OPERATIONTYPE: "" + opType,
-        WhseCode: localStorage.getItem("whseId"),
+        WhseCode: sessionStorage.getItem("whseId"),
         ITEMCODE: itemCode,
         BinCode: BinCode
       }])
@@ -117,8 +117,8 @@ export class PickTaskService {
   IsPalletValidForGRPO(palletCode: string, itemCode: string, BinCode: string): Observable<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
-        COMPANYDBNAME: localStorage.getItem("CompID"),
-        WhseCode: localStorage.getItem("whseId"),
+        COMPANYDBNAME: sessionStorage.getItem("CompID"),
+        WhseCode: sessionStorage.getItem("whseId"),
         PalletCode: palletCode,
         ITEMCODE: itemCode,
         BinCode: BinCode
@@ -130,7 +130,7 @@ export class PickTaskService {
   UpdatePickListStatusBasedOnSelected(OPTM_STATUS, OPTM_PICKLIST_ID, OPTM_STATUS1): Observable<any> {
     let jObject = {
       PalletCode: JSON.stringify([{
-        CompanyDBId: localStorage.getItem("CompID"),
+        CompanyDBId: sessionStorage.getItem("CompID"),
         OPTM_STATUS: OPTM_STATUS,
         OPTM_PICKLIST_ID: OPTM_PICKLIST_ID,
         OPTM_STATUS1: OPTM_STATUS1
@@ -142,7 +142,7 @@ export class PickTaskService {
   GetCountOfOpenTasksInPickList(OPTM_PICKLIST_ID): Observable<any> {
     let jObject = {
       PalletCode: JSON.stringify([{
-        CompanyDBId: localStorage.getItem("CompID"),
+        CompanyDBId: sessionStorage.getItem("CompID"),
         OPTM_PICKLIST_ID: OPTM_PICKLIST_ID
       }])
     };
@@ -152,7 +152,7 @@ export class PickTaskService {
   getServerDate(): Observable<any> {
     let jObject = {
       PalletCode: JSON.stringify([{
-        CompanyDBId: localStorage.getItem("CompID"),
+        CompanyDBId: sessionStorage.getItem("CompID"),
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/getServerDate", jObject, this.commonService.httpOptions);

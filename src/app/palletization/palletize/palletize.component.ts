@@ -514,13 +514,13 @@ export class PalletizeComponent implements OnInit {
     oPalletReq.Header = [];
     oPalletReq.Detail = [];
     oPalletReq.Header.push({
-      COMPANYDBNAME: localStorage.getItem("CompID"),
+      COMPANYDBNAME: sessionStorage.getItem("CompID"),
       PALLETOPERATIONTYPE: PalletOperationType.Palletization,
-      WhsCode: localStorage.getItem("whseId"),
+      WhsCode: sessionStorage.getItem("whseId"),
       FromPalletCode: "",
       ToPalletCode: "",
-      USERID: localStorage.getItem("UserId"),
-      DIServerToken: localStorage.getItem("Token")
+      USERID: sessionStorage.getItem("UserId"),
+      DIServerToken: sessionStorage.getItem("Token")
     }
     );
 
@@ -683,7 +683,7 @@ export class PalletizeComponent implements OnInit {
       switch ($event.From) {
         case ("NewPallet_Palletize"):
           this.toBin = $event.BinNo;
-          this.toWhse = localStorage.getItem("whseId");
+          this.toWhse = sessionStorage.getItem("whseId");
           this.createNewPallet($event.PalletNo, $event.BinNo);
           break
       }

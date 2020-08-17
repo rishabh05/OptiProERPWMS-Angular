@@ -11,6 +11,8 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ButtonsModule } from '@progress/kendo-angular-buttons';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
 import { TrnaslateLazyModule } from '../../translate-lazy.module';
+import { DialogsModule } from '../../../node_modules/@progress/kendo-angular-dialog';
+import { SharedModule } from 'src/app/shared-module/shared-module.module';
 
 
 
@@ -19,7 +21,9 @@ import { TrnaslateLazyModule } from '../../translate-lazy.module';
   imports: [
     CommonModule,
     AccountRoutingModule,
-    // BS
+    DialogsModule,
+    CommonModule,
+    SharedModule,
     PerfectScrollbarModule,
     HttpClientModule,     
     TrnaslateLazyModule,

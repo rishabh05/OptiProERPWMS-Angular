@@ -51,7 +51,7 @@ export class SigninService {
      
     let jObject = {
       CompanyName: JSON.stringify([{
-        Username: localStorage.getItem("UserId"),
+        Username: sessionStorage.getItem("UserId"),
         CompanyDBId: compId
       }])
     };
@@ -71,11 +71,12 @@ export class SigninService {
       this.commonService.httpOptions);
   }
 
-  getLicenseData(compId: string): Observable<any> {
+  getLicenseData(compId: string, LoginTrigger?): Observable<any> {
 
     let jObject = {
-      LoginId: localStorage.getItem("UserId"),
-      CompanyId: compId
+      LoginId: sessionStorage.getItem("UserId"),
+      CompanyId: compId,
+      LoginTrigger: LoginTrigger
     };
     if(this.config_params == null){
       this.loadConfig();
@@ -89,7 +90,7 @@ export class SigninService {
       CompanyName: JSON.stringify([{
         Warehouse: whse,
         Company: compId,
-        UserCode:localStorage.getItem("UserId"),
+        UserCode:sessionStorage.getItem("UserId"),
         Zone:zone
       }])
     };
@@ -100,7 +101,7 @@ export class SigninService {
   getRoleList(compId: string): Observable<any> {
     let jObject = {
       CompanyName: JSON.stringify([{
-        UserCode: localStorage.getItem("UserId"),
+        UserCode: sessionStorage.getItem("UserId"),
         Company: compId
       }])
     };
@@ -114,7 +115,7 @@ export class SigninService {
       CompanyName: JSON.stringify([{
         Warehouse: whseId,
         Company: compId,
-        UserCode:localStorage.getItem("UserId")
+        UserCode:sessionStorage.getItem("UserId")
       }])
     };//'/api/login/GetZoneData'
     return this.httpclient.post(this.config_params.service_url + "/api/WMSlogin/GetZoneDataByUser", jObject,
@@ -139,7 +140,7 @@ export class SigninService {
      
     let jObject = {
       CompanyName: JSON.stringify([{
-        Username: localStorage.getItem("UserId"),
+        Username: sessionStorage.getItem("UserId"),
         CompanyDBId: compId
       }])
     };

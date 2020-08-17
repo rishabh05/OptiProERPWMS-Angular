@@ -41,11 +41,11 @@ export class PortalTopComponent implements OnInit {
   ngOnInit() {
     
     UIHelper.manageThemeCssFile();
-    this.loggedInUserName = localStorage.getItem("UserId");
-    this.DBName = localStorage.getItem("CompID");
-    this.loggedinWarehouse = localStorage.getItem("whseId");
+    this.loggedInUserName = sessionStorage.getItem("UserId");
+    this.DBName = sessionStorage.getItem("CompID");
+    this.loggedinWarehouse = sessionStorage.getItem("whseId");
     this.updatetopBarSubs = this.commonService.refreshTopbarSubscriber.subscribe(data => {
-      this.loggedinWarehouse = localStorage.getItem("whseId");
+      this.loggedinWarehouse = sessionStorage.getItem("whseId");
     });
 
     // this.appVersion = "Version: " +   this.commonservice.config_params.AppVersion;
@@ -126,7 +126,7 @@ export class PortalTopComponent implements OnInit {
 
   clearLocalStorage(){
     localStorage.setItem("PhysicalCountData", "");
-    localStorage.setItem("whseId", "");
+    sessionStorage.setItem("whseId", "");
     localStorage.setItem("Line", "");
     localStorage.setItem("GRPOReceieveData", "");
     localStorage.setItem("AddToGRPO", "");
@@ -163,16 +163,16 @@ export class PortalTopComponent implements OnInit {
     localStorage.setItem("inlineSVGdata", "");
     localStorage.setItem("inlineSVGrev", "");
     localStorage.setItem("ThousandSeparator", "");
-    localStorage.setItem("UserId", "");
+    sessionStorage.setItem("UserId", "");
     localStorage.setItem("DATEFORMAT", "");
     localStorage.setItem("DecimalSeparator", "");
     localStorage.setItem("DecimalPrecision", "");
-    localStorage.setItem("Token", "");
+    sessionStorage.setItem("Token", "");
     localStorage.setItem("PalletizationEnabled", "");
     localStorage.setItem("AutoPalletIdGenerationChecked", "");
     localStorage.setItem("DefaultValues", "");
-    localStorage.setItem("CompID", "");
-    localStorage.setItem("GUID", "");
+    sessionStorage.setItem("CompID", "");
+    sessionStorage.setItem("GUID", "");
     localStorage.setItem("accessToken", "");
     localStorage.setItem("PSURLFORADMIN", "");
   }

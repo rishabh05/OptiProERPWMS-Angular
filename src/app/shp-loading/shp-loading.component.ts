@@ -181,7 +181,7 @@ export class ShpLoadingComponent implements OnInit {
 
   addScannedContainer(OPTM_SHIPMENT_CODE, OPTM_CONTCODE) {
     this.containerData.push({
-      CompanyDBId: localStorage.getItem("CompID"),
+      CompanyDBId: sessionStorage.getItem("CompID"),
       OPTM_SHIPMENT_CODE: OPTM_SHIPMENT_CODE,
       OPTM_CONTCODE: OPTM_CONTCODE
     });
@@ -348,7 +348,7 @@ export class ShpLoadingComponent implements OnInit {
       OPTM_AUTORULEID: "Manual",
       OPTM_WHSE: this.OPTM_WHSCODE,
       OPTM_BIN: this.OPTM_BINCODE,
-      OPTM_CREATEDBY: localStorage.getItem("UserId"),
+      OPTM_CREATEDBY: sessionStorage.getItem("UserId"),
       OPTM_MODIFIEDBY: '',
       Length: length,
       Width: "",
@@ -356,10 +356,10 @@ export class ShpLoadingComponent implements OnInit {
       ItemCode: "",
       NoOfPacks: "1",
       OPTM_TASKID: 0, //changed
-      CompanyDBId: localStorage.getItem("CompID"),
-      Username: localStorage.getItem("UserId"),
-      UserId: localStorage.getItem("UserId"),
-      GUID: localStorage.getItem("GUID"),
+      CompanyDBId: sessionStorage.getItem("CompID"),
+      Username: sessionStorage.getItem("UserId"),
+      UserId: sessionStorage.getItem("UserId"),
+      GUID: sessionStorage.getItem("GUID"),
       Action: "N",
       OPTM_PARENTCODE: "",
       OPTM_GROUP_CODE: 0,

@@ -177,8 +177,8 @@ export class PortalLeftComponent implements OnInit {
       localStorage.setItem("fromscreen", "InventoryTransferRequest");
     } else if (module == "binTransfer") {
       localStorage.setItem("fromscreen", "");
-      localStorage.setItem("towhseId", localStorage.getItem("whseId"));
-      localStorage.setItem("fromwhseId", localStorage.getItem("whseId"));
+      localStorage.setItem("towhseId", sessionStorage.getItem("whseId"));
+      localStorage.setItem("fromwhseId", sessionStorage.getItem("whseId"));
     } else if (module == "picking") {
       localStorage.setItem("PickType", "");
       localStorage.setItem("PickTypeIndex", "");
@@ -208,7 +208,7 @@ export class PortalLeftComponent implements OnInit {
   }
 
   binClick() {
-    // localStorage.setItem("towhseId", localStorage.getItem("whseId"));
+    // localStorage.setItem("towhseId", sessionStorage.getItem("whseId"));
   }
 
   onInboundClick() {

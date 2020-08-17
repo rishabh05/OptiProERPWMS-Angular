@@ -214,7 +214,7 @@ export class OutOrderComponent implements OnInit {
     if (this.selectedCustomer != null && this.selectedCustomer != undefined
       && this.selectedCustomer.CustomerCode != '' && this.selectedCustomer.CustomerCode != null) {
 
-      let whseId = localStorage.getItem("whseId");
+        let whseId = sessionStorage.getItem("whseId");
       this.outboundservice.getCustomerSOList(this.selectedCustomer.CustomerCode, "", whseId).subscribe(
         resp => {
           if (resp != null && resp.length > 0) {
@@ -395,7 +395,7 @@ export class OutOrderComponent implements OnInit {
       this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
 
       //lsOutbound
-      let whseId = localStorage.getItem("whseId");
+      let whseId = sessionStorage.getItem("whseId");
       this.showLookup = false;
       this.showLookupLoader = true;
       this.outboundservice.getSOItemList(tempOrderData.CARDCODE, tempOrderData.DOCNUM, whseId).subscribe(
@@ -629,10 +629,11 @@ export class OutOrderComponent implements OnInit {
       let arrSODETAIL: SODETAIL[] = [];
       let deliveryToken: DeliveryToken = new DeliveryToken();
       // Hdr
-      let comDbId = localStorage.getItem('CompID');
-      let token = localStorage.getItem('Token');
-      let guid: string = localStorage.getItem('GUID');
-      let uid: string = localStorage.getItem('UserId');
+      let comDbId = sessionStorage.getItem("CompID");
+      let token = sessionStorage.getItem("Token");
+      let guid: string = sessionStorage.getItem("GUID");
+      let uid: string = sessionStorage.getItem("UserId");
+
       let hdrLine: number = 0;
       let limit = -1;
       let hdrLineVal = 0;
@@ -1883,7 +1884,7 @@ export class OutOrderComponent implements OnInit {
             }
 
             var dtl = {
-              UsernameForLic: localStorage.getItem("UserId"),
+              UsernameForLic: sessionStorage.getItem("UserId"),
               LineNo: o.Item.LINENUM,
               LotNo: o.Meterial.LOTNO,
               ItemCode: o.Item.ITEMCODE,
@@ -1909,14 +1910,14 @@ export class OutOrderComponent implements OnInit {
 
       let hdr = {
         //whseId changed by hari for send logged in whse
-        WhseCode: localStorage.getItem("whseId"),
+        WhseCode: sessionStorage.getItem("whseId"),
         ToWhsCode: this.toWhse,
         Type: "",
-        DiServerToken: localStorage.getItem("Token"),
-        CompanyDBId: localStorage.getItem("CompID"),
+        DiServerToken: sessionStorage.getItem("Token"),
+        CompanyDBId: sessionStorage.getItem("CompID"),
         TransType: "WHS",
-        GUID: localStorage.getItem("GUID"),
-        UsernameForLic: localStorage.getItem("UserId"),
+        GUID: sessionStorage.getItem("GUID"),
+        UsernameForLic: sessionStorage.getItem("UserId"),
         BaseEntry: this.itrCode,
         BaseType: "1250000001"
       };
