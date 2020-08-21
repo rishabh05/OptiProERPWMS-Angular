@@ -251,12 +251,12 @@
     <div class="px-3">
         <div class="form-group row">
             <div class="input-group input-group-sm">
-                <!-- <button class="btn btn-primary k-button btn-sm btn-icon-with-text" type="button" (click)="printOptionsClick(13)">{{'PickList'|translate}}
-                </button> -->
-                <button class="btn btn-primary k-button btn-sm btn-icon-with-text" type="button" (click)="printOptionsClick(12)">{{'PackList'|translate}}
+                <button *ngIf="ShowPickListReport" class="btn btn-primary k-button btn-sm btn-icon-with-text" type="button" (click)="printOptionsClick(13)">{{'PickList'|translate}}
                 </button>
-                <!-- <button class="btn btn-primary k-button btn-sm btn-icon-with-text" type="button" (click)="printOptionsClick(11)">{{'BOL'|translate}}
-                </button> -->
+                <button *ngIf="ShowPackListReport" class="btn btn-primary k-button btn-sm btn-icon-with-text" type="button" (click)="printOptionsClick(12)">{{'PackList'|translate}}
+                </button>
+                <button *ngIf="ShowBOLReport" class="btn btn-primary k-button btn-sm btn-icon-with-text" type="button" (click)="printOptionsClick(11)">{{'BOL'|translate}}
+                </button>
             </div>
         </div>
     </div>

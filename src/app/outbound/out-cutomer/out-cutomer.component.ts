@@ -54,8 +54,11 @@ export class OutCutomerComponent implements OnInit {
   @ViewChild('scanTracking') scanTracking;
   public pageTitle: String = "";
   showShipmentInfo: boolean = false;
-
+  ShowPickListReport: boolean = true;
+  ShowPackListReport: boolean = true;
+  ShowBOLReport: boolean = true;
   showPDFLoading: boolean = false;
+
   constructor(private inboundService: InboundService, private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) {
     let option = localStorage.getItem("deliveryOptionType");
     this.deliveryOptionType = option;
@@ -84,6 +87,9 @@ export class OutCutomerComponent implements OnInit {
       this.setShipmentPageInfo();
     }
     this.updateSalesOrderList();
+    this.ShowPickListReport = (JSON.parse(sessionStorage.getItem('ConfigData'))).ShowPickListReport;
+    this.ShowPackListReport = (JSON.parse(sessionStorage.getItem('ConfigData'))).ShowPackListReport;
+    this.ShowBOLReport = (JSON.parse(sessionStorage.getItem('ConfigData'))).ShowBOLReport;
   }
 
   updateSalesOrderList() {

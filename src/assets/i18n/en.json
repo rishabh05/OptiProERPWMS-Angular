@@ -535,6 +535,7 @@
   "ToteDoesntMatch": "Tote doesn't match.",
   "ToteCreated": "Tote assigned.",
   "ScanCont": "Scan packing container",
+  "ContainerCodePlaceholder": "Enter packing container",
   "ScanTote": "Scan tote",
   "Tote": "Tote",
   "EnterTote": "Enter tote",

@@ -27,5 +27,7 @@ export interface LicenseData{
     ErrMessage: string,
     SapUser: string,
     PalletizationEnabled: string,
-    AutoPalletIdGenerationChecked: string
+    AutoPalletIdGenerationChecked: string,
+    PackingEnableInOutBound: string,
+    IsShippingEnable: string
 }

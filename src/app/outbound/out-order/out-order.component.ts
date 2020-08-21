@@ -78,9 +78,12 @@ export class OutOrderComponent implements OnInit {
   @ViewChild('PalletNo') PalletNo;
   @ViewChild('scanItemCode') scanItemCode;
   fromShipment: boolean = false;
-
+  ShowPickListReport: boolean = true;
+  ShowPackListReport: boolean = true;
+  ShowBOLReport: boolean = true;
   showPackingAlertForNTFirstTime:boolean = false;
   public selectedPackingModel:PackingModel = new PackingModel() ;
+
   constructor(private inboundService: InboundService, private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService,
     private inventoryTransferService: InventoryTransferService) { }
   ngOnInit() {
@@ -154,6 +157,9 @@ export class OutOrderComponent implements OnInit {
       this.calculatePickQty();
     }
     this.setSavedPelletDataToGrid();
+    this.ShowPickListReport = (JSON.parse(sessionStorage.getItem('ConfigData'))).ShowPickListReport;
+    this.ShowPackListReport = (JSON.parse(sessionStorage.getItem('ConfigData'))).ShowPackListReport;
+    this.ShowBOLReport = (JSON.parse(sessionStorage.getItem('ConfigData'))).ShowBOLReport;
   }
 
   ngAfterViewInit(): void {
@@ -784,9 +790,9 @@ export class OutOrderComponent implements OnInit {
               }
             }
             //this code will be in 186 machine.
-            if(this.isDeliveryContainerPacking){ 
+           if(this.isDeliveryContainerPacking){ 
               this.showPrintConfirmDialog();
-            }
+           }
 
             // for mormal deployment we will show report dialog with otions need to uncomment in html.
             //this.showPrintConfirmDialog();
