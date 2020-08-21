@@ -596,6 +596,8 @@
   "Inbound_InvoiceExistMessage": "Invoice# does not exist.",
   "Use_Container": "Use Container",
   "ReceiveForPO": "Receive for PO",
+  "DueDate": "Due Date",
+  "Comments": "Comments",
   "Dummy": "Dummy"
 }
  

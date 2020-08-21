@@ -35,6 +35,9 @@
                                                 [valueField]="'UomCode'" [value]="uomList[0]">
                                             </kendo-dropdownlist>
                                         </dd>
+                                        <button style="color: white;"   type="button" *ngIf="!fromProduction" (click)="ShowPackingDetails()" 
+                                        class="btn btn-success k-button btn-sm btn-icon-with-text mt-1">
+                                            <span class="k-icon k-i-preview " role="presentation"></span> {{'ShowPackingDetails'|translate}}</button>
                                     </dl>
                                 </ng-template>
                             </kendo-grid-column>
@@ -363,6 +366,20 @@
                 </div>
             </form>
         </ng-template>
+
+        <kendo-grid-column media="(max-width: 767px)"  class="opti_mobile-grid-td">
+            <ng-template kendoGridCellTemplate let-dataItem let-idx="rowIndex">
+                <dl class="opti_mobile_grid_dl">
+                    <dt>{{'PackPackingNo'|translate}}</dt>
+                    <dd >{{ dataItem.PkgNo }}</dd>
+
+                    <dt>{{'PackingType'|translate}}</dt>
+                    <dd>{{ dataItem.PkgType }}</dd>
+                </dl>
+                   
+               
+            </ng-template>
+        </kendo-grid-column>
 
         <kendo-grid-column media="(min-width: 768px)" field="PkgNo" title="{{'PackPackingNo'|translate}}" [width]="160"></kendo-grid-column>
         <kendo-grid-column media="(min-width: 768px)" field="PkgType" title="{{'PackingType'|translate}}" [width]="160"></kendo-grid-column>
