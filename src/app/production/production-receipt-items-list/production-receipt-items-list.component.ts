@@ -346,9 +346,21 @@ export class ProductionReceiptItemsListComponent implements OnInit {
             this.toastr.success('', this.translate.instant("ProdReceipt_FGRSuccessMessage")+" "+ data[0].SuccessNo);
             this.resetOnSerchClick(); 
           }else{
-            if (data[0].ErrorMsg != ""){
-                   // show errro.
-                   this.toastr.error('', data[0].ErrorMsg);
+            if(data[0].ErrorMsg != undefined && data[0].ErrorMsg == "OrderQtyError"){
+              this.toastr.error('', this.translate.instant("OrderQtyError"));
+              return;
+            }
+            if (data[0].ErrorMsg != ""){             
+              if(data[0].ErrorNo != undefined && data[0].ErrorNo == "-1"){                
+                // Receipt not successful. Do not refresh the screen.
+               }else if(data[0].ErrorNo != undefined && data[0].ErrorNo == "0"){
+                
+                 //Error in updating optipro tables. SAP succefully updated.
+                 this.toastr.error('', "Error in updating optipro tables. SAP succefully updated");                 
+                 this.resetOnSerchClick(); 
+               }              
+               // show errro.
+               this.toastr.error('', data[0].ErrorMsg);
             }
           }
         }

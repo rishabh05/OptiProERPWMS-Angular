@@ -5,7 +5,7 @@
         {{lookupTitle}}
     </kendo-dialog-titlebar>
     <kendo-grid  [kendoGridBinding]="serviceData"
-        [filterable]=isColumnFilter [groupable]=isColumnGroup [selectable]="true"  [sort]="state.sort"
+        [filterable]=isColumnFilter [groupable]=isColumnGroup [selectable]="true" [sortable]="true" [sort]="state.sort"
         [filter]="state.filter" [resizable]="true" [skip]="skip" (selectionChange)="on_item_select($event)" 
         style="max-height:400px" class="no-shadow" [pageSize]="lookupPageSize" [pageable]="lookupPagable">
 

@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProductionRoutingModule } from './production-routing.module';
 import { ProductionIssueComponent } from './production-issue/production-issue.component';
-import { ProductionReceiptComponent } from './production-receipt/production-receipt.component';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { TrnaslateLazyModule } from '../../translate-lazy.module';
 import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
@@ -20,7 +19,7 @@ import { InboundModule } from '../inbound/inbound.module';
 
 
 @NgModule({
-  declarations: [ProductionIssueComponent, ProductionReceiptComponent, ProdOrderlistComponent, ProductionReceiptItemsListComponent, ProductionReceiptMasterComponent],
+  declarations: [ProductionIssueComponent, ProdOrderlistComponent, ProductionReceiptItemsListComponent, ProductionReceiptMasterComponent],
   imports: [
     SharedModule,
     CommonModule,

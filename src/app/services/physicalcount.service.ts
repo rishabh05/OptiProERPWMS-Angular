@@ -27,26 +27,26 @@ export class PhysicalcountService {
   getPhysicalCountDataView(): Observable<any> {
     var jObject = {
       DeliveryToken: JSON.stringify([{
-        CompanyDBId: localStorage.getItem("CompID"),
-        WhsCode: localStorage.getItem("whseId"),
-        User: localStorage.getItem("UserId")
+        CompanyDBId: sessionStorage.getItem("CompID"),
+        WhsCode: sessionStorage.getItem("whseId"),
+        User: sessionStorage.getItem("UserId")
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetPhysicalCountDataView", jObject, this.commonService.httpOptions);
   }
 
   getItemList(docNo: string): Observable<any> {
-    var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), DocNum: docNo, Warehouse: localStorage.getItem("whseId") }]) };
+    var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), DocNum: docNo, Warehouse: sessionStorage.getItem("whseId") }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetItemList", jObject, this.commonService.httpOptions);
   }
 
   GetSavedDocNoDetails(DocEntry: string, ItemCode: string, Bin: string, IsTeamCount: string): Observable<any> {
-    var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), DocEntry: DocEntry, ItemCode: ItemCode, Bin: Bin, User: localStorage.getItem("UserId"), IsTeamCount: IsTeamCount }]) };
+    var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), DocEntry: DocEntry, ItemCode: ItemCode, Bin: Bin, User: sessionStorage.getItem("UserId"), IsTeamCount: IsTeamCount }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetSavedDocNoDetails", jObject, this.commonService.httpOptions);
   }
 
   ShowBILOTList(itemCode: string, Bin: string): Observable<any> {
-    var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), WHSCODE: localStorage.getItem("whseId"), BINNO: Bin, ITEMCODE: itemCode, DOCNUM: '', User: localStorage.getItem("UserId") }]) };
+    var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), WHSCODE: sessionStorage.getItem("whseId"), BINNO: Bin, ITEMCODE: itemCode, DOCNUM: '', User: sessionStorage.getItem("UserId") }]) };
 
     if (itemCode == "" && Bin == "") {
       return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetLotListWithoutBinNItemCode", jObject, this.commonService.httpOptions);
@@ -64,7 +64,7 @@ export class PhysicalcountService {
   }
 
   IslotExist(bin: string, itemCode: string, lot: string): Promise<any> {
-    var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), WHSCODE: localStorage.getItem("whseId"), BINNO: bin, ITEMCODE: itemCode, LOTNO: lot, DOCNUM: '' }]) };
+    var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), WHSCODE: sessionStorage.getItem("whseId"), BINNO: bin, ITEMCODE: itemCode, LOTNO: lot, DOCNUM: '' }]) };
 
     if (itemCode == "" && bin == "") {
       return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetLotWithoutBinNItemCode", jObject, this.commonService.httpOptions).toPromise();
@@ -82,7 +82,7 @@ export class PhysicalcountService {
   }
 
   getItemInfo(itemCode: string, docNo: string, docEntry: string): Promise<any> {
-    var jObject = { DeliveryToken: JSON.stringify([{ CompanyDbName: localStorage.getItem("CompID"), ITEMCODE: itemCode, WHSCODE: localStorage.getItem("whseId"), DocNo: docNo, DocEntry: docEntry }]) };
+    var jObject = { DeliveryToken: JSON.stringify([{ CompanyDbName: sessionStorage.getItem("CompID"), ITEMCODE: itemCode, WHSCODE: sessionStorage.getItem("whseId"), DocNo: docNo, DocEntry: docEntry }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetItemValidate", jObject, this.commonService.httpOptions).toPromise();
   }
 
@@ -94,13 +94,13 @@ export class PhysicalcountService {
   SubmitPhysicalCount(oAddPhysicalCountData: any): Observable<any> {
     var jObject = { 
       DeliveryToken: JSON.stringify(oAddPhysicalCountData),
-      UsernameForLic: localStorage.getItem("UserId")
+      UsernameForLic: sessionStorage.getItem("UserId")
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/SubmitPhysicalCount", jObject, this.commonService.httpOptions);
   }
 
   GetDocNoDetails(DocEntry: string, CountType: string, IsTeamCount: string): Observable<any> {
-    var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), DocEntry: DocEntry, CountType: CountType, User: localStorage.getItem("UserId"), IsTeamCount: IsTeamCount }]) };
+    var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), DocEntry: DocEntry, CountType: CountType, User: sessionStorage.getItem("UserId"), IsTeamCount: IsTeamCount }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetDocNoDetails", jObject, this.commonService.httpOptions);
   }
 
@@ -110,7 +110,7 @@ export class PhysicalcountService {
    */
   isWHSExists(whsCode: string) {
 
-    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), ItemCode: '', WhsCode: whsCode }]) };
+    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), ItemCode: '', WhsCode: whsCode }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsWhsExist", jObject, this.commonService.httpOptions);
   }
   /**
@@ -118,7 +118,7 @@ export class PhysicalcountService {
    * @param whsCode 
    */
   checkAndScanCode(vendCode: string, scanInputString) {
-    var jObject = { Gs1Token: JSON.stringify([{ Vsvendorid: vendCode, StrScan: scanInputString, CompanyDBId: localStorage.getItem("CompID") }]) };
+    var jObject = { Gs1Token: JSON.stringify([{ Vsvendorid: vendCode, StrScan: scanInputString, CompanyDBId: sessionStorage.getItem("CompID") }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/Gs1/GS1SETUP", jObject, this.commonService.httpOptions);
   }
 
@@ -131,9 +131,9 @@ export class PhysicalcountService {
   printingServiceForSubmitGRPO(psReceiptNo: string): Observable<any> {
     var jObject = {
       PrintingObject: JSON.stringify([{
-        CompanyDBId: localStorage.getItem("CompID"),
-        USERID: localStorage.getItem("UserId"), RPTID: 6, DOCNO: psReceiptNo,
-        GUID: localStorage.getItem("GUID"), UsernameForLic: localStorage.getItem("UserId")
+        CompanyDBId: sessionStorage.getItem("CompID"),
+        USERID: sessionStorage.getItem("UserId"), RPTID: 6, DOCNO: psReceiptNo,
+        GUID: sessionStorage.getItem("GUID"), UsernameForLic: sessionStorage.getItem("UserId")
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Printing/WMSPrintingService", jObject, this.commonService.httpOptions);

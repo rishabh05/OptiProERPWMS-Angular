@@ -41,12 +41,12 @@ export class WhsTransferComponent implements OnInit {
 
   ngOnInit() {
     if(localStorage.getItem("fromscreen") == "WhsTransfer"){
-      this.fromWhse = localStorage.getItem("whseId");
+      this.fromWhse = sessionStorage.getItem("whseId");
       this.pageHeading = this.translate.instant("WarehouseTransfer");
       this.isfromWhsDisabled = true;
       this.fromWhere = 1; 
     }else{
-      this.toWhse = localStorage.getItem("whseId");
+      this.toWhse = sessionStorage.getItem("whseId");
       this.pageHeading = this.translate.instant("InventoryTransferRequest");
       this.isfromWhsDisabled = false;
       this.fromWhere = 2;
@@ -211,10 +211,10 @@ export class WhsTransferComponent implements OnInit {
     this.fromScreen = localStorage.getItem("fromscreen");//"WhsTransfer";
     if(localStorage.getItem("fromscreen") == "WhsTransfer"){
       localStorage.setItem("towhseId", this.toWhse);
-      localStorage.setItem("fromwhseId", localStorage.getItem("whseId"));
+      localStorage.setItem("fromwhseId", sessionStorage.getItem("whseId"));
     }else{
       localStorage.setItem("fromwhseId", this.fromWhse);
-      localStorage.setItem("towhseId", localStorage.getItem("whseId"));
+      localStorage.setItem("towhseId", sessionStorage.getItem("whseId"));
     }
   }
 

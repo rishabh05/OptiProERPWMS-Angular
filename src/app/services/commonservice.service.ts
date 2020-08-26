@@ -171,7 +171,7 @@ export class Commonservice {
   }
 
   checkAndScanCode(vendCode: string, scanInputString) {
-    var jObject = { Gs1Token: JSON.stringify([{ Vsvendorid: vendCode, StrScan: scanInputString, CompanyDBId: localStorage.getItem("CompID") }]) };
+    var jObject = { Gs1Token: JSON.stringify([{ Vsvendorid: vendCode, StrScan: scanInputString, CompanyDBId: sessionStorage.getItem("CompID") }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/Gs1/GS1SETUP", jObject, this.httpOptions);
   }
 
@@ -193,7 +193,7 @@ export class Commonservice {
 
 
   RemoveLicense(): Observable<any> {
-    var jObject = { GUID: localStorage.getItem("GUID"), LoginId: localStorage.getItem("UserId") };
+    var jObject = { GUID: sessionStorage.getItem("GUID"), LoginId: sessionStorage.getItem("UserId") };
     return this.httpclient.post(this.config_params.service_url + "/api/WMSLogin/RemoveLoggedInUser", jObject, this.httpOptions);
   }
 
@@ -203,8 +203,8 @@ export class Commonservice {
     //JSON Obeject Prepared to be send as a param to API
     let jObject: any = {
       MoveOrder: JSON.stringify([{
-        CompanyDBID: localStorage.getItem("CompID"),
-        UserID: localStorage.getItem("UserId")
+        CompanyDBID: sessionStorage.getItem("CompID"),
+        UserID: sessionStorage.getItem("UserId")
       }])
     };
     //Return the response form the API  
@@ -227,11 +227,11 @@ export class Commonservice {
     sessionStorage.removeItem('loggedInUser');
     // sessionStorage.removeItem('ConfigData');
 
-    localStorage.removeItem('CompID');
-    localStorage.removeItem('GUID');
-    localStorage.removeItem('UserId');
-    localStorage.removeItem('whseId');
-    localStorage.removeItem('Token');
+    sessionStorage.removeItem("CompID");
+    sessionStorage.removeItem("GUID");
+    sessionStorage.removeItem("UserId");
+    sessionStorage.removeItem("whseId");
+    sessionStorage.removeItem("Token");
     this.clearInboundData()
     this.router.navigate(['/account']);
 
@@ -272,9 +272,9 @@ export class Commonservice {
   getPalletList(opType: number, itemCode: string): Observable<any> {
     var jObject = { 
       PalletCode: JSON.stringify([{
-        COMPANYDBNAME: localStorage.getItem("CompID"),
+        COMPANYDBNAME: sessionStorage.getItem("CompID"),
         OPERATIONTYPE: "" + opType,
-        WhseCode: localStorage.getItem("whseId"),
+        WhseCode: sessionStorage.getItem("whseId"),
         ITEMCODE: itemCode
       }])
     };
@@ -284,9 +284,9 @@ export class Commonservice {
   createNewPallet(palletCode: string, binNo: string): Observable<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
-        COMPANYDBNAME: localStorage.getItem("CompID"),
-        USER: localStorage.getItem("UserId"),
-        WHSCODE: localStorage.getItem("whseId"),
+        COMPANYDBNAME: sessionStorage.getItem("CompID"),
+        USER: sessionStorage.getItem("UserId"),
+        WHSCODE: sessionStorage.getItem("whseId"),
         PalletId: palletCode,
         BINCODE: binNo
       }])
@@ -297,8 +297,8 @@ export class Commonservice {
   isPalletValid(palletCode: string): Promise<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
-        COMPANYDBNAME: localStorage.getItem("CompID"),
-        WhseCode: localStorage.getItem("whseId"),
+        COMPANYDBNAME: sessionStorage.getItem("CompID"),
+        WhseCode: sessionStorage.getItem("whseId"),
         PalletCode: palletCode
       }])
     };
@@ -308,8 +308,8 @@ export class Commonservice {
   isContainerValid(containerCode: string): Promise<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
-        COMPANYDBNAME: localStorage.getItem("CompID"),
-        WhseCode: localStorage.getItem("whseId"),
+        COMPANYDBNAME: sessionStorage.getItem("CompID"),
+        WhseCode: sessionStorage.getItem("whseId"),
         PalletCode: containerCode
       }])
     };
@@ -317,12 +317,12 @@ export class Commonservice {
   }
 
   getItemCodeList(): Observable<any> {
-    var jObject = { ITEMCODE: '', ITEMNAME: '', WHSCODE: localStorage.getItem("whseId"), CompanyDBName: localStorage.getItem("CompID") }
+    var jObject = { ITEMCODE: '', ITEMNAME: '', WHSCODE: sessionStorage.getItem("whseId"), CompanyDBName: sessionStorage.getItem("CompID") }
     return this.httpclient.post(this.config_params.service_url + "/api/GoodsIssue/AllItemLookup", jObject, this.httpOptions);
   }
 
   getItemInfo(itemCode: string): Promise<any> {
-    var jObject = { ITEMCODE: JSON.stringify([{ CompanyDbName: localStorage.getItem("CompID"), ITEMCODE: itemCode, WHSCODE: localStorage.getItem("whseId") }]) };
+    var jObject = { ITEMCODE: JSON.stringify([{ CompanyDbName: sessionStorage.getItem("CompID"), ITEMCODE: itemCode, WHSCODE: sessionStorage.getItem("whseId") }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodsReceipt/GetItemInfo", jObject, this.httpOptions).toPromise();
   }
 
@@ -330,9 +330,9 @@ export class Commonservice {
   getPalletsOfSameWarehouse(palletCode: string): Observable<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
-        COMPANYDBNAME: localStorage.getItem("CompID"),
+        COMPANYDBNAME: sessionStorage.getItem("CompID"),
         PalletCode: palletCode,
-        WhseCode: localStorage.getItem("whseId")
+        WhseCode: sessionStorage.getItem("whseId")
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetPalletsOfSameWarehouse", jObject, this.httpOptions);
@@ -345,8 +345,8 @@ export class Commonservice {
   getItemsToPalletize(): Observable<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
-        COMPANYDBNAME: localStorage.getItem("CompID"),
-        WhseCode: localStorage.getItem("whseId")
+        COMPANYDBNAME: sessionStorage.getItem("CompID"),
+        WhseCode: sessionStorage.getItem("whseId")
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetItemsToPalletize", jObject, this.httpOptions);
@@ -359,9 +359,9 @@ export class Commonservice {
   GetPalletData(palletCode: string): Observable<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
-        COMPANYDBNAME: localStorage.getItem("CompID"),
+        COMPANYDBNAME: sessionStorage.getItem("CompID"),
         PalletCode: palletCode,
-        WhseCode: localStorage.getItem("whseId")
+        WhseCode: sessionStorage.getItem("whseId")
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetPalletData", jObject, this.httpOptions);
@@ -374,9 +374,9 @@ export class Commonservice {
   GetPalletDataForOutBound(palletCode: string): Observable<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
-        COMPANYDBNAME: localStorage.getItem("CompID"),
+        COMPANYDBNAME: sessionStorage.getItem("CompID"),
         PalletCode: palletCode,
-        WhseCode: localStorage.getItem("whseId")
+        WhseCode: sessionStorage.getItem("whseId")
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetPalletDataForOutBound", jObject, this.httpOptions);
@@ -392,13 +392,13 @@ export class Commonservice {
     var oPalletReq: any = {};
     oPalletReq.Header = [];
     oPalletReq.Header.push({
-      COMPANYDBNAME: localStorage.getItem("CompID"),
+      COMPANYDBNAME: sessionStorage.getItem("CompID"),
       FromPalletCode: fromPallet,
       ToPalletCode: fromPallet,
       PALLETOPERATIONTYPE: PalletOperationType.Depalletization,
-      WhseCode: localStorage.getItem("whseId"),
-      USERID: localStorage.getItem("UserId"),
-      DIServerToken: localStorage.getItem("Token")
+      WhseCode: sessionStorage.getItem("whseId"),
+      USERID: sessionStorage.getItem("UserId"),
+      DIServerToken: sessionStorage.getItem("Token")
     });
     var reqObject = { Header: oPalletReq.Header }
 
@@ -409,12 +409,12 @@ export class Commonservice {
 
     // var jObject = {
     //   PalletCode: JSON.stringify([{
-    //     COMPANYDBNAME: localStorage.getItem("CompID"),
+    //     COMPANYDBNAME: sessionStorage.getItem("CompID"),
     //     FromPalletCode: fromPallet,
     //     ToPalletCode: fromPallet,
     //     PALLETOPERATIONTYPE: PalletOperationType.Depalletization,
-    //     WhseCode: localStorage.getItem("whseId"),
-    //     USERID: localStorage.getItem("UserId")
+    //     WhseCode: sessionStorage.getItem("whseId"),
+    //     USERID: sessionStorage.getItem("UserId")
     //   }])
     // };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/PalletTransaction", jObject, this.httpOptions);
@@ -429,13 +429,13 @@ export class Commonservice {
     var oPalletReq: any = {};
     oPalletReq.Header = [];
     oPalletReq.Header.push({
-      COMPANYDBNAME: localStorage.getItem("CompID"),
+      COMPANYDBNAME: sessionStorage.getItem("CompID"),
       FromPalletCode: fromPallet,
       ToPalletCode: toPallet,
       PALLETOPERATIONTYPE: PalletOperationType.Transfer,
-      WhseCode: localStorage.getItem("whseId"),
-      USERID: localStorage.getItem("UserId"),
-      DIServerToken: localStorage.getItem("Token")
+      WhseCode: sessionStorage.getItem("whseId"),
+      USERID: sessionStorage.getItem("UserId"),
+      DIServerToken: sessionStorage.getItem("Token")
     });
     var reqObject = { Header: oPalletReq.Header }
 
@@ -455,12 +455,12 @@ export class Commonservice {
   palletTransfer1(fromPallet: string, toPallet): Observable<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
-        COMPANYDBNAME: localStorage.getItem("CompID"),
+        COMPANYDBNAME: sessionStorage.getItem("CompID"),
         FromPalletCode: fromPallet,
         ToPalletCode: toPallet,
         PALLETOPERATIONTYPE: PalletOperationType.Transfer,
-        WhseCode: localStorage.getItem("whseId"),
-        DIServerToken: localStorage.getItem("Token")
+        WhseCode: sessionStorage.getItem("whseId"),
+        DIServerToken: sessionStorage.getItem("Token")
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/PalletTransaction", jObject, this.httpOptions);
@@ -469,9 +469,9 @@ export class Commonservice {
   getBatchSerialForItem(itemCode: string): Observable<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
-        COMPANYDBNAME: localStorage.getItem("CompID"),
+        COMPANYDBNAME: sessionStorage.getItem("CompID"),
         ItemCode: itemCode,
-        WhseCode: localStorage.getItem("whseId")
+        WhseCode: sessionStorage.getItem("whseId")
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetBatchSerialForItem", jObject, this.httpOptions);
@@ -485,12 +485,12 @@ export class Commonservice {
   palletizeOld(palletCode: any): Observable<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
-        COMPANYDBNAME: localStorage.getItem("CompID"),
+        COMPANYDBNAME: sessionStorage.getItem("CompID"),
         FromPalletCode: palletCode,
         ToPalletCode: palletCode,
         PALLETOPERATIONTYPE: PalletOperationType.Palletization,
-        WhseCode: localStorage.getItem("whseId"),
-        DIServerToken: localStorage.getItem("Token")
+        WhseCode: sessionStorage.getItem("whseId"),
+        DIServerToken: sessionStorage.getItem("Token")
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/PalletTransaction", jObject, this.httpOptions);
@@ -506,13 +506,13 @@ export class Commonservice {
     var oPalletReq: any = {};
     oPalletReq.Header = [];
     oPalletReq.Header.push({
-      COMPANYDBNAME: localStorage.getItem("CompID"),
+      COMPANYDBNAME: sessionStorage.getItem("CompID"),
       FromPalletCode: fromPallet,
       ToPalletCode: toPallet,
       PALLETOPERATIONTYPE: PalletOperationType.Merge,
-      WhseCode: localStorage.getItem("whseId"),
-      USERID: localStorage.getItem("UserId"),
-      DIServerToken: localStorage.getItem("Token")
+      WhseCode: sessionStorage.getItem("whseId"),
+      USERID: sessionStorage.getItem("UserId"),
+      DIServerToken: sessionStorage.getItem("Token")
     });
     var reqObject = { Header: oPalletReq.Header }
 
@@ -532,11 +532,11 @@ export class Commonservice {
     var requestObject = { PalletCode: JSON.stringify(palletCode) }
     // var jObject = {
     //   PalletCode: JSON.stringify([{
-    //     COMPANYDBNAME: localStorage.getItem("CompID"),
+    //     COMPANYDBNAME: sessionStorage.getItem("CompID"),
     //     FromPalletCode: fromPallet,
     //     ToPalletCode: toPallet,
     //     PALLETOPERATIONTYPE: PalletOperationType.Palletization,
-    //     WhseCode: localStorage.getItem("whseId"),
+    //     WhseCode: sessionStorage.getItem("whseId"),
     //     BIN: "",
     //     WHSE: "",
     //     TOBIN: toBin,
@@ -546,7 +546,7 @@ export class Commonservice {
     //     FINALPALLETNO: "",
     //     BATCHNO: "",
     //     QTY: "",
-    //     USERID: localStorage.getItem("UserId")
+    //     USERID: sessionStorage.getItem("UserId")
     //   }])
     // };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/PalletTransaction", requestObject, this.httpOptions);
@@ -555,10 +555,10 @@ export class Commonservice {
   GetBatchandSerialItemsFromPallet(palletCode: string, itemCode: string): Observable<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
-        COMPANYDBNAME: localStorage.getItem("CompID"),
+        COMPANYDBNAME: sessionStorage.getItem("CompID"),
         ITEMCODE: itemCode,
         PALLETCODE: palletCode,
-        WhseCode: localStorage.getItem("whseId")
+        WhseCode: sessionStorage.getItem("whseId")
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetBatchandSerialItemsFromPallet", jObject, this.httpOptions);
@@ -571,7 +571,7 @@ export class Commonservice {
   GetItemsFromPallet(palletCode: string): Observable<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
-        COMPANYDBNAME: localStorage.getItem("CompID"),
+        COMPANYDBNAME: sessionStorage.getItem("CompID"),
         PALLETCODE: palletCode
       }])
     };
@@ -591,10 +591,10 @@ export class Commonservice {
   IsValidItemsFromPallet(palletCode: string, itemCode: string): Promise<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
-        COMPANYDBNAME: localStorage.getItem("CompID"),
+        COMPANYDBNAME: sessionStorage.getItem("CompID"),
         ITEMCODE: itemCode,
         PALLETCODE: palletCode,
-        WhseCode: localStorage.getItem("whseId")
+        WhseCode: sessionStorage.getItem("whseId")
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/IsValidItemsFromPallet", jObject, this.httpOptions).toPromise();
@@ -603,11 +603,11 @@ export class Commonservice {
   IsValidBatchandSerialItemsFromPallet(batchNo: string, itemCode: string, palletCode: string): Promise<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
-        COMPANYDBNAME: localStorage.getItem("CompID"),
+        COMPANYDBNAME: sessionStorage.getItem("CompID"),
         ITEMCODE: itemCode,
         PALLETCODE: palletCode,
         BATCHNO: batchNo,
-        WhseCode: localStorage.getItem("whseId")
+        WhseCode: sessionStorage.getItem("whseId")
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/IsValidBatchandSerialItemsFromPallet", jObject, this.httpOptions).toPromise();
@@ -616,8 +616,8 @@ export class Commonservice {
   GetPalletListForOutBound(itemCode: string): Observable<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
-        COMPANYDBNAME: localStorage.getItem("CompID"),
-        WHSECODE: localStorage.getItem("whseId"),
+        COMPANYDBNAME: sessionStorage.getItem("CompID"),
+        WHSECODE: sessionStorage.getItem("whseId"),
         ITEMCODE: itemCode
       }])
     };
@@ -627,8 +627,8 @@ export class Commonservice {
   IsPalletValidForOutBound(palletCode: string, itemCodeArray: string): Promise<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
-        COMPANYDBNAME: localStorage.getItem("CompID"),
-        WHSECODE: localStorage.getItem("whseId"),
+        COMPANYDBNAME: sessionStorage.getItem("CompID"),
+        WHSECODE: sessionStorage.getItem("whseId"),
         ITEMCODE: itemCodeArray,
         PALLETCODE: palletCode
       }])
@@ -639,9 +639,9 @@ export class Commonservice {
   GetPalletDataForWhseTrns(palletCode: string): Observable<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
-        COMPANYDBNAME: localStorage.getItem("CompID"),
+        COMPANYDBNAME: sessionStorage.getItem("CompID"),
         PalletCode: palletCode,
-        WhseCode: localStorage.getItem("whseId")
+        WhseCode: sessionStorage.getItem("whseId")
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetPalletDataForWhseTrns", jObject, this.httpOptions);
@@ -650,20 +650,20 @@ export class Commonservice {
   autoGeneratePallet(): Observable<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
-        COMPANYDBNAME: localStorage.getItem("CompID"),
-        WHSCODE: localStorage.getItem("whseId")
+        COMPANYDBNAME: sessionStorage.getItem("CompID"),
+        WHSCODE: sessionStorage.getItem("whseId")
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetPalletCode", jObject, this.httpOptions);
   }
 
   GetDefaultBinOrBinWithQtyForProduction(itemCode: string, oToWhs: string, status: string): Observable<any> {
-    var jObject = { WhsCode: JSON.stringify([{ ItemCode: itemCode, WhseCode: oToWhs, Status: status, CompanyDBId: localStorage.getItem("CompID") }]) };
+    var jObject = { WhsCode: JSON.stringify([{ ItemCode: itemCode, WhseCode: oToWhs, Status: status, CompanyDBId: sessionStorage.getItem("CompID") }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetDefaultBinOrBinWithQtyForProduction", jObject, this.httpOptions);
   }
 
   GetDefaultBinOrBinWithQty(itemCode: string, oToWhs: string): Observable<any> {
-    var jObject = { WhsCode: JSON.stringify([{ ItemCode: itemCode, WhseCode: oToWhs, CompanyDBId: localStorage.getItem("CompID") }]) };
+    var jObject = { WhsCode: JSON.stringify([{ ItemCode: itemCode, WhseCode: oToWhs, CompanyDBId: sessionStorage.getItem("CompID") }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetDefaultBinOrBinWithQty", jObject, this.httpOptions);
   }
 
@@ -671,8 +671,8 @@ export class Commonservice {
   GetPalletsWithRowsPresent(): Observable<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
-        COMPANYDBNAME: localStorage.getItem("CompID"), 
-        WhseCode: localStorage.getItem("whseId")
+        COMPANYDBNAME: sessionStorage.getItem("CompID"), 
+        WhseCode: sessionStorage.getItem("whseId")
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetPalletsWithRowsPresent", jObject, this.httpOptions);
@@ -681,8 +681,8 @@ export class Commonservice {
   GetContainerWithRowsPresent(containerId:any): Observable<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
-        COMPANYDBNAME: localStorage.getItem("CompID"), 
-        WhseCode: localStorage.getItem("whseId"),
+        COMPANYDBNAME: sessionStorage.getItem("CompID"), 
+        WhseCode: sessionStorage.getItem("whseId"),
         ContainerCode: containerId
       }])
     };
@@ -692,9 +692,9 @@ export class Commonservice {
   GetContainerDataForWhseTrns(containerCode: string): Observable<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
-        COMPANYDBNAME: localStorage.getItem("CompID"),
+        COMPANYDBNAME: sessionStorage.getItem("CompID"),
         CONTAINERCODE: containerCode,
-        WhseCode: localStorage.getItem("whseId")
+        WhseCode: sessionStorage.getItem("whseId")
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetContainerDataForWhseTrns", jObject, this.httpOptions);
@@ -703,8 +703,8 @@ export class Commonservice {
   onShipmentIDChange(OPTM_SHIPMENT_CODE): Observable<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
-        CompanyDBId: localStorage.getItem("CompID"), 
-        OPTM_WHSCODE: localStorage.getItem("whseId"),
+        CompanyDBId: sessionStorage.getItem("CompID"), 
+        OPTM_WHSCODE: sessionStorage.getItem("whseId"),
         OPTM_SHIPMENT_CODE: OPTM_SHIPMENT_CODE
       }])
     };
@@ -719,7 +719,7 @@ export class Commonservice {
   GetPickTaskSelectedSteps(OPTM_TRANS_CATEGORY): Observable<any> {
     let jObject = {
       PalletCode: JSON.stringify([{
-        CompanyDBId: localStorage.getItem("CompID"),
+        CompanyDBId: sessionStorage.getItem("CompID"),
         OPTM_TRANS_CATEGORY: OPTM_TRANS_CATEGORY
       }])
     };
@@ -751,8 +751,8 @@ export class Commonservice {
   GetConfigurationParam(): Observable<any> {
     let jObject = {
       PalletCode: JSON.stringify([{
-        CompanyDBId: localStorage.getItem("CompID"),
-        OPTM_APPLICABLE_WHSE: localStorage.getItem("whseId")
+        CompanyDBId: sessionStorage.getItem("CompID"),
+        OPTM_APPLICABLE_WHSE: sessionStorage.getItem("whseId")
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetConfigurationParam", jObject, this.httpOptions);

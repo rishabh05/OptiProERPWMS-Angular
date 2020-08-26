@@ -85,6 +85,9 @@ export class PickingItemDetailsComponent implements OnInit {
   OpenTaskCount: number = 2;
   intStepSeq: number = 0;
   blnSaveClicked: boolean = false;
+  //------placeholder---
+  cont_batch_serial_placeholder: string;
+
 
   @ViewChild('focusOnSerNo') focusOnSerNo;
   @ViewChild('focusOnItemCode') focusOnItemCode;
@@ -116,7 +119,7 @@ export class PickingItemDetailsComponent implements OnInit {
     this.clearScanningFields();
     this.ShipmentList[0] = JSON.parse(localStorage.getItem("ShipDetail"));
     this.PickListSteps = JSON.parse(localStorage.getItem("PickListSteps"));
-    this.compId = localStorage.getItem("CompID");
+    this.compId = sessionStorage.getItem("CompID");
     this.PickOperationList = ["", "Pick_To_Tote", "Pick_To_Container", ""];
     if (localStorage.getItem("TaskDetail") != undefined && localStorage.getItem("TaskDetail") != "" && localStorage.getItem("TaskDetail") != "null") {
       this.index = Number(localStorage.getItem("PickItemIndex"));
@@ -137,7 +140,6 @@ export class PickingItemDetailsComponent implements OnInit {
   }
 
   setPickingSteps(OPTM_MSTR_TRANS_TYPE, PickOperationIndex) {
-    //this.CurrentTaskSteps = this.PickListSteps.filter(element => (element.OPTM_MSTR_TRANS_TYPE == OPTM_MSTR_TRANS_TYPE && element.OPTM_APPLCBLE_IN_OPN == this.PickOperationList[Number(PickOperationIndex)]) || (element.OPTM_MSTR_TRANS_TYPE == OPTM_MSTR_TRANS_TYPE && element.OPTM_APPLCBLE_IN_OPN == this.PickOperationList[3]));
     this.CurrentTaskSteps = this.PickListSteps.filter(element => (((element.OPTM_MSTR_TRANS_TYPE == OPTM_MSTR_TRANS_TYPE && element.OPTM_APPLCBLE_IN_OPN == this.PickOperationList[Number(PickOperationIndex)]) || (element.OPTM_MSTR_TRANS_TYPE == OPTM_MSTR_TRANS_TYPE && element.OPTM_APPLCBLE_IN_OPN == this.PickOperationList[3])) && element.OPTM_APPLICABLE_BO == 2));
     this.PickListClosureSteps = this.PickListSteps.filter(element => (element.OPTM_APPLICABLE_BO == 1));
 
@@ -170,7 +172,7 @@ export class PickingItemDetailsComponent implements OnInit {
     }
     if (this.ShipmentList[0].OPTM_PICK_OPER == "2") {
       this.ValidatePackingContainer();
-        
+
       //this.toastr.success("", this.translate.instant("CCCreated"))
     } else {
       this.toastr.success("", this.translate.instant("ToteCreated"))
@@ -195,11 +197,11 @@ export class PickingItemDetailsComponent implements OnInit {
           if (data != "") {
             this.CreatedContOrTote = '';
             this.toastr.error("", data);
-            this.containercreated = false;            
+            this.containercreated = false;
           } else {
             this.toastr.success("", this.translate.instant("CCCreated"))
             this.containercreated = true;
-          }          
+          }
         } else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
           return;
@@ -315,7 +317,7 @@ export class PickingItemDetailsComponent implements OnInit {
         this.showLoader = false;
         if (data != undefined) {
           this.OPTM_STARTDATETIME = data;
-        } 
+        }
       },
       error => {
         this.showLoader = false;
@@ -352,17 +354,19 @@ export class PickingItemDetailsComponent implements OnInit {
       }
       this.IsContPicking = false;
       this.setPickingSteps(localStorage.getItem("PickTypeKey"), this.ShipmentList[0].OPTM_PICK_OPER);
+      this.cont_batch_serial_placeholder = this.translate.instant("Ph_Enter_Cont_Code")
     } else {
-      // this.itemcodeLabel = "Code";//this.translate.instant("ItemCode");
       this.itemcodeValue = this.PickTaskList[index].OPTM_ITEMCODE;
       this.IsContPicking = false;
       let OPTM_MSTR_TRANS_TYPE = "";
       if (this.OPTM_Tracking == 'S') {
         OPTM_MSTR_TRANS_TYPE = "Serial_Picking"
         this.Type = "Serial"
+        this.cont_batch_serial_placeholder = this.translate.instant("Ph_Enter_Sr_No")
       } else if (this.OPTM_Tracking == 'B') {
         OPTM_MSTR_TRANS_TYPE = "Batch_Picking";
         this.Type = "Batch"
+        this.cont_batch_serial_placeholder = this.translate.instant("Ph_Enter_Bt_No")
       } else {
         OPTM_MSTR_TRANS_TYPE = "Item_Picking";
         this.IsContPicking = true;
@@ -378,7 +382,7 @@ export class PickingItemDetailsComponent implements OnInit {
       this.addItemtoCont = true;
       this.ContainerTotePlaceHolder = this.translate.instant("EnterTote");
       this.ContainerToteTitle = this.translate.instant("Tote");
-      this.ContainerCodePlaceholderValue = this.translate.instant("TotePlaceholder");
+      this.ContainerCodePlaceholderValue = this.translate.instant("ph_EnterTote");
       if (this.ShipmentList[0].OPTM_CONTCODE != "" && this.ShipmentList[0].OPTM_CONTCODE != null) {
         this.CreatedContOrTote = this.ShipmentList[0].OPTM_CONTCODE
         this.containerAlreadyCreated = this.containercreated = true;
@@ -387,7 +391,7 @@ export class PickingItemDetailsComponent implements OnInit {
       }
     } else if (this.ShipmentList[0].OPTM_PICK_OPER == "2") {
       this.addItemtoCont = true;
-      this.ContainerTotePlaceHolder = this.translate.instant("ContainerCodePlaceholder");
+      this.ContainerTotePlaceHolder = this.translate.instant("ph_Enter_ContainerCode");
       this.ContainerToteTitle = this.translate.instant("ContainerCode");
       this.ContainerCodePlaceholderValue = this.translate.instant("ContainerCodePlaceholder");
       if (this.ShipmentList[0].OPTM_CONTCODE != "" && this.ShipmentList[0].OPTM_CONTCODE != null) {
@@ -727,7 +731,9 @@ export class PickingItemDetailsComponent implements OnInit {
 
   skipPickTask() {
     this.clearFields();
-    this.clearStepsFields();
+    this.stepIndex = 0;
+    this.stepIncrementValue = 1;
+    this.iterateSteps = false;
     this.pickedAllDty = false;
     this.index = this.index + 1;
     if (this.index == this.PickTaskList.length) {
@@ -771,26 +777,33 @@ export class PickingItemDetailsComponent implements OnInit {
         }
       }
     } else {
-      if (this.PickTaskDetail.OPTM_WHSTASK_BTCHSER != undefined && this.PickTaskDetail.OPTM_WHSTASK_BTCHSER.length > 0 && this.PickTaskDetail.OPTM_WHSTASK_BTCHSER.find(e => e.OPTM_ITEMCODE == this.itemcodeValue && e.OPTM_BTCHSER != '') != undefined) {
-        for (var i = 0; i < this.PickTaskDetail.OPTM_WHSTASK_BTCHSER.length; i++) {
-          if (this.PickTaskDetail.OPTM_WHSTASK_BTCHSER[i].OPTM_TASKID == this.PickTaskList[this.index].OPTM_TASKID) {
-            if (this.PT_Enter_ContBtchSer === this.PickTaskDetail.OPTM_WHSTASK_BTCHSER[i].OPTM_BTCHSER) {
-              batserAdded = true;
-              this.addBatchSerials();
-              // if (!this.threeSteps) {
-              //   this.PT_Enter_ContBtchSer = "";
-              // }
-              break;
-            }
-          }
-        }
+      if (this.PickTaskDetail.OPTM_WHSTASK_BTCHSER != undefined && this.PickTaskDetail.OPTM_WHSTASK_BTCHSER.length > 0 && this.PickTaskDetail.OPTM_WHSTASK_BTCHSER.findIndex(e => e.OPTM_BTCHSER == this.PT_Enter_ContBtchSer && e.OPTM_TASKID == this.pickTaskName) != -1) {
+        // for (var i = 0; i < this.PickTaskDetail.OPTM_WHSTASK_BTCHSER.length; i++) {
+        //   if (this.PickTaskDetail.OPTM_WHSTASK_BTCHSER[i].OPTM_TASKID == this.PickTaskList[this.index].OPTM_TASKID) {
+        //     if (this.PT_Enter_ContBtchSer === this.PickTaskDetail.OPTM_WHSTASK_BTCHSER[i].OPTM_BTCHSER) {
+        //       batserAdded = true;
+        //       this.addBatchSerials();
+        //       break;
+        //     }
+        //   }
+        // }
+        batserAdded = true;
+        this.addBatchSerials();
       } else {
         batserAdded = true;
         this.IsValidBatchSerial();
       }
     }
     if (!batserAdded) {
-      this.toastr.error('', this.translate.instant("PT_ContBtchSer_not_match"));
+      if (localStorage.getItem("PickType") == this.translate.instant("Container_Picking")) {
+        this.toastr.error('', this.translate.instant("Cont_not_match"));
+      } else {
+        if (this.OPTM_Tracking == 'S') {
+          this.toastr.error('', this.translate.instant("Ser_not_match"));
+        } else if (this.OPTM_Tracking == 'B') {
+          this.toastr.error('', this.translate.instant("Btch_not_match"));
+        }
+      }
       this.PT_Enter_ContBtchSer = "";
     }
     this.setfocus();
@@ -816,7 +829,7 @@ export class PickingItemDetailsComponent implements OnInit {
           OPTM_CONTAINER_ID: contValue,
           OPTM_QTY: 1,
           OPTM_BTCHSER: this.PT_Enter_ContBtchSer,
-          OPTM_CREATEDBY: localStorage.getItem("UserId"),
+          OPTM_CREATEDBY: sessionStorage.getItem("UserId"),
           OPTM_STARTDATETIME: this.OPTM_STARTDATETIME
         });
 
@@ -825,7 +838,7 @@ export class PickingItemDetailsComponent implements OnInit {
           OPTM_ITEMCODE: this.itemcodeValue,
           OPTM_ACTUAL_QTY: 1,
           OPTM_BTCHSER: this.PT_Enter_ContBtchSer,
-          OPTM_RESID_ACT: localStorage.getItem("UserId"),
+          OPTM_RESID_ACT: sessionStorage.getItem("UserId"),
           OPTM_STARTDATETIME: this.OPTM_STARTDATETIME
         });
         // }
@@ -845,25 +858,30 @@ export class PickingItemDetailsComponent implements OnInit {
     }
     else {
       if (this.OPTM_Tracking == 'B') {
-        let result = this.BtchNoneArray.find(element => element.OPTM_ContBtchSer == this.PT_Enter_ContBtchSer);
-        if (result == undefined) {
-          if (this.iterateSteps) {
-            this.nextSteptoIterate();
-          } else {
-            this.nextStep();
-          }
+        if (this.iterateSteps) {
+          this.nextSteptoIterate();
         } else {
-          let btchDetail = this.PickTaskDetail.OPTM_WHSTASK_BTCHSER.find(e => e.OPTM_BTCHSER == this.PT_Enter_ContBtchSer && e.OPTM_TASKID == this.pickTaskName && e.OPTM_ITEMCODE == this.itemcodeValue);
-          if (Number(result.OPTM_Qty) > Number(btchDetail.OPTM_PLANNED_QTY)) {
-            this.toastr.error('', this.translate.instant("AlreadyPickQty"))
-          } else {
-            if (this.iterateSteps) {
-              this.nextSteptoIterate();
-            } else {
-              this.nextStep();
-            }
-          }
+          this.nextStep();
         }
+        // let result = this.BtchNoneArray.find(element => element.OPTM_ContBtchSer == this.PT_Enter_ContBtchSer);
+        // if (result == undefined) {
+        //   if (this.iterateSteps) {
+        //     this.nextSteptoIterate();
+        //   } else {
+        //     this.nextStep();
+        //   }
+        // } else {
+        //   let btchDetail = this.PickTaskDetail.OPTM_WHSTASK_BTCHSER.find(e => e.OPTM_BTCHSER == this.PT_Enter_ContBtchSer && e.OPTM_TASKID == this.pickTaskName && e.OPTM_ITEMCODE == this.itemcodeValue);
+        //   if (Number(result.OPTM_Qty) > Number(btchDetail.OPTM_PLANNED_QTY)) {
+        //     this.toastr.error('', this.translate.instant("AlreadyPickQty"))
+        //   } else {
+        //     if (this.iterateSteps) {
+        //       this.nextSteptoIterate();
+        //     } else {
+        //       this.nextStep();
+        //     }
+        //   }
+        // }
       }
     }
   }
@@ -883,7 +901,7 @@ export class PickingItemDetailsComponent implements OnInit {
               this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
-          this.showLookupLoader = false;          
+          this.showLookupLoader = false;
           if (data.Table != undefined && data.Table.length > 0) {
             this.PT_Enter_ContBtchSer = data.Table[0].LOTNO;
             this.BatchSerDetail = data.Table[0];
@@ -895,18 +913,26 @@ export class PickingItemDetailsComponent implements OnInit {
             //     OPTM_CONTAINER_ID: "",
             //     OPTM_QTY: 1,
             //     OPTM_BTCHSER: this.PT_Enter_ContBtchSer,
-            //     OPTM_CREATEDBY: localStorage.getItem("UserId"),
+            //     OPTM_CREATEDBY: sessionStorage.getItem("UserId"),
             //     OPTM_STARTDATETIME: this.OPTM_STARTDATETIME
             //   });
             // }
-            this.addBatchSerials();            
+            this.addBatchSerials();
           } else {
             this.PT_Enter_ContBtchSer = "";
-            this.toastr.error('', this.translate.instant("ProdReceipt_InvalidBatchSerial"));
+            if (this.OPTM_Tracking == 'B') {
+              this.toastr.error('', this.translate.instant("InvalidBatch"));
+            } else {
+              this.toastr.error('', this.translate.instant("InvalidSerial"));
+            }
           }
         } else {
           this.PT_Enter_ContBtchSer = "";
-          this.toastr.error('', this.translate.instant("ProdReceipt_InvalidBatchSerial"));
+          if (this.OPTM_Tracking == 'B') {
+            this.toastr.error('', this.translate.instant("InvalidBatch"));
+          } else {
+            this.toastr.error('', this.translate.instant("InvalidSerial"));
+          }
         }
       },
       error => {
@@ -930,12 +956,14 @@ export class PickingItemDetailsComponent implements OnInit {
 
     // Manage qty with Batch
     if (this.OPTM_Tracking == 'B') {
-      if (this.PickTaskDetail.OPTM_WHSTASK_BTCHSER != undefined && this.PickTaskDetail.OPTM_WHSTASK_BTCHSER.length > 0 && this.PickTaskDetail.OPTM_WHSTASK_BTCHSER.find(e => e.OPTM_ITEMCODE == this.itemcodeValue && e.OPTM_BTCHSER != '') != undefined) {
+
+      if (this.PickTaskDetail.OPTM_WHSTASK_BTCHSER != undefined && this.PickTaskDetail.OPTM_WHSTASK_BTCHSER.length > 0 && this.PickTaskDetail.OPTM_WHSTASK_BTCHSER.findIndex(e => e.OPTM_BTCHSER == this.PT_Enter_ContBtchSer && e.OPTM_TASKID == this.pickTaskName) != -1)
+      {
         let BtchSerDtl = this.PickTaskDetail.OPTM_WHSTASK_BTCHSER.find(e => e.OPTM_BTCHSER == this.PT_Enter_ContBtchSer && e.OPTM_TASKID == this.pickTaskName && e.OPTM_ITEMCODE == this.itemcodeValue);
         if (BtchSerDtl == undefined) {
 
         } else {
-          let result = this.BtchNoneArray.find(element => element.OPTM_ContBtchSer == this.PT_Enter_ContBtchSer);
+          let result = this.BtchNoneArray.find(e => e.OPTM_ContBtchSer == this.PT_Enter_ContBtchSer);
           if (result == undefined) {
             if (Number(this.pickQty) > Number(BtchSerDtl.OPTM_PLANNED_QTY)) {
               this.toastr.error('', this.translate.instant("QtyExceed"));
@@ -953,13 +981,56 @@ export class PickingItemDetailsComponent implements OnInit {
           }
         }
       } else {
-        if (Number(this.pickQty) > Number(this.BatchSerDetail.TOTALQTY)) {
-          this.toastr.error('', this.translate.instant("QtyExceed"));
-          this.pickQty = undefined
-          this.setfocus();
-          return;
-        }
+        let result = this.BtchNoneArray.find(e => e.OPTM_ContBtchSer == this.PT_Enter_ContBtchSer);
+        if (result == undefined) {
+          if (Number(this.pickQty) > Number(this.BatchSerDetail.TOTALQTY)) {
+            this.toastr.error('', this.translate.instant("QtyExceed"));
+            this.pickQty = undefined
+            this.setfocus();
+            return;
+          }
+        } else {
+          if ((Number(this.pickQty) + Number(result.OPTM_Qty)) > Number(this.BatchSerDetail.TOTALQTY)) {
+            this.toastr.error('', this.translate.instant("QtyExceed"));
+            this.pickQty = undefined
+            this.setfocus();
+            return;
+          }
+        }       
       }
+
+
+
+      // if (this.PickTaskDetail.OPTM_WHSTASK_BTCHSER != undefined && this.PickTaskDetail.OPTM_WHSTASK_BTCHSER.length > 0 && this.PickTaskDetail.OPTM_WHSTASK_BTCHSER.find(e => e.OPTM_ITEMCODE == this.itemcodeValue && e.OPTM_BTCHSER != '') != undefined) {
+      //   let BtchSerDtl = this.PickTaskDetail.OPTM_WHSTASK_BTCHSER.find(e => e.OPTM_BTCHSER == this.PT_Enter_ContBtchSer && e.OPTM_TASKID == this.pickTaskName && e.OPTM_ITEMCODE == this.itemcodeValue);
+      //   if (BtchSerDtl == undefined) {
+
+      //   } else {
+      //     let result = this.BtchNoneArray.find(element => element.OPTM_ContBtchSer == this.PT_Enter_ContBtchSer);
+      //     if (result == undefined) {
+      //       if (Number(this.pickQty) > Number(BtchSerDtl.OPTM_PLANNED_QTY)) {
+      //         this.toastr.error('', this.translate.instant("QtyExceed"));
+      //         this.pickQty = undefined
+      //         this.setfocus();
+      //         return;
+      //       }
+      //     } else {
+      //       if ((Number(this.pickQty) + Number(result.OPTM_Qty)) > Number(BtchSerDtl.OPTM_PLANNED_QTY)) {
+      //         this.toastr.error('', this.translate.instant("QtyExceed"));
+      //         this.pickQty = undefined
+      //         this.setfocus();
+      //         return;
+      //       }
+      //     }
+      //   }
+      // } else {
+      //   if (Number(this.pickQty) > Number(this.BatchSerDetail.TOTALQTY)) {
+      //     this.toastr.error('', this.translate.instant("QtyExceed"));
+      //     this.pickQty = undefined
+      //     this.setfocus();
+      //     return;
+      //   }
+      // }
     }
 
     let sum = 0;
@@ -990,43 +1061,32 @@ export class PickingItemDetailsComponent implements OnInit {
 
 
   setDatatoServerArray() {
-    let result1 = this.PickTaskDetail.OPTM_WHSTASK_BTCHSER.find(e => e.OPTM_ITEMCODE == this.itemcodeValue && e.OPTM_BTCHSER == this.PT_Enter_ContBtchSer);
+    let result1 = this.PickTaskDetail.OPTM_WHSTASK_BTCHSER.find(e => e.OPTM_TASKID == this.pickTaskName && e.OPTM_BTCHSER == this.PT_Enter_ContBtchSer);
     let contValue = "";
     if (this.ShipmentList[0].OPTM_PICK_OPER == "2") {
       contValue = this.ScannedContOrTote
     }
     if (result1 == undefined) {
-      this.BtchSerDtlData.push({
-        OPTM_TASKID: this.PickTaskList[this.index].OPTM_TASKID,
-        OPTM_ITEMCODE: this.itemcodeValue,
-        OPTM_BIN: this.PT_Enter_Location,
-        OPTM_CONTAINER_ID: contValue,
-        OPTM_QTY: this.pickQty,
-        OPTM_BTCHSER: this.PT_Enter_ContBtchSer,
-        OPTM_CREATEDBY: localStorage.getItem("UserId"),
-        OPTM_STARTDATETIME: this.OPTM_STARTDATETIME
-      });
     } else {
       this.ItemDetail.push({
         OPTM_TASKID: this.PickTaskList[this.index].OPTM_TASKID,
         OPTM_ITEMCODE: this.itemcodeValue,
         OPTM_ACTUAL_QTY: this.pickQty,
         OPTM_BTCHSER: this.PT_Enter_ContBtchSer,
-        OPTM_RESID_ACT: localStorage.getItem("UserId"),
+        OPTM_RESID_ACT: sessionStorage.getItem("UserId"),
         OPTM_STARTDATETIME: this.OPTM_STARTDATETIME
       });
-
-      this.BtchSerDtlData.push({
-        OPTM_TASKID: this.PickTaskList[this.index].OPTM_TASKID,
-        OPTM_ITEMCODE: this.itemcodeValue,
-        OPTM_BIN: this.PT_Enter_Location,
-        OPTM_CONTAINER_ID: contValue,
-        OPTM_QTY: this.pickQty,
-        OPTM_BTCHSER: this.PT_Enter_ContBtchSer,
-        OPTM_CREATEDBY: localStorage.getItem("UserId"),
-        OPTM_STARTDATETIME: this.OPTM_STARTDATETIME
-      });
-    }
+    }   
+    this.BtchSerDtlData.push({
+      OPTM_TASKID: this.PickTaskList[this.index].OPTM_TASKID,
+      OPTM_ITEMCODE: this.itemcodeValue,
+      OPTM_BIN: this.PT_Enter_Location,
+      OPTM_CONTAINER_ID: contValue,
+      OPTM_QTY: this.pickQty,
+      OPTM_BTCHSER: this.PT_Enter_ContBtchSer,
+      OPTM_CREATEDBY: sessionStorage.getItem("UserId"),
+      OPTM_STARTDATETIME: this.OPTM_STARTDATETIME
+    });
   }
 
   checkIfQtyFullFiled() {
@@ -1044,18 +1104,21 @@ export class PickingItemDetailsComponent implements OnInit {
           this.setDatatoServerArray();
         } else {
           this.BtchNoneArray[result].OPTM_Qty = Number(this.pickQty) + Number(this.BtchNoneArray[result].OPTM_Qty);
-          this.setDatatoServerArray();
-          return;
+          for(var i =0; i<this.BtchSerDtlData.length; i++){
+            if(this.BtchSerDtlData[i].OPTM_BTCHSER == this.PT_Enter_ContBtchSer){
+              this.BtchSerDtlData[i].OPTM_QTY = this.BtchNoneArray[result].OPTM_Qty;
+              break;
+            } 
+          }
         }
       } else if (this.OPTM_Tracking == 'N') {
-
         this.BtchNoneArray.push(new BtchNoneModel(this.PT_Enter_Location, this.PT_Enter_ContBtchSer, this.pickQty, this.ScannedContOrTote));
         this.ItemDetail.push({
           OPTM_TASKID: this.PickTaskList[this.index].OPTM_TASKID,
           OPTM_ITEMCODE: this.itemcodeValue,
           OPTM_ACTUAL_QTY: this.pickQty,
           OPTM_BTCHSER: "",
-          OPTM_RESID_ACT: localStorage.getItem("UserId"),
+          OPTM_RESID_ACT: sessionStorage.getItem("UserId"),
           OPTM_STARTDATETIME: this.OPTM_STARTDATETIME
         });
       }
@@ -1070,6 +1133,7 @@ export class PickingItemDetailsComponent implements OnInit {
       if (this.stepIndex == this.CurrentTaskSteps.length - 1) {
         this.LastStep = this.currentStep;
         this.pickedAllDty = true;
+        this.currentStep = -1;
       }
       this.toastr.success('', this.translate.instant("AllQtyPickedMsg"));
     }
@@ -1103,9 +1167,9 @@ export class PickingItemDetailsComponent implements OnInit {
     }
 
     this.preparePickTaskData();
-    this.clearStepsFields();
-    // this.clearScanningFields();
-    // this.nextStep();
+    this.stepIndex = 0;
+    this.stepIncrementValue = 1;
+    this.iterateSteps = false;
     this.whsCode = this.PickTaskList[this.index].OPTM_SRC_WHSE;
     this.UserGrp = this.PickTaskList[this.index].OPTM_USER_GRP;
     this.blnSaveClicked = true;
@@ -1179,7 +1243,7 @@ export class PickingItemDetailsComponent implements OnInit {
       oSubmitPOLotsObj.SubmitPickTaskData = this.SubmitPickTaskData;
       if (this.BtchSerDtlData.length > 0) {
         oSubmitPOLotsObj.BtchSerDtlData = this.BtchSerDtlData;
-      }else{
+      } else {
         oSubmitPOLotsObj.BtchSerDtlData = [];
       }
       // if (this.ItemDetail.length > 0) {
@@ -1241,7 +1305,7 @@ export class PickingItemDetailsComponent implements OnInit {
 
   getNextPick() {
     this.CancelPickList();
-    
+
     if (this.countOfNowPickedTasks > 0) {
       //There are tasks that are processed but not dropped in any bin
       this.ProcessPicklistNextClosureStep();
@@ -1306,26 +1370,30 @@ export class PickingItemDetailsComponent implements OnInit {
     this.PT_ItemCode = "";
     this.pickQty = undefined;
     this.totalpickQty = 0;
-    this.ScannedContOrTote= "";
+    this.ScannedContOrTote = "";
     this.ScannedDropBin = "";
   }
 
   changeText(step) {
     if (step == this.LOCATION_STEP) {
-      this.currentStepText = this.translate.instant("PT_Scan_To_Location");
+      this.currentStepText = this.translate.instant("Ph_Scan_Location");
     }
     else if (step == this.ITEM_STEP) {
-      this.currentStepText = this.translate.instant("PT_ItemCode");
+      this.currentStepText = this.translate.instant("Ph_ScanItemCode");
     }
     else if (step == this.CONT_BTCH_SER_STEP) {
       if (localStorage.getItem("PickType") == this.translate.instant("Container_Picking")) {
-        this.currentStepText = this.translate.instant("ContainerCodePlaceholder");
+        this.currentStepText = this.translate.instant("ScanContainer");
       } else {
-        this.currentStepText = this.translate.instant("PT_ScantoLotNumber");
+        if (this.OPTM_Tracking == 'S') {
+          this.currentStepText = this.translate.instant("ScanSerial")
+        } else if (this.OPTM_Tracking == 'B') {
+          this.currentStepText = this.translate.instant("ScanBatch")
+        }
       }
     }
     else if (step == this.QTY_STEP) {
-      this.currentStepText = this.translate.instant("PT_EnterQty");
+      this.currentStepText = this.translate.instant("Ph_EnterQty");
     }
     else if (step == this.CONFIRM_CONTAINER_STEP) {
       if (this.ShipmentList[0].OPTM_PICK_OPER == "2") {
@@ -1403,16 +1471,16 @@ export class PickingItemDetailsComponent implements OnInit {
 
     if ((this.OPTM_Tracking == 'B' || this.OPTM_Tracking == 'N') && localStorage.getItem("PickType") != this.translate.instant("Container_Picking")) {
       for (var i = 0; i < this.BtchNoneArray.length; i++) {
-        this.SubmitPickTaskData.push(new PickTaskModel(this.ShipmentList[0].OPTM_PICKLIST_ID, this.ShipmentList[0].OPTM_PICKLIST_CODE, this.PickTaskList[this.index].OPTM_TASKID, localStorage.getItem("whseId"), this.BtchNoneArray[i].OPTM_Location, this.BtchNoneArray[i].OPTM_ContBtchSer, this.BtchNoneArray[i].OPTM_Qty, contValue, localStorage.getItem("UserId"), "N", toteValue, this.containerAlreadyCreated, this.OPTM_STARTDATETIME, localStorage.getItem("PickTypeIndex"), this.UserGrp, this.PickListDropBin));
+        this.SubmitPickTaskData.push(new PickTaskModel(this.ShipmentList[0].OPTM_PICKLIST_ID, this.ShipmentList[0].OPTM_PICKLIST_CODE, this.PickTaskList[this.index].OPTM_TASKID, sessionStorage.getItem("whseId"), this.BtchNoneArray[i].OPTM_Location, this.BtchNoneArray[i].OPTM_ContBtchSer, this.BtchNoneArray[i].OPTM_Qty, contValue, sessionStorage.getItem("UserId"), "N", toteValue, this.containerAlreadyCreated, this.OPTM_STARTDATETIME, localStorage.getItem("PickTypeIndex"), this.UserGrp, this.PickListDropBin));
       }
     } else {
       for (var i = 0; i < this.ContBtchSerArray.length; i++) {
         let result = this.PickListSteps.find(element => element.OPTM_TASKID == this.PickTaskList[this.index].OPTM_TASKID);
         if (result == undefined) {
           if (localStorage.getItem("PickType") == this.translate.instant("Container_Picking")) {
-            this.SubmitPickTaskData.push(new PickTaskModel(this.ShipmentList[0].OPTM_PICKLIST_ID, this.ShipmentList[0].OPTM_PICKLIST_CODE, this.PickTaskList[this.index].OPTM_TASKID, localStorage.getItem("whseId"), this.PT_Enter_Location, this.ContBtchSerArray[i], 1, contValue, localStorage.getItem("UserId"), "Y", toteValue, this.containerAlreadyCreated, this.OPTM_STARTDATETIME, localStorage.getItem("PickTypeIndex"), this.UserGrp, this.PickListDropBin));
+            this.SubmitPickTaskData.push(new PickTaskModel(this.ShipmentList[0].OPTM_PICKLIST_ID, this.ShipmentList[0].OPTM_PICKLIST_CODE, this.PickTaskList[this.index].OPTM_TASKID, sessionStorage.getItem("whseId"), this.PT_Enter_Location, this.ContBtchSerArray[i], 1, contValue, sessionStorage.getItem("UserId"), "Y", toteValue, this.containerAlreadyCreated, this.OPTM_STARTDATETIME, localStorage.getItem("PickTypeIndex"), this.UserGrp, this.PickListDropBin));
           } else {
-            this.SubmitPickTaskData.push(new PickTaskModel(this.ShipmentList[0].OPTM_PICKLIST_ID, this.ShipmentList[0].OPTM_PICKLIST_CODE, this.PickTaskList[this.index].OPTM_TASKID, localStorage.getItem("whseId"), this.PT_Enter_Location, this.ContBtchSerArray[i], 1, contValue, localStorage.getItem("UserId"), "N", toteValue, this.containerAlreadyCreated, this.OPTM_STARTDATETIME, localStorage.getItem("PickTypeIndex"), this.UserGrp, this.PickListDropBin));
+            this.SubmitPickTaskData.push(new PickTaskModel(this.ShipmentList[0].OPTM_PICKLIST_ID, this.ShipmentList[0].OPTM_PICKLIST_CODE, this.PickTaskList[this.index].OPTM_TASKID, sessionStorage.getItem("whseId"), this.PT_Enter_Location, this.ContBtchSerArray[i], 1, contValue, sessionStorage.getItem("UserId"), "N", toteValue, this.containerAlreadyCreated, this.OPTM_STARTDATETIME, localStorage.getItem("PickTypeIndex"), this.UserGrp, this.PickListDropBin));
           }
         } else {
           this.toastr.error('', this.translate.instant("DataAlreadySaved"));

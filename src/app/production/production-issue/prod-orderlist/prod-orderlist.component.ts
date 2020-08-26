@@ -53,7 +53,7 @@ export class ProdOrderlistComponent implements OnInit {
     }
   }
 
-  ngAfterViewInit(): void{
+  ngAfterViewInit(): void {
     this.scanOrderNo.nativeElement.focus()
   }
 
@@ -87,12 +87,12 @@ export class ProdOrderlistComponent implements OnInit {
       },
       error => {
         this.showLoader = false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -113,15 +113,19 @@ export class ProdOrderlistComponent implements OnInit {
 
   getItemListForOrder(fromIssueProduction: boolean = false, fromsearchButtonClick: boolean = false) {
     if (fromsearchButtonClick && this.outbound != null) {
-      
+
       let outboundTempData: OutboundData = new OutboundData()
       outboundTempData.OrderData = this.outbound.OrderData;
       localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outboundTempData));
-    } 
-    this.soItemsDetail = []; 
+    }
+    this.soItemsDetail = [];
 
-    if(this.orderNumber == null || this.orderNumber == undefined || this.orderNumber == ""){
-      return ;
+    if (this.orderNumber == null || this.orderNumber == undefined || this.orderNumber == "") {
+      return;
+    }
+
+    if (this.orderNo == null || this.orderNo == undefined || this.orderNo == "") {
+      return;
     }
     this.showLoader = true;
     this.productionService.GetBOMItemForProductionIssue(this.orderNo).subscribe(
@@ -169,12 +173,12 @@ export class ProdOrderlistComponent implements OnInit {
       },
       error => {
         this.showLoader = false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -263,7 +267,7 @@ export class ProdOrderlistComponent implements OnInit {
         const soelement = this.soItemsDetail[i];
         var totalPickQty: number = 0;
 
-        if (this.outbound && this.outbound.TempMeterials && 
+        if (this.outbound && this.outbound.TempMeterials &&
           this.outbound.TempMeterials.length > 0) {
 
           for (let j = 0; j < this.outbound.TempMeterials.length; j++) {
@@ -271,11 +275,11 @@ export class ProdOrderlistComponent implements OnInit {
             const element = this.outbound.TempMeterials[j];
             //console.log("My Element", element);
             if (soelement.ITEMCODE === element.Item.ITEMCODE && soelement.DOCENTRY === element.Item.DOCENTRY) {
-              var no: any= Number(element.Meterial.MeterialPickQty);
-              totalPickQty = totalPickQty + no; 
+              var no: any = Number(element.Meterial.MeterialPickQty);
+              totalPickQty = totalPickQty + no;
             }
           }
-        } 
+        }
 
         // Total Qty of Item
         soelement.RPTQTY = totalPickQty;
@@ -323,7 +327,7 @@ export class ProdOrderlistComponent implements OnInit {
 
           const element = tempMeterialCollection[j];
 
-          if (d.Item.DOCENTRY == element.Item.DOCENTRY && d.Order.DOCNUM == element.Order.DOCNUM) {
+          if (d.Item.DOCENTRY == element.Item.DOCENTRY) {
 
             tempMeterialCollection.slice(index, 1);
           }
@@ -338,8 +342,8 @@ export class ProdOrderlistComponent implements OnInit {
 
           let hasitem = this.outbound.DeleiveryCollection.filter(d =>
             d.Item.DOCENTRY === tm.Item.DOCENTRY &&
+            d.Item.ItemCode === tm.Item.ItemCode &&
             d.Item.TRACKING === tm.Item.TRACKING &&
-            d.Order.DOCNUM === tm.Order.DOCNUM &&
             d.Meterial.LOTNO === tm.Meterial.LOTNO &&
             d.Meterial.BINNO === tm.Meterial.BINNO
           );
@@ -370,10 +374,10 @@ export class ProdOrderlistComponent implements OnInit {
       let prodIssueModel: ProductionIssueModel = new ProductionIssueModel();
 
       // Hdr
-      let comDbId = localStorage.getItem('CompID');
-      let token = localStorage.getItem('Token');
-      let guid: string = localStorage.getItem('GUID');
-      let uid: string = localStorage.getItem('UserId');
+      let comDbId = sessionStorage.getItem("CompID");
+      let token = sessionStorage.getItem("Token");
+      let guid: string = sessionStorage.getItem("GUID");
+      let uid: string = sessionStorage.getItem("UserId");
       let hdrLine: number = 0;
       let limit = -1;
       let hdrLineVal = -1;
@@ -390,7 +394,8 @@ export class ProdOrderlistComponent implements OnInit {
         let lineDeleiveryCollection = this.outbound.DeleiveryCollection.filter(d =>
           element.Order.DOCNUM === d.Order.DOCNUM &&
           element.Item.DOCENTRY === d.Item.DOCENTRY &&
-          element.Item.TRACKING === d.Item.TRACKING
+          element.Item.TRACKING === d.Item.TRACKING &&
+          element.Item.LineId === d.Item.LineId
         );
 
         // Process Order Item and Tracking collection
@@ -472,8 +477,8 @@ export class ProdOrderlistComponent implements OnInit {
         }
       }
 
-     // console.log("Dtl", arrLots);
-     // console.log("hdr", arrIssues);
+      // console.log("Dtl", arrLots);
+      // console.log("hdr", arrIssues);
 
       if (arrIssues.length > 0 && arrLots.length > 0) {
         prodIssueModel.Items = arrIssues;
@@ -496,27 +501,32 @@ export class ProdOrderlistComponent implements OnInit {
           }
           else {
             this.showLoader = false;
-            this.toastr.error('', data[0].ErrorMsg);
 
-            // Reset All meterial on error.
-            this.outbound.DeleiveryCollection = []
-            this.outbound.SelectedMeterials = []
-            this.outbound.TempMeterials = []
-            localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+            if (data[0].ErrorMsg != "") {
+              if (data[0].ErrorNo != undefined && data[0].ErrorNo == "-1") {
+                // Receipt not successful. Do not refresh the screen.
+                this.toastr.error('', data[0].ErrorMsg);
+                return;
+              } else if (data[0].ErrorNo != undefined && data[0].ErrorNo == "0") {
+                //Error in updating optipro tables. SAP succefully updated.
+                this.toastr.error('', "Error in updating optipro tables. SAP succefully updated");
 
-            this.getItemListForOrder();
-
-
+              }
+              this.resetIssueProduction();
+              // show errro.
+              this.toastr.error('', data[0].ErrorMsg);
+            }
+            // this.toastr.error('', data[0].ErrorMsg);
           }
         },
         error => {
           this.showLoader = false;
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-         } 
-         else{
-          this.toastr.error('', error);
-         }
+          if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+          }
+          else {
+            this.toastr.error('', error);
+          }
         }
 
       );
@@ -530,9 +540,17 @@ export class ProdOrderlistComponent implements OnInit {
     localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
     this.orderNo = ""
     this.soItemsDetail = []
+
+    // Reset All meterial on error.
+    this.outbound.DeleiveryCollection = []
+    this.outbound.SelectedMeterials = []
+    this.outbound.TempMeterials = []
+    localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+
+    this.getItemListForOrder();
   }
 
-  onHiddenProdOrderScanClick(){
+  onHiddenProdOrderScanClick() {
     var inputValue = (<HTMLInputElement>document.getElementById('prodOrder_OrderNoScanInput')).value;
     if (inputValue.length > 0) {
       this.orderNo = inputValue;

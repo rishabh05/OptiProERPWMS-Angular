@@ -8,6 +8,7 @@ import { LicenseData } from '../../models/account/LicenseData';
 import { WHS } from '../../models/account/WHS';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { CommonData } from '../../models/CommonData';
 
 @Component({
     selector: 'app-signin',
@@ -41,8 +42,8 @@ export class SigninComponent implements OnInit {
     zoneList: any[] = [];
     roleList: any[] = [];
     binRangeList: any[] = [];
-    
-    binPermissionList:any[] = [];
+
+    binPermissionList: any[] = [];
     defaultZone: any;
     defaultWHS: any;
     selectedRole: any;
@@ -52,6 +53,12 @@ export class SigninComponent implements OnInit {
     readonlyFlag: boolean = false;
     public arrConfigData: any[];
     public config_params: any;
+    commonData: any = new CommonData();
+    showConfirmDialog = false;
+    dialogMsg: string = ""
+    yesButtonText: string = "";
+    noButtonText: string = "";
+    dialogFor: string = "";
 
     constructor(private router: Router, private signinService: SigninService,
         private commonService: Commonservice, private toastr: ToastrService,
@@ -158,13 +165,39 @@ export class SigninComponent implements OnInit {
                 this.showLoader = false;
                 return;
             }
-            this.getLicenseData();
+            this.getLicenseData(this.commonData.getLicenseCheckTriggerText("FirstLogin"));
+
             // this.showLoader = false;
-            // // localStorage.setItem("GUID", this.licenseData[1].GUID);
+            // // sessionStorage.setItem("GUID", this.licenseData[1].GUID);
             // localStorage.setItem("CompID", "BUILD128SRC12X");
-            // localStorage.setItem("whseId", "01");
-            // localStorage.setItem("Token", "2bf91be7-819c-4443-a1bc-82dc150da05d");
+            // sessionStorage.setItem("whseId", "01");
+            // sessionStorage.setItem("Token", "2bf91be7-819c-4443-a1bc-82dc150da05d");
             // this.router.navigateByUrl('home/dashboard'); 
+        }
+    }
+
+    showDialog(dialogFor: string, yesbtn: string, nobtn: string, msg: string) {
+        this.dialogFor = dialogFor;
+        this.yesButtonText = yesbtn;
+        this.noButtonText = nobtn;
+        this.showConfirmDialog = true;
+        this.dialogMsg = msg;
+    }
+
+    getConfirmDialogValue($event) {
+        this.showConfirmDialog = false;
+        if ($event.Status == "yes") {
+            switch ($event.From) {
+                case ("LicenseCheck"):
+                    this.getLicenseData(this.commonData.getLicenseCheckTriggerText("RemoveSession"));
+                    break;
+            }
+        } else if ($event.Status == "no") {
+            switch ($event.From) {
+                case ("LicenseCheck"):
+                    this.getLicenseData(this.commonData.getLicenseCheckTriggerText("PersistSession"));
+                    break;
+            }
         }
     }
 
@@ -213,14 +246,18 @@ export class SigninComponent implements OnInit {
         this.defaultWHS = { OPTM_WHSE: this.translate.instant("SelectWarehouse"), BPLid: 0 };
     }
 
-    private getLicenseData() {
+    private getLicenseData(LoginTrigger) {
         this.showFullPageLoader = true;
-        this.signinService.getLicenseData(this.selectedItem).subscribe(
+        this.signinService.getLicenseData(this.selectedItem, LoginTrigger).subscribe(
             data => {
                 this.licenseData = data;
-                if (this.licenseData != null && this.licenseData != undefined) {
-                    this.handleLicenseDataSuccessResponse();
-                    // this.showFullPageLoader = false;
+                if (this.licenseData != null && this.licenseData != undefined && this.licenseData.length > 0) {
+                    if (this.licenseData[0].ErrMessage == "Already Login") {
+                        this.showDialog("LicenseCheck", this.translate.instant("yes"), this.translate.instant("no"),
+                            this.translate.instant("Already_Loggin_Msg"));
+                    } else {
+                        this.handleLicenseDataSuccessResponse();
+                    }
                 } else {
                     this.showLoader = false;
                     this.showFullPageLoader = false;
@@ -247,10 +284,10 @@ export class SigninComponent implements OnInit {
                 if (this.licenseData[0].Message == "True") {
                     console.log("log", "handleLicense:message true");
                     this.selectedItem = document.getElementById("compId").innerText.trim();
-                    localStorage.setItem("GUID", this.licenseData[1].GUID);
-                    localStorage.setItem("CompID", this.selectedItem);
-                    localStorage.setItem("whseId", this.selectedWhse);
-                    localStorage.setItem("Token", this.licenseData[0].Token);
+                    sessionStorage.setItem("GUID", this.licenseData[1].GUID);
+                    sessionStorage.setItem("CompID", this.selectedItem);
+                    sessionStorage.setItem("whseId", this.selectedWhse);
+                    sessionStorage.setItem("Token", this.licenseData[0].Token);
                     localStorage.setItem("PalletizationEnabled", this.licenseData[0].PalletizationEnabled);
                     localStorage.setItem("isShipmentApplicable", "True");
 
@@ -338,7 +375,7 @@ export class SigninComponent implements OnInit {
             this.toastr.error('', this.translate.instant("Login_UsernotActive"), this.commonService.toast_config.iconClasses.error);
             return true;
         }
-        localStorage.setItem("UserId", this.userName);
+        sessionStorage.setItem("UserId", this.userName);
         localStorage.setItem("UserGroup", this.userDetails[0].OPTM_GROUPCODE);
         this.isCompleteLoginVisible = true;
         this.readonlyFlag = true;
@@ -352,16 +389,16 @@ export class SigninComponent implements OnInit {
                 this.selectedItem = this.companyName[i];
                 this.setWarehouseList(true);
             }
-        } 
+        }
     }
 
 
-    public setWarehouseList(isDirectCall:boolean=false) {
+    public setWarehouseList(isDirectCall: boolean = false) {
         if (document.getElementById("compId") != null) {
             this.selectedItem = document.getElementById("compId").innerText.trim();
         }
-        if(isDirectCall!=true){
-            if(this.selectedItem==this.translate.instant("Login_SelectCompany")){
+        if (isDirectCall != true) {
+            if (this.selectedItem == this.translate.instant("Login_SelectCompany")) {
                 this.toastr.error('', this.translate.instant("Login_SelectCompanyMsg"))
                 return;
             }
@@ -375,10 +412,10 @@ export class SigninComponent implements OnInit {
                     }
                 }
                 this.showRoleList(true);
-                 //call permission api after whse select.
-                if(isDirectCall)this.checkBinPermissionList(true); 
-               
-                
+                //call permission api after whse select.
+                if (isDirectCall) this.checkBinPermissionList(true);
+
+
             },
             error => {
                 if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
@@ -388,9 +425,9 @@ export class SigninComponent implements OnInit {
         );
     }
 
-    public showRoleList(isDirectCall:boolean = false) {
-        if(isDirectCall!=true){
-            if(this.selectedItem==this.translate.instant("Login_SelectCompany")){
+    public showRoleList(isDirectCall: boolean = false) {
+        if (isDirectCall != true) {
+            if (this.selectedItem == this.translate.instant("Login_SelectCompany")) {
                 this.toastr.error('', this.translate.instant("Login_SelectCompanyMsg"))
                 return;
             }
@@ -402,7 +439,7 @@ export class SigninComponent implements OnInit {
                     if (this.getCookie('Role') == this.roleList[i].OPTM_ROLEID) {
                         this.selectedRole = { OPTM_ROLEID: this.roleList[i].OPTM_ROLEID, BPLid: 0 };
                     }
-                } 
+                }
             },
             error => {
                 if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
@@ -412,21 +449,21 @@ export class SigninComponent implements OnInit {
         );
     }
 
-    public showZoneList(isDirectCall:boolean=false) {
-       
-        if(isDirectCall!=true){
-            if(this.selectedItem==this.translate.instant("Login_SelectCompany")){
+    public showZoneList(isDirectCall: boolean = false) {
+
+        if (isDirectCall != true) {
+            if (this.selectedItem == this.translate.instant("Login_SelectCompany")) {
                 this.toastr.error('', this.translate.instant("Login_SelectCompanyMsg"))
                 return;
             }
-            if(this.defaultWHS == undefined || this.defaultWHS == ""){
+            if (this.defaultWHS == undefined || this.defaultWHS == "") {
                 this.toastr.error('', this.translate.instant("Login_SelectwarehouseMsg"))
                 return;
             }
         }
 
-        var whse=this.defaultWHS.OPTM_WHSE//nedd to pass whse actual value
-        this.signinService.getZoneList(this.selectedItem,whse).subscribe(
+        var whse = this.defaultWHS.OPTM_WHSE//nedd to pass whse actual value
+        this.signinService.getZoneList(this.selectedItem, whse).subscribe(
             data => {
                 this.zoneList = data.Table;
                 for (var i = 0; i < this.zoneList.length; i++) {
@@ -434,7 +471,7 @@ export class SigninComponent implements OnInit {
                         this.selectedZone = { OPTM_WHSZONE: this.zoneList[i].OPTM_WHSZONE, BPLid: 0 };
                     }
                 }
-                if(isDirectCall && this.showBinRange)this.showBinRangeList(true)
+                if (isDirectCall && this.showBinRange) this.showBinRangeList(true)
             },
             error => {
                 if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
@@ -444,24 +481,24 @@ export class SigninComponent implements OnInit {
         );
     }
 
-    public showBinRangeList(isDirectCall:boolean=false) {
-        if(isDirectCall!=true){
-            if(this.selectedItem==this.translate.instant("Login_SelectCompany")){
+    public showBinRangeList(isDirectCall: boolean = false) {
+        if (isDirectCall != true) {
+            if (this.selectedItem == this.translate.instant("Login_SelectCompany")) {
                 this.toastr.error('', this.translate.instant("Login_SelectCompanyMsg"))
                 return;
             }
-            if(this.defaultWHS == undefined || this.defaultWHS == ""){
+            if (this.defaultWHS == undefined || this.defaultWHS == "") {
                 this.toastr.error('', this.translate.instant("Login_SelectwarehouseMsg"))
                 return;
             }
-            if(this.selectedZone == undefined || this.selectedZone == ""){
+            if (this.selectedZone == undefined || this.selectedZone == "") {
                 this.toastr.error('', this.translate.instant("Login_SelectZoneMsg"))
                 return;
             }
 
         }
-        var whse=this.defaultWHS.OPTM_WHSE
-        this.signinService.getBinRanges(whse,this.selectedItem,this.selectedZone.OPTM_WHSZONE).subscribe(
+        var whse = this.defaultWHS.OPTM_WHSE
+        this.signinService.getBinRanges(whse, this.selectedItem, this.selectedZone.OPTM_WHSZONE).subscribe(
             data => {
                 this.binRangeList = data.Table;
                 for (var i = 0; i < this.whsList.length; i++) {
@@ -475,27 +512,27 @@ export class SigninComponent implements OnInit {
                     this.commonService.unauthorizedToken(error, this.translate.instant("token_expired"));
                 }
             }
-        ); 
+        );
     }
-    showZone:boolean = false;
-    showBinRange:boolean = false;
-    public checkBinPermissionList(isDirectCall:boolean=false) {
-        if(this.defaultWHS == undefined || this.defaultWHS == ""){
+    showZone: boolean = false;
+    showBinRange: boolean = false;
+    public checkBinPermissionList(isDirectCall: boolean = false) {
+        if (this.defaultWHS == undefined || this.defaultWHS == "") {
             this.toastr.error('', this.translate.instant("Login_SelectwarehouseMsg"))
             return;
         }
-        this.signinService.getBinPermissionList(this.selectedItem,this.defaultWHS.OPTM_WHSE).subscribe(
+        this.signinService.getBinPermissionList(this.selectedItem, this.defaultWHS.OPTM_WHSE).subscribe(
             data => {
                 this.binPermissionList = data;
-                if(this.binPermissionList!=null && this.binPermissionList!=undefined && this.binPermissionList.length>0){
-                    if(this.binPermissionList[0].OPTM_PARAM_VALUE=="Bin Range"){
+                if (this.binPermissionList != null && this.binPermissionList != undefined && this.binPermissionList.length > 0) {
+                    if (this.binPermissionList[0].OPTM_PARAM_VALUE == "Bin Range") {
                         this.showBinRange = true;
                         this.showZone = true;
-                        if(this.showZone) this.showZoneList(isDirectCall)
-                    } else if(this.binPermissionList[0].OPTM_PARAM_VALUE=="Zone" || this.binPermissionList[0].OPTM_PARAM_VALUE=="zone" ){
+                        if (this.showZone) this.showZoneList(isDirectCall)
+                    } else if (this.binPermissionList[0].OPTM_PARAM_VALUE == "Zone" || this.binPermissionList[0].OPTM_PARAM_VALUE == "zone") {
                         this.showZone = true;
                         this.showBinRange = false;
-                       if(this.showZone) this.showZoneList(isDirectCall)
+                        if (this.showZone) this.showZoneList(isDirectCall)
                     }
                 }
             },
@@ -507,7 +544,7 @@ export class SigninComponent implements OnInit {
         );
     }
 
-    onWhsChange($event){ 
+    onWhsChange($event) {
         console.log("event change");
         this.checkBinPermissionList()
 

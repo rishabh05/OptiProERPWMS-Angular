@@ -662,21 +662,21 @@ export class InboundPolistComponent implements OnInit {
    
           this.addToGRPOArray.POReceiptLots.push({
             OPTM_TYPE:this.oSavedPOLotsArray.POReceiptLots[i].OPTM_TYPE,
-            DiServerToken: localStorage.getItem("Token"),
+            DiServerToken: sessionStorage.getItem("Token"),
             PONumber: this.oSavedPOLotsArray.POReceiptLots[i].PONumber,
             DocEntry: this.oSavedPOLotsArray.POReceiptLots[i].DocEntry,
-            CompanyDBId: localStorage.getItem("CompID"),
+            CompanyDBId: sessionStorage.getItem("CompID"),
             LineNo: this.oSavedPOLotsArray.POReceiptLots[i].LineNo,
             ShipQty: this.oSavedPOLotsArray.POReceiptLots[i].ShipQty,
             OpenQty: this.oSavedPOLotsArray.POReceiptLots[i].OpenQty,
-            WhsCode: localStorage.getItem("whseId"),
+            WhsCode: sessionStorage.getItem("whseId"),
             Tracking: this.oSavedPOLotsArray.POReceiptLots[i].Tracking,
             ItemCode: this.oSavedPOLotsArray.POReceiptLots[i].ItemCode,
             LastSerialNumber: 0,
             Line: this.oSavedPOLotsArray.POReceiptLots[i].Line,
-            GUID: localStorage.getItem("GUID"),
+            GUID: sessionStorage.getItem("GUID"),
             UOM: this.oSavedPOLotsArray.POReceiptLots[i].UOM,
-            UsernameForLic: localStorage.getItem("UserId")
+            UsernameForLic: sessionStorage.getItem("UserId")
           });
 
           for (var j = 0; j < this.oSavedPOLotsArray.POReceiptLotDetails.length; j++) {
@@ -986,21 +986,21 @@ export class InboundPolistComponent implements OnInit {
     }
 
     oSubmitPOLotsObj.POReceiptLots.push({
-      DiServerToken: localStorage.getItem("Token"),
+      DiServerToken: sessionStorage.getItem("Token"),
       PONumber: this.poCode,
       DocEntry: this.openPOLineModel.DOCENTRY,
-      CompanyDBId: localStorage.getItem("CompID"),
+      CompanyDBId: sessionStorage.getItem("CompID"),
       LineNo: this.openPOLineModel.LINENUM,
       ShipQty: this.openPOLineModel.RPTQTY.toString(),
       OpenQty: this.openPOLineModel.OPENQTY.toString(),
-      WhsCode: localStorage.getItem("whseId"),
+      WhsCode: sessionStorage.getItem("whseId"),
       Tracking: this.openPOLineModel.TRACKING,
       ItemCode: this.openPOLineModel.ITEMCODE,
       LastSerialNumber: 0,
       Line: Number(localStorage.getItem("Line")),
-      GUID: localStorage.getItem("GUID"),
+      GUID: sessionStorage.getItem("GUID"),
       UOM: "",
-      UsernameForLic: localStorage.getItem("UserId")
+      UsernameForLic: sessionStorage.getItem("UserId")
 
       //------end Of parameter For License----
     });

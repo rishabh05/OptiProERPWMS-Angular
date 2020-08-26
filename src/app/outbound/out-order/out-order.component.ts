@@ -71,15 +71,19 @@ export class OutOrderComponent implements OnInit {
   pagetitle: any = "";
   isPalletizationEnable: boolean = false
   disableSO: boolean = false;
+  fromITR: boolean = false;
   docEntry: any;   // this variable is used only for single itr submit request for multiple we have to change implementation.
   @ViewChild('scanSO') scanSO;
   @ViewChild('DocNum') DocNum;
   @ViewChild('PalletNo') PalletNo;
   @ViewChild('scanItemCode') scanItemCode;
   fromShipment: boolean = false;
-
+  ShowPickListReport: boolean = true;
+  ShowPackListReport: boolean = true;
+  ShowBOLReport: boolean = true;
   showPackingAlertForNTFirstTime:boolean = false;
   public selectedPackingModel:PackingModel = new PackingModel() ;
+
   constructor(private inboundService: InboundService, private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService,
     private inventoryTransferService: InventoryTransferService) { }
   ngOnInit() {
@@ -94,8 +98,10 @@ export class OutOrderComponent implements OnInit {
     }
     if (localStorage.getItem("ComingFrom") == "itr") {
       this.fromWhere = "itr";
+      this.fromITR = true;
       this.pagetitle = this.translate.instant("InvTransfer_ByITR");
     } else {
+      this.fromITR = false;
       let companyName = '';
       let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
       if (outboundData != null && outboundData != undefined && outboundData != ''
@@ -151,6 +157,9 @@ export class OutOrderComponent implements OnInit {
       this.calculatePickQty();
     }
     this.setSavedPelletDataToGrid();
+    this.ShowPickListReport = (JSON.parse(sessionStorage.getItem('ConfigData'))).ShowPickListReport;
+    this.ShowPackListReport = (JSON.parse(sessionStorage.getItem('ConfigData'))).ShowPackListReport;
+    this.ShowBOLReport = (JSON.parse(sessionStorage.getItem('ConfigData'))).ShowBOLReport;
   }
 
   ngAfterViewInit(): void {
@@ -211,7 +220,7 @@ export class OutOrderComponent implements OnInit {
     if (this.selectedCustomer != null && this.selectedCustomer != undefined
       && this.selectedCustomer.CustomerCode != '' && this.selectedCustomer.CustomerCode != null) {
 
-      let whseId = localStorage.getItem("whseId");
+        let whseId = sessionStorage.getItem("whseId");
       this.outboundservice.getCustomerSOList(this.selectedCustomer.CustomerCode, "", whseId).subscribe(
         resp => {
           if (resp != null && resp.length > 0) {
@@ -392,7 +401,7 @@ export class OutOrderComponent implements OnInit {
       this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
 
       //lsOutbound
-      let whseId = localStorage.getItem("whseId");
+      let whseId = sessionStorage.getItem("whseId");
       this.showLookup = false;
       this.showLookupLoader = true;
       this.outboundservice.getSOItemList(tempOrderData.CARDCODE, tempOrderData.DOCNUM, whseId).subscribe(
@@ -626,10 +635,11 @@ export class OutOrderComponent implements OnInit {
       let arrSODETAIL: SODETAIL[] = [];
       let deliveryToken: DeliveryToken = new DeliveryToken();
       // Hdr
-      let comDbId = localStorage.getItem('CompID');
-      let token = localStorage.getItem('Token');
-      let guid: string = localStorage.getItem('GUID');
-      let uid: string = localStorage.getItem('UserId');
+      let comDbId = sessionStorage.getItem("CompID");
+      let token = sessionStorage.getItem("Token");
+      let guid: string = sessionStorage.getItem("GUID");
+      let uid: string = sessionStorage.getItem("UserId");
+
       let hdrLine: number = 0;
       let limit = -1;
       let hdrLineVal = 0;
@@ -780,9 +790,9 @@ export class OutOrderComponent implements OnInit {
               }
             }
             //this code will be in 186 machine.
-            if(this.isDeliveryContainerPacking){ 
+           if(this.isDeliveryContainerPacking){ 
               this.showPrintConfirmDialog();
-            }
+           }
 
             // for mormal deployment we will show report dialog with otions need to uncomment in html.
             //this.showPrintConfirmDialog();
@@ -1880,7 +1890,7 @@ export class OutOrderComponent implements OnInit {
             }
 
             var dtl = {
-              UsernameForLic: localStorage.getItem("UserId"),
+              UsernameForLic: sessionStorage.getItem("UserId"),
               LineNo: o.Item.LINENUM,
               LotNo: o.Meterial.LOTNO,
               ItemCode: o.Item.ITEMCODE,
@@ -1906,14 +1916,14 @@ export class OutOrderComponent implements OnInit {
 
       let hdr = {
         //whseId changed by hari for send logged in whse
-        WhseCode: localStorage.getItem("whseId"),
+        WhseCode: sessionStorage.getItem("whseId"),
         ToWhsCode: this.toWhse,
         Type: "",
-        DiServerToken: localStorage.getItem("Token"),
-        CompanyDBId: localStorage.getItem("CompID"),
+        DiServerToken: sessionStorage.getItem("Token"),
+        CompanyDBId: sessionStorage.getItem("CompID"),
         TransType: "WHS",
-        GUID: localStorage.getItem("GUID"),
-        UsernameForLic: localStorage.getItem("UserId"),
+        GUID: sessionStorage.getItem("GUID"),
+        UsernameForLic: sessionStorage.getItem("UserId"),
         BaseEntry: this.itrCode,
         BaseType: "1250000001"
       };
@@ -1940,6 +1950,7 @@ export class OutOrderComponent implements OnInit {
               localStorage.setItem(CommonConstants.OutboundData, null);
               this.resetITRFields();
               this.responseDocEntry = data[0].SuccessNo;
+              var showITRReport =data[0].ITRPrintReport
               this.itrCode = ''
               this.orderNumber = ''
               //reset global object for itr success.====
@@ -1948,7 +1959,9 @@ export class OutOrderComponent implements OnInit {
               var customerCode = "";
               var customerName = "";
               this.outbound.CustomerData = { CustomerCode: customerCode, CustomerName: customerName, TrackingId: "", CustRefNo: "" };
-              this.showPrintConfirmDialogForITR()
+              if(showITRReport=='y' || showITRReport=='Y'){
+               this.showPrintConfirmDialogForITR()
+              }
             } else {
               this.toastr.error('', data[0].ErrorMsg);
             }

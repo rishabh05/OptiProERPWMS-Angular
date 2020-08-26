@@ -706,15 +706,15 @@ export class PhysicalCountComponent implements OnInit {
     if (!isDetailExist) {
       oAddPhysicalCountData.Detail.push({
         DocEntry: "" + this.DocEntry,
-        DiServerToken: localStorage.getItem("Token"),
+        DiServerToken: sessionStorage.getItem("Token"),
         DocNo: this.DocNo,
-        CompanyUsername: localStorage.getItem("UserId"),
+        CompanyUsername: sessionStorage.getItem("UserId"),
         // CompanyPassword: "",
-        CompanyDBId: localStorage.getItem("CompID"),
+        CompanyDBId: sessionStorage.getItem("CompID"),
         LotNo: this.batchserno,
         ItemCode: this.ItemCode,
         ItemName: this.ItemName,
-        QtyCounted: this.CountedQty,
+        QtyCounted: Number(this.CountedQty),
         BinNo: this.BinNo,
         CountType: this.DocNoDetails[index].CountType,
         InWhsQty: Number(this.QtyOnHand),
@@ -732,14 +732,14 @@ export class PhysicalCountComponent implements OnInit {
         VisOrder: this.DocNoDetails[index].VisOrder,
         Taker1Type: this.DocNoDetails[index].Taker1Type,
         Tracking: this.ItemTracking,
-        WhsCode: localStorage.getItem("whseId"),
+        WhsCode: sessionStorage.getItem("whseId"),
         isSaved: "N",
         TeamCount: this.DocNoDetails[index].TeamCount,
         IsTeamCount: this.IsteamCount,
         IndvCount: this.DocNoDetails[index].IndvCount,
-        Username: localStorage.getItem("UserId"),
-        GUID: localStorage.getItem("GUID"),
-        UsernameForLic: localStorage.getItem("UserId"),
+        Username: sessionStorage.getItem("UserId"),
+        GUID: sessionStorage.getItem("GUID"),
+        UsernameForLic: sessionStorage.getItem("UserId"),
       });
     }
 
@@ -763,21 +763,21 @@ export class PhysicalCountComponent implements OnInit {
       oAddPhysicalCountData.LotSerial.push({
         DocEntry: "" + this.DocEntry,
         DocNo: this.DocNo,
-        CompanyUsername: localStorage.getItem("UserId"),
+        CompanyUsername: sessionStorage.getItem("UserId"),
         // CompanyPassword: "",
-        CompanyDBId: localStorage.getItem("CompID"),
+        CompanyDBId: sessionStorage.getItem("CompID"),
         LotNo: this.batchserno,
         InWhsQty: this.QtyOnHand,
         ItemCode: this.ItemCode,
         ItemName: this.ItemName,
-        QtyCounted: this.CountedQty,
+        QtyCounted: Number(this.CountedQty),
         BinNo: this.BinNo,
         CountType: this.CountType,
         Tracking: this.ItemTracking,
-        WhsCode: localStorage.getItem("whseId"),
-        Username: localStorage.getItem("UserId"),
-        GUID: localStorage.getItem("GUID"),
-        UsernameForLic: localStorage.getItem("UserId")
+        WhsCode: sessionStorage.getItem("whseId"),
+        Username: sessionStorage.getItem("UserId"),
+        GUID: sessionStorage.getItem("GUID"),
+        UsernameForLic: sessionStorage.getItem("UserId")
       });
     }
 

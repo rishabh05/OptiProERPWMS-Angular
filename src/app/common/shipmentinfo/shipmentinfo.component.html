@@ -53,40 +53,40 @@
 
   <!-- Shipment grid start -->
   <kendo-grid [data]="serviceData" [skip]="skip" #gridUser [pageable]="true" [selectable]="true" [pageSize]="5">
-    <!-- <kendo-grid-column field="ShipmentId" title="ShipmentId"></kendo-grid-column> -->
     <kendo-grid-column field="ShipmentCode" title="{{'ShipmentCode'|translate}}"></kendo-grid-column>
-    <kendo-grid-column field="" headerClass="text-center" class="text-center" [width]="100" title="">
+    <kendo-grid-column field="UseContainerVal" title="{{'Use_Container'|translate}}"></kendo-grid-column>
+    <!-- <kendo-grid-column field="" headerClass="text-center" class="text-center" [width]="100" title="">
       <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
         <button type="button" class="btn btn-danger k-button btn-sm btn-icon" (mousedown)="openConfirmForDelete(dataItem.ShipmentCode, gridUser)">
           <span class="k-icon k-i-delete" role="presentation"></span>
         </button>
       </ng-template>
-    </kendo-grid-column>
+    </kendo-grid-column> -->
     <ng-template kendoGridDetailTemplate let-dataItem>
       <!-- Shipment Item Batch/Serial Info grid start -->
       <kendo-grid *ngIf="!dataItem.UseContainer" [data]="dataItem.ShipmentItems">
-        <kendo-grid-column field="OPTM_SHIPMENTID" title="{{'ShipmentId'|translate}}"></kendo-grid-column>
-        <kendo-grid-column field="OPTM_ITEMCODE" title="{{'ItemCode'|translate}}"></kendo-grid-column>
-        <kendo-grid-column field="OPTM_STATUS" title="{{'Status'|translate}}"></kendo-grid-column>
-        <kendo-grid-column field="OPTM_QTY" title="{{'Quantity'|translate}}" class="text-right">
+        <kendo-grid-column [width]="70"  field="OPTM_SHIPMENTID" title="{{'ShipmentId'|translate}}"></kendo-grid-column>
+        <kendo-grid-column [width]="120"  field="OPTM_ITEMCODE" title="{{'ItemCode'|translate}}"></kendo-grid-column>
+        <kendo-grid-column [width]="60"  field="OPTM_STATUS_VAL" title="{{'Status'|translate}}"></kendo-grid-column>
+        <kendo-grid-column [width]="60" field="OPTM_QTY" title="{{'Quantity'|translate}}" class="text-right">
           <ng-template kendoGridCellTemplate let-dataItem>
             {{dataItem.OPTM_QTY | numberFormat}}
           </ng-template>
         </kendo-grid-column>
-        <kendo-grid-column field="OPTM_QTY_FULFILLED" class="text-right" title="Filled Quantity">
+        <kendo-grid-column [width]="60" field="OPTM_QTY_FULFILLED" class="text-right" title="Filled Quantity">
           <ng-template kendoGridCellTemplate let-dataItem>
             {{dataItem.OPTM_QTY_FULFILLED | numberFormat}}
           </ng-template>
         </kendo-grid-column>
         <ng-template kendoGridDetailTemplate let-dataItem>
           <kendo-grid [data]="dataItem.ShipmentItemBatchSerial">
-            <kendo-grid-column field="OPTM_SHIPMENTID" title="{{'ShipmentId'|translate}}"></kendo-grid-column>
-            <kendo-grid-column field="OPTM_DTLLINEID" title="Line Id"></kendo-grid-column>
-            <kendo-grid-column field="OPTM_BTCHSER" class="grid-right-align-column" title="{{'BatchSerial_No'|translate}}">
+            <kendo-grid-column [width]="73" field="OPTM_SHIPMENTID" title="{{'ShipmentId'|translate}}"></kendo-grid-column>
+            <kendo-grid-column [width]="130" field="OPTM_ITEMCODE"  title="{{'ItemCode'|translate}}">
             </kendo-grid-column>
-            <kendo-grid-column field="OPTM_ITEMCODE" class="grid-right-align-column" title="{{'ItemCode'|translate}}">
+            <kendo-grid-column [width]="67" field="OPTM_BTCHSER"  title="{{'BatchSerial_No'|translate}}">
             </kendo-grid-column>
-            <kendo-grid-column field="OPTM_QTY" class="text-right" class="grid-right-align-column text-right" title="{{'Quantity'|translate}}">
+            <kendo-grid-column [width]="64" field="OPTM_DTLLINEID" title="Line Id"></kendo-grid-column>
+            <kendo-grid-column [width]="51" field="OPTM_QTY" class="text-right" class="grid-right-align-column text-right" title="{{'Quantity'|translate}}">
               <ng-template kendoGridCellTemplate let-dataItem>
                 {{dataItem.OPTM_QTY | numberFormat}}
               </ng-template>
@@ -103,17 +103,21 @@
         <kendo-grid-column field="OPTM_CONTTYPE" title="{{'ContainerType'|translate}}"></kendo-grid-column>
         <ng-template kendoGridDetailTemplate let-dataItem>
           <kendo-grid [data]="dataItem.ContainerItems">
-            <kendo-grid-column field="OPTM_ITEMCODE" title="{{'ItemCode'|translate}}"></kendo-grid-column>
-            <kendo-grid-column field="OPTM_QUANTITY" class="text-right" class="grid-right-align-column" title="{{'Quantity'|translate}}">
+            <kendo-grid-column [width]="190" field="OPTM_ITEMCODE" title="{{'ItemCode'|translate}}"></kendo-grid-column>
+            <kendo-grid-column [width]="100" field="OPTM_QUANTITY" class="text-right" class="grid-right-align-column" title="{{'Quantity'|translate}}">
               <ng-template kendoGridCellTemplate let-dataItem>
                 {{dataItem.OPTM_QUANTITY | numberFormat}}
               </ng-template>
             </kendo-grid-column>
             <ng-template kendoGridDetailTemplate let-innerItem>
               <kendo-grid [data]="innerItem.ContainerItemsBatchSerial">
-                <kendo-grid-column field="OPTM_BTCHSER" title="{{'BatchSerial_No'|translate}}"></kendo-grid-column>
-                <kendo-grid-column field="OPTM_ITEMCODE" title="{{'ItemCode'|translate}}"></kendo-grid-column>
-                <kendo-grid-column field="OPTM_QUANTITY" title="{{'Quantity'|translate}}"></kendo-grid-column>
+                <kendo-grid-column [width]="80" field="OPTM_BTCHSER" title="{{'BatchSerial_No'|translate}}"></kendo-grid-column>
+                <kendo-grid-column [width]="125" field="OPTM_ITEMCODE" title="{{'ItemCode'|translate}}"></kendo-grid-column>
+                <kendo-grid-column [width]="95" field="OPTM_QUANTITY" class="text-right" class="grid-right-align-column" title="{{'Quantity'|translate}}">
+                  <ng-template kendoGridCellTemplate let-dataItem>
+                    {{dataItem.OPTM_QUANTITY | numberFormat}}
+                  </ng-template>
+                </kendo-grid-column>
               </kendo-grid>
             </ng-template>
           </kendo-grid>

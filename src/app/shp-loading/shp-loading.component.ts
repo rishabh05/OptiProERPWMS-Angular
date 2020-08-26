@@ -45,7 +45,7 @@ export class ShpLoadingComponent implements OnInit {
     setTimeout(() => {
       this.setPickingSteps();
     }, 1000)
-
+    this.showFields = true;
   }
 
   setPickingSteps() {
@@ -93,6 +93,7 @@ export class ShpLoadingComponent implements OnInit {
             if(this.LoadContainersList.length == 0){
               this.dialogOpened = true;
             }
+            this.showFields = true;
           } else {
             this.toastr.error('', this.translate.instant("InvalidShipmentCode"));
             this.clearFields();
@@ -171,17 +172,17 @@ export class ShpLoadingComponent implements OnInit {
     }
     if (this.ScanLoadLocation === this.LoadLocation) {
       this.addScannedContainer(this.shipmentCode, this.ScanContainer);
-      this.stepIndex = -1;
-      this.nextSteptoIterate();
+      
     } else {
       this.toastr.error('', this.translate.instant("InvalidDD"));
       this.ScanLoadLocation = "";
     }
   }
 
+  showFields: boolean = true;
   addScannedContainer(OPTM_SHIPMENT_CODE, OPTM_CONTCODE) {
     this.containerData.push({
-      CompanyDBId: localStorage.getItem("CompID"),
+      CompanyDBId: sessionStorage.getItem("CompID"),
       OPTM_SHIPMENT_CODE: OPTM_SHIPMENT_CODE,
       OPTM_CONTCODE: OPTM_CONTCODE
     });
@@ -189,7 +190,11 @@ export class ShpLoadingComponent implements OnInit {
     this.ScanContainer = "";
     this.ScanLoadLocation = "";
     if (this.LoadContainersList.length == this.containerData.length) {
+      this.showFields = false
       this.toastr.success('', this.translate.instant("AllPickedCont"));
+    }else{
+      this.stepIndex = -1;
+      this.nextSteptoIterate();
     }
   }
 
@@ -348,7 +353,7 @@ export class ShpLoadingComponent implements OnInit {
       OPTM_AUTORULEID: "Manual",
       OPTM_WHSE: this.OPTM_WHSCODE,
       OPTM_BIN: this.OPTM_BINCODE,
-      OPTM_CREATEDBY: localStorage.getItem("UserId"),
+      OPTM_CREATEDBY: sessionStorage.getItem("UserId"),
       OPTM_MODIFIEDBY: '',
       Length: length,
       Width: "",
@@ -356,10 +361,10 @@ export class ShpLoadingComponent implements OnInit {
       ItemCode: "",
       NoOfPacks: "1",
       OPTM_TASKID: 0, //changed
-      CompanyDBId: localStorage.getItem("CompID"),
-      Username: localStorage.getItem("UserId"),
-      UserId: localStorage.getItem("UserId"),
-      GUID: localStorage.getItem("GUID"),
+      CompanyDBId: sessionStorage.getItem("CompID"),
+      Username: sessionStorage.getItem("UserId"),
+      UserId: sessionStorage.getItem("UserId"),
+      GUID: sessionStorage.getItem("GUID"),
       Action: "N",
       OPTM_PARENTCODE: "",
       OPTM_GROUP_CODE: 0,

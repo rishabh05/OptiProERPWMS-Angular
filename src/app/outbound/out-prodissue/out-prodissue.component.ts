@@ -1163,10 +1163,10 @@ export class OutProdissueComponent implements OnInit {
       let arrLots: Lot[] = [];
       let prodIssueModel: ProductionIssueModel = new ProductionIssueModel();
       // Hdr
-      let comDbId = localStorage.getItem('CompID');
-      let token = localStorage.getItem('Token');
-      let guid: string = localStorage.getItem('GUID');
-      let uid: string = localStorage.getItem('UserId');
+      let comDbId = sessionStorage.getItem("CompID");
+      let token = sessionStorage.getItem("Token");
+      let guid: string = sessionStorage.getItem("GUID");
+      let uid: string = sessionStorage.getItem("UserId");
       let hdrLine: number = 0;
       let limit = -1;
       let hdrLineVal = -1;
@@ -1272,7 +1272,21 @@ export class OutProdissueComponent implements OnInit {
           }
           else {
             this.showLookupLoader = false;
-            this.toastr.error('', data[0].ErrorMsg);
+            if (data[0].ErrorMsg != "") {
+              if (data[0].ErrorNo != undefined && data[0].ErrorNo == "-1") {
+                // Receipt not successful. Do not refresh the screen.
+                this.toastr.error('', data[0].ErrorMsg);
+                return;
+              } else if (data[0].ErrorNo != undefined && data[0].ErrorNo == "0") {
+                //Error in updating optipro tables. SAP succefully updated.
+                this.toastr.error('', "Error in updating optipro tables. SAP succefully updated");
+                this.resetIssueProduction();
+                this.back(1)
+              }
+               
+              // show errro.
+              this.toastr.error('', data[0].ErrorMsg);
+            }
           }
         },
         error => {

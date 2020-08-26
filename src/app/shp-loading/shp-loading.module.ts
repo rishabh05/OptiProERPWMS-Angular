@@ -9,6 +9,7 @@ import { TrnaslateLazyModule } from '../../translate-lazy.module';
 import { FormsModule } from '../../../node_modules/@angular/forms';
 import { PerfectScrollbarModule } from '../../../node_modules/ngx-perfect-scrollbar';
 import { DropDownsModule } from '../../../node_modules/@progress/kendo-angular-dropdowns';
+import { NgxTrimDirectiveModule } from '../../../node_modules/ngx-trim-directive';
 
 @NgModule({
   declarations: [ShpLoadingComponent],
@@ -21,7 +22,8 @@ import { DropDownsModule } from '../../../node_modules/@progress/kendo-angular-d
     TrnaslateLazyModule,
     PerfectScrollbarModule, 
     FormsModule,
-    DropDownsModule
+    DropDownsModule,
+    NgxTrimDirectiveModule
   ]
 })
 export class ShpLoadingModule { }

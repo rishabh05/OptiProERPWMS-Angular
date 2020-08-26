@@ -36,7 +36,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   uomSelectedVal: UOM;
   UOMList: UOM[];
   showLoader: boolean = false;
-  qty: number = undefined;
+  qty: any = undefined;
   showButton: boolean = false;
   showRecButton: boolean = false;
   recvingQuantityBinArray: RecvingQuantityBin[] = [];
@@ -124,7 +124,10 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   // caption related labels.
   Inbound_ReceiveForPO:any;
   inboundFromWhere: any = false;
+  screentitle:any=''
   @ViewChild('scanQty') scanQtyRef: ElementRef;
+
+  isGenealogyApplicable: boolean;
   constructor(private inboundService: InboundService, private commonservice: Commonservice,
     private router: Router, private toastr: ToastrService, private translate: TranslateService,
     private inboundMasterComponent: InboundMasterComponent, private productionService: ProductionService) {
@@ -145,21 +148,26 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   formatVal=''
   qtyFieldBlurFire: boolean = false;
   async onQtyBlur(scanQty,fromHtml:boolean = false) :Promise<any>{
-    if(!this.qtyFieldBlurFire){
-      if(fromHtml){
-        this.qty = scanQty.value;
-      }else{
-        this.qty = scanQty.nativeElement.value;
-      }
-     // this.qtyFieldBlurFire = true; 
-    }
+  //  this.qty = scanQty.value;
+  
+    this.qty =this.qty.toFixed(Number(localStorage.getItem("DecimalPrecision")))
+    console.log("blur format",this.qty);
+    // if(!this.qtyFieldBlurFire){
+    //   if(fromHtml){
+    //     this.qty = scanQty.value;
+    //   }else{
+    //     this.qty = scanQty.nativeElement.value;  
+    //   }
+      // this.qtyFieldBlurFire = true;
+    // }
+    return '';
     
-    return this.qtyFieldBlurFire; 
   }
   onQtyChange(scanQty){
     this.qty = scanQty.value
   }
   ngOnInit() {
+    this.IsGeneologyApplicable()
 
     var precision = localStorage.getItem("DecimalPrecision");
     this.formatVal = 'n'+precision;
@@ -289,7 +297,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
   GetDefaultBinOrBinWithQtyForProduction() {
     this.commonservice.GetDefaultBinOrBinWithQtyForProduction(this.ItemCode,
-      localStorage.getItem("whseId"), this.receiptData.status).subscribe(
+      sessionStorage.getItem("whseId"), this.receiptData.status).subscribe(
         data => {
           if (data != null) {
 
@@ -435,7 +443,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     this.showLoader = true;
     var result = false;
     if (localStorage.getItem('FromReceiptProd') == 'true') {
-      await this.inboundService.isBinExistForProduction(localStorage.getItem("whseId"), this.RecvbBinvalue, this.receiptData.status).then(
+      await this.inboundService.isBinExistForProduction(sessionStorage.getItem("whseId"), this.RecvbBinvalue, this.receiptData.status).then(
         (data: any) => {
           this.showLoader = false;
           console.log("inside inboundService.isBinExistForProduction");
@@ -484,7 +492,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         }
       );
     } else {
-      await this.inboundService.binChange(localStorage.getItem("whseId"), this.RecvbBinvalue).then(
+      await this.inboundService.binChange(sessionStorage.getItem("whseId"), this.RecvbBinvalue).then(
         (data: any) => {
           console.log("inside binChange");
           this.showLoader = false;
@@ -656,7 +664,9 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
 
     if (localStorage.getItem('FromReceiptProd') == 'true') {
+      if(this.isGenelogyEnabled=="Y"){
       this.checkAndValidateSerial(lotTemplateVar, value, rowindex);
+      }
     } else {
 
       let result = this.recvingQuantityBinArray.find(element => element.LotNumber == value);
@@ -719,7 +729,30 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       }
     );
   }
-
+  IsGeneologyApplicable() {
+    this.inboundService.IsGenealogyApplicable().subscribe(
+      (data: any) => {
+        console.log(data);
+        if (data!= undefined) {
+          this.isGenelogyEnabled = data;
+        } else if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+          this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+            this.translate.instant("CommonSessionExpireMsg"));
+          return;
+        }
+      
+      },
+      error => {
+        console.log("Error: ", error);
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
   async addQuantity() {
     var result = await this.validateBeforeSubmit();
     this.isValidateCalled = false;
@@ -728,7 +761,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    var result1 = await  this.onQtyBlur(this.scanQtyRef)
+   // var result1 = await  this.onQtyBlur(this.scanQtyRef)
 
     if (this.qty == 0 || this.qty == undefined) {
      this.toastr.error('', this.translate.instant("Inbound_EnterQuantityErrMsg"));
@@ -778,25 +811,26 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       }
       this.updateReceiveQty();
     } else {
-
       if (!this.fromReceiptProduction) {
         this.getAutoLot(this.openPOLineModel[0].ITEMCODE, this.qty);
       } else {
-        this.AddUpdateBatSerNo(null);
+        if(this.isGenelogyEnabled!="Y"){
+          this.getAutoLot(this.openPOLineModel[0].ITEMCODE, this.qty);
+        }else{
+          this.AddUpdateBatSerNo(null);
+        }
       }
     }
   }
-
+  isGenelogyEnabled :any = "N";
   AddUpdateBatSerNo(autoLots: any[]) {
     if (this.radioSelected == 0) {
       this.MfrSerial = this.ScanInputs;
     } else if (this.radioSelected == 1) {
       this.searlNo = this.ScanInputs;
     }
-    // let autoLots = JSON.parse(localStorage.getItem("primaryAutoLots"));
     if (this.isSerial) {
       while (this.qty > 0 && this.qty != 0) {
-
         if (autoLots != null && autoLots != null && autoLots.length > 0 && autoLots[0].AUTOLOT == "Y") {
           this.LastSerialNumber = [];
           this.LineId = [];
@@ -1163,7 +1197,6 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
     if (this.fromReceiptProduction) {
       //prepare model for receipt from production
-
       this.saveReceiptProdData(this.receiptData.status);
       this.screenBackEvent.emit('save');
     } else {
@@ -1255,43 +1288,6 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     }
     localStorage.setItem("GoodsReceiptModel", JSON.stringify(saveRecProdData));
   }
-
-
-  submitProductionReport(requestData: any) {
-    this.showLoader = true;
-    this.productionService.submitProductionRecepit(requestData).subscribe(
-      data => {
-        this.showLoader = false;
-        if (data != undefined) {
-          if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
-            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
-              this.translate.instant("CommonSessionExpireMsg"));
-            return;
-          }
-          //check and update response for entered serial no.
-          if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
-            // this.toastr.success( this.translate.instant("FGRSuccessMessage") +data[0].SuccessNo);
-            this.toastr.success('', this.translate.instant("ProdReceipt_FGRSuccessMessage") + " " + data[0].SuccessNo);
-            //  this.resetAfterSubmit();
-          } else {
-            if (data[0].ErrorMsg != "") {
-              // show errro.
-              this.toastr.error('', data[0].ErrorMsg);
-            }
-          }
-        }
-      },
-      error => {
-        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
-        }
-        else {
-          this.toastr.error('', error);
-        }
-      },
-    );
-  }
-
 
   prepareCommonData() {
     var oSubmitPOLotsObj: any = {};
@@ -1629,21 +1625,21 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
     oSubmitPOLotsObj.POReceiptLots.push({
       OPTM_TYPE:this.inboundFromWhere,
-      DiServerToken: localStorage.getItem("Token"),
+      DiServerToken: sessionStorage.getItem("Token"),
       PONumber: this.Ponumber,
       DocEntry: this.DocEntry,
-      CompanyDBId: localStorage.getItem("CompID"),
+      CompanyDBId: sessionStorage.getItem("CompID"),
       LineNo: this.openPOLineModel[0].LINENUM,
       ShipQty: this.openPOLineModel[0].RPTQTY.toString(),
       OpenQty: this.openPOLineModel[0].OPENQTY.toString(),
-      WhsCode: localStorage.getItem("whseId"),
+      WhsCode: sessionStorage.getItem("whseId"),
       Tracking: this.openPOLineModel[0].TRACKING,
       ItemCode: this.openPOLineModel[0].ITEMCODE,
       LastSerialNumber: 0,
       Line: Number(localStorage.getItem("Line")),
-      GUID: localStorage.getItem("GUID"),
+      GUID: sessionStorage.getItem("GUID"),
       UOM: this.uomSelectedVal.UomEntry,
-      UsernameForLic: localStorage.getItem("UserId")
+      UsernameForLic: sessionStorage.getItem("UserId")
 
       //------end Of parameter For License----
     });
@@ -1989,7 +1985,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   public GetTargetBins() {
     this.targetBinClick = false;
     this.showLoader = true;
-    this.inboundService.GetTargetBins('N', localStorage.getItem("whseId")).subscribe(
+    this.inboundService.GetTargetBins('N', sessionStorage.getItem("whseId")).subscribe(
       (data: any) => {
         this.showLoader = false;
         // console.log(data);
@@ -2552,10 +2548,10 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       // nothing to do.
     } else {
       itemsData.push({
-        DiServerToken: localStorage.getItem("Token"),
-        CompanyDBId: localStorage.getItem("CompID"),
+        DiServerToken: sessionStorage.getItem("Token"),
+        CompanyDBId: sessionStorage.getItem("CompID"),
         Transaction: this.Transaction,
-        RECUSERID: localStorage.getItem("UserId"),
+        RECUSERID: sessionStorage.getItem("UserId"),
         ONLINEPOSTING: this.ONLINEPOSTING,
         BATCHNO: this.receiptData.OrderNo,
         LineNo: 0,//abhi k lea kea h need to check
@@ -2572,9 +2568,9 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         WhsCode: this.receiptData.WhsCode,
         Tracking: this.receiptData.TRACKING,
         IsPalletExist: this.isPalletizationEnable,
-        LoginId: localStorage.getItem("UserId"),
-        GUID: localStorage.getItem("GUID"),
-        UsernameForLic: localStorage.getItem("UserId"),
+        LoginId: sessionStorage.getItem("UserId"),
+        GUID: sessionStorage.getItem("GUID"),
+        UsernameForLic: sessionStorage.getItem("UserId"),
         WONO: this.receiptData.OrderNo
       });
     }
@@ -2587,10 +2583,11 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       // will return empty array
     } else {
       rejectItemsData.push({
-        DiServerToken: localStorage.getItem("Token"),
-        CompanyDBId: localStorage.getItem("CompID"),
+        DiServerToken: sessionStorage.getItem("Token"),
+        CompanyDBId: sessionStorage.getItem("CompID"),
         Transaction: this.Transaction,
-        RECUSERID: localStorage.getItem("UserId"),
+        RECUSERID: sessionStorage.getItem("UserId"),
+        UsernameForLic: sessionStorage.getItem("UserId"),
         ONLINEPOSTING: this.ONLINEPOSTING,
         BATCHNO: this.receiptData.OrderNo,
         LineNo: 1,//abhi k lea kea h need to check
@@ -2604,7 +2601,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         FGQTYTOPOST: this.receiptData.ORIGINALACTUALQUANTITY,//abhi k lea need to check
         Tracking: this.receiptData.TRACKING,
         IsPalletExist: this.isPalletizationEnable,
-        LoginId: localStorage.getItem("UserId"),
+        LoginId: sessionStorage.getItem("UserId"),
         RejectQTY: this.receiptData.OPENQTY,
         RecRjctedQty: "Y",
         Quantity: totalAcceptedRejectedQty,
@@ -2880,21 +2877,21 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
    
           this.addToGRPOArray.POReceiptLots.push({
             OPTM_TYPE:this.oSavedPOLotsArray.POReceiptLots[i].OPTM_TYPE,
-            DiServerToken: localStorage.getItem("Token"),
+            DiServerToken: sessionStorage.getItem("Token"),
             PONumber: this.oSavedPOLotsArray.POReceiptLots[i].PONumber,
             DocEntry: this.oSavedPOLotsArray.POReceiptLots[i].DocEntry,
-            CompanyDBId: localStorage.getItem("CompID"),
+            CompanyDBId: sessionStorage.getItem("CompID"),
             LineNo: this.oSavedPOLotsArray.POReceiptLots[i].LineNo,
             ShipQty: this.oSavedPOLotsArray.POReceiptLots[i].ShipQty,
             OpenQty: this.oSavedPOLotsArray.POReceiptLots[i].OpenQty,
-            WhsCode: localStorage.getItem("whseId"),
+            WhsCode: sessionStorage.getItem("whseId"),
             Tracking: this.oSavedPOLotsArray.POReceiptLots[i].Tracking,
             ItemCode: this.oSavedPOLotsArray.POReceiptLots[i].ItemCode,
             LastSerialNumber: 0,
             Line: this.oSavedPOLotsArray.POReceiptLots[i].Line,
-            GUID: localStorage.getItem("GUID"),
+            GUID: sessionStorage.getItem("GUID"),
             UOM: this.oSavedPOLotsArray.POReceiptLots[i].UOM,
-            UsernameForLic: localStorage.getItem("UserId")
+            UsernameForLic: sessionStorage.getItem("UserId")
           });
 
           for (var j = 0; j < this.oSavedPOLotsArray.POReceiptLotDetails.length; j++) {

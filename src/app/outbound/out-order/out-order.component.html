@@ -161,7 +161,8 @@
                     </div>
                 </div>
             </div>
-
+           
+           <div *ngIf="fromITR==false">
             <div class="row mt-3">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
                     <div class="form-group row">
@@ -227,7 +228,7 @@
 
                 </div>
             </div>
-
+        </div>
 
 
             <div>
@@ -472,15 +473,15 @@
     <div class="px-3">
         <div class="form-group row">
             <div class="input-group input-group-sm">
-                <!-- <button class="btn btn-primary k-button btn-sm btn-icon-with-text" type="button"
+                <button *ngIf="ShowPickListReport" class="btn btn-primary k-button btn-sm btn-icon-with-text" type="button"
                     (click)="printOptionsClick(13)">{{'PickList'|translate}}
-                </button> -->
-                <button class="btn btn-primary k-button btn-sm btn-icon-with-text" type="button"
+                </button>
+                <button *ngIf="ShowPackListReport" class="btn btn-primary k-button btn-sm btn-icon-with-text" type="button"
                     (click)="printOptionsClick(12)">{{'PackList'|translate}}
                 </button>
-                <!-- <button class="btn btn-primary k-button btn-sm btn-icon-with-text" type="button"
+                <button *ngIf="ShowBOLReport" class="btn btn-primary k-button btn-sm btn-icon-with-text" type="button"
                     (click)="printOptionsClick(11)">{{'BOL'|translate}}
-                </button> -->
+                </button>
             </div>
         </div> 
     </div>

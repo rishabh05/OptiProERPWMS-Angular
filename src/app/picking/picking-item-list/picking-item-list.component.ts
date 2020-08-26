@@ -80,7 +80,7 @@ export class PickingItemListComponent implements OnInit {
 
   ngOnInit() {
     this.picktaskService.clearLocaStorage();
-    this.compId = localStorage.getItem("CompID");
+    this.compId = sessionStorage.getItem("CompID");
     this.ShipDetail = JSON.parse(localStorage.getItem("ShipDetail"));
     this.shipmentno = this.translate.instant("PickListCode") + ": " + this.ShipDetail.OPTM_PICKLIST_CODE;
     this.getPickTaskList(this.ShipDetail.OPTM_TASK_CODE, this.ShipDetail.OPTM_PICKLIST_ID);

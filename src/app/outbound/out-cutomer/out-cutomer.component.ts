@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { OutboundService } from 'src/app/services/outbound.service';
 import { ToastrService } from 'ngx-toastr';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { Commonservice } from 'src/app/services/commonservice.service';
 import { Router } from '@angular/router';
 import { OutboundData, CurrentOutBoundData } from 'src/app/models/outbound/outbound-data';
@@ -54,16 +54,27 @@ export class OutCutomerComponent implements OnInit {
   @ViewChild('scanTracking') scanTracking;
   public pageTitle: String = "";
   showShipmentInfo: boolean = false;
-
+  ShowPickListReport: boolean = true;
+  ShowPackListReport: boolean = true;
+  ShowBOLReport: boolean = true;
   showPDFLoading: boolean = false;
+  shipmentLinesArray = [];
+
   constructor(private inboundService: InboundService, private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) {
-    let option = localStorage.getItem("deliveryOptionType");
-    this.deliveryOptionType = option;
-    if (this.deliveryOptionType == '1') {
-      this.pageTitle = this.translate.instant("Outbound_Delivery")
-    } else if (this.deliveryOptionType == '2') {
-      this.pageTitle = this.translate.instant("Outbound_Delivery_through_Shipment")
-    }
+
+    let userLang = navigator.language.split('-')[0];
+    userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
+    translate.use(userLang);
+    translate.onLangChange.subscribe((event: LangChangeEvent) => {
+      let option = localStorage.getItem("deliveryOptionType");
+      this.deliveryOptionType = option;
+      if (this.deliveryOptionType == '1') {
+        this.pageTitle = this.translate.instant("Outbound_Delivery")
+      } else if (this.deliveryOptionType == '2') {
+        this.pageTitle = this.translate.instant("Outbound_Delivery_through_Shipment")
+      }
+      this.initializeShipmentLines();
+    });
   }
 
   ngOnInit() {
@@ -84,6 +95,24 @@ export class OutCutomerComponent implements OnInit {
       this.setShipmentPageInfo();
     }
     this.updateSalesOrderList();
+    this.ShowPickListReport = (JSON.parse(sessionStorage.getItem('ConfigData'))).ShowPickListReport;
+    this.ShowPackListReport = (JSON.parse(sessionStorage.getItem('ConfigData'))).ShowPackListReport;
+    this.ShowBOLReport = (JSON.parse(sessionStorage.getItem('ConfigData'))).ShowBOLReport;
+    this.initializeShipmentLines();
+  }
+
+  initializeShipmentLines() {
+    this.shipmentLinesArray = [
+      { "Value": 1, "Name": this.translate.instant("CStatusNew") },
+      { "Value": 2, "Name": this.translate.instant("Part_Allocated") },
+      { "Value": 3, "Name": this.translate.instant("Allocated") },
+      { "Value": 4, "Name": this.translate.instant("Pick_Generated") },
+      { "Value": 5, "Name": this.translate.instant("Pick_Released") },
+      { "Value": 6, "Name": this.translate.instant("Part_Picked") },
+      { "Value": 7, "Name": this.translate.instant("Picked") },
+      { "Value": 8, "Name": this.translate.instant("CShippedNew") },
+      { "Value": 9, "Name": this.translate.instant("CCancelledNew") }
+    ];
   }
 
   updateSalesOrderList() {
@@ -561,6 +590,7 @@ export class OutCutomerComponent implements OnInit {
     this.customerCode = '';
     this.showLookup = false;
     this.shipmentId = '';
+    this.dockDoorCode = ""
   }
 
   isDeliveryContainerPacking: boolean = false;
@@ -585,10 +615,10 @@ export class OutCutomerComponent implements OnInit {
       let arrSODETAIL: SODETAIL[] = [];
       let deliveryToken: DeliveryToken = new DeliveryToken();
       // Hdr
-      let comDbId = localStorage.getItem('CompID');
-      let token = localStorage.getItem('Token');
-      let guid: string = localStorage.getItem('GUID');
-      let uid: string = localStorage.getItem('UserId');
+      let comDbId = sessionStorage.getItem("CompID");
+      let token = sessionStorage.getItem("Token");
+      let guid: string = sessionStorage.getItem("GUID");
+      let uid: string = sessionStorage.getItem("UserId");
       let hdrLine: number = 0;
       let limit = -1;
       let hdrLineVal = 0;
@@ -883,7 +913,7 @@ export class OutCutomerComponent implements OnInit {
     if (this.orderNumber == "" || this.orderNumber == undefined) {
       return;
     }
-    let whseId = localStorage.getItem("whseId");
+    let whseId = sessionStorage.getItem("whseId");
     this.showLookupLoader = true;
     var result = false
     await this.outboundservice.GetCustomerDetailFromSO("", this.orderNumber, whseId).then(
@@ -959,7 +989,7 @@ export class OutCutomerComponent implements OnInit {
   }
 
   public openOrderLookup() {
-    let whseId = localStorage.getItem("whseId");
+    let whseId = sessionStorage.getItem("whseId");
     this.outboundservice.getCustomerSOList(this.customerCode, "", whseId).subscribe(
       resp => {
         if (resp != null && resp.length > 0) {
@@ -1070,7 +1100,7 @@ export class OutCutomerComponent implements OnInit {
   public getShipmentList() {
     this.showLookup = false;
     this.showLookupLoader = true;
-    this.outboundservice.getShipmentIdList().subscribe(
+    this.outboundservice.getShipmentIdList(this.customerCode, this.dockDoorCode).subscribe(
       resp => {
         this.showLookupLoader = false;
         if (resp != null && resp != undefined && resp.length > 0) {
@@ -1128,16 +1158,22 @@ export class OutCutomerComponent implements OnInit {
 
             this.dockDoorCode = resp.ItemHeader[0].OPTM_DOCKDOORID;
             this.dockDoorFromShipment = resp.ItemHeader[0].OPTM_DOCKDOORID;
+            var useContainer = resp.ItemHeader[0].OPTM_USE_CONTAINER;
+            if (useContainer == "Y" || useContainer == "y") {
+              this.useContainer = true;
+            } else {
+              this.useContainer = false;
+            }
             this.parseAndGenerateDeliveryDataFromShipment(resp);
             this.getShipmentDataItemDetails();
           } else {
             this.shipmentId = "";
-            this.toastr.error('', this.translate.instant("ShipmentNotAvailable"));
+            this.toastr.error('', this.translate.instant("InvalidShipmentCode"));
           }
 
 
         } else {
-          this.toastr.error('', this.translate.instant("ShipmentNotAvailable"));
+          this.toastr.error('', this.translate.instant("InvalidShipmentCode"));
           this.shipmentId = "";
           // this.scanShipmentId.nativeElement.focus()
         }
@@ -1170,6 +1206,7 @@ export class OutCutomerComponent implements OnInit {
       CustRefNo: "", ShipmentId: ""
     };
     outbound.TempMeterials = [];
+    this.dockDoorCode = ""
   }
 
   parseAndGenerateDeliveryDataFromShipment(shipmentResponse: any) {
@@ -1316,6 +1353,7 @@ export class OutCutomerComponent implements OnInit {
   ContainerItems: any = [];
   ContainerBatchSerial: any = [];
   ShipmentInfoData: any;
+
   public getShipmentDataItemDetails(showLookup: any = true) {
     if (this.shipmentId == undefined || this.shipmentId == null ||
       this.shipmentId == "") {
@@ -1334,18 +1372,17 @@ export class OutCutomerComponent implements OnInit {
             this.showLookupLoader = false;
             return;
           }
-          // if (showLookup) {
-          //   this.showShipmentInfo = true;
-          // } else {
-          //   this.showShipmentInfo = false;
-          // }        
 
           this.ShipmentHDR.push({
             ShipmentCode: this.shipmentId,
             ShipmentId: this.shipmentId,
-            UseContainer: this.useContainer
+            UseContainer: this.useContainer,
+            UseContainerVal: this.useContainer == true ? "Y" : "N"
           })
           this.ShipmentItems = resp.ShipmentItems;
+          for (var i = 0; i < resp.ShipmentItems.length; i++) {
+            this.ShipmentItems[i].OPTM_STATUS_VAL = this.shipmentLinesArray[Number(this.ShipmentItems[i].OPTM_STATUS)-1].Name
+          }
           this.ShipmentBtchSer = resp.ShipmentBtchSer;
           this.ContainerItems = resp.ContainerItems;
           this.ContainerHeader = resp.ContainerHeader;
@@ -1367,6 +1404,13 @@ export class OutCutomerComponent implements OnInit {
           this.ContainerHeader = this.setContainerItemBatchSerials(this.ContainerHeader, this.ContainerBatchSerial);
           this.ShipmentHDR[this.ShipmentHDR.length - 1]["ContainerHeader"] = this.ContainerHeader;
           this.ShipmentHDR[this.ShipmentHDR.length - 1]["ShipmentItems"] = this.ShipmentItems;
+
+          let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+          if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
+            this.outbound = JSON.parse(outboundData);
+          }
+          this.outbound.ShipmentHDR = this.ShipmentHDR;
+          localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
         } else {
           this.toastr.error('', this.translate.instant("ShipmentNotAvailable"));
         }
@@ -1381,6 +1425,11 @@ export class OutCutomerComponent implements OnInit {
 
   showShipments() {
     this.showShipmentInfo = true;
+    let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+    if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
+      this.outbound = JSON.parse(outboundData);
+    }
+    this.ShipmentHDR = this.outbound.ShipmentHDR;
     this.ShipmentInfoData = this.ShipmentHDR;
   }
 
@@ -1477,8 +1526,12 @@ export class OutCutomerComponent implements OnInit {
     if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
       this.outbound = JSON.parse(outboundData);
     }
-    let result = this.outbound.DeleiveryCollection.filter(e=> e.Item.ShipmentCode == shipmentCode)
-    let index = this.outbound.DeleiveryCollection.findIndex(e=> e.Item.ShipmentCode == shipmentCode)
+    if (this.outbound.ShipmentHDR != undefined) {
+      let removeIndex = this.outbound.ShipmentHDR.findIndex(e => e.Item.ShipmentCode == shipmentCode)
+      this.outbound.ShipmentHDR.splice(removeIndex, 1);
+    }
+    let result = this.outbound.DeleiveryCollection.filter(e => e.Item.ShipmentCode == shipmentCode)
+    let index = this.outbound.DeleiveryCollection.findIndex(e => e.Item.ShipmentCode == shipmentCode)
     this.outbound.DeleiveryCollection.splice(index, result.length);
     localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
     if (this.outbound.DeleiveryCollection !== undefined && this.outbound.DeleiveryCollection !== null && this.outbound.DeleiveryCollection.length > 0) {

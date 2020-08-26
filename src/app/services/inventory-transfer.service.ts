@@ -22,22 +22,22 @@ export class InventoryTransferService {
   }
 
   getToWHS(): Observable<any> {
-    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), ItemCode: '', WhsCode: localStorage.getItem("whseId"), UserId: localStorage.getItem("UserId"), GUID: localStorage.getItem("GUID"), UsernameForLic: localStorage.getItem("UserId") }]) };
+    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), ItemCode: '', WhsCode: sessionStorage.getItem("whseId"), UserId: sessionStorage.getItem("UserId"), GUID: sessionStorage.getItem("GUID"), UsernameForLic: sessionStorage.getItem("UserId") }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetToWHS", jObject, this.commonService.httpOptions);
   }
 
   getItemCodeList(): Observable<any> {
-    var jObject = { ITEMCODE: '', ITEMNAME: '', WHSCODE: localStorage.getItem("whseId"), CompanyDBName: localStorage.getItem("CompID") }
+    var jObject = { ITEMCODE: '', ITEMNAME: '', WHSCODE: sessionStorage.getItem("whseId"), CompanyDBName: sessionStorage.getItem("CompID") }
     return this.httpclient.post(this.config_params.service_url + "/api/GoodsIssue/AllItemLookup", jObject, this.commonService.httpOptions);
   }
 
   getBinListWithoutBinForNonTrack(ItemCode: string, lotNo: string, BINNO: string): Observable<any> {
-    var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), ITEMCODE: ItemCode, LOTNO: lotNo, WHSCODE: localStorage.getItem("whseId"), BINNO: BINNO, SUPPORTTRX: '67' }]) };
+    var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), ITEMCODE: ItemCode, LOTNO: lotNo, WHSCODE: sessionStorage.getItem("whseId"), BINNO: BINNO, SUPPORTTRX: '67' }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodsIssue/GetLotWithoutBinNItemCode", jObject, this.commonService.httpOptions);
   }
 
   getLotWithoutBinItemCode(ItemCode: string, lotNo: string, BINNO: string): Observable<any> {
-    var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), ITEMCODE: ItemCode, LOTNO: lotNo, WHSCODE: localStorage.getItem("whseId"), BINNO: BINNO, SUPPORTTRX: '67', LOTISSUEMETHOD: '' }]) };
+    var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), ITEMCODE: ItemCode, LOTNO: lotNo, WHSCODE: sessionStorage.getItem("whseId"), BINNO: BINNO, SUPPORTTRX: '67', LOTISSUEMETHOD: '' }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodsIssue/GetLotWithoutBinNItemCode", jObject, this.commonService.httpOptions);
   }
 
@@ -52,24 +52,24 @@ export class InventoryTransferService {
   }
 
   isWHsExists(toWhs: string): Observable<any> {
-    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), ItemCode: '', WhsCode: toWhs }]) };
+    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), ItemCode: '', WhsCode: toWhs }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsWhsExist", jObject, this.commonService.httpOptions);
   }
 
   GetItemCode(itemCode: string): Promise<any> {
-    var jObject = { ITEMCODE: JSON.stringify([{ COMPANYDBNAME: localStorage.getItem("CompID"), ITEMCODE: itemCode, WHSCODE: localStorage.getItem("whseId"),
-    GUID: localStorage.getItem("GUID"), UsernameForLic: localStorage.getItem("UserId") }]) };
+    var jObject = { ITEMCODE: JSON.stringify([{ COMPANYDBNAME: sessionStorage.getItem("CompID"), ITEMCODE: itemCode, WHSCODE: sessionStorage.getItem("whseId"),
+    GUID: sessionStorage.getItem("GUID"), UsernameForLic: sessionStorage.getItem("UserId") }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodsReceipt/GetItemCode", jObject, this.commonService.httpOptions).toPromise();
   }
 
   getItemInfo(itemCode: string): Observable<any> {
-    var jObject = { ITEMCODE: JSON.stringify([{ CompanyDbName: localStorage.getItem("CompID"), ITEMCODE: itemCode, WHSCODE: localStorage.getItem("whseId") }]) };
+    var jObject = { ITEMCODE: JSON.stringify([{ CompanyDbName: sessionStorage.getItem("CompID"), ITEMCODE: itemCode, WHSCODE: sessionStorage.getItem("whseId") }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodsReceipt/GetItemInfo", jObject, this.commonService.httpOptions);
   }
 
 
   getLotInfo(FromBin: string, Item: string, Lot: string): Promise<any> {
-    var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), WHSCODE:  localStorage.getItem("whseId"), BINNO: FromBin, ITEMCODE: Item, LOTNO: Lot, DOCNUM: '', }]) };
+    var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), WHSCODE:  sessionStorage.getItem("whseId"), BINNO: FromBin, ITEMCODE: Item, LOTNO: Lot, DOCNUM: '', }]) };
     if (Item == "" && FromBin == "") {
       return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetLotWithoutBinNItemCode", jObject, this.commonService.httpOptions).toPromise();
     }
@@ -87,7 +87,7 @@ export class InventoryTransferService {
 
 
   getLotList(oFromWhs: string, FromBin: string, Item: string, Lot: string): Observable<any> {
-    var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), WHSCODE: oFromWhs, BINNO: FromBin, ITEMCODE: Item, DOCNUM: '', SUPPORTEDTRX: 67 }]) };
+    var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), WHSCODE: oFromWhs, BINNO: FromBin, ITEMCODE: Item, DOCNUM: '', SUPPORTEDTRX: 67 }]) };
     if (Item == "" && FromBin == "") {
       return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetLotListWithoutBinNItemCodeforWhsTransfer", jObject, this.commonService.httpOptions);
     }
@@ -106,11 +106,11 @@ export class InventoryTransferService {
 
   getFromBins(ItemTracking: string, FromBin: string, Item: string, Lot: string): Observable<any> {
     if (ItemTracking == "N") {
-      var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), ITEMCODE: Item, LOTNO: Lot, WHSCODE: localStorage.getItem("whseId"), BINNO: FromBin, SUPPORTTRX: '67' }]) };
+      var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), ITEMCODE: Item, LOTNO: Lot, WHSCODE: sessionStorage.getItem("whseId"), BINNO: FromBin, SUPPORTTRX: '67' }]) };
       return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetBinListWithoutBinForNonTrack", jObject, this.commonService.httpOptions);
     }
     else {
-      var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), ITEMCODE: Item, LOTNO: Lot, WHSCODE: localStorage.getItem("whseId"), BINNO: FromBin, SUPPORTTRX: '67', LOTISSUEMETHOD: '' }]) };
+      var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), ITEMCODE: Item, LOTNO: Lot, WHSCODE: sessionStorage.getItem("whseId"), BINNO: FromBin, SUPPORTTRX: '67', LOTISSUEMETHOD: '' }]) };
       return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetLotWithoutBinWise", jObject, this.commonService.httpOptions);
     }
   }
@@ -118,42 +118,42 @@ export class InventoryTransferService {
 
   isFromBinExists(ItemTracking: string, FromBin: string, Item: string, Lot: string): Promise<any> {
     if (ItemTracking == "N") {
-      var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), ITEMCODE: Item, LOTNO: Lot, WHSCODE: localStorage.getItem("whseId"), BINNO: FromBin, SUPPORTTRX: '67' }]) };
+      var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), ITEMCODE: Item, LOTNO: Lot, WHSCODE: sessionStorage.getItem("whseId"), BINNO: FromBin, SUPPORTTRX: '67' }]) };
       return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetBinForNonTrackItem", jObject, this.commonService.httpOptions).toPromise();
     }
     else {
-      var jObject1 = { WhsCode: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), BinCode: FromBin, ItemCode: '', WhsCode: localStorage.getItem("whseId")}]) };
+      var jObject1 = { WhsCode: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), BinCode: FromBin, ItemCode: '', WhsCode: sessionStorage.getItem("whseId")}]) };
       return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsBinExist", jObject1, this.commonService.httpOptions).toPromise();
     }
   }
 
   isToBinExist(ToBin: string, oToWhs: string): Promise<any> {
-    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), BinCode: ToBin, ItemCode: '', WhsCode: oToWhs}]) };
+    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), BinCode: ToBin, ItemCode: '', WhsCode: oToWhs}]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsBinExist", jObject, this.commonService.httpOptions).toPromise();
   }
 
   getToBin(fromBin: string, oToWhs: string): Observable<any> {
-    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), ItemCode: '', WhsCode: oToWhs, FromBin: fromBin}]) };
+    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), ItemCode: '', WhsCode: oToWhs, FromBin: fromBin}]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetToBIN", jObject, this.commonService.httpOptions);
   }
 
   GetDefaultBinOrBinWithQty(itemCode: string, oToWhs: string): Observable<any> {
-    var jObject = { WhsCode: JSON.stringify([{ ItemCode: itemCode, WhseCode: oToWhs, CompanyDBId: localStorage.getItem("CompID") }]) };
+    var jObject = { WhsCode: JSON.stringify([{ ItemCode: itemCode, WhseCode: oToWhs, CompanyDBId: sessionStorage.getItem("CompID") }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetDefaultBinOrBinWithQty", jObject, this.commonService.httpOptions);
   }  
 
   GetToBinForWhsTrnsfr(itemCode: string, oToWhs: string): Observable<any> {
-    var jObject = { WhsCode: JSON.stringify([{ ItemCode: itemCode, WhseCode: oToWhs, CompanyDBId: localStorage.getItem("CompID") }]) };
+    var jObject = { WhsCode: JSON.stringify([{ ItemCode: itemCode, WhseCode: oToWhs, CompanyDBId: sessionStorage.getItem("CompID") }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetToBinForWhsTrnsfr", jObject, this.commonService.httpOptions);
   }  
 
   getDefaultBin(itemCode: string, oToWhs: string): Observable<any> {
-    var jObject = { DEFAULTSYSTEMBIN: JSON.stringify([{ ITEMCODE: itemCode, WHSCODE: oToWhs, CompanyDBName: localStorage.getItem("CompID") }]) };
+    var jObject = { DEFAULTSYSTEMBIN: JSON.stringify([{ ITEMCODE: itemCode, WHSCODE: oToWhs, CompanyDBName: sessionStorage.getItem("CompID") }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/WhsTrans/GetDefaultBinFromWarehouse", jObject, this.commonService.httpOptions);
   }
 
   GetInventoryDocuments(fromBin: string, oToWhs: string): Observable<any> {
-    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), ItemCode: '', WhsCode: oToWhs, FromBin: fromBin}]) };
+    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), ItemCode: '', WhsCode: oToWhs, FromBin: fromBin}]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetInventoryDocuments", jObject, this.commonService.httpOptions);
   }
 
@@ -161,9 +161,9 @@ export class InventoryTransferService {
     var jObject = { 
       DEFAULTSYSTEMBIN: JSON.stringify([
         { 
-          CompanyDBId: localStorage.getItem("CompID"), 
-          USERCODE: localStorage.getItem("UserId"), 
-          WHSCODE: localStorage.getItem("whseId"),
+          CompanyDBId: sessionStorage.getItem("CompID"), 
+          USERCODE: sessionStorage.getItem("UserId"), 
+          WHSCODE: sessionStorage.getItem("whseId"),
           DocEntry: ""
         }]) 
       };
@@ -174,9 +174,9 @@ export class InventoryTransferService {
     var jObject = { 
       DEFAULTSYSTEMBIN: JSON.stringify([
         { 
-          CompanyDBId: localStorage.getItem("CompID"), 
-          USERCODE: localStorage.getItem("UserId"), 
-          WHSCODE: localStorage.getItem("whseId"),
+          CompanyDBId: sessionStorage.getItem("CompID"), 
+          USERCODE: sessionStorage.getItem("UserId"), 
+          WHSCODE: sessionStorage.getItem("whseId"),
           DocEntry: entryDoc
         }]) 
       };
@@ -187,9 +187,9 @@ export class InventoryTransferService {
     var jObject = { 
       DEFAULTSYSTEMBIN: JSON.stringify([
         { 
-          CompanyDBId: localStorage.getItem("CompID"), 
-          USERCODE: localStorage.getItem("UserId"), 
-          WHSCODE: localStorage.getItem("whseId"),
+          CompanyDBId: sessionStorage.getItem("CompID"), 
+          USERCODE: sessionStorage.getItem("UserId"), 
+          WHSCODE: sessionStorage.getItem("whseId"),
           DocEntry: itrCode
         }]) 
       };
@@ -200,8 +200,8 @@ export class InventoryTransferService {
       var jObject = { 
         GETITEMS: JSON.stringify([
           { 
-            WHSECODE: localStorage.getItem("whseId"), 
-            CompanyDBId: localStorage.getItem("CompID") 
+            WHSECODE: sessionStorage.getItem("whseId"), 
+            CompanyDBId: sessionStorage.getItem("CompID") 
           }]) 
         };
     return this.httpclient.post(this.config_params.service_url + "/api/WhsTrans/GetItemListForWhseTrnsfr", jObject, this.commonService.httpOptions);
@@ -216,23 +216,23 @@ export class InventoryTransferService {
 
   isFromBinExistsPromise(ItemTracking: string, FromBin: string, Item: string, Lot: string): Promise<any>{
     if (ItemTracking == "N") {
-      var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), ITEMCODE: Item, LOTNO: Lot, WHSCODE: localStorage.getItem("whseId"), BINNO: FromBin, SUPPORTTRX: '67' }]) };
+      var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), ITEMCODE: Item, LOTNO: Lot, WHSCODE: sessionStorage.getItem("whseId"), BINNO: FromBin, SUPPORTTRX: '67' }]) };
       return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetBinForNonTrackItem", jObject, this.commonService.httpOptions).toPromise();
     }
     else {
-      var jObject1 = { WhsCode: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), BinCode: FromBin, ItemCode: '', WhsCode: localStorage.getItem("whseId")}]) };
+      var jObject1 = { WhsCode: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), BinCode: FromBin, ItemCode: '', WhsCode: sessionStorage.getItem("whseId")}]) };
       return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsBinExist", jObject1, this.commonService.httpOptions).toPromise();
     }
   }
 
   GetItemCodePromise(itemCode: string): Promise<any> {
-    var jObject = { ITEMCODE: JSON.stringify([{ COMPANYDBNAME: localStorage.getItem("CompID"), ITEMCODE: itemCode, WHSCODE: localStorage.getItem("whseId"),
-    GUID: localStorage.getItem("GUID"), UsernameForLic: localStorage.getItem("UserId") }]) };
+    var jObject = { ITEMCODE: JSON.stringify([{ COMPANYDBNAME: sessionStorage.getItem("CompID"), ITEMCODE: itemCode, WHSCODE: sessionStorage.getItem("whseId"),
+    GUID: sessionStorage.getItem("GUID"), UsernameForLic: sessionStorage.getItem("UserId") }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodsReceipt/GetItemCode", jObject, this.commonService.httpOptions).toPromise();
   }
 
   getLotInfoPromise(FromBin: string, Item: string, Lot: string): Promise<any> {
-    var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), WHSCODE:  localStorage.getItem("whseId"), BINNO: FromBin, ITEMCODE: Item, LOTNO: Lot, DOCNUM: '', }]) };
+    var jObject = { DeliveryToken: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), WHSCODE:  sessionStorage.getItem("whseId"), BINNO: FromBin, ITEMCODE: Item, LOTNO: Lot, DOCNUM: '', }]) };
     if (Item == "" && FromBin == "") {
       return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetLotWithoutBinNItemCode", jObject, this.commonService.httpOptions).toPromise();
     }
@@ -249,7 +249,7 @@ export class InventoryTransferService {
   }
 
   isToBinExistPromise(ToBin: string, oToWhs: string): Promise<any> {
-    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: localStorage.getItem("CompID"), BinCode: ToBin, ItemCode: '', WhsCode: oToWhs}]) };
+    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), BinCode: ToBin, ItemCode: '', WhsCode: oToWhs}]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsBinExist", jObject, this.commonService.httpOptions).toPromise();
   }
 }
