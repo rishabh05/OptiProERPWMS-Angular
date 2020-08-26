@@ -258,6 +258,16 @@ export class ProductionReceiptComponent implements OnInit {
     this.productionService.submitProductionRecepit(requestData).subscribe(
       data => {
         this.showLoader = false;
+        //Srini 11-Aug-2020
+        //Refresh data from OptiProERP production order after submit. Fetch it in all cases.
+        //If error you should get original quantities. Else
+        //you should get adjusted quantities
+        
+        //Are we adjusting Production Order Quantities after receiving in OptiProERP. 
+        //Quantity to receive = Quantity to receive - Received Quantity 
+        
+        //*********  Call refresh method here to fetch data for selected production order */
+
         if (data != undefined) {
           if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
