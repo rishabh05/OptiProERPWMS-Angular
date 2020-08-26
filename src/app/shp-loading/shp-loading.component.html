@@ -13,7 +13,7 @@
                 <div class="col-sm-8">
                   <div class="input-group input-group-sm">
                     <input #scanPTshipmentId type="text" class="form-control form-control-sm" id="shipmentCode" name="shipmentCode" [(ngModel)]="shipmentCode"
-                      placeholder="{{'shipmentCode'|translate}}" (blur)="onShipmentIDChange()">
+                      placeholder="{{'ShipmentCode'|translate}}" (blur)="onShipmentIDChange()" trim>
                   </div>
                 </div>
               </div>
@@ -22,7 +22,7 @@
                 <div class="col-sm-8">
                   <div class="input-group input-group-sm">
                     <input type="text" class="form-control form-control-sm" id="LoadLocation" name="LoadLocation" [(ngModel)]="LoadLocation"
-                      [disabled]=true>
+                      [disabled]=true trim="blur">
                   </div>
                 </div>
               </div>
@@ -46,11 +46,11 @@
                 <!-- step inputs -->
                 <div *ngIf="currentStep == 1" class="item-input-section">
                   <input #focusOnCont type="text" placeholder="{{'ScanContainer'|translate}}" (blur)="onContainerChange()" name="ScanContainer"
-                    [(ngModel)]="ScanContainer">
+                    [(ngModel)]="ScanContainer" trim>
                 </div>
                 <div *ngIf="currentStep == 2" class="item-input-section">
-                  <input #focusOnDockDoor type="text" placeholder="{{'ScanLoadLocation'|translate}}" (blur)="onLoadLocationChange()" name="ScanLoadLocation"
-                    [(ngModel)]="ScanLoadLocation">
+                  <input #focusOnDockDoor *ngIf="showFields" type="text" placeholder="{{'ScanLoadLocation'|translate}}" (blur)="onLoadLocationChange()" name="ScanLoadLocation"
+                    [(ngModel)]="ScanLoadLocation" trim="blur">
                 </div>
                 
                 <!-- step input option icons -->
@@ -68,7 +68,6 @@
                     <div class="bar-code">
                       <i class="k-icon k-i-greyscale" aria-hidden="true"></i>
                     </div>
-                    
                   </div>
                 </div>
                 <div class="text-center scan-text">{{currentStepText}}</div>
@@ -77,7 +76,7 @@
 
               <!-- step navigation Arrow placement -->
               <div>
-                <i *ngIf="currentStep > 1" (click)="prevStep()" class="k-icon k-i-arrow-chevron-left" aria-hidden="true"></i>
+                <i *ngIf="currentStep > 1 && showFields" (click)="prevStep()" class="k-icon k-i-arrow-chevron-left" aria-hidden="true"></i>
                 <i *ngIf="currentStep != LastStep" (click)="nextStep()" class="k-icon k-i-arrow-chevron-right" aria-hidden="true"></i>
                 <i *ngIf="false" (click)="onSaveClick('/po-order-details')" class="k-icon k-i-save" aria-hidden="true"></i>
               </div>
@@ -88,8 +87,6 @@
                 <ng-container  *ngFor="let c of PickListSteps; let i =index" >
                 <span [ngClass]="{active:currentStep == i+1}" class="step"></span>
               </ng-container>
-                <!-- <span [ngClass]="{active:currentStep == 1}" class="step"></span>
-                <span [ngClass]="{active:currentStep == 2}" class="step"></span> -->
               </div>
               <!--/ step bars -->
             </div>
@@ -103,7 +100,7 @@
         <button class="btn btn-outline-secondary btn-sm btn-transparent btn-icon mr-1" type="button" (click)="OnCancelClick()">
           <i class="opti-icon-arrow-back"></i>
         </button>
-        <button class="btn btn-success k-button btn-sm btn-icon-with-text" type="button" (click)="onSubmitClick()">
+        <button [disabled]="showFields" class="btn btn-success k-button btn-sm btn-icon-with-text" type="button" (click)="onSubmitClick()">
           <span class="k-icon k-i-check" role="presentation"></span>{{'Submit'|translate}}</button>
       </div>
     </div>

@@ -598,6 +598,17 @@
   "ReceiveForPO": "Receive for PO",
   "DueDate": "Due Date",
   "Comments": "Comments",
+
+  "CStatusNew": "New",
+  "CShippedNew": "Shipped",
+  "CPickedNew": "Picked",
+  "CCancelledNew": "Cancelled",
+  "Part_Allocated": "Part Allocated",
+  "Pick_Generated": "Pick Generated",
+  "Pick_Released": "Pick Released",
+  "Part_Picked": "Part Picked",
+  "Allocated": "Allocated",
+
   "Dummy": "Dummy"
 }
  

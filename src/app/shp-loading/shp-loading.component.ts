@@ -45,7 +45,7 @@ export class ShpLoadingComponent implements OnInit {
     setTimeout(() => {
       this.setPickingSteps();
     }, 1000)
-
+    this.showFields = true;
   }
 
   setPickingSteps() {
@@ -93,6 +93,7 @@ export class ShpLoadingComponent implements OnInit {
             if(this.LoadContainersList.length == 0){
               this.dialogOpened = true;
             }
+            this.showFields = true;
           } else {
             this.toastr.error('', this.translate.instant("InvalidShipmentCode"));
             this.clearFields();
@@ -171,14 +172,14 @@ export class ShpLoadingComponent implements OnInit {
     }
     if (this.ScanLoadLocation === this.LoadLocation) {
       this.addScannedContainer(this.shipmentCode, this.ScanContainer);
-      this.stepIndex = -1;
-      this.nextSteptoIterate();
+      
     } else {
       this.toastr.error('', this.translate.instant("InvalidDD"));
       this.ScanLoadLocation = "";
     }
   }
 
+  showFields: boolean = true;
   addScannedContainer(OPTM_SHIPMENT_CODE, OPTM_CONTCODE) {
     this.containerData.push({
       CompanyDBId: sessionStorage.getItem("CompID"),
@@ -189,7 +190,11 @@ export class ShpLoadingComponent implements OnInit {
     this.ScanContainer = "";
     this.ScanLoadLocation = "";
     if (this.LoadContainersList.length == this.containerData.length) {
+      this.showFields = false
       this.toastr.success('', this.translate.instant("AllPickedCont"));
+    }else{
+      this.stepIndex = -1;
+      this.nextSteptoIterate();
     }
   }
 

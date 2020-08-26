@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { OutboundService } from 'src/app/services/outbound.service';
 import { ToastrService } from 'ngx-toastr';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { Commonservice } from 'src/app/services/commonservice.service';
 import { Router } from '@angular/router';
 import { OutboundData, CurrentOutBoundData } from 'src/app/models/outbound/outbound-data';
@@ -58,15 +58,23 @@ export class OutCutomerComponent implements OnInit {
   ShowPackListReport: boolean = true;
   ShowBOLReport: boolean = true;
   showPDFLoading: boolean = false;
+  shipmentLinesArray = [];
 
   constructor(private inboundService: InboundService, private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) {
-    let option = localStorage.getItem("deliveryOptionType");
-    this.deliveryOptionType = option;
-    if (this.deliveryOptionType == '1') {
-      this.pageTitle = this.translate.instant("Outbound_Delivery")
-    } else if (this.deliveryOptionType == '2') {
-      this.pageTitle = this.translate.instant("Outbound_Delivery_through_Shipment")
-    }
+
+    let userLang = navigator.language.split('-')[0];
+    userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
+    translate.use(userLang);
+    translate.onLangChange.subscribe((event: LangChangeEvent) => {
+      let option = localStorage.getItem("deliveryOptionType");
+      this.deliveryOptionType = option;
+      if (this.deliveryOptionType == '1') {
+        this.pageTitle = this.translate.instant("Outbound_Delivery")
+      } else if (this.deliveryOptionType == '2') {
+        this.pageTitle = this.translate.instant("Outbound_Delivery_through_Shipment")
+      }
+      this.initializeShipmentLines();
+    });
   }
 
   ngOnInit() {
@@ -90,6 +98,21 @@ export class OutCutomerComponent implements OnInit {
     this.ShowPickListReport = (JSON.parse(sessionStorage.getItem('ConfigData'))).ShowPickListReport;
     this.ShowPackListReport = (JSON.parse(sessionStorage.getItem('ConfigData'))).ShowPackListReport;
     this.ShowBOLReport = (JSON.parse(sessionStorage.getItem('ConfigData'))).ShowBOLReport;
+    this.initializeShipmentLines();
+  }
+
+  initializeShipmentLines() {
+    this.shipmentLinesArray = [
+      { "Value": 1, "Name": this.translate.instant("CStatusNew") },
+      { "Value": 2, "Name": this.translate.instant("Part_Allocated") },
+      { "Value": 3, "Name": this.translate.instant("Allocated") },
+      { "Value": 4, "Name": this.translate.instant("Pick_Generated") },
+      { "Value": 5, "Name": this.translate.instant("Pick_Released") },
+      { "Value": 6, "Name": this.translate.instant("Part_Picked") },
+      { "Value": 7, "Name": this.translate.instant("Picked") },
+      { "Value": 8, "Name": this.translate.instant("CShippedNew") },
+      { "Value": 9, "Name": this.translate.instant("CCancelledNew") }
+    ];
   }
 
   updateSalesOrderList() {
@@ -567,6 +590,7 @@ export class OutCutomerComponent implements OnInit {
     this.customerCode = '';
     this.showLookup = false;
     this.shipmentId = '';
+    this.dockDoorCode = ""
   }
 
   isDeliveryContainerPacking: boolean = false;
@@ -1134,16 +1158,22 @@ export class OutCutomerComponent implements OnInit {
 
             this.dockDoorCode = resp.ItemHeader[0].OPTM_DOCKDOORID;
             this.dockDoorFromShipment = resp.ItemHeader[0].OPTM_DOCKDOORID;
+            var useContainer = resp.ItemHeader[0].OPTM_USE_CONTAINER;
+            if (useContainer == "Y" || useContainer == "y") {
+              this.useContainer = true;
+            } else {
+              this.useContainer = false;
+            }
             this.parseAndGenerateDeliveryDataFromShipment(resp);
             this.getShipmentDataItemDetails();
           } else {
             this.shipmentId = "";
-            this.toastr.error('', this.translate.instant("ShipmentNotAvailable"));
+            this.toastr.error('', this.translate.instant("InvalidShipmentCode"));
           }
 
 
         } else {
-          this.toastr.error('', this.translate.instant("ShipmentNotAvailable"));
+          this.toastr.error('', this.translate.instant("InvalidShipmentCode"));
           this.shipmentId = "";
           // this.scanShipmentId.nativeElement.focus()
         }
@@ -1176,6 +1206,7 @@ export class OutCutomerComponent implements OnInit {
       CustRefNo: "", ShipmentId: ""
     };
     outbound.TempMeterials = [];
+    this.dockDoorCode = ""
   }
 
   parseAndGenerateDeliveryDataFromShipment(shipmentResponse: any) {
@@ -1322,6 +1353,7 @@ export class OutCutomerComponent implements OnInit {
   ContainerItems: any = [];
   ContainerBatchSerial: any = [];
   ShipmentInfoData: any;
+
   public getShipmentDataItemDetails(showLookup: any = true) {
     if (this.shipmentId == undefined || this.shipmentId == null ||
       this.shipmentId == "") {
@@ -1344,9 +1376,13 @@ export class OutCutomerComponent implements OnInit {
           this.ShipmentHDR.push({
             ShipmentCode: this.shipmentId,
             ShipmentId: this.shipmentId,
-            UseContainer: this.useContainer
+            UseContainer: this.useContainer,
+            UseContainerVal: this.useContainer == true ? "Y" : "N"
           })
           this.ShipmentItems = resp.ShipmentItems;
+          for (var i = 0; i < resp.ShipmentItems.length; i++) {
+            this.ShipmentItems[i].OPTM_STATUS_VAL = this.shipmentLinesArray[Number(this.ShipmentItems[i].OPTM_STATUS)-1].Name
+          }
           this.ShipmentBtchSer = resp.ShipmentBtchSer;
           this.ContainerItems = resp.ContainerItems;
           this.ContainerHeader = resp.ContainerHeader;
