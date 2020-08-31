@@ -700,7 +700,7 @@ export class OutCutomerComponent implements OnInit {
 
               //=====when its non tracked then check already added start===
               if (o.Item.TRACKING == "N") {
-                if (e1.Bin === o.Meterial.BINNO && e1.DOCENTRY == o.Item.DOCENTRY) { // added docEntry condition on 21072020
+                if (e1.Bin === o.Meterial.BINNO && e1.DOCENTRY == o.Item.DOCENTRY && e1.TRACKING == o.Item.TRACKING) { // added docEntry condition on 21072020
                   hasDetail = true; //need to show error
                 }
               }
@@ -729,12 +729,13 @@ export class OutCutomerComponent implements OnInit {
             let dtl: SODETAIL = new SODETAIL();
             dtl.Bin = o.Meterial.BINNO;
             dtl.LotNumber = o.Meterial.LOTNO;
-            dtl.LotQty = o.Meterial.MeterialPickQty;
+            dtl.LotQty = o.Meterial.MeterialPickQty.toString();
             dtl.SysSerial = o.Meterial.SYSNUMBER;
             dtl.parentLine = parentLineNum;
             dtl.GUID = guid;
             dtl.UsernameForLic = uid;
-            dtl.DOCENTRY = o.Item.DOCENTRY
+            dtl.DOCENTRY = o.Item.DOCENTRY;
+            dtl.TRACKING = o.Item.TRACKING
             arrSODETAIL.push(dtl);
           }
           limit = limit + lineDeleiveryCollection.length;

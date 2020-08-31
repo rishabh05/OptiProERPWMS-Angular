@@ -535,6 +535,8 @@ export class SigninComponent implements OnInit {
                         if (this.showZone) this.showZoneList(isDirectCall)
                     }
                 }
+                sessionStorage.setItem("ShowZone", this.showZone?"Y":"N");
+                sessionStorage.setItem("ShowBinRange", this.showBinRange?"Y":"N");
             },
             error => {
                 if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {

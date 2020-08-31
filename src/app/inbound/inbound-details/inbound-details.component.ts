@@ -56,6 +56,17 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
     translate.use(userLang);
     translate.onLangChange.subscribe((event: LangChangeEvent) => {
+      if(this.inboundFromWhere==1){
+        this.PONo =  this.translate.instant("Inbound_PO#");
+        this.future_PO_Invoice = this.translate.instant("Inbound_FuturePOs");
+        this.addGRPODetailGridTitle =  this.translate.instant("Inbound_PurchaseOrderNumber");
+        // change captions and api calling according to normal inbound.
+      }else if(this.inboundFromWhere==2){
+        this.future_PO_Invoice = this.translate.instant("Inbound_FutureInvoices");
+        this.PONo =  this.translate.instant("Inbound_InvoiceNo");
+        this.addGRPODetailGridTitle =  this.translate.instant("Inbound_InvoiceNo");
+          // change captions and api calling according to normal inbound.
+      }
     });
   }
   inboundFromWhere: any = false;

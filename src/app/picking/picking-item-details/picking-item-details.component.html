@@ -45,7 +45,7 @@
                                 <label for="inputPassword" class="col-sm-4 col-form-label">{{ContainerToteTitle}}</label>
                                 <div class="col-sm-8">
                                     <div class="input-group input-group-sm">
-                                        <input #scanPTshipmentId type="text" class="form-control form-control-sm" id="CreatedContOrTote" name="CreatedContOrTote"
+                                        <input #focusCreatedContOrTote type="text" class="form-control form-control-sm" id="CreatedContOrTote" name="CreatedContOrTote"
                                             [(ngModel)]="CreatedContOrTote" placeholder="{{ContainerTotePlaceHolder}}" (blur)="CreateContainerOrTote()"
                                             [disabled]="containercreated" trim="blur">
                                     </div>

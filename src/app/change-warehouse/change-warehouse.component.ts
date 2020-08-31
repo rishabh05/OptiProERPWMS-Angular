@@ -31,12 +31,10 @@ export class ChangeWarehouseComponent implements OnInit {
     this.selectedRole = { OPTM_ROLEID: localStorage.getItem("SelectedRole"), BPLid: 0 };
     this.selectedZone = { OPTM_WHSZONE: localStorage.getItem("SelectedZone"), BPLid: 0 };
     this.selectedBin = { OPTM_BIN_RANGE: localStorage.getItem("SelectedBinRange"), BPLid: 0 };
-    if (localStorage.getItem("SelectedBinRange") != null &&
-      localStorage.getItem("SelectedBinRange") != undefined && localStorage.getItem("SelectedBinRange") != "") {
+    if (sessionStorage.getItem("ShowBinRange") == "Y") {
       this.showBinRange = true;
     }
-    if (localStorage.getItem("SelectedZone") != null &&
-      localStorage.getItem("SelectedZone") != undefined && localStorage.getItem("SelectedZone") != "") {
+    if (sessionStorage.getItem("ShowZone") == "Y") {
       this.showZone = true;
     }
     this.selectedItem = sessionStorage.getItem("CompID")
@@ -48,6 +46,18 @@ export class ChangeWarehouseComponent implements OnInit {
 
     if (this.showBinRange) this.showBinRangeList(true);
     if (this.showZone) this.showZoneList(true);
+
+    this.defaultWHS = { OPTM_WHSE: sessionStorage.getItem("whseId"), BPLid: 0 };
+    this.selectedRole = { OPTM_ROLEID: localStorage.getItem("SelectedRole"), BPLid: 0 };
+    this.selectedZone = { OPTM_WHSZONE: localStorage.getItem("SelectedZone"), BPLid: 0 };
+    this.selectedBin = { OPTM_BIN_RANGE: localStorage.getItem("SelectedBinRange"), BPLid: 0 };
+    if (sessionStorage.getItem("ShowBinRange") == "Y") {
+      this.showBinRange = true;
+    }
+    if (sessionStorage.getItem("ShowZone") == "Y") {
+      this.showZone = true;
+    }
+    this.selectedItem = sessionStorage.getItem("CompID")
   }
 
   public setWarehouseList() {

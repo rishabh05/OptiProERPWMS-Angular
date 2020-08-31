@@ -32,6 +32,7 @@ export class SODETAIL {
     GUID: string;
     UsernameForLic: string;
     DOCENTRY:string;
+    TRACKING: string;
 }
 
 export class DeliveryToken {

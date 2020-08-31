@@ -1658,15 +1658,15 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       Flag: 'D', // D = Line, H= Header, L = Lots
       LineNo: Number(localStorage.getItem("Line"))
     });
-
-
+    
     for (var iBtchIndex = 0; iBtchIndex < this.recvingQuantityBinArray.length; iBtchIndex++) {
+    //  let qty = Number(this.recvingQuantityBinArray[iBtchIndex].LotQty).toFixed(Number(localStorage.getItem("DecimalPrecision")))
       oSubmitPOLotsObj.POReceiptLotDetails.push({
         // POItemCode: this.Ponumber+this.openPOLineModel[0].ITEMCODE,
         Bin: this.recvingQuantityBinArray[iBtchIndex].Bin,
         LineNo: this.openPOLineModel[0].LINENUM,
         LotNumber: this.recvingQuantityBinArray[iBtchIndex].LotNumber, //getUpperTableData.GoodsReceiptLineRow[iBtchIndex].SysSerNo,
-        LotQty: this.recvingQuantityBinArray[iBtchIndex].LotQty,
+        LotQty: this.recvingQuantityBinArray[iBtchIndex].LotQty.toString(),
         SysSerial: "0",
         ExpireDate: this.GetSubmitDateFormat(this.expiryDate),//GetSubmitDateFormat(getUpperTableData.GoodsReceiptLineRow[iBtchIndex].EXPDATE), // oCurrentController.GetSubmitDateFormat(oActualGRPOModel.PoDetails[iIndex].ExpireDate),//oActualGRPOModel.PoDetails[iIndex].ExpireDate,
         VendorLot: this.recvingQuantityBinArray[iBtchIndex].VendorLot,

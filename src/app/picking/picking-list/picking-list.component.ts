@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { GridDataResult } from '@progress/kendo-angular-grid';
+import { GridDataResult, PageChangeEvent } from '@progress/kendo-angular-grid';
 import { Router } from '@angular/router';
 import { PickTaskService } from '../../services/picktask.service';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
@@ -71,16 +71,13 @@ export class PickingListComponent implements OnInit {
   ngOnInit() {
     this.picktaskService.clearLocaStorage();
     this.initialize();
-
-    // this.GetPicklist(this.pickTypeIndex)
-    // this.commonservice.setCustomizeInfo();
+    this.pageChange({ skip: 0, take: this.pageSize });
   }
 
   initialize() {
     this.PackTypeList = [this.translate.instant("Batch_Picking"),
     this.translate.instant("Cluster_Picking"), this.translate.instant("Container_Picking"),
     this.translate.instant("Discreate_Picking")];
-    //this.translate.instant("Discreate_Picking"), this.translate.instant("Zone_Picking")];
 
     this.PackTypeKeyList = ["Batch_Picking", "Cluster_Picking", "Container_Picking", "Discrete_Picking"];
     //this.PackTypeKeyList = ["Batch_Picking", "Cluster_Picking", "Container_Picking", "Discrete_Picking", "Zone_Picking"];
@@ -104,6 +101,7 @@ export class PickingListComponent implements OnInit {
     localStorage.setItem("From", "shiplist");
     localStorage.setItem("TaskDetail", "");
     this.router.navigate(['home/picking/picking-item-details']);
+    
   }
 
   checkIfPickProcessAuto(dataItem) {
@@ -118,6 +116,10 @@ export class PickingListComponent implements OnInit {
     }else{
       localStorage.setItem("Param", "");
     }
+  }
+
+  pageChange(event: PageChangeEvent) {
+    this.skip = event.skip;
   }
 
   showPickTaskList(row) {
@@ -184,6 +186,6 @@ export class PickingListComponent implements OnInit {
     this.GetPicklist(this.pickTypeIndex);
     localStorage.setItem("PickType", event);
     localStorage.setItem("PickTypeIndex", this.pickTypeIndex);
-
+    this.pageChange({ skip: 0, take: this.pageSize });
   }
 }

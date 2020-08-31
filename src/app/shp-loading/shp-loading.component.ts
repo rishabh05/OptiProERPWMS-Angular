@@ -83,6 +83,8 @@ export class ShpLoadingComponent implements OnInit {
             return;
           }
           if (data.OPTM_SHPMNT_HDR.length > 0) {
+            this.clearFields();
+            this.clearDataAfterSubmit();
             this.shipmentCode = data.OPTM_SHPMNT_HDR[0].OPTM_SHIPMENT_CODE;
             this.PT_ShipmentId = data.OPTM_SHPMNT_HDR[0].OPTM_SHIPMENTID;
             this.LoadLocation = data.OPTM_SHPMNT_HDR[0].OPTM_DOCKDOORID;
@@ -244,6 +246,8 @@ export class ShpLoadingComponent implements OnInit {
     this.PT_ShipmentId = "";
     this.shipmentCode = "";
     this.LoadLocation = "";
+    this.currentStep = 1;
+    this.stepIndex = 0;
   }
 
   iterateSteps = false;
@@ -292,7 +296,7 @@ export class ShpLoadingComponent implements OnInit {
   currentStepText = "";
   changeText(step) {
     if (step == 1) {
-      this.currentStepText = this.translate.instant("ScanCont");
+      this.currentStepText = this.translate.instant("ScanContainer");
     }
     else if (step == 2) {
       this.currentStepText = this.translate.instant("ScanLoadLoc");

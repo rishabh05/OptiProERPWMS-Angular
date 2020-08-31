@@ -78,7 +78,7 @@
             {{dataItem.OPTM_QTY_FULFILLED | numberFormat}}
           </ng-template>
         </kendo-grid-column>
-        <ng-template kendoGridDetailTemplate let-dataItem>
+        <ng-template kendoGridDetailTemplate let-dataItem [kendoGridDetailTemplateShowIf]="ShowBtchSerDetails">
           <kendo-grid [data]="dataItem.ShipmentItemBatchSerial">
             <kendo-grid-column [width]="73" field="OPTM_SHIPMENTID" title="{{'ShipmentId'|translate}}"></kendo-grid-column>
             <kendo-grid-column [width]="130" field="OPTM_ITEMCODE"  title="{{'ItemCode'|translate}}">
@@ -109,7 +109,7 @@
                 {{dataItem.OPTM_QUANTITY | numberFormat}}
               </ng-template>
             </kendo-grid-column>
-            <ng-template kendoGridDetailTemplate let-innerItem>
+            <ng-template kendoGridDetailTemplate let-innerItem [kendoGridDetailTemplateShowIf]="ShowContBtchSerDetails">
               <kendo-grid [data]="innerItem.ContainerItemsBatchSerial">
                 <kendo-grid-column [width]="80" field="OPTM_BTCHSER" title="{{'BatchSerial_No'|translate}}"></kendo-grid-column>
                 <kendo-grid-column [width]="125" field="OPTM_ITEMCODE" title="{{'ItemCode'|translate}}"></kendo-grid-column>

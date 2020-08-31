@@ -39,4 +39,13 @@ export class ShipmentinfoComponent implements OnInit {
     this.lookupRowDeleteEvent.emit(rowindex);
   }
 
+  public ShowBtchSerDetails(dataItem: any, index: number): boolean {
+    // return dataItem.OPTM_ITEMCODE != "12 Litre Red";
+    return dataItem.ShipmentItemBatchSerial.length != 0;
+  }
+
+  public ShowContBtchSerDetails(dataItem: any, index: number): boolean {
+    // return dataItem.OPTM_ITEMCODE != "12 Litre Red";
+    return dataItem.ContainerItemsBatchSerial.length != 0;
+  }
 }

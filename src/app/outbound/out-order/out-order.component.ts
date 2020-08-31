@@ -749,7 +749,7 @@ export class OutOrderComponent implements OnInit {
             let dtl: SODETAIL = new SODETAIL();
             dtl.Bin = o.Meterial.BINNO;
             dtl.LotNumber = o.Meterial.LOTNO;
-            dtl.LotQty = o.Meterial.MeterialPickQty;
+            dtl.LotQty = o.Meterial.MeterialPickQty.toString();
             dtl.SysSerial = o.Meterial.SYSNUMBER;
             dtl.parentLine = parentLineNum;
             dtl.GUID = guid;

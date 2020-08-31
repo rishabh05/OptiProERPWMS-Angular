@@ -33,6 +33,9 @@ export class AppComponent {
   ngOnInit() {
     // this.CommonService.loadConfig();
     this.svgSprite();
+    if(sessionStorage.getItem("CompID") == "" || sessionStorage.getItem("CompID") == null || sessionStorage.getItem("CompID") == undefined){
+        this.router.navigate(['/account']);       
+    }
   }
 
   svgSprite(){
