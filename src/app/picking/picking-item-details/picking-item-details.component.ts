@@ -1315,7 +1315,7 @@ export class PickingItemDetailsComponent implements OnInit {
               this.displayPickListData(data);
             }
           } else {
-            this.toastr.error('', data[0].ErrorMsg);
+            this.toastr.error('', data.OUTPUT[0].ErrorMsg);
           }
         }
       },
