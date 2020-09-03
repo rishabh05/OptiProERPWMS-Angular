@@ -489,6 +489,12 @@ export class LookupComponent implements OnInit {
         width: '100'
       },
       {
+        field: 'BaseRef',
+        title: this.translate.instant("BaseRef"),
+        type: 'text',
+        width: '100'
+      },
+      {
         field: 'DocDueDate',
         title: this.translate.instant("DelDate"),
         type: 'date',
@@ -920,13 +926,19 @@ export class LookupComponent implements OnInit {
         field: 'DocNum',
         title: this.translate.instant("InvTransfer_ITRRequestNo"),
         type: 'text',
-        width: '100'
+        width: '60'
       },
       {
         field: 'DocDueDate',
         title: this.translate.instant("DueDate"),
         type: 'text',
-        width: '100'
+        width: '50'
+      },
+      {
+        field: 'JrnlMemo',
+        title: this.translate.instant("JrnlMemo"),
+        type: 'text',
+        width: '130'
       },
       {
         field: 'Comments',

@@ -7,29 +7,22 @@
             </h3>
             <div class="row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
-
-                    <div class="form-group row" *ngIf ="deliveryOptionType==2">
-                        <label for="inputPassword"
-                            class="col-sm-3 col-form-label">{{'ShipmentID'|translate}}</label>
+                    <div class="form-group row" *ngIf="deliveryOptionType==2">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'Outbound_Customer'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input #scanShipmentId (blur)="onShipmentBlur()" id="outCustomerCustomerCodeInput"
-                                    type="text" class="form-control form-control-sm" name='shipmentCode'
-                                    [(ngModel)]="shipmentId" placeholder="{{'ShipmentID'|translate}}">
+                                <input #scanCustomerCode (blur)="onCustomerCodeBlur()" id="outCustomerCustomerCodeInput" [disabled]='orderCollection!=undefined && orderCollection!=null && orderCollection.length > 0'
+                                    type="text" class="form-control form-control-sm" name='customerCode' [(ngModel)]="customerCode"
+                                    placeholder="{{'Outbound_Customer'|translate}}">
                                 <div class="input-group-append">
-                                    <button tabIndex="-1"
-                                        class="k-button k-primary btn" (mousedown)="getShipmentList()" type="button">
+                                    <button tabIndex="-1" [disabled]=' orderCollection!=undefined && orderCollection!=null && orderCollection.length>0' class="k-button k-primary btn"
+                                        (mousedown)="openCustomerLookup()" type="button">
                                         <i class="opti-icon-search"></i>
-                                    </button>
-                                    <button tabIndex="-1" class="k-button k-primary btn separate-btn ship-btn" type="button"
-                                    (mousedown)="showShipments()" >
-                                    <i class="opti-icon-view-batch mr-1"></i>{{'Shipment_Detail'|translate}}
                                     </button>
                                 </div>
 
                                 <div class="ml-1 d-flex">
-                                    <button tabIndex="-1" type="button" id="outCustomerCuCodeScan" 
-                                        class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                    <button tabIndex="-1" type="button" id="outCustomerCuCodeScan" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
                                 </div>
@@ -37,133 +30,226 @@
                         </div>
                     </div>
 
-                    <div class="form-group row"  *ngIf ="deliveryOptionType==1 || (deliveryOptionType==2 && orderCollection!=undefined && orderCollection!=null && orderCollection.length > 0)">
-                        <label for="inputPassword"
-                            class="col-sm-3 col-form-label">{{'Outbound_Customer'|translate}}</label>
+                    <div class="form-group row" *ngIf="false">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'ShipmentID'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input #scanCustomerCode (blur)="onCustomerCodeBlur()" id="outCustomerCustomerCodeInput"
-                                    [disabled]='orderCollection!=undefined && orderCollection!=null && orderCollection.length > 0'
-                                    type="text" class="form-control form-control-sm" name='customerCode'
-                                    [(ngModel)]="customerCode" placeholder="{{'Outbound_Customer'|translate}}">
+                                <input #scanShipmentId (blur)="onShipmentBlur()" id="outCustomerCustomerCodeInput" type="text" class="form-control form-control-sm"
+                                    name='shipmentCode' [(ngModel)]="shipmentId" placeholder="{{'ShipmentID'|translate}}">
                                 <div class="input-group-append">
-                                    <button tabIndex="-1"
-                                        [disabled]=' orderCollection!=undefined && orderCollection!=null && orderCollection.length>0'
-                                        class="k-button k-primary btn" (mousedown)="openCustomerLookup()" type="button">
+                                    <button tabIndex="-1" class="k-button k-primary btn" (mousedown)="getShipmentList()" type="button">
                                         <i class="opti-icon-search"></i>
+                                    </button>
+                                    <button tabIndex="-1" class="k-button k-primary btn separate-btn ship-btn" type="button" (mousedown)="showShipments()">
+                                        <i class="opti-icon-view-batch mr-1"></i>{{'Shipment_Detail'|translate}}
                                     </button>
                                 </div>
 
                                 <div class="ml-1 d-flex">
-                                    <button tabIndex="-1" type="button" id="outCustomerCuCodeScan" 
-                                        class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                    <button tabIndex="-1" type="button" id="outCustomerCuCodeScan" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- *ngIf="customerName!=undefined && customerName!=''" -->
-                    <div class="form-group row"  *ngIf ="deliveryOptionType==1 || (deliveryOptionType==2 && orderCollection!=undefined && orderCollection!=null && orderCollection.length > 0)">
+
+                    <div class="form-group row" *ngIf="deliveryOptionType==1">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'Outbound_Customer'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input #scanCustomerCode (blur)="onCustomerCodeBlur()" id="outCustomerCustomerCodeInput" [disabled]='orderCollection!=undefined && orderCollection!=null && orderCollection.length > 0'
+                                    type="text" class="form-control form-control-sm" name='customerCode' [(ngModel)]="customerCode"
+                                    placeholder="{{'Outbound_Customer'|translate}}">
+                                <div class="input-group-append">
+                                    <button tabIndex="-1" [disabled]=' orderCollection!=undefined && orderCollection!=null && orderCollection.length>0' class="k-button k-primary btn"
+                                        (mousedown)="openCustomerLookup()" type="button">
+                                        <i class="opti-icon-search"></i>
+                                    </button>
+                                </div>
+
+                                <div class="ml-1 d-flex">
+                                    <button tabIndex="-1" type="button" id="outCustomerCuCodeScan" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                        <i class="opti-icon-qr-code fs-24"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row" *ngIf="deliveryOptionType==1">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Name'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" class="form-control form-control-sm" name="customerName"
-                                    value="{{customerName}}" placeholder="{{'Outbound_CustomerName'|translate}}"
+                                <input type="text" class="form-control form-control-sm" name="customerName" value="{{customerName}}" placeholder="{{'Outbound_CustomerName'|translate}}"
                                     [disabled]="true">
                             </div>
                         </div>
                     </div>
-                    <div class="form-group row" *ngIf ="deliveryOptionType==2">
-                        <label for="inputPassword"
-                            class="col-sm-3 col-form-label">{{'outbound_Dock_DoorNo'|translate}}</label>
+                    <div class="form-group row" *ngIf="deliveryOptionType==2">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'PT_Ship_To'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input #dockDoorID (blur)="onDockDoorBlur()" id="outDockDoorNoInput"
-                                    type="text" class="form-control form-control-sm" name='DockDoorCode'
-                                    [(ngModel)]="dockDoorCode" placeholder="{{'outbound_Dock_DoorNo'|translate}}" disabled>
-                                <!-- <div class="input-group-append">
-                                    <button tabIndex="-1"
-                                        class="k-button k-primary btn" (mousedown)="getDockDoorList()" type="button" disabled>
-                                        <i class="opti-icon-search"></i>
-                                    </button>
-                                </div> -->
-
+                                <input #shipTo (blur)="isValidShipTo()" id="outshipToNoInput" type="text" class="form-control form-control-sm" name='shipToCode'
+                                    [(ngModel)]="shipToCode" placeholder="{{'PT_Ship_To'|translate}}">
                                 <div class="ml-1 d-flex">
-                                    <button tabIndex="-1" type="button" id="outDockDoorScan" 
-                                        class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                    <button tabIndex="-1" type="button" id="outshipToScan" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group row" *ngIf ="deliveryOptionType==1">
-                            <label for="inputPassword" class="col-sm-3 col-form-label">{{'Outbound_SO'|translate}}</label>
-                            <div class="col-sm-9">
-                                <div class="input-group input-group-sm">
-                                    <input #scanSO (blur)="onOrderNoBlur()" type="text" class="form-control form-control-sm"
-                                        name='orderNumber' [(ngModel)]="orderNumber" id = "outCustomerSOInput"
-                                        placeholder="{{'Outbound_SO'|translate}}">
-                                    <div class="input-group-append">
-                                        <button tabIndex="-1" class="k-button k-primary btn" (mousedown)="openOrderLookup()" type="button">
-                                            <i class="opti-icon-search"></i>
-                                        </button>
-                                    </div>
-                                    <div class="ml-1 d-flex">
-                                        <button tabIndex="-1" type="button" id="outCustomerSOScan" 
-                                            class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
-                                            <i class="opti-icon-qr-code fs-24"></i>
-                                        </button>
-                                    </div>
+                    <div class="form-group row" *ngIf="deliveryOptionType==2">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'outbound_Dock_DoorNo'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input #dockDoorID (blur)="onDockDoorBlur()" id="outDockDoorNoInput" type="text" class="form-control form-control-sm" name='DockDoorCode'
+                                    [(ngModel)]="dockDoorCode" placeholder="{{'outbound_Dock_DoorNo'|translate}}">
+                                <div class="ml-1 d-flex">
+                                    <button tabIndex="-1" type="button" id="outDockDoorScan" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                        <i class="opti-icon-qr-code fs-24"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                    <div class="form-group row" *ngIf ="deliveryOptionType==1 || deliveryOptionType==2">
+                    </div>
+                    <div class="form-group row" *ngIf="deliveryOptionType==1">
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'Outbound_SO'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input #scanSO (blur)="onOrderNoBlur()" type="text" class="form-control form-control-sm" name='orderNumber' [(ngModel)]="orderNumber"
+                                    id="outCustomerSOInput" placeholder="{{'Outbound_SO'|translate}}">
+                                <div class="input-group-append">
+                                    <button tabIndex="-1" class="k-button k-primary btn" (mousedown)="openOrderLookup()" type="button">
+                                        <i class="opti-icon-search"></i>
+                                    </button>
+                                </div>
+                                <div class="ml-1 d-flex">
+                                    <button tabIndex="-1" type="button" id="outCustomerSOScan" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                        <i class="opti-icon-qr-code fs-24"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row" *ngIf="deliveryOptionType==1">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'TrackingId'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input #scanTracking (blur)="trackingIdBlur()" type="text" class="form-control form-control-sm" name="trackingId"
-                                    [(ngModel)]="trackingId" placeholder="{{'EnterTrackingId'|translate}}"
-                                    >
+                                <input #scanTracking (blur)="trackingIdBlur()" type="text" class="form-control form-control-sm" name="trackingId" [(ngModel)]="trackingId"
+                                    placeholder="{{'EnterTrackingId'|translate}}">
                             </div>
                         </div>
                     </div>
-                    <div class="form-group row" *ngIf ="deliveryOptionType==1 || deliveryOptionType==2">
+                    <div class="form-group row" *ngIf="deliveryOptionType==1">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'CustomerRefNo'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input type="text" (blur)="customerRefNoBlur()" class="form-control form-control-sm" name="custRefNo"
-                                    [(ngModel)]="CustRefNo" placeholder="{{'EnterCustomerRefNo'|translate}}"
-                                   >
+                                <input type="text" (blur)="customerRefNoBlur()" class="form-control form-control-sm" name="custRefNo" [(ngModel)]="CustRefNo"
+                                    placeholder="{{'EnterCustomerRefNo'|translate}}">
                             </div>
                         </div>
                     </div>
 
+                    <!-- <div class="form-group row" *ngIf="deliveryOptionType==2">
+                        <label class="custom-control-label" for="UseContainer">{{'Cont_Shipment'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input type="checkbox" id="UseContainer" (change)="onCheckChange()" class="custom-control-input" name="UseContainer" [(ngModel)]=UseContainer
+                                />
+                            </div>
+                        </div>
+                    </div> -->
+
+                    <div class="form-group row" *ngIf="deliveryOptionType==2">
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <button type="button" (click)="onQueryClick()">{{'Query'|translate}}</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="row"
-                *ngIf='(orderCollection!==undefined && orderCollection!==null && orderCollection.length>0)'>
+            <div class="row" *ngIf="deliveryOptionType==2">
                 <div class="col-12">
-                    <div>
-                        <!-- (selectionChange)="openPOByUOM($event,soItemsDetail.ITEMCODE)" 
-                        (selectionChange)="openSelectedDeleveryItem($event)"
-                    (selectionChange)="openSelectedDeleveryItem($event)"-->
-                        <kendo-grid class="no-shadow" [kendoGridBinding]="orderCollection" [resizable]="true"
-                            [pageSize]="pageSize" [pageable]="pagable" [sortable]="true" [filterable]=isColumnFilter
-                            [groupable]=isColumnGroup [height]=gridHeight  (selectionChange)="openSelectedDeleveryItem($event)" 
-                            [selectable]="true" #gridItem 
-                           >
+                    <!-- <kendo-grid *ngIf="deliveryOptionType==2" [kendoGridBinding]="DiliveryShipmentList" [resizable]="true" [height]="300" [pageSize]="10" (selectionChange)="onShipmentSelection($event)"
+                        [pageable]="true" [skip]="skip" (pageChange)="pageChange($event)" [selectable]="{ checkboxOnly: true, mode: 'multiple' }"
+                        [filterable]="isColumnFilterView"> -->
+
+                    <kendo-grid class="no-shadow" [kendoGridBinding]="DiliveryShipmentList" [resizable]="true" [pageSize]="pageSize" [pageable]="pagable"
+                        [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup [height]=gridHeight (selectionChange)="onShipmentSelection($event)"
+                        [selectable]="true" #gridItem>
+
+                        <ng-template kendoGridToolbarTemplate>
+                                <span class="grid-toolbar-title">{{'SelectShipmentForDelivery'|translate}}</span>
+                                <label class="custom-checkbox mb-0 mr-2 filter-checkbox">
+                                    <input #chkFilterView type="checkbox" (change)="onFilterChange(chkFilterView,ContainerItems)" id="FilterColumnView" [(ngModel)]="isColumnFilterView"
+                                        class="k-checkbox" name="FilterColumnView" />
+                                    <label class="k-checkbox-label" for="FilterColumnView">{{'Enable_Filter'|translate}}</label>
+                                </label>
+                            </ng-template>
+
+                        <!-- <ng-template kendoGridToolbarTemplate>
+                            <span class="grid-toolbar-title">{{'SelectShipmentForDelivery'|translate}}</span>
+                        </ng-template> -->
+
+                        <kendo-grid-checkbox-column title="{{'Select'|translate}}" [width]="15">
+                            <ng-template kendoGridHeaderTemplate let-column let-rowIndex="rowIndex">
+                                <div class="k-form-field d-flex">
+                                    <input type="checkbox" #Selectallcheckedvalue (change)="on_Selectall_checkbox_checked(Selectallcheckedvalue.checked)" id="parent_checkbox_{{rowIndex}}"
+                                        [checked]=selectall class="k-checkbox" />
+                                    <label class="k-checkbox-label" for="parent_checkbox_{{rowIndex}}"></label>
+                                </div>
+                            </ng-template>
+                            <ng-template kendoGridCellTemplate let-idx='rowIndex' let-dataItem='dataItem'>
+                                <!-- <div class="k-form-field d-flex">
+                                    <input type="checkbox" (change)="selectContainerRowChange(chkSelection.checked, dataItem, idx)" [checked]="dataItem.Selected"
+                                         id="chkbox-{{idx}}" class="k-checkbox" 
+                                    />
+                                    <label class="k-checkbox-label" for="chkbox-{{idx}}"></label>
+                                </div> -->
+
+                                <div class="k-form-field d-flex">
+                                    <input #chkSelection type="checkbox" (change)="selectContainerRowChange(chkSelection.checked, dataItem, idx)" [checked]="dataItem.Selected"
+                                        id="chkbox-{{idx}}" class="k-checkbox" name="columnfilter" />
+                                    <label class="k-checkbox-label" for="chkbox-{{idx}}"></label>
+                                </div>
+                            </ng-template>
+                        </kendo-grid-checkbox-column>
+                        <kendo-grid-column field="OPTM_SHIPMENT_CODE" width="100" title="{{'ShipmentCode'|translate}}"></kendo-grid-column>
+                        <kendo-grid-column field="OPTM_SCH_DATETIME" width="80" title="{{'SchShipDate'|translate}}">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                {{dataItem.OPTM_SCH_DATETIME | date:dateFormat}}
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column field="OPTM_GROUP_CODE" width="80" title="{{'NoofContainers'|translate}}"></kendo-grid-column>
+                        <kendo-grid-column field="DeliverySeq" [width]="45" title="{{'DeliverySeq'|translate}}" headerClass="text-left" class="text-left">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <input type="text" #DelSeq class="form-control form-control-sm text-right" [value]="" (input)="updateDeliverySeq(DelSeq.value, dataItem, rowIndex)"
+                                    trim>
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column field="OPTM_SHIPTO" width="80" title="{{'DeliverToLocation'|translate}}"></kendo-grid-column>
+                    </kendo-grid>
+                </div>
+            </div>
+
+            <div class="row" *ngIf='(orderCollection!==undefined && orderCollection!==null && orderCollection.length>0) && deliveryOptionType==1'>
+                <div class="col-12">
+                    <div *ngIf="deliveryOptionType==1">
+                        <kendo-grid class="no-shadow" [kendoGridBinding]="orderCollection" [resizable]="true" [pageSize]="pageSize" [pageable]="pagable"
+                            [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup [height]=gridHeight (selectionChange)="openSelectedDeleveryItem($event)"
+                            [selectable]="true" #gridItem>
 
                             <!-- grid for mobile start -->
                             <kendo-grid-column media="(max-width: 767px)" title="List" class="opti_mobile-grid-td">
                                 <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                     <dl class="opti_mobile_grid_dl w-100">
                                         <dt class="d-flex align-items-center">{{'Outbound_OrderNo'|translate}}
-                                            <button id="removeSelectedMeterial" (click)="removeOrder(idx,gridItem)"
-                                                class="btn btn-danger k-button btn-sm btn-icon ml-auto">
-                                                <span class="k-icon k-i-delete" role="presentation"></span></button>
+                                            <button id="removeSelectedMeterial" (click)="removeOrder(idx,gridItem)" class="btn btn-danger k-button btn-sm btn-icon ml-auto">
+                                                <span class="k-icon k-i-delete" role="presentation"></span>
+                                            </button>
                                         </dt>
                                         <dd>{{ dataItem.DOCNUM }}</dd>
                                     </dl>
@@ -173,12 +259,12 @@
 
                             <kendo-grid-column media="(min-width: 768px)" field="DOCNUM" title="Order No">
                             </kendo-grid-column>
-                            <kendo-grid-column headerClass="text-center" class="text-center" media="(min-width: 768px)"
-                                field="DOCNUM" [width]="80" title="{{'Delete'|translate}}" *ngIf="deliveryOptionType==1">
+                            <kendo-grid-column headerClass="text-center" class="text-center" media="(min-width: 768px)" field="DOCNUM" [width]="80" title="{{'Delete'|translate}}"
+                                *ngIf="deliveryOptionType==1">
                                 <ng-template kendoGridCellTemplate let-idx="rowIndex">
-                                    <button id="removeSelectedMeterial" (click)="removeOrder(idx,gridItem)"
-                                        class="btn btn-danger k-button btn-sm btn-icon">
-                                        <span class="k-icon k-i-delete" role="presentation"></span></button>
+                                    <button id="removeSelectedMeterial" (click)="removeOrder(idx,gridItem)" class="btn btn-danger k-button btn-sm btn-icon">
+                                        <span class="k-icon k-i-delete" role="presentation"></span>
+                                    </button>
                                 </ng-template>
                             </kendo-grid-column>
                         </kendo-grid>
@@ -192,27 +278,22 @@
             </div>
             <div class="col-sm-12 col-12">
 
-                    <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (mousedown)="cancel()"><span
-                        class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
+                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (mousedown)="cancel()">
+                    <span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
 
-                <button type="button"
-                    [hidden]='!(orderCollection!==undefined && orderCollection!==null && orderCollection.length>0)'
-                    (mousedown)="prepareDeleiveryCollection()"
-                    class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-check"
-                        role="presentation"></span> {{'Deleiver'|translate}}</button>
+                <button type="button" [hidden]='!(orderCollection!==undefined && orderCollection!==null && orderCollection.length>0)' (mousedown)="prepareDeleiveryCollection()"
+                    class="btn btn-success k-button btn-sm btn-icon-with-text">
+                    <span class="k-icon k-i-check" role="presentation"></span> {{'Deleiver'|translate}}</button>
 
-                <button type="button" *ngIf ="deliveryOptionType==1" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon"
-                    [disabled]="!customerCode" (click)="openCustSO(true)" roterLink="binTransfer" skipLocationChange><i
-                        class="opti-icon-arrow-next"></i></button>
- 
-                <button type="button" id="Hid_outboundCustomerCodeScanBtn" style="visibility:hidden"
-                    (click)="hiddenScanCustCodeBtn()"
-                    class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                <button type="button" *ngIf="deliveryOptionType==1" class="btn btn-outline-secondary btn-sm btn-transparent btn-icon" [disabled]="!customerCode"
+                    (click)="openCustSO(true)" roterLink="binTransfer" skipLocationChange>
+                    <i class="opti-icon-arrow-next"></i>
+                </button>
+
+                <button type="button" id="Hid_outboundCustomerCodeScanBtn" style="visibility:hidden" (click)="hiddenScanCustCodeBtn()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                     SB </button>
 
-                    <button type="button" id="Hid_OutCustSOScanBtn" style="visibility:hidden"
-                    (click) = "hiddenScanSoBtn()"
-                    class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                <button type="button" id="Hid_OutCustSOScanBtn" style="visibility:hidden" (click)="hiddenScanSoBtn()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                     SB </button>
 
             </div>
@@ -233,13 +314,13 @@
 
 <!-- Dialog -->
 <span *ngIf="showConfirmDialog">
-    <app-comon-confirm-dialog [titleMessage]="dialogMsg" [fromWhere]="dialogFor" [noButtonText]="noButtonText"
-        [yesButtonText]="yesButtonText" (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
+    <app-comon-confirm-dialog [titleMessage]="dialogMsg" [fromWhere]="dialogFor" [noButtonText]="noButtonText" [yesButtonText]="yesButtonText"
+        (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
 </span>
 <span *ngIf="showShipmentInfo==true">
- <app-shipmentinfo  [serviceData]='ShipmentInfoData' [useContainer]='useContainer' (lookupOutputEvent)="getShipmentLookupEvent($event)" 
- (lookupRowDeleteEvent)="shipmentRowDeleteEvent($event)"></app-shipmentinfo>
-</span> 
+    <app-shipmentinfo [serviceData]='ShipmentInfoData' [useContainer]='useContainer' (lookupOutputEvent)="getShipmentLookupEvent($event)"
+        (lookupRowDeleteEvent)="shipmentRowDeleteEvent($event)"></app-shipmentinfo>
+</span>
 
 
 
@@ -274,3 +355,33 @@
     <app-display-pdf *ngIf="displayPDF1" [base64String]='base64String' [fileName]='fileName' (pdfClose)="closePDF($event)"></app-display-pdf>
 </div>
 <!--Pick list pack list and Bol PDF-->
+
+<kendo-dialog [width]="700" [height]="400" *ngIf="dialogOpened" (close)="closeDialog()">
+    <div class="new-custom-grid">
+        <kendo-dialog-titlebar>
+            {{'ShipmentDetail'|translate}}
+        </kendo-dialog-titlebar>
+        <div class="px-3">
+            <div class="form-group row mt-2">
+                <div class="input-group input-group-sm">
+                    <kendo-grid [kendoGridBinding]="ShipmentDetail" [resizable]="true" [height]="270" [skip]="skip">
+                        <kendo-grid-column field="DOCNUM" width="70" title="{{'SalesOrder'|translate}}"></kendo-grid-column>
+                        <kendo-grid-column class="text-right" field="LINENUM" width="60" title="{{'OrderLine'|translate}}"></kendo-grid-column>
+                        <kendo-grid-column field="ITEMCODE" width="150" title="{{'ItemCode'|translate}}"></kendo-grid-column>
+                        <kendo-grid-column class="text-right" field="OPENQTY" width="80" title="{{'OpenQty'|translate}}"></kendo-grid-column>
+                        <kendo-grid-column class="text-right" field="QUANTITY" width="80" title="{{'ShipQty'|translate}}"></kendo-grid-column>
+                        <kendo-grid-column field="DOCDUEDATE" width="100" title="{{'DeliveryDate'|translate}}">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                {{dataItem.DOCDUEDATE | date:dateFormat}}
+                            </ng-template>
+                        </kendo-grid-column>
+                    </kendo-grid>
+                </div>
+            </div>
+        </div>
+
+        <kendo-dialog-actions>
+            <button class="ml-1" kendoButton (click)="closeDialog()" primary="true">{{'Ok'|translate}}</button>
+        </kendo-dialog-actions>
+    </div>
+</kendo-dialog>
