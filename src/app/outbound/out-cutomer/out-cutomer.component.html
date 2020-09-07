@@ -181,18 +181,18 @@
                         [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup [height]=gridHeight (selectionChange)="onShipmentSelection($event)"
                         [selectable]="true" #gridItem>
 
-                        <ng-template kendoGridToolbarTemplate>
-                                <span class="grid-toolbar-title">{{'SelectShipmentForDelivery'|translate}}</span>
-                                <label class="custom-checkbox mb-0 mr-2 filter-checkbox">
-                                    <input #chkFilterView type="checkbox" (change)="onFilterChange(chkFilterView,ContainerItems)" id="FilterColumnView" [(ngModel)]="isColumnFilterView"
-                                        class="k-checkbox" name="FilterColumnView" />
-                                    <label class="k-checkbox-label" for="FilterColumnView">{{'Enable_Filter'|translate}}</label>
-                                </label>
-                            </ng-template>
-
                         <!-- <ng-template kendoGridToolbarTemplate>
                             <span class="grid-toolbar-title">{{'SelectShipmentForDelivery'|translate}}</span>
+                            <label class="custom-checkbox mb-0 mr-2 filter-checkbox">
+                                <input #chkFilterView type="checkbox" (change)="onFilterChange(chkFilterView,ContainerItems)" id="FilterColumnView" [(ngModel)]="isColumnFilterView"
+                                    class="k-checkbox" name="FilterColumnView" />
+                                <label class="k-checkbox-label" for="FilterColumnView">{{'Enable_Filter'|translate}}</label>
+                            </label>
                         </ng-template> -->
+
+                        <ng-template kendoGridToolbarTemplate>
+                            <span class="grid-toolbar-title">{{'SelectShipmentForDelivery'|translate}}</span>
+                        </ng-template>
 
                         <kendo-grid-checkbox-column title="{{'Select'|translate}}" [width]="15">
                             <ng-template kendoGridHeaderTemplate let-column let-rowIndex="rowIndex">
@@ -211,7 +211,7 @@
                                 </div> -->
 
                                 <div class="k-form-field d-flex">
-                                    <input #chkSelection type="checkbox" (change)="selectContainerRowChange(chkSelection.checked, dataItem, idx)" [checked]="dataItem.Selected"
+                                    <input #chkSelection type="checkbox" (change)="selectShipmentRow(chkSelection.checked, dataItem, idx)" [checked]="dataItem.Selected"
                                         id="chkbox-{{idx}}" class="k-checkbox" name="columnfilter" />
                                     <label class="k-checkbox-label" for="chkbox-{{idx}}"></label>
                                 </div>
@@ -282,6 +282,10 @@
                     <span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
 
                 <button type="button" [hidden]='!(orderCollection!==undefined && orderCollection!==null && orderCollection.length>0)' (mousedown)="prepareDeleiveryCollection()"
+                    class="btn btn-success k-button btn-sm btn-icon-with-text">
+                    <span class="k-icon k-i-check" role="presentation"></span> {{'Deleiver'|translate}}</button>
+
+                <button type="button" *ngIf = "deliveryOptionType==2 && SelectedRowsforShipmentArr.length > 0" (mousedown)="prepareShipmentModel('delivery')"
                     class="btn btn-success k-button btn-sm btn-icon-with-text">
                     <span class="k-icon k-i-check" role="presentation"></span> {{'Deleiver'|translate}}</button>
 

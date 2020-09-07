@@ -255,5 +255,15 @@ export class OutboundService {
 
   }
 
+
+  public CreateDeliveryBasedonShipments(deliveryPayload) {
+    var jObject = { DeliveryToken: JSON.stringify(deliveryPayload) };    
+    return this.httpclient.post(this.config_params.service_url + "/api/Delivery/CreateDeliveryBasedonShipments", jObject, this.commonService.httpOptions);
+  }
+
+  public GetShipmentSODetails(deliveryPayload) {
+    var jObject = { DeliveryToken: JSON.stringify(deliveryPayload) };    
+    return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetShipmentSODetails", jObject, this.commonService.httpOptions);
+  }
 }
 
