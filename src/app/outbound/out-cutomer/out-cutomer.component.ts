@@ -22,11 +22,13 @@ export class OutCutomerComponent implements OnInit {
   yesButtonText: string = "Yes";
   noButtonText: string = "No";
   public serviceData: any;
+  DiliveryShipmentList: any[] = [];
   public lookupfor: any = '';
   public showLookup: boolean = false;
   public selectedCustomerElement: any;
   public customerName: string = '';
   public customerCode: string = '';
+  shipToCode: string = "";
   public viewLines: boolean;
   public outbound: OutboundData;
   public orderCollection: any[];
@@ -1114,9 +1116,9 @@ export class OutCutomerComponent implements OnInit {
   //--------------------add So field--
 
   public getShipmentList() {
-    this.showLookup = false;
+    // this.showLookup = false;
     this.showLookupLoader = true;
-    this.outboundservice.getShipmentIdList(this.customerCode, this.dockDoorCode).subscribe(
+    this.outboundservice.getShipmentList(this.customerCode, this.dockDoorCode, this.shipToCode).subscribe(
       resp => {
         this.showLookupLoader = false;
         if (resp != null && resp != undefined && resp.length > 0) {
@@ -1125,17 +1127,11 @@ export class OutCutomerComponent implements OnInit {
             this.showLookupLoader = false;
             return;
           }
-
-          this.serviceData = resp;
-          this.lookupfor = "ShipmentList";
-          this.showLookup = true;
-
+          this.DiliveryShipmentList = resp;
         } else {
           this.toastr.error('', this.translate.instant("ShipmentNotAvailable"));
           this.orderNumber = "";
-          // this.scanShipmentId.nativeElement.focus()
         }
-
       },
       error => {
         this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
@@ -1397,7 +1393,7 @@ export class OutCutomerComponent implements OnInit {
           })
           this.ShipmentItems = resp.ShipmentItems;
           for (var i = 0; i < resp.ShipmentItems.length; i++) {
-            this.ShipmentItems[i].OPTM_STATUS_VAL = this.shipmentLinesArray[Number(this.ShipmentItems[i].OPTM_STATUS)-1].Name
+            this.ShipmentItems[i].OPTM_STATUS_VAL = this.shipmentLinesArray[Number(this.ShipmentItems[i].OPTM_STATUS) - 1].Name
           }
           this.ShipmentBtchSer = resp.ShipmentBtchSer;
           this.ContainerItems = resp.ContainerItems;
@@ -1623,6 +1619,161 @@ export class OutCutomerComponent implements OnInit {
   }
   closePrintDialog() {
     this.printDialog = false;
+  }
+
+  onQueryClick() {
+    this.getShipmentList();
+  }
+
+  dialogOpened: boolean = false;
+  ShipmentDetail: any[] = [];
+
+  onShipmentSelection(event) {
+    this.dialogOpened = true;
+    this.getShipmentDetail(event.selectedRows[0].dataItem.OPTM_SHIPMENT_CODE);
+  }
+
+  updateDeliverySeq(lotTemplateVar, value, rowindex) {
+    for (let i = 0; i < this.DiliveryShipmentList.length; ++i) {
+      if (i === rowindex) {
+        this.DiliveryShipmentList[i].DeliverySeq = lotTemplateVar;
+      }
+    }
+  }
+
+  public getShipmentDetail(shipmentCode: any) {
+    if (shipmentCode == undefined || shipmentCode == null || shipmentCode == "") {
+      return;
+    }
+    this.showLookup = false;
+    this.showLookupLoader = true;
+    this.outboundservice.isValidShipmentId(shipmentCode).subscribe(
+      resp => {
+        this.showLookupLoader = false;
+        if (resp != null && resp != undefined) {
+          if (resp[0] != null && resp[0] != undefined && resp[0].ErrorMsg != null &&
+            resp[0].ErrorMsg != undefined && resp[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));
+            this.showLookupLoader = false;
+            return;
+          }
+
+          // reset for this shipment id.
+          this.resetOldShipmentData();
+
+          if (resp.ItemHeader != null && resp.ItemHeader != undefined && resp.ItemHeader.length > 0 &&
+            resp.ItemDetail != null && resp.ItemDetail != undefined && resp.ItemDetail.length > 0) {
+            this.ShipmentDetail = resp.ItemHeader;
+          } else {
+            this.shipmentId = "";
+            this.toastr.error('', this.translate.instant("InvalidShipmentCode"));
+          }
+
+
+        } else {
+          this.toastr.error('', this.translate.instant("InvalidShipmentCode"));
+          this.shipmentId = "";
+          // this.scanShipmentId.nativeElement.focus()
+        }
+
+      },
+      error => {
+        this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
+        this.showLookupLoader = false;
+      }
+    );
+  }
+
+  closeDialog() {
+    this.dialogOpened = false;
+  }
+
+  SelectedRowsforShipmentArr = [];
+  selectall: boolean = false;
+
+  selectContainerRowChange(isCheck, dataitem, idx) {
+    if (isCheck) {
+      this.DiliveryShipmentList[idx].Selected = true;
+      // for (let i = 0; i < this.DiliveryShipmentList.length; i++) {
+      //   if (this.DiliveryShipmentList[i].OPTM_CONTCODE == dataitem.OPTM_CONTCODE) {
+      //     this.DiliveryShipmentList[i].Selected = true;
+      //   }
+      // }
+      var index = this.SelectedRowsforShipmentArr.findIndex(r => r.OPTM_CONTCODE == dataitem.OPTM_CONTCODE);
+      if (index == -1) {
+        this.SelectedRowsforShipmentArr.push(dataitem);
+      }
+    }
+    else {
+      for (let i = 0; i < this.DiliveryShipmentList.length; i++) {
+        if (this.DiliveryShipmentList[i].OPTM_CONTCODE == dataitem.OPTM_CONTCODE) {
+          this.DiliveryShipmentList[i].Selected = false;
+        }
+      }
+      var index = this.SelectedRowsforShipmentArr.findIndex(r => r.OPTM_CONTCODE == dataitem.OPTM_CONTCODE);
+      if (index > -1)
+        this.SelectedRowsforShipmentArr.splice(index, 1);
+    }
+  }
+
+  on_Selectall_checkbox_checked(checkedvalue) {
+    var isExist = 0;
+    this.selectall = false
+    if (checkedvalue == true) {
+      if (this.DiliveryShipmentList.length > 0) {
+        this.selectall = true
+        this.SelectedRowsforShipmentArr = [];
+        for (let i = 0; i < this.DiliveryShipmentList.length; ++i) {
+          this.DiliveryShipmentList[i].Selected = true;
+          this.SelectedRowsforShipmentArr.push(this.DiliveryShipmentList[i]);
+        }
+      }
+    }
+    else {
+      this.selectall = false
+      if (this.DiliveryShipmentList.length > 0) {
+        for (let i = 0; i < this.DiliveryShipmentList.length; ++i) {
+          this.DiliveryShipmentList[i].Selected = false;
+          this.SelectedRowsforShipmentArr.splice(this.DiliveryShipmentList[i])
+        }
+      }
+    }
+  }
+
+  public isValidShipTo() {
+    if (this.shipToCode == undefined || this.shipToCode == null || this.shipToCode == "") {
+      return;
+    }
+    this.showLookup = false;
+    this.showLookupLoader = true;
+    this.outboundservice.isValidShipTo(this.shipToCode).subscribe(
+      resp => {
+        this.showLookupLoader = false;
+        if (resp != null && resp != undefined) {
+          if (resp[0] != null && resp[0] != undefined && resp[0].ErrorMsg != null &&
+            resp[0].ErrorMsg != undefined && resp[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
+            this.showLookupLoader = false;
+            return;
+          }
+          if (resp != null && resp.length == 0) {
+            this.toastr.error('', this.translate.instant("InvalidShipTo"));
+            this.shipToCode = "";
+            return;
+          }
+          if (resp[0] != null && resp[0].Address != null && resp[0].Address != undefined) {
+            this.shipToCode = resp[0].Address;
+          }
+        } else {
+          this.toastr.error('', this.translate.instant("InvalidShipTo"));
+          this.shipToCode = "";
+        }
+      },
+      error => {
+        this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
+        this.showLookupLoader = false;
+      }
+    );
   }
 }
 

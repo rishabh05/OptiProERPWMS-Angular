@@ -16,6 +16,7 @@ import { InputsModule } from '@progress/kendo-angular-inputs';
 import { DialogModule } from '@progress/kendo-angular-dialog';
 import { DeliveryThroughShipmentComponent } from './delivery-through-shipment/delivery-through-shipment.component';
 import { NewPackingInputDialogComponent } from './new-packing-input-dialog/new-packing-input-dialog.component';
+import { NgxTrimDirectiveModule } from '../../../node_modules/ngx-trim-directive';
  
 @NgModule({
   declarations: [ OutCutomerComponent, OutOrderComponent, OutProdissueComponent, DeliveryThroughShipmentComponent, NewPackingInputDialogComponent],
@@ -29,7 +30,8 @@ import { NewPackingInputDialogComponent } from './new-packing-input-dialog/new-p
     SharedModule,
     DropDownsModule,
     DialogModule,
-    InputsModule
+    InputsModule,
+    NgxTrimDirectiveModule
   ], 
   exports:[OutCutomerComponent,OutOrderComponent,OutProdissueComponent,NewPackingInputDialogComponent]
 })

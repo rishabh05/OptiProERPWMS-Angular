@@ -659,16 +659,12 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   }
 
   updateLotNumber(lotTemplateVar, value, rowindex, gridData: any) {
-
     value = value.trim();
-
-
     if (localStorage.getItem('FromReceiptProd') == 'true') {
       if(this.isGenelogyEnabled=="Y"){
       this.checkAndValidateSerial(lotTemplateVar, value, rowindex);
       }
     } else {
-
       let result = this.recvingQuantityBinArray.find(element => element.LotNumber == value);
       if (result != undefined) {
         if (this.openPOLineModel[0].TRACKING != "N") {
