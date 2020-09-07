@@ -983,7 +983,7 @@ export class LookupComponent implements OnInit {
     this.table_head = [
       {
         field: 'OPTM_SHIPMENTID',
-        title: this.translate.instant("ShipmentID"),
+        title: this.translate.instant("ShipmentCode"),
         type: 'text',
         width: '170'
       },
@@ -1008,6 +1008,12 @@ export class LookupComponent implements OnInit {
       {
         field: 'OPTM_USE_CONTAINER',
         title: this.translate.instant("Use_Container"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'SHIPMENTID',
+        title: this.translate.instant("ShipmentID"),
         type: 'text',
         width: '100'
       }

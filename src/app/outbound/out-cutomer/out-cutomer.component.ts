@@ -6,7 +6,7 @@ import { Commonservice } from 'src/app/services/commonservice.service';
 import { Router } from '@angular/router';
 import { OutboundData, CurrentOutBoundData } from 'src/app/models/outbound/outbound-data';
 import { CommonConstants } from 'src/app/const/common-constants';
-import { SOHEADER, SODETAIL, DeliveryToken } from 'src/app/models/outbound/out-del-req';
+import { SOHEADER, SODETAIL, DeliveryToken, LoginParams, Shipments } from 'src/app/models/outbound/out-del-req';
 import { InboundService } from 'src/app/services/inbound.service';
 
 // This file called from Outbound -> SO delivery and Shipment delivery
@@ -613,6 +613,8 @@ export class OutCutomerComponent implements OnInit {
       //let tempDeleiveryCollection: any[] = this.outbound.DeleiveryCollection;
       let arrSOHEADER: SOHEADER[] = [];
       let arrSODETAIL: SODETAIL[] = [];
+      let arrLoginParams: LoginParams[] = [];
+      let arrShipments: Shipments[] = [];
       let deliveryToken: DeliveryToken = new DeliveryToken();
       // Hdr
       let comDbId = sessionStorage.getItem("CompID");
@@ -683,6 +685,7 @@ export class OutCutomerComponent implements OnInit {
             }
             arrSOHEADER.push(hdr);
           }
+          
           //================logic to add delivery line.
           var parentLineNum = hdrLineVal;
           let hasDetail = false;
@@ -750,6 +753,18 @@ export class OutCutomerComponent implements OnInit {
       if (deliveryToken.PackingData.length > 0) {
         this.isDeliveryContainerPacking = true;
       }
+
+      //Add LoginParams and Shipment IDs
+      arrLoginParams[0].DiServerToken = sessionStorage.getItem("whseId");
+      arrLoginParams[0].WhsCode = sessionStorage.getItem("whseId");
+      arrLoginParams[0].UsernameForLic = sessionStorage.getItem("UserId");
+      arrLoginParams[0].CompanyDBId = sessionStorage.getItem("CompID");
+      arrLoginParams[0].GUID = sessionStorage.getItem("GUID");
+
+      deliveryToken.LoginParams = arrLoginParams;
+      deliveryToken.Shipments = arrShipments;
+
+      // End
       this.showLookupLoader = true;
       this.outboundservice.addDeleivery(deliveryToken).subscribe(
         data => {
