@@ -1629,11 +1629,12 @@ export class OutCutomerComponent implements OnInit {
   ShipmentDetail: any[] = [];
 
   onShipmentSelection(event) {
-    this.dialogOpened = true;
+    
     this.SelectedRowsforShipmentArr = [];
     this.SelectedRowsforShipmentArr.push({
       ShipmentID: event.selectedRows[0].dataItem.OPTM_SHIPMENTID
     })
+    // this.getShipmentDetail(event.selectedRows[0].dataItem.OPTM_SHIPMENT_CODE)
     this.prepareShipmentModel("getDetail");
   }
 
@@ -1668,6 +1669,7 @@ export class OutCutomerComponent implements OnInit {
           if (resp.ItemHeader != null && resp.ItemHeader != undefined && resp.ItemHeader.length > 0 &&
             resp.ItemDetail != null && resp.ItemDetail != undefined && resp.ItemDetail.length > 0) {
             this.ShipmentDetail = resp.ItemHeader;
+            this.dialogOpened = true;
           } else {
             this.shipmentId = "";
             this.toastr.error('', this.translate.instant("InvalidShipmentCode"));
@@ -1816,13 +1818,15 @@ export class OutCutomerComponent implements OnInit {
       resp => {
         this.showLookupLoader = false;
         if (resp != null && resp != undefined) {
-          if (resp[0] != null && resp[0] != undefined && resp[0].ErrorMsg != null &&
-            resp[0].ErrorMsg != undefined && resp[0].ErrorMsg == "7001") {
-            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
-            this.showLookupLoader = false;
-            return;
-          }
-          this.ShipmentDetail =  resp[0].ShipmentDtls;
+          // if (resp[0] != null && resp[0] != undefined && resp[0].ErrorMsg != null &&
+          //   resp[0].ErrorMsg != undefined && resp[0].ErrorMsg == "7001") {
+          //   this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
+          //   this.showLookupLoader = false;
+          //   return;
+          // }
+          
+          this.ShipmentDetail =  resp.ShipmentDtls
+          this.dialogOpened = true;
           this.SelectedRowsforShipmentArr = [];
         } else {
           this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
@@ -1844,13 +1848,27 @@ export class OutCutomerComponent implements OnInit {
       resp => {
         this.showLookupLoader = false;
         if (resp != null && resp != undefined) {
-          if (resp[0] != null && resp[0] != undefined && resp[0].ErrorMsg != null &&
-            resp[0].ErrorMsg != undefined && resp[0].ErrorMsg == "7001") {
-            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));
+          if (resp[0].ErrorMsg == "" && resp[0].Successmsg == "SUCCESSFULLY") {
+            this.delNo = resp[0].SuccessNo
+            this.responseDocEntry = resp[0].DocEntry
+            this.invoiceStatus = resp[0].InvoiceStatus;
             this.showLookupLoader = false;
+            this.trackingId = "";
+            this.CustRefNo = "";
+            this.toastr.success('', this.translate.instant("DeleiverySuccess") + " : " + resp[0].SuccessNo);
+            this.SelectedRowsforShipmentArr = [];
+            this.getShipmentList();
+          } else if (resp[0].ErrorMsg == "7001") {
+            this.showLookupLoader = false;
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
-          this.SelectedRowsforShipmentArr = [];
+          else {
+            this.showLookupLoader = false;
+            this.toastr.error('', resp[0].ErrorMsg);
+          }
+          
         } else {
           this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
           this.shipToCode = "";

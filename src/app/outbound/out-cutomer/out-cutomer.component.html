@@ -223,7 +223,7 @@
                                 {{dataItem.OPTM_SCH_DATETIME | date:dateFormat}}
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column field="OPTM_GROUP_CODE" width="80" title="{{'NoofContainers'|translate}}"></kendo-grid-column>
+                        <kendo-grid-column field="NO_OF_CONTAINERS" width="80" title="{{'NoofContainers'|translate}}"></kendo-grid-column>
                         <kendo-grid-column field="DeliverySeq" [width]="45" title="{{'DeliverySeq'|translate}}" headerClass="text-left" class="text-left">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                 <input type="text" #DelSeq class="form-control form-control-sm text-right" [value]="" (input)="updateDeliverySeq(DelSeq.value, dataItem, rowIndex)"
@@ -368,15 +368,15 @@
         <div class="px-3">
             <div class="form-group row mt-2">
                 <div class="input-group input-group-sm">
-                    <kendo-grid [kendoGridBinding]="ShipmentDetail" [resizable]="true" [height]="270" [skip]="skip">
-                        <kendo-grid-column field="DOCNUM" width="70" title="{{'SalesOrder'|translate}}"></kendo-grid-column>
-                        <kendo-grid-column class="text-right" field="LINENUM" width="60" title="{{'OrderLine'|translate}}"></kendo-grid-column>
-                        <kendo-grid-column field="ITEMCODE" width="150" title="{{'ItemCode'|translate}}"></kendo-grid-column>
-                        <kendo-grid-column class="text-right" field="OPENQTY" width="80" title="{{'OpenQty'|translate}}"></kendo-grid-column>
-                        <kendo-grid-column class="text-right" field="QUANTITY" width="80" title="{{'ShipQty'|translate}}"></kendo-grid-column>
-                        <kendo-grid-column field="DOCDUEDATE" width="100" title="{{'DeliveryDate'|translate}}">
+                    <kendo-grid [kendoGridBinding]="ShipmentDetail" [resizable]="true" [height]="270" [skip]="skip" #griditems>
+                        <kendo-grid-column field="OPTM_SONO" width="70" title="{{'SalesOrder'|translate}}"></kendo-grid-column>
+                        <kendo-grid-column class="text-right" field="OPTM_SOLINENO" width="60" title="{{'OrderLine'|translate}}"></kendo-grid-column>
+                        <kendo-grid-column field="OPTM_ITEMCODE" width="150" title="{{'ItemCode'|translate}}"></kendo-grid-column>
+                        <kendo-grid-column class="text-right" field="OPTM_SOLINEQTY" width="80" title="{{'OpenQty'|translate}}"></kendo-grid-column>
+                        <kendo-grid-column class="text-right" field="OPTM_SHPQTY_SUOM" width="80" title="{{'ShipQty'|translate}}"></kendo-grid-column>
+                        <kendo-grid-column field="ShipDate" width="100" title="{{'DeliveryDate'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem>
-                                {{dataItem.DOCDUEDATE | date:dateFormat}}
+                                {{dataItem.ShipDate | date:dateFormat}}
                             </ng-template>
                         </kendo-grid-column>
                     </kendo-grid>
