@@ -486,7 +486,7 @@
   "QtyNotFullFillMsg": "Please pick all the quantities of task.",
   "AllQtyPickedMsg": "You have picked all the quantities, Now click on save to save this task.",
   "QtyExceed": "Quantity exceed for the given batch number.",
-  "ShipmentID": "Shipment Code", 
+  "ShipmentID": "Shipment ID", 
   "ShipmentCode": "Shipment Code", 
   "ShipmentreadyToDeliver": "Your Shipment is ready to deliver.",
   "SerialAccepted": "Serial Accepted",
