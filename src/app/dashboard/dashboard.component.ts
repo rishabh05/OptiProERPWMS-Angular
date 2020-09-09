@@ -20,9 +20,6 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.appVersion = "Version: " +   this.commonservice.config_params.AppVersion;
 
-    // this.appVersion = this.translate.instant("Dashboard_AppVersion") +   this.commonservice.config_params.AppVersion;
- }
- 
+ } 
 }

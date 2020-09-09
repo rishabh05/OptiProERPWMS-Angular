@@ -196,7 +196,7 @@ export class LookupComponent implements OnInit {
         width: '100'
       },
       {
-        field: 'WHSName',
+        field: 'WhsName',
         title: this.translate.instant("WhseName"),
         type: 'text',
         width: '100'
@@ -781,15 +781,15 @@ export class LookupComponent implements OnInit {
   }
 
 
-  onCheckboxClick(checked: any, index: number) {
+  onCheckboxClick(checked: any, index: number, dataItem) {
 
     let servivceItem: any = this.serviceData[index];
     if (checked) {
-      this.selectedValues.push(servivceItem);
+      this.selectedValues.push(dataItem);
     }
     else {
       // let rixd: number= this.selectedValues.findIndex(i => i.LOTNO == servivceItem.LOTNO && i.LOTNO == servivceItem.BINNO)
-      var temp = this.selectedValues.splice(index, 1);
+      var temp = this.selectedValues.splice(dataItem);//(index, 1);
       this.selectedValues = this.selectedValues;
       //console.log("selectedValues.size", this.selectedValues.length);
     }

@@ -98,13 +98,7 @@
 
 <!-- About us modal start -->
 <ng-template #about let-modal>
-    <!-- <div class="modal-header">
-        <h4 class="modal-title">Modal title</h4>
-        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div> -->
-
+    
     <div class="modal-body text-center" style="padding: 20px;">
         <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
             <img src="assets/images/common/close-black.svg" width="15" />
@@ -112,16 +106,11 @@
         <p></p>
         <h4>
             Shipping Solution
-            <!-- <img src="assets/images/logo/large-logo-old.png" alt="Large Logo" class="opti_large-logo" /> -->
         </h4>
-        <p>{{appVersion}}</p>
+        <p>{{'appVersion'|translate}}</p>
         <p>{{'Dashboard_CopyWrt_Msg'|translate}}</p>
-        <p><a href="http://www.optiproerp.com">www.optiproerp.com</a></p>
+        <p><a href="http://www.optiproerp.com">{{'website'|translate}}</a></p>
     </div>
-
-    <!-- <div class="modal-footer">
-        <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
-    </div> -->
 </ng-template>
 <!-- About us modal end -->
 

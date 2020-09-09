@@ -1,9 +1,8 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UIHelper } from '../../helpers/ui.helpers';
 import { Commonservice } from '../../services/commonservice.service';
 import { Router } from '@angular/router';
 import { opticonstants } from '../../constants';
-
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
@@ -27,7 +26,7 @@ export class PortalTopComponent implements OnInit {
   loggedinWarehouse: string;
   updatetopBarSubs: ISubscription;
   showConfirmDialog:boolean = false;
-  appVersion: string="Version : 1.2.10";
+  // appVersion: string="Version : 1.2.10";
   
   constructor(
     private modalService: NgbModal, private commonService: Commonservice, private toastr: ToastrService, private router: Router, private translate: TranslateService) {
@@ -35,6 +34,7 @@ export class PortalTopComponent implements OnInit {
       userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
       translate.use(userLang);
       translate.onLangChange.subscribe((event: LangChangeEvent) => {
+       // this.appVersion = "Version: " +   this.commonservice.config_params.AppVersion;
       });
   }
 
@@ -48,7 +48,7 @@ export class PortalTopComponent implements OnInit {
       this.loggedinWarehouse = sessionStorage.getItem("whseId");
     });
 
-    // this.appVersion = "Version: " +   this.commonservice.config_params.AppVersion;
+//    this.appVersion = "Version: " +   this.commonservice.config_params.AppVersion;
 
     // this.appVersion = this.translate.instant("Dashboard_AppVersion") +   this.commonservice.config_params.AppVersion;
   }

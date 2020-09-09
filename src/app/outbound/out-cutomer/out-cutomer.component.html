@@ -217,20 +217,31 @@
                                 </div>
                             </ng-template>
                         </kendo-grid-checkbox-column>
-                        <kendo-grid-column field="OPTM_SHIPMENT_CODE" width="100" title="{{'ShipmentCode'|translate}}"></kendo-grid-column>
+                        <kendo-grid-column field="OPTM_SHIPMENT_CODE" width="100" title="{{'ShipmentCode'|translate}}">
+                            <ng-template kendoGridCellTemplate let-dataItem class="text-left">
+                                <a class="dropdown-item" style="color: blue; " class="text-left" (click)="showShipmentList(dataItem.OPTM_SHIPMENTID)">{{dataItem.OPTM_SHIPMENT_CODE}}</a>
+                                <!-- <a class="dropdown-item" style="color: gray; cursor: not-allowed; pointer-events: none;" *ngIf="isStageDiabled">Click here</a> -->
+                            </ng-template>
+                        </kendo-grid-column>
                         <kendo-grid-column field="OPTM_SCH_DATETIME" width="80" title="{{'SchShipDate'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem>
                                 {{dataItem.OPTM_SCH_DATETIME | date:dateFormat}}
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column field="NO_OF_CONTAINERS" width="80" title="{{'NoofContainers'|translate}}"></kendo-grid-column>
+                        <kendo-grid-column field="NO_OF_CONTAINERS" class="text-right" width="80" title="{{'NoofContainers'|translate}}"></kendo-grid-column>
+
                         <kendo-grid-column field="DeliverySeq" [width]="45" title="{{'DeliverySeq'|translate}}" headerClass="text-left" class="text-left">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                 <input type="text" #DelSeq class="form-control form-control-sm text-right" [value]="" (input)="updateDeliverySeq(DelSeq.value, dataItem, rowIndex)"
                                     trim>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column field="OPTM_SHIPTO" width="80" title="{{'DeliverToLocation'|translate}}"></kendo-grid-column>
+                        <kendo-grid-column field="DeliverToLocation" width="80" title="{{'DeliverToLocation'|translate}}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <input type="text" #DelSeq class="form-control form-control-sm text-right" [value]="" trim>
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column field="OPTM_SHIPTO" width="80" title="{{'PT_Ship_To'|translate}}"></kendo-grid-column>
                     </kendo-grid>
                 </div>
             </div>
@@ -285,7 +296,7 @@
                     class="btn btn-success k-button btn-sm btn-icon-with-text">
                     <span class="k-icon k-i-check" role="presentation"></span> {{'Deleiver'|translate}}</button>
 
-                <button type="button" *ngIf = "deliveryOptionType==2 && SelectedRowsforShipmentArr.length > 0" (mousedown)="prepareShipmentModel('delivery')"
+                <button type="button" *ngIf="deliveryOptionType==2 && SelectedRowsforShipmentArr.length > 0" (mousedown)="prepareShipmentModel('delivery')"
                     class="btn btn-success k-button btn-sm btn-icon-with-text">
                     <span class="k-icon k-i-check" role="presentation"></span> {{'Deleiver'|translate}}</button>
 
@@ -372,8 +383,16 @@
                         <kendo-grid-column field="OPTM_SONO" width="70" title="{{'SalesOrder'|translate}}"></kendo-grid-column>
                         <kendo-grid-column class="text-right" field="OPTM_SOLINENO" width="60" title="{{'OrderLine'|translate}}"></kendo-grid-column>
                         <kendo-grid-column field="OPTM_ITEMCODE" width="150" title="{{'ItemCode'|translate}}"></kendo-grid-column>
-                        <kendo-grid-column class="text-right" field="OPTM_SOLINEQTY" width="80" title="{{'OpenQty'|translate}}"></kendo-grid-column>
-                        <kendo-grid-column class="text-right" field="OPTM_SHPQTY_SUOM" width="80" title="{{'ShipQty'|translate}}"></kendo-grid-column>
+                        <kendo-grid-column class="text-right" field="OPTM_SOLINEQTY" width="80" title="{{'OpenQty'|translate}}">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                {{dataItem.OPTM_SOLINEQTY |numberFormat}}
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column class="text-right" field="OPTM_SHPQTY_SUOM" width="80" title="{{'ShipQty'|translate}}">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                {{dataItem.OPTM_SHPQTY_SUOM |numberFormat}}
+                            </ng-template>
+                        </kendo-grid-column>
                         <kendo-grid-column field="ShipDate" width="100" title="{{'DeliveryDate'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem>
                                 {{dataItem.ShipDate | date:dateFormat}}

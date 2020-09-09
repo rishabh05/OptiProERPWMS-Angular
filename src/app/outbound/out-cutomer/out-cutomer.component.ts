@@ -242,6 +242,7 @@ export class OutCutomerComponent implements OnInit {
           let outbound: OutboundData = new OutboundData();
           this.customerCode = resp[0].CUSTCODE;
           this.customerName = resp[0].CUSTNAME;
+          this.DiliveryShipmentList = [];
           outbound.CustomerData = {
             CustomerCode: this.customerCode, CustomerName: this.customerName, TrackingId: this.trackingId,
             CustRefNo: this.CustRefNo, ShipmentId: ''
@@ -334,7 +335,7 @@ export class OutCutomerComponent implements OnInit {
         let outbound: OutboundData = new OutboundData();
         this.customerCode = this.selectedCustomerElement[0];
         this.customerName = this.selectedCustomerElement[1];
-        //outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
+        this.DiliveryShipmentList = [];
         outbound.CustomerData = {
           CustomerCode: this.customerCode, CustomerName: this.customerName,
           TrackingId: this.trackingId, CustRefNo: this.CustRefNo, ShipmentId: ''
@@ -432,6 +433,7 @@ export class OutCutomerComponent implements OnInit {
           //this.showLookup = true;
           this.serviceData = resp;
           this.showLookupLoader = false;
+          
           if (this.serviceData.length > 0) {
             this.lookupfor = 'out-customer';
             this.showLookup = true;
@@ -1628,14 +1630,17 @@ export class OutCutomerComponent implements OnInit {
   dialogOpened: boolean = false;
   ShipmentDetail: any[] = [];
 
-  onShipmentSelection(event) {
-    
+  showShipmentList(shipmentId){
     this.SelectedRowsforShipmentArr = [];
     this.SelectedRowsforShipmentArr.push({
-      ShipmentID: event.selectedRows[0].dataItem.OPTM_SHIPMENTID
+      ShipmentID: shipmentId
     })
     // this.getShipmentDetail(event.selectedRows[0].dataItem.OPTM_SHIPMENT_CODE)
     this.prepareShipmentModel("getDetail");
+  }
+
+  onShipmentSelection(event) {    
+    this.showShipmentList(event.selectedRows[0].dataItem.OPTM_SHIPMENTID)
   }
 
   updateDeliverySeq(lotTemplateVar, value, rowindex) {

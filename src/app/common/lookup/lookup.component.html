@@ -31,7 +31,7 @@
         <kendo-grid-checkbox-column *ngIf="showSelection==true" title="Select" [width]="25">
             <ng-template  kendoGridCellTemplate let-idx='rowIndex' let-di='dataItem'>
                 <div class="k-form-field d-flex center-checkbox">
-                    <input #chkSelection type="checkbox" [disabled]='di.OldData' [checked]='di.OldData' (change)="onCheckboxClick(chkSelection.checked,idx)" id="chkbox-{{idx}}" class="k-checkbox"
+                    <input #chkSelection type="checkbox" [disabled]='di.OldData' [checked]='di.OldData' (change)="onCheckboxClick(chkSelection.checked, idx, di)" id="chkbox-{{idx}}" class="k-checkbox"
                         name="columnfilter" />
                         
                     <label class="k-checkbox-label" for="chkbox-{{idx}}"></label>
