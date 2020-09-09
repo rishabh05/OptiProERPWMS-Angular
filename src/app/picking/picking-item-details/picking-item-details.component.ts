@@ -706,15 +706,19 @@ export class PickingItemDetailsComponent implements OnInit {
     if (this.PT_Enter_Location == undefined || this.PT_Enter_Location == "") {
       return;
     }
-    if (this.CreatedContOrTote == "" || this.CreatedContOrTote == null || this.CreatedContOrTote == undefined) {
-      if (this.ShipmentList[0].OPTM_PICK_OPER == "2") {
-        this.toastr.error("", this.translate.instant("CCBlankMsg"))
-      } else {
-        this.toastr.error("", this.translate.instant("ToteBlankMsg"))
+
+    if (this.ShipmentList[0].OPTM_PICK_OPER != "3") {
+      if (this.CreatedContOrTote == "" || this.CreatedContOrTote == null || this.CreatedContOrTote == undefined) {
+        if (this.ShipmentList[0].OPTM_PICK_OPER == "2") {
+          this.toastr.error("", this.translate.instant("CCBlankMsg"))
+        } else {
+          this.toastr.error("", this.translate.instant("ToteBlankMsg"))
+        }
+        this.PT_Enter_Location = "";
+        return;
       }
-      this.PT_Enter_Location = "";
-      return;
     }
+    
     if (this.PT_Enter_Location === this.PickTaskList[this.index].OPTM_SRC_BIN) {// location
       if (this.iterateSteps) {
         this.nextSteptoIterate();
@@ -1158,11 +1162,11 @@ export class PickingItemDetailsComponent implements OnInit {
       this.clearScanningFields();
       return;
     } else {
-      if (this.stepIndex == this.CurrentTaskSteps.length - 1) {
+      // if (this.stepIndex == this.CurrentTaskSteps.length - 1) {
         this.LastStep = this.currentStep;
         this.pickedAllDty = true;
         this.currentStep = -1;
-      }
+      // }
       this.toastr.success('', this.translate.instant("AllQtyPickedMsg"));
     }
   }
@@ -1355,6 +1359,9 @@ export class PickingItemDetailsComponent implements OnInit {
           }
           if (data.OPTM_PICKLIST != undefined && data.OPTM_PICKLIST.length > 0) {
             //this.completedTaskCount = 0; //Srini
+            if (this.ShipmentList[0].OPTM_PICKLIST_ID == data.OPTM_PICKLIST[0].OPTM_PICKLIST_ID) {
+              this.toastr.info('', this.translate.instant("NoNextPick"));
+            }
             this.countOfNowPickedTasks = 0;
             this.PickListDropBin = '';
             this.OpenTaskCount = 0;
