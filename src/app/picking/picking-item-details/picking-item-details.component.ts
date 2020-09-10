@@ -1359,9 +1359,7 @@ export class PickingItemDetailsComponent implements OnInit {
           }
           if (data.OPTM_PICKLIST != undefined && data.OPTM_PICKLIST.length > 0) {
             //this.completedTaskCount = 0; //Srini
-            if (this.ShipmentList[0].OPTM_PICKLIST_ID == data.OPTM_PICKLIST[0].OPTM_PICKLIST_ID) {
-              this.toastr.info('', this.translate.instant("NoNextPick"));
-            }
+            
             this.countOfNowPickedTasks = 0;
             this.PickListDropBin = '';
             this.OpenTaskCount = 0;
