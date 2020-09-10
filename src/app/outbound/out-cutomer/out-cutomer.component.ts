@@ -650,7 +650,8 @@ export class OutCutomerComponent implements OnInit {
             const h = arrSOHEADER[index];
             if (h.SONumber.toString() === "" + o.Order.DOCNUM
               && h.ItemCode === o.Item.ITEMCODE
-              && h.Tracking === o.Item.TRACKING) {
+              && h.Tracking === o.Item.TRACKING 
+              && h.LineNo === o.Item.LINENUM) {
               existHdr = true;
               break;
             }
@@ -757,16 +758,6 @@ export class OutCutomerComponent implements OnInit {
       if (deliveryToken.PackingData.length > 0) {
         this.isDeliveryContainerPacking = true;
       }
-
-      //Add LoginParams and Shipment IDs
-      arrLoginParams[0].DiServerToken = sessionStorage.getItem("whseId");
-      arrLoginParams[0].WhsCode = sessionStorage.getItem("whseId");
-      arrLoginParams[0].UsernameForLic = sessionStorage.getItem("UserId");
-      arrLoginParams[0].CompanyDBId = sessionStorage.getItem("CompID");
-      arrLoginParams[0].GUID = sessionStorage.getItem("GUID");
-
-      deliveryToken.LoginParams = arrLoginParams;
-      deliveryToken.Shipments = arrShipments;
 
       // End
       this.showLookupLoader = true;

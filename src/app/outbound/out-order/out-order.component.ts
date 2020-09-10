@@ -666,7 +666,8 @@ export class OutOrderComponent implements OnInit {
             let h = arrSOHEADER[index];
             if (h.SONumber.toString() === o.Order.DOCNUM + ""
               && h.ItemCode === o.Item.ITEMCODE
-              && h.Tracking === o.Item.TRACKING) {
+              && h.Tracking === o.Item.TRACKING
+              && h.LineNo === o.Item.LINENUM) {
               existHdr = true;
               break;
             }
@@ -719,7 +720,7 @@ export class OutOrderComponent implements OnInit {
               //=====when its serial tracked then check already added end===
               //=====when its non tracked then check already added start===
               if (o.Item.TRACKING == "N") {
-                if (e1.Bin === o.Meterial.BINNO) {
+                if (e1.Bin === o.Meterial.BINNO && e1.DOCENTRY == o.Item.DOCENTRY && e1.TRACKING == o.Item.TRACKING) { // added docEntry condition on 21072020
                   hasDetail = true; //need to show error
                 }
               }
