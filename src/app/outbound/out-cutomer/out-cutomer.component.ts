@@ -8,6 +8,7 @@ import { OutboundData, CurrentOutBoundData } from 'src/app/models/outbound/outbo
 import { CommonConstants } from 'src/app/const/common-constants';
 import { SOHEADER, SODETAIL, DeliveryToken, LoginParams, Shipments } from 'src/app/models/outbound/out-del-req';
 import { InboundService } from 'src/app/services/inbound.service';
+import { PageChangeEvent } from '../../../../node_modules/@progress/kendo-angular-grid';
 
 // This file called from Outbound -> SO delivery and Shipment delivery
 
@@ -41,6 +42,7 @@ export class OutCutomerComponent implements OnInit {
   public uomList: any = [];
   pagable: boolean = false;
   pageSize: number = 10;
+  skip: any = 0;
   public trackingId: any = "";
   public CustRefNo: any = "";
   public shipmentId: any = "";
@@ -242,7 +244,7 @@ export class OutCutomerComponent implements OnInit {
           let outbound: OutboundData = new OutboundData();
           this.customerCode = resp[0].CUSTCODE;
           this.customerName = resp[0].CUSTNAME;
-          this.DiliveryShipmentList = [];
+          this.resetShipmentList();
           outbound.CustomerData = {
             CustomerCode: this.customerCode, CustomerName: this.customerName, TrackingId: this.trackingId,
             CustRefNo: this.CustRefNo, ShipmentId: ''
@@ -335,7 +337,7 @@ export class OutCutomerComponent implements OnInit {
         let outbound: OutboundData = new OutboundData();
         this.customerCode = this.selectedCustomerElement[0];
         this.customerName = this.selectedCustomerElement[1];
-        this.DiliveryShipmentList = [];
+        this.resetShipmentList();
         outbound.CustomerData = {
           CustomerCode: this.customerCode, CustomerName: this.customerName,
           TrackingId: this.trackingId, CustRefNo: this.CustRefNo, ShipmentId: ''
@@ -386,6 +388,7 @@ export class OutCutomerComponent implements OnInit {
     this.outboundservice.isValidDockDoorId(this.dockDoorCode).subscribe(
       resp => {
         this.showLookupLoader = false;
+        this.resetShipmentList();
         if (resp != null && resp != undefined) {
           if (resp[0] != null && resp[0] != undefined && resp[0].ErrorMsg != null &&
             resp[0].ErrorMsg != undefined && resp[0].ErrorMsg == "7001") {
@@ -1114,6 +1117,7 @@ export class OutCutomerComponent implements OnInit {
     this.outboundservice.getShipmentList(this.customerCode, this.dockDoorCode, this.shipToCode).subscribe(
       resp => {
         this.showLookupLoader = false;
+        this.resetShipmentList();
         if (resp != null && resp != undefined && resp.length > 0) {
           if (resp[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
@@ -1121,6 +1125,11 @@ export class OutCutomerComponent implements OnInit {
             return;
           }
           this.DiliveryShipmentList = resp;
+          if(this.DiliveryShipmentList.length > this.pageSize){
+            this.pagable = true;
+          }else{
+            this.pagable = false;
+          }          
         } else {
           this.toastr.error('', this.translate.instant("ShipmentNotAvailable"));
           this.orderNumber = "";
@@ -1714,6 +1723,7 @@ export class OutCutomerComponent implements OnInit {
       for (let i = 0; i < this.DiliveryShipmentList.length; i++) {
         if (this.DiliveryShipmentList[i].OPTM_SHIPMENTID == dataitem.OPTM_SHIPMENTID) {
           this.DiliveryShipmentList[i].Selected = false;
+          this.selectall = false;
         }
       }
       var index = this.SelectedRowsforShipmentArr.findIndex(r => r.ShipmentID == dataitem.OPTM_SHIPMENTID);
@@ -1731,7 +1741,10 @@ export class OutCutomerComponent implements OnInit {
         this.SelectedRowsforShipmentArr = [];
         for (let i = 0; i < this.DiliveryShipmentList.length; ++i) {
           this.DiliveryShipmentList[i].Selected = true;
-          this.SelectedRowsforShipmentArr.push(this.DiliveryShipmentList[i]);
+          // this.SelectedRowsforShipmentArr.push(this.DiliveryShipmentList[i]);
+          this.SelectedRowsforShipmentArr.push({
+            ShipmentID: this.DiliveryShipmentList[i].OPTM_SHIPMENTID
+          })
         }
       }
     }
@@ -1755,6 +1768,7 @@ export class OutCutomerComponent implements OnInit {
     this.outboundservice.isValidShipTo(this.shipToCode).subscribe(
       resp => {
         this.showLookupLoader = false;
+        this.resetShipmentList();
         if (resp != null && resp != undefined) {
           if (resp[0] != null && resp[0] != undefined && resp[0].ErrorMsg != null &&
             resp[0].ErrorMsg != undefined && resp[0].ErrorMsg == "7001") {
@@ -1875,6 +1889,18 @@ export class OutCutomerComponent implements OnInit {
         this.showLookupLoader = false;
       }
     );
+  }
+
+  resetShipmentList(){
+    this.DiliveryShipmentList = [];
+    this.selectall = false;
+    this.SelectedRowsforShipmentArr = [];
+    this.pagable = false;
+    this.pageChange({ skip: 0, take: this.pageSize });
+  }
+
+  pageChange(event: PageChangeEvent) {
+    this.skip = event.skip;
   }
 }
 
