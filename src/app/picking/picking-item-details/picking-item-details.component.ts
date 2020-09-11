@@ -1239,7 +1239,7 @@ export class PickingItemDetailsComponent implements OnInit {
     //the last pick information as he has not clicked on Save button. Then check if any tasks are processed
     //before clicking the next picklist button. If yes then drop the contents to Part pick bin
     if (this.blnSaveClicked && ((this.completedTaskCount + 1) == this.totalPickTaskCount)) {
-      this.currentStep = this.getStepNo(this.PickListClosureSteps[this.intStepSeq].OPTM_STEP_CODE);
+      this.currentStep = this.getStepNo(this.PickListClosureSteps[this.intStepSeq].OPTM_STEP_CODE);      
       switch (this.currentStep) {
         case this.DROP_BIN_STEP:
           this.currentStepText = this.translate.instant("PL_Scan_Drop_Location");
@@ -1305,6 +1305,7 @@ export class PickingItemDetailsComponent implements OnInit {
             this.countOfNowPickedTasks = this.countOfNowPickedTasks + 1;
             this.completedTaskCount = this.completedTaskCount + 1;
             this.clearScanningFields();
+            this.blnSaveClicked = false;
             this.toastr.success('', this.translate.instant("PickSubmitMsg"));
             if (this.completedTaskCount == this.totalPickTaskCount) {
               this.ShipmentList[0].OPTM_PICKLIST_CODE = "";
