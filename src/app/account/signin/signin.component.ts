@@ -288,14 +288,15 @@ export class SigninComponent implements OnInit {
                     sessionStorage.setItem("CompID", this.selectedItem);
                     sessionStorage.setItem("whseId", this.selectedWhse);
                     sessionStorage.setItem("Token", this.licenseData[0].Token);
+
                     localStorage.setItem("PalletizationEnabled", this.licenseData[0].PalletizationEnabled);
-                    localStorage.setItem("isShipmentApplicable", "True");
+                    localStorage.setItem("isShipmentApplicable", this.licenseData[1].IsShippingEnable);
+                    localStorage.setItem("GRPOPrintReport", this.licenseData[1].GRPOPrintReport);
+                    localStorage.setItem("AutoPalletIdGenerationChecked", this.licenseData[0].AutoPalletIdGenerationChecked);
 
                     localStorage.setItem("SelectedRole", this.selectedRole.OPTM_ROLEID);
                     localStorage.setItem("SelectedZone", this.selectedZone.OPTM_WHSZONE);
-                    localStorage.setItem("SelectedBinRange", this.selectedBin.OPTM_BIN_RANGE);
-
-                    localStorage.setItem("AutoPalletIdGenerationChecked", this.licenseData[0].AutoPalletIdGenerationChecked);
+                    localStorage.setItem("SelectedBinRange", this.selectedBin.OPTM_BIN_RANGE);                    
 
                     localStorage.setItem("DefaultValues", JSON.stringify(this.licenseData[0].DefaultValues));
                     for (var i = 0; i < this.licenseData[0].DefaultValues.length; i++) {

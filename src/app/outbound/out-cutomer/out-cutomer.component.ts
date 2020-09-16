@@ -6,7 +6,7 @@ import { Commonservice } from 'src/app/services/commonservice.service';
 import { Router } from '@angular/router';
 import { OutboundData, CurrentOutBoundData } from 'src/app/models/outbound/outbound-data';
 import { CommonConstants } from 'src/app/const/common-constants';
-import { SOHEADER, SODETAIL, DeliveryToken, LoginParams, Shipments } from 'src/app/models/outbound/out-del-req';
+import { SOHEADER, SODETAIL, DeliveryToken } from 'src/app/models/outbound/out-del-req';
 import { InboundService } from 'src/app/services/inbound.service';
 import { PageChangeEvent } from '../../../../node_modules/@progress/kendo-angular-grid';
 
@@ -620,8 +620,6 @@ export class OutCutomerComponent implements OnInit {
       //let tempDeleiveryCollection: any[] = this.outbound.DeleiveryCollection;
       let arrSOHEADER: SOHEADER[] = [];
       let arrSODETAIL: SODETAIL[] = [];
-      let arrLoginParams: LoginParams[] = [];
-      let arrShipments: Shipments[] = [];
       let deliveryToken: DeliveryToken = new DeliveryToken();
       // Hdr
       let comDbId = sessionStorage.getItem("CompID");
@@ -1644,9 +1642,17 @@ export class OutCutomerComponent implements OnInit {
   }
 
   updateDeliverySeq(lotTemplateVar, value, rowindex) {
-    for (let i = 0; i < this.DiliveryShipmentList.length; ++i) {
+    for (let i = 0; i < this.DiliveryShipmentList.length; i++) {
       if (i === rowindex) {
         this.DiliveryShipmentList[i].DeliverySeq = lotTemplateVar;
+      }
+    }
+  }
+
+  updateDeliverToLocation(lotTemplateVar, value, rowindex) {
+    for (let i = 0; i < this.DiliveryShipmentList.length; i++) {
+      if (i === rowindex) {
+        this.DiliveryShipmentList[i].DeliverToLocation = lotTemplateVar;
       }
     }
   }
@@ -1739,7 +1745,7 @@ export class OutCutomerComponent implements OnInit {
       if (this.DiliveryShipmentList.length > 0) {
         this.selectall = true
         this.SelectedRowsforShipmentArr = [];
-        for (let i = 0; i < this.DiliveryShipmentList.length; ++i) {
+        for (let i = 0; i < this.DiliveryShipmentList.length; i++) {
           this.DiliveryShipmentList[i].Selected = true;
           // this.SelectedRowsforShipmentArr.push(this.DiliveryShipmentList[i]);
           this.SelectedRowsforShipmentArr.push({
@@ -1751,7 +1757,7 @@ export class OutCutomerComponent implements OnInit {
     else {
       this.selectall = false
       if (this.DiliveryShipmentList.length > 0) {
-        for (let i = 0; i < this.DiliveryShipmentList.length; ++i) {
+        for (let i = 0; i < this.DiliveryShipmentList.length; i++) {
           this.DiliveryShipmentList[i].Selected = false;
           this.SelectedRowsforShipmentArr.splice(this.DiliveryShipmentList[i])
         }

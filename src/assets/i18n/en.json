@@ -572,7 +572,7 @@
   
   "PackingNotAvailable":"No packing no. available you can add from 'New Packing'.",
   "ShowPackingDetails":"Show Packing Details",
-  "PackingQtyNotMoreThenPickedQty":"Packing quantity can not be grater then picked quantity.",
+  "PackingQtyNotMoreThenPickedQty":"Packing quantity can not be greater then picked quantity.",
   "PackingDetailUpdated":"Packings updated successfully!",
   "PackingDetails":"Packing Details",
   "NoPackingInfoAvailable":"No packing info available.",

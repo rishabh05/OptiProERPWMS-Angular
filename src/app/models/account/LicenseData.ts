@@ -29,5 +29,6 @@ export interface LicenseData{
     PalletizationEnabled: string,
     AutoPalletIdGenerationChecked: string,
     PackingEnableInOutBound: string,
-    IsShippingEnable: string
+    IsShippingEnable: string,
+    GRPOPrintReport: string
 }

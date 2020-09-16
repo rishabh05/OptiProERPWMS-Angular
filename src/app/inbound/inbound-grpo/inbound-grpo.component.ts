@@ -122,9 +122,9 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   @ViewChild('scanQty') scanQty;
 
   // caption related labels.
-  Inbound_ReceiveForPO:any;
+  Inbound_ReceiveForPO: any;
   inboundFromWhere: any = false;
-  screentitle:any=''
+  screentitle: any = ''
   @ViewChild('scanQty') scanQtyRef: ElementRef;
 
   isGenealogyApplicable: boolean;
@@ -145,41 +145,41 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     }, 100);
     // this.itemCodeInput.nativeElement.focus();
   }
-  formatVal=''
+  formatVal = ''
   qtyFieldBlurFire: boolean = false;
-  async onQtyBlur(scanQty,fromHtml:boolean = false) :Promise<any>{
-  //  this.qty = scanQty.value;
-  
-    this.qty =this.qty.toFixed(Number(localStorage.getItem("DecimalPrecision")))
-    console.log("blur format",this.qty);
+  async onQtyBlur(scanQty, fromHtml: boolean = false): Promise<any> {
+    //  this.qty = scanQty.value;
+
+    this.qty = this.qty.toFixed(Number(localStorage.getItem("DecimalPrecision")))
+    console.log("blur format", this.qty);
     // if(!this.qtyFieldBlurFire){
     //   if(fromHtml){
     //     this.qty = scanQty.value;
     //   }else{
     //     this.qty = scanQty.nativeElement.value;  
     //   }
-      // this.qtyFieldBlurFire = true;
+    // this.qtyFieldBlurFire = true;
     // }
     return '';
-    
+
   }
-  onQtyChange(scanQty){
+  onQtyChange(scanQty) {
     this.qty = scanQty.value
   }
   ngOnInit() {
     this.IsGeneologyApplicable()
 
     var precision = localStorage.getItem("DecimalPrecision");
-    this.formatVal = 'n'+precision;
-    console.log("decimal precision"+this.formatVal);
+    this.formatVal = 'n' + precision;
+    console.log("decimal precision" + this.formatVal);
 
     this.inboundFromWhere = localStorage.getItem("inboundOptionType");
-    if(this.inboundFromWhere==1){
-      this.Inbound_ReceiveForPO =  this.translate.instant("Inbound_ReceiveForPO");
+    if (this.inboundFromWhere == 1) {
+      this.Inbound_ReceiveForPO = this.translate.instant("Inbound_ReceiveForPO");
       // change captions and api calling according to normal inbound.
-    }else if(this.inboundFromWhere==2){
-      this.Inbound_ReceiveForPO =  this.translate.instant("InboundReceiveInvoice");
-        // change captions and api calling according to normal inbound.
+    } else if (this.inboundFromWhere == 2) {
+      this.Inbound_ReceiveForPO = this.translate.instant("InboundReceiveInvoice");
+      // change captions and api calling according to normal inbound.
     }
 
 
@@ -429,14 +429,14 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     }
   }
 
-  OnBinChangeBlur(){
-    if(this.isValidateCalled){
+  OnBinChangeBlur() {
+    if (this.isValidateCalled) {
       return;
     }
     this.OnBinChange();
   }
 
-  async OnBinChange(): Promise<any>{
+  async OnBinChange(): Promise<any> {
     if (this.RecvbBinvalue == "") {
       return;
     }
@@ -456,15 +456,15 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
               //   return;
               // }
               // else {
-                this.RecvbBinvalue = data[0].BinNo;
-                if(this.receiptData.status == "Accept"){
-                }else{
-                  this.receiptData.WhsCode = data[0].WhsCode;
-                }
-                // oCurrentController.isReCeivingBinExist();
-             // }
-             result = true
-            }else{
+              this.RecvbBinvalue = data[0].BinNo;
+              if (this.receiptData.status == "Accept") {
+              } else {
+                this.receiptData.WhsCode = data[0].WhsCode;
+              }
+              // oCurrentController.isReCeivingBinExist();
+              // }
+              result = true
+            } else {
               this.toastr.error('', this.translate.instant("INVALIDBIN"));
               this.RecvbBinvalue = "";
               this.RecBinVal.nativeElement.focus()
@@ -661,8 +661,8 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   updateLotNumber(lotTemplateVar, value, rowindex, gridData: any) {
     value = value.trim();
     if (localStorage.getItem('FromReceiptProd') == 'true') {
-      if(this.isGenelogyEnabled=="Y"){
-      this.checkAndValidateSerial(lotTemplateVar, value, rowindex);
+      if (this.isGenelogyEnabled == "Y") {
+        this.checkAndValidateSerial(lotTemplateVar, value, rowindex);
       }
     } else {
       let result = this.recvingQuantityBinArray.find(element => element.LotNumber == value);
@@ -729,14 +729,14 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     this.inboundService.IsGenealogyApplicable().subscribe(
       (data: any) => {
         console.log(data);
-        if (data!= undefined) {
+        if (data != undefined) {
           this.isGenelogyEnabled = data;
         } else if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
           this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
             this.translate.instant("CommonSessionExpireMsg"));
           return;
         }
-      
+
       },
       error => {
         console.log("Error: ", error);
@@ -757,23 +757,23 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       return;
     }
 
-   // var result1 = await  this.onQtyBlur(this.scanQtyRef)
+    // var result1 = await  this.onQtyBlur(this.scanQtyRef)
 
     if (this.qty == 0 || this.qty == undefined) {
-     this.toastr.error('', this.translate.instant("Inbound_EnterQuantityErrMsg"));
+      this.toastr.error('', this.translate.instant("Inbound_EnterQuantityErrMsg"));
       return;
     }
     // if (this.ScanInputs == null || this.ScanInputs == undefined || this.ScanInputs == "") {
     //   return;
     // }
-    if (this.openPOLineModel[0].TRACKING == "S") { 
+    if (this.openPOLineModel[0].TRACKING == "S") {
       var numQty = Number(this.qty)
-      if (numQty%1!=0) {
+      if (numQty % 1 != 0) {
         this.toastr.error('', this.translate.instant("DecimalQuantity"));
         this.scanQty.nativeElement.focus();
         return;
       }
-    } 
+    }
     if (this.RecvbBinvalue == "" || this.RecvbBinvalue == undefined) {
       this.toastr.error('', this.translate.instant("INVALIDBIN"));
       return;
@@ -810,15 +810,15 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       if (!this.fromReceiptProduction) {
         this.getAutoLot(this.openPOLineModel[0].ITEMCODE, this.qty);
       } else {
-        if(this.isGenelogyEnabled!="Y"){
+        if (this.isGenelogyEnabled != "Y") {
           this.getAutoLot(this.openPOLineModel[0].ITEMCODE, this.qty);
-        }else{
+        } else {
           this.AddUpdateBatSerNo(null);
         }
       }
     }
   }
-  isGenelogyEnabled :any = "N";
+  isGenelogyEnabled: any = "N";
   AddUpdateBatSerNo(autoLots: any[]) {
     if (this.radioSelected == 0) {
       this.MfrSerial = this.ScanInputs;
@@ -886,12 +886,12 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       return;
     }
     if (this.openPOLineModel[0].TRACKING == "S") {
-    if (!Number.isInteger(this.qty)) {
-      this.toastr.error('', this.translate.instant("DecimalQuantity"));
-      this.scanQty.nativeElement.focus();
-      return;
+      if (!Number.isInteger(this.qty)) {
+        this.toastr.error('', this.translate.instant("DecimalQuantity"));
+        this.scanQty.nativeElement.focus();
+        return;
+      }
     }
-  }
     if (this.RecvbBinvalue == "" || this.RecvbBinvalue == undefined) {
       this.toastr.error('', this.translate.instant("INVALIDBIN"));
       return;
@@ -1094,14 +1094,20 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
           this.DeleteRowClick(this.rowindexForDelete, this.gridDataAfterDelete);
           break;
         case ("recCurrentOrAll"):
-          // show pdf dialog
-          this.yesButtonText = this.translate.instant("yes");
-          this.noButtonText = this.translate.instant("no");
-          this.dialogFor = "receiveMultiplePDFDialog";
-          this.dialogMsg = this.translate.instant("Inbound_PrintAllLabelsAfterSubmit");
-          this.operationType = "All";
-          this.showConfirmDialog = true; // show dialog
-          this.showPDF = true;
+
+          if (localStorage.getItem("GRPOPrintReport") == "Y") {
+            // show pdf dialog
+            this.yesButtonText = this.translate.instant("yes");
+            this.noButtonText = this.translate.instant("no");
+            this.dialogFor = "receiveMultiplePDFDialog";
+            this.dialogMsg = this.translate.instant("Inbound_PrintAllLabelsAfterSubmit");
+            this.operationType = "All";
+            this.showConfirmDialog = true; // show dialog
+            this.showPDF = true;
+          } else {
+            this.prepareAllData();
+            this.showPDF = false;
+          }
           break;
         case ("receiveSinglePDFDialog"):
           //do something. //yes mean all click
@@ -1119,13 +1125,13 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       } else {
         //means user click on negative button
         if ($event.From == "recCurrentOrAll") {
-          //this.submitCurrentGRPO();
-          this.yesButtonText = this.translate.instant("yes");
-          this.noButtonText = this.translate.instant("no");
-          this.dialogFor = "receiveSinglePDFDialog";
-          this.dialogMsg = this.translate.instant("Inbound_PrintAllLabelsAfterSubmit");
-          this.operationType = "Current";
-          this.showConfirmDialog = true; // show dialog
+          if (localStorage.getItem("GRPOPrintReport") == "Y") {
+            this.showPrintDialog();
+            this.operationType = "Current";
+          } else {
+            this.submitCurrentGRPO();
+            this.showPDF = false;
+          }
         }
         else if ($event.From == "receiveSinglePDFDialog") {
           this.submitCurrentGRPO();
@@ -1303,7 +1309,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
   prepareAllData() {
     var oSubmitPOLotsObj: any = {};
- 
+
     var dataModel = localStorage.getItem("GRPOReceieveData");  // for submit all data on all clic
     // I have have replaced the array name.
     if (dataModel == null || dataModel == undefined || dataModel == "") {
@@ -1581,24 +1587,22 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     } else {
       var dataModel: any = localStorage.getItem("GRPOReceieveData");
       if (dataModel == null || dataModel == undefined || dataModel == "") {
-        //this.submitCurrentGRPO();
-        // show print dialog here and onclick its handling.
-        this.yesButtonText = this.translate.instant("yes");
-        this.noButtonText = this.translate.instant("no");
-        this.dialogFor = "receiveSinglePDFDialog";
-        this.dialogMsg = this.translate.instant("Inbound_PrintAllLabelsAfterSubmit");
-        this.showConfirmDialog = true; // show dialog
-
+        if (localStorage.getItem("GRPOPrintReport") == "Y") {
+          this.showPrintDialog();
+        } else {
+          this.submitCurrentGRPO();
+          this.showPDF = false;
+        }
       } else {
         dataModel = this.manageRecords(JSON.parse(dataModel));
         if (dataModel == null || dataModel == undefined || dataModel == "" ||
           dataModel.POReceiptLots.length < 1) {
-          this.yesButtonText = this.translate.instant("yes");
-          this.noButtonText = this.translate.instant("no");
-          this.dialogFor = "receiveSinglePDFDialog";
-          this.dialogMsg = this.translate.instant("Inbound_PrintAllLabelsAfterSubmit");
-          this.showConfirmDialog = true; // show dialog
-          //this.submitCurrentGRPO();
+          if (localStorage.getItem("GRPOPrintReport") == "Y") {
+            this.showPrintDialog();
+          } else {
+            this.submitCurrentGRPO();
+            this.showPDF = false;
+          }
           return;
         } else {
           this.yesButtonText = this.translate.instant("All");
@@ -1611,6 +1615,15 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     }
   }
 
+  showPrintDialog() {
+    // show print dialog here and onclick its handling.
+    this.yesButtonText = this.translate.instant("yes");
+    this.noButtonText = this.translate.instant("no");
+    this.dialogFor = "receiveSinglePDFDialog";
+    this.dialogMsg = this.translate.instant("Inbound_PrintAllLabelsAfterSubmit");
+    this.showConfirmDialog = true; // show dialog
+  }
+
   prepareSubmitPurchaseOrder(oSubmitPOLotsObj: any): any {
     oSubmitPOLotsObj = this.manageRecords(oSubmitPOLotsObj);
     if (localStorage.getItem("Line") == null || localStorage.getItem("Line") == undefined ||
@@ -1620,7 +1633,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
 
     oSubmitPOLotsObj.POReceiptLots.push({
-      OPTM_TYPE:this.inboundFromWhere,
+      OPTM_TYPE: this.inboundFromWhere,
       DiServerToken: sessionStorage.getItem("Token"),
       PONumber: this.Ponumber,
       DocEntry: this.DocEntry,
@@ -1654,9 +1667,9 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       Flag: 'D', // D = Line, H= Header, L = Lots
       LineNo: Number(localStorage.getItem("Line"))
     });
-    
+
     for (var iBtchIndex = 0; iBtchIndex < this.recvingQuantityBinArray.length; iBtchIndex++) {
-    //  let qty = Number(this.recvingQuantityBinArray[iBtchIndex].LotQty).toFixed(Number(localStorage.getItem("DecimalPrecision")))
+      //  let qty = Number(this.recvingQuantityBinArray[iBtchIndex].LotQty).toFixed(Number(localStorage.getItem("DecimalPrecision")))
       oSubmitPOLotsObj.POReceiptLotDetails.push({
         // POItemCode: this.Ponumber+this.openPOLineModel[0].ITEMCODE,
         Bin: this.recvingQuantityBinArray[iBtchIndex].Bin,
@@ -2034,10 +2047,10 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         } else {
           this.RecvbBinvalue = $event[0];
         }
-        if(this.tracking == "N"){
+        if (this.tracking == "N") {
           this.scanQty.nativeElement.focus();
         } else {
-          if(localStorage.getItem('FromReceiptProd') == 'true'){
+          if (localStorage.getItem('FromReceiptProd') == 'true') {
             this.scanPallet.nativeElement.focus();
           } else {
             this.scanBatchSerial.nativeElement.focus();
@@ -2053,14 +2066,14 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         this.scanTargetBin.nativeElement.focus();
       } else if (this.lookupfor == "PalletList") {
         this.palletValue = $event[0];
-        if(this.scanQty!=undefined && this.scanQty !=null){
+        if (this.scanQty != undefined && this.scanQty != null) {
           this.scanQty.nativeElement.focus();
         }
       }
     }
   }
 
-  OnTargetBinChangeBlu(){
+  OnTargetBinChangeBlu() {
 
   }
 
@@ -2181,13 +2194,13 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     this.OnPalletChange();
   }
 
-  onGS1ItemScanBlur(){
-    if(this.isValidateCalled){
+  onGS1ItemScanBlur() {
+    if (this.isValidateCalled) {
       return;
     }
     this.onGS1ItemScan();
   }
-  async onGS1ItemScan(): Promise<any>{
+  async onGS1ItemScan(): Promise<any> {
     if (this.ScanInputs != null && this.ScanInputs != undefined &&
       this.ScanInputs != "" && this.ScanInputs != "error decoding QR Code") {
 
@@ -2284,12 +2297,12 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         }
         result = false;
       });
-      return result;
+    return result;
   }
 
   public displayPDF(dNo: string) {
     this.showLoader = true;
-    this.inboundService.printingServiceForSubmitGRPO(dNo,6).subscribe(
+    this.inboundService.printingServiceForSubmitGRPO(dNo, 6).subscribe(
       (data: any) => {
         this.showLoader = false;
         if (data != undefined) {
@@ -2418,8 +2431,8 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     this.showNewPallet = true;
   }
 
-  OnPalletChangeBlur(){
-    if(this.isValidateCalled){
+  OnPalletChangeBlur() {
+    if (this.isValidateCalled) {
       return;
     }
     this.OnPalletChange();
@@ -2803,32 +2816,32 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   }
 
   isValidateCalled: boolean = false;
-  async validateBeforeSubmit():Promise<any>{
+  async validateBeforeSubmit(): Promise<any> {
     this.isValidateCalled = true;
     var currentFocus = document.activeElement.id;
-    console.log("validateBeforeSubmit current focus: "+currentFocus);
-    
-    if(currentFocus != undefined){
-      if(currentFocus == "inboundGrpoRecBinInput"){
+    console.log("validateBeforeSubmit current focus: " + currentFocus);
+
+    if (currentFocus != undefined) {
+      if (currentFocus == "inboundGrpoRecBinInput") {
         return this.OnBinChange();
       }
-      else if(currentFocus == "inboundGRPOPalletNo"){
+      else if (currentFocus == "inboundGRPOPalletNo") {
         return this.OnPalletChange();
       }
-      else if(currentFocus == "inboundScanInputField"){
+      else if (currentFocus == "inboundScanInputField") {
         return this.onGS1ItemScan();
       }
     }
   }
 
   //--this code not required but we need to check proper then will remove it----------------------
-  oSavedPOLotsArray:any = [];
-  addToGRPOArray:any = [];
+  oSavedPOLotsArray: any = [];
+  addToGRPOArray: any = [];
   addToGRPOPONumbers: any = {};
   poCode: any = {};
   async  onAddtoGRPOClick() {
     this.poCode = this.Ponumber
-   // await this.validateBeforeSubmit();
+    // await this.validateBeforeSubmit();
 
     this.oSavedPOLotsArray = JSON.parse(localStorage.getItem("GRPOReceieveData"));
     if (this.oSavedPOLotsArray != undefined && this.oSavedPOLotsArray != null && this.oSavedPOLotsArray != "") {
@@ -2870,9 +2883,9 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
             addpo = false;
           }
-   
+
           this.addToGRPOArray.POReceiptLots.push({
-            OPTM_TYPE:this.oSavedPOLotsArray.POReceiptLots[i].OPTM_TYPE,
+            OPTM_TYPE: this.oSavedPOLotsArray.POReceiptLots[i].OPTM_TYPE,
             DiServerToken: sessionStorage.getItem("Token"),
             PONumber: this.oSavedPOLotsArray.POReceiptLots[i].PONumber,
             DocEntry: this.oSavedPOLotsArray.POReceiptLots[i].DocEntry,
@@ -2950,7 +2963,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       localStorage.setItem("addToGRPOPONumbers", JSON.stringify(this.addToGRPOPONumbers));
     }
     localStorage.setItem("PONumber", "");
-   // this.inboundMasterComponent.inboundComponent = 1;
+    // this.inboundMasterComponent.inboundComponent = 1;
   }
 
   manageGRPOData() {

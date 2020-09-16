@@ -146,14 +146,14 @@ export class PickingListComponent implements OnInit {
             this.checkIfPickProcessAuto(this.ShipmentList[0]);
           } else {
             this.showGrid = false;
-            this.toastr.error('', this.translate.instant("NoPickMsg"));
+       //     this.toastr.error('', this.translate.instant("NoPickMsg"));
             return;
           }
           if (this.ShipmentList.length > this.pageSize) {
             this.pagable = true;
           }
         } else {
-          this.toastr.error('', this.translate.instant("NoPickMsg"));
+        //  this.toastr.error('', this.translate.instant("NoPickMsg"));
         }
       },
       error => {

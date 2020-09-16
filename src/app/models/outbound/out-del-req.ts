@@ -1,16 +1,5 @@
 import { PackingModel } from './PackingModel';
 
-export class LoginParams {
-    DiServerToken: string;
-    CompanyDBId: string;
-    WhsCode: string;
-    UsernameForLic: string;
-    GUID: string;
-}
-
-export class Shipments {
-    ShipmentID: number;
-}
 
 export class SOHEADER {
     DiServerToken: string;
@@ -52,8 +41,6 @@ export class DeliveryToken {
     SODETAIL: SODETAIL[];
     PackingData:PackingModel[];
     UDF: any[];
-    LoginParams: LoginParams[];
-    Shipments: Shipments[];
 }
 
 export class RootObject {

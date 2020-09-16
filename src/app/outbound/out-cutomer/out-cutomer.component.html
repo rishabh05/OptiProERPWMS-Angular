@@ -219,12 +219,12 @@
 
                         <kendo-grid-column field="DeliverySeq" [width]="45" title="{{'DeliverySeq'|translate}}" headerClass="text-left" class="text-left">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                <input type="number" #DelSeq class="form-control form-control-sm text-right" [value]="" (input)="updateDeliverySeq(DelSeq.value, dataItem, rowIndex)" min =0 trim>
+                                <input type="number" #DelSeq class="form-control form-control-sm text-right" name ="dataItem.DeliverySeq" value="{{dataItem.DeliverySeq}}" (input)="updateDeliverySeq(DelSeq.value, dataItem, rowIndex)" min =0 trim>
                             </ng-template>
                         </kendo-grid-column>
                         <kendo-grid-column field="DeliverToLocation" width="90" title="{{'DeliverToLocation'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                <input type="text" #DeliverToLocation class="form-control form-control-sm" [value]="">
+                                <input type="text" #DeliverToLocation class="form-control form-control-sm" name ="dataItem.DeliverToLocation" value="{{dataItem.DeliverToLocation}}" (input)="updateDeliverToLocation(DeliverToLocation.value, dataItem, rowIndex)">
                             </ng-template>
                         </kendo-grid-column>
                         <kendo-grid-column field="OPTM_SHIPTO" width="90" title="{{'PT_Ship_To'|translate}}"></kendo-grid-column>

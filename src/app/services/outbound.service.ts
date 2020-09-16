@@ -193,7 +193,7 @@ export class OutboundService {
     var jObject = {
       DeliveryToken: JSON.stringify([{
         COMPANYDBNAME: sessionStorage.getItem("CompID"), WHSCODE: sessionStorage.getItem("whseId"), ITEMCODE: itemCode, BINNO: scanBin, SCANSERIAL: scannedSerialValue,
-        DocEntry: docEntry
+        DocEntry: docEntry, PalletCode: ""
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetAllPickPackAndOtherSerialBatchWithoutBin", jObject, this.commonService.httpOptions);
@@ -257,12 +257,12 @@ export class OutboundService {
 
 
   public CreateDeliveryBasedonShipments(deliveryPayload) {
-    var jObject = { DeliveryToken: JSON.stringify(deliveryPayload) };    
+    var jObject = { DeliveryToken: JSON.stringify(deliveryPayload) };
     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/CreateDeliveryBasedonShipments", jObject, this.commonService.httpOptions);
   }
 
   public GetShipmentSODetails(deliveryPayload): Observable<any> {
-    var jObject = { DeliveryToken: JSON.stringify(deliveryPayload) };    
+    var jObject = { DeliveryToken: JSON.stringify(deliveryPayload) };
     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/GetShipmentSODetails", jObject, this.commonService.httpOptions);
   }
 }

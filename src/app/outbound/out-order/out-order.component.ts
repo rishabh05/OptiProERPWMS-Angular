@@ -1835,7 +1835,8 @@ export class OutOrderComponent implements OnInit {
       && this.outbound.DeleiveryCollection.length > 0) {
 
       if (this.itrCode !== undefined && this.itrCode !== null) {
-        this.outbound.DeleiveryCollection = this.outbound.DeleiveryCollection.filter(d => d.Order.DOCNUM === this.itrCode);
+        this.outbound.DeleiveryCollection = this.outbound.DeleiveryCollection.filter(d => 
+          d.Order.DOCNUM === this.itrCode);
       }
       var oWhsTransAddLot: any = {};
       oWhsTransAddLot.Header = [];
@@ -1926,7 +1927,8 @@ export class OutOrderComponent implements OnInit {
         GUID: sessionStorage.getItem("GUID"),
         UsernameForLic: sessionStorage.getItem("UserId"),
         BaseEntry: this.itrCode,
-        BaseType: "1250000001"
+        BaseType: "1250000001",
+        DOCNUM: this.outbound.DeleiveryCollection[0].Item.DOCNUM
       };
       oWhsTransAddLot.Header.push(hdr);
 

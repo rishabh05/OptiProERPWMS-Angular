@@ -35,7 +35,7 @@
                                                 [valueField]="'UomCode'" [value]="uomList[0]">
                                             </kendo-dropdownlist>
                                         </dd>
-                                        <button style="color: white;"   type="button" *ngIf="!fromProduction" (click)="ShowPackingDetails()" 
+                                        <button style="color: white;"   type="button" *ngIf="fromProduction==false && fromITR==false" (click)="ShowPackingDetails()" 
                                         class="btn btn-success k-button btn-sm btn-icon-with-text mt-1">
                                             <span class="k-icon k-i-preview " role="presentation"></span> {{'ShowPackingDetails'|translate}}</button>
                                     </dl>
@@ -62,7 +62,7 @@
                                 </ng-template>
                             </kendo-grid-column>
 
-                            <kendo-grid-column *ngIf="!fromProduction" media="(min-width: 768px)" field="" headerClass="text-right" class=" text-right"
+                            <kendo-grid-column *ngIf="fromProduction==false && fromITR==false" media="(min-width: 768px)" field="" headerClass="text-right" class=" text-right"
                                 title="{{'PackingDetails'|translate}}" [width]="160">
                                 <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                     <button style="color: white;" type="button" *ngIf="!fromProduction" (click)="ShowPackingDetails()" class="btn btn-success k-button btn-sm btn-icon-with-text ">
