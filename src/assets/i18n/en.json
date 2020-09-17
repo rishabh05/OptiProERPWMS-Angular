@@ -626,6 +626,8 @@
   "Query": "Query",
   "InvalidShipTo": "Invalid Ship To Code",
   "CommonSomeErrorMsg": "No data available",
+  "NumberOfCopies": "Number of copies",
+  "ReportTitle": "Print Report",
   "Dummy": "Dummy"
 }
  

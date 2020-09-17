@@ -124,8 +124,12 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
   receive() {
     var dataModel = localStorage.getItem("AddToGRPO");
     if (dataModel != null && dataModel != undefined && dataModel != "") {
-      this.showPrintConfirmDialog();
-      
+      if (localStorage.getItem("GRPOPrintReport") == "Y") {
+        this.showPrintConfirmDialog();
+      } else {
+        this.SubmitGoodsReceiptPO(JSON.parse(localStorage.getItem("AddToGRPO")));
+        this.showPDF = false;
+      }
     }
   }
   showPrintConfirmDialog(){

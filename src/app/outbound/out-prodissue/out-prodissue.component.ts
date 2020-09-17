@@ -282,9 +282,10 @@ export class OutProdissueComponent implements OnInit {
         var serialNo = "";
         if (data != null && data.length > 0) {
           if (data[0].Error != null) {
+            this.ScanBatchSerial(openQty);
             if (data[0].Error == "Invalidcodescan") {
               piManualOrSingleDimentionBarcode = 1
-              this.toastr.error('', this.translate.instant("InvalidScanCode"));
+              // this.toastr.error('', this.translate.instant("InvalidScanCode"));
               this.ScanInputs = "";
               // nothing is done in old code.
             } else {
@@ -373,30 +374,7 @@ export class OutProdissueComponent implements OnInit {
                 console.log("Error when checking availability: ", error);
               });
         } else {
-          this.ourboundService.getAllPickPackAndOtherSerialBatchWithoutBin(this.outbound.SelectedItem.ITEMCODE, "", this.ScanInputs,
-            this.outbound.SelectedItem.DOCENTRY).subscribe(
-              (data: any) => {
-                if (data != null && data != undefined && data.length > 0) {
-                  // var binno = data[0].BINNO;
-                  // var totalQty = data[0].TOTALQTY;
-                  // var lotNo = data[0].LOTNO;
-                  // var PickQty = openQty;
-                  // var sysNumber = data[0].SYSNUMBER;
-                  // let lookupArray: any = [{
-                  //   ITEMCODE: itemCode, OPENQTY: openQty, BINNO: binno,
-                  //   TOTALQTY: totalQty, LOTNO: lotNo, PickQty: PickQty, SYSNUMBER: sysNumber
-                  // }];
-                  // let el: any = document.getElementById('gridSelectedMeterial');
-                  // this.getLookupValue(lookupArray, el, true, false);
-                  this.setScanBtchSerIntoGrid(data, openQty);
-                } else {
-                  this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
-                }
-                this.ScanInputs = "";
-              },
-              error => {
-                console.log("Error when checking availability: ", error);
-              });
+          this.ScanBatchSerial(openQty);
         }
       },
       error => {
@@ -404,21 +382,55 @@ export class OutProdissueComponent implements OnInit {
       });
   }
 
-  setScanBtchSerIntoGrid(data, openQty){
-    for(var i=0; i<data.length; i++){
+  ScanBatchSerial(openQty) {
+    this.ourboundService.getAllPickPackAndOtherSerialBatchWithoutBin(this.outbound.SelectedItem.ITEMCODE, "", this.ScanInputs,
+      this.outbound.SelectedItem.DOCENTRY).subscribe(
+        (data: any) => {
+          if (data != null && data != undefined && data.length > 0) {
+            // var binno = data[0].BINNO;
+            // var totalQty = data[0].TOTALQTY;
+            // var lotNo = data[0].LOTNO;
+            // var PickQty = openQty;
+            // var sysNumber = data[0].SYSNUMBER;
+            // let lookupArray: any = [{
+            //   ITEMCODE: itemCode, OPENQTY: openQty, BINNO: binno,
+            //   TOTALQTY: totalQty, LOTNO: lotNo, PickQty: PickQty, SYSNUMBER: sysNumber
+            // }];
+            // let el: any = document.getElementById('gridSelectedMeterial');
+            // this.getLookupValue(lookupArray, el, true, false);
+            this.setScanBtchSerIntoGrid(data, openQty);
+          } else {
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          }
+          this.ScanInputs = "";
+        },
+        error => {
+          console.log("Error when checking availability: ", error);
+        });
+  }
+
+  setScanBtchSerIntoGrid(data, openQty) {
+    let el: any = document.getElementById('gridSelectedMeterial');
+    if(el.data != undefined && el.data.length > 0){
+      let index = el.data.findIndex(e => e.LOTNO == data[0].LOTNO);
+      if(index != -1){
+        this.toastr.error('', this.translate.instant("ProdIssue_BatchSerialAlreadyExist"))
+        return;
+      }
+    }
+    for (var i = 0; i < data.length; i++) {
       data[i].MeterialPickQty = openQty
       data[i].OPENQTY = undefined
       data[i].PickQty = undefined
     }
     this.lookupData = data;
-    if(data.length > 1){
+    if (data.length > 1) {
       this.manageOldSelectedItems();
       this.manageExistingItem();
       this.lookupFor = "out-items"
       this.showLookup = true;
       this.showOtherLookup = false;
-    }else{      
-      let el: any = document.getElementById('gridSelectedMeterial');
+    } else {      
       this.getLookupValue(data, el, true, false);
     }
   }
