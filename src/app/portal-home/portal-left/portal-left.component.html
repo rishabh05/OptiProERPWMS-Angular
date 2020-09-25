@@ -122,6 +122,15 @@
                     <span class="text">{{'PickList'|translate}}</span>
                 </a>
             </li>
+            <li id="PACKING" (click)="listClick($event, 'packing')" [ngClass]="{'active': selectedItem == 'packing'}"
+                [ngStyle]="{'display':'flex'}">
+                <a>
+                    <svg viewBox="0 0 128 128" class="icon">
+                        <use xlink:href="#picklist"></use>
+                    </svg>
+                    <span class="text">{{'Packing'|translate}}</span>
+                </a>
+            </li>            
             <li id="ShpLoading" (click)="listClick($event, 'ShpLoading')"
                 [ngClass]="{'active': selectedItem == 'ShpLoading'}" [ngStyle]="{'display':'none'}">
                 <a>

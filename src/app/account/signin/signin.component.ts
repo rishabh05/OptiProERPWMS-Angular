@@ -294,9 +294,11 @@ export class SigninComponent implements OnInit {
                     localStorage.setItem("GRPOPrintReport", this.licenseData[1].GRPOPrintReport);
                     localStorage.setItem("AutoPalletIdGenerationChecked", this.licenseData[0].AutoPalletIdGenerationChecked);
 
-                    localStorage.setItem("SelectedRole", this.selectedRole.OPTM_ROLEID);
+                    if (this.selectedRole != null) {
+                        localStorage.setItem("SelectedRole", this.selectedRole.OPTM_ROLEID);
+                    }
                     localStorage.setItem("SelectedZone", this.selectedZone.OPTM_WHSZONE);
-                    localStorage.setItem("SelectedBinRange", this.selectedBin.OPTM_BIN_RANGE);                    
+                    localStorage.setItem("SelectedBinRange", this.selectedBin.OPTM_BIN_RANGE);
 
                     localStorage.setItem("DefaultValues", JSON.stringify(this.licenseData[0].DefaultValues));
                     for (var i = 0; i < this.licenseData[0].DefaultValues.length; i++) {
@@ -322,7 +324,9 @@ export class SigninComponent implements OnInit {
                         this.setCookie('cookiePassword', this.password, 365);
                         this.setCookie('CompID', this.selectedItem, 365);
                         this.setCookie('whseId', this.selectedWhse, 365);
-                        this.setCookie('Role', this.selectedRole.OPTM_ROLEID, 365);
+                        if (this.selectedRole != null) {
+                            this.setCookie('Role', this.selectedRole.OPTM_ROLEID, 365);
+                        }
                         this.setCookie('Zone', this.selectedZone.OPTM_WHSZONE, 365);
                         this.setCookie('BinRange', this.selectedBin.OPTM_BIN_RANGE, 365);
                     } else {
@@ -536,8 +540,8 @@ export class SigninComponent implements OnInit {
                         if (this.showZone) this.showZoneList(isDirectCall)
                     }
                 }
-                sessionStorage.setItem("ShowZone", this.showZone?"Y":"N");
-                sessionStorage.setItem("ShowBinRange", this.showBinRange?"Y":"N");
+                sessionStorage.setItem("ShowZone", this.showZone ? "Y" : "N");
+                sessionStorage.setItem("ShowBinRange", this.showBinRange ? "Y" : "N");
             },
             error => {
                 if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {

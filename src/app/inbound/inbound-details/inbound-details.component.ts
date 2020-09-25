@@ -5,8 +5,8 @@ import { ToastrService } from 'ngx-toastr';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { InboundMasterComponent } from '../inbound-master.component';
-import { StatePersistingServiceService } from 'src/app/services/state-persisting-service.service';
-import { CommonConstants } from 'src/app/const/common-constants';
+import { StatePersistingServiceService } from '../../services/state-persisting-service.service';
+import { CommonConstants } from '../../const/common-constants';
 @Component({
   selector: 'app-inbound-details',
   templateUrl: './inbound-details.component.html',
@@ -139,7 +139,8 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
     this.dialogMsg = this.translate.instant("Inbound_PrintAllLabelsAfterSubmit");
     this.showConfirmDialog = true; // show dialog 
   }
-  SubmitGoodsReceiptPO(oSubmitPOLotsObj: any) {
+
+  SubmitGoodsReceiptPO(oSubmitPOLotsObj: any, noOfCopy?) {
     this.showLoader = true;
     this.inboundService.SubmitGoodsReceiptPO(oSubmitPOLotsObj).subscribe(
       (data: any) => {
@@ -155,7 +156,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
           this.dateAvailableToReceieve();
           if (this.showPDF) {
             //show pdf
-            this.displayPDF(data[0].DocEntry);
+            this.displayPDF(data[0].DocEntry, noOfCopy);
             this.showPDF = false;
           } else {
             // no need to display pdf
@@ -390,7 +391,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
           this.DeleteRowClick(this.rowindexForDelete, this.gridDataAfterDelete);
           break;
         case ("receiveSinglePDFDialog"):
-          this.SubmitGoodsReceiptPO(JSON.parse(localStorage.getItem("AddToGRPO")));
+          this.SubmitGoodsReceiptPO(JSON.parse(localStorage.getItem("AddToGRPO"), $event.NoOfCopies));
           this.showPDF = true;
           break;
           
@@ -400,6 +401,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
         // when user click on cross button nothing to do.
       }else if($event.From == "receiveSinglePDFDialog"){
         this.SubmitGoodsReceiptPO(JSON.parse(localStorage.getItem("AddToGRPO")));
+        this.showPDF = false;
       }
     }
   }
@@ -502,9 +504,9 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
   }
 
 
-  public displayPDF(dNo: string) {
+  public displayPDF(dNo: string, noOfCopy) {
     this.showLoader = true;
-    this.inboundService.printingServiceForSubmitGRPO(dNo, 6).subscribe(
+    this.inboundService.printingServiceForSubmitGRPO(dNo, 6, noOfCopy).subscribe(
       (data: any) => {
         this.showLoader = false;
         if (data != undefined) { 

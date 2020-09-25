@@ -1,9 +1,9 @@
 [
     {
-        "service_url": "http://localhost:27446",
-        "AppVersion": "1.2.10",
-        "ShowPickListReport": true,
+        "service_url": "http://localhost:34100",
+        "AppVersion": "1.2.12",
+        "ShowPickListReport": false,
         "ShowPackListReport": true,
-        "ShowBOLReport": true
+        "ShowBOLReport": false
     } 
 ]   

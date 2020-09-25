@@ -219,7 +219,9 @@
 
                         <kendo-grid-column field="DeliverySeq" [width]="45" title="{{'DeliverySeq'|translate}}" headerClass="text-left" class="text-left">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                <input type="number" #DelSeq class="form-control form-control-sm text-right" name ="dataItem.DeliverySeq" value="{{dataItem.DeliverySeq}}" (input)="updateDeliverySeq(DelSeq.value, dataItem, rowIndex)" min =0 trim>
+                                <input type="number" #DelSeq class="form-control form-control-sm text-right" name ="dataItem.DeliverySeq" id="DelSeq" value="{{dataItem.DeliverySeq}}"
+                                onkeydown="if(event.key==='.'||event.key==='e'||event.key==='='||event.key===','||event.key==='-'||event.key==='+'){event.preventDefault();}"  
+                                (input)="updateDeliverySeq(DelSeq.value, dataItem, rowIndex)" min =0 trim>
                             </ng-template>
                         </kendo-grid-column>
                         <kendo-grid-column field="DeliverToLocation" width="90" title="{{'DeliverToLocation'|translate}}">
@@ -330,6 +332,15 @@
     <kendo-dialog-titlebar>
         {{'PrintOptions'|translate}}
     </kendo-dialog-titlebar>
+    <!-- <div class="form-group" *ngIf="ShowPrintCount">
+        <div class="input-group input-group-sm">
+          <label class="col-sm-5 col-form-label">{{'NumberOfCopies'|translate}}</label>
+          <div class="col-sm-7 p-0">
+            <input type="number" #noOfCopy id="containerCode" name="containerCode" [(ngModel)]="numberOfCopies" class="form-control form-control-sm"
+              placeholder="{{'NumberOfCopies'|translate}}">
+          </div>
+        </div>
+      </div> -->
     <div class="px-3">
         <div class="form-group row">
             <div class="input-group input-group-sm">
