@@ -1,0 +1,143 @@
+<div class="opti_container position-relative bg-white rounded">
+  <form class="form-with-fix-btnBar" *ngIf="!viewLines">
+    <div class="opti_container_inner" [perfectScrollbar]=" ">
+      <h3 class="border-bottom no-border-mobile d-flex pt-1 pb-3 mb-4">
+        {{'Packing'|translate}}
+      </h3>
+      <div class="row">
+        <div class="col-12">
+          <div class="po-details-comp">
+            <div class="po-details-sec">
+              <div class="form-group row">
+                <label for="inputPassword" class="col-sm-4 col-form-label">{{'Tote'|translate}}</label>
+                <div class="col-sm-8">
+                  <div class="input-group input-group-sm">
+                    <input type="text" class="form-control form-control-sm" id="Tote" name="Tote" [(ngModel)]="ToteValue" trim="blur">
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="inputPassword" class="col-sm-4 col-form-label">{{'ShipmentCode'|translate}}</label>
+                <div class="col-sm-8">
+                  <div class="input-group input-group-sm">
+                    <input #scanPTshipmentId type="text" class="form-control form-control-sm" id="shipmentCode" name="shipmentCode" [(ngModel)]="shipmentCode"
+                      placeholder="{{'ShipmentCode'|translate}}" (blur)="onShipmentIDChange()" trim>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="px-3">
+                <div class="form-group row mt-2">
+                    <div class="input-group input-group-sm">
+                        <kendo-grid [kendoGridBinding]="ShipmentDetail" [resizable]="true" [height]="150" [skip]="skip" #griditems>
+                            <kendo-grid-column field="OPTM_ITEMCODE" width="70" title="{{'ItemCode'|translate}}"></kendo-grid-column>
+                            <kendo-grid-column field="OPTM_SOLINENO" width="60" title="{{'BatchSerial'|translate}}"></kendo-grid-column>
+                            <kendo-grid-column class="text-right" field="Quantity" width="80" title="{{'Quantity'|translate}}">
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                    {{dataItem.OPTM_SOLINEQTY |numberFormat}}
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column field="ContainerCode" width="100" title="{{'ContainerCode'|translate}}">
+                            </kendo-grid-column>
+                        </kendo-grid>
+                    </div>
+                </div>
+            </div>
+<br>
+
+            <div class="item-sec">
+              <div class="item-steps">
+                <!-- step inputs -->
+                <div *ngIf="currentStep == 1" class="item-input-section">
+                  <input #focusOnCont type="text" placeholder="{{'Ph_ScanItemCode'|translate}}" (blur)="onContainerChange()" name="ScanContainer"
+                    [(ngModel)]="ScanContainer" trim>
+                </div>
+                <div *ngIf="currentStep == 2" class="item-input-section">
+                  <input #focusOnDockDoor *ngIf="showFields" type="text" placeholder="{{'ScanBatch'|translate}}" (blur)="onLoadLocationChange()"
+                    name="ScanLoadLocation" [(ngModel)]="ScanLoadLocation" trim="blur">
+                </div>
+                <div *ngIf="currentStep == 3" class="item-input-section">
+                  <input #focusOnDockDoor *ngIf="showFields" type="text" placeholder="{{'EnterQty'|translate}}" (blur)="onLoadLocationChange()"
+                    name="ScanLoadLocation" [(ngModel)]="ScanLoadLocation" trim="blur">
+                </div>
+                <div *ngIf="currentStep == 4" class="item-input-section">
+                  <input #focusOnDockDoor *ngIf="showFields" type="text" placeholder="{{'ScanCont'|translate}}" (blur)="onLoadLocationChange()"
+                    name="ScanLoadLocation" [(ngModel)]="ScanLoadLocation" trim="blur">
+                </div>
+                <!-- step input option icons -->
+                <div class="step-flex">
+                  <div class="keyboard-box step-flex-item">
+                    <div class="keyboard-icon">
+                      <i class="k-icon k-i-group-box" aria-hidden="true"></i>
+                    </div>
+                  </div>
+                  <div class="or-class step-flex-item">
+                    <span class="or-text">OR</span>
+                    <span class="or-line"></span>
+                  </div>
+                  <div *ngIf="currentStep != 4" class="scanner-box step-flex-item">
+                    <div class="bar-code">
+                      <i class="k-icon k-i-greyscale" aria-hidden="true"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="text-center scan-text">{{currentStepText}}</div>
+                <!--/ step input option icons -->
+              </div>
+
+              <!-- step navigation Arrow placement -->
+              <div>
+                <i *ngIf="currentStep > 1 && showFields" (click)="prevStep()" class="k-icon k-i-arrow-chevron-left" aria-hidden="true"></i>
+                <i *ngIf="currentStep != LastStep" (click)="nextStep()" class="k-icon k-i-arrow-chevron-right" aria-hidden="true"></i>
+                <i *ngIf="false" (click)="onSaveClick('/po-order-details')" class="k-icon k-i-save" aria-hidden="true"></i>
+              </div>
+              <!--/ step navigation -->
+
+              <!-- step bars -->
+              <div class="item-steps-bar">
+                <ng-container *ngFor="let c of PickListSteps; let i =index">
+                  <span [ngClass]="{active:currentStep == i+1}" class="step"></span>
+                </ng-container>
+              </div>
+              <!--/ step bars -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fix-footer-btnBar">
+      <div class="col-sm-12 col-12">
+
+        <button class="btn btn-outline-secondary btn-sm btn-transparent btn-icon mr-1" type="button" (click)="OnCancelClick()">
+          <i class="opti-icon-arrow-back"></i>
+        </button>
+        <button [disabled]="showFields" class="btn btn-success k-button btn-sm btn-icon-with-text" type="button" (click)="onSubmitClick()">
+          <span class="k-icon k-i-check" role="presentation"></span>{{'Pack'|translate}}</button>
+      </div>
+    </div>
+  </form>
+
+</div>
+
+<kendo-dialog [width]="500" *ngIf="dialogOpened" (close)="close_kendo_dialog()">
+  <div class="new-custom-grid">
+    <kendo-dialog-titlebar>
+      {{'ScanContAssignShp'|translate}}
+    </kendo-dialog-titlebar>
+    <div class="px-3">
+      <div class="form-group row mt-2">
+        <div class="input-group input-group-sm">
+          <label class="col-sm-4 col-form-label">{{'ContainerCode'|translate}}</label>
+          <input type="text" id="containerCode" name="containerCode" class="col-sm-8 form-control form-control-sm mr-3" [(ngModel)]="containerCode"
+            placeholder="{{'Enter_Container_Code'|translate}}" (blur)="generateContainer()">
+        </div>
+      </div>
+    </div>
+
+    <kendo-dialog-actions>
+      <button class="ml-1" kendoButton (click)="onConfirmClick()" primary="true">Confirm</button>
+    </kendo-dialog-actions>
+  </div>
+</kendo-dialog>

@@ -1,17 +1,17 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
-import { OutboundService } from 'src/app/services/outbound.service';
-import { CommonConstants } from 'src/app/const/common-constants';
+import { OutboundService } from '../../services/outbound.service';
+import { CommonConstants } from '../../const/common-constants';
 import { Router } from '@angular/router';
-import { Commonservice } from 'src/app/services/commonservice.service';
+import { Commonservice } from '../../services/commonservice.service';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
-import { OutboundData } from 'src/app/models/outbound/outbound-data';
+import { OutboundData } from '../../models/outbound/outbound-data';
 import { RowClassArgs } from '@progress/kendo-angular-grid';
-import { SODETAIL, SOHEADER, DeliveryToken } from 'src/app/models/outbound/out-del-req';
-import { MeterialModel } from 'src/app/models/outbound/meterial-model';
-import { InventoryTransferService } from 'src/app/services/inventory-transfer.service';
-import { InboundService } from 'src/app/services/inbound.service';
-import { PackingModel } from 'src/app/models/outbound/PackingModel';
+import { SODETAIL, SOHEADER, DeliveryToken } from '../../models/outbound/out-del-req';
+import { MeterialModel } from '../../models/outbound/meterial-model';
+import { InventoryTransferService } from '../../services/inventory-transfer.service';
+import { InboundService } from '../../services/inbound.service';
+import { PackingModel } from '../../models/outbound/PackingModel';
 
 // This file called from Outbound -> SO delivery, Shipment delivery, IT by ITR.
 
@@ -81,8 +81,8 @@ export class OutOrderComponent implements OnInit {
   ShowPickListReport: boolean = true;
   ShowPackListReport: boolean = true;
   ShowBOLReport: boolean = true;
-  showPackingAlertForNTFirstTime:boolean = false;
-  public selectedPackingModel:PackingModel = new PackingModel() ;
+  showPackingAlertForNTFirstTime: boolean = false;
+  public selectedPackingModel: PackingModel = new PackingModel();
 
   constructor(private inboundService: InboundService, private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService,
     private inventoryTransferService: InventoryTransferService) { }
@@ -109,14 +109,14 @@ export class OutOrderComponent implements OnInit {
         this.outbound = JSON.parse(outboundData);
         this.selectedCustomer = this.outbound.CustomerData;
         companyName = this.selectedCustomer.CustomerCode;
-        if(this.outbound.selectedPackingItem!=null && this.outbound.selectedPackingItem!=undefined){
+        if (this.outbound.selectedPackingItem != null && this.outbound.selectedPackingItem != undefined) {
           this.selectedPackingModel = this.outbound.selectedPackingItem;
-        }else{
+        } else {
           this.selectedPackingModel = new PackingModel();
           this.selectedPackingModel.PkgNo = ''
           this.selectedPackingModel.PkgType = ''
         }
-        
+
       }
       this.pagetitle = this.translate.instant("Outbound_DeleiveryToCustomer") + ": " + companyName;
       // means from outbound
@@ -220,7 +220,7 @@ export class OutOrderComponent implements OnInit {
     if (this.selectedCustomer != null && this.selectedCustomer != undefined
       && this.selectedCustomer.CustomerCode != '' && this.selectedCustomer.CustomerCode != null) {
 
-        let whseId = sessionStorage.getItem("whseId");
+      let whseId = sessionStorage.getItem("whseId");
       this.outboundservice.getCustomerSOList(this.selectedCustomer.CustomerCode, "", whseId).subscribe(
         resp => {
           if (resp != null && resp.length > 0) {
@@ -282,11 +282,12 @@ export class OutOrderComponent implements OnInit {
         var outbound: any;
         let outboundData = localStorage.getItem(CommonConstants.OutboundData);
         if (outboundData != undefined && outboundData != '') {
-        outbound = JSON.parse(outboundData);
-        outbound.selectedPackingItem=this.selectedPackingModel;
-        localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));}
-  
-      }else  if (this.lookupfor == "PalletList") {
+          outbound = JSON.parse(outboundData);
+          outbound.selectedPackingItem = this.selectedPackingModel;
+          localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
+        }
+
+      } else if (this.lookupfor == "PalletList") {
         this.showLookupLoader = false;
         this.palletNo = lookupValue.Code;
         this.getPalletData();
@@ -301,54 +302,54 @@ export class OutOrderComponent implements OnInit {
           this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
           this.openSOOrderList();
           this.scanSO.nativeElement.focus()
-        } else 
-        if (this.lookupfor == "ITRList") {
-          this.resetITRFields();
-          //
-          this.toWhse = lookupValue.ToWhsCode;
-          this.itrCode = lookupValue.DocEntry;
-          this.docNum = lookupValue.DocNum;
-          this.orderNumber = this.itrCode;
-          this.outbound.ITRToBinNo = {
-            ToBin: this.toBinNo,
-            ToWhse: this.toWhse
-          };
-          localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
-          this.getITRItemList();
-          this.DocNum.nativeElement.focus()
-        } else if (this.lookupfor == "toBinsList") {
-          this.toBinNo = lookupValue.BINNO;
-          this.outbound.ITRToBinNo = {
-            ToBin: this.toBinNo,
-            ToWhse: this.toWhse
-          };
-          localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
-          // this.scanToBin.nativeElement.focus()
-        } else {
-          if (this.lookupfor == "ItemsList") {
-            this.selectedItem = lookupValue.ITEMCODE;
-            this.scanItemCode.nativeElement.focus()
+        } else
+          if (this.lookupfor == "ITRList") {
+            this.resetITRFields();
+            //
+            this.toWhse = lookupValue.ToWhsCode;
+            this.itrCode = lookupValue.DocEntry;
+            this.docNum = lookupValue.DocNum;
+            this.orderNumber = this.itrCode;
+            this.outbound.ITRToBinNo = {
+              ToBin: this.toBinNo,
+              ToWhse: this.toWhse
+            };
+            localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+            this.getITRItemList();
+            this.DocNum.nativeElement.focus()
+          } else if (this.lookupfor == "toBinsList") {
+            this.toBinNo = lookupValue.BINNO;
+            this.outbound.ITRToBinNo = {
+              ToBin: this.toBinNo,
+              ToWhse: this.toWhse
+            };
+            localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+            // this.scanToBin.nativeElement.focus()
+          } else {
+            if (this.lookupfor == "ItemsList") {
+              this.selectedItem = lookupValue.ITEMCODE;
+              this.scanItemCode.nativeElement.focus()
+            }
           }
-        }
       }
     }
   }
-   
-  
+
+
   public openPOByUOM(selectdeData: any, ) {
     console.log("openPOByUOM method run........");
 
     // if(selectdeData.TRACKING=="N" && (this.selectedPackingModel.PkgNo==null ||
     //   this.selectedPackingModel.PkgNo==undefined ||  this.selectedPackingModel.PkgNo=="")){
     //   if(!this.showPackingAlertForNTFirstTime){
-      
+
     //   this.showDialog("PackingAlert","Ok","Cancel",
     //   "If you want to add packing detail for this item then select packing first")
     //   this.showPackingAlertForNTFirstTime = true;
     //   return;
     //   }
     // }
-  //  let selectdeData = selection.selectedRows[0].dataItem;
+    //  let selectdeData = selection.selectedRows[0].dataItem;
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
     if (outboundData != undefined && outboundData != '') {
       this.outbound = JSON.parse(outboundData);
@@ -476,6 +477,7 @@ export class OutOrderComponent implements OnInit {
   public addToDeleiver(goToCustomer: boolean = true) {
 
     this.callPrepareDeleiveryTempCollectionMethod()
+    this.savePackageDetailinStorage();
     let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
     if (outboundData != undefined && outboundData != '') {
       if (goToCustomer == true)
@@ -569,6 +571,7 @@ export class OutOrderComponent implements OnInit {
       } else {
         // something went wrong doc num is not available this. case should not be there.
       }
+      
     }
     this.outbound.TempMeterials = [];
   }
@@ -610,17 +613,12 @@ export class OutOrderComponent implements OnInit {
         // Total Qty of Item
         soelement.RPTQTY = totalPickQty;
         this.soItemsDetail[i] = soelement;
-
       }
-
-
     }
-
-
   }
 
 
-  isDeliveryContainerPacking:boolean = false;
+  isDeliveryContainerPacking: boolean = false;
   prepareDeleiveryCollectionAndDeliver(orderId: any) {
 
     if (this.outbound != null && this.outbound != undefined
@@ -766,8 +764,12 @@ export class OutOrderComponent implements OnInit {
         deliveryToken.SODETAIL = arrSODETAIL;
         deliveryToken.UDF = [];
         deliveryToken.PackingData = this.getPackingDataFromLocalStorage()
+
+        if(deliveryToken.PackingData.length == 0){
+          deliveryToken.PackingData = this.savePackageDetailinStorage();
+        }
       }
-      if(deliveryToken.PackingData.length>0){
+      if (deliveryToken.PackingData.length > 0) {
         this.isDeliveryContainerPacking = true;
       }
       //==delivery submit final code===
@@ -777,23 +779,25 @@ export class OutOrderComponent implements OnInit {
           if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
             this.delNo = data[0].SuccessNo;
             this.invoiceStatus = data[0].InvoiceStatus;
-            
-            this.responseDocEntry =  data[0].DocEntry
+
+            this.responseDocEntry = data[0].DocEntry
             this.toastr.success('', this.translate.instant("DeleiverySuccess") + " : " + data[0].SuccessNo);
             // this.printDialog = true  
 
 
-            if(this.invoiceStatus=="N" ||  this.invoiceStatus=="n" ){
-             // this.toastr.error('', this.translate.instant("ARINvoiceNotCreated") + " : " + data[0].SuccessNo);
-            }else{
-              if(this.invoiceStatus=="Y" ||  this.invoiceStatus=="y" ){
-              //  this.toastr.success('', this.translate.instant("ARINvoiceSucess") + " : " + data[0].SuccessNo);
+            if (this.invoiceStatus == "N" || this.invoiceStatus == "n") {
+              // this.toastr.error('', this.translate.instant("ARINvoiceNotCreated") + " : " + data[0].SuccessNo);
+            } else {
+              if (this.invoiceStatus == "Y" || this.invoiceStatus == "y") {
+                //  this.toastr.success('', this.translate.instant("ARINvoiceSucess") + " : " + data[0].SuccessNo);
               }
             }
             //this code will be in 186 machine.
-           if(this.isDeliveryContainerPacking){ 
+            if (this.isDeliveryContainerPacking) {
               this.showPrintConfirmDialog();
-           }
+            }else{
+              this.clearOutbound();
+            }
 
             // for mormal deployment we will show report dialog with otions need to uncomment in html.
             //this.showPrintConfirmDialog();
@@ -821,6 +825,34 @@ export class OutOrderComponent implements OnInit {
     }
   }
 
+  savePackageDetailinStorage(){
+    this.outbound = JSON.parse(localStorage.getItem(CommonConstants.OutboundData));
+    let packingCollection = [];
+    if(this.outbound.packingCollection.length > 0){
+      packingCollection = this.outbound.packingCollection;
+    }
+    if (this.outbound.selectedPackingItem != null && this.outbound.selectedPackingItem != undefined) {
+      for (var i = 0; i < this.outbound.DeleiveryCollection.length; i++) {
+        var packingItem = new PackingModel()
+        packingItem.PkgNo = this.outbound.selectedPackingItem.PkgNo
+        packingItem.PkgType = this.outbound.selectedPackingItem.PkgType
+        packingItem.CARDCODE = this.outbound.DeleiveryCollection[i].Item.CARDCODE;
+        packingItem.ItemCode = this.outbound.DeleiveryCollection[i].Meterial.ITEMCODE;
+        packingItem.ItemTracking = this.outbound.DeleiveryCollection[i].Item.TRACKING;
+        packingItem.Quantity = this.outbound.DeleiveryCollection[i].Meterial.MeterialPickQty.toString();
+        packingItem.DocEntry = this.outbound.DeleiveryCollection[i].Item.DOCENTRY;
+        packingItem.LineNum = this.outbound.DeleiveryCollection[i].Item.LINENUM;
+        let index = packingCollection.findIndex(e=> e.ItemCode == packingItem.ItemCode && e.LineNum == packingItem.LineNum)
+        if(index == -1){
+          packingCollection.push(packingItem)
+        }        
+      }
+      this.outbound.packingCollection = packingCollection;
+      localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+    }
+    return packingCollection;
+  }
+  
   clearOutbound() {
     localStorage.setItem(CommonConstants.OutboundData, null);
     this.router.navigate(["home/outbound/outcustomer", { skipLocationChange: true }])
@@ -1406,8 +1438,9 @@ export class OutOrderComponent implements OnInit {
     this.showConfirmDialog = false;
     if ($event.Status == "yes") {
       switch ($event.From) {
-        case ("receiveSinglePDFDialog"):
+        case ("receivePDFDialog"):
           this.printDialog = true
+          this.noOfCopy = $event.NoOfCopies;
           break;
         case ("delete"):
           this.palletList.splice(this.rowindex, 1);
@@ -1516,14 +1549,14 @@ export class OutOrderComponent implements OnInit {
           break;
 
         case ("printDialogForITR"):
-          this.displayPDF(""+this.responseDocEntry, 14)
+          this.displayPDF("" + this.responseDocEntry, 14, $event.NoOfCopies)
           break;
       }
     } else {
       if ($event.Status == "no") {
         switch ($event.From) {
-          case ("receiveSinglePDFDialog"):
-            this.clearOutbound()
+          case ("receivePDFDialog"):
+            this.clearOutbound();
             break;
           case ("delete"):
             break;
@@ -1533,10 +1566,10 @@ export class OutOrderComponent implements OnInit {
             this.deleiver(this.outbound.OrderData.DOCNUM);
             break;
           case ("ClearTempArray"):
-                this.fromEvent =  "";
-                break;
+            this.fromEvent = "";
+            break;
           case ("packingAlert"):
-               break;
+            break;
         }
       }
     }
@@ -1835,7 +1868,7 @@ export class OutOrderComponent implements OnInit {
       && this.outbound.DeleiveryCollection.length > 0) {
 
       if (this.itrCode !== undefined && this.itrCode !== null) {
-        this.outbound.DeleiveryCollection = this.outbound.DeleiveryCollection.filter(d => 
+        this.outbound.DeleiveryCollection = this.outbound.DeleiveryCollection.filter(d =>
           d.Order.DOCNUM === this.itrCode);
       }
       var oWhsTransAddLot: any = {};
@@ -1953,7 +1986,7 @@ export class OutOrderComponent implements OnInit {
               localStorage.setItem(CommonConstants.OutboundData, null);
               this.resetITRFields();
               this.responseDocEntry = data[0].SuccessNo;
-              var showITRReport =data[0].ITRPrintReport
+              var showITRReport = data[0].ITRPrintReport
               this.itrCode = ''
               this.orderNumber = ''
               //reset global object for itr success.====
@@ -1962,8 +1995,8 @@ export class OutOrderComponent implements OnInit {
               var customerCode = "";
               var customerName = "";
               this.outbound.CustomerData = { CustomerCode: customerCode, CustomerName: customerName, TrackingId: "", CustRefNo: "" };
-              if(showITRReport=='y' || showITRReport=='Y'){
-               this.showPrintConfirmDialogForITR()
+              if (showITRReport == 'y' || showITRReport == 'Y') {
+                this.showPrintConfirmDialogForITR()
               }
             } else {
               this.toastr.error('', data[0].ErrorMsg);
@@ -2014,22 +2047,22 @@ export class OutOrderComponent implements OnInit {
 
 
 
-  showPackingLookup:boolean = false;
-  selectPackingNumber1(){
-   //manage from local array and show list
-   let outboundData = localStorage.getItem(CommonConstants.OutboundData);
-   if (outboundData != undefined && outboundData != '') {
-     this.outbound = JSON.parse(outboundData);
-     this.serviceData = this.outbound.packingCollection;
-     if(this.serviceData.length==0){
-      this.toastr.error('', this.translate.instant("PackingNotAvailable"));
-      return;
-     }else{
-         this.lookupfor = "packingList";
-         //this.showPackingLookup = true;
-         this.showLookup = true;
-         this.showLookupLoader = true;
-     }
+  showPackingLookup: boolean = false;
+  selectPackingNumber1() {
+    //manage from local array and show list
+    let outboundData = localStorage.getItem(CommonConstants.OutboundData);
+    if (outboundData != undefined && outboundData != '') {
+      this.outbound = JSON.parse(outboundData);
+      this.serviceData = this.outbound.packingCollection;
+      if (this.serviceData.length == 0) {
+        this.toastr.error('', this.translate.instant("PackingNotAvailable"));
+        return;
+      } else {
+        this.lookupfor = "packingList";
+        //this.showPackingLookup = true;
+        this.showLookup = true;
+        this.showLookupLoader = true;
+      }
     }
   }
 
@@ -2040,13 +2073,13 @@ export class OutOrderComponent implements OnInit {
       this.outbound = JSON.parse(outboundData);
       this.serviceData = this.outbound.packingCollection;
       const map = new Map();
-      var result=[];
+      var result = [];
       for (const packingLookupItem of this.outbound.packingCollection) {
-        if(!map.has(packingLookupItem.PkgNo)){
-            map.set(packingLookupItem.PkgNo, true);    // set any value to Map
-            result.push(
-               packingLookupItem
-            );
+        if (!map.has(packingLookupItem.PkgNo)) {
+          map.set(packingLookupItem.PkgNo, true);    // set any value to Map
+          result.push(
+            packingLookupItem
+          );
         }
       }
       this.serviceData = result;
@@ -2060,14 +2093,14 @@ export class OutOrderComponent implements OnInit {
       }
     }
   }
-  
-  onPackingNoChange(){
-   if(this.checkPackingNoExistInDb(this.selectedPackingModel.PkgNo)){
-    this.getSelectedPackingNoModel(this.selectedPackingModel.PkgNo)
-   }else{
-    this.selectedPackingModel = new PackingModel();
-    this.toastr.error('', this.translate.instant("PackingNoNotAvailable"));
-   }
+
+  onPackingNoChange() {
+    if (this.checkPackingNoExistInDb(this.selectedPackingModel.PkgNo)) {
+      this.getSelectedPackingNoModel(this.selectedPackingModel.PkgNo)
+    } else {
+      this.selectedPackingModel = new PackingModel();
+      this.toastr.error('', this.translate.instant("PackingNoNotAvailable"));
+    }
     //manage from local array and show list
   }
   checkPackingNoExistInDb(packingNo: String): boolean {
@@ -2081,21 +2114,21 @@ export class OutOrderComponent implements OnInit {
     }
     return false;
   }
-    getSelectedPackingNoModel(packingNo: String): PackingModel {
-      var outbound: any;
-      let outboundData = localStorage.getItem(CommonConstants.OutboundData);
-      if (outboundData != undefined && outboundData != '') {
-        outbound = JSON.parse(outboundData);
-        var packingCollection: any = outbound.packingCollection;
-        var items = packingCollection.filter(pItem => pItem.PkgNo == packingNo);
-        var model: PackingModel = new PackingModel()
-        model = items[0]
-        return model
-      }
+  getSelectedPackingNoModel(packingNo: String): PackingModel {
+    var outbound: any;
+    let outboundData = localStorage.getItem(CommonConstants.OutboundData);
+    if (outboundData != undefined && outboundData != '') {
+      outbound = JSON.parse(outboundData);
+      var packingCollection: any = outbound.packingCollection;
+      var items = packingCollection.filter(pItem => pItem.PkgNo == packingNo);
+      var model: PackingModel = new PackingModel()
+      model = items[0]
+      return model
     }
-  
-  
-  
+  }
+
+
+
 
 
   inputDialogFor: any;
@@ -2109,31 +2142,31 @@ export class OutOrderComponent implements OnInit {
     this.btnNo = this.translate.instant("Cancel");
     this.newPackingNoDialogFlag = true;
     this.titleMessage = this.translate.instant("CreateNewPacking");
-   
+
   }
 
-  getNewPackingDialogOutPut($event){
+  getNewPackingDialogOutPut($event) {
     if ($event != null && $event == "close") {
       //nothing to do
       this.newPackingNoDialogFlag = false;
       return;
-    }else{
+    } else {
       var outbound: any;
-    let outboundData = localStorage.getItem(CommonConstants.OutboundData);
-    if (outboundData != undefined && outboundData != '') {
-      outbound = JSON.parse(outboundData);
-      this.selectedPackingModel = new PackingModel();
-      this.selectedPackingModel = outbound.selectedPackingItem;
-    }
+      let outboundData = localStorage.getItem(CommonConstants.OutboundData);
+      if (outboundData != undefined && outboundData != '') {
+        outbound = JSON.parse(outboundData);
+        this.selectedPackingModel = new PackingModel();
+        this.selectedPackingModel = outbound.selectedPackingItem;
+      }
     }
     this.newPackingNoDialogFlag = false;
   }
- 
- 
 
 
 
-  onHiddenOutOrderItemCodeScanClick(){
+
+
+  onHiddenOutOrderItemCodeScanClick() {
     var inputValue = (<HTMLInputElement>document.getElementById('outOrderItemcodeinput')).value;
     if (inputValue.length > 0) {
       this.ItemCode = inputValue;
@@ -2166,22 +2199,24 @@ export class OutOrderComponent implements OnInit {
   }
 
   printOptionsClick(event) {
-    this.displayPDF(""+this.responseDocEntry, event)
+    this.displayPDF("" + this.responseDocEntry, event, this.noOfCopy)
   }
+
   invoiceStatus: any = ""
   delNo: any = "";
-  responseDocEntry: any = "";  
+  responseDocEntry: any = "";
   printDialog: boolean = false
   showPDF: boolean = false;
   base64String: string = "";
   fileName: string = "";
   displayPDF1: boolean = false;
-  public displayPDF(dNo: string, value: any) {
+
+  public displayPDF(dNo: string, value: any, NoOfCopies) {
     this.showPDFLoading = true;
-    this.inboundService.printingServiceForSubmitGRPO(dNo, value).subscribe(
+    this.inboundService.printingServiceForSubmitGRPO(dNo, value, NoOfCopies).subscribe(
       (data: any) => {
         this.showPDFLoading = false;
-      //  this.printDialog = false;
+        //  this.printDialog = false;
         if (data != undefined) {
           // console.log("" + data);
           if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
@@ -2226,7 +2261,7 @@ export class OutOrderComponent implements OnInit {
   showPrintConfirmDialog() {
     this.yesButtonText = this.translate.instant("yes");
     this.noButtonText = this.translate.instant("no");
-    this.dialogFor = "receiveSinglePDFDialog";
+    this.dialogFor = "receivePDFDialog";
     this.dialogMsg = "Do you want to print report?";//this.translate.instant("Inbound_PrintAllLabelsAfterSubmit");
     this.showConfirmDialog = true; // show dialog 
   }
@@ -2240,29 +2275,30 @@ export class OutOrderComponent implements OnInit {
   }
 
   getPackingDataFromLocalStorage() {
-    let selectedPackingItems=[]
+    let selectedPackingItems = []
     let outboundData = localStorage.getItem(CommonConstants.OutboundData);
     if (outboundData != undefined && outboundData != '') {
       var outbound = JSON.parse(outboundData);
       var packingCollection: any = outbound.packingCollection;
-      selectedPackingItems = packingCollection.filter(pi =>pi.ItemCode!=null && pi.ItemCode!= undefined );
+      selectedPackingItems = packingCollection.filter(pi => pi.ItemCode != null && pi.ItemCode != undefined);
     }
-    var serialNo:number=0;
-    for(let i=0;i<selectedPackingItems.length;i++){
-      serialNo =serialNo+1;
-      selectedPackingItems[i].PkgId= serialNo
+    var serialNo: number = 0;
+    for (let i = 0; i < selectedPackingItems.length; i++) {
+      serialNo = serialNo + 1;
+      selectedPackingItems[i].PkgId = serialNo
     }
     return selectedPackingItems;
   }
 
 
-
+  noOfCopy = 1;
   closePDF() {
     this.displayPDF1 = false;
     console.log("PDF dialog is closed");
   }
-  closePrintDialog(){
+  closePrintDialog() {
     this.printDialog = false;
+    this.noOfCopy = 1;
     this.clearOutbound();
   }
 

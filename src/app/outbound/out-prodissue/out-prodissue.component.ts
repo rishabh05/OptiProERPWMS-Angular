@@ -1,23 +1,23 @@
 import { Component, OnInit, EventEmitter, Output, ViewChild } from '@angular/core';
-import { CommonConstants } from 'src/app/const/common-constants';
-import { OutboundService } from 'src/app/services/outbound.service';
-import { OutboundData } from 'src/app/models/outbound/outbound-data';
-import { MeterialModel } from 'src/app/models/outbound/meterial-model';
+import { CommonConstants } from '../../const/common-constants';
+import { OutboundService } from '../../services/outbound.service';
+import { OutboundData } from '../../models/outbound/outbound-data';
+import { MeterialModel } from '../../models/outbound/meterial-model';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
 import { forEach } from '@angular/router/src/utils/collection';
 import { anyChanged } from '@progress/kendo-angular-grid/dist/es2015/utils';
-import { Commonservice } from 'src/app/services/commonservice.service';
+import { Commonservice } from '../../services/commonservice.service';
 
-import { Lot, ProductionIssueModel, Item } from 'src/app/models/Production/IFP';
-import { ProductionService } from 'src/app/services/production.service';
-import { LabelPrintReportsService } from 'src/app/services/label-print-reports.service';
+import { Lot, ProductionIssueModel, Item } from '../../models/Production/IFP';
+import { ProductionService } from '../../services/production.service';
+import { LabelPrintReportsService } from '../../services/label-print-reports.service';
 import { ISubscription } from 'rxjs/Subscription';
-import { InboundService } from 'src/app/services/inbound.service';
-import { InventoryTransferService } from 'src/app/services/inventory-transfer.service';
-import { PackingModel } from 'src/app/models/outbound/PackingModel';
-import { PickingModule } from 'src/app/picking/picking.module';
+import { InboundService } from '../../services/inbound.service';
+import { InventoryTransferService } from '../../services/inventory-transfer.service';
+import { PackingModel } from '../../models/outbound/PackingModel';
+import { PickingModule } from '../../picking/picking.module';
 
 
 
@@ -197,19 +197,22 @@ export class OutProdissueComponent implements OnInit {
       && this.outbound.TempMeterials !== null
       && this.outbound.TempMeterials.length > 0) {
 
-      //  itemMeterials = this.outbound.TempMeterials.filter(
-      //  (m: any) => m.Item.ITEMCODE
-      //      == this.outbound.SelectedItem.ITEMCODE && m.Item.ROWNUM
-      //      == this.outbound.SelectedItem.ROWNUM && this.outbound.OrderData.DOCNUM == m.Item.DOCNUM);
-
-      for (let i = 0; i < this.outbound.TempMeterials.length; i++) {
-        // for (let j = 0; j < this.outbound.TempMeterials[j].Item.length; j++) {
-        if (this.outbound.TempMeterials[i].Item.ITEMCODE == this.outbound.SelectedItem.ITEMCODE
-          && this.outbound.TempMeterials[i].Item.ROWNUM == this.outbound.SelectedItem.ROWNUM
-          && this.outbound.TempMeterials[i].Item.DOCNUM == this.outbound.OrderData.DOCNUM) {
-          itemMeterials.push(this.outbound.TempMeterials[i]);
+      if (localStorage.getItem("ComingFrom") == "itr") {
+        for (let i = 0; i < this.outbound.TempMeterials.length; i++) {
+          if (this.outbound.TempMeterials[i].Item.ITEMCODE == this.outbound.SelectedItem.ITEMCODE
+            && this.outbound.TempMeterials[i].Item.ROWNUM == this.outbound.SelectedItem.ROWNUM
+            && this.outbound.TempMeterials[i].Item.DOCNUM == this.outbound.SelectedItem.DOCNUM) {
+            itemMeterials.push(this.outbound.TempMeterials[i]);
+          }
         }
-        // }
+      } else {
+        for (let i = 0; i < this.outbound.TempMeterials.length; i++) {
+          if (this.outbound.TempMeterials[i].Item.ITEMCODE == this.outbound.SelectedItem.ITEMCODE
+            && this.outbound.TempMeterials[i].Item.ROWNUM == this.outbound.SelectedItem.ROWNUM
+            && this.outbound.TempMeterials[i].Item.DOCNUM == this.outbound.OrderData.DOCNUM) {
+            itemMeterials.push(this.outbound.TempMeterials[i]);
+          }
+        }
       }
     }
     if (itemMeterials !== undefined && itemMeterials !== null
@@ -338,10 +341,7 @@ export class OutProdissueComponent implements OnInit {
               }
             }
           }
-          // create array 
-          //let lookupArray:any=[{ITEMCODE:itemCode,OPENQTY:openQty}]
-          // BINNO TOTALQTY LOTNO PickQty
-          //this.getLookupValue(lookupArray,null,false); 
+
           this.ourboundService.getAllPickPackAndOtherSerialBatchWithoutBin(itemCode, "", serialNo,
             this.outbound.SelectedItem.DOCENTRY).subscribe(
               (data: any) => {
@@ -356,15 +356,15 @@ export class OutProdissueComponent implements OnInit {
                   //   TOTALQTY: totalQty, LOTNO: lotNo, PickQty: PickQty, SYSNUMBER: sysNumber
                   // }];
 
-                  // for(var i=0; i<data.length; i++){
-                  //   data[i].MeterialPickQty = openQty
-                  //   data[i].OPENQTY = undefined
-                  //   data[i].PickQty = undefined
-                  // }
-                  // let el: any = document.getElementById('gridSelectedMeterial');
-                  // this.getLookupValue(data, el, true, false);
+                  for (var i = 0; i < data.length; i++) {
+                    data[i].MeterialPickQty = openQty
+                    data[i].OPENQTY = undefined
+                    data[i].PickQty = undefined
+                  }
+                  let el: any = document.getElementById('gridSelectedMeterial');
+                  this.getLookupValue(data, el, true, true);
 
-                  this.setScanBtchSerIntoGrid(data, openQty);
+                  // this.setScanBtchSerIntoGrid(data, openQty, "GSTNScan");
                 } else {
                   this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
                 }
@@ -387,18 +387,7 @@ export class OutProdissueComponent implements OnInit {
       this.outbound.SelectedItem.DOCENTRY).subscribe(
         (data: any) => {
           if (data != null && data != undefined && data.length > 0) {
-            // var binno = data[0].BINNO;
-            // var totalQty = data[0].TOTALQTY;
-            // var lotNo = data[0].LOTNO;
-            // var PickQty = openQty;
-            // var sysNumber = data[0].SYSNUMBER;
-            // let lookupArray: any = [{
-            //   ITEMCODE: itemCode, OPENQTY: openQty, BINNO: binno,
-            //   TOTALQTY: totalQty, LOTNO: lotNo, PickQty: PickQty, SYSNUMBER: sysNumber
-            // }];
-            // let el: any = document.getElementById('gridSelectedMeterial');
-            // this.getLookupValue(lookupArray, el, true, false);
-            this.setScanBtchSerIntoGrid(data, openQty);
+            this.setScanBtchSerIntoGrid(data, openQty, "");
           } else {
             this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
           }
@@ -409,11 +398,11 @@ export class OutProdissueComponent implements OnInit {
         });
   }
 
-  setScanBtchSerIntoGrid(data, openQty) {
+  setScanBtchSerIntoGrid(data, openQty, fromWhere?: string) {
     let el: any = document.getElementById('gridSelectedMeterial');
-    if(el.data != undefined && el.data.length > 0){
+    if (el.data != undefined && el.data.length > 0) {
       let index = el.data.findIndex(e => e.LOTNO == data[0].LOTNO);
-      if(index != -1){
+      if (index != -1) {
         this.toastr.error('', this.translate.instant("ProdIssue_BatchSerialAlreadyExist"))
         return;
       }
@@ -430,8 +419,8 @@ export class OutProdissueComponent implements OnInit {
       this.lookupFor = "out-items"
       this.showLookup = true;
       this.showOtherLookup = false;
-    } else {      
-      this.getLookupValue(data, el, true, false);
+    } else {
+      this.getLookupValue(data, el, true, false, fromWhere);
     }
   }
 
@@ -563,7 +552,7 @@ export class OutProdissueComponent implements OnInit {
     )
   }
 
-  getLookupValue(lookupValue: any, gridSelectedMeterial: any, updateGrid: boolean = true, scan: boolean = false) {
+  getLookupValue(lookupValue: any, gridSelectedMeterial: any, updateGrid: boolean = true, scan: boolean = false, fromwhere?: string) {
     this.showLookup = false;
     this.showOtherLookup = false;
     if (this.lookupFor == "packingList") {
@@ -646,7 +635,7 @@ export class OutProdissueComponent implements OnInit {
             this.comingSelectedMeterials = lookupValue;
           }
         }
-        this.manageMeterial(scan);
+        this.manageMeterial(scan, fromwhere);
         if (updateGrid == true)
           gridSelectedMeterial.data = this.selectedMeterials;
         //lsOutbound
@@ -723,27 +712,49 @@ export class OutProdissueComponent implements OnInit {
     }
   }
 
-  manageMeterial(scan: boolean = false) {
+  manageMeterial(scan: boolean = false, fromwhere?: string) {
     let requiredMeterialQty: number = this._requiredMeterialQty;
     let pickedMeterialQty: number = this._pickedMeterialQty;
     let remailingMeterialQty: number = requiredMeterialQty - pickedMeterialQty;
+    // if(fromwhere != undefined && fromwhere == "GSTNScan"){
+    //   remailingMeterialQty = this.comingSelectedMeterials[0].MeterialPickQty; 
+    //   if(remailingMeterialQty > requiredMeterialQty){
+    //     remailingMeterialQty = requiredMeterialQty - pickedMeterialQty;
+    //   }
+    // }
     if (pickedMeterialQty <= requiredMeterialQty) {
       if (scan) {// if scan true means user comes from scan.
         let meterial = this.comingSelectedMeterials[0]; // coming selected material is the collection which we selected from dropdown.
-        if (meterial.PickQty > requiredMeterialQty) { //checking how much qty we require
-          if (meterial.totalPickQty > remailingMeterialQty) {
-            meterial.MeterialPickQty = remailingMeterialQty
+        // if (meterial.PickQty > requiredMeterialQty) { //checking how much qty we require
+        //   if (meterial.totalPickQty > remailingMeterialQty) {
+        //     meterial.MeterialPickQty = remailingMeterialQty
+        //   } else {
+        //     meterial.MeterialPickQty = meterial.totalPickQty
+        //   }
+        // } else { // if selected material qty is not grater then the required qty.
+        //   if (meterial.totalPickQty > remailingMeterialQty) {
+        //     meterial.MeterialPickQty = remailingMeterialQty
+        //   }
+        //   else {
+        //     meterial.MeterialPickQty = meterial.totalPickQty
+        //   }
+        //   meterial.MeterialPickQty = meterial.TOTALQTY - meterial.PickQty
+        // }
+        if (meterial.MeterialPickQty > requiredMeterialQty) {
+          let avaliableMeterialQty = parseFloat(meterial.TOTALQTY);
+          if (avaliableMeterialQty >= remailingMeterialQty) {
+            meterial.MeterialPickQty = remailingMeterialQty;
           } else {
-            meterial.MeterialPickQty = meterial.totalPickQty
+            meterial.MeterialPickQty = avaliableMeterialQty;
           }
         } else { // if selected material qty is not grater then the required qty.
-          if (meterial.totalPickQty > remailingMeterialQty) {
-            meterial.MeterialPickQty = remailingMeterialQty
-          }
-          else {
-            meterial.MeterialPickQty = meterial.totalPickQty
-          }
-          meterial.MeterialPickQty = meterial.TOTALQTY - meterial.PickQty
+          // if (meterial.totalPickQty > remailingMeterialQty) {
+          //   meterial.MeterialPickQty = remailingMeterialQty
+          // }
+          // else {
+          //   meterial.MeterialPickQty = meterial.totalPickQty
+          // }
+          // meterial.MeterialPickQty = meterial.TOTALQTY - meterial.PickQty
         }
         this.selectedMeterials.push(meterial); // after updating the qty push the material to seleted material with updated qty.
         //apply paging..
@@ -869,6 +880,40 @@ export class OutProdissueComponent implements OnInit {
     }
     if (this.checkPackingDetailIsOk()) {
       packingCollection = this.outbound.packingCollection;
+      if (packingCollection.length == 0 && this.outbound.selectedPackingItem != null && this.outbound.selectedPackingItem != undefined) {
+        var sum = this.outbound.SelectedMeterials.reduce(function (a, b) {
+          return a + parseFloat(b.MeterialPickQty);
+        }, 0);
+        var packingItem = new PackingModel()
+        packingItem.PkgNo = this.outbound.selectedPackingItem.PkgNo
+        packingItem.PkgType = this.outbound.selectedPackingItem.PkgType
+        packingItem.CARDCODE = this.outbound.SelectedItem.CARDCODE;
+        packingItem.ItemCode = this.outbound.SelectedItem.ITEMCODE;
+        packingItem.ItemTracking = this.outbound.SelectedItem.TRACKING;
+        packingItem.Quantity = sum.toString();
+        packingItem.DocEntry = this.outbound.SelectedItem.DOCENTRY;
+        packingItem.LineNum = this.outbound.SelectedItem.LINENUM;
+        packingCollection.push(packingItem)
+
+        // packingCollection.push({
+        //   PkgNo: this.outbound.selectedPackingItem.PkgNo,
+        //   PkgType: this.outbound.selectedPackingItem.PkgType,
+        //   ACTLOTNO: this.outbound.SelectedItem.CARDCODE,
+        //   ItemCode: this.outbound.SelectedItem.ITEMCODE,
+        //   DocEntry: this.outbound.SelectedItem.DOCENTRY,
+        //   ItemTracking: this.outbound.SelectedItem.TRACKING,
+        //   LineNum: this.outbound.SelectedItem.LINENUM,
+        //   Quantity: sum
+        // })
+        // packingCollection = this.outbound.selectedPackingItem;
+        // packingCollection.CARDCODE = this.outbound.SelectedItem.CARDCODE
+        // packingCollection.ItemCode = this.outbound.SelectedItem.ITEMCODE
+
+        // packingCollection.DocEntry = this.outbound.SelectedItem.DOCENTRY
+        // packingCollection.ItemTracking = this.outbound.SelectedItem.TRACKING
+        // packingCollection.LineNum = this.outbound.SelectedItem.LINENUM
+        // packingCollection.Quantity = sum;
+      }
     } else {
       this.showPackingMismatchAlert = true;
       // means packing is not ok
@@ -903,7 +948,7 @@ export class OutProdissueComponent implements OnInit {
         // loop selected Items
         for (let index = 0; index < this.selectedMeterials.length; index++) {
           const m = this.selectedMeterials[index];
-          count = count + m.MeterialPickQty;
+          count = Number(count) + Number(m.MeterialPickQty);
           if (count > this._requiredMeterialQty) {
             this.toastr.error('', this.translate.instant("ProdIssue_QtyGTTotal"));
             return;
@@ -919,7 +964,7 @@ export class OutProdissueComponent implements OnInit {
         // loop selected Items
         for (let index = 0; index < this.selectedMeterials.length; index++) {
           const m = this.selectedMeterials[index];
-          count = count + m.MeterialPickQty;
+          count = Number(count) + Number(m.MeterialPickQty);
           if (count > this._requiredMeterialQty) {
             this.toastr.error('', this.translate.instant("ProdIssue_QtyGTTotal"));
             return;
@@ -987,7 +1032,7 @@ export class OutProdissueComponent implements OnInit {
   checkPackingDetailIsOk(): boolean {
     var totalSelectdQty: number = 0;
     var packingCollection = this.outbound.packingCollection
-    let selectedPackingOfThisScreen = packingCollection.filter(pi => (pi.ItemCode == this.selected.ITEMCODE && pi.DocEntry == this.selected.DOCENTRY));
+    let selectedPackingOfThisScreen = packingCollection.filter(pi => (pi.ItemCode == this.selected.ITEMCODE && pi.DocEntry == this.selected.DOCENTRY && pi.PkgNo != "" && pi.PkgType != ""));
     if (selectedPackingOfThisScreen != null && selectedPackingOfThisScreen != undefined && selectedPackingOfThisScreen.length > 0) {
       for (let i = 0; i < selectedPackingOfThisScreen.length; i++) {
         totalSelectdQty = + selectedPackingOfThisScreen[i].Quantity;
@@ -1685,7 +1730,7 @@ export class OutProdissueComponent implements OnInit {
           newItm.ItemCode = this.selected.ITEMCODE;
           newItm.CARDCODE = this.selected.CARDCODE;
           newItm.ItemTracking = this.selected.TRACKING;
-          newItm.Quantity = 0;
+          newItm.Quantity = "0";
           newItm.DocEntry = this.selected.DOCENTRY;
           newItm.LineNum = this.selected.LINENUM
           arrayToDisplay.push(newItm)
@@ -1779,7 +1824,7 @@ export class OutProdissueComponent implements OnInit {
             packingItem.CARDCODE = cardCode;
             packingItem.ItemCode = itemId;
             packingItem.ItemTracking = tracking;
-            packingItem.Quantity = qty;
+            packingItem.Quantity = qty.toString();
             packingItem.DocEntry = docEntry;
             packingItem.LineNum = lineNum;
             this.outbound.packingCollection = packingCollectionItems;
@@ -1791,7 +1836,7 @@ export class OutProdissueComponent implements OnInit {
             packingItem.CARDCODE = cardCode;
             packingItem.ItemCode = itemId;
             packingItem.ItemTracking = tracking;
-            packingItem.Quantity = qty;
+            packingItem.Quantity = qty.toString();
             packingItem.DocEntry = docEntry;
             packingItem.LineNum = lineNum;
             packingCollectionItems.push(packingItem)
@@ -1808,7 +1853,7 @@ export class OutProdissueComponent implements OnInit {
             packingItem.CARDCODE = cardCode;
             packingItem.ItemCode = itemId;
             packingItem.ItemTracking = tracking;
-            packingItem.Quantity = qty;
+            packingItem.Quantity = qty.toString();
             packingItem.DocEntry = docEntry;
             packingItem.LineNum = lineNum;
             packingCollectionItems.push(packingItem)
@@ -1820,7 +1865,7 @@ export class OutProdissueComponent implements OnInit {
             packingItem.CARDCODE = cardCode;
             packingItem.ItemCode = itemId;
             packingItem.ItemTracking = tracking;
-            packingItem.Quantity = qty;
+            packingItem.Quantity = qty.toString();
             packingItem.DocEntry = docEntry;
             packingItem.LineNum = lineNum;
             var pos = packingCollectionItems.findIndex(i => (i.PkgNo == packingItem.PkgNo && i.ItemCode == undefined))
@@ -1840,7 +1885,7 @@ export class OutProdissueComponent implements OnInit {
         packingItem.CARDCODE = cardCode;
         packingItem.ItemCode = itemId;
         packingItem.ItemTracking = tracking;
-        packingItem.Quantity = qty;
+        packingItem.Quantity = qty.toString();
         packingItem.DocEntry = docEntry;
         packingItem.LineNum = lineNum;
         packingCollectionItems.push(packingItem)
@@ -1873,7 +1918,7 @@ export class OutProdissueComponent implements OnInit {
     let selectedPackingsBySO = selectedPackingsByItem.filter(pi => pi.DocEntry == docEntry);
     if (selectedPackingsBySO != null && selectedPackingsBySO != undefined && selectedPackingsBySO.length > 0) {
       var packingItem: PackingModel = selectedPackingsBySO[0]
-      if (packingItem.Quantity != null && packingItem.Quantity != undefined && packingItem.Quantity > 0) {
+      if (packingItem.Quantity != null && packingItem.Quantity != undefined && Number(packingItem.Quantity > 0)) {
         materialQty = packingItem.Quantity;
       }
     }

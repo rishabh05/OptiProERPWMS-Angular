@@ -925,13 +925,13 @@ export class LookupComponent implements OnInit {
       {
         field: 'DocNum',
         title: this.translate.instant("InvTransfer_ITRRequestNo"),
-        type: 'text',
+        type: 'numeric',
         width: '60'
       },
       {
         field: 'DocDueDate',
         title: this.translate.instant("DueDate"),
-        type: 'text',
+        type: 'date',
         width: '50'
       },
       {

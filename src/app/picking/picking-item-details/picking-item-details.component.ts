@@ -145,7 +145,7 @@ export class PickingItemDetailsComponent implements OnInit {
     this.PickListClosureSteps = this.PickListSteps.filter(element => (element.OPTM_APPLICABLE_BO == 1));
 
     if (this.PickListClosureSteps == undefined || this.PickListClosureSteps.length == 0) {
-      this.toastr.error("Srini", 'Picklist closure steps not defined. Cannot continue.')
+      this.toastr.error("", this.translate.instant("PICKLIST_STEPS_NOT_DEF"))
       this.onBackClick();
       return;
     }
@@ -695,7 +695,7 @@ export class PickingItemDetailsComponent implements OnInit {
       this.intStepSeq = this.intStepSeq + 1;
       this.ProcessPicklistNextClosureStep()
     } else if (this.ScannedDropBin != this.PickListDropBin) {
-      this.toastr.error('Srini', 'Scanned Drop Bin does not match');
+      this.toastr.error('', this.translate.instant("DROP_BIN_NOT_MATCH"));
       this.ScannedDropBin = '';
       this.setfocus();
     }
@@ -758,7 +758,7 @@ export class PickingItemDetailsComponent implements OnInit {
     this.pickedAllDty = false;
     this.index = this.index + 1;
     if (this.index == this.PickTaskList.length) {
-      this.toastr.info('Srini', "Reached end of Picklist");
+      this.toastr.info('', this.translate.instant("Reached_END_Picklist"));
       this.index = 0;
     }
     this.setValues(this.index);
@@ -774,7 +774,7 @@ export class PickingItemDetailsComponent implements OnInit {
         if (this.PickTaskDetail.OPTM_WHSTASK_DTL[i].OPTM_TASKID == this.PickTaskList[this.index].OPTM_TASKID) {
           if (this.PT_Enter_ContBtchSer === this.PickTaskDetail.OPTM_WHSTASK_DTL[i].OPTM_CONTCODE) {
             if (this.PickTaskDetail.OPTM_WHSTASK_DTL[i].OPTM_DAMAGE_FLG == 1) {
-              this.toastr.error('Srini', "Scanned Container Damaged");
+              this.toastr.error('', this.translate.instant("CONT_DAMAGE"));
             }
             batserAdded = true;
             let result = this.ContBtchSerArray.find(element => element == this.PT_Enter_ContBtchSer);
@@ -1244,7 +1244,7 @@ export class PickingItemDetailsComponent implements OnInit {
         case this.DROP_BIN_STEP:
           this.currentStepText = this.translate.instant("PL_Scan_Drop_Location");
         case this.CONFIRM_DROP_BIN_STEP:
-          this.toastr.success('Srini', this.translate.instant("ConfirmPickDropLocation"));
+          this.toastr.success('', this.translate.instant("ConfirmPickDropLocation"));
       }
     } else if (this.countOfNowPickedTasks > 0) {
       //User has picked at least one task after moving to this Picklist.
@@ -1254,7 +1254,7 @@ export class PickingItemDetailsComponent implements OnInit {
       this.PickListDropBin = this.PartPickDropBin;
       this.currentStep = this.CONFIRM_DROP_BIN_STEP;
       //Show user confirm drop bin location
-      this.toastr.success('Srini', this.translate.instant("ConfirmPickDropLocation"));
+      this.toastr.success('', this.translate.instant("ConfirmPickDropLocation"));
     }
   }
 
@@ -1612,7 +1612,7 @@ export class PickingItemDetailsComponent implements OnInit {
           if (data.OPEN_TASKS.length > 0) {
             this.OpenTaskCount = data.OPEN_TASKS[0].OPEN_TASKS;
             if (this.OpenTaskCount == 0) {
-              this.toastr.error('Srini', this.translate.instant("No_open_tasks_Picklist"));
+              this.toastr.error('', this.translate.instant("No_open_tasks_Picklist"));
               return;
             } else {
               if (this.OpenTaskCount == 1) {
