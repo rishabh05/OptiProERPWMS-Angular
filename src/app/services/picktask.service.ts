@@ -158,5 +158,38 @@ export class PickTaskService {
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/getServerDate", jObject, this.commonService.httpOptions);
   }
   
+//PACKING APIS  
+  GetDroppedToteList(OPTM_BIN): Observable<any> {
+    let jObject = {
+      PalletCode: JSON.stringify([{
+        COMPANYDBNAME: sessionStorage.getItem("CompID"),
+        OPTM_WHSE: sessionStorage.getItem("whseId"),
+        OPTM_BIN: OPTM_BIN
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetDroppedToteList", jObject, this.commonService.httpOptions);
+  }
+
+  GetToteShipments(OPTM_TOTE_NUMBER): Observable<any> {
+    let jObject = {
+      PalletCode: JSON.stringify([{
+        COMPANYDBNAME: sessionStorage.getItem("CompID"),
+        OPTM_TOTE_NUMBER: OPTM_TOTE_NUMBER
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetToteShipments", jObject, this.commonService.httpOptions);
+  }
+
+  GetToteItemBtchSer(OPTM_TOTE_NUMBER, OPTM_SHIPMENTID, OPTM_ITEMCODE): Observable<any> {
+    let jObject = {
+      PalletCode: JSON.stringify([{
+        COMPANYDBNAME: sessionStorage.getItem("CompID"),
+        OPTM_TOTE_NUMBER: OPTM_TOTE_NUMBER,
+        OPTM_SHIPMENTID: OPTM_SHIPMENTID,
+        OPTM_ITEMCODE: OPTM_ITEMCODE
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetToteItemBtchSer", jObject, this.commonService.httpOptions);
+  }
 }
 

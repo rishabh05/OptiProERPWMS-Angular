@@ -156,7 +156,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
           this.dateAvailableToReceieve();
           if (this.showPDF) {
             //show pdf
-            this.displayPDF(data[0].DocEntry, noOfCopy);
+            this.displayPDF(data[0].DocEntry, this.NoOfPrintCopies);
             this.showPDF = false;
           } else {
             // no need to display pdf
@@ -171,6 +171,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
           // alert(data[0].ErrorMsg);
           this.toastr.error('', data[0].ErrorMsg);
         }
+        this.NoOfPrintCopies = 1
       },
       error => {
         console.log("Error: ", error);
@@ -383,6 +384,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
     this.showConfirmDialog = true;
   }
 
+  NoOfPrintCopies = 1;
   getConfirmDialogValue($event) {
     this.showConfirmDialog = false;
     if ($event.Status == "yes") {
@@ -391,6 +393,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
           this.DeleteRowClick(this.rowindexForDelete, this.gridDataAfterDelete);
           break;
         case ("receiveSinglePDFDialog"):
+          this.NoOfPrintCopies = $event.NoOfCopies;
           this.SubmitGoodsReceiptPO(JSON.parse(localStorage.getItem("AddToGRPO"), $event.NoOfCopies));
           this.showPDF = true;
           break;

@@ -30,6 +30,14 @@ export class ComonConfirmDialogComponent implements OnInit {
     }
   }
 
+  async ngOnChanges(): Promise<void> {
+    if(this.fromWhere == "receiveSinglePDFDialog" || this.fromWhere == "receiveMultiplePDFDialog"){
+      this.ShowPrintCount = true;
+    }else{
+      this.ShowPrintCount = false;
+    }
+  }
+
   public opened: boolean = true;
 
   public close(status) {

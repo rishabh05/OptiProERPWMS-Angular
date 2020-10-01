@@ -8,16 +8,64 @@
         <div class="col-12">
           <div class="po-details-comp">
             <div class="po-details-sec">
-              <div class="form-group row">
-                <label for="inputPassword" class="col-sm-4 col-form-label">{{'Tote'|translate}}</label>
-                <div class="col-sm-8">
-                  <div class="input-group input-group-sm">
-                    <input type="text" class="form-control form-control-sm" id="Tote" name="Tote" [(ngModel)]="ToteValue" trim="blur">
-                  </div>
+
+                <div class="form-group row">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">{{'BinCode'|translate}}</label>
+                    <div class="col-sm-8">
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control form-control-sm" id="BinCode" name="BinCode" [(ngModel)]="BinCodeValue" trim="blur">
+                            <div class="input-group-append">
+                                <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="GetDroppedToteList()">
+                                    <i class="opti-icon-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
+
+                <div class="form-group row">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">{{'Tote'|translate}}</label>
+                    <div class="col-sm-8">
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control form-control-sm" id="Tote" name="Tote" [(ngModel)]="ToteValue" trim="blur">
+                            <div class="input-group-append">
+                                <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="GetDroppedToteList()">
+                                    <i class="opti-icon-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">{{'ShipmentCode'|translate}}</label>
+                    <div class="col-sm-8">
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control form-control-sm" id="ShipmentCode" name="ShipmentCode" [(ngModel)]="ShipmentCodeValue" trim="blur">
+                            <div class="input-group-append">
+                                <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="GetDroppedToteList()">
+                                    <i class="opti-icon-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
               <div class="form-group row">
+                  <label for="inputPassword" class="col-sm-4 col-form-label">{{'ContainerCode'|translate}}</label>
+                  <div class="col-sm-8">
+                      <div class="input-group input-group-sm">
+                          <input type="text" class="form-control form-control-sm" id="ContainerCode" name="ContainerCode" [(ngModel)]="ContainerCodeValue" trim="blur">
+                          <div class="input-group-append">
+                              <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="GetDroppedContainerCodeList()">
+                                  <i class="opti-icon-search"></i>
+                              </button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <!-- <div class="form-group row">
                 <label for="inputPassword" class="col-sm-4 col-form-label">{{'ShipmentCode'|translate}}</label>
                 <div class="col-sm-8">
                   <div class="input-group input-group-sm">
@@ -25,8 +73,10 @@
                       placeholder="{{'ShipmentCode'|translate}}" (blur)="onShipmentIDChange()" trim>
                   </div>
                 </div>
-              </div>
+              </div> -->
             </div>
+
+                  
 
             <div class="px-3">
                 <div class="form-group row mt-2">

@@ -3,6 +3,7 @@ import { Commonservice } from '../services/commonservice.service';
 import { Router } from '../../../node_modules/@angular/router';
 import { LangChangeEvent, TranslateService } from '../../../node_modules/@ngx-translate/core';
 import { ToastrService } from '../../../node_modules/ngx-toastr';
+import { PickTaskService } from '../services/picktask.service';
 
 @Component({
   selector: 'app-packing',
@@ -33,7 +34,7 @@ export class PackingComponent implements OnInit {
   @ViewChild('focusOnCont') focusOnCont;
   @ViewChild('focusOnDockDoor') focusOnDockDoor;
 
-  constructor(private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService) {
+  constructor(private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService, private packservice: PickTaskService) {
     let userLang = navigator.language.split('-')[0];
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
     translate.use(userLang);
@@ -409,6 +410,105 @@ export class PackingComponent implements OnInit {
     });
     
     this.commonservice.CreateContainerForPacking(oSaveModel).subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        if (data != undefined) {
+          if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
+          if (data.OUTPUT[0].RESULT == "Data Saved") {
+            this.toastr.success('', this.translate.instant("ContainerCreatedSuccessMsg"));
+            this.containerCode = "";
+            this.onShipmentIDChange();
+          } else {
+            this.toastr.error('', data.OUTPUT[0].RESULT);
+          }
+        } else {
+          // this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+        }
+      },
+      error => {
+        this.showLoader = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
+
+  GetDroppedToteList(){
+    this.packservice.GetDroppedToteList("").subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        if (data != undefined) {
+          if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
+          if (data.OUTPUT[0].RESULT == "Data Saved") {
+            this.toastr.success('', this.translate.instant("ContainerCreatedSuccessMsg"));
+            this.containerCode = "";
+            this.onShipmentIDChange();
+          } else {
+            this.toastr.error('', data.OUTPUT[0].RESULT);
+          }
+        } else {
+          // this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+        }
+      },
+      error => {
+        this.showLoader = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
+
+  GetToteShipments(){
+    this.packservice.GetToteShipments("").subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        if (data != undefined) {
+          if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
+          if (data.OUTPUT[0].RESULT == "Data Saved") {
+            this.toastr.success('', this.translate.instant("ContainerCreatedSuccessMsg"));
+            this.containerCode = "";
+            this.onShipmentIDChange();
+          } else {
+            this.toastr.error('', data.OUTPUT[0].RESULT);
+          }
+        } else {
+          // this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+        }
+      },
+      error => {
+        this.showLoader = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
+
+  GetToteItemBtchSer(){
+    this.packservice.GetToteItemBtchSer("", "", "").subscribe(
       (data: any) => {
         this.showLoader = false;
         if (data != undefined) {
