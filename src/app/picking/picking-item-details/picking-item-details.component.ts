@@ -176,8 +176,7 @@ export class PickingItemDetailsComponent implements OnInit {
 
       //this.toastr.success("", this.translate.instant("CCCreated"))
     } else {
-      this.toastr.success("", this.translate.instant("ToteCreated"))
-      this.containercreated = true;
+      this.ValidateTote();
     }
     //this.containercreated = true;
   }
@@ -185,7 +184,7 @@ export class PickingItemDetailsComponent implements OnInit {
   ValidatePackingContainer() {
     this.showLoader = true;
     // console.log("2  " + new Date().toLocaleTimeString());
-    this.picktaskService.ValidatePackingContainer(this.CreatedContOrTote).subscribe(
+    this.picktaskService.ValidatePackingContainer(this.CreatedContOrTote, this.pickTaskName).subscribe(
       (data: any) => {
         this.showLoader = false;
         if (data != undefined) {
@@ -220,6 +219,46 @@ export class PickingItemDetailsComponent implements OnInit {
       }
     );
   }
+
+  ValidateTote() {
+    this.showLoader = true;
+    // console.log("2  " + new Date().toLocaleTimeString());
+    this.picktaskService.ValidateTote(this.CreatedContOrTote, this.pickTaskName).subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        if (data != undefined) {
+          if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
+          this.showLookupLoader = false;
+          if (data != "") {
+            this.CreatedContOrTote = '';
+            this.toastr.error("", data);
+            this.containercreated = false;
+          } else {
+            this.toastr.success("", this.translate.instant("ToteCreated"))
+            this.containercreated = true;
+          }
+        } else {
+          this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          return;
+        }
+      },
+      error => {
+        this.showLoader = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+        return;
+      }
+    );
+  }
+
 
   getStepNo(OPTM_STEP_CODE): any {
     switch (OPTM_STEP_CODE) {
@@ -858,12 +897,14 @@ export class PickingItemDetailsComponent implements OnInit {
         this.BtchSerDtlData.push({
           OPTM_TASKID: this.PickTaskList[this.index].OPTM_TASKID,
           OPTM_ITEMCODE: this.itemcodeValue,
+          OPTM_WHSE: sessionStorage.getItem("whseID"),
           OPTM_BIN: this.PT_Enter_Location,
-          OPTM_CONTAINER_ID: contValue,
+          OPTM_CONTAINERCODE: contValue,
           OPTM_QTY: 1,
           OPTM_BTCHSER: this.PT_Enter_ContBtchSer,
           OPTM_CREATEDBY: sessionStorage.getItem("UserId"),
-          OPTM_STARTDATETIME: this.OPTM_STARTDATETIME
+          OPTM_STARTDATETIME: this.OPTM_STARTDATETIME,
+          Source_Obj: "PickList"
         });
 
         this.ItemDetail.push({
@@ -1239,13 +1280,15 @@ export class PickingItemDetailsComponent implements OnInit {
     //the last pick information as he has not clicked on Save button. Then check if any tasks are processed
     //before clicking the next picklist button. If yes then drop the contents to Part pick bin
     if (this.blnSaveClicked && ((this.completedTaskCount + 1) == this.totalPickTaskCount)) {
+      /*
       this.currentStep = this.getStepNo(this.PickListClosureSteps[this.intStepSeq].OPTM_STEP_CODE);      
       switch (this.currentStep) {
         case this.DROP_BIN_STEP:
           this.currentStepText = this.translate.instant("PL_Scan_Drop_Location");
         case this.CONFIRM_DROP_BIN_STEP:
-          this.toastr.success('Srini', this.translate.instant("ConfirmPickDropLocation"));
+          this.toastr.success('Srini', this.translate.instant("ConfirmPickDropLocation"));      
       }
+      */
     } else if (this.countOfNowPickedTasks > 0) {
       //User has picked at least one task after moving to this Picklist.
       //He has not just moved through the tasks without completing any of them
@@ -1256,6 +1299,13 @@ export class PickingItemDetailsComponent implements OnInit {
       //Show user confirm drop bin location
       this.toastr.success('Srini', this.translate.instant("ConfirmPickDropLocation"));
     }
+    this.currentStep = this.getStepNo(this.PickListClosureSteps[this.intStepSeq].OPTM_STEP_CODE);      
+      switch (this.currentStep) {
+        case this.DROP_BIN_STEP:
+          this.currentStepText = this.translate.instant("PL_Scan_Drop_Location");
+        case this.CONFIRM_DROP_BIN_STEP:
+          this.toastr.success('Srini', this.translate.instant("ConfirmPickDropLocation"));
+      }
   }
 
   onPickDropConfirmation() {
@@ -1505,16 +1555,16 @@ export class PickingItemDetailsComponent implements OnInit {
 
     if ((this.OPTM_Tracking == 'B' || this.OPTM_Tracking == 'N') && localStorage.getItem("PickType") != this.translate.instant("Container_Picking")) {
       for (var i = 0; i < this.BtchNoneArray.length; i++) {
-        this.SubmitPickTaskData.push(new PickTaskModel(this.ShipmentList[0].OPTM_PICKLIST_ID, this.ShipmentList[0].OPTM_PICKLIST_CODE, this.PickTaskList[this.index].OPTM_TASKID, sessionStorage.getItem("whseId"), this.BtchNoneArray[i].OPTM_Location, this.BtchNoneArray[i].OPTM_ContBtchSer, this.BtchNoneArray[i].OPTM_Qty, contValue, sessionStorage.getItem("UserId"), "N", toteValue, this.containerAlreadyCreated, this.OPTM_STARTDATETIME, localStorage.getItem("PickTypeIndex"), this.UserGrp, this.PickListDropBin));
+        this.SubmitPickTaskData.push(new PickTaskModel(this.ShipmentList[0].OPTM_PICKLIST_ID, this.ShipmentList[0].OPTM_PICKLIST_CODE, this.PickTaskList[this.index].OPTM_TASKID, sessionStorage.getItem("whseId"), this.BtchNoneArray[i].OPTM_Location, this.BtchNoneArray[i].OPTM_ContBtchSer, this.BtchNoneArray[i].OPTM_Qty, contValue, sessionStorage.getItem("UserId"), "N", toteValue, this.containerAlreadyCreated, this.OPTM_STARTDATETIME, localStorage.getItem("PickTypeIndex"), this.UserGrp, this.PickListDropBin, this.ShipmentList[0].OPTM_PICK_OPER));
       }
     } else {
       for (var i = 0; i < this.ContBtchSerArray.length; i++) {
         let result = this.PickListSteps.find(element => element.OPTM_TASKID == this.PickTaskList[this.index].OPTM_TASKID);
         if (result == undefined) {
           if (localStorage.getItem("PickType") == this.translate.instant("Container_Picking")) {
-            this.SubmitPickTaskData.push(new PickTaskModel(this.ShipmentList[0].OPTM_PICKLIST_ID, this.ShipmentList[0].OPTM_PICKLIST_CODE, this.PickTaskList[this.index].OPTM_TASKID, sessionStorage.getItem("whseId"), this.PT_Enter_Location, this.ContBtchSerArray[i], 1, contValue, sessionStorage.getItem("UserId"), "Y", toteValue, this.containerAlreadyCreated, this.OPTM_STARTDATETIME, localStorage.getItem("PickTypeIndex"), this.UserGrp, this.PickListDropBin));
+            this.SubmitPickTaskData.push(new PickTaskModel(this.ShipmentList[0].OPTM_PICKLIST_ID, this.ShipmentList[0].OPTM_PICKLIST_CODE, this.PickTaskList[this.index].OPTM_TASKID, sessionStorage.getItem("whseId"), this.PT_Enter_Location, this.ContBtchSerArray[i], 1, contValue, sessionStorage.getItem("UserId"), "Y", toteValue, this.containerAlreadyCreated, this.OPTM_STARTDATETIME, localStorage.getItem("PickTypeIndex"), this.UserGrp, this.PickListDropBin,this.ShipmentList[0].OPTM_PICK_OPER));
           } else {
-            this.SubmitPickTaskData.push(new PickTaskModel(this.ShipmentList[0].OPTM_PICKLIST_ID, this.ShipmentList[0].OPTM_PICKLIST_CODE, this.PickTaskList[this.index].OPTM_TASKID, sessionStorage.getItem("whseId"), this.PT_Enter_Location, this.ContBtchSerArray[i], 1, contValue, sessionStorage.getItem("UserId"), "N", toteValue, this.containerAlreadyCreated, this.OPTM_STARTDATETIME, localStorage.getItem("PickTypeIndex"), this.UserGrp, this.PickListDropBin));
+            this.SubmitPickTaskData.push(new PickTaskModel(this.ShipmentList[0].OPTM_PICKLIST_ID, this.ShipmentList[0].OPTM_PICKLIST_CODE, this.PickTaskList[this.index].OPTM_TASKID, sessionStorage.getItem("whseId"), this.PT_Enter_Location, this.ContBtchSerArray[i], 1, contValue, sessionStorage.getItem("UserId"), "N", toteValue, this.containerAlreadyCreated, this.OPTM_STARTDATETIME, localStorage.getItem("PickTypeIndex"), this.UserGrp, this.PickListDropBin,this.ShipmentList[0].OPTM_PICK_OPER));
           }
         } else {
           this.toastr.error('', this.translate.instant("DataAlreadySaved"));

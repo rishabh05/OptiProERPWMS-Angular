@@ -45,15 +45,27 @@ export class PickTaskService {
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetDataBasedOnPickList", jObject, this.commonService.httpOptions);
   }
 
-  ValidatePackingContainer(ScannedContCode: string): Observable<any> {
+  ValidatePackingContainer(ScannedContCode: string, strTaskID: string): Observable<any> {
     let jObject = {
       PalletCode: JSON.stringify([{
         CompanyDBId: sessionStorage.getItem("CompID"),
-        OPTM_CONTCODE: ScannedContCode
+        OPTM_CONTCODE: ScannedContCode,
+        OPTM_TASKID: strTaskID
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/ValidatePackingContainer", jObject, this.commonService.httpOptions);
-  }  
+  } 
+  
+  ValidateTote(ScannedContCode: string, strTaskID: string): Observable<any> {
+    let jObject = {
+      PalletCode: JSON.stringify([{
+        CompanyDBId: sessionStorage.getItem("CompID"),
+        OPTM_CONTCODE: ScannedContCode,
+        OPTM_TASKID: strTaskID
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/ValidateTote", jObject, this.commonService.httpOptions);
+  } 
 
   IsValidBatchSerial(ITEMCODE: string, LOTNO: string, OPTM_SRC_BIN: string): Observable<any> {
     let jObject = {
