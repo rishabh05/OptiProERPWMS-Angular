@@ -1,7 +1,16 @@
 <kendo-dialog title="Please confirm" (close)="close('cancel')" [minWidth]="250" [width]="380">
   <p style="margin: 15px 0;font-size:16px;">{{titleMessage}}</p>
+  <div class="form-group" *ngIf="ShowPrintCount">
+    <div class="input-group input-group-sm">
+      <label class="col-sm-5 col-form-label">{{'NumberOfCopies'|translate}}</label>
+      <div class="col-sm-7 p-0">
+        <input type="number" #noOfCopy id="containerCode" name="containerCode" [(ngModel)]="numberOfCopies" class="form-control form-control-sm"
+          placeholder="{{'NumberOfCopies'|translate}}">
+      </div>
+    </div>
+  </div>
   <kendo-dialog-actions>
-      <button kendoButton *ngIf="showNoButton" (click)="close('no')">{{noButtonText}}</button>         
-      <button class="ml-1" kendoButton (click)="close('yes')" primary="true">{{yesButtonText}}</button>
+    <button kendoButton *ngIf="showNoButton" (click)="close('no')">{{noButtonText}}</button>
+    <button class="ml-1" kendoButton (click)="close('yes')" primary="true">{{yesButtonText}}</button>
   </kendo-dialog-actions>
-</kendo-dialog> 
+</kendo-dialog>

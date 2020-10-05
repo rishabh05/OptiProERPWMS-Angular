@@ -1,14 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { OutboundService } from 'src/app/services/outbound.service';
+import { OutboundService } from '../../services/outbound.service';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
-import { Commonservice } from 'src/app/services/commonservice.service';
+import { Commonservice } from '../../services/commonservice.service';
 import { Router } from '@angular/router';
-import { OutboundData, CurrentOutBoundData } from 'src/app/models/outbound/outbound-data';
-import { CommonConstants } from 'src/app/const/common-constants';
-import { SOHEADER, SODETAIL, DeliveryToken } from 'src/app/models/outbound/out-del-req';
-import { InboundService } from 'src/app/services/inbound.service';
-import { PageChangeEvent } from '../../../../node_modules/@progress/kendo-angular-grid';
+import { OutboundData, CurrentOutBoundData } from '../../models/outbound/outbound-data';
+import { CommonConstants } from '../../const/common-constants';
+import { SOHEADER, SODETAIL, DeliveryToken } from '../../models/outbound/out-del-req';
+import { InboundService } from '../../services/inbound.service';
+import { PageChangeEvent } from '@progress/kendo-angular-grid';
 
 // This file called from Outbound -> SO delivery and Shipment delivery
 
@@ -77,7 +77,7 @@ export class OutCutomerComponent implements OnInit {
       } else if (this.deliveryOptionType == '2') {
         this.pageTitle = this.translate.instant("Outbound_Delivery_through_Shipment")
       }
-      this.initializeShipmentLines();
+      // this.initializeShipmentLines();
     });
   }
 
@@ -102,22 +102,24 @@ export class OutCutomerComponent implements OnInit {
     this.ShowPickListReport = (JSON.parse(sessionStorage.getItem('ConfigData'))).ShowPickListReport;
     this.ShowPackListReport = (JSON.parse(sessionStorage.getItem('ConfigData'))).ShowPackListReport;
     this.ShowBOLReport = (JSON.parse(sessionStorage.getItem('ConfigData'))).ShowBOLReport;
-    this.initializeShipmentLines();
+    // this.initializeShipmentLines();
+
+
   }
 
-  initializeShipmentLines() {
-    this.shipmentLinesArray = [
-      { "Value": 1, "Name": this.translate.instant("CStatusNew") },
-      { "Value": 2, "Name": this.translate.instant("Part_Allocated") },
-      { "Value": 3, "Name": this.translate.instant("Allocated") },
-      { "Value": 4, "Name": this.translate.instant("Pick_Generated") },
-      { "Value": 5, "Name": this.translate.instant("Pick_Released") },
-      { "Value": 6, "Name": this.translate.instant("Part_Picked") },
-      { "Value": 7, "Name": this.translate.instant("Picked") },
-      { "Value": 8, "Name": this.translate.instant("CShippedNew") },
-      { "Value": 9, "Name": this.translate.instant("CCancelledNew") }
-    ];
-  }
+  // initializeShipmentLines() {
+  //   this.shipmentLinesArray = [
+  //     { "Value": 1, "Name": this.translate.instant("CStatusNew") },
+  //     { "Value": 2, "Name": this.translate.instant("Part_Allocated") },
+  //     { "Value": 3, "Name": this.translate.instant("Allocated") },
+  //     { "Value": 4, "Name": this.translate.instant("Pick_Generated") },
+  //     { "Value": 5, "Name": this.translate.instant("Pick_Released") },
+  //     { "Value": 6, "Name": this.translate.instant("Part_Picked") },
+  //     { "Value": 7, "Name": this.translate.instant("Picked") },
+  //     { "Value": 8, "Name": this.translate.instant("CShippedNew") },
+  //     { "Value": 9, "Name": this.translate.instant("CCancelledNew") }
+  //   ];
+  // }
 
   updateSalesOrderList() {
     // lsOutbound
@@ -567,20 +569,22 @@ export class OutCutomerComponent implements OnInit {
     this.router.navigateByUrl('home/dashboard');
   }
 
+  noOfCopy = 1
   getConfirmDialogValue($event) {
     this.showConfirmDialog = false;
 
     // Yes
     if ($event.Status === 'yes') {
-      if ($event.From == "receiveSinglePDFDialog") {
+      if ($event.From == "receivePDFDialog") {
         this.printDialog = true
+        this.noOfCopy = $event.NoOfCopies;
       } else {
         this.removeOrderMain(this.delIdx, this.delGrd);
       }
     }
     // No
     else if ($event.Status === 'no') {
-      if ($event.From == "receiveSinglePDFDialog") {
+      if ($event.From == "receivePDFDialog") {
 
       }
     }
@@ -829,6 +833,7 @@ export class OutCutomerComponent implements OnInit {
     }
     return selectedPackingItems;
   }
+
   async manageShipQty(arrSOHEADER: SOHEADER[]): Promise<SOHEADER[]> {
     let tarrSOHEADER: SOHEADER[] = [];
 
@@ -1128,6 +1133,13 @@ export class OutCutomerComponent implements OnInit {
           }else{
             this.pagable = false;
           }          
+          // var DelSeq = document.getElementById("DelSeq")
+          // DelSeq.addEventListener("keydown", function(e) {
+          //   // prevent: "e", "=", ",", "-", "."
+          //   if ([69, 187, 188, 189, 190].includes(e.keyCode)) {
+          //     e.preventDefault();
+          //   }
+          // })
         } else {
           this.toastr.error('', this.translate.instant("ShipmentNotAvailable"));
           this.orderNumber = "";
@@ -1561,9 +1573,10 @@ export class OutCutomerComponent implements OnInit {
   fileName: string = "";
   displayPDF1: boolean = false;
   dialogFor: string = "";
+
   public displayPDF(dNo: string, value: any) {
     this.showPDFLoading = true;
-    this.inboundService.printingServiceForSubmitGRPO(dNo, value).subscribe(
+    this.inboundService.printingServiceForSubmitGRPO(dNo, value, this.noOfCopy).subscribe(
       (data: any) => {
         this.showPDFLoading = false;
         // this.printDialog = false;
@@ -1604,7 +1617,7 @@ export class OutCutomerComponent implements OnInit {
   showPrintConfirmDialog() {
     this.yesButtonText = this.translate.instant("yes");
     this.noButtonText = this.translate.instant("no");
-    this.dialogFor = "receiveSinglePDFDialog";
+    this.dialogFor = "receivePDFDialog";
     this.dialogMsg = "Do you want to print report?";//this.translate.instant("Inbound_PrintAllLabelsAfterSubmit");
     this.showConfirmDialog = true; // show dialog 
   }
@@ -1619,6 +1632,7 @@ export class OutCutomerComponent implements OnInit {
   }
   closePrintDialog() {
     this.printDialog = false;
+    this.noOfCopy = 1;
   }
 
   onQueryClick() {
@@ -1642,19 +1656,18 @@ export class OutCutomerComponent implements OnInit {
   }
 
   updateDeliverySeq(lotTemplateVar, value, rowindex) {
-    for (let i = 0; i < this.DiliveryShipmentList.length; i++) {
-      if (i === rowindex) {
-        this.DiliveryShipmentList[i].DeliverySeq = lotTemplateVar;
-      }
-    }
+    let index = this.DiliveryShipmentList.findIndex(e=> e.OPTM_SHIPMENT_CODE == value.OPTM_SHIPMENT_CODE)
+    this.DiliveryShipmentList[index].DeliverySeq = lotTemplateVar;
   }
 
   updateDeliverToLocation(lotTemplateVar, value, rowindex) {
-    for (let i = 0; i < this.DiliveryShipmentList.length; i++) {
-      if (i === rowindex) {
-        this.DiliveryShipmentList[i].DeliverToLocation = lotTemplateVar;
-      }
-    }
+    // for (let i = 0; i < this.DiliveryShipmentList.length; i++) {
+    //   if (i === rowindex) {
+    //     this.DiliveryShipmentList[i].DeliverToLocation = lotTemplateVar;
+    //   }
+    // }
+    let index = this.DiliveryShipmentList.findIndex(e=> e.OPTM_SHIPMENT_CODE == value.OPTM_SHIPMENT_CODE)
+    this.DiliveryShipmentList[index].DeliverToLocation = lotTemplateVar;
   }
 
   public getShipmentDetail(shipmentCode: any) {
@@ -1873,7 +1886,8 @@ export class OutCutomerComponent implements OnInit {
             this.CustRefNo = "";
             this.toastr.success('', this.translate.instant("DeleiverySuccess") + " : " + resp[0].SuccessNo);
             this.SelectedRowsforShipmentArr = [];
-            this.getShipmentList();
+            this.resetShipmentList();
+         //   this.getShipmentList();
           } else if (resp[0].ErrorMsg == "7001") {
             this.showLookupLoader = false;
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,

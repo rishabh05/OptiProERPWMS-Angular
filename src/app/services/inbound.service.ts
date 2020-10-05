@@ -237,9 +237,10 @@ export class InboundService {
     * @param binNo 
     * @param noOfCopies 
     */
-   printingServiceForSubmitGRPO(psReceiptNo:string, rptid:any) : Observable<any> {
+   printingServiceForSubmitGRPO(psReceiptNo:string, rptid:any, NOOFLABELS) : Observable<any> {
     var jObject = { PrintingObject: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"),
     USERID: sessionStorage.getItem("UserId"), RPTID: rptid, DOCNO: psReceiptNo, 
+    NOOFLABELS: NOOFLABELS,
     GUID: sessionStorage.getItem("GUID"), UsernameForLic: sessionStorage.getItem("UserId") }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/Printing/WMSPrintingService", jObject, this.commonService.httpOptions);
    }

@@ -735,10 +735,7 @@ export class Commonservice {
               "Session expire");
             return;
           }
-          // this.showLookupLoader = false;
-          // this.pickListSteps = data.OPTM_TRANS_STEPS;
           localStorage.setItem("PickListSteps", JSON.stringify(data.OPTM_TRANS_STEPS));
-
         } else {
           // this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         }

@@ -181,6 +181,10 @@ export class LookupComponent implements OnInit {
       this.packingDetailList();
     } else  if (this.lookupfor == "POListForInvoice"){
       this.showPOList(2);
+    } else if(this.lookupfor == "PackBinList"){
+      this.showBins();
+    }else if(this.lookupfor == "ToteList"){
+      this.showToteList();
     }
 
     this.clearFilters();
@@ -920,18 +924,35 @@ export class LookupComponent implements OnInit {
     }
 }
 
+showBins() {
+  this.table_head = [
+    {
+      field: 'OPTM_SORT_PACK_BIN',
+      title: this.translate.instant("OPTM_SORT_PACK_BIN"),
+      type: 'text',
+      width: '100'
+    }   
+  ];
+  this.lookupTitle = this.translate.instant("Bin List");
+  if (this.serviceData !== undefined) {
+    if (this.serviceData.length > 0) {
+      this.dialogOpened = true;
+    }
+  }
+}
+
   showITRList() {
     this.table_head = [
       {
         field: 'DocNum',
         title: this.translate.instant("InvTransfer_ITRRequestNo"),
-        type: 'text',
+        type: 'numeric',
         width: '60'
       },
       {
         field: 'DocDueDate',
         title: this.translate.instant("DueDate"),
-        type: 'text',
+        type: 'date',
         width: '50'
       },
       {
@@ -1048,6 +1069,23 @@ export class LookupComponent implements OnInit {
       }
     ];
     this.lookupTitle = this.translate.instant("Outbound_Dock_Door_List");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
+
+  showToteList(){
+    this.table_head = [
+      {
+        field: 'OPTM_CODE',
+        title: this.translate.instant("Tote"),
+        type: 'text',
+        width: '150'
+      }
+    ];
+    this.lookupTitle = this.translate.instant("Tote List");
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
         this.dialogOpened = true;

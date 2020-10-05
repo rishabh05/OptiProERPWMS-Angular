@@ -11,7 +11,7 @@ import { SplitTransferComponent } from '../palletization/split-transfer/split-tr
 import { PalletMergeComponent } from '../palletization/pallet-merge/pallet-merge.component';
 import { DepalletizeComponent } from '../palletization/depalletize/depalletize.component';
 import { PalletizeComponent } from '../palletization/palletize/palletize.component';
-import { InventoryTransferbyITRMasterComponent } from 'src/app/inventory-transfer/inventory-transferby-itrmaster/inventory-transferby-itrmaster.component';
+import { InventoryTransferbyITRMasterComponent } from '../inventory-transfer/inventory-transferby-itrmaster/inventory-transferby-itrmaster.component';
 
 const routes: Routes = [
 
@@ -31,6 +31,7 @@ const routes: Routes = [
       { path:'inbound', loadChildren:"../inbound/inbound.module#InboundModule"},     
       { path: 'adjustment-counting', loadChildren: "../adjustments-counting/adjustments-counting.module#AdjustmentsCountingModule" }, 
       { path: 'picking', loadChildren: "../picking/picking.module#PickingModule" },
+      { path: 'packing', loadChildren: "../packing/packing.module#PackingModule" },
       { path: 'production', loadChildren: "../production/production.module#ProductionModule" },
       { path: 'printing-label', loadChildren: "../printing-label/printing-label.module#PrintingLabelModule" },
       // Need to remove these routing

@@ -1,17 +1,17 @@
 import { Component, OnInit, ViewChild, ComponentFactory, Output, Input, EventEmitter, ElementRef, AfterViewInit } from '@angular/core';
-import { InboundMasterComponent } from 'src/app/inbound/inbound-master.component';
-import { Router } from '../../../../node_modules/@angular/router';
-import { InboundService } from 'src/app/services/inbound.service';
-import { Commonservice } from 'src/app/services/commonservice.service';
-import { ToastrService } from '../../../../node_modules/ngx-toastr';
-import { TranslateService, LangChangeEvent } from '../../../../node_modules/@ngx-translate/core';
-import { UOM } from 'src/app/models/Inbound/UOM';
-import { OpenPOLinesModel } from 'src/app/models/Inbound/OpenPOLinesModel';
-import { RecvingQuantityBin } from 'src/app/models/Inbound/RecvingQuantityBin';
-import { AutoLot } from 'src/app/models/Inbound/AutoLot';
+import { InboundMasterComponent } from '../inbound-master.component';
+import { Router } from '@angular/router';
+import { InboundService } from '../../services/inbound.service';
+import { Commonservice } from '../../services/commonservice.service';
+import { ToastrService } from 'ngx-toastr';
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
+import { UOM } from '../../models/Inbound/UOM';
+import { OpenPOLinesModel } from '../../models/Inbound/OpenPOLinesModel';
+import { RecvingQuantityBin } from '../../models/Inbound/RecvingQuantityBin';
+import { AutoLot } from '../../models/Inbound/AutoLot';
 import { ISubscription } from 'rxjs/Subscription';
-import { ProductionService } from 'src/app/services/production.service';
-import { PalletOperationType } from 'src/app/enums/PalletEnums';
+import { ProductionService } from '../../services/production.service';
+import { PalletOperationType } from '../../enums/PalletEnums';
 
 
 
@@ -1111,12 +1111,13 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
           break;
         case ("receiveSinglePDFDialog"):
           //do something. //yes mean all click
-          this.submitCurrentGRPO();
+          this.submitCurrentGRPO($event.NoOfCopies);
           this.showPDF = true;
           break;
         case ("receiveMultiplePDFDialog"):
+        //$event.NoOfCopies
           // if pdf dialog yes click for multiple recevie.
-          this.prepareAllData();
+          this.prepareAllData($event.NoOfCopies);
           break;
       }
     } else {
@@ -1145,7 +1146,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     }
   }
 
-  submitCurrentGRPO() {
+  submitCurrentGRPO(NoOfCopies?) {
     var oSubmitPOLotsObj: any = {};
     oSubmitPOLotsObj.Header = [];
     oSubmitPOLotsObj.POReceiptLots = [];
@@ -1153,7 +1154,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     oSubmitPOLotsObj.UDF = [];
     oSubmitPOLotsObj.LastSerialNumber = [];
     var oSubmitPOLotsObj = this.prepareSubmitPurchaseOrder(oSubmitPOLotsObj); // current data only.
-    this.SubmitGoodsReceiptPO(oSubmitPOLotsObj);
+    this.SubmitGoodsReceiptPO(oSubmitPOLotsObj, NoOfCopies);
   }
 
   forwardZero(num: number, size: number): string {
@@ -1307,7 +1308,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     localStorage.setItem("GRPOReceieveData", JSON.stringify(oSubmitPOLotsObj));
   }
 
-  prepareAllData() {
+  prepareAllData(NoOfCopies?) {
     var oSubmitPOLotsObj: any = {};
 
     var dataModel = localStorage.getItem("GRPOReceieveData");  // for submit all data on all clic
@@ -1325,7 +1326,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     // localStorage.setItem("GRPOReceieveData", JSON.stringify(oSubmitPOLotsObj));
     // var dataModel = localStorage.getItem("AddToGRPO");
     // if (dataModel != null && dataModel != undefined && dataModel != "") {
-    this.SubmitGoodsReceiptPO(oSubmitPOLotsObj);
+    this.SubmitGoodsReceiptPO(oSubmitPOLotsObj, NoOfCopies);
     // }
   }
 
@@ -1818,7 +1819,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
 
 
 
-  SubmitGoodsReceiptPO(oSubmitPOLotsObj: any) {
+  SubmitGoodsReceiptPO(oSubmitPOLotsObj: any, noOfCopy) {
     this.showLoader = true;
     this.inboundService.SubmitGoodsReceiptPO(oSubmitPOLotsObj).subscribe(
       (data: any) => {
@@ -1840,12 +1841,12 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
             localStorage.setItem("addToGRPOPONumbers", "");
           }
 
-
+          console.log(noOfCopy); 
           this.toastr.success('', this.translate.instant("Inbound_GRPOSuccessMessage") + " " + data[0].SuccessNo);
 
           if (this.showPDF) {
             //show pdf
-            this.displayPDF(data[0].DocEntry);
+            this.displayPDF(data[0].DocEntry, noOfCopy);
             this.showPDF = false;
           } else {
             // no need to display pdf
@@ -2300,9 +2301,9 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     return result;
   }
 
-  public displayPDF(dNo: string) {
+  public displayPDF(dNo: string, noOfCopy) {
     this.showLoader = true;
-    this.inboundService.printingServiceForSubmitGRPO(dNo, 6).subscribe(
+    this.inboundService.printingServiceForSubmitGRPO(dNo, 6, noOfCopy).subscribe(
       (data: any) => {
         this.showLoader = false;
         if (data != undefined) {

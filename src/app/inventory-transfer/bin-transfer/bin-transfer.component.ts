@@ -1930,7 +1930,7 @@ export class BinTransferComponent implements OnInit {
   showPDFLoading:boolean = false;
   public displayPDF(dNo: string, value: any) {
     this.showPDFLoading = true;
-    this.inboundService.printingServiceForSubmitGRPO(dNo, value).subscribe(
+    this.inboundService.printingServiceForSubmitGRPO(dNo, value, 1).subscribe(
       (data: any) => {
         this.showPDFLoading = false;
        // this.printDialog = false;

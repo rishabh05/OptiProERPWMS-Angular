@@ -14,7 +14,7 @@
                         <label for="Pick_Type" class="col-sm-4 col-form-label">{{'Pick_Type'|translate}}</label>
                         <div class="col-sm-7">
                             <div class="input-group ">
-                                <kendo-dropdownlist [data]="PackTypeList" id="Pick_Type" #selectedvalue (selectionChange)="onPickTypeChange($event)" name="Pick_Type"
+                                <kendo-dropdownlist [data]="pickTypeArray" id="Pick_Type" #selectedvalue (selectionChange)="onPickTypeChange($event)" name="Pick_Type"
                                     [(ngModel)]="Pick_Type">
                                 </kendo-dropdownlist>
                             </div>

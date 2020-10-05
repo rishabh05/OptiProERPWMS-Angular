@@ -22,6 +22,7 @@ export class PickingListComponent implements OnInit {
   pickTypeIndex: any = 1;
   showGrid: boolean = false;
   confiParams: any[] = [];
+  pickTypeArray = [];
 
   constructor(private picktaskService: PickTaskService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService) {
     let userLang = navigator.language.split('-')[0];
@@ -75,6 +76,7 @@ export class PickingListComponent implements OnInit {
   }
 
   initialize() {
+    this.pickTypeArray = [this.translate.instant("Container_Picking"), this.translate.instant("Discreate_Picking")];
     this.PackTypeList = [this.translate.instant("Batch_Picking"),
     this.translate.instant("Cluster_Picking"), this.translate.instant("Container_Picking"),
     this.translate.instant("Discreate_Picking")];

@@ -626,6 +626,15 @@
   "Query": "Query",
   "InvalidShipTo": "Invalid Ship To Code",
   "CommonSomeErrorMsg": "No data available",
+  "NumberOfCopies": "Number of copies",
+  "ReportTitle": "Print Report",
+  "PICKLIST_STEPS_NOT_DEF": "Picklist closure steps not defined. Cannot continue.",
+  "DROP_BIN_NOT_MATCH": "Scanned Drop Bin does not match",
+  "Reached_END_Picklist": "Reached end of Picklist",
+  "CONT_DAMAGE": "Scanned Container Damaged",
+  "ReqQuantity": "Required Quantity",
+  "PickQuantity": "Pick Quantity",
+
   "Dummy": "Dummy"
 }
  

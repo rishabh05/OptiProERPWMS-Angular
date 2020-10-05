@@ -756,6 +756,7 @@ export class OutOrderComponent implements OnInit {
             dtl.GUID = guid;
             dtl.UsernameForLic = uid;
             dtl.DOCENTRY = o.Item.DOCENTRY
+            dtl.TRACKING = o.Item.TRACKING
             arrSODETAIL.push(dtl);
           }
           limit = limit + lineDeleiveryCollection.length;
@@ -793,6 +794,8 @@ export class OutOrderComponent implements OnInit {
             //this code will be in 186 machine.
            if(this.isDeliveryContainerPacking){ 
               this.showPrintConfirmDialog();
+           }else{
+            this.clearOutbound()
            }
 
             // for mormal deployment we will show report dialog with otions need to uncomment in html.
@@ -1406,7 +1409,7 @@ export class OutOrderComponent implements OnInit {
     this.showConfirmDialog = false;
     if ($event.Status == "yes") {
       switch ($event.From) {
-        case ("receiveSinglePDFDialog"):
+        case ("receivePDFDialog"):
           this.printDialog = true
           break;
         case ("delete"):
@@ -1522,7 +1525,7 @@ export class OutOrderComponent implements OnInit {
     } else {
       if ($event.Status == "no") {
         switch ($event.From) {
-          case ("receiveSinglePDFDialog"):
+          case ("receivePDFDialog"):
             this.clearOutbound()
             break;
           case ("delete"):
@@ -2178,7 +2181,7 @@ export class OutOrderComponent implements OnInit {
   displayPDF1: boolean = false;
   public displayPDF(dNo: string, value: any) {
     this.showPDFLoading = true;
-    this.inboundService.printingServiceForSubmitGRPO(dNo, value).subscribe(
+    this.inboundService.printingServiceForSubmitGRPO(dNo, value, 1).subscribe(
       (data: any) => {
         this.showPDFLoading = false;
       //  this.printDialog = false;
@@ -2226,7 +2229,7 @@ export class OutOrderComponent implements OnInit {
   showPrintConfirmDialog() {
     this.yesButtonText = this.translate.instant("yes");
     this.noButtonText = this.translate.instant("no");
-    this.dialogFor = "receiveSinglePDFDialog";
+    this.dialogFor = "receivePDFDialog";
     this.dialogMsg = "Do you want to print report?";//this.translate.instant("Inbound_PrintAllLabelsAfterSubmit");
     this.showConfirmDialog = true; // show dialog 
   }
