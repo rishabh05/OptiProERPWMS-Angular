@@ -632,6 +632,9 @@
   "DROP_BIN_NOT_MATCH": "Scanned Drop Bin does not match",
   "Reached_END_Picklist": "Reached end of Picklist",
   "CONT_DAMAGE": "Scanned Container Damaged",
+  "ReqQuantity": "Required Quantity",
+  "PickQuantity": "Pick Quantity",
+
   "Dummy": "Dummy"
 }
  

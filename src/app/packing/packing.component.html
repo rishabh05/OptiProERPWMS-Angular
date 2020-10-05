@@ -9,60 +9,63 @@
           <div class="po-details-comp">
             <div class="po-details-sec">
 
-                <div class="form-group row">
-                    <label for="inputPassword" class="col-sm-4 col-form-label">{{'BinCode'|translate}}</label>
-                    <div class="col-sm-8">
-                        <div class="input-group input-group-sm">
-                            <input type="text" class="form-control form-control-sm" id="BinCode" name="BinCode" [(ngModel)]="BinCodeValue" trim="blur">
-                            <div class="input-group-append">
-                                <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="GetDroppedToteList()">
-                                    <i class="opti-icon-search"></i>
-                                </button>
-                            </div>
-                        </div>
+              <div class="form-group row">
+                <label for="inputPassword" class="col-sm-4 col-form-label">{{'BinCode'|translate}}</label>
+                <div class="col-sm-8">
+                  <div class="input-group input-group-sm">
+                    <input type="text" class="form-control form-control-sm" id="BinCode" name="BinCode" [(ngModel)]="BinCodeValue" trim="blur">
+                    <div class="input-group-append">
+                      <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="GetPackingBinsForWarehouse()">
+                        <i class="opti-icon-search"></i>
+                      </button>
                     </div>
+                  </div>
                 </div>
-
-                <div class="form-group row">
-                    <label for="inputPassword" class="col-sm-4 col-form-label">{{'Tote'|translate}}</label>
-                    <div class="col-sm-8">
-                        <div class="input-group input-group-sm">
-                            <input type="text" class="form-control form-control-sm" id="Tote" name="Tote" [(ngModel)]="ToteValue" trim="blur">
-                            <div class="input-group-append">
-                                <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="GetDroppedToteList()">
-                                    <i class="opti-icon-search"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label for="inputPassword" class="col-sm-4 col-form-label">{{'ShipmentCode'|translate}}</label>
-                    <div class="col-sm-8">
-                        <div class="input-group input-group-sm">
-                            <input type="text" class="form-control form-control-sm" id="ShipmentCode" name="ShipmentCode" [(ngModel)]="ShipmentCodeValue" trim="blur">
-                            <div class="input-group-append">
-                                <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="GetDroppedToteList()">
-                                    <i class="opti-icon-search"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+              </div>
 
               <div class="form-group row">
-                  <label for="inputPassword" class="col-sm-4 col-form-label">{{'ContainerCode'|translate}}</label>
-                  <div class="col-sm-8">
-                      <div class="input-group input-group-sm">
-                          <input type="text" class="form-control form-control-sm" id="ContainerCode" name="ContainerCode" [(ngModel)]="ContainerCodeValue" trim="blur">
-                          <div class="input-group-append">
+                <label for="inputPassword" class="col-sm-4 col-form-label">{{'Tote'|translate}}</label>
+                <div class="col-sm-8">
+                  <div class="input-group input-group-sm">
+                    <input type="text" class="form-control form-control-sm" id="Tote" name="Tote" [(ngModel)]="ToteValue" (blur)="ValidateSelectedToteForPacking()"
+                      trim="blur">
+                    <div class="input-group-append">
+                      <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="GetDroppedToteList()">
+                        <i class="opti-icon-search"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="inputPassword" class="col-sm-4 col-form-label">{{'ShipmentCode'|translate}}</label>
+                <div class="col-sm-8">
+                  <div class="input-group input-group-sm">
+                    <input type="text" class="form-control form-control-sm" id="ShipmentCode" name="ShipmentCode" [(ngModel)]="ShipmentCodeValue"
+                      (blur)="ValidateSelectedShipmentForPacking()" trim="blur">
+                    <div class="input-group-append">
+                      <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="GetToteShipments()">
+                        <i class="opti-icon-search"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="inputPassword" class="col-sm-4 col-form-label">{{'ContainerCode'|translate}}</label>
+                <div class="col-sm-8">
+                  <div class="input-group input-group-sm">
+                    <input type="text" class="form-control form-control-sm" id="ContainerCode" name="ContainerCode" [(ngModel)]="ContainerCodeValue"
+                      trim="blur">
+                    <!-- <div class="input-group-append">
                               <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="GetDroppedContainerCodeList()">
                                   <i class="opti-icon-search"></i>
                               </button>
-                          </div>
-                      </div>
+                          </div> -->
                   </div>
+                </div>
               </div>
 
               <!-- <div class="form-group row">
@@ -76,45 +79,53 @@
               </div> -->
             </div>
 
-                  
+
 
             <div class="px-3">
-                <div class="form-group row mt-2">
-                    <div class="input-group input-group-sm">
-                        <kendo-grid [kendoGridBinding]="ShipmentDetail" [resizable]="true" [height]="150" [skip]="skip" #griditems>
-                            <kendo-grid-column field="OPTM_ITEMCODE" width="70" title="{{'ItemCode'|translate}}"></kendo-grid-column>
-                            <kendo-grid-column field="OPTM_SOLINENO" width="60" title="{{'BatchSerial'|translate}}"></kendo-grid-column>
-                            <kendo-grid-column class="text-right" field="Quantity" width="80" title="{{'Quantity'|translate}}">
-                                <ng-template kendoGridCellTemplate let-dataItem>
-                                    {{dataItem.OPTM_SOLINEQTY |numberFormat}}
-                                </ng-template>
-                            </kendo-grid-column>
-                            <kendo-grid-column field="ContainerCode" width="100" title="{{'ContainerCode'|translate}}">
-                            </kendo-grid-column>
-                        </kendo-grid>
-                    </div>
+              <div class="form-group row mt-2">
+                <div class="input-group input-group-sm">
+                  <kendo-grid [kendoGridBinding]="ShipmentDetail" [resizable]="true" [height]="150" [skip]="skip" #griditems>
+                    <kendo-grid-column field="OPTM_ITEMCODE" width="70" title="{{'ItemCode'|translate}}">
+                    </kendo-grid-column>
+                    <kendo-grid-column class="text-right" field="ReqQuantity" width="80" title="{{'ReqQuantity'|translate}}">
+                      <ng-template kendoGridCellTemplate let-dataItem>
+                        {{dataItem.ReqQuantity |numberFormat}}
+                      </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column class="text-right" field="PickQuantity" width="80" title="{{'PickQuantity'|translate}}">
+                      <ng-template kendoGridCellTemplate let-dataItem>
+                        {{dataItem.PickQuantity |numberFormat}}
+                      </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column class="text-right" field="BalanceQty" width="80" title="{{'BalanceQty'|translate}}">
+                      <ng-template kendoGridCellTemplate let-dataItem>
+                        {{dataItem.BalanceQty |numberFormat}}
+                      </ng-template>
+                    </kendo-grid-column>
+                  </kendo-grid>
                 </div>
+              </div>
             </div>
-<br>
+            <br>
 
             <div class="item-sec">
               <div class="item-steps">
                 <!-- step inputs -->
                 <div *ngIf="currentStep == 1" class="item-input-section">
-                  <input #focusOnCont type="text" placeholder="{{'Ph_ScanItemCode'|translate}}" (blur)="onContainerChange()" name="ScanContainer"
-                    [(ngModel)]="ScanContainer" trim>
+                  <input #focusOnItemCode type="text" placeholder="{{'Ph_ScanItemCode'|translate}}" (blur)="onItemChanges()" name="ItemCode"
+                    [(ngModel)]="ItemCode" trim>
                 </div>
                 <div *ngIf="currentStep == 2" class="item-input-section">
-                  <input #focusOnDockDoor *ngIf="showFields" type="text" placeholder="{{'ScanBatch'|translate}}" (blur)="onLoadLocationChange()"
-                    name="ScanLoadLocation" [(ngModel)]="ScanLoadLocation" trim="blur">
+                  <input #focusOnBtchSer *ngIf="showFields" type="text" placeholder="{{'ScanBatch'|translate}}" (blur)="onBtchSerChange()"
+                    name="BtchSer" [(ngModel)]="BtchSer" trim="blur">
                 </div>
                 <div *ngIf="currentStep == 3" class="item-input-section">
-                  <input #focusOnDockDoor *ngIf="showFields" type="text" placeholder="{{'EnterQty'|translate}}" (blur)="onLoadLocationChange()"
-                    name="ScanLoadLocation" [(ngModel)]="ScanLoadLocation" trim="blur">
+                  <input #focusOnQty *ngIf="showFields" type="text" placeholder="{{'EnterQty'|translate}}" (blur)="onQtyChange()"
+                    name="BtchSerQty" [(ngModel)]="BtchSerQty" trim="blur">
                 </div>
                 <div *ngIf="currentStep == 4" class="item-input-section">
-                  <input #focusOnDockDoor *ngIf="showFields" type="text" placeholder="{{'ScanCont'|translate}}" (blur)="onLoadLocationChange()"
-                    name="ScanLoadLocation" [(ngModel)]="ScanLoadLocation" trim="blur">
+                  <input #focusOnCont *ngIf="showFields" type="text" placeholder="{{'ScanCont'|translate}}" (blur)="onContainerChange()"
+                    name="packingContainer" [(ngModel)]="packingContainer" trim="blur">
                 </div>
                 <!-- step input option icons -->
                 <div class="step-flex">
@@ -141,7 +152,7 @@
               <div>
                 <i *ngIf="currentStep > 1 && showFields" (click)="prevStep()" class="k-icon k-i-arrow-chevron-left" aria-hidden="true"></i>
                 <i *ngIf="currentStep != LastStep" (click)="nextStep()" class="k-icon k-i-arrow-chevron-right" aria-hidden="true"></i>
-                <i *ngIf="false" (click)="onSaveClick('/po-order-details')" class="k-icon k-i-save" aria-hidden="true"></i>
+                <i *ngIf="currentStep == LastStep" (click)="onSaveClick('/po-order-details')" class="k-icon k-i-save" aria-hidden="true"></i>
               </div>
               <!--/ step navigation -->
 
@@ -171,23 +182,6 @@
 
 </div>
 
-<kendo-dialog [width]="500" *ngIf="dialogOpened" (close)="close_kendo_dialog()">
-  <div class="new-custom-grid">
-    <kendo-dialog-titlebar>
-      {{'ScanContAssignShp'|translate}}
-    </kendo-dialog-titlebar>
-    <div class="px-3">
-      <div class="form-group row mt-2">
-        <div class="input-group input-group-sm">
-          <label class="col-sm-4 col-form-label">{{'ContainerCode'|translate}}</label>
-          <input type="text" id="containerCode" name="containerCode" class="col-sm-8 form-control form-control-sm mr-3" [(ngModel)]="containerCode"
-            placeholder="{{'Enter_Container_Code'|translate}}" (blur)="generateContainer()">
-        </div>
-      </div>
-    </div>
-
-    <kendo-dialog-actions>
-      <button class="ml-1" kendoButton (click)="onConfirmClick()" primary="true">Confirm</button>
-    </kendo-dialog-actions>
-  </div>
-</kendo-dialog>
+<span *ngIf="showLookup">
+    <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupkey)="getLookupValue($event)"></app-lookup>
+</span>
