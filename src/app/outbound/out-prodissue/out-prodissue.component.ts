@@ -897,7 +897,7 @@ export class OutProdissueComponent implements OnInit {
             //     === this.outbound.SelectedItem.ROWNUM && this.outbound.OrderData.DOCNUM === m.Item.DOCNUM);
 
                 itemMeterials = this.outbound.TempMeterials.filter(e=> e.Item.ITEMCODE == this.outbound.SelectedItem.ITEMCODE && e.Item.ROWNUM
-                  == this.outbound.SelectedItem.ROWNUM && this.outbound.OrderData.DOCNUM == e.Item.DOCNUM)
+                  == this.outbound.SelectedItem.ROWNUM && this.outbound.SelectedItem.DOCNUM == e.Item.DOCNUM)
           }
           if (itemMeterials !== undefined && itemMeterials !== null
             && itemMeterials.length > 0) {

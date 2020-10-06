@@ -185,6 +185,8 @@ export class LookupComponent implements OnInit {
       this.showBins();
     }else if(this.lookupfor == "ToteList"){
       this.showToteList();
+    }else if(this.lookupfor == "ToteShipmentList"){
+      this.showToteShipmentList();
     }
 
     this.clearFilters();
@@ -928,12 +930,12 @@ showBins() {
   this.table_head = [
     {
       field: 'OPTM_SORT_PACK_BIN',
-      title: this.translate.instant("OPTM_SORT_PACK_BIN"),
+      title: this.translate.instant("Bins"),
       type: 'text',
       width: '100'
     }   
   ];
-  this.lookupTitle = this.translate.instant("Bin List");
+  this.lookupTitle = this.translate.instant("BinList");
   if (this.serviceData !== undefined) {
     if (this.serviceData.length > 0) {
       this.dialogOpened = true;
@@ -1086,6 +1088,29 @@ showBins() {
       }
     ];
     this.lookupTitle = this.translate.instant("Tote List");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
+
+  showToteShipmentList(){
+    this.table_head = [
+      {
+        field: 'OPTM_SHIPMENTID',
+        title: this.translate.instant("ShipmentID"),
+        type: 'numeric',
+        width: '100'
+      },
+      {
+        field: 'OPTM_SHIPMENT_CODE',
+        title: this.translate.instant("ShipmentCode"),
+        type: 'text',
+        width: '100'
+      }
+    ];
+    this.lookupTitle = this.translate.instant("Shipment_List");
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
         this.dialogOpened = true;

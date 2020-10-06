@@ -634,6 +634,9 @@
   "CONT_DAMAGE": "Scanned Container Damaged",
   "ReqQuantity": "Required Quantity",
   "PickQuantity": "Pick Quantity",
+  "BinList": "Bin List",
+  "Bins": "Bins",
+  "BinSelectFirst": "Please select bin first.",
 
   "Dummy": "Dummy"
 }

@@ -42,7 +42,7 @@
                 <label for="inputPassword" class="col-sm-4 col-form-label">{{'ShipmentCode'|translate}}</label>
                 <div class="col-sm-8">
                   <div class="input-group input-group-sm">
-                    <input type="text" class="form-control form-control-sm" id="ShipmentCode" name="ShipmentCode" [(ngModel)]="ShipmentCodeValue"
+                    <input type="text" class="form-control form-control-sm" id="ShipmentCode" name="ShipmentCode" [(ngModel)]="ShipmentCode"
                       (blur)="ValidateSelectedShipmentForPacking()" trim="blur">
                     <div class="input-group-append">
                       <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="GetToteShipments()">
@@ -57,7 +57,7 @@
                 <label for="inputPassword" class="col-sm-4 col-form-label">{{'ContainerCode'|translate}}</label>
                 <div class="col-sm-8">
                   <div class="input-group input-group-sm">
-                    <input type="text" class="form-control form-control-sm" id="ContainerCode" name="ContainerCode" [(ngModel)]="ContainerCodeValue"
+                    <input type="text" class="form-control form-control-sm" id="ContainerCode" name="ContainerCode" [(ngModel)]="ContainerCode" (blur)="ValidatePackingContainer()"
                       trim="blur">
                     <!-- <div class="input-group-append">
                               <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="GetDroppedContainerCodeList()">
@@ -67,16 +67,6 @@
                   </div>
                 </div>
               </div>
-
-              <!-- <div class="form-group row">
-                <label for="inputPassword" class="col-sm-4 col-form-label">{{'ShipmentCode'|translate}}</label>
-                <div class="col-sm-8">
-                  <div class="input-group input-group-sm">
-                    <input #scanPTshipmentId type="text" class="form-control form-control-sm" id="shipmentCode" name="shipmentCode" [(ngModel)]="shipmentCode"
-                      placeholder="{{'ShipmentCode'|translate}}" (blur)="onShipmentIDChange()" trim>
-                  </div>
-                </div>
-              </div> -->
             </div>
 
 
@@ -84,12 +74,12 @@
             <div class="px-3">
               <div class="form-group row mt-2">
                 <div class="input-group input-group-sm">
-                  <kendo-grid [kendoGridBinding]="ShipmentDetail" [resizable]="true" [height]="150" [skip]="skip" #griditems>
+                  <kendo-grid [kendoGridBinding]="ShipmentItemDetail" [resizable]="true" [height]="150" [skip]="skip" #griditems>
                     <kendo-grid-column field="OPTM_ITEMCODE" width="70" title="{{'ItemCode'|translate}}">
                     </kendo-grid-column>
-                    <kendo-grid-column class="text-right" field="ReqQuantity" width="80" title="{{'ReqQuantity'|translate}}">
+                    <kendo-grid-column class="text-right" field="SHIP_QTY" width="80" title="{{'ReqQuantity'|translate}}">
                       <ng-template kendoGridCellTemplate let-dataItem>
-                        {{dataItem.ReqQuantity |numberFormat}}
+                        {{dataItem.SHIP_QTY |numberFormat}}
                       </ng-template>
                     </kendo-grid-column>
                     <kendo-grid-column class="text-right" field="PickQuantity" width="80" title="{{'PickQuantity'|translate}}">
@@ -112,20 +102,20 @@
               <div class="item-steps">
                 <!-- step inputs -->
                 <div *ngIf="currentStep == 1" class="item-input-section">
-                  <input #focusOnItemCode type="text" placeholder="{{'Ph_ScanItemCode'|translate}}" (blur)="onItemChanges()" name="ItemCode"
-                    [(ngModel)]="ItemCode" trim>
+                  <input #focusOnItemCode *ngIf="showFields" type="text" placeholder="{{'Ph_ScanItemCode'|translate}}" (blur)="onItemChange()" name="scannedItemCode"
+                    [(ngModel)]="scannedItemCode" trim>
                 </div>
                 <div *ngIf="currentStep == 2" class="item-input-section">
                   <input #focusOnBtchSer *ngIf="showFields" type="text" placeholder="{{'ScanBatch'|translate}}" (blur)="onBtchSerChange()"
-                    name="BtchSer" [(ngModel)]="BtchSer" trim="blur">
+                    name="scannedBtchSer" [(ngModel)]="scannedBtchSer" trim="blur">
                 </div>
                 <div *ngIf="currentStep == 3" class="item-input-section">
-                  <input #focusOnQty *ngIf="showFields" type="text" placeholder="{{'EnterQty'|translate}}" (blur)="onQtyChange()"
-                    name="BtchSerQty" [(ngModel)]="BtchSerQty" trim="blur">
+                  <input #focusOnQty *ngIf="showFields" type="number" placeholder="{{'EnterQty'|translate}}" (blur)="onQtyChange()"
+                    name="scannedQty" [(ngModel)]="scannedQty" trim="blur">
                 </div>
                 <div *ngIf="currentStep == 4" class="item-input-section">
                   <input #focusOnCont *ngIf="showFields" type="text" placeholder="{{'ScanCont'|translate}}" (blur)="onContainerChange()"
-                    name="packingContainer" [(ngModel)]="packingContainer" trim="blur">
+                    name="scannedContainer" [(ngModel)]="scannedContainer" trim="blur">
                 </div>
                 <!-- step input option icons -->
                 <div class="step-flex">
@@ -152,7 +142,7 @@
               <div>
                 <i *ngIf="currentStep > 1 && showFields" (click)="prevStep()" class="k-icon k-i-arrow-chevron-left" aria-hidden="true"></i>
                 <i *ngIf="currentStep != LastStep" (click)="nextStep()" class="k-icon k-i-arrow-chevron-right" aria-hidden="true"></i>
-                <i *ngIf="currentStep == LastStep" (click)="onSaveClick('/po-order-details')" class="k-icon k-i-save" aria-hidden="true"></i>
+                <i *ngIf="!showFields" (click)="onSaveClick('/po-order-details')" class="k-icon k-i-save" aria-hidden="true"></i>
               </div>
               <!--/ step navigation -->
 
@@ -174,8 +164,8 @@
         <button class="btn btn-outline-secondary btn-sm btn-transparent btn-icon mr-1" type="button" (click)="OnCancelClick()">
           <i class="opti-icon-arrow-back"></i>
         </button>
-        <button [disabled]="showFields" class="btn btn-success k-button btn-sm btn-icon-with-text" type="button" (click)="onSubmitClick()">
-          <span class="k-icon k-i-check" role="presentation"></span>{{'Pack'|translate}}</button>
+        <button class="btn btn-success k-button btn-sm btn-icon-with-text" type="button" (click)="onSubmitClick()">
+          <span class="k-icon k-i-check" role="presentation"></span>{{'Submit'|translate}}</button>
       </div>
     </div>
   </form>

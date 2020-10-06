@@ -19,7 +19,7 @@ export class PackingComponent implements OnInit {
   ShipmentId: string;
   ShipmentCode: string;
   ContainerCode: string;
-  LastStep = 2;
+  LastStep = 4;
   showLoader: boolean = false;
   FirstCont: any;
   PickListSteps: any[] = [];
@@ -73,20 +73,10 @@ export class PackingComponent implements OnInit {
   }
 
   clearFields() {
-    this.ShipmentId = "";
-  }
-
-  onContainerChange() {
-    if (this.ContainerCode == "" || this.ContainerCode == undefined) {
-      return;
-    }
-    let result = undefined//this.LoadContainersList.find(element => element.OPTM_CONTCODE == this.ScanContainer)
-    if (result != undefined) {
-     
-    } else {
-      this.toastr.error('', this.translate.instant("InvalidContainerCode"));
-      this.ScanContainer = "";
-    }
+    this.scannedBtchSer = "";
+    this.scannedContainer = "";
+    this.scannedItemCode = "";
+    this.scannedQty = undefined;
   }
 
   setfocus() {
@@ -162,8 +152,9 @@ export class PackingComponent implements OnInit {
     }
   }
 
+  // pickedCompleteCycle = false;
   checkIfQtyFullFiled() {
-
+    this.showFields = false
   }
 
   nextStep() {
@@ -209,7 +200,7 @@ export class PackingComponent implements OnInit {
 
   GetDroppedToteList() {
     if(this.BinCodeValue == "" || this.BinCodeValue == undefined){
-      this.toastr.error('', this.translate.instant("Please select bin first."));
+      this.toastr.error('', this.translate.instant("BinSelectFirst"));
       return;
     }
 
@@ -245,6 +236,7 @@ export class PackingComponent implements OnInit {
     );
   }
 
+  SHIPMENT_ITEMS=[];
   GetToteShipments() {
     if (this.ToteValue == "" || this.ToteValue == undefined) {
       this.toastr.error('', this.translate.instant("ToteBlankMsg"))
@@ -260,11 +252,17 @@ export class PackingComponent implements OnInit {
               this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
-          if (data.OUTPUT[0].RESULT == "Data Saved") {
-            this.toastr.success('', this.translate.instant("ContainerCreatedSuccessMsg"));
-          } else {
-            this.toastr.error('', data.OUTPUT[0].RESULT);
+
+          if(data.SHIPMENTS.length > 0){
+            this.showLookup = true;
+            this.lookupfor = "ToteShipmentList"
+            this.serviceData = data.SHIPMENTS
           }
+
+          if(data.SHIPMENT_ITEMS.length > 0){
+            this.SHIPMENT_ITEMS = data.SHIPMENT_ITEMS;
+          }
+
         } else {
           // this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         }
@@ -282,7 +280,7 @@ export class PackingComponent implements OnInit {
   }
 
   GetToteItemBtchSer() {
-    this.packservice.GetToteItemBtchSer("", "", "").subscribe(
+    this.packservice.GetToteItemBtchSer(this.ToteValue, this.ShipmentId).subscribe(
       (data: any) => {
         this.showLoader = false;
         if (data != undefined) {
@@ -291,11 +289,7 @@ export class PackingComponent implements OnInit {
               this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
-          if (data.OUTPUT[0].RESULT == "Data Saved") {
-            this.toastr.success('', this.translate.instant("ContainerCreatedSuccessMsg"));
-          } else {
-            this.toastr.error('', data.OUTPUT[0].RESULT);
-          }
+          this.ItemBtchSerDetail = data.ITEM_BTCHSER;
         } else {
           // this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         }
@@ -377,6 +371,8 @@ export class PackingComponent implements OnInit {
   showLookup = false;
   serviceData = [];
   lookupfor = "";
+  ShipmentItemDetail = [];
+  ItemBtchSerDetail = [];
   GetPackingBinsForWarehouse(){
     this.packservice.GetPackingBinsForWarehouse().subscribe(
       (data: any) => {
@@ -415,6 +411,15 @@ export class PackingComponent implements OnInit {
       this.BinCodeValue = event.OPTM_SORT_PACK_BIN;
     }else if(this.lookupfor == "ToteList"){
       this.ToteValue = event.OPTM_CODE;
+    }else if(this.lookupfor == "ToteShipmentList"){
+      this.ShipmentCode = event.OPTM_SHIPMENT_CODE;
+      this.ShipmentId = event.OPTM_SHIPMENTID;
+      
+      if(this.SHIPMENT_ITEMS.length > 0){
+        this.ShipmentItemDetail = this.SHIPMENT_ITEMS.filter(e=> e.OPTM_SHIPMENTID == this.ShipmentId);
+      }
+
+      this.GetToteItemBtchSer();
     }
   }
 
@@ -450,8 +455,8 @@ export class PackingComponent implements OnInit {
   }
 
   SavePackingContainerAndUpdateShipment() {
-    var packingContainerDtl = this.PrearePackingContModel("", "", "");
-    this.packservice.SavePackingContainerAndUpdateShipment(packingContainerDtl).subscribe(
+    //var packingContainerDtl = this.PrearePackingContModel();
+    this.packservice.SavePackingContainerAndUpdateShipment(this.BtchSerDtlData).subscribe(
       (data: any) => {
         this.showLoader = false;
         if (data != undefined) {
@@ -480,28 +485,189 @@ export class PackingComponent implements OnInit {
       }
     );
   }
+  
+  ValidatePackingContainer() {
+    this.showLoader = true;
+    // console.log("2  " + new Date().toLocaleTimeString());
+    this.packservice.ValidatePackingContainer(this.ContainerCode, undefined, this.ShipmentCode).subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        if (data != undefined) {
+          if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
+          // this.showLookupLoader = false;
+          if (data != "") {
+            this.ContainerCode = '';
+            this.toastr.error("", data);
+            // this.containercreated = false;
+          } else {
+            this.toastr.success("", this.translate.instant("CCCreated"))
+            // this.containercreated = true;
+          }
+        } else {
+          this.toastr.error('', this.translate.instant("InvalidContainerCode"));
+          return;
+        }
+      },
+      error => {
+        this.showLoader = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+        return;
+      }
+    );
+  }
 
+  scannedItemCode: string = "";
+  scannedContainer: string = "";
+  scannedQty: number = undefined;
+  scannedBtchSer: string = "";
+  onItemChange() {
+    if (this.scannedItemCode == undefined || this.scannedItemCode == "") {
+      return;
+    }
+    this.scannedItemCode = this.scannedItemCode.trim();
+    let index = this.ItemBtchSerDetail.findIndex(e=> e.OPTM_ITEMCODE == this.scannedItemCode)
+    if (index != -1) {
+      if (this.currentStep == this.LastStep) {
+        this.checkIfQtyFullFiled();
+      } else {
+        if (this.iterateSteps) {
+          this.nextSteptoIterate();
+        } else {
+          this.nextStep();
+        }
+      }
+    } else {
+      this.toastr.error('', this.translate.instant("InvalidItemCode"));
+      this.scannedItemCode = "";
+      this.setfocus();
+    }
+  }
 
-  PrearePackingContModel(ItemCode, BtchSer, Quantity, ) {
-    var packingContainerDtl: any = {};
-    packingContainerDtl.BtchSerDtlData = [];
-    packingContainerDtl.BtchSerDtlData.push({
+  onBtchSerChange() {
+    if (this.scannedBtchSer == undefined || this.scannedBtchSer == "") {
+      return;
+    }
+    this.scannedBtchSer = this.scannedBtchSer.trim();
+    let index = this.ItemBtchSerDetail.findIndex(e=> e.OPTM_BTCHSER == this.scannedBtchSer && e.OPTM_ITEMCODE == this.scannedItemCode)
+    if (index != -1) {
+      if (this.currentStep == this.LastStep) {
+        this.checkIfQtyFullFiled();
+      } else {
+        if (this.iterateSteps) {
+          this.nextSteptoIterate();
+        } else {
+          this.nextStep();
+        }
+      }
+    } else {
+      this.toastr.error('', this.translate.instant("InvalidscannedBtchSer"));
+      this.scannedBtchSer = "";
+      this.setfocus();
+    }
+  }
+
+  onQtyChange() {
+    if (this.scannedQty == undefined || Number(this.scannedQty) <= 0) {
+      return;
+    }
+    let result = this.ItemBtchSerDetail.find(e=> e.OPTM_BTCHSER == this.scannedBtchSer && e.OPTM_ITEMCODE == this.scannedItemCode)
+    if (this.scannedQty <= result.QTY_AVAIL_TO_PACK) {
+      if (this.currentStep == this.LastStep) {
+        this.checkIfQtyFullFiled();
+      } else {
+        if (this.iterateSteps) {
+          this.nextSteptoIterate();
+        } else {
+          this.nextStep();
+        }
+      }
+    } else {
+      this.toastr.error('', this.translate.instant("InvalidscannedQty"));
+      this.scannedQty = undefined;
+      this.setfocus();
+    }
+  }
+
+  onContainerChange(){
+    if (this.scannedContainer == undefined || this.scannedContainer == "") {
+      return;
+    }
+    this.scannedContainer = this.scannedContainer.trim();
+    if (this.scannedContainer === this.ContainerCode) {
+
+      if (this.currentStep == this.LastStep) {
+        this.checkIfQtyFullFiled();
+      } else {
+        if (this.iterateSteps) {
+          this.nextSteptoIterate();
+        } else {
+          this.nextStep();
+        }
+      }
+      // if (this.iterateSteps) {
+      //   this.nextSteptoIterate();
+      // } else {
+      //   this.nextStep();
+      // }
+    } else {
+      this.toastr.error('', this.translate.instant("InvalidscannedContainer"));
+      this.scannedContainer = "";
+      this.setfocus();
+    }
+  }
+
+  BtchSerDtlData = [];
+  onSaveClick() {    
+    this.BtchSerDtlData.push({
       COMPANYDBNAME: sessionStorage.getItem("CompID"),
       TOTE_NUMBER: this.ToteValue,
       OPTM_SHIPMENTID: this.ShipmentId,
       OPTM_CONTAINERCODE: this.ContainerCode,
-      OPTM_ITEMCODE: ItemCode,
-      OPTM_BTCHSER: BtchSer,
-      OPTM_QTY: Quantity,
+      OPTM_ITEMCODE: this.scannedItemCode,
+      OPTM_BTCHSER: this.scannedBtchSer,
+      OPTM_QTY: this.scannedQty,
       OPTM_WHSE: sessionStorage.getItem("whseId"),
-      OPTM_BIN: "",
+      OPTM_BIN: this.BinCodeValue,
       OPTM_CREATEDBY: sessionStorage.getItem("UserId"),
       Source_Obj: "Packing" //"PickList', 'Packing', 'Shipment'
     })
-    return packingContainerDtl;
+
+    this.clearFields();
+    this.currentStep = 1;
+    this.stepIndex = 0;
+    this.showFields = true;
+
+    let index = this.ShipmentItemDetail.findIndex(e=> e.OPTM_ITEMCODE == this.scannedItemCode);
+    this.ShipmentItemDetail[index].PickQuantity = this.scannedQty;
+    this.ShipmentItemDetail[index].BalanceQty = Number(this.ShipmentItemDetail[index].SHIP_QTY) - Number(this.scannedQty);
   }
 
-  onSaveClick() {
-
+  PrearePackingContModel() {
+    var packingContainerDtl: any = {};
+    packingContainerDtl.BtchSerDtlData = [];
+    packingContainerDtl.BtchSerDtlData = this.BtchSerDtlData;
+    // .push({
+    //   COMPANYDBNAME: sessionStorage.getItem("CompID"),
+    //   TOTE_NUMBER: this.ToteValue,
+    //   OPTM_SHIPMENTID: this.ShipmentId,
+    //   OPTM_CONTAINERCODE: this.ContainerCode,
+    //   OPTM_ITEMCODE: ItemCode,
+    //   OPTM_BTCHSER: BtchSer,
+    //   OPTM_QTY: Quantity,
+    //   OPTM_WHSE: sessionStorage.getItem("whseId"),
+    //   OPTM_BIN: "",
+    //   OPTM_CREATEDBY: sessionStorage.getItem("UserId"),
+    //   Source_Obj: "Packing" //"PickList', 'Packing', 'Shipment'
+    // })
+    return packingContainerDtl;
   }
 }

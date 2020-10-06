@@ -45,12 +45,13 @@ export class PickTaskService {
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetDataBasedOnPickList", jObject, this.commonService.httpOptions);
   }
 
-  ValidatePackingContainer(ScannedContCode: string, strTaskID: string): Observable<any> {
+  ValidatePackingContainer(ScannedContCode: string, strTaskID: string, OPTM_SHIPMENT_CODE?): Observable<any> {
     let jObject = {
       PalletCode: JSON.stringify([{
         CompanyDBId: sessionStorage.getItem("CompID"),
         OPTM_CONTCODE: ScannedContCode,
-        OPTM_TASKID: strTaskID
+        OPTM_TASKID: strTaskID,
+        OPTM_SHIPMENT_CODE: OPTM_SHIPMENT_CODE
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/ValidatePackingContainer", jObject, this.commonService.httpOptions);
@@ -192,13 +193,12 @@ export class PickTaskService {
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetToteShipments", jObject, this.commonService.httpOptions);
   }
 
-  GetToteItemBtchSer(OPTM_TOTE_NUMBER, OPTM_SHIPMENTID, OPTM_ITEMCODE): Observable<any> {
+  GetToteItemBtchSer(OPTM_TOTE_NUMBER, OPTM_SHIPMENTID): Observable<any> {
     let jObject = {
       PalletCode: JSON.stringify([{
         COMPANYDBNAME: sessionStorage.getItem("CompID"),
         OPTM_TOTE_NUMBER: OPTM_TOTE_NUMBER,
-        OPTM_SHIPMENTID: OPTM_SHIPMENTID,
-        OPTM_ITEMCODE: OPTM_ITEMCODE
+        OPTM_SHIPMENTID: OPTM_SHIPMENTID
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetToteItemBtchSer", jObject, this.commonService.httpOptions);
