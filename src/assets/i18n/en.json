@@ -536,6 +536,7 @@
   "CCCreated": "Container Code created.",
   "CCDoesntMatch": "Container Code doesn't match.",
   "ToteDoesntMatch": "Tote doesn't match.",
+  "InvalidTote": "Invalid tote code.",
   "ToteCreated": "Tote assigned.",
   "ScanCont": "Scan packing container",
   "ContainerCodePlaceholder": "Enter packing container",
@@ -637,7 +638,10 @@
   "BinList": "Bin List",
   "Bins": "Bins",
   "BinSelectFirst": "Please select bin first.",
-
+  "SHPCODEFirst": "Please select Shipment code first.",
+  "PackContBlank":"Please take packing container first.",
+  "PackingContCreated": "Packing container created.",
+  "Itemdetailsaved": "Item detail saved",
   "Dummy": "Dummy"
 }
  

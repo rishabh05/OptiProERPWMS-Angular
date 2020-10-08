@@ -11,7 +11,7 @@ import { PickTaskService } from '../services/picktask.service';
   styleUrls: ['./packing.component.scss']
 })
 export class PackingComponent implements OnInit {
-  
+
   ToteValue: String = "";
   currentStep = 1;
   ScanContainer: string;
@@ -100,32 +100,22 @@ export class PackingComponent implements OnInit {
   }
 
   showFields: boolean = true;
-  // addScannedContainer(OPTM_SHIPMENT_CODE, OPTM_CONTCODE) {
-  //   this.containerData.push({
-  //     CompanyDBId: sessionStorage.getItem("CompID"),
-  //     OPTM_SHIPMENT_CODE: OPTM_SHIPMENT_CODE,
-  //     OPTM_CONTCODE: OPTM_CONTCODE
-  //   });
-  //   this.toastr.success('', this.translate.instant("contSaved"));
-  //   this.ScanContainer = "";
-  //   this.ScanLoadLocation = "";
-  //   if (this.LoadContainersList.length == this.containerData.length) {
-  //     this.showFields = false
-  //     this.toastr.success('', this.translate.instant("AllPickedCont"));
-  //   } else {
-  //     this.stepIndex = -1;
-  //     this.nextSteptoIterate();
-  //   }
-  // }
-
   onSubmitClick() {
     this.SavePackingContainerAndUpdateShipment();
   }
 
+  clearHeaderValues() {
+    this.ToteValue = "";
+    this.ShipmentCode = "";
+    this.ContainerCode = ""
+    this.ShipmentItemDetail = [];
+  }
+
   clearDataAfterSubmit() {
-    this.ShipmentId = "";
-    this.currentStep = 1;
-    this.stepIndex = 0;
+    this.clearHeaderValues();
+    this.clearFields();
+    this.resetSteps();
+    this.BtchSerDtlData = [];
   }
 
   iterateSteps = false;
@@ -176,7 +166,12 @@ export class PackingComponent implements OnInit {
     if (step == 1) {
       this.currentStepText = this.translate.instant("Ph_ScanItemCode");
     } else if (step == 2) {
-      this.currentStepText = this.translate.instant("ScanBatch");
+      let tracking = this.getITemTracking(this.scannedItemCode)
+      if(tracking == 'B'){
+        this.currentStepText = this.translate.instant("ScanBatch");
+      }else{
+        this.currentStepText = this.translate.instant("ScanSerial");
+      }
     } else if (step == 3) {
       this.currentStepText = this.translate.instant("EnterQty");
     } else if (step == 4) {
@@ -199,7 +194,7 @@ export class PackingComponent implements OnInit {
   }
 
   GetDroppedToteList() {
-    if(this.BinCodeValue == "" || this.BinCodeValue == undefined){
+    if (this.BinCodeValue == "" || this.BinCodeValue == undefined) {
       this.toastr.error('', this.translate.instant("BinSelectFirst"));
       return;
     }
@@ -213,15 +208,15 @@ export class PackingComponent implements OnInit {
               this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
-          if(data.length > 0){
+          if (data.length > 0) {
             this.showLookup = true;
             this.serviceData = data;
             this.lookupfor = "ToteList";
-          }else{
+          } else {
             this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
           }
         } else {
-          // this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         }
       },
       error => {
@@ -236,14 +231,14 @@ export class PackingComponent implements OnInit {
     );
   }
 
-  SHIPMENT_ITEMS=[];
+  SHIPMENT_ITEMS = [];
   GetToteShipments() {
     if (this.ToteValue == "" || this.ToteValue == undefined) {
       this.toastr.error('', this.translate.instant("ToteBlankMsg"))
       return;
     }
 
-    this.packservice.GetToteShipments(this.ToteValue).subscribe(
+    this.packservice.GetToteShipments(this.ToteValue, this.BinCodeValue).subscribe(
       (data: any) => {
         this.showLoader = false;
         if (data != undefined) {
@@ -253,18 +248,20 @@ export class PackingComponent implements OnInit {
             return;
           }
 
-          if(data.SHIPMENTS.length > 0){
+          if (data.SHIPMENTS.length > 0) {
             this.showLookup = true;
             this.lookupfor = "ToteShipmentList"
             this.serviceData = data.SHIPMENTS
+          } else {
+            this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
           }
 
-          if(data.SHIPMENT_ITEMS.length > 0){
+          if (data.SHIPMENT_ITEMS.length > 0) {
             this.SHIPMENT_ITEMS = data.SHIPMENT_ITEMS;
           }
 
         } else {
-          // this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         }
       },
       error => {
@@ -280,7 +277,7 @@ export class PackingComponent implements OnInit {
   }
 
   GetToteItemBtchSer() {
-    this.packservice.GetToteItemBtchSer(this.ToteValue, this.ShipmentId).subscribe(
+    this.packservice.GetToteItemBtchSer(this.ToteValue, this.ShipmentId, this.BinCodeValue).subscribe(
       (data: any) => {
         this.showLoader = false;
         if (data != undefined) {
@@ -307,6 +304,9 @@ export class PackingComponent implements OnInit {
   }
 
   ValidateSelectedToteForPacking() {
+    if (this.ToteValue == "" || this.ToteValue == undefined) {
+      return;
+    }
     this.packservice.ValidateSelectedToteForPacking(this.ToteValue).subscribe(
       (data: any) => {
         this.showLoader = false;
@@ -316,13 +316,15 @@ export class PackingComponent implements OnInit {
               this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
-          if (data.OUTPUT[0].RESULT == "Data Saved") {
-            this.toastr.success('', this.translate.instant("ContainerCreatedSuccessMsg"));
+          if (data[0].ErrorMsg != "") {
+            this.toastr.error('', data[0].ErrorMsg);
+            this.ToteValue = ""
           } else {
-            this.toastr.error('', data.OUTPUT[0].RESULT);
+
           }
         } else {
-          // this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+          this.toastr.error('', this.translate.instant("InvalidTote"));
+          this.ToteValue = ""
         }
       },
       error => {
@@ -338,6 +340,12 @@ export class PackingComponent implements OnInit {
   }
 
   ValidateSelectedShipmentForPacking() {
+    if (this.ToteValue == "" || this.ToteValue == undefined) {
+      this.toastr.error('', this.translate.instant("ToteBlankMsg"))
+      return;
+    } else if (this.ShipmentCode == "" || this.ShipmentCode == undefined) {
+      return;
+    }
     this.packservice.ValidateSelectedShipmentForPacking(this.ToteValue, this.ShipmentCode).subscribe(
       (data: any) => {
         this.showLoader = false;
@@ -347,10 +355,12 @@ export class PackingComponent implements OnInit {
               this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
-          if (data.OUTPUT[0].RESULT == "Data Saved") {
-            this.toastr.success('', this.translate.instant("ContainerCreatedSuccessMsg"));
+          if (data[0].ErrorNo != "0") {
+            this.toastr.error('', data[0].ErrorMsg);
+            this.ShipmentCode = ""
+            this.ShipmentId = ""
           } else {
-            this.toastr.error('', data.OUTPUT[0].RESULT);
+            this.ShipmentId = data[0].data;
           }
         } else {
           // this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
@@ -373,7 +383,7 @@ export class PackingComponent implements OnInit {
   lookupfor = "";
   ShipmentItemDetail = [];
   ItemBtchSerDetail = [];
-  GetPackingBinsForWarehouse(){
+  GetPackingBinsForWarehouse() {
     this.packservice.GetPackingBinsForWarehouse().subscribe(
       (data: any) => {
         this.showLoader = false;
@@ -383,11 +393,11 @@ export class PackingComponent implements OnInit {
               this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
-          if(data.length > 0){
+          if (data.length > 0) {
             this.showLookup = true;
             this.serviceData = data;
             this.lookupfor = "PackBinList";
-          }else{
+          } else {
             this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
           }
         } else {
@@ -406,56 +416,60 @@ export class PackingComponent implements OnInit {
     );
   }
 
-  getLookupValue(event){
-    if (this.lookupfor == "PackBinList"){
+  getLookupValue(event) {
+    if (this.lookupfor == "PackBinList") {
       this.BinCodeValue = event.OPTM_SORT_PACK_BIN;
-    }else if(this.lookupfor == "ToteList"){
+      this.clearHeaderValues();
+      this.clearFields();
+      this.resetSteps();
+    } else if (this.lookupfor == "ToteList") {
       this.ToteValue = event.OPTM_CODE;
-    }else if(this.lookupfor == "ToteShipmentList"){
+    } else if (this.lookupfor == "ToteShipmentList") {
       this.ShipmentCode = event.OPTM_SHIPMENT_CODE;
       this.ShipmentId = event.OPTM_SHIPMENTID;
-      
-      if(this.SHIPMENT_ITEMS.length > 0){
-        this.ShipmentItemDetail = this.SHIPMENT_ITEMS.filter(e=> e.OPTM_SHIPMENTID == this.ShipmentId);
+
+      if (this.SHIPMENT_ITEMS.length > 0) {
+        this.ShipmentItemDetail = this.SHIPMENT_ITEMS.filter(e => e.OPTM_SHIPMENTID == this.ShipmentId);
       }
 
       this.GetToteItemBtchSer();
     }
   }
 
-  GetToteShipmentItems() {
-    this.packservice.GetToteShipmentItems(this.ToteValue, this.ShipmentCode).subscribe(
-      (data: any) => {
-        this.showLoader = false;
-        if (data != undefined) {
-          if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
-            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
-              this.translate.instant("CommonSessionExpireMsg"));
-            return;
-          }
-          if (data.OUTPUT[0].RESULT == "Data Saved") {
-            this.toastr.success('', this.translate.instant("ContainerCreatedSuccessMsg"));
-          } else {
-            this.toastr.error('', data.OUTPUT[0].RESULT);
-          }
-        } else {
-          // this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
-        }
-      },
-      error => {
-        this.showLoader = false;
-        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
-        }
-        else {
-          this.toastr.error('', error);
-        }
-      }
-    );
-  }
+  // GetToteShipmentItems() {
+  //   this.packservice.GetToteShipmentItems(this.ToteValue, this.ShipmentCode).subscribe(
+  //     (data: any) => {
+  //       this.showLoader = false;
+  //       if (data != undefined) {
+  //         if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+  //           this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+  //             this.translate.instant("CommonSessionExpireMsg"));
+  //           return;
+  //         }
+  //         if (data.OUTPUT[0].RESULT == "Data Saved") {
+  //           this.toastr.success('', this.translate.instant("ContainerCreatedSuccessMsg"));
+  //         } else {
+  //           this.toastr.error('', data.OUTPUT[0].RESULT);
+  //         }
+  //       } else {
+  //         // this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+  //       }
+  //     },
+  //     error => {
+  //       this.showLoader = false;
+  //       if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+  //         this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+  //       }
+  //       else {
+  //         this.toastr.error('', error);
+  //       }
+  //     }
+  //   );
+  // }
 
   SavePackingContainerAndUpdateShipment() {
     //var packingContainerDtl = this.PrearePackingContModel();
+
     this.packservice.SavePackingContainerAndUpdateShipment(this.BtchSerDtlData).subscribe(
       (data: any) => {
         this.showLoader = false;
@@ -465,10 +479,11 @@ export class PackingComponent implements OnInit {
               this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
-          if (data.OUTPUT[0].RESULT == "Data Saved") {
-            this.toastr.success('', this.translate.instant("ContainerCreatedSuccessMsg"));
+          if (data[0].ErrorNo == "0") {
+            this.toastr.success('', this.translate.instant("PackingContCreated"));
+            this.clearDataAfterSubmit();
           } else {
-            this.toastr.error('', data.OUTPUT[0].RESULT);
+            this.toastr.error('', data[0].ErrorMsg);
           }
         } else {
           // this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
@@ -485,10 +500,16 @@ export class PackingComponent implements OnInit {
       }
     );
   }
-  
+
   ValidatePackingContainer() {
+    if (this.ContainerCode == "" || this.ContainerCode == undefined) {
+      return;
+    } else if (this.ShipmentCode == "" || this.ShipmentCode == undefined) {
+      this.toastr.error('', this.translate.instant("SHPCODEFirst"))
+      return;
+    }
+
     this.showLoader = true;
-    // console.log("2  " + new Date().toLocaleTimeString());
     this.packservice.ValidatePackingContainer(this.ContainerCode, undefined, this.ShipmentCode).subscribe(
       (data: any) => {
         this.showLoader = false;
@@ -530,15 +551,22 @@ export class PackingComponent implements OnInit {
   scannedQty: number = undefined;
   scannedBtchSer: string = "";
   onItemChange() {
+    if (this.ContainerCode == "" || this.ContainerCode == undefined) {
+      this.toastr.error('', this.translate.instant("PackContBlank"))
+      return;
+    }
     if (this.scannedItemCode == undefined || this.scannedItemCode == "") {
       return;
     }
     this.scannedItemCode = this.scannedItemCode.trim();
-    let index = this.ItemBtchSerDetail.findIndex(e=> e.OPTM_ITEMCODE == this.scannedItemCode)
+    let index = this.ItemBtchSerDetail.findIndex(e => e.OPTM_ITEMCODE == this.scannedItemCode)
     if (index != -1) {
       if (this.currentStep == this.LastStep) {
         this.checkIfQtyFullFiled();
       } else {
+        if (this.getITemTracking(this.scannedItemCode) == 'N') {
+          this.stepIndex = this.stepIndex + 1
+        }
         if (this.iterateSteps) {
           this.nextSteptoIterate();
         } else {
@@ -552,12 +580,27 @@ export class PackingComponent implements OnInit {
     }
   }
 
+  getITemTracking(ItemCode) {
+    let result = this.ShipmentItemDetail.find(e => e.OPTM_ITEMCODE == ItemCode);
+    return result.OPTM_TRACKING
+  }
+
   onBtchSerChange() {
     if (this.scannedBtchSer == undefined || this.scannedBtchSer == "") {
       return;
     }
     this.scannedBtchSer = this.scannedBtchSer.trim();
-    let index = this.ItemBtchSerDetail.findIndex(e=> e.OPTM_BTCHSER == this.scannedBtchSer && e.OPTM_ITEMCODE == this.scannedItemCode)
+    let tracking = this.getITemTracking(this.scannedItemCode)
+    if(tracking == 'S'){
+      let index = this.BtchSerDtlData.findIndex(e=> e.OPTM_ITEMCODE == this.scannedItemCode && e.OPTM_BTCHSER == this.scannedBtchSer);
+      if(index != -1){
+        this.toastr.error('', this.translate.instant("Serial already taken."))
+        this.scannedBtchSer = "";
+        return;
+      }
+    }
+
+    let index = this.ItemBtchSerDetail.findIndex(e => e.OPTM_BTCHSER == this.scannedBtchSer && e.OPTM_ITEMCODE == this.scannedItemCode)
     if (index != -1) {
       if (this.currentStep == this.LastStep) {
         this.checkIfQtyFullFiled();
@@ -569,7 +612,12 @@ export class PackingComponent implements OnInit {
         }
       }
     } else {
-      this.toastr.error('', this.translate.instant("InvalidscannedBtchSer"));
+      if(tracking == 'B'){
+        this.toastr.error('', this.translate.instant("InvalidBatch"));
+      }else{
+        this.toastr.error('', this.translate.instant("InvalidSerial"));
+      }
+      
       this.scannedBtchSer = "";
       this.setfocus();
     }
@@ -579,8 +627,21 @@ export class PackingComponent implements OnInit {
     if (this.scannedQty == undefined || Number(this.scannedQty) <= 0) {
       return;
     }
-    let result = this.ItemBtchSerDetail.find(e=> e.OPTM_BTCHSER == this.scannedBtchSer && e.OPTM_ITEMCODE == this.scannedItemCode)
-    if (this.scannedQty <= result.QTY_AVAIL_TO_PACK) {
+    let result;
+    let sum =0;
+    let array;
+    var itemdtl = this.ShipmentItemDetail.find(e=> e.OPTM_ITEMCODE == this.scannedItemCode);
+    if (this.getITemTracking(this.scannedItemCode) == 'N') {
+      result = this.ItemBtchSerDetail.find(e => e.OPTM_ITEMCODE == this.scannedItemCode)
+      array = this.BtchSerDtlData.filter(e => e.OPTM_ITEMCODE == this.scannedItemCode)
+    } else {
+      result = this.ItemBtchSerDetail.find(e => e.OPTM_BTCHSER == this.scannedBtchSer && e.OPTM_ITEMCODE == this.scannedItemCode)
+      array = this.BtchSerDtlData.filter(e => e.OPTM_BTCHSER == this.scannedBtchSer && e.OPTM_ITEMCODE == this.scannedItemCode)
+    }
+    sum = array.reduce(function (a, b) {
+      return a + parseFloat(b.OPTM_QTY);
+    }, 0);
+    if ((Number(sum) + this.scannedQty) <= result.QTY_AVAIL_TO_PACK && (Number(sum) + this.scannedQty) <= itemdtl.SHIP_QTY) {
       if (this.currentStep == this.LastStep) {
         this.checkIfQtyFullFiled();
       } else {
@@ -590,14 +651,15 @@ export class PackingComponent implements OnInit {
           this.nextStep();
         }
       }
-    } else {
+    }
+    else {
       this.toastr.error('', this.translate.instant("InvalidscannedQty"));
       this.scannedQty = undefined;
       this.setfocus();
     }
   }
 
-  onContainerChange(){
+  onContainerChange() {
     if (this.scannedContainer == undefined || this.scannedContainer == "") {
       return;
     }
@@ -626,10 +688,48 @@ export class PackingComponent implements OnInit {
   }
 
   BtchSerDtlData = [];
-  onSaveClick() {    
+  onSaveClick() {
+    this.toastr.success('', this.translate.instant("Itemdetailsaved"))
+    this.PrearePackingContModel();
+    let index = this.ShipmentItemDetail.findIndex(e => e.OPTM_ITEMCODE == this.scannedItemCode);
+    if (this.ShipmentItemDetail[index].PickQuantity != undefined) {
+      this.ShipmentItemDetail[index].PickQuantity = Number(this.ShipmentItemDetail[index].PickQuantity) + Number(this.scannedQty)
+    } else {
+      this.ShipmentItemDetail[index].PickQuantity = this.scannedQty;
+    }
+    // this.ShipmentItemDetail[index].PickQuantity = this.scannedQty;
+    this.ShipmentItemDetail[index].BalanceQty = Number(this.ShipmentItemDetail[index].SHIP_QTY) - Number(this.ShipmentItemDetail[index].PickQuantity);
+
+    this.clearFields();
+    this.resetSteps();
+    this.showFields = true;
+  }
+
+  resetSteps() {
+    this.currentStep = 1;
+    this.stepIndex = 0;
+  }
+
+  PrearePackingContModel() {
+    let tracking = this.getITemTracking(this.scannedItemCode)
+    if(tracking == "N" || tracking == 'B'){
+      let index = -1;
+      if(tracking == "N"){
+        index = this.BtchSerDtlData.findIndex(e=> e.OPTM_ITEMCODE == this.scannedItemCode);
+      }else{
+        index = this.BtchSerDtlData.findIndex(e=> e.OPTM_ITEMCODE == this.scannedItemCode && e.OPTM_BTCHSER == this.scannedBtchSer);
+      }
+
+      if(index != -1){
+        this.BtchSerDtlData[index].OPTM_QTY = this.BtchSerDtlData[index].OPTM_QTY + this.scannedQty;
+        return;
+      }
+    }
+
+
     this.BtchSerDtlData.push({
       COMPANYDBNAME: sessionStorage.getItem("CompID"),
-      TOTE_NUMBER: this.ToteValue,
+      OPTM_TOTE_NUMBER: this.ToteValue,
       OPTM_SHIPMENTID: this.ShipmentId,
       OPTM_CONTAINERCODE: this.ContainerCode,
       OPTM_ITEMCODE: this.scannedItemCode,
@@ -640,34 +740,5 @@ export class PackingComponent implements OnInit {
       OPTM_CREATEDBY: sessionStorage.getItem("UserId"),
       Source_Obj: "Packing" //"PickList', 'Packing', 'Shipment'
     })
-
-    this.clearFields();
-    this.currentStep = 1;
-    this.stepIndex = 0;
-    this.showFields = true;
-
-    let index = this.ShipmentItemDetail.findIndex(e=> e.OPTM_ITEMCODE == this.scannedItemCode);
-    this.ShipmentItemDetail[index].PickQuantity = this.scannedQty;
-    this.ShipmentItemDetail[index].BalanceQty = Number(this.ShipmentItemDetail[index].SHIP_QTY) - Number(this.scannedQty);
-  }
-
-  PrearePackingContModel() {
-    var packingContainerDtl: any = {};
-    packingContainerDtl.BtchSerDtlData = [];
-    packingContainerDtl.BtchSerDtlData = this.BtchSerDtlData;
-    // .push({
-    //   COMPANYDBNAME: sessionStorage.getItem("CompID"),
-    //   TOTE_NUMBER: this.ToteValue,
-    //   OPTM_SHIPMENTID: this.ShipmentId,
-    //   OPTM_CONTAINERCODE: this.ContainerCode,
-    //   OPTM_ITEMCODE: ItemCode,
-    //   OPTM_BTCHSER: BtchSer,
-    //   OPTM_QTY: Quantity,
-    //   OPTM_WHSE: sessionStorage.getItem("whseId"),
-    //   OPTM_BIN: "",
-    //   OPTM_CREATEDBY: sessionStorage.getItem("UserId"),
-    //   Source_Obj: "Packing" //"PickList', 'Packing', 'Shipment'
-    // })
-    return packingContainerDtl;
   }
 }

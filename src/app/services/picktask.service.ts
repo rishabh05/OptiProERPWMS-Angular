@@ -185,22 +185,26 @@ export class PickTaskService {
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetDroppedToteList", jObject, this.commonService.httpOptions);
   }
 
-  GetToteShipments(OPTM_TOTE_NUMBER): Observable<any> {
+  GetToteShipments(OPTM_TOTE_NUMBER, OPTM_BIN): Observable<any> {
     let jObject = {
       PalletCode: JSON.stringify([{
         COMPANYDBNAME: sessionStorage.getItem("CompID"),
-        OPTM_TOTE_NUMBER: OPTM_TOTE_NUMBER
+        OPTM_TOTE_NUMBER: OPTM_TOTE_NUMBER,
+        OPTM_WHSE: sessionStorage.getItem("whseId"),
+        OPTM_BIN: OPTM_BIN
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetToteShipments", jObject, this.commonService.httpOptions);
   }
 
-  GetToteItemBtchSer(OPTM_TOTE_NUMBER, OPTM_SHIPMENTID): Observable<any> {
+  GetToteItemBtchSer(OPTM_TOTE_NUMBER, OPTM_SHIPMENTID, OPTM_BINCODE): Observable<any> {
     let jObject = {
       PalletCode: JSON.stringify([{
         COMPANYDBNAME: sessionStorage.getItem("CompID"),
         OPTM_TOTE_NUMBER: OPTM_TOTE_NUMBER,
-        OPTM_SHIPMENTID: OPTM_SHIPMENTID
+        OPTM_SHIPMENTID: OPTM_SHIPMENTID,
+        OPTM_WHSECODE: sessionStorage.getItem("whseId"),
+        OPTM_BINCODE: OPTM_BINCODE
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetToteItemBtchSer", jObject, this.commonService.httpOptions);
