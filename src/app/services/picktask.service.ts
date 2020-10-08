@@ -57,12 +57,14 @@ export class PickTaskService {
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/ValidatePackingContainer", jObject, this.commonService.httpOptions);
   } 
   
-  ValidateTote(ScannedContCode: string, strTaskID: string): Observable<any> {
+  ValidateTote(ScannedContCode: string, strTaskID: string, strWH: string, strBin: string): Observable<any> {
     let jObject = {
       PalletCode: JSON.stringify([{
         CompanyDBId: sessionStorage.getItem("CompID"),
         OPTM_CONTCODE: ScannedContCode,
-        OPTM_TASKID: strTaskID
+        OPTM_TASKID: strTaskID,
+        OPTM_WHSE: strWH,
+        OPTM_BIN: strBin
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/ValidateTote", jObject, this.commonService.httpOptions);

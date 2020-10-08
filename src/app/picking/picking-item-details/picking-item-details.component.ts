@@ -223,7 +223,7 @@ export class PickingItemDetailsComponent implements OnInit {
   ValidateTote() {
     this.showLoader = true;
     // console.log("2  " + new Date().toLocaleTimeString());
-    this.picktaskService.ValidateTote(this.CreatedContOrTote, this.pickTaskName).subscribe(
+    this.picktaskService.ValidateTote(this.CreatedContOrTote, this.pickTaskName, sessionStorage.getItem("whseID"), this.PickDropBin).subscribe(
       (data: any) => {
         this.showLoader = false;
         if (data != undefined) {
@@ -1153,12 +1153,15 @@ export class PickingItemDetailsComponent implements OnInit {
     this.BtchSerDtlData.push({
       OPTM_TASKID: this.PickTaskList[this.index].OPTM_TASKID,
       OPTM_ITEMCODE: this.itemcodeValue,
+      OPTM_WHSE: sessionStorage.getItem("whseID"),
       OPTM_BIN: this.PT_Enter_Location,
       OPTM_CONTAINER_ID: contValue,
+      OPTM_CONTAINERCODE: contValue,
       OPTM_QTY: this.pickQty,
       OPTM_BTCHSER: this.PT_Enter_ContBtchSer,
       OPTM_CREATEDBY: sessionStorage.getItem("UserId"),
-      OPTM_STARTDATETIME: this.OPTM_STARTDATETIME
+      OPTM_STARTDATETIME: this.OPTM_STARTDATETIME,
+      Source_Obj: "PickList"
     });
   }
 
