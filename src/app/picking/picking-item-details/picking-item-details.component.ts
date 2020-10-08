@@ -223,7 +223,7 @@ export class PickingItemDetailsComponent implements OnInit {
   ValidateTote() {
     this.showLoader = true;
     // console.log("2  " + new Date().toLocaleTimeString());
-    this.picktaskService.ValidateTote(this.CreatedContOrTote, this.pickTaskName, sessionStorage.getItem("whseID"), this.PickDropBin).subscribe(
+    this.picktaskService.ValidateTote(this.CreatedContOrTote, this.pickTaskName, this.PickDropBin).subscribe(
       (data: any) => {
         this.showLoader = false;
         if (data != undefined) {
