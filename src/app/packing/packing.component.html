@@ -106,7 +106,7 @@
                     [(ngModel)]="scannedItemCode" trim>
                 </div>
                 <div *ngIf="currentStep == 2" class="item-input-section">
-                  <input #focusOnBtchSer *ngIf="showFields" type="text" placeholder="{{'ScanBatch'|translate}}" (blur)="onBtchSerChange()"
+                  <input #focusOnBtchSer *ngIf="showFields" type="text" placeholder="{{'BatchSerial_No'|translate}}" (blur)="onBtchSerChange()"
                     name="scannedBtchSer" [(ngModel)]="scannedBtchSer" trim="blur">
                 </div>
                 <div *ngIf="currentStep == 3" class="item-input-section">
@@ -128,7 +128,7 @@
                     <span class="or-text">OR</span>
                     <span class="or-line"></span>
                   </div>
-                  <div *ngIf="currentStep != 4" class="scanner-box step-flex-item">
+                  <div class="scanner-box step-flex-item">
                     <div class="bar-code">
                       <i class="k-icon k-i-greyscale" aria-hidden="true"></i>
                     </div>

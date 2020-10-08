@@ -2627,7 +2627,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     // if (this.showNewPallet) {
 
     if (localStorage.getItem('FromReceiptProd') == 'true') {
-      this.showInputDialog("", this.translate.instant("Done"), this.translate.instant("Cancel"),
+      this.showInputDialog("NewPallet_GRPO", this.translate.instant("Done"), this.translate.instant("Cancel"),
         this.translate.instant("Plt_CreateNewPallet"));
     } else {
       this.showInputDialog("NewPallet_GRPO", this.translate.instant("Done"), this.translate.instant("Cancel"),
