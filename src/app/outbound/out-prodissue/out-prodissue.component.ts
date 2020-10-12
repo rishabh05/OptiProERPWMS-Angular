@@ -1,23 +1,23 @@
 import { Component, OnInit, EventEmitter, Output, ViewChild } from '@angular/core';
-import { CommonConstants } from 'src/app/const/common-constants';
-import { OutboundService } from 'src/app/services/outbound.service';
-import { OutboundData } from 'src/app/models/outbound/outbound-data';
-import { MeterialModel } from 'src/app/models/outbound/meterial-model';
+import { CommonConstants } from '../../const/common-constants';
+import { OutboundService } from '../../services/outbound.service';
+import { OutboundData } from '../../models/outbound/outbound-data';
+import { MeterialModel } from '../../models/outbound/meterial-model';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
 import { forEach } from '@angular/router/src/utils/collection';
 import { anyChanged } from '@progress/kendo-angular-grid/dist/es2015/utils';
-import { Commonservice } from 'src/app/services/commonservice.service';
+import { Commonservice } from '../../services/commonservice.service';
 
-import { Lot, ProductionIssueModel, Item } from 'src/app/models/Production/IFP';
-import { ProductionService } from 'src/app/services/production.service';
-import { LabelPrintReportsService } from 'src/app/services/label-print-reports.service';
+import { Lot, ProductionIssueModel, Item } from '../../models/Production/IFP';
+import { ProductionService } from '../../services/production.service';
+import { LabelPrintReportsService } from '../../services/label-print-reports.service';
 import { ISubscription } from 'rxjs/Subscription';
-import { InboundService } from 'src/app/services/inbound.service';
-import { InventoryTransferService } from 'src/app/services/inventory-transfer.service';
-import { PackingModel } from 'src/app/models/outbound/PackingModel';
-import { PickingModule } from 'src/app/picking/picking.module';
+import { InboundService } from '../../services/inbound.service';
+import { InventoryTransferService } from '../../services/inventory-transfer.service';
+import { PackingModel } from '../../models/outbound/PackingModel';
+import { PickingModule } from '../../picking/picking.module';
 
 
 
@@ -486,7 +486,13 @@ export class OutProdissueComponent implements OnInit {
 
   needMeterial() {
     this.calculateTotalAndRemainingQty();
-    return this._pickedMeterialQty < this._requiredMeterialQty;
+    if (localStorage.getItem("ComingFrom") == "ProductionIssue") {
+      return this._pickedMeterialQty < this._requiredMeterialQty;
+    }else{
+      if(localStorage.getItem("IsGreaterQuantityAllowedThanOrder") == "Y"){
+        return true;
+      }
+    }
   }
 
   onIssueMeterialQtyChange(idx: number, txt: any) {
@@ -520,13 +526,20 @@ export class OutProdissueComponent implements OnInit {
       return;
     }
     if (this._pickedMeterialQty > this._requiredMeterialQty) {
-      this.toastr.error('', this.translate.instant("ProdIssue_QtyGTOpen"));
-      txt.value = oldValue;
-      this.selectedMeterials[idx].MeterialPickQty = oldValue;
-      this.calculateTotalAndRemainingQty();
-
-      return;
-    }
+      if(localStorage.getItem("ComingFrom") == "ProductionIssue"){
+        this.toastr.error('', this.translate.instant("ProdIssue_QtyGTOpen"));
+        txt.value = oldValue;
+        this.selectedMeterials[idx].MeterialPickQty = oldValue;
+        this.calculateTotalAndRemainingQty();
+        return;
+      }else if(localStorage.getItem("IsGreaterQuantityAllowedThanOrder") != "Y"){
+        this.toastr.error('', this.translate.instant("ProdIssue_QtyGTOpen"));
+        txt.value = oldValue;
+        this.selectedMeterials[idx].MeterialPickQty = oldValue;
+        this.calculateTotalAndRemainingQty();
+        return;
+      }
+    } 
     this.updateQtyInPackingForAlreadySelectedMaterial(this.selectedMeterials[idx].MeterialPickQty);
   }
 
@@ -836,17 +849,22 @@ export class OutProdissueComponent implements OnInit {
       if (scan) {// if scan true means user comes from scan.
         let meterial = this.comingSelectedMeterials[0]; // coming selected material is the collection which we selected from dropdown.
         let avaliableMeterialQty = parseFloat(meterial.TOTALQTY);
-        if (meterial.MeterialPickQty > requiredMeterialQty) {
-          if (avaliableMeterialQty >= remailingMeterialQty) {
-            meterial.MeterialPickQty = remailingMeterialQty;
-          } else {
-            meterial.MeterialPickQty = avaliableMeterialQty;
-          }
-        } else { 
-          if(meterial.MeterialPickQty > avaliableMeterialQty){
-            meterial.MeterialPickQty = avaliableMeterialQty;
+        if(localStorage.getItem("ComingFrom") != "ProductionIssue" && localStorage.getItem("IsGreaterQuantityAllowedThanOrder") == "Y"){
+          meterial.MeterialPickQty = avaliableMeterialQty;
+        }else{
+          if (meterial.MeterialPickQty > requiredMeterialQty) {
+            if (avaliableMeterialQty >= remailingMeterialQty) {
+              meterial.MeterialPickQty = remailingMeterialQty;
+            } else {
+              meterial.MeterialPickQty = avaliableMeterialQty;
+            }
+          } else { 
+            if(meterial.MeterialPickQty > avaliableMeterialQty){
+              meterial.MeterialPickQty = avaliableMeterialQty;
+            }
           }
         }
+        
         this.selectedMeterials.push(meterial); // after updating the qty push the material to seleted material with updated qty.
         if (this.selectedPackingModel != null && this.selectedPackingModel != undefined &&
           this.selectedPackingModel.PkgNo != "") {
@@ -865,10 +883,14 @@ export class OutProdissueComponent implements OnInit {
         for (let i = 0; i < this.comingSelectedMeterials.length; i++) { // loop over all selected materials to select material according to qty.
           let meterial = this.comingSelectedMeterials[i];
           let avaliableMeterialQty = parseFloat(meterial.TOTALQTY);
-          if (avaliableMeterialQty >= remailingMeterialQty) {
-            meterial.MeterialPickQty = remailingMeterialQty;
-          } else {
+          if(localStorage.getItem("ComingFrom") != "ProductionIssue" && localStorage.getItem("IsGreaterQuantityAllowedThanOrder") == "Y"){
             meterial.MeterialPickQty = avaliableMeterialQty;
+          }else{
+            if (avaliableMeterialQty >= remailingMeterialQty) {
+              meterial.MeterialPickQty = remailingMeterialQty;
+            } else {
+              meterial.MeterialPickQty = avaliableMeterialQty;
+            }
           }
           this.selectedMeterials.push(meterial);
           // after updating the qty push the material to seleted material with updated qty.
@@ -1024,8 +1046,13 @@ export class OutProdissueComponent implements OnInit {
           const m = this.selectedMeterials[index];
           count = count + m.MeterialPickQty;
           if (count > this._requiredMeterialQty) {
-            this.toastr.error('', this.translate.instant("ProdIssue_QtyGTTotal"));
-            return;
+            if(localStorage.getItem("ComingFrom") == "ProductionIssue"){
+              this.toastr.error('', this.translate.instant("ProdIssue_QtyGTTotal"));
+              return;
+            }else if(localStorage.getItem("IsGreaterQuantityAllowedThanOrder") != "Y"){
+              this.toastr.error('', this.translate.instant("ProdIssue_QtyGTTotal"));
+              return;
+            }           
           }
           if (m.MeterialPickQty > 0) {
             let item = { Order: this.outbound.OrderData, Item: this.outbound.SelectedItem, Meterial: m }
@@ -1040,8 +1067,13 @@ export class OutProdissueComponent implements OnInit {
           const m = this.selectedMeterials[index];
           count = count + m.MeterialPickQty;
           if (count > this._requiredMeterialQty) {
-            this.toastr.error('', this.translate.instant("ProdIssue_QtyGTTotal"));
-            return;
+            if(localStorage.getItem("ComingFrom") == "ProductionIssue"){
+              this.toastr.error('', this.translate.instant("ProdIssue_QtyGTTotal"));
+              return;
+            }else if(localStorage.getItem("IsGreaterQuantityAllowedThanOrder") != "Y"){
+              this.toastr.error('', this.translate.instant("ProdIssue_QtyGTTotal"));
+              return;
+            }
           }
           if (m.MeterialPickQty > 0) {
             let item = { Order: this.outbound.OrderData, Item: this.outbound.SelectedItem, Meterial: m }

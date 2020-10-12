@@ -615,15 +615,23 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       quantitySum += Number(this.recvingQuantityBinArray[i].LotQty);
     }
     quantitySum = quantitySum + Number(this.qty);
-
+    
     if (Number(this.OpenQty) == 0) {
       this.toastr.error('', this.translate.instant("Inbound_NoOpenQuantity"));
       this.qty = undefined;
       return false;
-    } else if (quantitySum > Number(this.OpenQty)) {
-      this.toastr.error('', this.translate.instant("Inbound_NoOpenQuantityValid"));
-      this.qty = undefined;
-      return false;
+    }else if (quantitySum > Number(this.OpenQty)) {
+      if (localStorage.getItem('FromReceiptProd') == 'true') {
+        this.toastr.error('', this.translate.instant("Inbound_NoOpenQuantityValid"));
+        this.qty = undefined;
+        return false;
+      }else if(localStorage.getItem("IsGreaterQuantityAllowedThanOrder") != "Y"){
+        this.toastr.error('', this.translate.instant("Inbound_NoOpenQuantityValid"));
+        this.qty = undefined;
+        return false;
+      }else{
+        return true;
+      }      
     } else {
       return true;
     }

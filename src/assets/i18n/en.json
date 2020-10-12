@@ -642,6 +642,16 @@
   "PackContBlank":"Please take packing container first.",
   "PackingContCreated": "Packing container created.",
   "Itemdetailsaved": "Item detail saved",
+  "DropLocation": "Drop Location",
+  "DropOption": "Drop Option",
+  "scanpicklist": "Scan Picklist",
+  "enterpicklist": "Enter Picklist",
+  "scancont": "Scan Container",
+  "enterCont": "Enter Container",
+  "EnterDropLocation": "Enter Drop Location",
+  "DROP": "Drop",
+  "load": "Load",
+  "ProReceiptReport": "Do you want to print report?",
   "Dummy": "Dummy"
 }
  

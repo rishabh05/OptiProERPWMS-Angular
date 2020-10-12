@@ -319,9 +319,40 @@ export class ProductionReceiptItemsListComponent implements OnInit {
     );
   }
 
+  dialogMsg: string = ""
+  yesButtonText: string = "";
+  noButtonText: string = "";
+  dialogFor: string = "";
+  showConfirmDialog: boolean = false;
+  showPrintDialog() {
+    // show print dialog here and onclick its handling.
+    this.yesButtonText = this.translate.instant("yes");
+    this.noButtonText = this.translate.instant("no");
+    this.dialogFor = "prodReceiptReport";
+    this.dialogMsg = this.translate.instant("ProReceiptReport");
+    this.showConfirmDialog = true; // show dialog
+  }
 
-  submitProductionReport(){
-     
+  getConfirmDialogValue($event) {
+    this.showConfirmDialog = false;
+    if ($event.Status == "yes") {
+      switch ($event.From) {
+        case ("prodReceiptReport"):
+
+          break;
+      }
+    } else {
+      if ($event.Status == "cancel") {
+        // when user click on cross button nothing to do.
+      } else {
+        //means user click on negative button
+        if ($event.From == "prodReceiptReport") {
+        }
+      }
+    }
+  }
+
+  submitProductionReport(){     
     //get data from local storage
     var submitRecProdData: any = {};
     var dataModel = localStorage.getItem("GoodsReceiptModel");
@@ -345,6 +376,11 @@ export class ProductionReceiptItemsListComponent implements OnInit {
            // this.toastr.success( this.translate.instant("FGRSuccessMessage") +data[0].SuccessNo);
             this.toastr.success('', this.translate.instant("ProdReceipt_FGRSuccessMessage")+" "+ data[0].SuccessNo);
             this.resetOnSerchClick(); 
+
+            if(localStorage.getItem("IsPrintingEnabledForProdReceipt") == "Y"){
+              this.showPrintDialog();
+            }
+
           }else{
             if(data[0].ErrorMsg != undefined && data[0].ErrorMsg == "OrderQtyError"){
               this.toastr.error('', this.translate.instant("OrderQtyError"));

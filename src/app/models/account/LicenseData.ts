@@ -30,5 +30,7 @@ export interface LicenseData{
     AutoPalletIdGenerationChecked: string,
     PackingEnableInOutBound: string,
     IsShippingEnable: string,
-    GRPOPrintReport: string
+    GRPOPrintReport: string,
+    IsGreaterQuantityAllowedThanOrder: string,
+    ProdReceiptPrintReport: string
 }

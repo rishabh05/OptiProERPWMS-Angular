@@ -1133,6 +1133,10 @@ export class OutCutomerComponent implements OnInit {
           }else{
             this.pagable = false;
           }          
+
+          for(var i=0; i<this.DiliveryShipmentList.length; i++){
+            this.DiliveryShipmentList[i].Selected = false;
+          }
           // var DelSeq = document.getElementById("DelSeq")
           // DelSeq.addEventListener("keydown", function(e) {
           //   // prevent: "e", "=", ",", "-", "."

@@ -32,6 +32,8 @@ const routes: Routes = [
       { path: 'adjustment-counting', loadChildren: "../adjustments-counting/adjustments-counting.module#AdjustmentsCountingModule" }, 
       { path: 'picking', loadChildren: "../picking/picking.module#PickingModule" },
       { path: 'packing', loadChildren: "../packing/packing.module#PackingModule" },
+      { path: 'drop', loadChildren: "../drop/drop.module#DropModule" },
+      { path: 'load', loadChildren: "../load/load.module#LoadModule" },
       { path: 'production', loadChildren: "../production/production.module#ProductionModule" },
       { path: 'printing-label', loadChildren: "../printing-label/printing-label.module#PrintingLabelModule" },
       // Need to remove these routing

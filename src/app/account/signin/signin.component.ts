@@ -292,6 +292,8 @@ export class SigninComponent implements OnInit {
                     localStorage.setItem("PalletizationEnabled", this.licenseData[0].PalletizationEnabled);
                     localStorage.setItem("isShipmentApplicable", this.licenseData[1].IsShippingEnable);
                     localStorage.setItem("GRPOPrintReport", this.licenseData[1].GRPOPrintReport);
+                    localStorage.setItem("IsGreaterQuantityAllowedThanOrder", this.licenseData[1].IsGreaterQuantityAllowedThanOrder);
+                    localStorage.setItem("IsPrintingEnabledForProdReceipt", this.licenseData[1].ProdReceiptPrintReport);
                     localStorage.setItem("AutoPalletIdGenerationChecked", this.licenseData[0].AutoPalletIdGenerationChecked);
 
                     if (this.selectedRole != null) {

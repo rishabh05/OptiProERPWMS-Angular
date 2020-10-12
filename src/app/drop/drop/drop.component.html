@@ -1,0 +1,159 @@
+<div class="opti_container position-relative bg-white rounded">
+  <form class="form-with-fix-btnBar" *ngIf="!viewLines">
+    <div class="opti_container_inner" [perfectScrollbar]=" ">
+      <h3 class="border-bottom no-border-mobile d-flex pt-1 pb-3 mb-4">
+        {{'DROP'|translate}}
+      </h3>
+      <div class="row">
+        <div class="col-12">
+          <div class="po-details-comp">
+            <div class="po-details-sec">
+
+              <div class="form-group row">
+                <label for="DropOption" class="col-sm-4 col-form-label">{{'DropOption'|translate}}</label>
+                <div class="col-sm-8">
+                  <div class="input-group ">
+                    <kendo-dropdownlist [data]="DropOptionArray" id="DropOption" #selectedvalue (selectionChange)="onDropOptionChange($event)"
+                      name="DropOption" [(ngModel)]="DropOption">
+                    </kendo-dropdownlist>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="inputPassword" class="col-sm-4 col-form-label">{{DropField_lbl}}</label>
+                <div class="col-sm-8">
+                  <div class="input-group input-group-sm">
+                    <input type="text" class="form-control form-control-sm" id="dropValue" name="dropValue" [(ngModel)]="dropValue" (blur)="onPicklistContToteChange()"
+                      trim="blur">
+                    <!-- <div class="input-group-append">
+                      <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="GetDroppedToteList()">
+                        <i class="opti-icon-search"></i>
+                      </button>
+                    </div> -->
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="inputPassword" class="col-sm-4 col-form-label">{{'DropLocation'|translate}}</label>
+                <div class="col-sm-8">
+                  <div class="input-group input-group-sm">
+                    <input type="text" class="form-control form-control-sm" id="ShipmentCode" name="ShipmentCode" [(ngModel)]="ShipmentCode"
+                      (blur)="onDropLocationChange()" trim="blur" disabled>
+                    <!-- <div class="input-group-append">
+                      <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="GetToteShipments()">
+                        <i class="opti-icon-search"></i>
+                      </button>
+                    </div> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+
+<!-- 
+
+            <div class="px-3">
+              <div class="form-group row mt-2">
+                <div class="input-group input-group-sm">
+                  <kendo-grid [kendoGridBinding]="ShipmentItemDetail" [resizable]="true" [height]="150" [skip]="skip" #griditems>
+                    <kendo-grid-column field="OPTM_ITEMCODE" width="70" title="{{'ItemCode'|translate}}">
+                    </kendo-grid-column>
+                    <kendo-grid-column class="text-right" field="SHIP_QTY" width="80" title="{{'ReqQuantity'|translate}}">
+                      <ng-template kendoGridCellTemplate let-dataItem>
+                        {{dataItem.SHIP_QTY |numberFormat}}
+                      </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column class="text-right" field="PickQuantity" width="80" title="{{'PickQuantity'|translate}}">
+                      <ng-template kendoGridCellTemplate let-dataItem>
+                        {{dataItem.PickQuantity |numberFormat}}
+                      </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column class="text-right" field="BalanceQty" width="80" title="{{'BalanceQty'|translate}}">
+                      <ng-template kendoGridCellTemplate let-dataItem>
+                        {{dataItem.BalanceQty |numberFormat}}
+                      </ng-template>
+                    </kendo-grid-column>
+                  </kendo-grid>
+                </div>
+              </div>
+            </div>
+            <br> -->
+
+            <div class="item-sec">
+              <div class="item-steps">
+                <!-- step inputs -->
+                <div *ngIf="currentStep == 1" class="item-input-section">
+                  <input #focusOnConfirmDropOption *ngIf="showFields" type="text" placeholder="{{DropOptionPlaceHolder}}" (blur)="onPickToteContChange()"
+                    name="scannedDropOption" [(ngModel)]="scannedDropOption" trim>
+                </div>
+                <div *ngIf="currentStep == 2" class="item-input-section">
+                  <input #focusOnDropLoc *ngIf="showFields" type="text" placeholder="{{'EnterDropLocation'|translate}}" (blur)="onDropLocationChange()"
+                    name="scannedDropLoc" [(ngModel)]="scannedDropLoc" trim="blur">
+                </div>
+                <!-- <div *ngIf="currentStep == 3" class="item-input-section">
+                  <input #focusOnQty *ngIf="showFields" type="number" placeholder="{{'EnterQty'|translate}}" (blur)="onQtyChange()" name="scannedQty"
+                    [(ngModel)]="scannedQty" trim="blur">
+                </div>
+                <div *ngIf="currentStep == 4" class="item-input-section">
+                  <input #focusOnCont *ngIf="showFields" type="text" placeholder="{{'ScanCont'|translate}}" (blur)="onContainerChange()" name="scannedContainer"
+                    [(ngModel)]="scannedContainer" trim="blur">
+                </div> -->
+                <!-- step input option icons -->
+                <div class="step-flex">
+                  <div class="keyboard-box step-flex-item">
+                    <div class="keyboard-icon">
+                      <i class="k-icon k-i-group-box" aria-hidden="true"></i>
+                    </div>
+                  </div>
+                  <div class="or-class step-flex-item">
+                    <span class="or-text">OR</span>
+                    <span class="or-line"></span>
+                  </div>
+                  <div class="scanner-box step-flex-item">
+                    <div class="bar-code">
+                      <i class="k-icon k-i-greyscale" aria-hidden="true"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="text-center scan-text">{{currentStepText}}</div>
+                <!--/ step input option icons -->
+              </div>
+
+              <!-- step navigation Arrow placement -->
+              <div>
+                <i *ngIf="currentStep > 1 && showFields" (click)="prevStep()" class="k-icon k-i-arrow-chevron-left" aria-hidden="true"></i>
+                <i *ngIf="currentStep != LastStep" (click)="nextStep()" class="k-icon k-i-arrow-chevron-right" aria-hidden="true"></i>
+                <i *ngIf="!showFields" (click)="onSaveClick('/po-order-details')" class="k-icon k-i-save" aria-hidden="true"></i>
+              </div>
+              <!--/ step navigation -->
+
+              <!-- step bars -->
+              <div class="item-steps-bar">
+                <ng-container *ngFor="let c of PickListSteps; let i =index">
+                  <span [ngClass]="{active:currentStep == i+1}" class="step"></span>
+                </ng-container>
+              </div>
+              <!--/ step bars -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fix-footer-btnBar">
+      <div class="col-sm-12 col-12">
+
+        <button class="btn btn-outline-secondary btn-sm btn-transparent btn-icon mr-1" type="button" (click)="OnCancelClick()">
+          <i class="opti-icon-arrow-back"></i>
+        </button>
+        <button class="btn btn-success k-button btn-sm btn-icon-with-text" type="button" (click)="onSubmitClick()">
+          <span class="k-icon k-i-check" role="presentation"></span>{{'Submit'|translate}}</button>
+      </div>
+    </div>
+  </form>
+
+</div>
+
+<span *ngIf="showLookup">
+  <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupkey)="getLookupValue($event)"></app-lookup>
+</span>
