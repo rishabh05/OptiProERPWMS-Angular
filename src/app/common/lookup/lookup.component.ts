@@ -795,7 +795,7 @@ export class LookupComponent implements OnInit {
     }
     else {
       // let rixd: number= this.selectedValues.findIndex(i => i.LOTNO == servivceItem.LOTNO && i.LOTNO == servivceItem.BINNO)
-      var temp = this.selectedValues.splice(dataItem);//(index, 1);
+      var temp = this.selectedValues.splice(dataItem, 1);
       this.selectedValues = this.selectedValues;
       //console.log("selectedValues.size", this.selectedValues.length);
     }

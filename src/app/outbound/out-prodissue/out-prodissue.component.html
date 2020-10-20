@@ -22,15 +22,21 @@
                                         <dt>{{'ItemCode'|translate}}</dt>
                                         <dd>{{ dataItem.ITEMCODE }}</dd>
 
-                                        <dt>{{PickQtylbl}}</dt>
-                                        <dd>{{ _pickedMeterialQty|numberFormat }}</dd>
+                                        <dt *ngIf="fromProduction==true || fromITR==true">{{PickQtylbl}}</dt>
+                                        <dd *ngIf="fromProduction==true || fromITR==true">{{ _pickedMeterialQty|numberFormat }}</dd>
+
+                                        <dt *ngIf="fromProduction==false && fromITR==false">{{'Qty_InventoryUOM'|translate}}</dt>
+                                        <dd *ngIf="fromProduction==false && fromITR==false">{{_pickedMeterialQtyInvUOM|numberFormat}}/{{dataItem.INVOPENQTY|numberFormat}}</dd>
                                     </dl>
                                     <dl class="opti_mobile_grid_dl">
-                                        <dt>{{OpenQtylbl}}</dt>
-                                        <dd>{{ dataItem.OPENQTY|numberFormat }}</dd>
+                                        <dt *ngIf="fromProduction==true || fromITR==true">{{OpenQtylbl}}</dt>
+                                        <dd *ngIf="fromProduction==true || fromITR==true">{{ dataItem.OPENQTY|numberFormat }}</dd>
 
-                                        <dt *ngIf="!fromProduction">{{'UoM'|translate}}</dt>
-                                        <dd *ngIf="!fromProduction">
+                                        <dt *ngIf="fromProduction==false && fromITR==false">{{'Qty_SalesUoM'|translate}}</dt>
+                                        <dd *ngIf="fromProduction==false && fromITR==false">{{_pickedMeterialQty|numberFormat}}/{{dataItem.OPENQTY|numberFormat}}</dd>
+
+                                        <dt *ngIf="fromProduction==false && fromITR==false">{{'UoM'|translate}}</dt>
+                                        <dd *ngIf="fromProduction==false && fromITR==false">
                                             <kendo-dropdownlist class="form-control input-sm" (valueChange)="valueChange($event)" [data]="uomList" [textField]="'UomName'"
                                                 [valueField]="'UomCode'" [value]="uomList[0]">
                                             </kendo-dropdownlist>
@@ -44,18 +50,32 @@
                             <!-- grid for mobile end -->
 
                             <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE" title="{{'ItemCode'|translate}}" [width]="160"></kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" headerClass="text-right" class=" text-right" title="{{OpenQtylbl}}"
+
+                            <kendo-grid-column *ngIf="fromProduction==true || fromITR==true" media="(min-width: 768px)" field="OPENQTY" headerClass="text-right" class=" text-right" title="{{OpenQtylbl}}"
                                 [width]="160">
                                 <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.OPENQTY|numberFormat}}
                                 </ng-template>
                             </kendo-grid-column>
 
-                            <kendo-grid-column media="(min-width: 768px)" field="RPTQTY" headerClass="text-right" class="text-right" [width]="160" title="{{PickQtylbl}}">
+                            <kendo-grid-column *ngIf="fromProduction==true || fromITR==true" media="(min-width: 768px)" field="RPTQTY" headerClass="text-right" class="text-right" [width]="160" title="{{PickQtylbl}}">
                                 <ng-template kendoGridCellTemplate let-dataItem>{{_pickedMeterialQty|numberFormat}}
                                 </ng-template>
-                                <!-- <ng-template kendoGridCellTemplate format="{0:n3}">{{_pickedMeterialQty|number:'1.3-3'}}</ng-template> -->
                             </kendo-grid-column>
-                            <kendo-grid-column *ngIf="!fromProduction" media="(min-width: 768px)" field="Delete" title="{{'UoM'|translate}}" width="120">
+
+                            <kendo-grid-column *ngIf="fromProduction==false && fromITR==false" media="(min-width: 768px)" field="OPENQTY" headerClass="text-right" class=" text-right" title="{{'Qty_SalesUoM'|translate}}"
+                            [width]="160">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                    {{_pickedMeterialQty|numberFormat}}/{{dataItem.OPENQTY|numberFormat}}
+                            </ng-template>
+                        </kendo-grid-column>
+
+                        <kendo-grid-column *ngIf="fromProduction==false && fromITR==false" media="(min-width: 768px)" field="RPTQTY" headerClass="text-right" class="text-right" [width]="160" title="{{'Qty_InventoryUOM'|translate}}">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                    {{_pickedMeterialQtyInvUOM|numberFormat}}/{{dataItem.INVOPENQTY|numberFormat}}
+                            </ng-template>
+                        </kendo-grid-column>
+
+                            <kendo-grid-column *ngIf="fromProduction==false && fromITR==false" media="(min-width: 768px)" field="Delete" title="{{'UoM'|translate}}" width="120">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <kendo-dropdownlist class="form-control input-sm" (valueChange)="valueChange($event)" [data]="uomList" [textField]="'UomName'"
                                         [valueField]="'UomCode'" [value]="selectedUOM"></kendo-dropdownlist>

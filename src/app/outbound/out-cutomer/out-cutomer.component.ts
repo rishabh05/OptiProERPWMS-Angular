@@ -670,14 +670,14 @@ export class OutCutomerComponent implements OnInit {
             hdr.DOCENTRY = o.Item.DOCENTRY;
             hdr.CompanyDBId = comDbId;
             hdr.LineNo = o.Item.LINENUM;
-            let metQty = lineDeleiveryCollection.map(i => i.Meterial.MeterialPickQty).reduce((sum, c) => sum + c);
+            let metQty = lineDeleiveryCollection.map(i => i.Meterial.RPTQTY).reduce((sum, c) => sum + c);
             hdr.ShipQty = metQty.toString();
             hdr.DocNum = o.Order.DOCNUM;
             hdr.OpenQty = o.Item.OPENQTY;
             hdr.WhsCode = o.Item.WHSCODE;
             hdr.Tracking = o.Item.TRACKING;
             hdr.ItemCode = o.Item.ITEMCODE;
-            hdr.UOM = -1;
+            hdr.UOM = o.Item.SelectedUOMEntry;
             hdr.UOMName = o.Item.UOM;
             hdr.Line = hdrLineVal; //0
             if (this.outbound.CustomerData.CustRefNo != null && this.outbound.CustomerData.CustRefNo != undefined) {
@@ -742,7 +742,7 @@ export class OutCutomerComponent implements OnInit {
             let dtl: SODETAIL = new SODETAIL();
             dtl.Bin = o.Meterial.BINNO;
             dtl.LotNumber = o.Meterial.LOTNO;
-            dtl.LotQty = o.Meterial.MeterialPickQty.toString();
+            dtl.LotQty = Number(o.Meterial.MeterialPickQty.toString()).toFixed(Number(localStorage.getItem("DecimalPrecision")));
             dtl.SysSerial = o.Meterial.SYSNUMBER;
             dtl.parentLine = parentLineNum;
             dtl.GUID = guid;
@@ -841,7 +841,7 @@ export class OutCutomerComponent implements OnInit {
       const o = arrSOHEADER[idx];
 
       // Get UOM and value
-      this.outboundservice.getUOMList(o.ItemCode).subscribe(
+      await this.outboundservice.getUOMList(o.ItemCode).then(
         async (data) => {
           this.uomList = data;
           let selectedUOM = this.uomList.filter(u => u.UomName == o.UOMName);
@@ -851,7 +851,6 @@ export class OutCutomerComponent implements OnInit {
           o.ShipQty = (parseFloat(o.tShipQty) * parseFloat(selectedUOM.AltQty)).toString();
           await tarrSOHEADER.push(o);
         }
-
       );
     }
     return tarrSOHEADER;

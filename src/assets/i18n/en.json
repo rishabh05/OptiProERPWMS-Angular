@@ -217,7 +217,6 @@
   "BinNo": "Bin No.",
   "INVALIDBIN": "Invalid bin number.",
   "FrmNToBinCantSame": "From Bin and To Bin cannot be same",
-  "UOM": "UOM",
   "Manual": "Manual",
   "Quantity": "Quantity",
   "DeleteAll": "Delete all",
@@ -652,6 +651,9 @@
   "DROP": "Drop",
   "load": "Load",
   "ProReceiptReport": "Do you want to print report?",
+  "Qty_InventoryUOM": "Qty(Inventory UoM)",
+  "Qty_PurchaseUoM": "Qty(Purchase UoM)",
+  "Qty_SalesUoM": "Qty(Sales UoM)",
   "Dummy": "Dummy"
 }
  

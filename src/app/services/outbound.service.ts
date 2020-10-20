@@ -138,11 +138,11 @@ export class OutboundService {
     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/SoCustomerWiseLookup", body, this.commonService.httpOptions);
   }
 
-  public getUOMList(itemCode: string) {
+  public getUOMList(itemCode: string): Promise<any> {
     this.outRequest = new OutRequest();
     this.outRequest.ItemCode = itemCode;
     var body: any = { ItemKey: this.prepareRequest() };
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/getUOM", body, this.commonService.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/getUOM", body, this.commonService.httpOptions).toPromise();
   }
 
   public getAvaliableMeterial(itemCode: string, docentry: string) {

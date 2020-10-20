@@ -588,35 +588,31 @@ export class OutOrderComponent implements OnInit {
 
 
   public calculatePickQty() {
-
     if (this.soItemsDetail) {
-
       for (let i = 0; i < this.soItemsDetail.length; i++) {
         const soelement = this.soItemsDetail[i];
         let totalPickQty: number = 0;
-
         if (this.outbound && this.outbound.TempMeterials && this.outbound.TempMeterials.length > 0) {
-
           for (let j = 0; j < this.outbound.TempMeterials.length; j++) {
-
             const element = this.outbound.TempMeterials[j];
             //    console.log("My Element", element);
             if (soelement.ROWNUM === element.Item.ROWNUM && soelement.ITEMCODE === element.Item.ITEMCODE && this.outbound.OrderData.DOCNUM.toString() === element.Order.DOCNUM.toString()) {
-              totalPickQty = totalPickQty + element.Meterial.MeterialPickQty;
+              if(element.Meterial.RPTQTY == undefined){
+                element.Meterial.RPTQTY = 0;
+              } 
+              if(element.Item.TRACKING == 'S'){
+                totalPickQty = totalPickQty + element.Meterial.MeterialPickQty;
+              }else{
+                totalPickQty = totalPickQty + element.Meterial.RPTQTY;//element.Meterial.MeterialPickQty;
+              }
             }
           }
         }
-
         // Total Qty of Item
         soelement.RPTQTY = totalPickQty;
         this.soItemsDetail[i] = soelement;
-
       }
-
-
     }
-
-
   }
 
 
@@ -682,14 +678,14 @@ export class OutOrderComponent implements OnInit {
             hdr.DOCENTRY = o.Item.DOCENTRY;
             hdr.CompanyDBId = comDbId;
             hdr.LineNo = o.Item.LINENUM;
-            let metQty = lineDeleiveryCollection.map(i => i.Meterial.MeterialPickQty).reduce((sum, c) => sum + c);
+            let metQty = lineDeleiveryCollection.map(i => i.Meterial.RPTQTY).reduce((sum, c) => sum + c);
             hdr.ShipQty = metQty.toString();
             hdr.DocNum = o.Order.DOCNUM;
             hdr.OpenQty = o.Item.OPENQTY;
             hdr.WhsCode = o.Item.WHSCODE;
             hdr.Tracking = o.Item.TRACKING;
             hdr.ItemCode = o.Item.ITEMCODE;
-            hdr.UOM = -1;
+            hdr.UOM = o.Item.SelectedUOMEntry;
             hdr.UOMName = o.Item.UOM;
             hdr.Line = hdrLineVal;//0
             if (this.outbound.CustomerData.CustRefNo != null && this.outbound.CustomerData.CustRefNo != undefined) {
@@ -750,7 +746,7 @@ export class OutOrderComponent implements OnInit {
             let dtl: SODETAIL = new SODETAIL();
             dtl.Bin = o.Meterial.BINNO;
             dtl.LotNumber = o.Meterial.LOTNO;
-            dtl.LotQty = o.Meterial.MeterialPickQty.toString();
+            dtl.LotQty = Number(o.Meterial.MeterialPickQty.toString()).toFixed(Number(localStorage.getItem("DecimalPrecision")));
             dtl.SysSerial = o.Meterial.SYSNUMBER;
             dtl.parentLine = parentLineNum;
             dtl.GUID = guid;
@@ -869,7 +865,6 @@ export class OutOrderComponent implements OnInit {
         if (data != null) {
           this.itemsByPallet = data;
           this.addPalletData()
-          // this.managePickQuantity();
         }
         else {
           this.toastr.error('', this.translate.instant("InValidPalletNo"));
