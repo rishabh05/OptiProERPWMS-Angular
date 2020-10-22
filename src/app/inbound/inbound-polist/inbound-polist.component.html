@@ -108,6 +108,8 @@
                                         <dt>{{'ItemCode'|translate}}</dt>
                                         <dd>{{ dataItem.ITEMCODE }}</dd>
 
+                                        <dt>{{'Inbound_ItemName'|translate}}</dt>
+                                        <dd>{{ dataItem.ITEMNAME }}</dd>
 
                                     </dl>
 
@@ -134,6 +136,12 @@
                                     <a class="col-template-mousedown" (mousedown)="onClickOpenPOLineRowOpenAutoLot(dataItem,grid)">
                                         {{dataItem.ITEMCODE}}
                                     </a></ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE" title="{{'Inbound_ItemName'|translate}}">
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                <a class="col-template-mousedown" (mousedown)="onClickOpenPOLineRowOpenAutoLot(dataItem,grid)">
+                                    {{dataItem.ITEMNAME}}
+                                </a></ng-template>
                             </kendo-grid-column>
                             <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" title="{{'OpenQty'|translate}}" headerClass="text-right" class="text-right">
                                 <ng-template kendoGridCellTemplate let-dataItem>

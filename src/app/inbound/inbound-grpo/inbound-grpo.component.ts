@@ -237,7 +237,10 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       }
       this.showScanAndInputRadio = true;
       this.showUOM = true;
-      this.getUOMList();
+      if(!this.fromReceiptProduction){
+        this.getUOMList();
+      }
+      
       this.LastSerialNumber = [];
       this.LineId = [];
 
@@ -248,7 +251,10 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         this.OpenQty = this.openPOLineModel[0].OPENQTY;
         this.ItemCode = this.openPOLineModel[0].ITEMCODE;
       }
-      // this.showSavedDataToGrid();
+      if(this.fromReceiptProduction){
+        this.showSavedDataToGrid();
+      }
+      
     }
 
 
@@ -560,7 +566,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   */
   public getUOMList() {
     this.showLoader = true;
-    this.inboundService.getUOMs(this.openPOLineModel[0].ITEMCODE).subscribe(
+    this.inboundService.getUOMs(this.openPOLineModel[0].ITEMCODE, this.openPOLineModel[0].DOCENTRY, this.openPOLineModel[0].LINENUM).subscribe(
       (data: any) => {
         this.showLoader = false;
         //getUOM Entry from saved model
@@ -987,15 +993,19 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   }
 
   updateQtytoHeader(quantitySum) {
-    if (this.tracking == 'S') {
-      this.openPOLineModel[0].RPTQTY = quantitySum * this.uomSelectedVal.AltQty;
-      this.openPOLineModel[0].INVRPTQTY = this.openPOLineModel[0].RPTQTY * this.uomSelectedVal.BaseQty;
-    } else {
+    if(this.fromReceiptProduction){
       this.openPOLineModel[0].RPTQTY = quantitySum;
-      this.openPOLineModel[0].INVRPTQTY = this.openPOLineModel[0].RPTQTY * this.uomSelectedVal.BaseQty;
+    }else{
+      if (this.tracking == 'S') {
+        this.openPOLineModel[0].RPTQTY = quantitySum * this.uomSelectedVal.AltQty;
+        this.openPOLineModel[0].INVRPTQTY = this.openPOLineModel[0].RPTQTY * this.uomSelectedVal.BaseQty;
+      } else {
+        this.openPOLineModel[0].RPTQTY = quantitySum;
+        this.openPOLineModel[0].INVRPTQTY = this.openPOLineModel[0].RPTQTY * this.uomSelectedVal.BaseQty;
+      }
+      this.openPOLineModel[0].INVRPTQTY = Number(this.openPOLineModel[0].INVRPTQTY).toFixed(Number(localStorage.getItem("DecimalPrecision")));
+      this.openPOLineModel[0].RPTQTY = Number(this.openPOLineModel[0].RPTQTY).toFixed(Number(localStorage.getItem("DecimalPrecision")));
     }
-    this.openPOLineModel[0].INVRPTQTY = Number(this.openPOLineModel[0].INVRPTQTY).toFixed(Number(localStorage.getItem("DecimalPrecision")));
-    this.openPOLineModel[0].RPTQTY = Number(this.openPOLineModel[0].RPTQTY).toFixed(Number(localStorage.getItem("DecimalPrecision")));
   }
 
   batchCalculation(autoLots: AutoLot[], qty: any) {
@@ -1442,11 +1452,13 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
           this.getUOMVal(this.UOMentry)
           for (var j = 0; j < oSubmitPOLots.POReceiptLotDetails.length; j++) {
             if (oSubmitPOLots.POReceiptLotDetails[j].ParentLineNo == oSubmitPOLots.POReceiptLots[i].Line) {
-              if(this.tracking == 'S'){
-                oSubmitPOLots.POReceiptLotDetails[j].LotQty = oSubmitPOLots.POReceiptLotDetails[j].LotQty;
-              }else{
-                oSubmitPOLots.POReceiptLotDetails[j].LotQty = oSubmitPOLots.POReceiptLotDetails[j].LotQty / this.uomSelectedVal.BaseQty;
-              }              
+              if(!this.fromReceiptProduction){
+                if(this.tracking == 'S'){
+                  oSubmitPOLots.POReceiptLotDetails[j].LotQty = oSubmitPOLots.POReceiptLotDetails[j].LotQty;
+                }else{
+                  oSubmitPOLots.POReceiptLotDetails[j].LotQty = oSubmitPOLots.POReceiptLotDetails[j].LotQty / this.uomSelectedVal.BaseQty;
+                } 
+              }                           
               oSubmitPOLots.POReceiptLotDetails[j].LotQty = Number(oSubmitPOLots.POReceiptLotDetails[j].LotQty).toFixed(Number(localStorage.getItem("DecimalPrecision")))
               this.recvingQuantityBinArray.push(oSubmitPOLots.POReceiptLotDetails[j]);
               this.previousReceivedQty = Number(this.previousReceivedQty) + Number(oSubmitPOLots

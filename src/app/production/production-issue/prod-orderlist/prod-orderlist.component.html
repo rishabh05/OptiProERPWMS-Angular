@@ -14,7 +14,7 @@
                             <div class="input-group input-group-sm">
                                 <input #scanOrderNo type="text" class="form-control form-control-sm" name='orderNo' [(ngModel)]="orderNo"
                                     placeholder="{{'Outbound_OrderNo'|translate}}" id="prodOrder_OrderNoScanInput"
-                                    (blur)="getItemListForOrder(false,true)">
+                                    (blur)="onIssueNoBlur()">
                                 <div class="input-group-append has-seprate-btn">
                                     <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="getOrderList()">
                                         <i class="opti-icon-search"></i>

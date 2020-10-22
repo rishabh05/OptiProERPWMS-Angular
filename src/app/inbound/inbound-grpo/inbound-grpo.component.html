@@ -25,6 +25,9 @@
                                     <dt>{{'ItemCode'|translate}}</dt>
                                     <dd>{{ dataItem.ITEMCODE }}</dd>
 
+                                    <dt>{{'Inbound_ItemName'|translate}}</dt>
+                                    <dd>{{ dataItem.ITEMNAME }}</dd>
+
                                     <dt *ngIf="fromReceiptProduction">{{'Inbound_ReceiveQty'|translate}}</dt>
                                     <dd *ngIf="fromReceiptProduction">{{dataItem.RPTQTY | numberFormat}}</dd>
 
@@ -52,6 +55,7 @@
                         <!-- grid for mobile end -->
 
                         <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE" title="{{'ItemCode'|translate}}"></kendo-grid-column>
+                        <kendo-grid-column media="(min-width: 768px)" field="ITEMNAME" title="{{'Inbound_ItemName'|translate}}"></kendo-grid-column>                        
                         <kendo-grid-column *ngIf="fromReceiptProduction" media="(min-width: 768px)" field="OPENQTY" headerClass="text-right" class="text-right" title="{{'OpenQty'|translate}}"
                             class="text-right">
                             <ng-template kendoGridCellTemplate let-dataItem>

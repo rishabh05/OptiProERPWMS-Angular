@@ -828,33 +828,34 @@ export class OutCutomerComponent implements OnInit {
     }
     var serialNo: number = 0;
     for (let i = 0; i < selectedPackingItems.length; i++) {
+      selectedPackingItems[i].Quantity = selectedPackingItems[i].Quantity.toString();
       serialNo = serialNo + 1;
       selectedPackingItems[i].PkgId = serialNo
     }
     return selectedPackingItems;
   }
 
-  async manageShipQty(arrSOHEADER: SOHEADER[]): Promise<SOHEADER[]> {
-    let tarrSOHEADER: SOHEADER[] = [];
+  // async manageShipQty(arrSOHEADER: SOHEADER[]): Promise<SOHEADER[]> {
+  //   let tarrSOHEADER: SOHEADER[] = [];
 
-    for (let idx = 0; idx < arrSOHEADER.length; idx++) {
-      const o = arrSOHEADER[idx];
+  //   for (let idx = 0; idx < arrSOHEADER.length; idx++) {
+  //     const o = arrSOHEADER[idx];
 
-      // Get UOM and value
-      await this.outboundservice.getUOMList(o.ItemCode).then(
-        async (data) => {
-          this.uomList = data;
-          let selectedUOM = this.uomList.filter(u => u.UomName == o.UOMName);
-          selectedUOM = selectedUOM[0];
+  //     // Get UOM and value
+  //     await this.outboundservice.getUOMList(o.ItemCode).then(
+  //       async (data) => {
+  //         this.uomList = data;
+  //         let selectedUOM = this.uomList.filter(u => u.UomName == o.UOMName);
+  //         selectedUOM = selectedUOM[0];
 
-          o.UOM = selectedUOM.UomCode;
-          o.ShipQty = (parseFloat(o.tShipQty) * parseFloat(selectedUOM.AltQty)).toString();
-          await tarrSOHEADER.push(o);
-        }
-      );
-    }
-    return tarrSOHEADER;
-  }
+  //         o.UOM = selectedUOM.UomCode;
+  //         o.ShipQty = (parseFloat(o.tShipQty) * parseFloat(selectedUOM.AltQty)).toString();
+  //         await tarrSOHEADER.push(o);
+  //       }
+  //     );
+  //   }
+  //   return tarrSOHEADER;
+  // }
 
   manageLineNo(hdrList: SOHEADER[], dtlList: SODETAIL[]) {
     let tmpHdr: SOHEADER[] = [];

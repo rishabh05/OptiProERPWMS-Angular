@@ -110,6 +110,11 @@ export class ProdOrderlistComponent implements OnInit {
     return dBit;
   }
 
+  onIssueNoBlur() {
+    if (this.orderNo) {
+      this.getItemListForOrder(false, true);
+    }
+  }
 
   getItemListForOrder(fromIssueProduction: boolean = false, fromsearchButtonClick: boolean = false) {
     if (fromsearchButtonClick && this.outbound != null) {
@@ -120,9 +125,9 @@ export class ProdOrderlistComponent implements OnInit {
     }
     this.soItemsDetail = [];
 
-    if (this.orderNumber == null || this.orderNumber == undefined || this.orderNumber == "") {
-      return;
-    }
+    // if (this.orderNumber == null || this.orderNumber == undefined || this.orderNumber == "") {
+    //   return;
+    // }
 
     if (this.orderNo == null || this.orderNo == undefined || this.orderNo == "") {
       return;

@@ -7,6 +7,7 @@ import { Commonservice } from 'src/app/services/commonservice.service';
 import { Router } from '@angular/router';
 import { AutoLot } from 'src/app/models/Inbound/AutoLot';
 import { RowClassArgs } from '@progress/kendo-angular-grid';
+import { InboundService } from '../../services/inbound.service';
 
 @Component({
   selector: 'app-production-receipt-items-list',
@@ -29,7 +30,7 @@ export class ProductionReceiptItemsListComponent implements OnInit {
   availableRejQty:number = 0;
   constructor(private router: Router, private commonservice: Commonservice,
     private toastr: ToastrService, private translate: TranslateService,
-    private productionService: ProductionService) { }
+    private productionService: ProductionService, private inboundService: InboundService) { }
   ngOnInit() {
     this.enableSubmitButton(false);
   }
@@ -333,12 +334,16 @@ export class ProductionReceiptItemsListComponent implements OnInit {
     this.showConfirmDialog = true; // show dialog
   }
 
+  responseDocEntry: string="";
+  base64String: string = "";
+  fileName: string = "";
+  displayPDF1: boolean = false;
   getConfirmDialogValue($event) {
     this.showConfirmDialog = false;
     if ($event.Status == "yes") {
       switch ($event.From) {
         case ("prodReceiptReport"):
-
+        this.displayPDF(this.responseDocEntry, 1);
           break;
       }
     } else {
@@ -350,6 +355,61 @@ export class ProductionReceiptItemsListComponent implements OnInit {
         }
       }
     }
+  }
+
+  public displayPDF(dNo: string, noOfCopy) {
+    this.showLoader = true;
+    this.inboundService.printingServiceForSubmitGRPO(dNo, 5, 1).subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        if (data != undefined) {
+          // console.log("" + data);
+          if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
+
+          if (data.Detail != null && data.Detail != undefined && data.Detail[0] != null && data.Detail[0] != undefined) {
+            this.fileName = data.Detail[0].FileName;
+            this.base64String = data.Detail[0].Base64String;
+          }
+
+
+          if (this.base64String != null && this.base64String != "") {
+            // this.showPdf(); // this function is used to display pdf in new tab.
+            this.base64String = 'data:application/pdf;base64,' + this.base64String;
+            this.displayPDF1 = true;
+            //this.commonservice.refreshDisplyPDF(true);
+
+          } else {
+            // no data available then redirect to first screen.
+            // this.inboundMasterComponent.inboundComponent = 1;
+          }
+          //  console.log("filename:" + this.fileName);
+          // console.log("filename:" + this.base64String);
+        } else {
+          this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+        }
+      },
+      error => {
+        this.showLoader = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
+
+  closePDF() {
+    //close current screen and redirect to first screen.
+    // this.inboundMasterComponent.inboundComponent = 1;
+    //console.log("PDF dialog is closed");
+    this.displayPDF1 = false;
+    console.log("PDF dialog is closed");
   }
 
   submitProductionReport(){     
@@ -373,7 +433,7 @@ export class ProductionReceiptItemsListComponent implements OnInit {
           } 
           //check and update response for entered serial no.
           if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
-           // this.toastr.success( this.translate.instant("FGRSuccessMessage") +data[0].SuccessNo);
+            this.responseDocEntry =  data[0].DocEntry
             this.toastr.success('', this.translate.instant("ProdReceipt_FGRSuccessMessage")+" "+ data[0].SuccessNo);
             this.resetOnSerchClick(); 
 

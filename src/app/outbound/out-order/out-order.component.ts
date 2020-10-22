@@ -600,10 +600,15 @@ export class OutOrderComponent implements OnInit {
               if(element.Meterial.RPTQTY == undefined){
                 element.Meterial.RPTQTY = 0;
               } 
-              if(element.Item.TRACKING == 'S'){
+              if (localStorage.getItem("ComingFrom") == "itr"){
                 totalPickQty = totalPickQty + element.Meterial.MeterialPickQty;
               }else{
-                totalPickQty = totalPickQty + element.Meterial.RPTQTY;//element.Meterial.MeterialPickQty;
+                if(element.Item.TRACKING == 'S'){
+                  totalPickQty = totalPickQty + element.Meterial.MeterialPickQty;
+                }else{
+                  totalPickQty = totalPickQty + element.Meterial.RPTQTY;//element.Meterial.MeterialPickQty;
+                }
+                totalPickQty = Number(totalPickQty.toFixed(Number(localStorage.getItem("DecimalPrecision"))));
               }
             }
           }
@@ -2247,6 +2252,7 @@ export class OutOrderComponent implements OnInit {
     }
     var serialNo:number=0;
     for(let i=0;i<selectedPackingItems.length;i++){
+      selectedPackingItems[i].Quantity = selectedPackingItems[i].Quantity.toString();
       serialNo =serialNo+1;
       selectedPackingItems[i].PkgId= serialNo
     }

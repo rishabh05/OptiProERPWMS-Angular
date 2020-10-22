@@ -138,9 +138,13 @@ export class OutboundService {
     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/SoCustomerWiseLookup", body, this.commonService.httpOptions);
   }
 
-  public getUOMList(itemCode: string): Promise<any> {
+  public getUOMList(itemCode: string, SODOCNETRY, SOLINENUM): Promise<any> {
     this.outRequest = new OutRequest();
     this.outRequest.ItemCode = itemCode;
+    this.outRequest.PODOCNETRY = 0;
+    this.outRequest.SODOCNETRY = SODOCNETRY;
+    this.outRequest.SOLINENUM = SOLINENUM;
+    this.outRequest.POLINENUM = 0;
     var body: any = { ItemKey: this.prepareRequest() };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/getUOM", body, this.commonService.httpOptions).toPromise();
   }

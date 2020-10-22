@@ -654,6 +654,7 @@
   "Qty_InventoryUOM": "Qty(Inventory UoM)",
   "Qty_PurchaseUoM": "Qty(Purchase UoM)",
   "Qty_SalesUoM": "Qty(Sales UoM)",
+  "Inbound_ItemName": "Item Name",
   "Dummy": "Dummy"
 }
  
