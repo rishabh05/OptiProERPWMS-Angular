@@ -25,7 +25,7 @@
                                         <dt *ngIf="fromProduction==true || fromITR==true">{{PickQtylbl}}</dt>
                                         <dd *ngIf="fromProduction==true || fromITR==true">{{ _pickedMeterialQty|numberFormat }}</dd>
 
-                                        <dt *ngIf="fromProduction==false && fromITR==false">{{'Qty_InventoryUOM'|translate}}</dt>
+                                        <dt *ngIf="fromProduction==false && fromITR==false">{{'Qty_InventoryUOMMob'|translate}}</dt>
                                         <dd *ngIf="fromProduction==false && fromITR==false">{{_pickedMeterialQtyInvUOM|numberFormat}}/{{dataItem.INVOPENQTY|numberFormat}}</dd>
                                     </dl>
                                     <dl class="opti_mobile_grid_dl">
@@ -82,7 +82,7 @@
                                 </ng-template>
                             </kendo-grid-column>
 
-                            <kendo-grid-column *ngIf="fromProduction==false && fromITR==false" media="(min-width: 768px)" field="" headerClass="text-right" class=" text-right"
+                            <kendo-grid-column *ngIf="fromProduction==false && fromITR==false" media="(min-width: 768px)" field="" headerClass="text-left" class=" text-left"
                                 title="{{'PackingDetails'|translate}}" [width]="160">
                                 <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                     <button style="color: white;" type="button" *ngIf="!fromProduction" (click)="ShowPackingDetails()" class="btn btn-success k-button btn-sm btn-icon-with-text ">

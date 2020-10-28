@@ -115,7 +115,7 @@ export class InboundService {
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsGenealogyApplicable", jObject, this.commonService.httpOptions);
   }
 
-  getUOMs(itemCode: string, PODOCNETRY, POLINENUM): Observable<any> {
+  getUOMs(itemCode: string, PODOCNETRY, POLINENUM, INVODOCNETRY, INVLINENUM): Observable<any> {
     let jObject = {
       ItemKey: JSON.stringify([{
         CompanyDBId: sessionStorage.getItem("CompID"),
@@ -123,7 +123,9 @@ export class InboundService {
         PODOCNETRY: PODOCNETRY,
         SODOCNETRY: 0,
         SOLINENUM: 0,
-        POLINENUM: POLINENUM
+        POLINENUM: POLINENUM,
+        INVODOCNETRY: INVODOCNETRY,
+        INVLINENUM: INVLINENUM
       }])
     };
    // console.log("getUOMs API's request:"+JSON.stringify(jObject));

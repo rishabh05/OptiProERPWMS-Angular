@@ -11,7 +11,7 @@ import 'bootstrap';
 import { ColumnSetting } from '../../models/CommonData';
 import { OutboundData } from '../../models/outbound/outbound-data';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
-import { GridComponent } from '@progress/kendo-angular-grid';
+import { GridComponent, PageChangeEvent } from '@progress/kendo-angular-grid';
 import { UIHelper } from '../../helpers/ui.helpers';
 import { State } from '@progress/kendo-data-query';
 import { CommonConstants } from 'src/app/const/common-constants';
@@ -788,14 +788,15 @@ export class LookupComponent implements OnInit {
 
 
   onCheckboxClick(checked: any, index: number, dataItem) {
-
+    // this.pageChange({ skip: 0, take: this.pagesize });
     let servivceItem: any = this.serviceData[index];
+    this.serviceData[index].selected = checked;
     if (checked) {
       this.selectedValues.push(dataItem);
     }
     else {
-      // let rixd: number= this.selectedValues.findIndex(i => i.LOTNO == servivceItem.LOTNO && i.LOTNO == servivceItem.BINNO)
-      var temp = this.selectedValues.splice(dataItem, 1);
+      let rixd: number= this.selectedValues.findIndex(i => i.LOTNO == servivceItem.LOTNO && i.BINNO == servivceItem.BINNO)
+      var temp = this.selectedValues.splice(rixd, 1);
       this.selectedValues = this.selectedValues;
       //console.log("selectedValues.size", this.selectedValues.length);
     }
@@ -1116,6 +1117,11 @@ showBins() {
         this.dialogOpened = true;
       }
     }
+  }
+
+  skip: any = 0;
+  pageChange(event: PageChangeEvent) {
+    this.skip = event.skip;
   }
 
   Done() {

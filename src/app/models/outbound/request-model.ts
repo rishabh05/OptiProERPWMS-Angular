@@ -12,4 +12,6 @@ export class OutRequest {
     PODOCNETRY
     POLINENUM
     SOLINENUM
+    INVODOCNETRY
+    INVLINENUM
 }

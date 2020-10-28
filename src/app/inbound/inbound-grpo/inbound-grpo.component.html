@@ -31,7 +31,7 @@
                                     <dt *ngIf="fromReceiptProduction">{{'Inbound_ReceiveQty'|translate}}</dt>
                                     <dd *ngIf="fromReceiptProduction">{{dataItem.RPTQTY | numberFormat}}</dd>
 
-                                    <dt *ngIf="!fromReceiptProduction">{{'Qty_InventoryUOM'|translate}}</dt>
+                                    <dt *ngIf="!fromReceiptProduction">{{'Qty_InventoryUOMMobGRPO'|translate}}</dt>
                                     <dd *ngIf="!fromReceiptProduction">{{dataItem.INVRPTQTY | numberFormat}}/{{dataItem.INVOPENQTY | numberFormat}}</dd>
 
                                 </dl>
@@ -40,12 +40,12 @@
                                     <dt *ngIf="fromReceiptProduction">{{'OpenQty'|translate}}</dt>
                                     <dd *ngIf="fromReceiptProduction">{{dataItem.OPENQTY | numberFormat}}</dd>
 
-                                    <dt *ngIf="!fromReceiptProduction">{{'Qty_PurchaseUoM'|translate}}</dt>
+                                    <dt *ngIf="!fromReceiptProduction">{{'Qty_PurchaseUoMMob'|translate}}</dt>
                                     <dd *ngIf="!fromReceiptProduction">{{dataItem.RPTQTY | numberFormat}}/{{dataItem.OPENQTY | numberFormat}}</dd>
 
                                     <dt *ngIf="showUOM">{{'UoM'|translate}}</dt>
                                     <dd *ngIf="showUOM">
-                                        <kendo-dropdownlist class="form-control" name="uomSelectedVal" [(ngModel)]="uomSelectedVal" [data]="dataItem.UOMList" textField="UomName"
+                                        <kendo-dropdownlist class="form-control" name="uomSelectedVal" [(ngModel)]="uomSelectedVal" [data]="dataItem.UOMList" textField="UomName" [disabled]="inboundFromWhere == 2"
                                             valueField="UomCode"></kendo-dropdownlist>
                                     </dd>
 
@@ -74,7 +74,7 @@
                                 {{dataItem.RPTQTY | numberFormat}}/{{dataItem.OPENQTY | numberFormat}}
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column *ngIf="!fromReceiptProduction" media="(min-width: 768px)" field="INVOPENQTY" headerClass="text-right" title="{{'Qty_InventoryUOM'|translate}}"
+                        <kendo-grid-column *ngIf="!fromReceiptProduction" media="(min-width: 768px)" field="INVOPENQTY" headerClass="text-right" title="{{'Qty_InventoryUOMGRPO'|translate}}"
                             class="text-right">
                             <ng-template kendoGridCellTemplate let-dataItem>
                               {{dataItem.INVRPTQTY | numberFormat}}/{{dataItem.INVOPENQTY | numberFormat}}
@@ -84,7 +84,7 @@
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                 <kendo-dropdownlist class="form-control" name="uomSelectedVal" [(ngModel)]="uomSelectedVal" [data]="dataItem.UOMList" textField="UomName"
                                 (selectionChange)="onUoMChange($event, gridItem)"
-                                    valueField="UomCode"></kendo-dropdownlist>
+                                    valueField="UomCode" [disabled]="inboundFromWhere == 2"></kendo-dropdownlist>
                             </ng-template>
                         </kendo-grid-column>
 

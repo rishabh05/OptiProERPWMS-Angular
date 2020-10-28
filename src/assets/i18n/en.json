@@ -651,9 +651,13 @@
   "DROP": "Drop",
   "load": "Load",
   "ProReceiptReport": "Do you want to print report?",
-  "Qty_InventoryUOM": "Qty(Inventory UoM)",
-  "Qty_PurchaseUoM": "Qty(Purchase UoM)",
-  "Qty_SalesUoM": "Qty(Sales UoM)",
+  "Qty_InventoryUOMMob": "Pick/Open Qty.(Inv. UoM)",
+  "Qty_InventoryUOMMobGRPO": "Recv./Open Qty.(Inv. UoM)",
+  "Qty_PurchaseUoMMob": "Recv./Open Qty.(Pur. UoM)",
+  "Qty_InventoryUOM": "Pick/Open Qty.(Inventory UoM)",
+  "Qty_InventoryUOMGRPO": "Receive/Open Qty.(Inventory UoM)",
+  "Qty_PurchaseUoM": "Receive/Open Qty.(Purchase UoM)",
+  "Qty_SalesUoM": "Pick/Open Qty.(Sales UoM)",
   "Inbound_ItemName": "Item Name",
   "Dummy": "Dummy"
 }

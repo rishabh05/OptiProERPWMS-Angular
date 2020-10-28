@@ -145,6 +145,8 @@ export class OutboundService {
     this.outRequest.SODOCNETRY = SODOCNETRY;
     this.outRequest.SOLINENUM = SOLINENUM;
     this.outRequest.POLINENUM = 0;
+    this.outRequest.INVODOCNETRY = 0;
+    this.outRequest.INVLINENUM = 0;    
     var body: any = { ItemKey: this.prepareRequest() };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/getUOM", body, this.commonService.httpOptions).toPromise();
   }

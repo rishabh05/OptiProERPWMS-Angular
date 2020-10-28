@@ -5,7 +5,7 @@
         {{lookupTitle}}
     </kendo-dialog-titlebar>
     <kendo-grid  [kendoGridBinding]="serviceData"
-        [filterable]=isColumnFilter [groupable]=isColumnGroup [selectable]="true" [sortable]="true" [sort]="state.sort"
+        [filterable]=isColumnFilter [groupable]=isColumnGroup [selectable]="true" [sortable]="true" [sort]="state.sort" (pageChange)="pageChange($event)"
         [filter]="state.filter" [resizable]="true" [skip]="skip" (selectionChange)="on_item_select($event)" 
         style="max-height:400px" class="no-shadow" [pageSize]="lookupPageSize" [pageable]="lookupPagable">
 
@@ -31,7 +31,7 @@
         <kendo-grid-checkbox-column *ngIf="showSelection==true" title="Select" [width]="25">
             <ng-template  kendoGridCellTemplate let-idx='rowIndex' let-di='dataItem'>
                 <div class="k-form-field d-flex center-checkbox">
-                    <input #chkSelection type="checkbox" [disabled]='di.OldData' [checked]='di.OldData' (change)="onCheckboxClick(chkSelection.checked, idx, di)" id="chkbox-{{idx}}" class="k-checkbox"
+                    <input #chkSelection type="checkbox" [disabled]='di.OldData' [checked]='di.selected' (change)="onCheckboxClick(chkSelection.checked, idx, di)" id="chkbox-{{idx}}" class="k-checkbox"
                         name="columnfilter" />
                         
                     <label class="k-checkbox-label" for="chkbox-{{idx}}"></label>

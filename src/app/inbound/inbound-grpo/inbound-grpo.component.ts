@@ -566,13 +566,26 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   */
   public getUOMList() {
     this.showLoader = true;
-    this.inboundService.getUOMs(this.openPOLineModel[0].ITEMCODE, this.openPOLineModel[0].DOCENTRY, this.openPOLineModel[0].LINENUM).subscribe(
+    let podocentry=0, invdocentry =0;
+    let polinenum=0, invlinenum=0;
+    if (this.inboundFromWhere == 1) {
+      podocentry = this.openPOLineModel[0].DOCENTRY;
+      polinenum = this.openPOLineModel[0].LINENUM;
+    } else if (this.inboundFromWhere == 2) {
+      invdocentry = this.openPOLineModel[0].DOCENTRY;
+      invlinenum = this.openPOLineModel[0].LINENUM;
+    }
+
+    this.inboundService.getUOMs(this.openPOLineModel[0].ITEMCODE, podocentry, polinenum, invdocentry, invlinenum).subscribe(
       (data: any) => {
         this.showLoader = false;
         //getUOM Entry from saved model
         this.getUomEntryFromSaveRecords();
         this.openPOLineModel[0].UOMList = data;
         if (this.openPOLineModel[0].UOMList.length > 0) {
+          if(this.inboundFromWhere == 2){
+            this.openPOLineModel[0].UOMList = this.openPOLineModel[0].UOMList.filter(e => e.UomCode == this.openPOLineModel[0].UOM);
+          }
           this.uomSelectedVal = this.openPOLineModel[0].UOMList[0];
           if (this.UOMentry == "") {
             this.uomSelectedVal = this.openPOLineModel[0].UOMList.find(e => e.UomCode == this.openPOLineModel[0].UOM)
