@@ -14,6 +14,8 @@ import { InventoryTransferbyITRMasterComponent } from './inventory-transferby-it
 import { ITRLIstComponent } from './itrlist/itrlist.component';
 import { ITRCalculationComponent } from './itr-calculation/itr-calculation.component';
 import { OutboundModule } from '../outbound/outbound.module';
+import { DropDownsModule } from '../../../node_modules/@progress/kendo-angular-dropdowns';
+// import { ModalModule } from '../../../node_modules/ngx-bootstrap/modal/modal.module';
 
 @NgModule({
   declarations: [WhsTransferComponent, BinTransferComponent, InventoryTransferbyITRMasterComponent, ITRLIstComponent, ITRCalculationComponent],
@@ -27,6 +29,7 @@ import { OutboundModule } from '../outbound/outbound.module';
     InventoryTransferRoutingModule,
     DialogsModule,
     OutboundModule,
+    DropDownsModule,
     ModalModule.forRoot()
   ]
 })

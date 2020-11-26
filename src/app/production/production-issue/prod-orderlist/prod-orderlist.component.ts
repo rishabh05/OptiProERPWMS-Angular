@@ -9,6 +9,7 @@ import { ProductionIssueComponent } from 'src/app/production/production-issue/pr
 import { OutboundData } from 'src/app/models/outbound/outbound-data';
 import { CommonConstants } from 'src/app/const/common-constants';
 import { Lot, Item, ProductionIssueModel } from 'src/app/models/Production/IFP';
+import { IUIComponentTemplate } from 'src/app/common/ui-component.interface';
 
 
 @Component({
@@ -32,6 +33,15 @@ export class ProdOrderlistComponent implements OnInit {
   pageSize: number = Commonservice.pageSize;
   @ViewChild('scanOrderNo') scanOrderNo;
 
+  //UDF
+  showUDF = false;
+  UDFComponentData: IUIComponentTemplate[] = [];
+  itUDFComponents: IUIComponentTemplate = <IUIComponentTemplate>{};
+  templates = [];
+  UDF = [];
+  displayArea = "Header";
+  IsUDFEnabled = 'N';
+
   showConfirmDialog: boolean = false;
   constructor(private router: Router, private productionService: ProductionService, public productionIssueComponent: ProductionIssueComponent,
     private toastr: ToastrService, private translate: TranslateService, private commonservice: Commonservice) { }
@@ -39,7 +49,7 @@ export class ProdOrderlistComponent implements OnInit {
   ngOnInit() {
 
 
-    let outboundData: string = localStorage.getItem("OutboundData");
+    let outboundData: string = sessionStorage.getItem("OutboundData");
     if (outboundData != undefined && outboundData != '') {
       this.outbound = JSON.parse(outboundData);
 
@@ -51,6 +61,10 @@ export class ProdOrderlistComponent implements OnInit {
       }
       this.calculatePickQty();
     }
+    this.IsUDFEnabled = sessionStorage.getItem("ISUDFEnabled");
+    if(this.IsUDFEnabled == 'Y'){
+      this.commonservice.GetWMSUDFBasedOnScreen("15041");
+    }    
   }
 
   ngAfterViewInit(): void {
@@ -121,7 +135,7 @@ export class ProdOrderlistComponent implements OnInit {
 
       let outboundTempData: OutboundData = new OutboundData()
       outboundTempData.OrderData = this.outbound.OrderData;
-      localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outboundTempData));
+      sessionStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outboundTempData));
     }
     this.soItemsDetail = [];
 
@@ -191,13 +205,15 @@ export class ProdOrderlistComponent implements OnInit {
   public openPOByUOM(selectdeData: any) {
 
     // let selectdeData = selection.selectedRows[0].dataItem;
-    let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
-
+    let outboundData: string = sessionStorage.getItem(CommonConstants.OutboundData);
     if (outboundData != undefined && outboundData != '' && outboundData != null && outboundData != 'null') {
       this.outbound = JSON.parse(outboundData);
       this.outbound.SelectedItem = selectdeData;
       //lsOutbound
-      localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+      if(!this.checkIfMandatoryUDFFilled()){
+        return;
+      }
+      sessionStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
       this.prodOrderlist = false;
     }
   }
@@ -210,8 +226,8 @@ export class ProdOrderlistComponent implements OnInit {
     }
     this.outbound.OrderData = lookupValue;
     this.orderNumber = this.outbound.OrderData.RefDocEntry;
-    localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
-    localStorage.setItem("ComingFrom", "ProductionIssue");
+    sessionStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+    sessionStorage.setItem("ComingFrom", "ProductionIssue");
     // this.showDeleiveryAndAdd = this.showAddToMeterialAndDelevery();
 
     this.getItemListForOrder(false, true);
@@ -235,7 +251,7 @@ export class ProdOrderlistComponent implements OnInit {
 
     // Issue
     if (event.fromwhere == 1) {
-      let outboundData: string = localStorage.getItem("OutboundData");
+      let outboundData: string = sessionStorage.getItem("OutboundData");
       debugger;
       if (outboundData != undefined && outboundData != '') {
         this.outbound = JSON.parse(outboundData);
@@ -307,14 +323,14 @@ export class ProdOrderlistComponent implements OnInit {
     this.showLoader = true;
 
     //lsOutbound
-    let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+    let outboundData: string = sessionStorage.getItem(CommonConstants.OutboundData);
 
     if (outboundData != undefined && outboundData != '') {
       this.outbound = JSON.parse(outboundData);
 
       this.prepareDeleiveryTempCollection();
 
-      localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+      sessionStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
 
       this.showLoader = false;
     }
@@ -352,13 +368,10 @@ export class ProdOrderlistComponent implements OnInit {
             d.Meterial.LOTNO === tm.Meterial.LOTNO &&
             d.Meterial.BINNO === tm.Meterial.BINNO
           );
-
           if (hasitem.length == 0) {
             this.outbound.DeleiveryCollection.push(tm)
           }
-
         }
-
       }
     }
   }
@@ -475,19 +488,28 @@ export class ProdOrderlistComponent implements OnInit {
 
             arrLots.push(dtl);
           }
-
           limit = limit + lineDeleiveryCollection.length;
-
-
         }
       }
-
-      // console.log("Dtl", arrLots);
-      // console.log("hdr", arrIssues);
 
       if (arrIssues.length > 0 && arrLots.length > 0) {
         prodIssueModel.Items = arrIssues;
         prodIssueModel.Lots = arrLots;
+        prodIssueModel.UDF = []
+        if (this.IsUDFEnabled == 'Y') {
+          prodIssueModel.UDF = this.outbound.UDF;
+          if (prodIssueModel.UDF.findIndex(e => e.Flag == "H") == -1) {
+            if (sessionStorage.getItem("GRPOHdrUDF") != undefined && sessionStorage.getItem("GRPOHdrUDF") != "") {
+              JSON.parse(sessionStorage.getItem("GRPOHdrUDF")).forEach(element => {
+                prodIssueModel.UDF.push(element);
+              });
+            } else {
+              if(this.ShowUDF('Header', false)){
+                return;
+              }
+            }
+          }
+        }
       }
 
       this.productionService.submitProduction(prodIssueModel).subscribe(
@@ -497,7 +519,7 @@ export class ProdOrderlistComponent implements OnInit {
             this.toastr.success('', this.translate.instant("ProdIssue_ProductionIssueSuccess") + " : " + data[0].SuccessNo);
 
             this.resetIssueProduction();
-
+            sessionStorage.setItem("GRPOHdrUDF", "");
           } else if (data[0].ErrorMsg == "7001") {
             this.showLoader = false;
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
@@ -542,7 +564,7 @@ export class ProdOrderlistComponent implements OnInit {
   resetIssueProduction() {
     let data: OutboundData = this.outbound
     this.outbound = new OutboundData();
-    localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+    sessionStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
     this.orderNo = ""
     this.soItemsDetail = []
 
@@ -550,7 +572,7 @@ export class ProdOrderlistComponent implements OnInit {
     this.outbound.DeleiveryCollection = []
     this.outbound.SelectedMeterials = []
     this.outbound.TempMeterials = []
-    localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+    sessionStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
 
     this.getItemListForOrder();
   }
@@ -563,4 +585,147 @@ export class ProdOrderlistComponent implements OnInit {
     this.getItemListForOrder();
   }
 
+  ShowUDF(displayArea, UDFButtonClicked, dataItem?): boolean {
+    if(dataItem != undefined){
+      this.outbound.SelectedItem = dataItem;
+    }
+    this.displayArea = displayArea;
+    let UDFStatus;
+    if (displayArea == 'Detail') {
+      let subarray = [];
+      this.outbound.UDF.forEach(element => {
+        if (element.LineNo == this.outbound.SelectedItem.RefLineNo && element.DocEntry == this.outbound.SelectedItem.DOCENTRY) {
+          subarray.push(element);
+        }
+      });
+      UDFStatus = this.commonservice.loadUDF(displayArea, this.commonservice.getUDFData(), subarray);
+    } else {
+      if (sessionStorage.getItem("GRPOHdrUDF") != undefined && sessionStorage.getItem("GRPOHdrUDF") != "") {
+        UDFStatus = this.commonservice.loadUDF(displayArea, this.commonservice.getUDFData(), JSON.parse(sessionStorage.getItem("GRPOHdrUDF")));
+      } else {
+        UDFStatus = this.commonservice.loadUDF(displayArea, this.commonservice.getUDFData());
+      }
+    }
+    if (!UDFButtonClicked) {
+      if (UDFStatus != "MANDATORY_AVL") {
+        return false;
+      }
+    }
+    this.templates = this.commonservice.getTemplateArray();
+    this.UDFComponentData = this.commonservice.getUDFComponentDataArray();
+    this.showUDF = true;
+    return true;
+  }
+
+  onUDFDialogClose() {
+    this.showUDF = false;
+    this.UDFComponentData = [];
+    this.templates = [];
+  }
+
+  // getUDFSelectedItem(itUDFComponentData) {
+  //   this.onUDFDialogClose();
+  //   if (itUDFComponentData == null) {
+  //     return;
+  //   }
+  //   this.UDF = [];
+  //   if (itUDFComponentData.length > 0) {
+  //     for (var i = 0; i < itUDFComponentData.length; i++) {
+  //       let value = "";
+  //       if (itUDFComponentData[i].istextbox) {
+  //         value = itUDFComponentData[i].textBox;
+  //       } else {
+  //         value = itUDFComponentData[i].dropDown.FldValue;
+  //       }
+  //       this.UDF.push({
+  //         Flag: "H",
+  //         LineNo: -1,
+  //         Value: value,
+  //         Key: itUDFComponentData[i].AliasID
+  //       });
+  //     }
+  //     sessionStorage.setItem("GRPOHdrUDF", JSON.stringify(this.UDF));
+  //   }
+  //   this.templates = [];
+  // }
+
+  getUDFSelectedItem(itUDFComponentData) {
+    this.onUDFDialogClose();
+    if (itUDFComponentData == null) {
+      return;
+    }
+    this.UDF = [];
+    if (this.displayArea == "Detail") {
+      while (this.outbound.UDF.length > 0) {
+        let index = this.outbound.UDF.findIndex(e => e.LineNo == this.outbound.SelectedItem.RefLineNo && e.DocEntry == this.outbound.SelectedItem.DOCENTRY)
+        if (index == -1) {
+          break;
+        }
+        this.outbound.UDF.splice(index, 1);
+      }
+      if (itUDFComponentData.length > 0) {
+        for (var i = 0; i < itUDFComponentData.length; i++) {
+          let value = "";
+          if (itUDFComponentData[i].istextbox) {
+            value = itUDFComponentData[i].textBox;
+          } else {
+            value = itUDFComponentData[i].dropDown.FldValue;
+          }
+          let lineno = this.outbound.SelectedItem.RefLineNo
+          this.outbound.UDF.push({
+            Flag: "D",
+            LineNo: lineno,
+            Value: value,
+            Key: itUDFComponentData[i].AliasID,
+            DocEntry: this.outbound.SelectedItem.DOCENTRY
+          });
+        }
+        sessionStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+      }
+    } else {
+      // while (this.outbound.UDF.length > 0) {
+      //   let index = this.outbound.UDF.findIndex(e => e.Flag == "H")
+      //   if (index == -1) {
+      //     break;
+      //   }
+      //   this.outbound.UDF.splice(index, 1);
+      // }      
+      if (itUDFComponentData.length > 0) {
+        for (var i = 0; i < itUDFComponentData.length; i++) {
+          let value = "";
+          if (itUDFComponentData[i].istextbox) {
+            value = itUDFComponentData[i].textBox;
+          } else {
+            value = itUDFComponentData[i].dropDown.FldValue;
+          }
+          this.UDF.push({
+            Flag: "H",
+            LineNo: -1,
+            Value: value,
+            Key: itUDFComponentData[i].AliasID
+          });
+        }
+        sessionStorage.setItem("GRPOHdrUDF", JSON.stringify(this.UDF));
+      }
+    }
+    this.templates = [];
+  }
+
+  checkIfMandatoryUDFFilled(): boolean{
+    if (this.IsUDFEnabled == 'Y') {
+      if (sessionStorage.getItem("GRPOHdrUDF") == undefined || sessionStorage.getItem("GRPOHdrUDF") == "") {
+        if(this.ShowUDF('Header', false)){
+          return false;
+        }
+      }
+
+      let indx = this.outbound.UDF.findIndex(e => e.LineNo == this.outbound.SelectedItem.RefLineNo && e.DocEntry == this.outbound.SelectedItem.DOCENTRY)
+      if (indx == -1) {
+        if(this.ShowUDF('Detail', false)){
+          return false;
+        }
+      }      
+    }
+    return true;
+  }
 }

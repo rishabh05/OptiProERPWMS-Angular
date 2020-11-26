@@ -101,9 +101,9 @@ export class SigninComponent implements OnInit {
         element.className = "";
         element.classList.add("opti_body-login");
         element.classList.add("opti_account-module");
-        if (localStorage.getItem("service_url") != null && localStorage.getItem("service_url") != undefined
-            && localStorage.getItem("service_url") != "") {
-            // sessionStorage.setItem('ConfigData', localStorage.getItem("service_url"));
+        if (sessionStorage.getItem("service_url") != null && sessionStorage.getItem("service_url") != undefined
+            && sessionStorage.getItem("service_url") != "") {
+            // sessionStorage.setItem('ConfigData', sessionStorage.getItem("service_url"));
             this.signinService.loadConfig();
             this.getPSURL(); //call method after seting configDataObject.
         } else {
@@ -122,13 +122,13 @@ export class SigninComponent implements OnInit {
     }
 
     getPSURL() {
-        //    localStorage.setItem("PSURLFORADMIN", "http://139.144.10.220/optiproadmin/");
-        // localStorage.setItem("PSURLFORADMIN", "http://172.16.6.140/OptiProAdmin/");
+        //    sessionStorage.setItem("PSURLFORADMIN", "http://139.144.10.220/optiproadmin/");
+        // sessionStorage.setItem("PSURLFORADMIN", "http://172.16.6.140/OptiProAdmin/");
         this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
         this.signinService.getPSURL(this.config_params.service_url).subscribe(
             data => {
                 if (data != null) {
-                    localStorage.setItem("PSURLFORADMIN", data);
+                    sessionStorage.setItem("PSURLFORADMIN", data);
                 }
             },
             error => {
@@ -150,7 +150,7 @@ export class SigninComponent implements OnInit {
         // alert('login:: at login method top');
         // this.isCompleteLoginVisible = true;
 
-        window.localStorage.setItem('IsMenuLoaded', 'false');
+        window.sessionStorage.setItem('IsMenuLoaded', 'false');
         if (this.userName == "" || this.password == "") {
             this.toastr.error('', this.translate.instant("Login_UnPwdBlankErrorMsg"), this.commonService.toast_config.iconClasses.error);
             return true;
@@ -169,7 +169,7 @@ export class SigninComponent implements OnInit {
 
             // this.showLoader = false;
             // // sessionStorage.setItem("GUID", this.licenseData[1].GUID);
-            // localStorage.setItem("CompID", "BUILD128SRC12X");
+            // sessionStorage.setItem("CompID", "BUILD128SRC12X");
             // sessionStorage.setItem("whseId", "01");
             // sessionStorage.setItem("Token", "2bf91be7-819c-4443-a1bc-82dc150da05d");
             // this.router.navigateByUrl('home/dashboard'); 
@@ -209,7 +209,7 @@ export class SigninComponent implements OnInit {
                 if (data != null && data != undefined && data.Table.length > 0) {
                     if (data.AuthenticationDetails != null && data.AuthenticationDetails.length > 0) {
                         let access_token = data.AuthenticationDetails[0].token_type + " " + data.AuthenticationDetails[0].access_token;
-                        localStorage.setItem('accessToken', access_token);
+                        sessionStorage.setItem('accessToken', access_token);
                         this.commonService.updateHeader();
                         this.userDetails = data.Table;
                         this.handleValidationUserSuccessResponse();
@@ -289,33 +289,35 @@ export class SigninComponent implements OnInit {
                     sessionStorage.setItem("whseId", this.selectedWhse);
                     sessionStorage.setItem("Token", this.licenseData[0].Token);
 
-                    localStorage.setItem("PalletizationEnabled", this.licenseData[0].PalletizationEnabled);
-                    localStorage.setItem("isShipmentApplicable", this.licenseData[1].IsShippingEnable);
-                    localStorage.setItem("GRPOPrintReport", this.licenseData[1].GRPOPrintReport);
-                    localStorage.setItem("IsGreaterQuantityAllowedThanOrder", this.licenseData[1].IsGreaterQuantityAllowedThanOrder);
-                    localStorage.setItem("IsPrintingEnabledForProdReceipt", this.licenseData[1].ProdReceiptPrintReport);
-                    localStorage.setItem("AutoPalletIdGenerationChecked", this.licenseData[0].AutoPalletIdGenerationChecked);
+                    sessionStorage.setItem("PalletizationEnabled", this.licenseData[0].PalletizationEnabled);
+                    sessionStorage.setItem("isShipmentApplicable", this.licenseData[1].IsShippingEnable);
+                    sessionStorage.setItem("GRPOPrintReport", this.licenseData[1].GRPOPrintReport);
+                    sessionStorage.setItem("IsGreaterQuantityAllowedThanOrder", this.licenseData[1].IsGreaterQuantityAllowedThanOrder);
+                    sessionStorage.setItem("IsPrintingEnabledForProdReceipt", this.licenseData[1].ProdReceiptPrintReport);
+                    sessionStorage.setItem("AutoPalletIdGenerationChecked", this.licenseData[0].AutoPalletIdGenerationChecked);
+                    sessionStorage.setItem("ISUDFEnabled",this.licenseData[1].UDFEnabled);
+                    sessionStorage.setItem("GS1SetupScanningEnabled", this.licenseData[1].GS1SetupScanningEnabled);
 
                     if (this.selectedRole != null) {
-                        localStorage.setItem("SelectedRole", this.selectedRole.OPTM_ROLEID);
+                        sessionStorage.setItem("SelectedRole", this.selectedRole.OPTM_ROLEID);
                     }
-                    localStorage.setItem("SelectedZone", this.selectedZone.OPTM_WHSZONE);
-                    localStorage.setItem("SelectedBinRange", this.selectedBin.OPTM_BIN_RANGE);
+                    sessionStorage.setItem("SelectedZone", this.selectedZone.OPTM_WHSZONE);
+                    sessionStorage.setItem("SelectedBinRange", this.selectedBin.OPTM_BIN_RANGE);
 
-                    localStorage.setItem("DefaultValues", JSON.stringify(this.licenseData[0].DefaultValues));
+                    sessionStorage.setItem("DefaultValues", JSON.stringify(this.licenseData[0].DefaultValues));
                     for (var i = 0; i < this.licenseData[0].DefaultValues.length; i++) {
                         switch (this.licenseData[0].DefaultValues[i].DefaultKey) {
                             case "DecimalPrecision":
-                                localStorage.setItem("DecimalPrecision", this.licenseData[0].DefaultValues[i].DefaultValue);
+                                sessionStorage.setItem("DecimalPrecision", this.licenseData[0].DefaultValues[i].DefaultValue);
                                 break;
                             case "DecimalSeparator":
-                                localStorage.setItem("DecimalSeparator", this.licenseData[0].DefaultValues[i].DefaultValue);
+                                sessionStorage.setItem("DecimalSeparator", this.licenseData[0].DefaultValues[i].DefaultValue);
                                 break;
                             case "ThousandSeparator":
-                                localStorage.setItem("ThousandSeparator", this.licenseData[0].DefaultValues[i].DefaultValue);
+                                sessionStorage.setItem("ThousandSeparator", this.licenseData[0].DefaultValues[i].DefaultValue);
                                 break;
                             case "DATEFORMAT":
-                                localStorage.setItem("DATEFORMAT", this.licenseData[0].DefaultValues[i].DefaultValue);
+                                sessionStorage.setItem("DATEFORMAT", this.licenseData[0].DefaultValues[i].DefaultValue);
                                 break;
                         }
                     }
@@ -383,7 +385,7 @@ export class SigninComponent implements OnInit {
             return true;
         }
         sessionStorage.setItem("UserId", this.userName);
-        localStorage.setItem("UserGroup", this.userDetails[0].OPTM_GROUPCODE);
+        sessionStorage.setItem("UserGroup", this.userDetails[0].OPTM_GROUPCODE);
         this.isCompleteLoginVisible = true;
         this.readonlyFlag = true;
 

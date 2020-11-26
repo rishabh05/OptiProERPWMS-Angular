@@ -1,0 +1,33 @@
+<kendo-dialog [width]="600" (close)="onUDFDialogClose()">
+    <kendo-dialog-titlebar>
+        {{Heading}}
+    </kendo-dialog-titlebar>
+    <div class="form-group row" *ngFor="let template of templates;let i = index;">
+        <label for="inputPassword" class="col-sm-4 col-form-label">{{UDFComponentData[i].LabelName}}</label>
+        <div class="col-sm-8" *ngIf="UDFComponentData[i].istextbox && UDFComponentData[i].textType=='text'">
+            <div class="input-group input-group-sm">
+                <input type="{{UDFComponentData[i].textType}}" class="form-control form-control-sm" id="txt{{i}}" name="txt{{i}}" [(ngModel)]='UDFComponentData[i].textBox'
+                    maxlength="{{UDFComponentData[i].Size}}">
+            </div>
+        </div>
+
+        <div class="col-sm-8" *ngIf="UDFComponentData[i].istextbox && UDFComponentData[i].textType=='number'">
+            <div class="input-group input-group-sm">
+                <input type="{{UDFComponentData[i].textType}}" class="form-control form-control-sm" id="txt{{i}}" name="txt{{i}}" [(ngModel)]='UDFComponentData[i].textBox' onkeydown="if(event.key==='.'||event.key==='e'||event.key==='='||event.key===','||event.key==='-'||event.key==='+'){event.preventDefault();}"
+                    min="0" max="6">
+            </div>
+        </div>
+
+        <div class="col-sm-8" *ngIf="UDFComponentData[i].isdropDown">
+            <div class="input-group input-group-sm">
+                <kendo-dropdownlist [data]="UDFComponentData[i].DropdownArray" id="drp{{i}}" textField="Descr" valueField="IndexID" #selectedvalue
+                    name="drp{{i}}" [(ngModel)]="UDFComponentData[i].dropDown">
+                </kendo-dropdownlist>
+            </div>
+        </div>
+    </div>
+    <kendo-dialog-actions class="text-right">
+        <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text" (mousedown)="onUDFSaveClick()">
+            <span class="k-icon k-i-check" role="presentation"></span> {{'Save'|translate}}</button>
+    </kendo-dialog-actions>
+</kendo-dialog>

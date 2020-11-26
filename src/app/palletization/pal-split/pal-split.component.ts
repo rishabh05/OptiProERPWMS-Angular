@@ -56,7 +56,7 @@ export class PalSplitComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (localStorage.getItem("AutoPalletIdGenerationChecked") == "True") {
+    if (sessionStorage.getItem("AutoPalletIdGenerationChecked") == "True") {
       this.autoGeneratePalletEnable = true;
     }
   }

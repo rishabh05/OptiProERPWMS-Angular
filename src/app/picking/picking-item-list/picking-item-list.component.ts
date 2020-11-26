@@ -26,7 +26,7 @@ export class PickingItemListComponent implements OnInit {
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
     translate.use(userLang);
     translate.onLangChange.subscribe((event: LangChangeEvent) => {
-      this.ShipDetail = JSON.parse(localStorage.getItem("ShipDetail"));
+      this.ShipDetail = JSON.parse(sessionStorage.getItem("ShipDetail"));
       this.shipmentno = this.translate.instant("PickListCode") + ": " + this.ShipDetail.OPTM_PICKLIST_CODE;
     });
   }
@@ -81,15 +81,15 @@ export class PickingItemListComponent implements OnInit {
   ngOnInit() {
     this.picktaskService.clearLocaStorage();
     this.compId = sessionStorage.getItem("CompID");
-    this.ShipDetail = JSON.parse(localStorage.getItem("ShipDetail"));
+    this.ShipDetail = JSON.parse(sessionStorage.getItem("ShipDetail"));
     this.shipmentno = this.translate.instant("PickListCode") + ": " + this.ShipDetail.OPTM_PICKLIST_CODE;
     this.getPickTaskList(this.ShipDetail.OPTM_TASK_CODE, this.ShipDetail.OPTM_PICKLIST_ID);
   }
 
   cellClickHandler(row) {
-    localStorage.setItem("From", "tasklist");
-    localStorage.setItem("PickItemIndex", row.rowIndex);
-    localStorage.setItem("TaskDetail", JSON.stringify(this.PickTaskDetail));
+    sessionStorage.setItem("From", "tasklist");
+    sessionStorage.setItem("PickItemIndex", row.rowIndex);
+    sessionStorage.setItem("TaskDetail", JSON.stringify(this.PickTaskDetail));
     this.router.navigate(['home/picking/picking-item-details']);
   }
 
@@ -112,7 +112,7 @@ export class PickingItemListComponent implements OnInit {
           this.showLookupLoader = false;
           this.PickTaskDetail = data;
           this.PickTaskList = data.OPTM_WHSTASKLIST;
-          if (localStorage.getItem("PickType") == this.translate.instant("Container_Picking")) {
+          if (sessionStorage.getItem("PickType") == this.translate.instant("Container_Picking")) {
             for(var i=0; i<this.PickTaskList.length; i++){
               this.PickTaskList[i].CODE = data.OPTM_WHSTASK_DTL.find(e=>e.OPTM_TASKID == this.PickTaskList[i].OPTM_TASKID).OPTM_CONTCODE;
             }

@@ -56,7 +56,7 @@ export class PortalHomeComponent implements OnInit {
             if (data.CustomizationDetails.length > 0) {
               // this.isCustEnabled = data.CustomizationDetails[0].CustEnabled;
               // this.isCustomizedFor = data.CustomizationDetails[0].CustFor;
-              localStorage.setItem('isCustEnabled', data.CustomizationDetails[0].CustEnabled);
+              sessionStorage.setItem('isCustEnabled', data.CustomizationDetails[0].CustEnabled);
             }
           }
 
@@ -71,7 +71,7 @@ export class PortalHomeComponent implements OnInit {
           if (data.UserDetails.length > 0) {
             if (data.UserDetails != undefined) {
               // this.isUserIsSubcontracter = data.UserDetails[0].isUserIsSubcontracter;
-              localStorage.setItem('isUserIsSubcontracter', data.UserDetails[0].isUserIsSubcontracter);
+              sessionStorage.setItem('isUserIsSubcontracter', data.UserDetails[0].isUserIsSubcontracter);
             }
             // this.showLoader = false;
           }

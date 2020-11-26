@@ -41,8 +41,8 @@
                                                 [valueField]="'UomCode'" [value]="uomList[0]">
                                             </kendo-dropdownlist>
                                         </dd>
-                                        <button style="color: white;"   type="button" *ngIf="fromProduction==false && fromITR==false" (click)="ShowPackingDetails()" 
-                                        class="btn btn-success k-button btn-sm btn-icon-with-text mt-1">
+                                        <button style="color: white;" type="button" *ngIf="fromProduction==false && fromITR==false" (click)="ShowPackingDetails()"
+                                            class="btn btn-success k-button btn-sm btn-icon-with-text mt-1">
                                             <span class="k-icon k-i-preview " role="presentation"></span> {{'ShowPackingDetails'|translate}}</button>
                                     </dl>
                                 </ng-template>
@@ -51,39 +51,42 @@
 
                             <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE" title="{{'ItemCode'|translate}}" [width]="160"></kendo-grid-column>
 
-                            <kendo-grid-column *ngIf="fromProduction==true || fromITR==true" media="(min-width: 768px)" field="OPENQTY" headerClass="text-right" class=" text-right" title="{{OpenQtylbl}}"
-                                [width]="160">
+                            <kendo-grid-column *ngIf="fromProduction==true || fromITR==true" media="(min-width: 768px)" field="OPENQTY" headerClass="text-right"
+                                class=" text-right" title="{{OpenQtylbl}}" [width]="160">
                                 <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.OPENQTY|numberFormat}}
                                 </ng-template>
                             </kendo-grid-column>
 
-                            <kendo-grid-column *ngIf="fromProduction==true || fromITR==true" media="(min-width: 768px)" field="RPTQTY" headerClass="text-right" class="text-right" [width]="160" title="{{PickQtylbl}}">
+                            <kendo-grid-column *ngIf="fromProduction==true || fromITR==true" media="(min-width: 768px)" field="RPTQTY" headerClass="text-right"
+                                class="text-right" [width]="160" title="{{PickQtylbl}}">
                                 <ng-template kendoGridCellTemplate let-dataItem>{{_pickedMeterialQty|numberFormat}}
                                 </ng-template>
                             </kendo-grid-column>
 
-                            <kendo-grid-column *ngIf="fromProduction==false && fromITR==false" media="(min-width: 768px)" field="OPENQTY" headerClass="text-right" class=" text-right" title="{{'Qty_SalesUoM'|translate}}"
-                            [width]="160">
-                            <ng-template kendoGridCellTemplate let-dataItem>
+                            <kendo-grid-column *ngIf="fromProduction==false && fromITR==false" media="(min-width: 768px)" field="OPENQTY" headerClass="text-right"
+                                class=" text-right" title="{{'Qty_SalesUoM'|translate}}" [width]="160">
+                                <ng-template kendoGridCellTemplate let-dataItem>
                                     {{_pickedMeterialQty|numberFormat}}/{{dataItem.OPENQTY|numberFormat}}
-                            </ng-template>
-                        </kendo-grid-column>
+                                </ng-template>
+                            </kendo-grid-column>
 
-                        <kendo-grid-column *ngIf="fromProduction==false && fromITR==false" media="(min-width: 768px)" field="RPTQTY" headerClass="text-right" class="text-right" [width]="160" title="{{'Qty_InventoryUOM'|translate}}">
-                            <ng-template kendoGridCellTemplate let-dataItem>
+                            <kendo-grid-column *ngIf="fromProduction==false && fromITR==false" media="(min-width: 768px)" field="RPTQTY" headerClass="text-right"
+                                class="text-right" [width]="160" title="{{'Qty_InventoryUOM'|translate}}">
+                                <ng-template kendoGridCellTemplate let-dataItem>
                                     {{_pickedMeterialQtyInvUOM|numberFormat}}/{{dataItem.INVOPENQTY|numberFormat}}
-                            </ng-template>
-                        </kendo-grid-column>
+                                </ng-template>
+                            </kendo-grid-column>
 
-                            <kendo-grid-column *ngIf="fromProduction==false && fromITR==false" media="(min-width: 768px)" field="Delete" title="{{'UoM'|translate}}" width="120">
+                            <kendo-grid-column *ngIf="fromProduction==false && fromITR==false" media="(min-width: 768px)" field="Delete" title="{{'UoM'|translate}}"
+                                width="120">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <kendo-dropdownlist class="form-control input-sm" (valueChange)="valueChange($event)" [data]="uomList" [textField]="'UomName'"
                                         [valueField]="'UomCode'" [value]="selectedUOM"></kendo-dropdownlist>
                                 </ng-template>
                             </kendo-grid-column>
 
-                            <kendo-grid-column *ngIf="fromProduction==false && fromITR==false" media="(min-width: 768px)" field="" headerClass="text-left" class=" text-left"
-                                title="{{'PackingDetails'|translate}}" [width]="160">
+                            <kendo-grid-column *ngIf="fromProduction==false && fromITR==false" media="(min-width: 768px)" field="" headerClass="text-left"
+                                class=" text-left" title="{{'PackingDetails'|translate}}" [width]="160">
                                 <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                     <button style="color: white;" type="button" *ngIf="!fromProduction" (click)="ShowPackingDetails()" class="btn btn-success k-button btn-sm btn-icon-with-text ">
                                         <span class="k-icon k-i-preview" role="presentation"></span> {{'ShowPackingDetails'|translate}}</button>
@@ -241,9 +244,11 @@
 
                                     <dl class="opti_mobile_grid_dl">
                                         <dt class="d-flex align-items-center">{{'TOTALQTY'|translate}}
-
                                             <button *ngIf="OrderType!='N'" id="removeSelectedMeterial" (click)="removeSelectedMeterial(idx,gridSelectedMeterial)" class="btn btn-danger k-button btn-sm btn-icon ml-auto">
                                                 <span class="k-icon k-i-delete" role="presentation"></span>
+                                            </button>
+                                            <button tabindex="-1" *ngIf="IsUDFEnabled == 'Y'&&false" class="k-button k-primary btn custom-icon-button" type="button" (mousedown)="ShowUDF('Lot', idx)">
+                                                <span class="k-icon k-i-plus-outline "></span>{{'UDF'|translate}}
                                             </button>
                                         </dt>
                                         <dd>{{ dataItem.TOTALQTY | numberFormat }}</dd>
@@ -262,12 +267,9 @@
                             <kendo-grid-column media="(min-width: 768px)" field="BINNO" title="{{'BinNo'|translate}}" [width]="30"></kendo-grid-column>
                             <kendo-grid-column media="(min-width: 768px)" field="TOTALQTY" headerClass="text-right" class=" text-right" title="{{'TOTALQTY'|translate}}"
                                 [width]="10">
-
                                 <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.TOTALQTY | numberFormat}}
                                 </ng-template>
                             </kendo-grid-column>
-
-
                             <kendo-grid-column media="(min-width: 768px)" *ngIf="OrderType!='S'" headerClass="text-right" class="text-right" field="MeterialPickQty"
                                 width="50" editor="numeric" title="{{'PickQty'|translate}}">
                                 <ng-template kendoGridCellTemplate let-dataItem="dataItem" class="text-right" let-idx="rowIndex">
@@ -277,12 +279,9 @@
                                     </kendo-numerictextbox>
                                 </ng-template>
                             </kendo-grid-column>
-
                             <kendo-grid-column headerClass="text-center" class="text-center" media="(min-width: 768px)" *ngIf="OrderType!='N'" field="LOTNO"
                                 title="" width="10">
-
                                 <ng-template kendoGridCellTemplate let-idx="rowIndex">
-
                                     <button *ngIf="gridSelectedMeterial.data[idx].PALLETNO==''" id="removeSelectedMeterial" class="align-items-center" (click)="removeMeterial(idx,gridSelectedMeterial)"
                                         class="btn btn-danger k-button btn-sm btn-icon">
                                         <span class="k-icon k-i-delete" role="presentation"></span>
@@ -290,6 +289,14 @@
                                 </ng-template>
                             </kendo-grid-column>
 
+                            <kendo-grid-column media="(min-width: 768px)" *ngIf="IsUDFEnabled == 'Y' && false" field="" headerClass="text-left" class="text-left"
+                                [width]="10" title="{{'UDF'|translate}}">
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <button tabindex="-1" class="k-button k-primary btn custom-icon-button" type="button" (mousedown)="ShowUDF('Lot', rowIndex)">
+                                        <span class="k-icon k-i-plus-outline "></span>{{'UDF'|translate}}
+                                    </button>
+                                </ng-template>
+                            </kendo-grid-column>
                         </kendo-grid>
                     </div>
                 </div>
@@ -330,6 +337,10 @@
         </div>
     </form>
 </div>
+
+<span *ngIf="showUDF">
+    <app-udfdialog [lookupfor]='displayArea' [templates]='templates' [UDFComponentData]='UDFComponentData' (UDFSaveClick)="getUDFSelectedItem($event)"></app-udfdialog>
+</span>
 
 <span *ngIf="showLookup==true && showOtherLookup==false">
     <app-lookup [lookupfor]='lookupFor' [serviceData]='lookupData' (lookupkey)="getLookupValue($event,gridSelectedMeterial)"></app-lookup>
@@ -387,17 +398,17 @@
             </form>
         </ng-template>
 
-        <kendo-grid-column media="(max-width: 767px)"  class="opti_mobile-grid-td">
+        <kendo-grid-column media="(max-width: 767px)" class="opti_mobile-grid-td">
             <ng-template kendoGridCellTemplate let-dataItem let-idx="rowIndex">
                 <dl class="opti_mobile_grid_dl">
                     <dt>{{'PackPackingNo'|translate}}</dt>
-                    <dd >{{ dataItem.PkgNo }}</dd>
+                    <dd>{{ dataItem.PkgNo }}</dd>
 
                     <dt>{{'PackingType'|translate}}</dt>
                     <dd>{{ dataItem.PkgType }}</dd>
                 </dl>
-                   
-               
+
+
             </ng-template>
         </kendo-grid-column>
 

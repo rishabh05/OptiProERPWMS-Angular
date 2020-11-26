@@ -79,6 +79,12 @@
                                         </button>
                                     </dt>
                                     <dd>{{ dataItem.Status }}</dd>
+                                    <dt d-flex align-items-center>
+                                        <button tabindex="-1" *ngIf="IsUDFEnabled == 'Y'" class="k-button k-primary btn custom-icon-button" type="button" (mousedown)="ShowUDF('Detail', true, dataItem)">
+                                            <span class="k-icon k-i-plus-outline"></span>{{'UDF'|translate}}
+                                        </button>
+                                    </dt>
+                                    <dd></dd>
                                 </dl>
                             </ng-template>
                         </kendo-grid-column>
@@ -119,9 +125,14 @@
                                     {{dataItem.ReceiveQty |numberFormat}}
                                 </a>
                             </ng-template>
-
                         </kendo-grid-column>
-
+                        <kendo-grid-column media="(min-width: 768px)" *ngIf="IsUDFEnabled == 'Y'" field="UDF" title="{{'UDF'|translate}}">
+                            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <button tabindex="-1" class="k-button k-primary btn custom-icon-button" type="button" (mousedown)="ShowUDF('Detail', true, dataItem)">
+                                    <span class="k-icon k-i-plus-outline "></span>{{'UDF'|translate}}
+                                </button>
+                            </ng-template>
+                        </kendo-grid-column>
                     </kendo-grid>
                 </div>
             </div>
@@ -136,6 +147,10 @@
                 <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="onCancelClk($event)">
                     <span class="k-icon k-i-close-outline" role="presentation"></span>
                     {{'Cancel'|translate}}</button>
+
+                <button tabindex="-1" *ngIf="IsUDFEnabled == 'Y'" class="k-button k-primary btn custom-icon-button" type="button" (mousedown)="ShowUDF('Header', true)">
+                    <span class="k-icon k-i-plus-outline "></span>{{'UDF'|translate}}
+                </button>
 
                 <button type="button" *ngIf="displaySubmit" (click)="submitProductionReport($event)" class="btn btn-success k-button btn-sm btn-icon-with-text">
                     <span class="k-icon k-i-check" role="presentation"></span> {{'Submit'|translate}}</button>
@@ -157,6 +172,10 @@
     </div>
 
 </div>
+
+<span *ngIf="showUDF">
+    <app-udfdialog [lookupfor]='displayArea' [templates]='templates' [UDFComponentData]='UDFComponentData' (UDFSaveClick)="getUDFSelectedItem($event)"></app-udfdialog>
+</span>
 
 <app-inbound-grpo *ngIf="prodReceiptComponent == 2" [fromWhere]='receipt' (screenBackEvent)="backFromGRPOScreen($event)">
 </app-inbound-grpo>

@@ -105,7 +105,7 @@ export class NewPackingInputDialogComponent implements OnInit {
 
   checkPackingNoExistInDb(packingNo: String): boolean {
     var outbound: any;
-    let outboundData = localStorage.getItem(CommonConstants.OutboundData);
+    let outboundData = sessionStorage.getItem(CommonConstants.OutboundData);
     if (outboundData != undefined && outboundData != '') {
       outbound = JSON.parse(outboundData);
       var packingCollection: any = outbound.packingCollection;
@@ -139,7 +139,7 @@ export class NewPackingInputDialogComponent implements OnInit {
       return;
     }
     var outbound: any;
-    let outboundData = localStorage.getItem(CommonConstants.OutboundData);
+    let outboundData = sessionStorage.getItem(CommonConstants.OutboundData);
     if (outboundData != undefined && outboundData != '') {
       outbound = JSON.parse(outboundData);
       var packingCollection: any = outbound.packingCollection;
@@ -149,7 +149,7 @@ export class NewPackingInputDialogComponent implements OnInit {
       outbound.packingCollection.push(model) 
       outbound.AllCreatedPackings.push(model)
       outbound.selectedPackingItem=model;
-      localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
+      sessionStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
      }
      this.packingDialogOutput.emit({
       Status: 'yes',

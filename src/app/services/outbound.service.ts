@@ -146,7 +146,7 @@ export class OutboundService {
     this.outRequest.SOLINENUM = SOLINENUM;
     this.outRequest.POLINENUM = 0;
     this.outRequest.INVODOCNETRY = 0;
-    this.outRequest.INVLINENUM = 0;    
+    this.outRequest.INVLINENUM = 0;
     var body: any = { ItemKey: this.prepareRequest() };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/getUOM", body, this.commonService.httpOptions).toPromise();
   }
@@ -187,10 +187,10 @@ export class OutboundService {
    * check and scan code.
    * @param whsCode 
    */
-  checkAndScanCode(vendCode: string, scanInputString) {
-    var jObject = { Gs1Token: JSON.stringify([{ Vsvendorid: vendCode, StrScan: scanInputString, CompanyDBId: sessionStorage.getItem("CompID") }]) };
-    return this.httpclient.post(this.config_params.service_url + "/api/Gs1/GS1SETUP", jObject, this.commonService.httpOptions);
-  }
+  // checkAndScanCode(vendCode: string, scanInputString) {
+  //   var jObject = { Gs1Token: JSON.stringify([{ Vsvendorid: vendCode, StrScan: scanInputString, CompanyDBId: sessionStorage.getItem("CompID") }]) };
+  //   return this.httpclient.post(this.config_params.service_url + "/api/Gs1/GS1SETUP", jObject, this.commonService.httpOptions);
+  // }
 
 
 

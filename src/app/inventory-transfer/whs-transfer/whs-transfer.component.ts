@@ -40,7 +40,7 @@ export class WhsTransferComponent implements OnInit {
   }
 
   ngOnInit() {
-    if(localStorage.getItem("fromscreen") == "WhsTransfer"){
+    if(sessionStorage.getItem("fromscreen") == "WhsTransfer"){
       this.fromWhse = sessionStorage.getItem("whseId");
       this.pageHeading = this.translate.instant("WarehouseTransfer");
       this.isfromWhsDisabled = true;
@@ -54,7 +54,7 @@ export class WhsTransferComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    if(localStorage.getItem("fromscreen") == "WhsTransfer"){
+    if(sessionStorage.getItem("fromscreen") == "WhsTransfer"){
       this.scanToWhse.nativeElement.focus();
     }else{
       this.scanFromWhse.nativeElement.focus();
@@ -131,7 +131,7 @@ export class WhsTransferComponent implements OnInit {
       this.toastr.error('', this.translate.instant("InvTransfer_ToWhsBlankErrMsg"));
       return;
     }
-    localStorage.setItem("towhseId", this.toWhse);
+    sessionStorage.setItem("towhseId", this.toWhse);
     this.selectedItem = module;
     this.closeRightSidebar();
     this.router.navigate(['home/' + module, { skipLocationChange: true }]);
@@ -208,13 +208,13 @@ export class WhsTransferComponent implements OnInit {
     }
 
     this.whsView = !this.whsView;
-    this.fromScreen = localStorage.getItem("fromscreen");//"WhsTransfer";
-    if(localStorage.getItem("fromscreen") == "WhsTransfer"){
-      localStorage.setItem("towhseId", this.toWhse);
-      localStorage.setItem("fromwhseId", sessionStorage.getItem("whseId"));
+    this.fromScreen = sessionStorage.getItem("fromscreen");//"WhsTransfer";
+    if(sessionStorage.getItem("fromscreen") == "WhsTransfer"){
+      sessionStorage.setItem("towhseId", this.toWhse);
+      sessionStorage.setItem("fromwhseId", sessionStorage.getItem("whseId"));
     }else{
-      localStorage.setItem("fromwhseId", this.fromWhse);
-      localStorage.setItem("towhseId", sessionStorage.getItem("whseId"));
+      sessionStorage.setItem("fromwhseId", this.fromWhse);
+      sessionStorage.setItem("towhseId", sessionStorage.getItem("whseId"));
     }
   }
 

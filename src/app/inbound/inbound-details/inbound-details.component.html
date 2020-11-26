@@ -11,7 +11,8 @@
                         <label for="inputPassword" class="col-4 col-sm-3 col-form-label py-0">{{future_PO_Invoice}}</label>
                         <div class="col-8 col-sm-9">
                             <div class="opti_input-group-checkbox">
-                                <input type="checkbox" id="ch7" (change)="toggleVisibility($event)" class="k-checkbox" name="future" [(ngModel)]="futurepo" />
+                                <input type="checkbox" id="ch7" (change)="toggleVisibility($event)" class="k-checkbox" name="future" [(ngModel)]="futurepo"
+                                />
                                 <label class="k-checkbox-label" for="ch7"></label>
                             </div>
                         </div>
@@ -31,9 +32,9 @@
                                     <button tabIndex="-1" type="button" id="inboundDetailVendorScanButton" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
                     </div>
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Inbound_VendorName'|translate}}</label>
@@ -44,39 +45,35 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                            <label for="inputPassword" class="col-sm-3 col-form-label">{{PONo}}</label>
-                            <div class="col-sm-9">
-                                <div class="input-group input-group-sm">
-                                    <input type="text" #poScanInputField class="form-control form-control-sm" name="poCode" [(ngModel)]="poCode" placeholder="{{PONo}}"
-                                        (blur)="OnPOChangeBlur()" id="inboundDetailPOScanInputField">
-                                    <div class="input-group-append">
-                                        <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="onPOlookupClick()">
-                                            <i class="opti-icon-search"></i>
-                                        </button>
-                                    </div>
-                                    <div class="ml-1 d-flex">
-                                        <button tabIndex="-1" type="button" id="inboundDetailPOScanButton" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
-                                            <i class="opti-icon-qr-code fs-24"></i>
-                                        </button>
-                                    </div>
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{PONo}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input type="text" #poScanInputField class="form-control form-control-sm" name="poCode" [(ngModel)]="poCode" placeholder="{{PONo}}"
+                                    (blur)="OnPOChangeBlur()" id="inboundDetailPOScanInputField">
+                                <div class="input-group-append">
+                                    <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="onPOlookupClick()">
+                                        <i class="opti-icon-search"></i>
+                                    </button>
+                                </div>
+                                <div class="ml-1 d-flex">
+                                    <button tabIndex="-1" type="button" id="inboundDetailPOScanButton" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                        <i class="opti-icon-qr-code fs-24"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
                     <div class="form-group row">
-                            <label for="inputPassword" class="col-sm-3 col-form-label">{{'Inbound_VendRefNo'|translate}}</label>
-                            <div class="col-sm-9">
-                                <div class="input-group input-group-sm">
-                                    <input #scanVenderRefNo type="text" tabIndex="-1" class="form-control form-control-sm" id="venderRefNo" name="VendRefNo" [(ngModel)]="VendRefNo" placeholder="{{'Inbound_VendRefNo'|translate}}"
-                                        (blur)="OnVendRefNoChangeBlur()">
-    
-                                </div>
+                        <label for="inputPassword" class="col-sm-3 col-form-label">{{'Inbound_VendRefNo'|translate}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm">
+                                <input #scanVenderRefNo type="text" tabIndex="-1" class="form-control form-control-sm" id="venderRefNo" name="VendRefNo"
+                                    [(ngModel)]="VendRefNo" placeholder="{{'Inbound_VendRefNo'|translate}}" (blur)="OnVendRefNoChangeBlur()">
+
                             </div>
                         </div>
-
-                   
-
-                  
+                    </div>
                 </div>
             </div>
 
@@ -126,6 +123,9 @@
             <div class="col-sm-12 col-12">
                 <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (mousedown)="OnCancelClick()">
                     <span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
+                <button tabindex="-1" *ngIf="IsUDFEnabled == 'Y'" class="k-button k-primary btn custom-icon-button" type="button" (mousedown)="ShowUDF('Header')">
+                    <span class="k-icon k-i-plus-outline "></span>{{'UDF'|translate}}
+                </button>
                 <button *ngIf="showGRPOGridAndBtn" class="btn btn-success k-button btn-sm btn-icon-with-text" type="button" (mousedown)="receive()">
                     <span class="k-icon k-i-check" role="presentation"></span> {{'Receive'|translate}}</button>
 
@@ -134,17 +134,21 @@
                     <i class="opti-icon-arrow-next"></i>
                 </button>
 
-                <button type="button" id="hid_InboundDetailVendCodeScanButton" style="visibility:hidden" (click)="onHiddenVendCodeScanClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                <button type="button" id="hid_InboundDetailVendCodeScanButton" style="visibility:hidden" (click)="onHiddenVendCodeScanClick()"
+                    class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                     Btn </button>
 
-                <button type="button" id="hid_InboundDetailPOScanButton" style="visibility:hidden" (click)="onHiddenSOScanClick()"
-                    class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                <button type="button" id="hid_InboundDetailPOScanButton" style="visibility:hidden" (click)="onHiddenSOScanClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                     Btn </button>
             </div>
         </div>
-    </form> 
-
+    </form>
 </div>
+
+<span *ngIf="showUDF">
+    <app-udfdialog [lookupfor]='displayArea' [templates]='templates' [UDFComponentData]='UDFComponentData' (UDFSaveClick)="getUDFSelectedItem($event)"></app-udfdialog>
+</span>
+
 <span *ngIf="showLookupLoader == false">
     <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
 </span>

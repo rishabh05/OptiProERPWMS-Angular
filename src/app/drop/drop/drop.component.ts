@@ -53,7 +53,7 @@ export class DropComponent implements OnInit {
   }
 
   setPickingSteps() {
-    this.PickListSteps = JSON.parse(localStorage.getItem("PickListSteps"));
+    this.PickListSteps = JSON.parse(sessionStorage.getItem("PickListSteps"));
     if (this.PickListSteps != undefined && this.PickListSteps.length > 0) {
       this.currentStep = this.getStepNo(this.PickListSteps[0].OPTM_STEP_CODE);
       this.maxStep = this.PickListSteps.length;

@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter, HostListener, TemplateRef, ViewChild, ElementRef } from '@angular/core';
-import { viewLineContent } from '../../DemoData/sales-order';
 import { UIHelper } from '../../helpers/ui.helpers';
 import { BsModalService, BsModalRef, ModalDirective } from 'ngx-bootstrap/modal';
 import { Commonservice } from '../../services/commonservice.service';
@@ -7,10 +6,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { InventoryTransferService } from '../../services/inventory-transfer.service';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
-import { Template } from '@angular/compiler/src/render3/r3_ast';
 import { Location } from '@angular/common';
-import { FieldAccessorPipe } from '@progress/kendo-angular-grid/dist/es2015/rendering/common/field-accessor.pipe';
 import { InboundService } from 'src/app/services/inbound.service';
+import { IUIComponentTemplate } from 'src/app/common/ui-component.interface';
+import { FieldAccessorPipe } from '../../../../node_modules/@progress/kendo-angular-grid/dist/es2015/rendering/common/field-accessor.pipe';
 
 @Component({
   selector: 'app-bin-transfer',
@@ -45,7 +44,8 @@ export class BinTransferComponent implements OnInit {
   PageTitle: string;
   ModalContent: string;
   TransferedItemsDetail: any[] = [];
-  respSuccssDocNo:any;
+  UDF: any[] = [];
+  respSuccssDocNo: any;
   @Input() fromScreen: any;
   @Output() cancelevent = new EventEmitter();
   batchNoPlaceholder: string = "";
@@ -88,11 +88,13 @@ export class BinTransferComponent implements OnInit {
   @ViewChild("scanReasonByPallet") scanReasonByPallet;
 
   // container variables;
-  containerId:any='';
-  containerCode:any = '';
+  containerId: any = '';
+  containerCode: any = '';
   containerData: any = [];
+  IsUDFEnabled = "N";
+
   constructor(private commonservice: Commonservice, private activatedRoute: ActivatedRoute,
-    private router: Router, private inventoryTransferService: InventoryTransferService,private inboundService: InboundService,
+    private router: Router, private inventoryTransferService: InventoryTransferService, private inboundService: InboundService,
     private toastr: ToastrService, private translate: TranslateService,
     private modalService: BsModalService, private _location: Location, ) {
     let userLang = navigator.language.split('-')[0];
@@ -119,18 +121,18 @@ export class BinTransferComponent implements OnInit {
 
   ngOnInit() {
     this.batchNoPlaceholder = this.translate.instant("BatchNo");
-    if (localStorage.getItem("PalletizationEnabled") == "True") {
+    if (sessionStorage.getItem("PalletizationEnabled") == "True") {
       this.isPalletizationEnable = true;
     } else {
       this.isPalletizationEnable = false;
     }
-    if (localStorage.getItem("isShipmentApplicable") == "True") {
+    if (sessionStorage.getItem("isShipmentApplicable") == "True") {
       this.isShipmentContainerEnable = true;
     } else {
       this.isShipmentContainerEnable = false;
     }
-    
-    localStorage.setItem("radioSelection", "0");
+
+    sessionStorage.setItem("radioSelection", "0");
     // apply grid height
     this.gridHeight = UIHelper.getMainContentHeight();
 
@@ -141,38 +143,35 @@ export class BinTransferComponent implements OnInit {
     this.viewLines = false;
 
     this.showBinFields = true;
-    if (localStorage.getItem("fromscreen") == "WhsTransfer") {
-      this.PageTitle = this.translate.instant("WarehouseTransfer") + this.translate.instant("InvTransfer_From") + localStorage.getItem("fromwhseId") + this.translate.instant("InvTransfer_To") + localStorage.getItem("towhseId");
-    } else if (localStorage.getItem("fromscreen") == "InventoryTransferRequest") {
-      this.PageTitle = this.translate.instant("InventoryTransferRequest") + this.translate.instant("InvTransfer_From") + localStorage.getItem("fromwhseId") + this.translate.instant("InvTransfer_To") + localStorage.getItem("towhseId");
+    if (sessionStorage.getItem("fromscreen") == "WhsTransfer") {
+      this.PageTitle = this.translate.instant("WarehouseTransfer") + this.translate.instant("InvTransfer_From") + sessionStorage.getItem("fromwhseId") + this.translate.instant("InvTransfer_To") + sessionStorage.getItem("towhseId");
+    } else if (sessionStorage.getItem("fromscreen") == "InventoryTransferRequest") {
+      this.PageTitle = this.translate.instant("InventoryTransferRequest") + this.translate.instant("InvTransfer_From") + sessionStorage.getItem("fromwhseId") + this.translate.instant("InvTransfer_To") + sessionStorage.getItem("towhseId");
       this.showBinFields = false;
     } else {
       this.PageTitle = this.translate.instant("BinTransfer");
     }
-
-
-
-    // if (localStorage.getItem("towhseId") == sessionStorage.getItem("whseId")) {
-    //   this.PageTitle = this.translate.instant("BinTransfer");
-    // } else {
-    //   this.PageTitle = this.translate.instant("WarehouseTransfer") + this.translate.instant("InvTransfer_From") + sessionStorage.getItem("whseId") + this.translate.instant("InvTransfer_To") + localStorage.getItem("towhseId");
-    // }
     this.formatTransferNumbers();
     this.formatOnHandQty();
     this.zero = this.onHandQty;
-    console.log("bin loaded")
+
+    sessionStorage.setItem("LineNum", "0");
+    this.IsUDFEnabled = sessionStorage.getItem("ISUDFEnabled");
+    if (this.IsUDFEnabled == 'Y') {
+      this.commonservice.GetWMSUDFBasedOnScreen("15108");
+    }
   }
 
   ngAfterViewInit(): void {
     this.scanItemCode.nativeElement.focus();
-    setTimeout(()=>{
-      if (localStorage.getItem("fromscreen") == "WhsTransfer") {
-        this.PageTitle = this.translate.instant("WarehouseTransfer") + this.translate.instant("InvTransfer_From") + localStorage.getItem("fromwhseId") + this.translate.instant("InvTransfer_To") + localStorage.getItem("towhseId");
-      } else if (localStorage.getItem("fromscreen") == "InventoryTransferRequest") {
-        this.PageTitle = this.translate.instant("InventoryTransferRequest") + this.translate.instant("InvTransfer_From") + localStorage.getItem("fromwhseId") + this.translate.instant("InvTransfer_To") + localStorage.getItem("towhseId");
+    setTimeout(() => {
+      if (sessionStorage.getItem("fromscreen") == "WhsTransfer") {
+        this.PageTitle = this.translate.instant("WarehouseTransfer") + this.translate.instant("InvTransfer_From") + sessionStorage.getItem("fromwhseId") + this.translate.instant("InvTransfer_To") + sessionStorage.getItem("towhseId");
+      } else if (sessionStorage.getItem("fromscreen") == "InventoryTransferRequest") {
+        this.PageTitle = this.translate.instant("InventoryTransferRequest") + this.translate.instant("InvTransfer_From") + sessionStorage.getItem("fromwhseId") + this.translate.instant("InvTransfer_To") + sessionStorage.getItem("towhseId");
       } else {
         this.PageTitle = this.translate.instant("BinTransfer");
-  }
+      }
     }, 500)
   }
 
@@ -249,13 +248,13 @@ export class BinTransferComponent implements OnInit {
   }
 
   OnItemCodeChangeBlur() {
-    if(this.isValidateCalled){
+    if (this.isValidateCalled) {
       return;
     }
     this.OnItemCodeChange();
   }
 
-  async OnItemCodeChange() : Promise<any>{
+  async OnItemCodeChange(): Promise<any> {
     if (this.itemCode == "" || this.itemCode == undefined) {
       return;
     }
@@ -265,11 +264,11 @@ export class BinTransferComponent implements OnInit {
       data => {
         this.showLoader = false;
         console.log("inside item code validate");
-        if (data != undefined && data.length > 0) {          
+        if (data != undefined && data.length > 0) {
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
-              result = false;
+            result = false;
           }
           this.itemCode = data[0].ItemCode;
           if (this.itemCode != null && this.itemCode != undefined && this.itemCode != '') {
@@ -321,7 +320,7 @@ export class BinTransferComponent implements OnInit {
           this.formatOnHandQty();
           this.formatTransferNumbers();
           if (this.ItemTracking == 'N') {
-            if ((localStorage.getItem("fromscreen") != "InventoryTransferRequest")) {
+            if ((sessionStorage.getItem("fromscreen") != "InventoryTransferRequest")) {
               this.getDefaultFromBin();
               this.scanFromBin.nativeElement.focus();
             }
@@ -350,13 +349,13 @@ export class BinTransferComponent implements OnInit {
   }
 
   OnLotChangeBlur() {
-    if(this.isValidateCalled){
+    if (this.isValidateCalled) {
       return;
     }
     this.OnLotChange();
   }
 
-  async OnLotChange():Promise<any>{
+  async OnLotChange(): Promise<any> {
     if (this.lotValue == "" || this.lotValue == undefined) {
       return;
     }
@@ -414,7 +413,7 @@ export class BinTransferComponent implements OnInit {
 
   getDefaultFromBin() {
     this.inventoryTransferService.GetDefaultBinOrBinWithQty(this.itemCode,
-      localStorage.getItem("fromwhseId")).subscribe(
+      sessionStorage.getItem("fromwhseId")).subscribe(
         data => {
           if (data != null) {
 
@@ -457,7 +456,7 @@ export class BinTransferComponent implements OnInit {
 
   getDefaultToBin() {
     this.inventoryTransferService.GetToBinForWhsTrnsfr(this.itemCode,
-      localStorage.getItem("towhseId")).subscribe(
+      sessionStorage.getItem("towhseId")).subscribe(
         data => {
           if (data != null) {
             let resultV = data.find(element => element.BINTYPE == '1');
@@ -511,7 +510,7 @@ export class BinTransferComponent implements OnInit {
 
 
   getDefaultBin() {
-    this.inventoryTransferService.getDefaultBin(this.itemCode, localStorage.getItem("towhseId")).subscribe(
+    this.inventoryTransferService.getDefaultBin(this.itemCode, sessionStorage.getItem("towhseId")).subscribe(
       data => {
         this.getDefaultBinFlag = true;
         if (data != null) {
@@ -549,7 +548,7 @@ export class BinTransferComponent implements OnInit {
           }
           this.showLookupLoader = false;
           for (var i = 0; i < data.length; i++) {
-            data[i].TOTALQTY = data[i].TOTALQTY.toFixed(Number(localStorage.getItem("DecimalPrecision")));
+            data[i].TOTALQTY = data[i].TOTALQTY.toFixed(Number(sessionStorage.getItem("DecimalPrecision")));
           }
           this.serviceData = data;
           this.lookupfor = "BatchNoList";
@@ -583,7 +582,7 @@ export class BinTransferComponent implements OnInit {
             else {
               this.lookupfor = "NTrackFromBin";
               for (var i = 0; i < data.length; i++) {
-                data[i].TOTALQTY = data[i].TOTALQTY.toFixed(Number(localStorage.getItem("DecimalPrecision")));
+                data[i].TOTALQTY = data[i].TOTALQTY.toFixed(Number(sessionStorage.getItem("DecimalPrecision")));
               }
             }
             this.serviceData = data;
@@ -605,13 +604,13 @@ export class BinTransferComponent implements OnInit {
   }
 
   OnFromBinChangeBlur() {
-    if(this.isValidateCalled){
+    if (this.isValidateCalled) {
       return;
     }
     this.OnFromBinChange();
   }
 
-  async OnFromBinChange(): Promise<any> {  
+  async OnFromBinChange(): Promise<any> {
     if (this.fromBin == "" || this.fromBin == undefined) {
       return;
     }
@@ -671,19 +670,19 @@ export class BinTransferComponent implements OnInit {
   }
 
   OnToBinChangeBlur() {
-    if(this.isValidateCalled){
+    if (this.isValidateCalled) {
       return;
     }
     this.OnToBinChange();
   }
 
-  async OnToBinChange():Promise<any> {
+  async OnToBinChange(): Promise<any> {
     if (this.toBin == "" || this.toBin == undefined) {
       return false;
     }
     var result = false;
     this.showLoader = true;
-    await this.inventoryTransferService.isToBinExist(this.toBin, localStorage.getItem("towhseId")).then(
+    await this.inventoryTransferService.isToBinExist(this.toBin, sessionStorage.getItem("towhseId")).then(
       data => {
         this.showLoader = false;
         console.log("inside isToBinExist")
@@ -726,7 +725,7 @@ export class BinTransferComponent implements OnInit {
 
   ShowToBins() {
     this.showLoader = true;
-    this.inventoryTransferService.getToBin(this.fromBin, localStorage.getItem("towhseId")).subscribe(
+    this.inventoryTransferService.getToBin(this.fromBin, sessionStorage.getItem("towhseId")).subscribe(
       data => {
         this.showLoader = false;
         if (data != null) {
@@ -774,7 +773,7 @@ export class BinTransferComponent implements OnInit {
   }
 
   async AddLineLots(value: string) {
-    if(value=="add"){
+    if (value == "add") {
       //validateBeforeSubmit calling twice in case of submit.. so i commented it.
       var result = await this.validateBeforeSubmit();
       this.isValidateCalled = false;
@@ -785,7 +784,7 @@ export class BinTransferComponent implements OnInit {
     }
     this.operationType = "add";
 
-    if (localStorage.getItem("fromscreen") == "InventoryTransferRequest") {
+    if (sessionStorage.getItem("fromscreen") == "InventoryTransferRequest") {
       if (!this.ITRValidation()) {
         return;
       }
@@ -795,11 +794,25 @@ export class BinTransferComponent implements OnInit {
       }
     }
 
+    if (value != "submit") {
+      if (sessionStorage.getItem("LineNum") == null || sessionStorage.getItem("LineNum") == undefined ||
+        sessionStorage.getItem("LineNum") == "") {
+        sessionStorage.setItem("LineNum", "0");
+      }
+      let lineNum = Number(sessionStorage.getItem("LineNum"))
+      let index = this.UDF.findIndex(e => e.LineNo == lineNum);
+      if (index == -1 && this.IsUDFEnabled == 'Y') {
+        if (this.ShowUDF('Detail', false)) {
+          return;
+        }
+      }
+    }
+
     this.itemIndex = this.IsInvTransferDetailLineExists(this.itemCode,
       this.lotValue, this.fromBin, this.toBin, this.Remarks, "");
     if (this.itemIndex == -1) {
       this.TransferedItemsDetail.push({
-        LineNum: '01',
+        LineNum: Number(sessionStorage.getItem("LineNum")),
         LotNo: this.lotValue,
         ItemCode: this.itemCode,
         ItemName: this.itemName,
@@ -808,13 +821,15 @@ export class BinTransferComponent implements OnInit {
         BinNo: this.fromBin,
         ToBin: this.toBin,
         Tracking: this.ItemTracking,
-        WhsCode: localStorage.getItem("towhseId"),
+        WhsCode: sessionStorage.getItem("towhseId"),
         OnHandQty: "" + this.onHandQty,
         Remarks: this.Remarks,
         PalletCode: this.palletNo,
         MfrNo: this.actualLotNo,
         BaseLine: ""
       });
+
+      sessionStorage.setItem("LineNum", "" + (Number(sessionStorage.getItem("LineNum")) + 1));
       this.clearDataForAddMore();
     } else {
       if (this.ItemTracking == "S") {
@@ -845,7 +860,6 @@ export class BinTransferComponent implements OnInit {
     if (result != undefined && result == false) {
       return;
     }
-    
     console.log("radio selection: " + this.radioSelected);
     if (this.radioSelected == 1) { // radio selection == 1 for by pallet
       if (this.TransferedItemsDetail.length == 0) {
@@ -854,7 +868,7 @@ export class BinTransferComponent implements OnInit {
       }
       this.SubmitFinally();
     } else {
-      if(this.radioSelected ==2){ // code for container code.
+      if (this.radioSelected == 2) { // code for container code.
 
         if (this.TransferedItemsDetail.length == 0) {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg")); // change the validation message here.
@@ -862,23 +876,42 @@ export class BinTransferComponent implements OnInit {
         }
         this.SubmitFinally();
 
-      }else{
+      } else {
         // if its type 0 or bin transfer by item.
-      this.showValidation = true;
-      if (this.TransferedItemsDetail.length > 0) {
-        this.showValidation = false;
-      }
+        this.showValidation = true;
+        if (this.TransferedItemsDetail.length > 0) {
+          this.showValidation = false;
+        }
 
-      this.operationType = "submit";
-      var _is = this.AddLineLots("submit");
+        if (sessionStorage.getItem("LineNum") == null || sessionStorage.getItem("LineNum") == undefined ||
+          sessionStorage.getItem("LineNum") == "") {
+          sessionStorage.setItem("LineNum", "0");
+        }
+        let lineNum = Number(sessionStorage.getItem("LineNum"))
+        let indx = this.UDF.findIndex(e => e.LineNo == lineNum);
+        if (indx == -1 && this.IsUDFEnabled == 'Y') {
+          if (this.ShowUDF('Detail', false)) {
+            return;
+          }
+        }
 
-      if (_is != undefined && !_is) {
-        return;
+        this.operationType = "submit";
+        var _is = this.AddLineLots("submit");
+
+        if (_is != undefined && !_is) {
+          return;
+        }
+
+        let index = this.UDF.findIndex(e => e.Flag == "H");
+        if (index == -1 && this.IsUDFEnabled == 'Y') {
+          if (this.ShowUDF('Header', false)) {
+            return;
+          }
+        }
+
+        this.SubmitFinally();
       }
-      this.SubmitFinally();
     }
-  //});    
-  }
   }
 
   SubmitFinally() {
@@ -897,16 +930,16 @@ export class BinTransferComponent implements OnInit {
     oWhsTransAddLot.Detail = this.TransferedItemsDetail;
     let type;
 
-    if (localStorage.getItem("fromscreen") == "WhsTransfer") {
+    if (sessionStorage.getItem("fromscreen") == "WhsTransfer") {
       type = "Items";
-    } else if (localStorage.getItem("fromscreen") == "InventoryTransferRequest") {
+    } else if (sessionStorage.getItem("fromscreen") == "InventoryTransferRequest") {
       type = "Items";
     } else {
       type = "";
     }
     oWhsTransAddLot.Header.push({
-      WhseCode: localStorage.getItem("fromwhseId"),
-      ToWhsCode: localStorage.getItem("towhseId"), //oToWhs,
+      WhseCode: sessionStorage.getItem("fromwhseId"),
+      ToWhsCode: sessionStorage.getItem("towhseId"), //oToWhs,
       Type: type,
       DiServerToken: sessionStorage.getItem("Token"), //companyDBObject.DIServerToken,
       CompanyDBId: sessionStorage.getItem("CompID"), //companyDBObject.CompanyDbName,
@@ -918,10 +951,10 @@ export class BinTransferComponent implements OnInit {
       BaseType: "0"
       //------------------End for the Licence Parameter------------------------------------------------------
     });
-
+    oWhsTransAddLot.UDF = this.UDF;
 
     this.showLoader = true;
-    if (localStorage.getItem("fromscreen") == "InventoryTransferRequest") {
+    if (sessionStorage.getItem("fromscreen") == "InventoryTransferRequest") {
       this.inventoryTransferService.CreateITR(oWhsTransAddLot).subscribe(
         data => {
           this.showLoader = false;
@@ -937,16 +970,16 @@ export class BinTransferComponent implements OnInit {
               }
               //-----------------------------------End for the Function Check for Licence--------------------------------
               if (data[0].ErrorMsg == "") {
-               // var showGRPOREport =data[0].GRPOPrintReport
-                var showITRReport =data[0].ITRPrintReport
+                // var showGRPOREport =data[0].GRPOPrintReport
+                var showITRReport = data[0].ITRPrintReport
                 this.toastr.success('', this.translate.instant("InvTransfer_ItemsTranSuccessfully") + " " + data[0].SuccessNo);
                 this.respSuccssDocNo = data[0].SuccessNo
-                if(showITRReport=='y' || showITRReport=='Y'){
+                if (showITRReport == 'y' || showITRReport == 'Y') {
                   this.showPrintConfirmDialog();
-                }else{
+                } else {
 
                 }
-             
+
                 oWhsTransAddLot = {};
                 oWhsTransAddLot.Header = [];
                 oWhsTransAddLot.Detail = [];
@@ -954,6 +987,7 @@ export class BinTransferComponent implements OnInit {
                 this.TransferedItemsDetail = [];
                 this.selectedPallets = [];
                 this.selectedContainers = [];
+
                 this.clearData();
               }
               else {
@@ -973,9 +1007,9 @@ export class BinTransferComponent implements OnInit {
         }
       );
     } else {
-    // if("something"){
-    //     // code to submit container request.
-    //   }else{
+      // if("something"){
+      //     // code to submit container request.
+      //   }else{
       //===================================
       this.inventoryTransferService.submitBinTransfer(oWhsTransAddLot).subscribe(
         data => {
@@ -994,15 +1028,18 @@ export class BinTransferComponent implements OnInit {
               if (data[0].ErrorMsg == "") {
                 this.toastr.success('', this.translate.instant("InvTransfer_ItemsTranSuccessfully") + " " + data[0].SuccessNo);
                 this.respSuccssDocNo = data[0].SuccessNo
-                var showITRReport =data[0].ITRPrintReport
+                var showITRReport = data[0].ITRPrintReport
                 oWhsTransAddLot = {};
                 oWhsTransAddLot.Header = [];
                 oWhsTransAddLot.Detail = [];
                 oWhsTransAddLot.UDF = [];
                 this.TransferedItemsDetail = [];
+                this.UDF = [];
+                sessionStorage.setItem("LineNum", "0");
                 this.selectedPallets = [];
-                if(showITRReport=='y' || showITRReport=='Y'){
-                this.showPrintConfirmDialog();}
+                if (showITRReport == 'y' || showITRReport == 'Y') {
+                  this.showPrintConfirmDialog();
+                }
                 this.clearData();
               }
               else {
@@ -1117,7 +1154,7 @@ export class BinTransferComponent implements OnInit {
     return true;
   }
 
-  getlookupSelectedItem(event){
+  getlookupSelectedItem(event) {
     if (this.lookupfor == "SBTrackFromBin") {
       this.fromBin = event.BINNO;
       this.transferQty = event.TOTALQTY;
@@ -1128,7 +1165,7 @@ export class BinTransferComponent implements OnInit {
       this.transferQty = event.TOTALQTY;
       this.onHandQty = event.TOTALQTY;
       this.scanToBin.nativeElement.focus();
-    } 
+    }
   }
 
   getLookupValue($event) {
@@ -1175,12 +1212,12 @@ export class BinTransferComponent implements OnInit {
         this.onHandQty = 0.000;
         if (this.ItemTracking == 'N') {
           this.getDefaultFromBin();
-        }else{
+        } else {
           this.getDefaultToBin();
         }
         this.CheckTrackingandVisiblity();
         setTimeout(() => {
-          if(this.ItemTracking == 'N'){
+          if (this.ItemTracking == 'N') {
             this.scanFromBin.nativeElement.focus();
           } else {
             this.scanLotNo.nativeElement.focus();
@@ -1206,7 +1243,7 @@ export class BinTransferComponent implements OnInit {
         this.actualLotNo = $event[0];
         this.scanFromBin.nativeElement.focus();
       }
-      
+
       else if (this.lookupfor == "toBinsList") {
         this.toBin = $event[0];
         //this.prepareByPalletData();
@@ -1216,10 +1253,10 @@ export class BinTransferComponent implements OnInit {
           //other to bin Field
           this.scanReasonByPallet.nativeElement.focus();
         }
-      }else if (this.lookupfor == "ContainerList"){
-         this.containerId = $event[0];
-         this.containerCode = $event[1];
-         for (let i = 0; i < this.containerList.length; i++) {
+      } else if (this.lookupfor == "ContainerList") {
+        this.containerId = $event[0];
+        this.containerCode = $event[1];
+        for (let i = 0; i < this.containerList.length; i++) {
           if (this.containerCode == this.containerList[i].OPTM_CONTCODE) {
             this.binOfSelectedContainer = this.containerList[i].OPTM_BIN;
             break;
@@ -1227,7 +1264,7 @@ export class BinTransferComponent implements OnInit {
         }
       }
       this.formatTransferNumbers();
-      this.formatOnHandQty(); 
+      this.formatOnHandQty();
     }
   }
 
@@ -1266,7 +1303,7 @@ export class BinTransferComponent implements OnInit {
   }
 
   OnOKClick() {
-    var rs = localStorage.getItem("radioSelection");
+    var rs = sessionStorage.getItem("radioSelection");
     if (rs != undefined && rs.length > 0) {
       this.radioSelected = Number.parseInt(rs);
     }
@@ -1274,7 +1311,7 @@ export class BinTransferComponent implements OnInit {
   }
 
   deleteAllOkClick() {
-    var rs = localStorage.getItem("radioSelection");
+    var rs = sessionStorage.getItem("radioSelection");
     if (rs != undefined && rs.length > 0) {
       this.radioSelected = Number.parseInt(rs);
     }
@@ -1286,19 +1323,19 @@ export class BinTransferComponent implements OnInit {
   }
 
   formatTransferNumbers() {
-    this.transferQty = Number(this.transferQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));
+    this.transferQty = Number(this.transferQty).toFixed(Number(sessionStorage.getItem("DecimalPrecision")));
   }
 
   formatOnHandQty() {
-    this.onHandQty = Number(this.onHandQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));
+    this.onHandQty = Number(this.onHandQty).toFixed(Number(sessionStorage.getItem("DecimalPrecision")));
   }
 
   goBack() {
     this.operationType = "back";
 
-    if (localStorage.getItem("fromscreen") == "WhsTransfer") {
+    if (sessionStorage.getItem("fromscreen") == "WhsTransfer") {
       this.cancelevent.emit(true);
-    } else if (localStorage.getItem("fromscreen") == "InventoryTransferRequest") {
+    } else if (sessionStorage.getItem("fromscreen") == "InventoryTransferRequest") {
       this.cancelevent.emit(true);
     } else {
       this.router.navigate(['home/dashboard']);
@@ -1323,6 +1360,12 @@ export class BinTransferComponent implements OnInit {
     if ($event.Status == "yes") {
       switch ($event.From) {
         case ("delete"):
+          let lineNum = this.TransferedItemsDetail[this.rowindex].lineNum;
+          let udfDeleteArry = this.UDF.filter(e => e.LineNo == lineNum)
+          for (var i = 0; i < udfDeleteArry.length; i++) {
+            let indx = this.UDF.findIndex(e => e.LineNo == lineNum)
+            this.UDF.splice(indx, 1);
+          }
           this.TransferedItemsDetail.splice(this.rowindex, 1);
           this.gridDataRow.data = this.TransferedItemsDetail;
           console.log(this.TransferedItemsDetail.length);
@@ -1337,21 +1380,21 @@ export class BinTransferComponent implements OnInit {
           this.TransferedItemsDetail = tempList;
           this.selectedPallets.splice(this.rowindex, 1);
           break;
- 
-          case ("DeleteContainer"):
-            var tempList: any = [];
-            for (let i = 0; i < this.TransferedItemsDetail.length; i++) {
-              if (this.selectedContainers[this.rowindex].Code != this.TransferedItemsDetail[i].PalletCode) {
-                tempList.push(this.TransferedItemsDetail[i]);
-              }
+
+        case ("DeleteContainer"):
+          var tempList: any = [];
+          for (let i = 0; i < this.TransferedItemsDetail.length; i++) {
+            if (this.selectedContainers[this.rowindex].Code != this.TransferedItemsDetail[i].PalletCode) {
+              tempList.push(this.TransferedItemsDetail[i]);
             }
-            this.TransferedItemsDetail = tempList;
-            this.selectedContainers.splice(this.rowindex, 1);
-            break;
+          }
+          this.TransferedItemsDetail = tempList;
+          this.selectedContainers.splice(this.rowindex, 1);
+          break;
         case ("deleteAll"):
           this.deleteAllOkClick();
           break;
-        case ("overwriteQty"): 
+        case ("overwriteQty"):
           this.TransferedItemsDetail[this.itemIndex].Qty = this.transferQty;
           if (this.operationType == "submit") {
             this.SubmitFinally();
@@ -1366,7 +1409,7 @@ export class BinTransferComponent implements OnInit {
           this.TransferedItemsDetail = [];
           this.selectedPallets = [];
           this.clearData();
-          setTimeout(()=>{
+          setTimeout(() => {
             if (this.radioSelected == 0) {
               this.scanItemCode.nativeElement.focus();
             } else {
@@ -1374,11 +1417,11 @@ export class BinTransferComponent implements OnInit {
             }
           }, 200)
           break;
-          case("showPDFReport"):
-           // this.printDialog = true
-            this.displayPDF(this.respSuccssDocNo,14);
-            break;
-       }
+        case ("showPDFReport"):
+          // this.printDialog = true
+          this.displayPDF(this.respSuccssDocNo, 14);
+          break;
+      }
     } else {
       if ($event.Status == "no") {
         switch ($event.From) {
@@ -1388,7 +1431,7 @@ export class BinTransferComponent implements OnInit {
             break;
           case ("overwriteQty"):
             break;
-          case("showPDFReport"):
+          case ("showPDFReport"):
             break;
         }
       }
@@ -1429,29 +1472,27 @@ export class BinTransferComponent implements OnInit {
         }, 100);
       }
     }
-
-
   }
 
   manageCheckChange() {
     if (this.checkChangeEvent.target.id == "byItem") {
       // mfr serial radio selected.
       this.radioSelected = 0;
-      localStorage.setItem("radioSelection", "0");
+      sessionStorage.setItem("radioSelection", "0");
     }
     if (this.checkChangeEvent.target.id == "byPallet") {
       // mfr serial radio selected.
       this.radioSelected = 1;
-      localStorage.setItem("radioSelection", "1");
+      sessionStorage.setItem("radioSelection", "1");
     }
     if (this.checkChangeEvent.target.id == "ByContainer") {
       // mfr serial radio selected.
       this.radioSelected = 2;
-      localStorage.setItem("radioSelection", "2");
+      sessionStorage.setItem("radioSelection", "2");
     }
   }
 
-  getContainerList(){
+  getContainerList() {
     this.showLoader = true;
     this.showLookupLoader = true;
     this.commonservice.GetContainerWithRowsPresent("").subscribe(
@@ -1484,7 +1525,7 @@ export class BinTransferComponent implements OnInit {
     );
   }
 
-  onContainerChange(){
+  onContainerChange() {
     if (this.containerCode == undefined || this.containerCode == "") {
       return;
     }
@@ -1559,14 +1600,14 @@ export class BinTransferComponent implements OnInit {
     );
   }
 
-  onPalletChangeBlur(){
-    if(this.isValidateCalled){
+  onPalletChangeBlur() {
+    if (this.isValidateCalled) {
       return
     }
     this.onPalletChange();
   }
 
-  async onPalletChange(): Promise<any>{
+  async onPalletChange(): Promise<any> {
     if (this.palletNo == undefined || this.palletNo == "") {
       return;
     }
@@ -1661,7 +1702,7 @@ export class BinTransferComponent implements OnInit {
         BinNo: this.palletData[i].BINNO,
         ToBin: this.toBin,
         Tracking: this.palletData[i].ITEMTYPE,
-        WhsCode: localStorage.getItem("towhseId"),
+        WhsCode: sessionStorage.getItem("towhseId"),
         OnHandQty: this.palletData[i].QTY,
         Remarks: this.Remarks,
         BaseLine: ""
@@ -1724,7 +1765,7 @@ export class BinTransferComponent implements OnInit {
         BinNo: this.containerData[i].BINNO,
         ToBin: this.toBin,
         Tracking: this.containerData[i].ITEMTYPE,
-        WhsCode: localStorage.getItem("towhseId"),
+        WhsCode: sessionStorage.getItem("towhseId"),
         OnHandQty: this.containerData[i].QTY,
         Remarks: this.Remarks,
         BaseLine: ""
@@ -1791,12 +1832,6 @@ export class BinTransferComponent implements OnInit {
     this.palletNo = "";
     // this.toBin = "";
   }
-
-
-
-
-
-
 
 
 
@@ -1891,35 +1926,30 @@ export class BinTransferComponent implements OnInit {
 
   isValidateCalled: boolean = false;
   lastFocussedField: any;
-  async validateBeforeSubmit():Promise<any>{
+  async validateBeforeSubmit(): Promise<any> {
     this.isValidateCalled = true;
     var currentFocus = document.activeElement.id;
-    console.log("validateBeforeSubmit current focus: "+currentFocus);
-    
-    if(currentFocus != undefined){
+    console.log("validateBeforeSubmit current focus: " + currentFocus);
+
+    if (currentFocus != undefined) {
       this.lastFocussedField = currentFocus;
-      if(currentFocus == "binTransferItemCodeScan"){
+      if (currentFocus == "binTransferItemCodeScan") {
         return this.OnItemCodeChange();
-      } else if(currentFocus == "binTransferBatchNoInput"){
+      } else if (currentFocus == "binTransferBatchNoInput") {
         return this.OnLotChange();
-      } else if(currentFocus == "binTransferFromBinInput"){
+      } else if (currentFocus == "binTransferFromBinInput") {
         return this.OnFromBinChange();
-      } else if(currentFocus == "binTransferToBinInput"){
+      } else if (currentFocus == "binTransferToBinInput") {
         return this.OnToBinChange();
-      } else if(currentFocus == "binTransferScanByPalletPalletNoInput") {
+      } else if (currentFocus == "binTransferScanByPalletPalletNoInput") {
         return this.onPalletChange();
-      } else if(currentFocus == "binTransferByPalletToBinNoInput") {
+      } else if (currentFocus == "binTransferByPalletToBinNoInput") {
         return this.OnToBinChange();
-      } else if(currentFocus == "transferQty"){
-        this.transferQty = Number(this.transferQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));
-      } 
+      } else if (currentFocus == "transferQty") {
+        this.transferQty = Number(this.transferQty).toFixed(Number(sessionStorage.getItem("DecimalPrecision")));
+      }
     }
   }
-
-
-
-
-
 
 
   printDialog: boolean = false
@@ -1927,13 +1957,13 @@ export class BinTransferComponent implements OnInit {
   base64String: string = "";
   fileName: string = "";
   displayPDF1: boolean = false;
-  showPDFLoading:boolean = false;
+  showPDFLoading: boolean = false;
   public displayPDF(dNo: string, value: any) {
     this.showPDFLoading = true;
     this.inboundService.printingServiceForSubmitGRPO(dNo, value, 1).subscribe(
       (data: any) => {
         this.showPDFLoading = false;
-       // this.printDialog = false;
+        // this.printDialog = false;
         if (data != undefined) {
           // console.log("" + data);
           if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
@@ -1982,12 +2012,203 @@ export class BinTransferComponent implements OnInit {
     this.displayPDF("", event)
   }
 
-  closePDF() { 
+  closePDF() {
     this.displayPDF1 = false;
     console.log("PDF dialog is closed");
   }
-  closePrintDialog(){
+  closePrintDialog() {
     this.printDialog = false;
   }
 
+  showUDF = false;
+  UDFComponentData: IUIComponentTemplate[] = [];
+  itUDFComponents: IUIComponentTemplate = <IUIComponentTemplate>{};
+  templates = [];
+  displayArea = "Header";
+  UDFApiResponse: any;
+  // ShowUDF(displayArea) {
+  //   this.displayArea = displayArea;
+  //   this.loadUDF(displayArea)
+  //   this.showUDF = true;
+  // }
+
+
+  ShowUDF(displayArea, UDFButtonClicked): boolean {
+    this.displayArea = displayArea;
+    let tempUDF = [];
+    if (displayArea == "Header") {
+      this.UDF.forEach(element => {
+        if (element.Flag == "H") {
+          tempUDF.push(element);
+        }
+      });
+    } else if (displayArea == "Detail") {
+      this.UDF.forEach(element => {
+        if (element.Flag == "D" && element.LineNo == Number(sessionStorage.getItem("LineNum"))) {
+          tempUDF.push(element);
+        }
+      });
+    } else {
+      if (this.ItemTracking == "B") {
+        if (this.lotValue == "") {
+          this.toastr.error('', this.translate.instant("PhyCount_BatchLotcannotbeblank"));
+          return;
+        }
+      }
+      else if (this.ItemTracking == "S") {
+        if (this.lotValue == "") {
+          this.toastr.error('', this.translate.instant("InvTransfer_SerialNoCantBlank"));
+          return;
+        }  
+      }
+      if (this.fromBin == "") {
+        this.toastr.error('', this.translate.instant("InvTransfer_FromBinMsg"));
+        return;
+      }
+      this.UDF.forEach(element => {
+        if (element.Flag == "L" && element.LineNo == Number(sessionStorage.getItem("LineNum"))) {
+          tempUDF.push(element);
+        }
+      });
+    }
+    let UDFStatus = this.commonservice.loadUDF(displayArea, this.commonservice.getUDFData(), tempUDF);
+    if (!UDFButtonClicked) {
+      if (UDFStatus != "MANDATORY_AVL") {
+        return false;
+      }
+    }
+    this.templates = this.commonservice.getTemplateArray();
+    this.UDFComponentData = this.commonservice.getUDFComponentDataArray();
+    this.showUDF = true;
+    return true;
+  }
+
+  // addUDFdata(istextbox, isdropdown, DropdownArray, Field) {
+  //   this.itUDFComponents = <IUIComponentTemplate>{};
+  //   this.itUDFComponents.dropDown = "";
+  //   this.itUDFComponents.textBox = "";
+  //   this.itUDFComponents.ismandatory = Field.OPTM_ISMANDATORY == 1 ? true : false;
+  //   this.itUDFComponents.LabelName = Field.Descr;
+  //   this.itUDFComponents.istextbox = istextbox;
+  //   this.itUDFComponents.isdropDown = isdropdown;
+  //   this.itUDFComponents.OPTM_SEQ = Field.OPTM_SEQ;
+  //   this.itUDFComponents.AliasID = Field.AliasID;
+  //   this.itUDFComponents.Size = Field.SizeID;
+
+  //   if (isdropdown) {
+  //     this.itUDFComponents.DropdownArray = DropdownArray;
+  //   } else {
+  //     this.itUDFComponents.textType = Field.OPTM_FIELD_TYPE;
+  //     this.itUDFComponents.textBox = Field.Dflt
+  //   }
+  //   this.templates.push(this.templates.length);
+  //   this.UDFComponentData.push(this.itUDFComponents);
+  // }
+
+  getUDFSelectedItem(itUDFComponentData) {
+    this.onUDFDialogClose();
+    if (itUDFComponentData == null) {
+      return;
+    }
+    if (this.displayArea == "Detail") {
+      if (sessionStorage.getItem("LineNum") == null || sessionStorage.getItem("LineNum") == undefined ||
+        sessionStorage.getItem("LineNum") == "") {
+        sessionStorage.setItem("LineNum", "0");
+      }
+      if (itUDFComponentData.length > 0) {
+        for (var i = 0; i < itUDFComponentData.length; i++) {
+          // oWhsTransAddLot.UDF = itUDFComponentData;
+          let value = "";
+          if (itUDFComponentData[i].istextbox) {
+            value = itUDFComponentData[i].textBox;
+          } else {
+            value = itUDFComponentData[i].dropDown.FldValue;
+          }
+          this.UDF.push({
+            Flag: "D",
+            LineNo: Number(sessionStorage.getItem("LineNum")),
+            Value: value,
+            Key: itUDFComponentData[i].AliasID
+          });
+        }
+      }
+    } else if (this.displayArea == "Lot") {
+      if (sessionStorage.getItem("LineNum") == null || sessionStorage.getItem("LineNum") == undefined ||
+        sessionStorage.getItem("LineNum") == "") {
+        sessionStorage.setItem("LineNum", "0");
+      }
+      if (itUDFComponentData.length > 0) {
+        for (var i = 0; i < itUDFComponentData.length; i++) {
+          let value = "";
+          if (itUDFComponentData[i].istextbox) {
+            value = itUDFComponentData[i].textBox;
+          } else {
+            value = itUDFComponentData[i].dropDown.FldValue;
+          }
+          this.UDF.push({
+            Flag: "L",
+            LineNo: Number(sessionStorage.getItem("LineNum")),
+            Value: value,
+            Key: itUDFComponentData[i].AliasID,
+            LotNo: this.lotValue,
+            Bin: this.fromBin
+          });
+        }
+      }
+    } else {
+      if (itUDFComponentData.length > 0) {
+        while (this.UDF.length > 0) {
+          let index = this.UDF.findIndex(e => e.Flag == "H")
+          if (index == -1) {
+            break;
+          }
+          this.UDF.splice(index, 1);
+        }
+        for (var i = 0; i < itUDFComponentData.length; i++) {
+          let value = "";
+          if (itUDFComponentData[i].istextbox) {
+            value = itUDFComponentData[i].textBox;
+          } else {
+            value = itUDFComponentData[i].dropDown.FldValue;
+          }
+          this.UDF.push({
+            Flag: "H",
+            LineNo: -1,
+            Value: value,
+            Key: itUDFComponentData[i].AliasID
+          });
+        }
+      }
+    }
+    this.templates = [];
+  }
+
+  onUDFDialogClose() {
+    this.showUDF = false;
+    this.UDFComponentData = [];
+    this.templates = [];
+  }
+
+
+
+  // loadUDF(displayArea) {
+  //   this.onUDFDialogClose();
+  //   let data = this.UDFApiResponse;
+
+  //   let subarray = [];
+  //   data.Fields.forEach(element => {
+  //     if (element.OPTM_DISPLAYAREA == displayArea) {
+  //       subarray.push(element);
+  //     }
+  //   });
+  //   for (var i = 0; i < subarray.length; i++) {
+  //     let DropdownArray = data.ValidValues.filter(e => e.OPTM_SEQ == subarray[i].OPTM_SEQ);
+  //     let textboxType = subarray[i].OPTM_FIELD_TYPE;// == "A" ? "text":"number";
+  //     if (DropdownArray.length == 0) {
+  //       this.addUDFdata(true, false, DropdownArray, subarray[i]);
+  //     } else {
+  //       this.addUDFdata(false, true, DropdownArray, subarray[i]);
+  //     }
+  //   }
+  // }
 } 

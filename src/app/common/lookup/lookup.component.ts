@@ -249,6 +249,12 @@ export class LookupComponent implements OnInit {
         title: this.translate.instant("AvailableQty"),
         type: 'numeric',
         width: '100'
+      },
+      {
+        field: 'EXPDATE',
+        title: this.translate.instant("ExpiryDate"),
+        type: 'date',
+        width: '100'
       }
     ];
     this.lookupTitle = this.translate.instant("AvaliableMeterial");
@@ -258,7 +264,7 @@ export class LookupComponent implements OnInit {
         //  console.log('ServiceData', this.serviceData);
         var tempData: any;
         for (var i = 0; i < len; i++) {
-          var qty = Number(this.serviceData[i].TOTALQTY).toFixed(Number(localStorage.getItem("DecimalPrecision")));
+            var qty = Number(this.serviceData[i].TOTALQTY).toFixed(Number(sessionStorage.getItem("DecimalPrecision")));
           this.serviceData[i].TOTALQTY = qty;
         }
         this.dialogOpened = true;
@@ -298,6 +304,12 @@ export class LookupComponent implements OnInit {
         field: 'ITEMNAME',
         title: this.translate.instant("ItemName"),
         type: 'text',
+        width: '100'
+      },
+      {
+        field: 'EXPDATE',
+        title: this.translate.instant("ExpiryDate"),
+        type: 'date',
         width: '100'
       }
     ];
@@ -610,6 +622,12 @@ export class LookupComponent implements OnInit {
         field: 'BINNO',
         title: this.translate.instant("BinNo"),
         type: 'text'
+      },
+      {
+        field: 'EXPDATE',
+        title: this.translate.instant("ExpiryDate"),
+        type: 'date',
+        width: '100'
       }
     ];
     this.lookupTitle = this.translate.instant("Palletmessage.Lot");
@@ -708,6 +726,12 @@ export class LookupComponent implements OnInit {
         title: this.translate.instant("BinNo"),
         type: 'text',
         width: '100'
+      },
+      {
+        field: 'EXPDATE',
+        title: this.translate.instant("ExpiryDate"),
+        type: 'date',
+        width: '100'
       }
     ];
 
@@ -788,18 +812,18 @@ export class LookupComponent implements OnInit {
 
 
   onCheckboxClick(checked: any, index: number, dataItem) {
-    // this.pageChange({ skip: 0, take: this.pagesize });
-    let servivceItem: any = this.serviceData[index];
-    this.serviceData[index].selected = checked;
-    if (checked) {
-      this.selectedValues.push(dataItem);
-    }
-    else {
-      let rixd: number= this.selectedValues.findIndex(i => i.LOTNO == servivceItem.LOTNO && i.BINNO == servivceItem.BINNO)
-      var temp = this.selectedValues.splice(rixd, 1);
-      this.selectedValues = this.selectedValues;
-      //console.log("selectedValues.size", this.selectedValues.length);
-    }
+      // this.pageChange({ skip: 0, take: this.pagesize });
+      let servivceItem: any = this.serviceData[index];
+      this.serviceData[index].selected = checked;
+      if (checked) {
+          this.selectedValues.push(dataItem);
+      }
+      else {
+          let rixd: number= this.selectedValues.findIndex(i => i.LOTNO == servivceItem.LOTNO && i.BINNO == servivceItem.BINNO)
+          var temp = this.selectedValues.splice(rixd, 1);
+          this.selectedValues = this.selectedValues;
+          //console.log("selectedValues.size", this.selectedValues.length);
+      }
   }
 
   palletList() {
@@ -1121,7 +1145,7 @@ showBins() {
 
   skip: any = 0;
   pageChange(event: PageChangeEvent) {
-    this.skip = event.skip;
+      this.skip = event.skip;
   }
 
   Done() {

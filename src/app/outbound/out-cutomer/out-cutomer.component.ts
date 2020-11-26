@@ -9,6 +9,7 @@ import { CommonConstants } from '../../const/common-constants';
 import { SOHEADER, SODETAIL, DeliveryToken } from '../../models/outbound/out-del-req';
 import { InboundService } from '../../services/inbound.service';
 import { PageChangeEvent } from '@progress/kendo-angular-grid';
+import { IUIComponentTemplate } from 'src/app/common/ui-component.interface';
 
 // This file called from Outbound -> SO delivery and Shipment delivery
 
@@ -63,6 +64,14 @@ export class OutCutomerComponent implements OnInit {
   ShowBOLReport: boolean = true;
   showPDFLoading: boolean = false;
   shipmentLinesArray = [];
+  //UDF
+  showUDF = false;
+  UDFComponentData: IUIComponentTemplate[] = [];
+  itUDFComponents: IUIComponentTemplate = <IUIComponentTemplate>{};
+  templates = [];
+  UDF = [];
+  displayArea = "Header";
+  IsUDFEnabled: string="N";
 
   constructor(private inboundService: InboundService, private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) {
 
@@ -70,7 +79,7 @@ export class OutCutomerComponent implements OnInit {
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
     translate.use(userLang);
     translate.onLangChange.subscribe((event: LangChangeEvent) => {
-      let option = localStorage.getItem("deliveryOptionType");
+      let option = sessionStorage.getItem("deliveryOptionType");
       this.deliveryOptionType = option;
       if (this.deliveryOptionType == '1') {
         this.pageTitle = this.translate.instant("Outbound_Delivery")
@@ -87,7 +96,7 @@ export class OutCutomerComponent implements OnInit {
     this.showLookup = false;
     this.ShipmentHDR = [];
 
-    let option = localStorage.getItem("deliveryOptionType");
+    let option = sessionStorage.getItem("deliveryOptionType");
     this.deliveryOptionType = option;
     if (this.deliveryOptionType == '1') {
       this.pageTitle = this.translate.instant("Outbound_Delivery")
@@ -103,8 +112,10 @@ export class OutCutomerComponent implements OnInit {
     this.ShowPackListReport = (JSON.parse(sessionStorage.getItem('ConfigData'))).ShowPackListReport;
     this.ShowBOLReport = (JSON.parse(sessionStorage.getItem('ConfigData'))).ShowBOLReport;
     // this.initializeShipmentLines();
-
-
+    this.IsUDFEnabled = sessionStorage.getItem("ISUDFEnabled");
+    if(this.IsUDFEnabled == "Y"){
+      this.commonservice.GetWMSUDFBasedOnScreen("15041");
+    }    
   }
 
   // initializeShipmentLines() {
@@ -123,7 +134,7 @@ export class OutCutomerComponent implements OnInit {
 
   updateSalesOrderList() {
     // lsOutbound
-    let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+    let outboundData: string = sessionStorage.getItem(CommonConstants.OutboundData);
     if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
       this.outbound = JSON.parse(outboundData);
       if (this.outbound != undefined && this.outbound != null) {
@@ -253,7 +264,7 @@ export class OutCutomerComponent implements OnInit {
           };
 
           // lsOutbound
-          localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
+          sessionStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
           CurrentOutBoundData.CustomerData = outbound.CustomerData;
           this.outbound = outbound;
           result = true;
@@ -286,7 +297,7 @@ export class OutCutomerComponent implements OnInit {
         this.customerName = this.selectedCustomerElement[1];
 
         //===================================
-        let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+        let outboundData: string = sessionStorage.getItem(CommonConstants.OutboundData);
         if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
           this.outbound = JSON.parse(outboundData);
           if (this.outbound != undefined && this.outbound != null && this.outbound.OrderData != null
@@ -295,7 +306,7 @@ export class OutCutomerComponent implements OnInit {
             // console.log("outbound","Outbound not null if...")
             this.outbound.OrderData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
             this.outbound.OrderData.DOCNUM = this.orderNumber;
-            localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+            sessionStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
           } else {
             //console.log("outbound","Outbound ka else...")
             //if order is not present first time case.
@@ -303,7 +314,7 @@ export class OutCutomerComponent implements OnInit {
             outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName, ShipmentId: '' };
             outbound.OrderData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
             outbound.OrderData.DOCNUM = this.orderNumber;
-            localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
+            sessionStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
           }
         } else {
           // if first time.
@@ -311,7 +322,7 @@ export class OutCutomerComponent implements OnInit {
           outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName, ShipmentId: '' };
           outbound.OrderData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
           outbound.OrderData.DOCNUM = this.orderNumber;
-          localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
+          sessionStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
           //console.log("outbound","OutboundData null case....")
         }
         //===================================
@@ -345,7 +356,7 @@ export class OutCutomerComponent implements OnInit {
           TrackingId: this.trackingId, CustRefNo: this.CustRefNo, ShipmentId: ''
         };
         // lsOutbound
-        localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
+        sessionStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
         CurrentOutBoundData.CustomerData = outbound.CustomerData;
         this.outbound = outbound;
         this.scanSO.nativeElement.focus()
@@ -438,7 +449,7 @@ export class OutCutomerComponent implements OnInit {
           //this.showLookup = true;
           this.serviceData = resp;
           this.showLookupLoader = false;
-          
+
           if (this.serviceData.length > 0) {
             this.lookupfor = 'out-customer';
             this.showLookup = true;
@@ -477,7 +488,7 @@ export class OutCutomerComponent implements OnInit {
    */
   openSelectedDeleveryItem($event) {
     //console.log("selected delivery item");
-    localStorage.setItem("selectedSOAfterAddToDelivery", $event.selectedRows[0].dataItem.DOCNUM);
+    sessionStorage.setItem("selectedSOAfterAddToDelivery", $event.selectedRows[0].dataItem.DOCNUM);
     this.prepareTempCollectionForSelectedDelivery($event.selectedRows[0].dataItem.DOCNUM, $event.selectedRows[0].dataItem.DOCENTRY)
   }
 
@@ -493,15 +504,15 @@ export class OutCutomerComponent implements OnInit {
     }
 
     if (this.orderNumber != null) {
-      localStorage.setItem("IsSOAvailable", "True");
+      sessionStorage.setItem("IsSOAvailable", "True");
     }
-    localStorage.setItem("selectedSOAfterAddToDelivery", null);
+    sessionStorage.setItem("selectedSOAfterAddToDelivery", null);
     if (clearOrder == true) {
-      let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+      let outboundData: string = sessionStorage.getItem(CommonConstants.OutboundData);
       if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
         this.outbound = JSON.parse(outboundData);
         if (this.outbound != undefined && this.outbound != null) {
-          localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+          sessionStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
         }
       }
     }
@@ -510,7 +521,7 @@ export class OutCutomerComponent implements OnInit {
     // then it will check customer ref no. ones more then try to get it ones more if available
     // temporary fix to avoid that blur issue.
     if (clearOrder == true) {
-      let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+      let outboundData: string = sessionStorage.getItem(CommonConstants.OutboundData);
       if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
         var outboundRecord = JSON.parse(outboundData);
         if (outboundRecord != null && outboundRecord != undefined && outboundRecord != "" &&
@@ -521,11 +532,19 @@ export class OutCutomerComponent implements OnInit {
         }
       }
     }
+    if(this.IsUDFEnabled == 'Y'){
+      if (sessionStorage.getItem("GRPOHdrUDF") == undefined || sessionStorage.getItem("GRPOHdrUDF") == "") {
+        if(this.ShowUDF('Header', false)){
+          return;
+        }
+        // return;
+      }
+    }
     this.router.navigateByUrl('home/outbound/outorder', { skipLocationChange: true });
   }
 
   customerRefNoBlur() {
-    let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+    let outboundData: string = sessionStorage.getItem(CommonConstants.OutboundData);
     if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
       this.outbound = JSON.parse(outboundData);
       if (this.outbound != undefined && this.outbound != null && this.outbound
@@ -538,13 +557,13 @@ export class OutCutomerComponent implements OnInit {
           CustomerCode: customerCode, CustomerName: customerName,
           TrackingId: trackingId, CustRefNo: CustRefNo, ShipmentId: this.shipmentId
         };
-        localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+        sessionStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
       }
     }
   }
 
   trackingIdBlur() {
-    let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+    let outboundData: string = sessionStorage.getItem(CommonConstants.OutboundData);
     if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
       this.outbound = JSON.parse(outboundData);
       if (this.outbound != undefined && this.outbound != null && this.outbound
@@ -557,14 +576,14 @@ export class OutCutomerComponent implements OnInit {
           CustomerCode: customerCode, CustomerName: customerName,
           TrackingId: trackingId, CustRefNo: CustRefNo, ShipmentId: this.shipmentId
         };
-        localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+        sessionStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
       }
     }
   }
 
   public cancel() {
     // lsOutbound
-    localStorage.setItem(CommonConstants.OutboundData, null)
+    sessionStorage.setItem(CommonConstants.OutboundData, null)
     CurrentOutBoundData.CustomerData = null;
     this.router.navigateByUrl('home/dashboard');
   }
@@ -595,7 +614,7 @@ export class OutCutomerComponent implements OnInit {
   }
 
   clearOutbound() {
-    localStorage.setItem(CommonConstants.OutboundData, null);
+    sessionStorage.setItem(CommonConstants.OutboundData, null);
     this.orderCollection = [];
     this.customerName = '';
     this.customerCode = '';
@@ -614,7 +633,7 @@ export class OutCutomerComponent implements OnInit {
       }
     }
 
-    let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+    let outboundData: string = sessionStorage.getItem(CommonConstants.OutboundData);
     if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
       this.outbound = JSON.parse(outboundData);
     }
@@ -655,7 +674,7 @@ export class OutCutomerComponent implements OnInit {
             const h = arrSOHEADER[index];
             if (h.SONumber.toString() === "" + o.Order.DOCNUM
               && h.ItemCode === o.Item.ITEMCODE
-              && h.Tracking === o.Item.TRACKING 
+              && h.Tracking === o.Item.TRACKING
               && h.LineNo === o.Item.LINENUM) {
               existHdr = true;
               break;
@@ -695,7 +714,7 @@ export class OutCutomerComponent implements OnInit {
             }
             arrSOHEADER.push(hdr);
           }
-          
+
           //================logic to add delivery line.
           var parentLineNum = hdrLineVal;
           let hasDetail = false;
@@ -742,7 +761,7 @@ export class OutCutomerComponent implements OnInit {
             let dtl: SODETAIL = new SODETAIL();
             dtl.Bin = o.Meterial.BINNO;
             dtl.LotNumber = o.Meterial.LOTNO;
-            dtl.LotQty = Number(o.Meterial.MeterialPickQty.toString()).toFixed(Number(localStorage.getItem("DecimalPrecision")));
+            dtl.LotQty = Number(o.Meterial.MeterialPickQty.toString()).toFixed(Number(sessionStorage.getItem("DecimalPrecision")));
             dtl.SysSerial = o.Meterial.SYSNUMBER;
             dtl.parentLine = parentLineNum;
             dtl.GUID = guid;
@@ -758,7 +777,22 @@ export class OutCutomerComponent implements OnInit {
         deliveryToken.SOHEADER = arrSOHEADER;
         deliveryToken.SODETAIL = arrSODETAIL;
         deliveryToken.UDF = [];
-        deliveryToken.PackingData = this.getPackingDataFromLocalStorage()
+        if(this.IsUDFEnabled == 'Y'){
+          deliveryToken.UDF = this.outbound.UDF;
+          if (deliveryToken.UDF.findIndex(e => e.Flag == "H") == -1) {
+            if (sessionStorage.getItem("GRPOHdrUDF") != undefined && sessionStorage.getItem("GRPOHdrUDF") != "") {
+              JSON.parse(sessionStorage.getItem("GRPOHdrUDF")).forEach(element => {
+                deliveryToken.UDF.push(element);
+              });
+            } else {
+              if(this.ShowUDF('Header', false)){
+                return;
+              }
+              // return;
+            }
+          }
+        }        
+        deliveryToken.PackingData = this.getPackingDataFromsessionStorage()
       }
       if (deliveryToken.PackingData.length > 0) {
         this.isDeliveryContainerPacking = true;
@@ -777,8 +811,7 @@ export class OutCutomerComponent implements OnInit {
             this.CustRefNo = "";
             this.toastr.success('', this.translate.instant("DeleiverySuccess") + " : " + data[0].SuccessNo);
             this.clearOutbound();
-
-
+            sessionStorage.setItem("GRPOHdrUDF", "");
             if (this.invoiceStatus == "N" || this.invoiceStatus == "n") {
               // this.toastr.error('', this.translate.instant("ARINvoiceNotCreated") + " : " + data[0].SuccessNo);
             } else {
@@ -818,9 +851,9 @@ export class OutCutomerComponent implements OnInit {
     }
   }
 
-  getPackingDataFromLocalStorage() {
+  getPackingDataFromsessionStorage() {
     let selectedPackingItems = []
-    let outboundData = localStorage.getItem(CommonConstants.OutboundData);
+    let outboundData = sessionStorage.getItem(CommonConstants.OutboundData);
     if (outboundData != undefined && outboundData != '') {
       var outbound = JSON.parse(outboundData);
       var packingCollection: any = outbound.packingCollection;
@@ -899,7 +932,7 @@ export class OutCutomerComponent implements OnInit {
     let order = this.orderCollection[idx];
     this.outbound.DeleiveryCollection = this.outbound.DeleiveryCollection.filter(d => d.Order.DOCNUM !== order.DOCNUM);
     this.outbound.TempMeterials = this.outbound.TempMeterials.filter(d => d.Order.DOCNUM !== order.DOCNUM);
-    localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+    sessionStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
   }
 
   openOrderScreen(selection: any) {
@@ -907,7 +940,7 @@ export class OutCutomerComponent implements OnInit {
     let orderList = this.outbound.DeleiveryCollection.filter(d => d.Order.DOCNUM === selectedIinquiry.DOCNUM);
     if (orderList.length > 0) {
       this.outbound.OrderData = orderList[0].Order;
-      localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+      sessionStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
       this.openCustSO();
     }
   }
@@ -952,10 +985,10 @@ export class OutCutomerComponent implements OnInit {
           // outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
           // outbound.OrderData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
           // outbound.OrderData.DOCNUM = this.orderNumber;
-          // localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
+          // sessionStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
 
           //===================================
-          let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+          let outboundData: string = sessionStorage.getItem(CommonConstants.OutboundData);
           if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
             this.outbound = JSON.parse(outboundData);
             if (this.outbound != undefined && this.outbound != null && this.outbound.OrderData != null
@@ -964,7 +997,7 @@ export class OutCutomerComponent implements OnInit {
               //console.log("outbound","Outbound not null if...")
               this.outbound.OrderData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
               this.outbound.OrderData.DOCNUM = this.orderNumber;
-              localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+              sessionStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
             } else {
               //console.log("outbound","Outbound ka else...")
               //if order is not present first time case.
@@ -972,7 +1005,7 @@ export class OutCutomerComponent implements OnInit {
               outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName, ShipmentId: this.shipmentId };
               outbound.OrderData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
               outbound.OrderData.DOCNUM = this.orderNumber;
-              localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
+              sessionStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
             }
           } else {
             // if first time.
@@ -980,7 +1013,7 @@ export class OutCutomerComponent implements OnInit {
             outbound.CustomerData = { CustomerCode: this.customerCode, CustomerName: this.customerName, ShipmentId: this.shipmentId };
             outbound.OrderData = { CustomerCode: this.customerCode, CustomerName: this.customerName };
             outbound.OrderData.DOCNUM = this.orderNumber;
-            localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
+            sessionStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
             //console.log("outbound","OutboundData null case....")
           }
           //===================================
@@ -1079,7 +1112,7 @@ export class OutCutomerComponent implements OnInit {
    */
   prepareTempCollectionForSelectedDelivery(selectedDocNum: any, selectedDocEntry: any) {
     let deliveryDataForSelectedSO: any = [];
-    let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+    let outboundData: string = sessionStorage.getItem(CommonConstants.OutboundData);
 
     if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
       this.outbound = JSON.parse(outboundData);
@@ -1104,10 +1137,18 @@ export class OutCutomerComponent implements OnInit {
         }
       }
     }
+    if(this.IsUDFEnabled == 'Y'){
+      if (sessionStorage.getItem("GRPOHdrUDF") == undefined || sessionStorage.getItem("GRPOHdrUDF") == "") {
+        if(this.ShowUDF('Header', false)){
+          return;
+        }
+      }
+    }
+
     // after we create delivery collection clear temp collection.
     this.outbound.TempMeterials = deliveryDataForSelectedSO;
     // //lsOutbound
-    localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+    sessionStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
     this.router.navigateByUrl('home/outbound/outorder', { skipLocationChange: true });
   }
 
@@ -1128,13 +1169,13 @@ export class OutCutomerComponent implements OnInit {
             return;
           }
           this.DiliveryShipmentList = resp;
-          if(this.DiliveryShipmentList.length > this.pageSize){
+          if (this.DiliveryShipmentList.length > this.pageSize) {
             this.pagable = true;
-          }else{
+          } else {
             this.pagable = false;
-          }          
+          }
 
-          for(var i=0; i<this.DiliveryShipmentList.length; i++){
+          for (var i = 0; i < this.DiliveryShipmentList.length; i++) {
             this.DiliveryShipmentList[i].Selected = false;
           }
           // var DelSeq = document.getElementById("DelSeq")
@@ -1239,8 +1280,8 @@ export class OutCutomerComponent implements OnInit {
 
   parseAndGenerateDeliveryDataFromShipment(shipmentResponse: any) {
     let outbound: OutboundData = new OutboundData();
-    if (JSON.parse(localStorage.getItem(CommonConstants.OutboundData)) != undefined) {
-      outbound = JSON.parse(localStorage.getItem(CommonConstants.OutboundData));
+    if (JSON.parse(sessionStorage.getItem(CommonConstants.OutboundData)) != undefined) {
+      outbound = JSON.parse(sessionStorage.getItem(CommonConstants.OutboundData));
     }
     if (shipmentResponse != null && shipmentResponse != undefined && shipmentResponse != "" &&
       shipmentResponse != "null" && shipmentResponse.ItemHeader != undefined && shipmentResponse.ItemHeader != null &&
@@ -1309,15 +1350,15 @@ export class OutCutomerComponent implements OnInit {
     }
 
     //set temp collection data to local storage.
-    localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
+    sessionStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
     // prepare deliery collection from shipment response.
     this.prepareDeleiveryCollectionFromTempCollection(outbound);
 
-    localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
+    sessionStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
     //set delivery data to local storage.
-    localStorage.setItem(CommonConstants.FROM_DTS, JSON.stringify(true));
+    sessionStorage.setItem(CommonConstants.FROM_DTS, JSON.stringify(true));
 
-    let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+    let outboundData: string = sessionStorage.getItem(CommonConstants.OutboundData);
     if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
       this.outbound = JSON.parse(outboundData);
     }
@@ -1433,12 +1474,12 @@ export class OutCutomerComponent implements OnInit {
           this.ShipmentHDR[this.ShipmentHDR.length - 1]["ContainerHeader"] = this.ContainerHeader;
           this.ShipmentHDR[this.ShipmentHDR.length - 1]["ShipmentItems"] = this.ShipmentItems;
 
-          let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+          let outboundData: string = sessionStorage.getItem(CommonConstants.OutboundData);
           if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
             this.outbound = JSON.parse(outboundData);
           }
           this.outbound.ShipmentHDR = this.ShipmentHDR;
-          localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+          sessionStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
         } else {
           this.toastr.error('', this.translate.instant("ShipmentNotAvailable"));
         }
@@ -1453,7 +1494,7 @@ export class OutCutomerComponent implements OnInit {
 
   showShipments() {
     this.showShipmentInfo = true;
-    let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+    let outboundData: string = sessionStorage.getItem(CommonConstants.OutboundData);
     if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
       this.outbound = JSON.parse(outboundData);
     }
@@ -1484,7 +1525,7 @@ export class OutCutomerComponent implements OnInit {
       }
     }
     //lsOutbound
-    let outboundData = localStorage.getItem(CommonConstants.OutboundData);
+    let outboundData = sessionStorage.getItem(CommonConstants.OutboundData);
     if (outboundData != undefined && outboundData != '') {
       this.outbound = JSON.parse(outboundData);
       this.outbound.packingCollection = tempPackingArray
@@ -1550,7 +1591,7 @@ export class OutCutomerComponent implements OnInit {
   }
 
   shipmentRowDeleteEvent(shipmentCode) {
-    let outboundData: string = localStorage.getItem(CommonConstants.OutboundData);
+    let outboundData: string = sessionStorage.getItem(CommonConstants.OutboundData);
     if (outboundData !== undefined && outboundData !== '' && outboundData !== null) {
       this.outbound = JSON.parse(outboundData);
     }
@@ -1561,7 +1602,7 @@ export class OutCutomerComponent implements OnInit {
     let result = this.outbound.DeleiveryCollection.filter(e => e.Item.ShipmentCode == shipmentCode)
     let index = this.outbound.DeleiveryCollection.findIndex(e => e.Item.ShipmentCode == shipmentCode)
     this.outbound.DeleiveryCollection.splice(index, result.length);
-    localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+    sessionStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
     if (this.outbound.DeleiveryCollection !== undefined && this.outbound.DeleiveryCollection !== null && this.outbound.DeleiveryCollection.length > 0) {
       this.orderCollection = this.getUniqueValuesByProperty(this.outbound.DeleiveryCollection);
       if (this.orderCollection.length > this.pageSize) {
@@ -1622,7 +1663,7 @@ export class OutCutomerComponent implements OnInit {
     this.yesButtonText = this.translate.instant("yes");
     this.noButtonText = this.translate.instant("no");
     this.dialogFor = "receivePDFDialog";
-    this.dialogMsg = "Do you want to print report?";//this.translate.instant("Inbound_PrintAllLabelsAfterSubmit");
+    this.dialogMsg = "Do you want to print report?";
     this.showConfirmDialog = true; // show dialog 
   }
 
@@ -1646,7 +1687,7 @@ export class OutCutomerComponent implements OnInit {
   dialogOpened: boolean = false;
   ShipmentDetail: any[] = [];
 
-  showShipmentList(shipmentId){
+  showShipmentList(shipmentId) {
     this.SelectedRowsforShipmentArr = [];
     this.SelectedRowsforShipmentArr.push({
       ShipmentID: shipmentId
@@ -1655,12 +1696,12 @@ export class OutCutomerComponent implements OnInit {
     this.prepareShipmentModel("getDetail");
   }
 
-  onShipmentSelection(event) {    
+  onShipmentSelection(event) {
     this.showShipmentList(event.selectedRows[0].dataItem.OPTM_SHIPMENTID)
   }
 
   updateDeliverySeq(lotTemplateVar, value, rowindex) {
-    let index = this.DiliveryShipmentList.findIndex(e=> e.OPTM_SHIPMENT_CODE == value.OPTM_SHIPMENT_CODE)
+    let index = this.DiliveryShipmentList.findIndex(e => e.OPTM_SHIPMENT_CODE == value.OPTM_SHIPMENT_CODE)
     this.DiliveryShipmentList[index].DeliverySeq = lotTemplateVar;
   }
 
@@ -1670,7 +1711,7 @@ export class OutCutomerComponent implements OnInit {
     //     this.DiliveryShipmentList[i].DeliverToLocation = lotTemplateVar;
     //   }
     // }
-    let index = this.DiliveryShipmentList.findIndex(e=> e.OPTM_SHIPMENT_CODE == value.OPTM_SHIPMENT_CODE)
+    let index = this.DiliveryShipmentList.findIndex(e => e.OPTM_SHIPMENT_CODE == value.OPTM_SHIPMENT_CODE)
     this.DiliveryShipmentList[index].DeliverToLocation = lotTemplateVar;
   }
 
@@ -1837,9 +1878,9 @@ export class OutCutomerComponent implements OnInit {
     //   Shipment: this.shipmentId
     // })
 
-    if(event == "delivery"){
+    if (event == "delivery") {
       this.CreateDeliveryBasedonShipments(deliveryPayload);
-    }else{
+    } else {
       this.GetShipmentSODetails(deliveryPayload);
     }
   }
@@ -1857,8 +1898,8 @@ export class OutCutomerComponent implements OnInit {
           //   this.showLookupLoader = false;
           //   return;
           // }
-          
-          this.ShipmentDetail =  resp.ShipmentDtls
+
+          this.ShipmentDetail = resp.ShipmentDtls
           this.dialogOpened = true;
           this.SelectedRowsforShipmentArr = [];
         } else {
@@ -1891,7 +1932,8 @@ export class OutCutomerComponent implements OnInit {
             this.toastr.success('', this.translate.instant("DeleiverySuccess") + " : " + resp[0].SuccessNo);
             this.SelectedRowsforShipmentArr = [];
             this.resetShipmentList();
-         //   this.getShipmentList();
+            this.showPrintConfirmDialog();
+            //   this.getShipmentList();
           } else if (resp[0].ErrorMsg == "7001") {
             this.showLookupLoader = false;
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
@@ -1902,7 +1944,7 @@ export class OutCutomerComponent implements OnInit {
             this.showLookupLoader = false;
             this.toastr.error('', resp[0].ErrorMsg);
           }
-          
+
         } else {
           this.toastr.error('', this.translate.instant("CommonSomeErrorMsg"));
           this.shipToCode = "";
@@ -1915,7 +1957,7 @@ export class OutCutomerComponent implements OnInit {
     );
   }
 
-  resetShipmentList(){
+  resetShipmentList() {
     this.DiliveryShipmentList = [];
     this.selectall = false;
     this.SelectedRowsforShipmentArr = [];
@@ -1925,6 +1967,57 @@ export class OutCutomerComponent implements OnInit {
 
   pageChange(event: PageChangeEvent) {
     this.skip = event.skip;
+  }
+
+  ShowUDF(displayArea, UDFButtonClicked): boolean {
+    this.displayArea = displayArea;
+    let UDFStatus
+    if (sessionStorage.getItem("GRPOHdrUDF") != undefined && sessionStorage.getItem("GRPOHdrUDF") != "") {
+      UDFStatus = this.commonservice.loadUDF(displayArea, this.commonservice.getUDFData(), JSON.parse(sessionStorage.getItem("GRPOHdrUDF")));
+    } else {
+      UDFStatus = this.commonservice.loadUDF(displayArea, this.commonservice.getUDFData());
+    }
+    if (!UDFButtonClicked) {
+      if (UDFStatus != "MANDATORY_AVL") {
+        return false;
+      }
+    }
+    this.templates = this.commonservice.getTemplateArray();
+    this.UDFComponentData = this.commonservice.getUDFComponentDataArray();
+    this.showUDF = true;
+    return true
+  }
+
+  onUDFDialogClose() {
+    this.showUDF = false;
+    this.UDFComponentData = [];
+    this.templates = [];
+  }
+
+  getUDFSelectedItem(itUDFComponentData) {
+    this.onUDFDialogClose();
+    if (itUDFComponentData == null) {
+      return;
+    }
+    this.UDF = [];
+    if (itUDFComponentData.length > 0) {
+      for (var i = 0; i < itUDFComponentData.length; i++) {
+        let value = "";
+        if (itUDFComponentData[i].istextbox) {
+          value = itUDFComponentData[i].textBox;
+        } else {
+          value = itUDFComponentData[i].dropDown.FldValue;
+        }
+        this.UDF.push({
+          Flag: "H",
+          LineNo: -1,
+          Value: value,
+          Key: itUDFComponentData[i].AliasID
+        });
+      }
+      sessionStorage.setItem("GRPOHdrUDF", JSON.stringify(this.UDF));
+    }
+    this.templates = [];
   }
 }
 

@@ -248,6 +248,7 @@
   "SearchBin": "Search Bin",
   "AvailableQty": "Available Qty.",
   "AvaliableMeterial": "Available Material",
+  "ExpiryDate": "Expiry Date",
   "BatchSrBinList": "Batch/Sr/Bin No. List",
   "NoOfCopiesCannotbeBlank": "No. of copies cannot be blank or zero",
   "NoOfCopiesShouldBeNumeric": "No. of copies must be numeric",

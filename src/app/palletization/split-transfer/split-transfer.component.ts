@@ -26,7 +26,7 @@ export class SplitTransferComponent implements OnInit {
   constructor( private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService) { }
 
   ngOnInit() {
-    if (localStorage.getItem("AutoPalletIdGenerationChecked") == "True") {
+    if (sessionStorage.getItem("AutoPalletIdGenerationChecked") == "True") {
       this.autoGenereatePalletEnable = true;
     }
   }

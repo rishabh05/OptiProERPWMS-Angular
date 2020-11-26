@@ -7,19 +7,20 @@ import { Router } from '@angular/router';
 import { InboundMasterComponent } from '../inbound-master.component';
 import { StatePersistingServiceService } from '../../services/state-persisting-service.service';
 import { CommonConstants } from '../../const/common-constants';
+import { IUIComponentTemplate } from 'src/app/common/ui-component.interface';
 @Component({
   selector: 'app-inbound-details',
   templateUrl: './inbound-details.component.html',
   styleUrls: ['./inbound-details.component.scss']
 })
-export class InboundDetailsComponent implements OnInit,AfterViewInit {
-  
-  @ViewChild('VendScanInputField') vendInputScanField:ElementRef;
+export class InboundDetailsComponent implements OnInit, AfterViewInit {
+
+  @ViewChild('VendScanInputField') vendInputScanField: ElementRef;
   @ViewChild('poScanInputField') poScanInputField;
   @ViewChild('scanVenderRefNo') scanVenderRefNo;
   public viewLines: boolean;
-  showLookupLoader: boolean = true; 
-  VendRefNo: string="";
+  showLookupLoader: boolean = true;
+  VendRefNo: string = "";
   serviceData: any[];
   lookupfor: string;
   VendCode: string;
@@ -39,78 +40,127 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
   yesButtonText: string = "";
   noButtonText: string = "";
   showPDF: boolean = false;
-  base64String: string = ""; 
+  base64String: string = "";
   fileName: string = "";
   displayPDF1: boolean = false;
   detailsAvailable: boolean = false;
   // caption related labels.
-  PONo:any;
+  PONo: any;
   addGRPODetailGridTitle: any;
-  future_PO_Invoice:any;
+  future_PO_Invoice: any;
+  //UDF
+  showUDF = false;
+  UDFComponentData: IUIComponentTemplate[] = [];
+  itUDFComponents: IUIComponentTemplate = <IUIComponentTemplate>{};
+  templates = [];
+  UDF = [];
+  displayArea = "Header";
+  IsUDFEnabled = "N";
+
   ngAfterViewInit(): void {
     this.vendInputScanField.nativeElement.focus();
   }
   constructor(private inboundService: InboundService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService,
-    private inboundMasterComponent: InboundMasterComponent,private persistingService:StatePersistingServiceService) {
+    private inboundMasterComponent: InboundMasterComponent, private persistingService: StatePersistingServiceService) {
     let userLang = navigator.language.split('-')[0];
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
     translate.use(userLang);
     translate.onLangChange.subscribe((event: LangChangeEvent) => {
-      if(this.inboundFromWhere==1){
-        this.PONo =  this.translate.instant("Inbound_PO#");
+      if (this.inboundFromWhere == 1) {
+        this.PONo = this.translate.instant("Inbound_PO#");
         this.future_PO_Invoice = this.translate.instant("Inbound_FuturePOs");
-        this.addGRPODetailGridTitle =  this.translate.instant("Inbound_PurchaseOrderNumber");
+        this.addGRPODetailGridTitle = this.translate.instant("Inbound_PurchaseOrderNumber");
         // change captions and api calling according to normal inbound.
-      }else if(this.inboundFromWhere==2){
+      } else if (this.inboundFromWhere == 2) {
         this.future_PO_Invoice = this.translate.instant("Inbound_FutureInvoices");
-        this.PONo =  this.translate.instant("Inbound_InvoiceNo");
-        this.addGRPODetailGridTitle =  this.translate.instant("Inbound_InvoiceNo");
-          // change captions and api calling according to normal inbound.
+        this.PONo = this.translate.instant("Inbound_InvoiceNo");
+        this.addGRPODetailGridTitle = this.translate.instant("Inbound_InvoiceNo");
+        // change captions and api calling according to normal inbound.
       }
     });
   }
   inboundFromWhere: any = false;
   ngOnInit() {
-    this.inboundFromWhere = localStorage.getItem("inboundOptionType");
-    if(this.inboundFromWhere==1){
-      this.PONo =  this.translate.instant("Inbound_PO#");
+    this.inboundFromWhere = sessionStorage.getItem("inboundOptionType");
+    if (this.inboundFromWhere == 1) {
+      this.PONo = this.translate.instant("Inbound_PO#");
       this.future_PO_Invoice = this.translate.instant("Inbound_FuturePOs");
-      this.addGRPODetailGridTitle =  this.translate.instant("Inbound_PurchaseOrderNumber");
+      this.addGRPODetailGridTitle = this.translate.instant("Inbound_PurchaseOrderNumber");
+      // this.GetUDFBasedOnScreen("15041");
+      
       // change captions and api calling according to normal inbound.
-    }else if(this.inboundFromWhere==2){
+    } else if (this.inboundFromWhere == 2) {
       this.future_PO_Invoice = this.translate.instant("Inbound_FutureInvoices");
-      this.PONo =  this.translate.instant("Inbound_InvoiceNo");
-      this.addGRPODetailGridTitle =  this.translate.instant("Inbound_InvoiceNo");
-        // change captions and api calling according to normal inbound.
+      this.PONo = this.translate.instant("Inbound_InvoiceNo");
+      this.addGRPODetailGridTitle = this.translate.instant("Inbound_InvoiceNo");
+      // change captions and api calling according to normal inbound.
     }
     // set future po to check if already checked.
-    if(localStorage.getItem("isFuturePOChecked")== "true"){
+    if (sessionStorage.getItem("isFuturePOChecked") == "true") {
       this.futurepo = true;
-    }else{
+    } else {
       this.futurepo = false;
     }
 
-    this.VendCode = localStorage.getItem("VendCode");
-    this.VendName = localStorage.getItem("VendName");
-    this.VendRefNo = localStorage.getItem("VendRefNo");
-    
-    if(this.VendCode != ""){
+    this.VendCode = sessionStorage.getItem("VendCode");
+    this.VendName = sessionStorage.getItem("VendName");
+    this.VendRefNo = sessionStorage.getItem("VendRefNo");
+
+    if (this.VendCode != "") {
       this.showNext = true;
-    }else{
+    } else {
       this.showNext = false;
     }
     this.dateAvailableToReceieve();
+    this.IsUDFEnabled = sessionStorage.getItem("ISUDFEnabled");
+    if(this.IsUDFEnabled == "Y"){
+      this.commonservice.GetWMSUDFBasedOnScreen("15041");
+    }
   }
 
- 
-   //future po change.
+
+  // UDFApiResponse: any;
+  // public GetUDFBasedOnScreen(moduleId) {
+  //   this.showLoader = true;
+  //   this.commonservice.GetUDFBasedOnScreen("WMS", moduleId).subscribe(
+  //     (data: any) => {
+  //       this.showLoader = false;
+  //       // this.printDialog = false;
+  //       if (data != undefined) {
+  //         // console.log("" + data);
+  //         if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+  //           this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+  //             this.translate.instant("CommonSessionExpireMsg"));
+  //           return;
+  //         }
+
+  //         this.UDFApiResponse = data;
+  //         this.inboundMasterComponent.setUDFData(this.UDFApiResponse)
+  //       } else {
+  //         this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+  //       }
+  //     },
+  //     error => {
+  //       this.showLookupLoader = false;
+  //       if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+  //         this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+  //       }
+  //       else {
+  //         this.toastr.error('', error);
+  //       }
+  //     }
+  //   );
+  // }
+
+
+  //future po change.
   toggleVisibility(e) {
-  console.log("checkuncheck:",this.futurepo);
-  localStorage.setItem("isFuturePOChecked", JSON.stringify(this.futurepo));
+    console.log("checkuncheck:", this.futurepo);
+    sessionStorage.setItem("isFuturePOChecked", JSON.stringify(this.futurepo));
   }
 
   dateAvailableToReceieve() {
-    var dataModel = localStorage.getItem("addToGRPOPONumbers");
+    var dataModel = sessionStorage.getItem("addToGRPOPONumbers");
     if (dataModel == null || dataModel == undefined || dataModel == "") {
       this.showGRPOGridAndBtn = false;
     } else {
@@ -122,17 +172,18 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
   }
 
   receive() {
-    var dataModel = localStorage.getItem("AddToGRPO");
+    var dataModel = sessionStorage.getItem("AddToGRPO");
     if (dataModel != null && dataModel != undefined && dataModel != "") {
-      if (localStorage.getItem("GRPOPrintReport") == "Y") {
+      if (sessionStorage.getItem("GRPOPrintReport") == "Y") {
         this.showPrintConfirmDialog();
       } else {
-        this.SubmitGoodsReceiptPO(JSON.parse(localStorage.getItem("AddToGRPO")));
+        this.SubmitGoodsReceiptPO(JSON.parse(sessionStorage.getItem("AddToGRPO")));
         this.showPDF = false;
       }
     }
   }
-  showPrintConfirmDialog(){
+
+  showPrintConfirmDialog() {
     this.yesButtonText = this.translate.instant("yes");
     this.noButtonText = this.translate.instant("no");
     this.dialogFor = "receiveSinglePDFDialog";
@@ -148,11 +199,13 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
         //console.log(data);
         if (data[0].ErrorMsg == "" && data[0].Successmsg == "SUCCESSFULLY") {
           // alert("Goods Receipt PO generated successfully with Doc No: " + data.DocEntry);
-          this.toastr.success('', this.translate.instant("Inbound_GRPOSuccessMessage") +" "+ data[0].SuccessNo);
-          localStorage.setItem("Line", "0");
-          localStorage.setItem("GRPOReceieveData", "");
-          localStorage.setItem("AddToGRPO", "");
-          localStorage.setItem("addToGRPOPONumbers", "");
+          this.toastr.success('', this.translate.instant("Inbound_GRPOSuccessMessage") + " " + data[0].SuccessNo);
+          sessionStorage.setItem("Line", "0");
+          sessionStorage.setItem("GRPOReceieveData", "");
+          sessionStorage.setItem("AddToGRPO", "");
+          sessionStorage.setItem("addToGRPOPONumbers", "");
+          sessionStorage.setItem("GRPOHdrUDF", "");
+          this.inboundMasterComponent.clearUDF();
           this.dateAvailableToReceieve();
           if (this.showPDF) {
             //show pdf
@@ -176,22 +229,22 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
       error => {
         console.log("Error: ", error);
         // alert("fail");
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
-  
+
   onVendorLookupClick() {
     this.showLoader = true;
     this.inboundService.getVendorList().subscribe(
       (data: any) => {
         this.showLoader = false;
-      // console.log(data);
+        // console.log(data);
         if (data != undefined) {
           if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
@@ -209,24 +262,24 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
         this.showLoader = false;
         // console.log("Error: ", error);
         // this.toastr.error('', error);
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       }       
-        else{
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
           this.toastr.error('', error);
-        } 
+        }
       }
     );
   }
 
   OnVendorChangeBlur() {
-    if(this.isValidateCalled){
+    if (this.isValidateCalled) {
       return;
     }
     this.OnVendorChange();
   }
-  
-  async OnVendorChange(): Promise<any>{
+
+  async OnVendorChange(): Promise<any> {
     if (this.VendCode == "" || this.VendCode == undefined) {
       return;
     }
@@ -242,24 +295,24 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
           if (data != undefined && data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
-              result = false;
+            result = false;
           }
           if (data[0].Result == "0") {
             this.toastr.error('', this.translate.instant("Inbound_VendorExistMessge"));
             this.VendCode = "";
             this.showNext = false;
             this.poCode = "";
-            this.VendCode1= this.VendCode;
+            this.VendCode1 = this.VendCode;
             this.vendInputScanField.nativeElement.focus()
             result = false;
           } else {
-            if(this.VendCode1 != data[0].ID){
+            if (this.VendCode1 != data[0].ID) {
               this.poCode = "";
             }
             this.VendCode = data[0].ID;
             this.VendName = data[0].Name;
             this.showNext = true;
-            this.VendCode1= this.VendCode;
+            this.VendCode1 = this.VendCode;
             result = true;
           }
         } else {
@@ -274,13 +327,13 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
         this.showLoader = false;
         // console.log("Error: ", error);
         // this.toastr.error('', error);
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
-       result = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+        result = false;
       }
     );
     return result;
@@ -300,15 +353,15 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
         this.VendName = $event[2];
         this.showNext = true;
         this.detailsAvailable = true;
-        this.VendCode1= this.VendCode;
+        this.VendCode1 = this.VendCode;
         this.scanVenderRefNo.nativeElement.focus();
-      }else{
-        if(this.VendCode1 != $event[0]){
+      } else {
+        if (this.VendCode1 != $event[0]) {
           this.poCode = "";
         }
         this.VendCode = $event[0];
         this.VendName = $event[1];
-        this.VendCode1= this.VendCode;
+        this.VendCode1 = this.VendCode;
         this.showNext = true;
         this.detailsAvailable = true;
         //this.vendInputScanField.nativeElement.focus();
@@ -319,48 +372,46 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
 
   async onNextClick() {
     var result = await this.validateBeforeSubmit();
-
-    //this.OnVendRefNoChange();
-    let vrNO = localStorage.getItem(CommonConstants.VendRefNo);
+    let vrNO = sessionStorage.getItem(CommonConstants.VendRefNo);
     if (vrNO != undefined && vrNO != '') {
-      if(this.VendRefNo.length <= 100){
-        localStorage.setItem(CommonConstants.VendRefNo, this.VendRefNo);
-      }else{
+      if (this.VendRefNo.length <= 100) {
+        sessionStorage.setItem(CommonConstants.VendRefNo, this.VendRefNo);
+      } else {
         this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
       }
-   }else{
-    if(this.VendRefNo.length <= 100){
-      localStorage.setItem(CommonConstants.VendRefNo, this.VendRefNo);
-    }else{
-      this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
-    } 
-   }
-
-
-
-    // if(this.VendRefNo.length <= 100){
-    //   localStorage.setItem("VendRefNo", this.VendRefNo);
-    // }else{
-    //   this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
-    // }
+    } else {
+      if (this.VendRefNo.length <= 100) {
+        sessionStorage.setItem(CommonConstants.VendRefNo, this.VendRefNo);
+      } else {
+        this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+      }
+    }
     this.isValidateCalled = false;
     console.log("validate result: " + result);
     if (result != undefined && result == false) {
       return;
     }
 
+    if(this.IsUDFEnabled == "Y"){
+      if (sessionStorage.getItem("GRPOHdrUDF") == undefined || sessionStorage.getItem("GRPOHdrUDF") == "") {
+        if (this.ShowUDF('Header', false)) {
+          return;
+        }
+      }
+    }
+
     if (this.VendCode != undefined && this.VendCode != "") {
       this.inboundMasterComponent.selectedVernder = this.VendCode;
       this.inboundMasterComponent.inboundComponent = 2;
-      localStorage.setItem("VendCode", this.VendCode);
-      localStorage.setItem("VendName", this.VendName);
-      localStorage.setItem("selectedPO", "");
-      localStorage.setItem("PONumber", this.poCode);
+      sessionStorage.setItem("VendCode", this.VendCode);
+      sessionStorage.setItem("VendName", this.VendName);
+      sessionStorage.setItem("selectedPO", "");
+      sessionStorage.setItem("PONumber", this.poCode);
     }
     else {
       this.toastr.error('', this.translate.instant("Inbound_SelectVendorValidateMsg"));
     }
-    this.persistingService.set('gridSettings',null);
+    this.persistingService.set('gridSettings', null);
   }
 
   OnCancelClick() {
@@ -368,12 +419,12 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
   }
 
   onPOSelection($event) {
-    localStorage.setItem("selectedPO", $event.selectedRows[0].dataItem.PONumber);
+    sessionStorage.setItem("selectedPO", $event.selectedRows[0].dataItem.PONumber);
     this.inboundMasterComponent.inboundComponent = 2;
 
-    this.persistingService.set('gridSettings',null);
+    this.persistingService.set('gridSettings', null);
   }
- 
+
   public openConfirmForDelete(rowindex, gridData: any) {
     this.dialogFor = "deleteRow";
     this.dialogMsg = this.translate.instant("Inbound_DoYouWantToDelete")
@@ -394,23 +445,22 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
           break;
         case ("receiveSinglePDFDialog"):
           this.NoOfPrintCopies = $event.NoOfCopies;
-          this.SubmitGoodsReceiptPO(JSON.parse(localStorage.getItem("AddToGRPO"), $event.NoOfCopies));
+          this.SubmitGoodsReceiptPO(JSON.parse(sessionStorage.getItem("AddToGRPO"), $event.NoOfCopies));
           this.showPDF = true;
           break;
-          
       }
     } else {
       if ($event.Status == "cancel") {
         // when user click on cross button nothing to do.
-      }else if($event.From == "receiveSinglePDFDialog"){
-        this.SubmitGoodsReceiptPO(JSON.parse(localStorage.getItem("AddToGRPO")));
+      } else if ($event.From == "receiveSinglePDFDialog") {
+        this.SubmitGoodsReceiptPO(JSON.parse(sessionStorage.getItem("AddToGRPO")));
         this.showPDF = false;
       }
     }
   }
 
   DeleteRowClick(rowindex, gridData: any) {
-    var dataModel = localStorage.getItem("addToGRPOPONumbers");
+    var dataModel = sessionStorage.getItem("addToGRPOPONumbers");
     if (dataModel == null || dataModel == undefined || dataModel == "") {
     } else {
       var inboundData = JSON.parse(dataModel);
@@ -418,7 +468,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
       this.removePODetailData(this.Polist[rowindex].PONumber);
     }
     this.Polist.splice(rowindex, 1);
-    localStorage.setItem("addToGRPOPONumbers", JSON.stringify(inboundData));
+    sessionStorage.setItem("addToGRPOPONumbers", JSON.stringify(inboundData));
     gridData.data = this.Polist;
     if (this.Polist.length > 0) {
       this.showGRPOGridAndBtn = true;
@@ -427,8 +477,8 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
     }
   }
 
-  removePODetailData(PONumbers: any){
-    var inboundData = JSON.parse(localStorage.getItem("AddToGRPO"));
+  removePODetailData(PONumbers: any) {
+    var inboundData = JSON.parse(sessionStorage.getItem("AddToGRPO"));
     if (inboundData != undefined && inboundData != null && inboundData != "") {
       for (var i = 0; i < inboundData.POReceiptLots.length; i++) {
         if (inboundData.POReceiptLots[i].PONumber == PONumbers) {
@@ -436,38 +486,31 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
           for (var j = 0; j < inboundData.POReceiptLotDetails.length; j++) {
             if (inboundData.POReceiptLotDetails[j].ParentLineNo == inboundData.POReceiptLots[i].Line) {
               inboundData.POReceiptLotDetails.splice(j, 1);
-              j=-1;
+              j = -1;
             }
           }
 
-          for (var k = 0; k < inboundData.UDF.length; k++) {
-            if (inboundData.UDF[k].Key == "OPTM_TARGETWHS" &&
-              inboundData.UDF[k].LineNo == inboundData.POReceiptLots[i].Line) {
-              inboundData.UDF.splice(k, 1);
+          while(inboundData.UDF.length > 0){
+            let index = inboundData.UDF.findIndex(e => e.LineNo == inboundData.POReceiptLots[i].Line)
+            if(index == -1){
+              break;
             }
-  
-            if (inboundData.UDF[k].Key == "OPTM_TARGETBIN" &&
-              inboundData.UDF[k].LineNo == inboundData.POReceiptLots[i].Line) {
-              inboundData.UDF.splice(k, 1);
-            }
+            inboundData.UDF.splice(index, 1);
           }
 
           for (var m = 0; m < inboundData.LastSerialNumber.length; m++) {
             if (inboundData.LastSerialNumber[m].ItemCode == inboundData.POReceiptLots[i].ItemCode) {
               inboundData.LastSerialNumber.splice(m, 1);
-              m=-1;
+              m = -1;
             }
           }
-
           inboundData.POReceiptLots.splice(i, 1);
         }
       }
-      localStorage.setItem("AddToGRPO", JSON.stringify(inboundData));
+      sessionStorage.setItem("AddToGRPO", JSON.stringify(inboundData));
     }
 
-
-
-    var GRPOReceieveData = JSON.parse(localStorage.getItem("GRPOReceieveData"));
+    var GRPOReceieveData = JSON.parse(sessionStorage.getItem("GRPOReceieveData"));
     if (GRPOReceieveData != undefined && GRPOReceieveData != null && GRPOReceieveData != "") {
       for (var i = 0; i < GRPOReceieveData.POReceiptLots.length; i++) {
         if (GRPOReceieveData.POReceiptLots[i].PONumber == PONumbers) {
@@ -475,33 +518,28 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
           for (var j = 0; j < GRPOReceieveData.POReceiptLotDetails.length; j++) {
             if (GRPOReceieveData.POReceiptLotDetails[j].ParentLineNo == GRPOReceieveData.POReceiptLots[i].Line) {
               GRPOReceieveData.POReceiptLotDetails.splice(j, 1);
-              j=-1;
+              j = -1;
             }
           }
 
-          for (var k = 0; k < GRPOReceieveData.UDF.length; k++) {
-            if (GRPOReceieveData.UDF[k].Key == "OPTM_TARGETWHS" &&
-              GRPOReceieveData.UDF[k].LineNo == GRPOReceieveData.POReceiptLots[i].Line) {
-              GRPOReceieveData.UDF.splice(k, 1);
+          while(GRPOReceieveData.UDF.length > 0){
+            let index = GRPOReceieveData.UDF.findIndex(e => e.LineNo == GRPOReceieveData.POReceiptLots[i].Line)
+            if(index == -1){
+              break;
             }
-  
-            if (GRPOReceieveData.UDF[k].Key == "OPTM_TARGETBIN" &&
-              GRPOReceieveData.UDF[k].LineNo == GRPOReceieveData.POReceiptLots[i].Line) {
-              GRPOReceieveData.UDF.splice(k, 1);
-            }
+            GRPOReceieveData.UDF.splice(index, 1);
           }
 
           for (var m = 0; m < GRPOReceieveData.LastSerialNumber.length; m++) {
             if (GRPOReceieveData.LastSerialNumber[m].ItemCode == GRPOReceieveData.POReceiptLots[i].ItemCode) {
               GRPOReceieveData.LastSerialNumber.splice(m, 1);
-              m=-1;
+              m = -1;
             }
           }
-
           GRPOReceieveData.POReceiptLots.splice(i, 1);
         }
       }
-      localStorage.setItem("GRPOReceieveData", JSON.stringify(GRPOReceieveData));
+      sessionStorage.setItem("GRPOReceieveData", JSON.stringify(GRPOReceieveData));
     }
 
   }
@@ -512,8 +550,8 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
     this.inboundService.printingServiceForSubmitGRPO(dNo, 6, noOfCopy).subscribe(
       (data: any) => {
         this.showLoader = false;
-        if (data != undefined) { 
-         // console.log("" + data);
+        if (data != undefined) {
+          // console.log("" + data);
           if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
@@ -543,12 +581,12 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
       },
       error => {
         this.showLoader = false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -583,19 +621,19 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
   }
 
   OnPOChangeBlur() {
-    if(this.isValidateCalled){
+    if (this.isValidateCalled) {
       return;
     }
     this.OnPOChange();
   }
 
-  async OnPOChange(): Promise<any>{
+  async OnPOChange(): Promise<any> {
     if (this.poCode == "" || this.poCode == undefined) {
       return;
     }
     this.showLoader = true;
     var result = false;
-    await this.inboundService.IsPOExists(this.poCode, "",this.inboundFromWhere).then(
+    await this.inboundService.IsPOExists(this.poCode, "", this.inboundFromWhere).then(
       data => {
         this.showLoader = false;
         if (data != null) {
@@ -604,17 +642,17 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
             this.VendName = data[0].NAME
             this.showNext = true;
             this.detailsAvailable = true;
-            this.VendCode1= this.VendCode;
+            this.VendCode1 = this.VendCode;
             result = true
           }
           else {
             this.poCode = "";
-            if(this.inboundFromWhere==2){
+            if (this.inboundFromWhere == 2) {
               this.toastr.error('', this.translate.instant("Inbound_InvoiceExistMessage"));
-            }else{
+            } else {
               this.toastr.error('', this.translate.instant("Inbound_POExistMessage"));
             }
-            
+
             this.poScanInputField.nativeElement.focus()
             result = false;
           }
@@ -628,13 +666,13 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
       error => {
         this.showLoader = false;
         this.toastr.error('', error);
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
-       result = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+        result = false;
       }
     );
     return result;
@@ -643,7 +681,7 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
   onPOlookupClick() {
     this.showLoader = true;
     this.inboundService.getPOList(this.futurepo,
-      this.VendCode, "",this.inboundFromWhere).subscribe(
+      this.VendCode, "", this.inboundFromWhere).subscribe(
         (data: any) => {
           this.showLoader = false;
           if (data != undefined) {
@@ -652,20 +690,20 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
                 this.translate.instant("CommonSessionExpireMsg"));
               return;
             }
-            if(data.Table==undefined || data.Table==null ||  data.Table.length==0){
+            if (data.Table == undefined || data.Table == null || data.Table.length == 0) {
               this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
-              return;  
+              return;
             }
             this.showLookupLoader = false;
             this.serviceData = data.Table;
             this.lookupfor = "POList";
-            var ibFromWhere:any = localStorage.getItem("inboundOptionType");
-            if(ibFromWhere==1){
+            var ibFromWhere: any = sessionStorage.getItem("inboundOptionType");
+            if (ibFromWhere == 1) {
               this.lookupfor = "POList";
-            }else{
+            } else {
               this.lookupfor = "POListForInvoice";
             }
-            
+
           } else {
             this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
           }
@@ -673,42 +711,42 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
         error => {
           this.showLoader = false;
           console.log("Error: ", error);
-          if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-         } 
-         else{
-          this.toastr.error('', error);
-         }
+          if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+          }
+          else {
+            this.toastr.error('', error);
+          }
         }
       );
   }
 
-  OnVendRefNoChangeBlur(){
-    if(this.isValidateCalled){
+  OnVendRefNoChangeBlur() {
+    if (this.isValidateCalled) {
       return;
     }
     this.OnVendRefNoChange();
   }
 
   OnVendRefNoChange() {
-    
+
     // if(this.VendRefNo.length <= 100){
-    //   localStorage.setItem("VendRefNo", this.VendRefNo);
+    //   sessionStorage.setItem("VendRefNo", this.VendRefNo);
     // }else{
     //   this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
     // }
 
-  //   let vrNO = localStorage.getItem(CommonConstants.VendRefNo);
-  //   if (vrNO != undefined && vrNO != '') {
-  //     if(this.VendRefNo.length <= 100){
-  //       localStorage.setItem(CommonConstants.VendRefNo, this.VendRefNo);
-  //     }else{
-  //       this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
-  //     }
-  //  }
+    //   let vrNO = sessionStorage.getItem(CommonConstants.VendRefNo);
+    //   if (vrNO != undefined && vrNO != '') {
+    //     if(this.VendRefNo.length <= 100){
+    //       sessionStorage.setItem(CommonConstants.VendRefNo, this.VendRefNo);
+    //     }else{
+    //       this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+    //     }
+    //  }
   }
 
-  onHiddenVendCodeScanClick(){
+  onHiddenVendCodeScanClick() {
     var inputValue = (<HTMLInputElement>document.getElementById('InboundDetailVendScanInputField')).value;
     if (inputValue.length > 0) {
       this.VendCode = inputValue;
@@ -716,30 +754,81 @@ export class InboundDetailsComponent implements OnInit,AfterViewInit {
     this.OnVendorChange();
   }
 
-  onHiddenSOScanClick(){
+  onHiddenSOScanClick() {
     var inputValue = (<HTMLInputElement>document.getElementById('inboundDetailPOScanInputField')).value;
     if (inputValue.length > 0) {
       this.poCode = inputValue;
-      
+
     }
     this.OnPOChange();
-    
+
   }
-  
+
   isValidateCalled: boolean = false;
-  async validateBeforeSubmit():Promise<any>{
+  async validateBeforeSubmit(): Promise<any> {
     this.isValidateCalled = true;
     var currentFocus = document.activeElement.id;
-    console.log("validateBeforeSubmit current focus: "+currentFocus);
-    
-    if(currentFocus != undefined){
-      if(currentFocus == "InboundDetailVendScanInputField"){
+    console.log("validateBeforeSubmit current focus: " + currentFocus);
+
+    if (currentFocus != undefined) {
+      if (currentFocus == "InboundDetailVendScanInputField") {
         return this.OnVendorChange();
-      } else if(currentFocus == "inboundDetailPOScanInputField"){
+      } else if (currentFocus == "inboundDetailPOScanInputField") {
         return this.OnPOChange();
-      } else if(currentFocus == "venderRefNo"){
+      } else if (currentFocus == "venderRefNo") {
         return this.OnVendRefNoChangeBlur();
       }
     }
+  }
+
+  ShowUDF(displayArea, UDFButtonClicked): boolean {
+    this.displayArea = displayArea;
+    let UDFStatus;
+    if (sessionStorage.getItem("GRPOHdrUDF") != undefined && sessionStorage.getItem("GRPOHdrUDF") != "") {
+      UDFStatus = this.commonservice.loadUDF(displayArea, this.commonservice.getUDFData(), JSON.parse(sessionStorage.getItem("GRPOHdrUDF")));
+    }else{
+      UDFStatus = this.commonservice.loadUDF(displayArea, this.commonservice.getUDFData());
+    }    
+    if (!UDFButtonClicked) {
+      if (UDFStatus != "MANDATORY_AVL") {
+        return false;
+      }
+    }
+    this.templates = this.commonservice.getTemplateArray();
+    this.UDFComponentData = this.commonservice.getUDFComponentDataArray();
+    this.showUDF = true;
+    return true;
+  }
+
+  onUDFDialogClose() {
+    this.showUDF = false;
+    this.UDFComponentData = [];
+    this.templates = [];
+  }
+
+  getUDFSelectedItem(itUDFComponentData) {
+    this.onUDFDialogClose();
+    if (itUDFComponentData == null) {
+      return;
+    }
+    this.UDF = [];
+    if (itUDFComponentData.length > 0) {
+      for (var i = 0; i < itUDFComponentData.length; i++) {
+        let value = "";
+        if (itUDFComponentData[i].istextbox) {
+          value = itUDFComponentData[i].textBox;
+        } else {
+          value = itUDFComponentData[i].dropDown.FldValue;
+        }
+        this.UDF.push({
+          Flag: "H",
+          LineNo: -1,
+          Value: value,
+          Key: itUDFComponentData[i].AliasID
+        });
+      }
+      sessionStorage.setItem("GRPOHdrUDF", JSON.stringify(this.UDF));
+    }
+    this.templates = [];
   }
 }

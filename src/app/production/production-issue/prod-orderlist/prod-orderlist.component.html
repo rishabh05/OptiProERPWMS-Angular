@@ -12,9 +12,8 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'Outbound_OrderNo'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input #scanOrderNo type="text" class="form-control form-control-sm" name='orderNo' [(ngModel)]="orderNo"
-                                    placeholder="{{'Outbound_OrderNo'|translate}}" id="prodOrder_OrderNoScanInput"
-                                    (blur)="onIssueNoBlur()">
+                                <input #scanOrderNo type="text" class="form-control form-control-sm" name='orderNo' [(ngModel)]="orderNo" placeholder="{{'Outbound_OrderNo'|translate}}"
+                                    id="prodOrder_OrderNoScanInput" (blur)="onIssueNoBlur()">
                                 <div class="input-group-append has-seprate-btn">
                                     <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="getOrderList()">
                                         <i class="opti-icon-search"></i>
@@ -24,8 +23,7 @@
                                     </button> -->
                                 </div>
                                 <div class="d-flex ml-1">
-                                    <button tabIndex="-1" type="button"  id="prodOrderScanOrderNoBtn" (mousedown)="onInboundScan()"
-                                        class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                    <button tabIndex="-1" type="button" id="prodOrderScanOrderNoBtn" (mousedown)="onInboundScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
                                         <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
                                 </div>
@@ -42,16 +40,24 @@
                         <div class="d-flex align-items-center">
                             <h4 class="mt-2 mb-2  mt-md-0">{{'Items'|translate}}</h4>
                             <ul class="color-label mt-2 mt-md-0 ml-auto mb-2">
-                                <li><span class="color-block blue"></span><span>Batch</span></li>
-                                <li><span class="color-block red"></span><span>Serial</span></li>
-                                <li><span class="color-block "></span><span>None</span></li>
+                                <li>
+                                    <span class="color-block blue"></span>
+                                    <span>Batch</span>
+                                </li>
+                                <li>
+                                    <span class="color-block red"></span>
+                                    <span>Serial</span>
+                                </li>
+                                <li>
+                                    <span class="color-block "></span>
+                                    <span>None</span>
+                                </li>
                             </ul>
                         </div>
                         <div class="col-12 mb-2 border-bottom"></div>
-                        <kendo-grid class="no-shadow" [kendoGridBinding]="soItemsDetail" [resizable]="true" [pageSize]="pageSize"
-                            [pageable]="pagable" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
-                            [height]=gridHeight [selectable]="true" [rowClass]="rowCallback" 
-                            #gridItem>
+                        <kendo-grid class="no-shadow" [kendoGridBinding]="soItemsDetail" [resizable]="true" [pageSize]="pageSize" [pageable]="pagable"
+                            [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup [height]=gridHeight [selectable]="true"
+                            [rowClass]="rowCallback" #gridItem>
 
                             <!-- grid for mobile start -->
                             <kendo-grid-column media="(max-width: 767px)" title="{{'Items'|translate}}" class="opti_mobile-grid-td">
@@ -60,68 +66,85 @@
                                         <dt>{{'ItemCode'|translate}}</dt>
                                         <dd>{{ dataItem.ITEMCODE }}</dd>
 
-                                        <dt>{{'IssuedQty'|translate}}</dt>
+                                        <dt>{{'IssuedQty'|translate}}
+                                        </dt>
                                         <dd>{{ dataItem.RPTQTY|numberFormat }}</dd>
                                     </dl>
                                     <dl class="opti_mobile_grid_dl" (touchend)="openPOByUOM(dataItem, dataItem.ItemCode)">
-                                        <dt class="d-flex align-items-center">{{'BalanceQty'|translate}} <span class="opti_arrow-grid-detail float-right text-center opti_vertical-align ml-auto">›</span></dt>
+                                        <dt class="d-flex align-items-center">{{'BalanceQty'|translate}}
+                                            <span class="opti_arrow-grid-detail float-right text-center opti_vertical-align ml-auto">›</span>
+                                        </dt>
                                         <dd>{{ dataItem.BalQty|numberFormat }}</dd>
+
+                                        <dt d-flex align-items-center *ngIf="IsUDFEnabled == 'Y'">
+                                            <button tabindex="-1" *ngIf="IsUDFEnabled == 'Y'" class="k-button k-primary btn custom-icon-button" type="button" (mousedown)="ShowUDF('Detail', true, dataItem)">
+                                                <span class="k-icon k-i-plus-outline"></span>{{'UDF'|translate}}
+                                            </button>
+                                        </dt>
+                                        <dd></dd>
                                     </dl>
                                 </ng-template>
                             </kendo-grid-column>
                             <!-- grid for mobile end -->
 
-                            <kendo-grid-column media="(min-width: 768px)" field="ItemCode" title="{{'ItemCode'|translate}}"
-                                [width]="6">
+                            <kendo-grid-column media="(min-width: 768px)" field="ItemCode" title="{{'ItemCode'|translate}}" [width]="6">
                                 <ng-template kendoGridCellTemplate let-dataItem>
-                                        <a class="col-template-mousedown" (mousedown)="openPOByUOM(dataItem, dataItem.ItemCode)">{{dataItem.ItemCode}}</a>
-                                </ng-template>  
+                                    <a class="col-template-mousedown" (mousedown)="openPOByUOM(dataItem, dataItem.ItemCode)">{{dataItem.ItemCode}}</a>
+                                </ng-template>
                             </kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="BalQty" headerClass="text-right" class="text-right"
-                                [width]="6" title="{{'BalanceQty'|translate}}">                               
+                            <kendo-grid-column media="(min-width: 768px)" field="BalQty" headerClass="text-right" class="text-right" [width]="6" title="{{'BalanceQty'|translate}}">
                                 <ng-template kendoGridCellTemplate let-dataItem>
-                                        <a class="col-template-mousedown" (mousedown)="openPOByUOM(dataItem, dataItem.ItemCode)">{{dataItem.BalQty | numberFormat}}</a>
-                                </ng-template> 
+                                    <a class="col-template-mousedown" (mousedown)="openPOByUOM(dataItem, dataItem.ItemCode)">{{dataItem.BalQty | numberFormat}}</a>
+                                </ng-template>
                             </kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="RPTQTY" headerClass="text-right" class="text-right"
-                                [width]="6" format="{0:n3}" title="{{'IssuedQty'|translate}}">
+                            <kendo-grid-column media="(min-width: 768px)" field="RPTQTY" headerClass="text-right" class="text-right" [width]="6" format="{0:n3}"
+                                title="{{'IssuedQty'|translate}}">
                                 <ng-template kendoGridCellTemplate let-dataItem>
-                                        <a class="col-template-mousedown" (mousedown)="openPOByUOM(dataItem, dataItem.ItemCode)">{{dataItem.RPTQTY | numberFormat}}</a>
-                                    </ng-template> 
+                                    <a class="col-template-mousedown" (mousedown)="openPOByUOM(dataItem, dataItem.ItemCode)">{{dataItem.RPTQTY | numberFormat}}</a>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" *ngIf="IsUDFEnabled == 'Y'" [width]="4" field="UDF" title="{{'UDF'|translate}}">
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <button tabindex="-1" *ngIf="IsUDFEnabled == 'Y'" class="k-button k-primary btn custom-icon-button" type="button" (mousedown)="ShowUDF('Detail', true, dataItem)">
+                                        <span class="k-icon k-i-plus-outline "></span>{{'UDF'|translate}}
+                                    </button>
+                                </ng-template>
                             </kendo-grid-column>
                         </kendo-grid>
-                        
                     </div>
                 </div>
-
             </div>
         </div>
-        
+
         <div class="fix-footer-btnBar">
             <div class="col-sm-12 col-12">
                 <hr />
             </div>
-            <div class="col-sm-12 col-12">               
-             
-                    <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="onCancelClick()"><span
-                        class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
+            <div class="col-sm-12 col-12">
 
-                <button type="button" *ngIf="showAddToMeterialAndDelevery()" (click)="submitProduction()"
-                    class="btn btn-success k-button btn-sm btn-icon-with-text"><span class="k-icon k-i-check"></span>
+                <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (click)="onCancelClick()">
+                    <span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
+
+                <button tabindex="-1" *ngIf="IsUDFEnabled == 'Y'" class="k-button k-primary btn custom-icon-button" type="button" (mousedown)="ShowUDF('Header', true)">
+                    <span class="k-icon k-i-plus-outline "></span>{{'UDF'|translate}}
+                </button>
+
+                <button type="button" *ngIf="showAddToMeterialAndDelevery()" (click)="submitProduction()" class="btn btn-success k-button btn-sm btn-icon-with-text">
+                    <span class="k-icon k-i-check"></span>
                     {{'Submit'|translate}}</button>
 
-                <button type="button" id="hid_btnProdOrderScanBtn" style="visibility:hidden"
-                    (click)="onHiddenProdOrderScanClick()"
-                    class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
+                <button type="button" id="hid_btnProdOrderScanBtn" style="visibility:hidden" (click)="onHiddenProdOrderScanClick()" class="btn btn-primary k-button btn-sm btn-icon-with-text mr-0.5">
                     <i [ngClass]="manageEyeIcon? 'opti-icon-eye mr-2':'opti-icon-eye-off mr-2'"></i>btn
                 </button>
-                    
+
             </div>
         </div>
     </form>
 </div>
 
-
+<span *ngIf="showUDF">
+    <app-udfdialog [lookupfor]='displayArea' [templates]='templates' [UDFComponentData]='UDFComponentData' (UDFSaveClick)="getUDFSelectedItem($event)"></app-udfdialog>
+</span>
 
 <app-out-prodissue *ngIf="prodOrderlist == false" (screenBackEvent)="onBackToScreen($event)"></app-out-prodissue>
 <span *ngIf="showLookupLoader == false">
@@ -129,8 +152,8 @@
 </span>
 
 <span *ngIf="showConfirmDialog">
-    <app-comon-confirm-dialog [titleMessage]="dialogMsg" [yesButtonText]="yesButtonText" [fromWhere]="dialogFor"
-        [noButtonText]="noButtonText" (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
+    <app-comon-confirm-dialog [titleMessage]="dialogMsg" [yesButtonText]="yesButtonText" [fromWhere]="dialogFor" [noButtonText]="noButtonText"
+        (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
 </span>
 <div class="opti_loader full-section" *ngIf="showLoader">
     <div class="opti_spinner"></div>

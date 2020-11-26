@@ -252,22 +252,22 @@
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <dl class="opti_mobile_grid_dl" (touchend)="openPOByUOM(dataItem,dataItem.ITEMCODE)">
                                         <dt class="d-flex align-items-center">{{'LINENUM'|translate}}
-                                            <span class="opti_arrow-grid-detail float-right text-center opti_vertical-align ml-auto">›</span>
+                                            <!-- <span class="opti_arrow-grid-detail float-right text-center opti_vertical-align ml-auto">›</span> -->
                                         </dt>
                                         <dd>{{ dataItem.ROWNUM|numberFormat }}</dd>
 
                                         <dt>{{'ItemCode'|translate}}</dt>
                                         <dd>{{ dataItem.ITEMCODE }}</dd>
-
-
                                     </dl>
                                     <dl class="opti_mobile_grid_dl" (touchend)="openPOByUOM(dataItem,dataItem.ITEMCODE)">
                                         <dt class="d-flex align-items-center">{{'OpenQty'|translate}}
-                                            <span class="opti_arrow-grid-detail float-right text-center opti_vertical-align ml-auto">›</span>
+                                            <span class="opti_arrow-grid-detail float-right text-center opti_vertical-align ml-auto">></span>
                                         </dt>
                                         <dd>{{ dataItem.OPENQTY|numberFormat }}</dd>
 
-                                        <dt>{{'PickQty'|translate}}</dt>
+                                        <dt>{{'PickQty'|translate}} &nbsp; <button tabindex="-1" *ngIf="IsUDFEnabled == 'Y'" class="k-button float-right k-primary btn custom-icon-button" type="button" (mousedown)="ShowUDF('Detail', true, dataItem)">
+                                                <span class="k-icon k-i-plus-outline"></span>{{'UDF'|translate}}
+                                            </button></dt>
                                         <dd>{{ dataItem.RPTQTY|numberFormat }}</dd>
                                     </dl>
                                 </ng-template>
@@ -296,8 +296,13 @@
                                     <a class="col-template-mousedown" (mousedown)="openPOByUOM(dataItem,dataItem.ITEMCODE)">{{dataItem.RPTQTY | numberFormat}}</a>
                                 </ng-template>
                             </kendo-grid-column>
-
-
+                            <kendo-grid-column media="(min-width: 768px)" *ngIf="IsUDFEnabled == 'Y'" [width]="4" field="UDF" title="{{'UDF'|translate}}">
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <button tabindex="-1" *ngIf="IsUDFEnabled == 'Y'" class="k-button k-primary btn custom-icon-button" type="button" (mousedown)="ShowUDF('Detail', true, dataItem)">
+                                        <span class="k-icon k-i-plus-outline "></span>{{'UDF'|translate}}
+                                    </button>
+                                </ng-template>
+                            </kendo-grid-column>
                         </kendo-grid>
                     </div>
                 </div>
@@ -326,6 +331,11 @@
 
                 <button type="button" *ngIf="fromWhere=='itr'" (mousedown)="cancel()" class="btn btn-danger k-button btn-sm btn-icon-with-text">
                     <span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
+
+                <button tabindex="-1" class="k-button k-primary btn custom-icon-button" type="button" *ngIf="fromWhere=='itr' && !fromShipment && IsUDFEnabled == 'Y'"
+                    (mousedown)="ShowUDF('Header', true)">
+                    <span class="k-icon k-i-plus-outline "></span>{{'UDF'|translate}}
+                </button>
 
                 <button type="button" *ngIf="showDeleiveryAndAdd && fromWhere=='itr' && !fromShipment" (click)="itrClick()" class="btn btn-success k-button btn-sm btn-icon-with-text">
                     <span class="k-icon k-i-check" role="presentation"></span>
@@ -403,7 +413,9 @@
     <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupkey)="getLookupValue($event)"></app-lookup>
 </span>
 
-
+<span *ngIf="showUDF">
+    <app-udfdialog [lookupfor]='displayArea' [templates]='templates' [UDFComponentData]='UDFComponentData' (UDFSaveClick)="getUDFSelectedItem($event)"></app-udfdialog>
+</span>
 
 <!-- Dialog -->
 <span *ngIf="showConfirmDialog">
@@ -422,7 +434,7 @@
     <kendo-dialog-titlebar>
         {{'PrintOptions'|translate}}
     </kendo-dialog-titlebar>
-    
+
     <div class="px-3">
         <div class="form-group row">
             <div class="input-group input-group-sm">

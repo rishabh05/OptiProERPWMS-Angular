@@ -14,6 +14,7 @@ export class OutboundData {
     ITRToBinNo: any;
     selectedPackingItem:PackingModel=null;
     ShipmentHDR = [];
+    UDF=[];
 }
 
 export class CurrentOutBoundData {
