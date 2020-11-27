@@ -933,18 +933,18 @@ export class Commonservice {
   }
 
   ComponentVisibilityList = [];
-  async getComponentVisibilityList(moduleId): Promise<any> {
-    await this.GetUDFBasedOnSc("WMS", "15041").then(
+  async getComponentVisibilityList(moduleId, screenId, CntrlId): Promise<any> {
+    await this.GetControlVisibility("WMS", moduleId, screenId, CntrlId).then(
       (data: any) => {
         if (data != null) {
           // if (data.length > 0) {
-            this.ComponentVisibilityList = data.Fields;
+            this.ComponentVisibilityList = data;
           // } else {
             // this.toastr.error('', this.translate.instant("InValidPalletNo"));
           // }
         }
         else {
-          this.toastr.error('', this.translate.instant("InValidPalletNo"));
+          // this.toastr.error('', this.translate.instant("InValidPalletNo"));
         }
       },
       error => {
@@ -954,15 +954,17 @@ export class Commonservice {
     // return true;
   }
 
-  GetUDFBasedOnSc(OPTM_MODULECODE, OPTM_SCREENID): Promise<any> {
+  GetControlVisibility(ApplicationID, ModuleID, ScreenID, ControlID): Promise<any> {
     let jObject = {
-      DEFAULTSYSTEMBIN: JSON.stringify([{
+      UserId: JSON.stringify([{
         CompanyDBId: sessionStorage.getItem("CompID"),
-        OPTM_MODULECODE: OPTM_MODULECODE,
-        OPTM_SCREENID: OPTM_SCREENID
+        ApplicationID: ApplicationID,
+        ModuleID: ModuleID,
+        ScreenID: ScreenID,
+        ControlID: ControlID
       }])
     };
-    return this.httpclient.post(this.config_params.service_url + "/api/WhsTrans/GetUDFBasedOnScreen", jObject, this.httpOptions).toPromise();
+    return this.httpclient.post(this.config_params.service_url + "/api/menu/GetAllControl", jObject, this.httpOptions).toPromise();
   }
 
   getComponentVisibility():any[]{

@@ -13,6 +13,7 @@ import { ISubscription } from 'rxjs/Subscription';
 import { ProductionService } from '../../services/production.service';
 import { PalletOperationType } from '../../enums/PalletEnums';
 import { IUIComponentTemplate } from 'src/app/common/ui-component.interface';
+// import {Modules}
 
 @Component({
   selector: 'app-inbound-grpo',
@@ -147,8 +148,9 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   onQtyChange(scanQty) {
     this.qty = scanQty.value
   }
-  ngOnInit() {
+  async ngOnInit() {
     this.IsGeneologyApplicable()
+    // await this.commonservice.getComponentVisibilityList(1, 1, "GRID_BTCHSER_QTY");
     this.UDFlineNo = -1;
     var precision = sessionStorage.getItem("DecimalPrecision");
     this.formatVal = 'n' + precision;
@@ -273,7 +275,11 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         this.ShowBins();
       }
     }
+    // await this.commonservice.getComponentVisibilityList(1, 3, "GRID_BTCHSER_QTY");
+    // this.gridColumnVisibilityArry = this.commonservice.getComponentVisibility();
+    // this.gridColumnVisibilityArry[0]+"."+this.gridColumnVisibilityArry[0].OPTM_FIELDID = this.gridColumnVisibilityArry[0].OPTM_VISIBILITYSTATUS;
   }
+  gridColumnVisibilityArry = [];
 
   GetDefaultBinOrBinWithQtyForProduction() {
     this.commonservice.GetDefaultBinOrBinWithQtyForProduction(this.ItemCode,
@@ -867,6 +873,9 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       this.MfrSerial = this.ScanInputs;
       this.searlNo = this.ScanInputs;
     } else if (this.radioSelected == 1) {
+      if (this.isPalletizationEnable) {
+        this.MfrSerial = this.ScanInputs;
+      }
       this.searlNo = this.ScanInputs;
     }
     if (this.isSerial) {
@@ -1261,12 +1270,14 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         }
         return;
       }
+
+      //check if detail udf exists or not
+      if (!this.checkandOpenDetailUDF()) {
+        return;
+      }
     }
 
-    //check if detail udf exists or not
-    if (!this.checkandOpenDetailUDF()) {
-      return;
-    }
+
     if (this.fromReceiptProduction) {
       // if (!this.checkandOpenDetailUDF()) {
       //   return;
@@ -1678,11 +1689,12 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         }
         return;
       }
+      //validating grid end.
+      if (!this.checkandOpenDetailUDF()) {
+        return;
+      }
     }
-    //validating grid end.
-    if (!this.checkandOpenDetailUDF()) {
-      return;
-    }
+
     if (this.fromReceiptProduction) {
       //prepare model for receipt from production
       // console.log("receive qty bin array" + this.recvingQuantityBinArray);
@@ -1745,13 +1757,13 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     } else {
       lineno = this.openPOLineModel[0].LINENUM;
     }
-    if(this.recvingQuantityBinArray.length > 0){
+    if (this.recvingQuantityBinArray.length > 0) {
       // [iBtchIndex].LotNumber)
-      for(var i=0; i<this.recvingQuantityBinArray.length; i++){
-        let index = UDF.findIndex(e => e.LineNo == lineno && e.DocEntry == 
+      for (var i = 0; i < this.recvingQuantityBinArray.length; i++) {
+        let index = UDF.findIndex(e => e.LineNo == lineno && e.DocEntry ==
           this.openPOLineModel[0].DOCENTRY && e.Flag == "L" && e.LotNo == this.recvingQuantityBinArray[i].LotNumber)
         if (index == -1) {
-          if(this.ShowUDF('Lot', false, i)){
+          if (this.ShowUDF('Lot', false, i)) {
             return false;
           }
         }
@@ -2421,10 +2433,10 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
               // nothing is done in old code.
               result = false;
               return result
-            }else if(data[0].Error == "SerialNotExists" || data[0].Error == "BatchNotExists") {
+            } else if (data[0].Error == "SerialNotExists" || data[0].Error == "BatchNotExists") {
               result = false;
               return result
-            }else if(data[0].Error == "SerialAlreadyExists") {
+            } else if (data[0].Error == "SerialAlreadyExists") {
               piManualOrSingleDimentionBarcode = 1
               this.ScanInputs = "";
               this.toastr.error('', this.translate.instant("Serial already exists"));
@@ -3209,7 +3221,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
   displayArea = "Header";
   btchIndex = 0;
 
-  ShowUDF(displayArea, UDFButtonClicked, rowIndex?):boolean {
+  ShowUDF(displayArea, UDFButtonClicked, rowIndex?): boolean {
     if (displayArea == "Lot" && this.recvingQuantityBinArray[rowIndex].LotNumber == "") {
       if (this.openPOLineModel[0].TRACKING == "B") {
         this.toastr.error('', this.translate.instant("Inbound_BatchNotBlank"))
