@@ -48,6 +48,25 @@
                       <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="GetToteShipments()">
                         <i class="opti-icon-search"></i>
                       </button>
+                      <div class="btn-group ml-1">
+                        <div class="dropdown show">
+                            <a class="btn btn-success btn-sm toggle-btn" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" data-placement="top"
+                                aria-haspopup="true" aria-expanded="false">
+                                <i class="opti-icon-more"></i>
+                            </a>
+                            <div class="dropdown-menu mr-3 mb-1" aria-labelledby="dropdownMenuLink">                                
+                                <a class="dropdown-item cursor-pointer" (click)="onBTCHSERClick()">
+                                    {{'ItemBTCHSER'|translate}}</a>
+                                <a class="dropdown-item cursor-pointer" (click)="onPackStatusClick()">
+                                      {{'ShipmentPackStatus'|translate}}</a>
+                                <a class="dropdown-item cursor-pointer" (click)="onRelTotesClick()">
+                                    {{'RelatedTotes'|translate}}</a>
+                                <hr>
+                                <a class="dropdown-item cursor-pointer" (click)="onRemoveFromContainerClick()">
+                                  {{'RemoveFromContainer'|translate}}</a>
+                            </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -59,11 +78,11 @@
                   <div class="input-group input-group-sm">
                     <input type="text" class="form-control form-control-sm" id="ContainerCode" name="ContainerCode" [(ngModel)]="ContainerCode" (blur)="ValidatePackingContainer()"
                       trim="blur">
-                    <!-- <div class="input-group-append">
-                              <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="GetDroppedContainerCodeList()">
-                                  <i class="opti-icon-search"></i>
-                              </button>
-                          </div> -->
+                    <div class="input-group-append">
+                        <button tabIndex="-1" class="k-button k-primary btn" type="button" (click)="ClearContCode()">
+                            <i class="opti-icon-remove"></i>
+                        </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -82,14 +101,24 @@
                         {{dataItem.SHIP_QTY |numberFormat}}
                       </ng-template>
                     </kendo-grid-column>
-                    <kendo-grid-column class="text-right" field="PickQuantity" width="80" title="{{'PickQuantity'|translate}}">
+                    <kendo-grid-column class="text-right" field="PickQuantity" width="80" title="{{'PackedQuantity'|translate}}">
                       <ng-template kendoGridCellTemplate let-dataItem>
                         {{dataItem.PickQuantity |numberFormat}}
                       </ng-template>
                     </kendo-grid-column>
-                    <kendo-grid-column class="text-right" field="BalanceQty" width="80" title="{{'BalanceQty'|translate}}">
+                    <kendo-grid-column class="text-right" field="BalanceQty" width="80" title="{{'BalToPack'|translate}}">
                       <ng-template kendoGridCellTemplate let-dataItem>
                         {{dataItem.BalanceQty |numberFormat}}
+                      </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column class="text-right" field="BAL_TOTE_QTY" width="80" title="{{'AvailInTote'|translate}}">
+                      <ng-template kendoGridCellTemplate let-dataItem>
+                        {{dataItem.BAL_TOTE_QTY |numberFormat}}
+                      </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column class="text-right" width="80" title="{{'BalInTote'|translate}}">
+                      <ng-template kendoGridCellTemplate let-dataItem>
+                        {{(dataItem.BAL_TOTE_QTY - dataItem.PickQuantity)|numberFormat}}
                       </ng-template>
                     </kendo-grid-column>
                   </kendo-grid>
@@ -174,4 +203,11 @@
 
 <span *ngIf="showLookup">
     <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupkey)="getLookupValue($event)"></app-lookup>
+</span>
+
+<span *ngIf="showRemoveDialogFlag">
+  <app-remove-from-container [titleMessage]="titleMessage" [yesButtonText]="yesButtonText" [OPTM_CONTAINERCODE]="remFrmContCode" [noButtonText]="noButtonText"
+  [OPTM_ITEMCODE]="remItemCode"  [OPTM_BTCHSER]="remBtchSer"  [OPTM_QTY]="remQty" [OPTM_TRACKING]="ItmTracking"
+  (userResponse)= "SetRemoveItemDetails($event)">
+  </app-remove-from-container>
 </span>

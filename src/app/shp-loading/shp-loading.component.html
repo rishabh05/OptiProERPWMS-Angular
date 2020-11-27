@@ -18,6 +18,15 @@
                 </div>
               </div>
               <div class="form-group row">
+                <label for="inputPassword" class="col-sm-4 col-form-label">{{'Status'|translate}}</label>
+                <div class="col-sm-8">
+                  <div class="input-group input-group-sm">
+                    <input type="text" class="form-control form-control-sm" id="Status" name="Status" value={{shipmentStatus}}
+                      [disabled]=true trim="blur">
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
                 <label for="inputPassword" class="col-sm-4 col-form-label">{{'LoadLocation'|translate}}</label>
                 <div class="col-sm-8">
                   <div class="input-group input-group-sm">
@@ -30,14 +39,28 @@
                 <label for="inputPassword" class="col-sm-4 col-form-label">{{'LoadContainers'|translate}}</label>
                 <div class="col-sm-8">
                   <div class="input-group input-group-sm">
-                    <!-- <kendo-dropdownlist [data]="LoadContainersList" id="LoadContainers" 
-                      name="LoadContainers" [(ngModel)]="{{LoadContainers.OPTM_CONTCODE}}"> -->
-
                       <kendo-dropdownlist class="form-control" 
                       [data]="LoadContainersList" textField="OPTM_CONTCODE" valueField="OPTM_CONTCODE"   name="FirstCont"
                       [(ngModel)]="FirstCont"></kendo-dropdownlist>                      
-
+                      <div class="input-group-append">
+                        <div class="btn-group ml-1">
+                          <div class="dropdown show">
+                            <a class="btn btn-success btn-sm toggle-btn" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" data-placement="top"
+                                aria-haspopup="true" aria-expanded="false">
+                                <i class="opti-icon-more"></i>
+                            </a>
+                            <div class="dropdown-menu mr-3 mb-1" aria-labelledby="dropdownMenuLink">                                
+                                <a class="dropdown-item cursor-pointer" (click)="onLoadedContClick()">
+                                    {{'Loaded_Containers'|translate}}</a>                                
+                                <hr>
+                                <a class="dropdown-item cursor-pointer" (click)="onUnloadContainerClick()">
+                                  {{'UnloadContainer'|translate}}</a>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
+                  
                 </div>
               </div>
             </div>
@@ -45,7 +68,7 @@
               <div class="item-steps">
                 <!-- step inputs -->
                 <div *ngIf="currentStep == 1" class="item-input-section">
-                  <input #focusOnCont type="text" placeholder="{{'ScanContainer'|translate}}" (blur)="onContainerChange()" name="ScanContainer"
+                  <input #focusOnCont *ngIf="showFields" type="text" placeholder="{{'ScanContainer'|translate}}" (blur)="onContainerChange()" name="ScanContainer"
                     [(ngModel)]="ScanContainer" trim>
                 </div>
                 <div *ngIf="currentStep == 2" class="item-input-section">
@@ -100,25 +123,28 @@
         <button class="btn btn-outline-secondary btn-sm btn-transparent btn-icon mr-1" type="button" (click)="OnCancelClick()">
           <i class="opti-icon-arrow-back"></i>
         </button>
-        <button [disabled]="showFields" class="btn btn-success k-button btn-sm btn-icon-with-text" type="button" (click)="onSubmitClick()">
+        <button [disabled]="disableSubmit" class="btn btn-success k-button btn-sm btn-icon-with-text" type="button" (click)="onSubmitClick()">
           <span class="k-icon k-i-check" role="presentation"></span>{{'Submit'|translate}}</button>
       </div>
     </div>
   </form>
-
 </div>
+
+<span *ngIf="showLookup">
+  <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupkey)="getLookupValue($event)"></app-lookup>
+</span>
 
 <kendo-dialog [width]="500" *ngIf="dialogOpened" (close)="close_kendo_dialog()">
     <div class="new-custom-grid">
         <kendo-dialog-titlebar>
-            {{'ScanContAssignShp'|translate}}
+            {{dialogTitle}}
         </kendo-dialog-titlebar>
         <div class="px-3">
             <div class="form-group row mt-2">
                 <div class="input-group input-group-sm">
                     <label class="col-sm-4 col-form-label">{{'ContainerCode'|translate}}</label>
                     <input type="text" id="containerCode" name="containerCode" class="col-sm-8 form-control form-control-sm mr-3"
-                        [(ngModel)]="containerCode" placeholder="{{'Enter_Container_Code'|translate}}" (blur)="generateContainer()">
+                        [(ngModel)]="containerCode" placeholder="{{'Enter_Container_Code'|translate}}" (blur)="OnSelectContainer()">
                 </div>
             </div>
         </div>

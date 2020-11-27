@@ -10,7 +10,7 @@
             <div class="po-details-sec">
 
               <div class="form-group row">
-                <label for="DropOption" class="col-sm-4 col-form-label">{{'DropOption'|translate}}</label>
+                <label for="DropOption" class="col-sm-4 col-form-label">{{'DropOptionLbl'|translate}}</label>
                 <div class="col-sm-8">
                   <div class="input-group ">
                     <kendo-dropdownlist [data]="DropOptionArray" id="DropOption" #selectedvalue (selectionChange)="onDropOptionChange($event)"
@@ -21,26 +21,11 @@
               </div>
 
               <div class="form-group row">
-                <label for="inputPassword" class="col-sm-4 col-form-label">{{DropField_lbl}}</label>
-                <div class="col-sm-8">
-                  <div class="input-group input-group-sm">
-                    <input type="text" class="form-control form-control-sm" id="dropValue" name="dropValue" [(ngModel)]="dropValue" (blur)="onPicklistContToteChange()"
-                      trim="blur">
-                    <!-- <div class="input-group-append">
-                      <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="GetDroppedToteList()">
-                        <i class="opti-icon-search"></i>
-                      </button>
-                    </div> -->
-                  </div>
-                </div>
-              </div>
-
-              <div class="form-group row">
                 <label for="inputPassword" class="col-sm-4 col-form-label">{{'DropLocation'|translate}}</label>
                 <div class="col-sm-8">
                   <div class="input-group input-group-sm">
-                    <input type="text" class="form-control form-control-sm" id="ShipmentCode" name="ShipmentCode" [(ngModel)]="ShipmentCode"
-                      (blur)="onDropLocationChange()" trim="blur" disabled>
+                    <input type="text" class="form-control form-control-sm" id="dropLocation" name="dropLocation" [(ngModel)]="dropLocation"
+                      (blur)="onDropLocationChange()" trim="blur" >
                     <!-- <div class="input-group-append">
                       <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="GetToteShipments()">
                         <i class="opti-icon-search"></i>
@@ -49,6 +34,24 @@
                   </div>
                 </div>
               </div>
+
+              <!--
+              <div class="form-group row">
+                <label for="inputPassword" class="col-sm-4 col-form-label">{{DropField_lbl}}</label>
+                <div class="col-sm-8">
+                  <div class="input-group input-group-sm">
+                    <input type="text" class="form-control form-control-sm" id="dropValue" name="dropValue" [(ngModel)]="dropValue" (blur)="onPicklistContToteChange()"
+                      trim="blur">
+                    <div class="input-group-append">
+                      <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="GetDroppedToteList()">
+                        <i class="opti-icon-search"></i>
+                      </button>
+                    </div> -->
+                  <!--
+                  </div>
+                </div>
+              </div> -->    
+                    
             </div>
 
 <!-- 
@@ -83,22 +86,14 @@
             <div class="item-sec">
               <div class="item-steps">
                 <!-- step inputs -->
-                <div *ngIf="currentStep == 1" class="item-input-section">
-                  <input #focusOnConfirmDropOption *ngIf="showFields" type="text" placeholder="{{DropOptionPlaceHolder}}" (blur)="onPickToteContChange()"
+                <div *ngIf="currentStepCode == 'Confirm_Drop'" class="item-input-section">
+                  <input #focusOnConfirmDropOption *ngIf="processStep" type="text" placeholder="{{DropOptionPlaceHolder}}" (blur)="onScanContToteChange(false)"
                     name="scannedDropOption" [(ngModel)]="scannedDropOption" trim>
                 </div>
-                <div *ngIf="currentStep == 2" class="item-input-section">
-                  <input #focusOnDropLoc *ngIf="showFields" type="text" placeholder="{{'EnterDropLocation'|translate}}" (blur)="onDropLocationChange()"
+                <div *ngIf="currentStepCode == 'Confirm_Pick_Drop_Location'" class="item-input-section">
+                  <input #focusOnDropLoc *ngIf="processStep" type="text" placeholder="{{'EnterDropLocation'|translate}}" (blur)="ValidateScannedLocation()"
                     name="scannedDropLoc" [(ngModel)]="scannedDropLoc" trim="blur">
-                </div>
-                <!-- <div *ngIf="currentStep == 3" class="item-input-section">
-                  <input #focusOnQty *ngIf="showFields" type="number" placeholder="{{'EnterQty'|translate}}" (blur)="onQtyChange()" name="scannedQty"
-                    [(ngModel)]="scannedQty" trim="blur">
-                </div>
-                <div *ngIf="currentStep == 4" class="item-input-section">
-                  <input #focusOnCont *ngIf="showFields" type="text" placeholder="{{'ScanCont'|translate}}" (blur)="onContainerChange()" name="scannedContainer"
-                    [(ngModel)]="scannedContainer" trim="blur">
-                </div> -->
+                </div>                
                 <!-- step input option icons -->
                 <div class="step-flex">
                   <div class="keyboard-box step-flex-item">
@@ -122,15 +117,15 @@
 
               <!-- step navigation Arrow placement -->
               <div>
-                <i *ngIf="currentStep > 1 && showFields" (click)="prevStep()" class="k-icon k-i-arrow-chevron-left" aria-hidden="true"></i>
+                <i *ngIf="currentStep > 1 && processStep" (click)="prevStep()" class="k-icon k-i-arrow-chevron-left" aria-hidden="true"></i>
                 <i *ngIf="currentStep != LastStep" (click)="nextStep()" class="k-icon k-i-arrow-chevron-right" aria-hidden="true"></i>
-                <i *ngIf="!showFields" (click)="onSaveClick('/po-order-details')" class="k-icon k-i-save" aria-hidden="true"></i>
+                <i *ngIf="!processStep" (click)="onSaveClick('/po-order-details')" class="k-icon k-i-save" aria-hidden="true"></i>
               </div>
               <!--/ step navigation -->
 
               <!-- step bars -->
               <div class="item-steps-bar">
-                <ng-container *ngFor="let c of PickListSteps; let i =index">
+                <ng-container *ngFor="let c of DropSteps; let i =index">
                   <span [ngClass]="{active:currentStep == i+1}" class="step"></span>
                 </ng-container>
               </div>

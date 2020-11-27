@@ -48,6 +48,11 @@
                                         <input #focusCreatedContOrTote type="text" class="form-control form-control-sm" id="CreatedContOrTote" name="CreatedContOrTote"
                                             [(ngModel)]="CreatedContOrTote" placeholder="{{ContainerTotePlaceHolder}}" (blur)="CreateContainerOrTote()"
                                             [disabled]="containercreated" trim="blur">
+                                        <div class="input-group-append">
+                                            <button tabIndex="-1" class="k-button k-primary btn" type="button" (click)="ClearContCode()">
+                                                <i class="opti-icon-remove"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -145,7 +150,7 @@
                     <span role="presentation"></span>{{'NextPickTask'|translate}}</button>
 
                 <button class="btn btn-success k-button btn-sm btn-icon-with-text" type="button" (click)="onPickDropConfirmation()" [disabled]="currentStep != 12">
-                    <span role="presentation"></span>Drop Confirm</button>
+                    <span role="presentation"></span>Drop Confirm</button>                
             </div>
         </div>
     </form>

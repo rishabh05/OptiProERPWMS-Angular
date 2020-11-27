@@ -16,7 +16,7 @@ export class LoadComponent implements OnInit {
   showFields: boolean = true;
   selectedDropOption: string = "";
   currentStepText = "";
-  PickListSteps: any[] = [];
+  LoadSteps: any[] = [];
   currentStep = 1;
   maxStep = 2;
   scannedDropOption = "";
@@ -43,17 +43,17 @@ export class LoadComponent implements OnInit {
     this.Load = this.LoadArray[0];
     this.commonservice.GetSelectedSteps("Loading");
     setTimeout(() => {
-      this.setPickingSteps();
+      this.setLoadingSteps();
     }, 500)
     this.showFields = true;
     this.loadField_lbl = this.translate.instant("Load") + " " + this.Load;
   }
 
-  setPickingSteps() {
-    this.PickListSteps = JSON.parse(sessionStorage.getItem("PickListSteps"));
-    if (this.PickListSteps != undefined && this.PickListSteps.length > 0) {
-      this.currentStep = this.getStepNo(this.PickListSteps[0].OPTM_STEP_CODE);
-      this.maxStep = this.PickListSteps.length;
+  setLoadingSteps() {
+    this.LoadSteps = JSON.parse(localStorage.getItem("LoadSteps"));
+    if (this.LoadSteps != undefined && this.LoadSteps.length > 0) {
+      this.currentStep = this.getStepNo(this.LoadSteps[0].OPTM_STEP_CODE);
+      this.maxStep = this.LoadSteps.length;
       this.changeText(this.currentStep)
     }
   }

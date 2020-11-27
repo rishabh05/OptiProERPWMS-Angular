@@ -14,6 +14,7 @@ import { PickingItemListComponent } from './picking-item-list/picking-item-list.
 import { PickingItemDetailsComponent } from './picking-item-details/picking-item-details.component';
 import { DialogsModule } from '../../../node_modules/@progress/kendo-angular-dialog';
 import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
+import { DecimalPipe } from '@angular/common';
 
 @NgModule({
   declarations: [ 
@@ -34,7 +35,7 @@ import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
     DateInputsModule,
     NgxTrimDirectiveModule
   ],
-  providers: [],
+  providers: [DecimalPipe],
   exports: []
 })
 export class PickingModule { }

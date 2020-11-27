@@ -76,10 +76,10 @@ export class PickingListComponent implements OnInit {
   }
 
   initialize() {
-    this.pickTypeArray = [this.translate.instant("Container_Picking"), this.translate.instant("Discreate_Picking")];
-    this.PackTypeList = [this.translate.instant("Batch_Picking"),
-    this.translate.instant("Cluster_Picking"), this.translate.instant("Container_Picking"),
-    this.translate.instant("Discreate_Picking")];
+    this.pickTypeArray = [this.translate.instant("Batch_Picking"), this.translate.instant("Cluster_Picking"), 
+                this.translate.instant("Container_Picking"), this.translate.instant("Discreate_Picking")];
+    this.PackTypeList = [this.translate.instant("Batch_Picking"), this.translate.instant("Cluster_Picking"), 
+                this.translate.instant("Container_Picking"), this.translate.instant("Discreate_Picking")];
 
     this.PackTypeKeyList = ["Batch_Picking", "Cluster_Picking", "Container_Picking", "Discrete_Picking"];
     //this.PackTypeKeyList = ["Batch_Picking", "Cluster_Picking", "Container_Picking", "Discrete_Picking", "Zone_Picking"];
@@ -99,9 +99,9 @@ export class PickingListComponent implements OnInit {
   }
 
   onShipmentSelection(row) {
-    sessionStorage.setItem("ShipDetail", JSON.stringify(row.dataItem));
-    sessionStorage.setItem("From", "shiplist");
-    sessionStorage.setItem("TaskDetail", "");
+    localStorage.setItem("TaskInfo", JSON.stringify(row.dataItem));
+    localStorage.setItem("From", "shiplist");
+    localStorage.setItem("TaskDetail", "");
     this.router.navigate(['home/picking/picking-item-details']);
     
   }
@@ -110,14 +110,26 @@ export class PickingListComponent implements OnInit {
     this.confiParams = JSON.parse(sessionStorage.getItem('ConfigurationParam'));
     let result = this.confiParams.find(e => e.OPTM_PARAM_NAME == "Param_Picking_Process" && e.OPTM_PARAM_VALUE == "Push-Automatic")
     if (result != undefined) {
-      sessionStorage.setItem("ShipDetail", JSON.stringify(dataItem));
-      sessionStorage.setItem("From", "shiplist");
-      sessionStorage.setItem("TaskDetail", "");
-      sessionStorage.setItem("Param", "Auto");
+      localStorage.setItem("TaskInfo", JSON.stringify(dataItem));
+      localStorage.setItem("From", "shiplist");
+      localStorage.setItem("TaskDetail", "");
+      localStorage.setItem("Param", "Auto");
       this.router.navigate(['home/picking/picking-item-details']);
     }else{
       sessionStorage.setItem("Param", "");
     }
+
+    /*
+    result = this.confiParams.find(e => e.OPTM_PARAM_NAME == "Param_Use_Mult_Totes_For_One_PickList")
+    if (result != undefined) {
+      sessionStorage.setItem("OPTM_ALLOW_MULTI_TOTES", result.OPTM_PARAM_VALUE);
+    };
+
+    result = this.confiParams.find(e => e.OPTM_PARAM_NAME == "Param_Use_Mult_Pack_Cont_For_One_PickList")
+    if (result != undefined) {
+      sessionStorage.setItem("OPTM_ALLOW_MULTI_CONT", result.OPTM_PARAM_VALUE);
+    }
+    */
   }
 
   pageChange(event: PageChangeEvent) {
@@ -126,7 +138,7 @@ export class PickingListComponent implements OnInit {
 
   showPickTaskList(row) {
     //OPTM_PICKLIST_ID
-    sessionStorage.setItem("ShipDetail", JSON.stringify(row));
+    localStorage.setItem("TaskInfo", JSON.stringify(row));
     this.router.navigate(['home/picking/picking-item-list']);
   }
 
@@ -148,7 +160,7 @@ export class PickingListComponent implements OnInit {
             this.checkIfPickProcessAuto(this.ShipmentList[0]);
           } else {
             this.showGrid = false;
-       //     this.toastr.error('', this.translate.instant("NoPickMsg"));
+            this.toastr.error('', this.translate.instant("NoPickMsg"));
             return;
           }
           if (this.ShipmentList.length > this.pageSize) {

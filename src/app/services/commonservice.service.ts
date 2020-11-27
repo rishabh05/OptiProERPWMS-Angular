@@ -230,9 +230,9 @@ export class Commonservice {
     } else {
       toastr.error('', message);
     }
-
-    if (JSON.parse(sessionStorage.getItem("ShipDetail")) != "" && JSON.parse(sessionStorage.getItem("ShipDetail")) != undefined && JSON.parse(sessionStorage.getItem("ShipDetail")) != null) {
-      // this.CancelPickList((JSON.parse(sessionStorage.getItem("ShipDetail"))).OPTM_PICKLIST_CODE);
+    
+    if(JSON.parse(localStorage.getItem("TaskInfo")) != "" && JSON.parse(localStorage.getItem("TaskInfo")) != undefined && JSON.parse(localStorage.getItem("TaskInfo")) != null){
+     // this.CancelPickList((JSON.parse(localStorage.getItem("TaskInfo"))).OPTM_PICKLIST_CODE);
     }
 
     sessionStorage.removeItem('isLoggedIn');
@@ -725,6 +725,18 @@ export class Commonservice {
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetShipmentContainers", jObject, this.httpOptions);
   }
 
+  UnloadContainer(OPTM_SHIPMENT_CODE:string, containerCode: string): Observable<any> {
+    var jObject = {
+      PalletCode: JSON.stringify([{
+        CompanyDBId: sessionStorage.getItem("CompID"), 
+        OPTM_WHSCODE: sessionStorage.getItem("whseId"),
+        OPTM_SHIPMENT_CODE: OPTM_SHIPMENT_CODE,
+        OPTM_CONTCODE: containerCode
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/UnloadContainer", jObject, this.httpOptions);
+  }
+
   SaveLoadTaskInformation(containerData): Observable<any> {
     var jObject = { PalletCode: JSON.stringify(containerData) };
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/SaveLoadTaskInformation", jObject, this.httpOptions);
@@ -740,6 +752,15 @@ export class Commonservice {
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetPickTaskSelectedSteps", jObject, this.httpOptions);
   }
 
+  getServerDate(): Observable<any> {
+    let jObject = {
+      PalletCode: JSON.stringify([{
+        CompanyDBId: sessionStorage.getItem("CompID"),
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/getServerDate", jObject, this.httpOptions);
+  }
+
   GetSelectedSteps(OPTM_TRANS_CATEGORY) {
     this.GetPickTaskSelectedSteps(OPTM_TRANS_CATEGORY).subscribe(
       (data: any) => {
@@ -747,9 +768,20 @@ export class Commonservice {
           if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
             this.RemoveLicenseAndSignout(this.toastr, this.router,
               "Session expire");
-            return;
+            return; 
           }
-          sessionStorage.setItem("PickListSteps", JSON.stringify(data.OPTM_TRANS_STEPS));
+          if (OPTM_TRANS_CATEGORY == "Picking") {
+            localStorage.setItem("PickListSteps", JSON.stringify(data.OPTM_TRANS_STEPS));
+          } else if (OPTM_TRANS_CATEGORY == "Drop") {
+            sessionStorage.setItem("DropSteps", JSON.stringify(data.OPTM_TRANS_STEPS));
+          } else if (OPTM_TRANS_CATEGORY == "Loading") {
+            sessionStorage.setItem("LoadSteps", JSON.stringify(data.OPTM_TRANS_STEPS));
+          } else if (OPTM_TRANS_CATEGORY == "Packing") {
+            sessionStorage.setItem("PackingSteps", JSON.stringify(data.OPTM_TRANS_STEPS));
+          } else if (OPTM_TRANS_CATEGORY == "Shp_Loading") {
+            sessionStorage.setItem("ShpLoadingSteps", JSON.stringify(data.OPTM_TRANS_STEPS));
+          } 
+          
         } else {
           // this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
         }
@@ -971,3 +1003,6 @@ export class Commonservice {
     return this.ComponentVisibilityList;
   }
 }
+
+
+

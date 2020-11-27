@@ -11,10 +11,13 @@ import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
 import { PackingRoutingModule } from './packing-routing.module';
 import { DialogsModule } from '../../../node_modules/@progress/kendo-angular-dialog';
 import { PackingComponent } from './packing.component';
+import {RemoveComponent} from './remove.component';
+import { DecimalPipe } from '@angular/common';
 
 @NgModule({
   declarations: [ 
-    PackingComponent
+    PackingComponent,
+    RemoveComponent
   ],
   imports: [
     CommonModule,
@@ -29,7 +32,7 @@ import { PackingComponent } from './packing.component';
     DateInputsModule,
     NgxTrimDirectiveModule
   ],
-  providers: [],
+  providers: [DecimalPipe],
   exports: []
 })
 export class PackingModule { }
