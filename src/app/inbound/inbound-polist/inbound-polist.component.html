@@ -3,7 +3,7 @@
         <div class="opti_container_inner" [perfectScrollbar]=" ">
 
             <h3 class="border-bottom d-flex pt-1 pb-3 mb-4">
-           FM Branch::     {{'Inbound_GoodsReceiptPO'|translate}} : {{selectedVendor}}
+                FM Branch:: {{'Inbound_GoodsReceiptPO'|translate}} : {{selectedVendor}}
             </h3>
             <div class="row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
@@ -12,7 +12,8 @@
                         <label for="inputPassword" class="col-4 col-sm-3 col-form-label py-0">{{future_PO_Invoice}}</label>
                         <div class="col-8 col-sm-9">
                             <div class="opti_input-group-checkbox">
-                                <input type="checkbox" id="ch7" (change)="toggleVisibility($event)" class="k-checkbox" name="future" [(ngModel)]="futurepo" />
+                                <input type="checkbox" id="ch7" (change)="toggleVisibility($event)" class="k-checkbox" name="future" [(ngModel)]="futurepo"
+                                />
                                 <label class="k-checkbox-label" for="ch7"></label>
                             </div>
                         </div>
@@ -29,16 +30,15 @@
                                     <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="onPOlookupClick()" [disabled]="disablePO">
                                         <i class="opti-icon-search"></i>
                                     </button>
-                                    <button tabIndex="-1" class="k-button k-primary btn separate-btn" 
-                                    *ngIf="false" (mousedown)="openPOLines()"  type="button">
+                                    <button tabIndex="-1" class="k-button k-primary btn separate-btn" *ngIf="false" (mousedown)="openPOLines()" type="button">
                                         <i class="opti-icon-search"></i>
                                     </button>
                                 </div>
                                 <div class="ml-1 d-flex">
-                                    <button tabIndex="-1" type="button" id="inboundPoListPOScanBtn"   (mousedown)="onInboundScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
-                                     <i class="opti-icon-qr-code fs-24"></i>
+                                    <button tabIndex="-1" type="button" id="inboundPoListPOScanBtn" (mousedown)="onInboundScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                        <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
-                                 </div> 
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -46,19 +46,18 @@
                         <label for="inputPassword" class="col-sm-3 col-form-label">{{'ItemCode'|translate}}</label>
                         <div class="col-sm-9">
                             <div class="input-group input-group-sm">
-                                <input #scanItemCode type="text" (blur)="OnItemCodeChangeBlur()"  placeholder="{{'ItemCode'|translate}}" 
-                                class="form-control form-control-sm" name="itemCode" [(ngModel)]=itemCode 
-                                id="InboundPO_ItemCodeScanInputField">
+                                <input #scanItemCode type="text" (blur)="OnItemCodeChangeBlur()" placeholder="{{'ItemCode'|translate}}" class="form-control form-control-sm"
+                                    name="itemCode" [(ngModel)]=itemCode id="InboundPO_ItemCodeScanInputField">
                                 <div class="input-group-append has-seprate-btn">
                                     <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="onItemlookupClick()">
                                         <i class="opti-icon-search"></i>
                                     </button>
                                 </div>
                                 <div class="ml-1 d-flex">
-                                    <button tabIndex="-1" type="button" id="inboundPOItemCodescanButton"  (mousedown)="onInboundScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
-                                     <i class="opti-icon-qr-code fs-24"></i>
+                                    <button tabIndex="-1" type="button" id="inboundPOItemCodescanButton" (mousedown)="onInboundScan()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                                        <i class="opti-icon-qr-code fs-24"></i>
                                     </button>
-                                 </div> 
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -86,67 +85,84 @@
                                 </li>
                             </ul>
                         </div>
-                      
-                        <kendo-grid class="no-shadow" [data]="gridSettings.gridData" [resizable]="true" 
-                          [pageSize]="gridSettings.state.take" [skip]="gridSettings.state.skip" [pageable]="pagable" [sortable]="true" 
-                            [filterable]=isColumnFilter [groupable]=isColumnGroup [height]=gridHeight [selectable]="true" [rowClass]="rowCallback"                           
-                            (dataStateChange)="dataStateChange($event)" #grid="kendoGrid">
-                            
-                            <!-- <ng-template kendoGridToolbarTemplate>
-                                    <button class="k-button" (click)="saveGridSettings(grid)">Save current state</button>
-                                    <button class="k-button" (click)="gridSettings = mapGridSettings(persistingService.get('gridSettings'))">Load saved state</button>
-                            </ng-template>  -->
+
+                        <kendo-grid class="no-shadow" [data]="gridSettings.gridData" [resizable]="true" [pageSize]="gridSettings.state.take" [skip]="gridSettings.state.skip"
+                            [pageable]="pagable" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup [height]=gridHeight
+                            [selectable]="true" [rowClass]="rowCallback" (dataStateChange)="dataStateChange($event)" #grid="kendoGrid">
                             <!-- grid for mobile start -->
                             <kendo-grid-column media="(max-width: 767px)" title="{{'Items'|translate}}" class="opti_mobile-grid-td">
                                 <ng-template kendoGridCellTemplate let-dataItem>
-                                   
-                                    <dl class="opti_mobile_grid_dl"  (touchend)="onClickOpenPOLineRowOpenAutoLot(dataItem,grid)">
-                                            <dt class="d-flex align-items-center">{{'LINENUM'|translate}}
-                                                    <span class="opti_arrow-grid-detail ml-auto text-center opti_vertical-align">›</span>
-                                                </dt>
-                                                <dd>{{dataItem.ROWNUM | numberFormat}}</dd>
+
+                                    <dl class="opti_mobile_grid_dl" (touchend)="onClickOpenPOLineRowOpenAutoLot(dataItem,grid)">
+                                        <dt class="d-flex align-items-center">{{'LINENUM'|translate}}
+                                            <!-- <span class="opti_arrow-grid-detail ml-auto text-center opti_vertical-align">›</span> -->
+                                        </dt>
+                                        <dd>{{dataItem.ROWNUM | numberFormat}}</dd>
                                         <dt>{{'ItemCode'|translate}}</dt>
                                         <dd>{{ dataItem.ITEMCODE }}</dd>
 
+                                        <dt>{{'Inbound_ItemName'|translate}}</dt>
+                                        <dd>{{ dataItem.ITEMNAME }}</dd>
 
                                     </dl>
 
-                                    <dl class="opti_mobile_grid_dl"  (touchend)="onClickOpenPOLineRowOpenAutoLot(dataItem,grid)">
+                                    <dl class="opti_mobile_grid_dl" (touchend)="onClickOpenPOLineRowOpenAutoLot(dataItem,grid)">
                                         <dt class="d-flex align-items-center">{{'OpenQty'|translate}}
                                             <span class="opti_arrow-grid-detail ml-auto text-center opti_vertical-align">›</span>
                                         </dt>
                                         <dd>{{dataItem.OPENQTY | numberFormat}}</dd>
                                         <dt>{{'Inbound_ReceiveQty'|translate}}</dt>
                                         <dd>{{dataItem.RPTQTY | numberFormat}}</dd>
+
+                                        <dt d-flex align-items-center>
+                                            <button tabindex="-1" *ngIf="IsUDFEnabled == 'Y'" class="k-button k-primary btn custom-icon-button" type="button" (mousedown)="ShowUDF('Detail', true, dataItem)">
+                                                <span class="k-icon k-i-plus-outline"></span>{{'UDF'|translate}}
+                                            </button>
+                                        </dt>
+                                        <dd></dd>
                                     </dl>
-                           
+
                                 </ng-template>
                             </kendo-grid-column>
                             <!-- grid for mobile end -->
 
                             <kendo-grid-column media="(min-width: 768px)" field="ROWNUM" title="{{'LINENUM'|translate}}">
-                                    <ng-template kendoGridCellTemplate let-dataItem>
-                                        <a class="col-template-mousedown" (mousedown)="onClickOpenPOLineRowOpenAutoLot(dataItem,grid)" >{{dataItem.ROWNUM}}</a>
-                                    </ng-template>
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                    <a class="col-template-mousedown" (mousedown)="onClickOpenPOLineRowOpenAutoLot(dataItem,grid)">{{dataItem.ROWNUM}}</a>
+                                </ng-template>
                             </kendo-grid-column>
                             <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE" title="{{'ItemCode'|translate}}">
-                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                <ng-template kendoGridCellTemplate let-dataItem>
                                     <a class="col-template-mousedown" (mousedown)="onClickOpenPOLineRowOpenAutoLot(dataItem,grid)">
                                         {{dataItem.ITEMCODE}}
-                                    </a></ng-template>
+                                    </a>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column media="(min-width: 768px)" field="ITEMNAME" title="{{'Inbound_ItemName'|translate}}">
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                    <a class="col-template-mousedown" (mousedown)="onClickOpenPOLineRowOpenAutoLot(dataItem,grid)">
+                                        {{dataItem.ITEMNAME}}
+                                    </a>
+                                </ng-template>
                             </kendo-grid-column>
                             <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" title="{{'OpenQty'|translate}}" headerClass="text-right" class="text-right">
                                 <ng-template kendoGridCellTemplate let-dataItem>
-                                   
                                     <a class="col-template-mousedown" (mousedown)="onClickOpenPOLineRowOpenAutoLot(dataItem,grid)"> {{dataItem.OPENQTY | numberFormat}}</a>
                                 </ng-template>
                             </kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="RPTQTY" title="{{'Inbound_ReceiveQty'|translate}}" headerClass="text-right" class="text-right">
+                            <kendo-grid-column media="(min-width: 768px)" field="RPTQTY" title="{{'Inbound_ReceiveQty'|translate}}" headerClass="text-right"
+                                class="text-right">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <a class="col-template-mousedown" (mousedown)="onClickOpenPOLineRowOpenAutoLot(dataItem,grid)"> {{dataItem.RPTQTY | numberFormat}}</a>
                                 </ng-template>
                             </kendo-grid-column>
-                         
+                            <kendo-grid-column media="(min-width: 768px)" *ngIf="IsUDFEnabled == 'Y'" field="UDF" title="{{'UDF'|translate}}">
+                                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                    <button tabindex="-1" class="k-button k-primary btn custom-icon-button" type="button" (mousedown)="ShowUDF('Detail', true, dataItem)">
+                                        <span class="k-icon k-i-plus-outline "></span>{{'UDF'|translate}}
+                                    </button>
+                                </ng-template>
+                            </kendo-grid-column>
                         </kendo-grid>
                     </div>
                 </div>
@@ -163,25 +179,30 @@
                 <button class="btn btn-outline-secondary btn-sm btn-transparent btn-icon mr-1" (click)="onCancelClick()" type="button">
                     <i class="opti-icon-arrow-back"></i>
                 </button>
-               
+
                 <button type="button" *ngIf="showGRPOButton" class="btn btn-primary k-button btn-sm btn-icon-with-text" (mousedown)="onAddtoGRPOClick()">
                     <span class="k-icon k-i-plus-outline" role="presentation"></span>{{'AddToGRPO'|translate}} </button>
 
-                    <button type="button" id="hid_InboundPOScanButton" style="visibility:hidden" (click)="onHiddenPOScanClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
-                        SB </button>  
-                        <button type="button" id="hid_ItemhiddenScanButton" style="visibility:hidden" (click)="onItemHiddenScanClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
-                            SB </button>                                          
+                <button type="button" id="hid_InboundPOScanButton" style="visibility:hidden" (click)="onHiddenPOScanClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                    SB </button>
+                <button type="button" id="hid_ItemhiddenScanButton" style="visibility:hidden" (click)="onItemHiddenScanClick()" class="btn btn-light k-button btn-sm btn-transparent btn-icon separate-btn p-0">
+                    SB </button>
             </div>
         </div>
     </form>
-</div> 
+</div>
+
+<span *ngIf="showUDF">
+    <app-udfdialog [lookupfor]='displayArea' [templates]='templates' [UDFComponentData]='UDFComponentData' (UDFSaveClick)="getUDFSelectedItem($event)"></app-udfdialog>
+</span>
+
 <span *ngIf="showLookupLoader == false">
     <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>
 </span>
 
 <span *ngIf="showConfirmDialog">
-    <app-comon-confirm-dialog [titleMessage]="dialogMsg" [yesButtonText]="yesButtonText" [fromWhere]="dialogFor"
-        [noButtonText]="noButtonText" (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
+    <app-comon-confirm-dialog [titleMessage]="dialogMsg" [yesButtonText]="yesButtonText" [fromWhere]="dialogFor" [noButtonText]="noButtonText"
+        (isYesClick)="getConfirmDialogValue($event)"></app-comon-confirm-dialog>
 </span>
 
 <div class="opti_loader full-section" *ngIf="showLoader">

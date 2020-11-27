@@ -8,12 +8,12 @@ export class StatePersistingServiceService {
 
   constructor() { }
   public get<T>(token: string): T {
-    const settings = localStorage.getItem(token);
+    const settings = sessionStorage.getItem(token);
     return settings ? JSON.parse(settings) : settings;
 }
 
 public set<T>(token: string, gridConfig: GridSettings): void {
-  if(gridConfig==null) localStorage.setItem(token, "");
-    localStorage.setItem(token, JSON.stringify(gridConfig));
+  if(gridConfig==null) sessionStorage.setItem(token, "");
+    sessionStorage.setItem(token, JSON.stringify(gridConfig));
 }
 }

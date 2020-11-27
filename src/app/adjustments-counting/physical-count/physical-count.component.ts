@@ -5,6 +5,7 @@ import { Commonservice } from 'src/app/services/commonservice.service';
 import { TranslateService, LangChangeEvent } from '../../../../node_modules/@ngx-translate/core';
 import { ToastrService } from '../../../../node_modules/ngx-toastr';
 import { storeCleanupWithContext } from '@angular/core/src/render3/instructions';
+import { IUIComponentTemplate } from 'src/app/common/ui-component.interface';
 
 @Component({
   selector: 'app-physical-count',
@@ -64,6 +65,14 @@ export class PhysicalCountComponent implements OnInit {
   @ViewChild('scanItemCode') scanItemCode;
   @ViewChild('scanBatchSerial') scanBatchSerial;
   @ViewChild('scanCountedQty') scanCountedQty;
+  //UDF
+  showUDF = false;
+  UDFComponentData: IUIComponentTemplate[] = [];
+  itUDFComponents: IUIComponentTemplate = <IUIComponentTemplate>{};
+  templates = [];
+  UDF = [];
+  displayArea = "Header";
+  IsUDFEnabled = "N";
 
   constructor(private phycountService: PhysicalcountService, private commonservice: Commonservice, private router: Router, private toastr: ToastrService, private translate: TranslateService) {
     let userLang = navigator.language.split('-')[0];
@@ -74,11 +83,15 @@ export class PhysicalCountComponent implements OnInit {
   }
 
   ngOnInit() {
-    localStorage.setItem("PhysicalCountData", "");
+    sessionStorage.setItem("PhysicalCountData", "");
     this.getPhysicalCountData();
+    this.IsUDFEnabled = sessionStorage.getItem("ISUDFEnabled");
+    if (this.IsUDFEnabled == "Y") {
+      this.commonservice.GetWMSUDFBasedOnScreen("15041");
+    }
   }
 
-  ngAfterViewInit():void{
+  ngAfterViewInit(): void {
 
   }
 
@@ -87,7 +100,7 @@ export class PhysicalCountComponent implements OnInit {
     this.phycountService.getPhysicalCountDataView().subscribe(
       (data: any) => {
         this.showLoader = false;
-       // console.log(data);
+        // console.log(data);
         if (data != undefined) {
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
@@ -96,7 +109,7 @@ export class PhysicalCountComponent implements OnInit {
           }
           this.showLookupLoader = true;
           for (var i = 0; i < data.length; i++) {
-            data[i].InWhsQty = Number(data[i].InWhsQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));
+            data[i].InWhsQty = Number(data[i].InWhsQty).toFixed(Number(sessionStorage.getItem("DecimalPrecision")));
           }
           this.serviceData = data;
           this.lookupfor = "PhyCntItemList";
@@ -107,12 +120,12 @@ export class PhysicalCountComponent implements OnInit {
       },
       error => {
         this.showLoader = false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -138,12 +151,12 @@ export class PhysicalCountComponent implements OnInit {
       },
       error => {
         this.showLoader = false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -152,7 +165,7 @@ export class PhysicalCountComponent implements OnInit {
     this.phycountService.ShowBILOTList(this.ItemCode, this.BinNo).subscribe(
       (data: any) => {
         this.showLoader = false;
-       // console.log(data);
+        // console.log(data);
         if (data != undefined) {
           if (data.ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
@@ -162,7 +175,7 @@ export class PhysicalCountComponent implements OnInit {
           if (data.length > 0) {
             this.showLookupLoader = true;
             for (var i = 0; i < data.length; i++) {
-              data[i].TOTALQTY = Number(data[i].TOTALQTY).toFixed(Number(localStorage.getItem("DecimalPrecision")));
+              data[i].TOTALQTY = Number(data[i].TOTALQTY).toFixed(Number(sessionStorage.getItem("DecimalPrecision")));
             }
             this.serviceData = data;
             this.lookupfor = "ShowBatachSerList";
@@ -175,24 +188,24 @@ export class PhysicalCountComponent implements OnInit {
       },
       error => {
         this.showLoader = false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
 
-  OnItemChangeBlur(){
-    if(this.isValidateCalled){
+  OnItemChangeBlur() {
+    if (this.isValidateCalled) {
       return;
     }
     this.OnItemChange();
   }
 
-  async OnItemChange():Promise<any>{
+  async OnItemChange(): Promise<any> {
     if (this.ItemCode == "" || this.ItemCode == undefined) {
       return;
     }
@@ -231,13 +244,13 @@ export class PhysicalCountComponent implements OnInit {
         }
       },
       error => {
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
-       result = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+        result = false;
       }
     );
     return result;
@@ -308,8 +321,8 @@ export class PhysicalCountComponent implements OnInit {
     this.dialogMsg = msg;
   }
 
-  OnLotChangeBlur(){
-    if(this.isValidateCalled){
+  OnLotChangeBlur() {
+    if (this.isValidateCalled) {
       return;
     }
     this.OnLotChange();
@@ -346,7 +359,7 @@ export class PhysicalCountComponent implements OnInit {
             this.isLotAdded = true;
             if (savenext == "savenext") {
               this.onSaveClick(true)
-            }else if (savenext == "submit") {
+            } else if (savenext == "submit") {
               this.onSubmitClick()
             }
             result = true;
@@ -355,13 +368,13 @@ export class PhysicalCountComponent implements OnInit {
 
       },
       error => {
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
-       result = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+        result = false;
       }
     );
     return result;
@@ -381,7 +394,7 @@ export class PhysicalCountComponent implements OnInit {
           }
           for (var i = 0; i < data.length; i++) {
             if (data[i].OPTM_LOTSERQTY != null) {
-              data[i].OPTM_LOTSERQTY = data[i].OPTM_LOTSERQTY.toFixed(Number(localStorage.getItem("DecimalPrecision")));
+              data[i].OPTM_LOTSERQTY = data[i].OPTM_LOTSERQTY.toFixed(Number(sessionStorage.getItem("DecimalPrecision")));
             }
           }
           this.SavedDocNoDetailArray = data;
@@ -405,12 +418,12 @@ export class PhysicalCountComponent implements OnInit {
       },
       error => {
         this.showLoader = false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -435,12 +448,12 @@ export class PhysicalCountComponent implements OnInit {
       },
       error => {
         this.showLoader = false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -449,57 +462,57 @@ export class PhysicalCountComponent implements OnInit {
     if ($event != null && $event == "close") {
       //nothing to do
       return;
-    }else{
-    if (this.lookupfor == "PhyCntItemList") {
-      this.DocEntry = $event[0];
-      this.DocNo = $event[1];
-      this.CountDate = $event[4];
-      this.ItemCode = $event[2];
+    } else {
+      if (this.lookupfor == "PhyCntItemList") {
+        this.DocEntry = $event[0];
+        this.DocNo = $event[1];
+        this.CountDate = $event[4];
+        this.ItemCode = $event[2];
 
-      this.BinNo = $event[3];
-      this.QtyOnHand = $event[5];
-      this.IsteamCount = $event[6];
-      this.GetSavedDocNoDetails();
-      this.scanItemCode.nativeElement.focus()
-    } else if (this.lookupfor == "showPhyCntItemsList") {
-      this.ItemCode = $event[0];
-      this.ItemName = $event[1];
-      this.BinNo = $event[3];
-      this.ItemTracking = $event[2];
-      this.UOM = $event[4];
-      this.CountedQty = "0";
-      this.QtyOnHand = "0";
-      this.batchserno = "";
-      this.CheckTrackingandVisiblity();
-      setTimeout(()=>{
-        if(this.ItemTracking == "N"){
-          this.scanCountedQty.nativeElement.focus()
-        } else {
-          this.scanBatchSerial.nativeElement.focus()
-        }
-      }, 200)
-    } else if (this.lookupfor == "ShowBatachSerList") {
-      this.batchserno = $event[0];
-      this.ItemCode = $event[2];
-      this.ItemName = $event[3];
-      this.ItemTracking = $event[11];
-      // this.UOM = $event[19];
-      this.CountedQty = $event[7];
-      this.QtyOnHand = $event[7];
-      this.CheckTrackingandVisiblity();
-      this.scanCountedQty.nativeElement.focus()
+        this.BinNo = $event[3];
+        this.QtyOnHand = $event[5];
+        this.IsteamCount = $event[6];
+        this.GetSavedDocNoDetails();
+        this.scanItemCode.nativeElement.focus()
+      } else if (this.lookupfor == "showPhyCntItemsList") {
+        this.ItemCode = $event[0];
+        this.ItemName = $event[1];
+        this.BinNo = $event[3];
+        this.ItemTracking = $event[2];
+        this.UOM = $event[4];
+        this.CountedQty = "0";
+        this.QtyOnHand = "0";
+        this.batchserno = "";
+        this.CheckTrackingandVisiblity();
+        setTimeout(() => {
+          if (this.ItemTracking == "N") {
+            this.scanCountedQty.nativeElement.focus()
+          } else {
+            this.scanBatchSerial.nativeElement.focus()
+          }
+        }, 200)
+      } else if (this.lookupfor == "ShowBatachSerList") {
+        this.batchserno = $event[0];
+        this.ItemCode = $event[2];
+        this.ItemName = $event[3];
+        this.ItemTracking = $event[11];
+        // this.UOM = $event[19];
+        this.CountedQty = $event[7];
+        this.QtyOnHand = $event[7];
+        this.CheckTrackingandVisiblity();
+        this.scanCountedQty.nativeElement.focus()
+      }
+      this.formatCountedQty();
+      this.formatOnHandQty();
     }
-    this.formatCountedQty();
-    this.formatOnHandQty();
-  }
   }
 
   formatCountedQty() {
-    this.CountedQty = Number(this.CountedQty).toFixed(Number(localStorage.getItem("DecimalPrecision")));
+    this.CountedQty = Number(this.CountedQty).toFixed(Number(sessionStorage.getItem("DecimalPrecision")));
   }
 
   formatOnHandQty() {
-    this.QtyOnHand = Number(this.QtyOnHand).toFixed(Number(localStorage.getItem("DecimalPrecision")));
+    this.QtyOnHand = Number(this.QtyOnHand).toFixed(Number(sessionStorage.getItem("DecimalPrecision")));
   }
 
   CheckTrackingandVisiblity() {
@@ -519,7 +532,7 @@ export class PhysicalCountComponent implements OnInit {
       this.isNonTrack = true;
     }
     var oAddPhysicalCountData: any = {};
-    var dataModel = localStorage.getItem("PhysicalCountData");
+    var dataModel = sessionStorage.getItem("PhysicalCountData");
     if (dataModel == null || dataModel == undefined || dataModel == "") {
       oAddPhysicalCountData.Detail = [];
       oAddPhysicalCountData.LotSerial = [];
@@ -549,7 +562,7 @@ export class PhysicalCountComponent implements OnInit {
       if (this.DocNoDetails.length > 0) {
 
         var oAddPhysicalCountData: any = {};
-        var dataModel = localStorage.getItem("PhysicalCountData");
+        var dataModel = sessionStorage.getItem("PhysicalCountData");
         if (dataModel == null || dataModel == undefined || dataModel == "") {
           oAddPhysicalCountData.Detail = [];
           oAddPhysicalCountData.LotSerial = [];
@@ -620,12 +633,12 @@ export class PhysicalCountComponent implements OnInit {
       },
       error => {
         this.showLoader = false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -667,12 +680,12 @@ export class PhysicalCountComponent implements OnInit {
       },
       error => {
         this.showLoader = false;
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       }
     );
   }
@@ -749,7 +762,7 @@ export class PhysicalCountComponent implements OnInit {
         oAddPhysicalCountData.LotSerial[iAddLot].DocNo == this.DocNo) {
         isLotSerExist = true;
         if (this.LotSerialQtycheck == 1) {
-          oAddPhysicalCountData.LotSerial[iAddLot].QtyCounted = (Number(this.CountedQty) + Number(oAddPhysicalCountData.LotSerial[iAddLot].QtyCounted)).toFixed(Number(localStorage.getItem("DecimalPrecision")));
+          oAddPhysicalCountData.LotSerial[iAddLot].QtyCounted = (Number(this.CountedQty) + Number(oAddPhysicalCountData.LotSerial[iAddLot].QtyCounted)).toFixed(Number(sessionStorage.getItem("DecimalPrecision")));
           this.LotSerialQtycheck = 0;
         }
         if (this.LotSerialQtycheck == 2) {
@@ -802,17 +815,17 @@ export class PhysicalCountComponent implements OnInit {
     return oAddPhysicalCountData;
   }
 
-  onCountedQtyChangedBlur(){
-    if(this.isValidateCalled){
+  onCountedQtyChangedBlur() {
+    if (this.isValidateCalled) {
       return;
     }
     this.onCountedQtyChanged();
   }
 
-  async onCountedQtyChanged():Promise<any>{
+  async onCountedQtyChanged(): Promise<any> {
     this.LotSerialQtycheck = 0;
     var oAddPhysicalCountData: any = {};
-    var dataModel = localStorage.getItem("PhysicalCountData");
+    var dataModel = sessionStorage.getItem("PhysicalCountData");
     if (dataModel == null || dataModel == undefined || dataModel == "") {
       this.formatCountedQty();
       return;
@@ -871,7 +884,7 @@ export class PhysicalCountComponent implements OnInit {
     }
 
     var oAddPhysicalCountData: any = {};
-    var dataModel = localStorage.getItem("PhysicalCountData");
+    var dataModel = sessionStorage.getItem("PhysicalCountData");
     if (dataModel == null || dataModel == undefined || dataModel == "") {
       oAddPhysicalCountData.Detail = [];
       oAddPhysicalCountData.LotSerial = [];
@@ -880,7 +893,7 @@ export class PhysicalCountComponent implements OnInit {
       oAddPhysicalCountData = JSON.parse(dataModel);
     }
     oAddPhysicalCountData = this.PreparePhysicalCountData(oAddPhysicalCountData);
-    localStorage.setItem("PhysicalCountData", JSON.stringify(oAddPhysicalCountData));
+    sessionStorage.setItem("PhysicalCountData", JSON.stringify(oAddPhysicalCountData));
     this.SavePhysicalCountData(oAddPhysicalCountData);
   }
 
@@ -920,7 +933,7 @@ export class PhysicalCountComponent implements OnInit {
       this.formatCountedQty();
     }
     var oAddPhysicalCountData: any = {};
-    var dataModel = localStorage.getItem("PhysicalCountData");
+    var dataModel = sessionStorage.getItem("PhysicalCountData");
     if (dataModel == null || dataModel == undefined || dataModel == "") {
       oAddPhysicalCountData.Detail = [];
       oAddPhysicalCountData.LotSerial = [];
@@ -929,7 +942,7 @@ export class PhysicalCountComponent implements OnInit {
       oAddPhysicalCountData = JSON.parse(dataModel);
     }
     oAddPhysicalCountData = this.PreparePhysicalCountData(oAddPhysicalCountData);
-    localStorage.setItem("PhysicalCountData", JSON.stringify(oAddPhysicalCountData));
+    sessionStorage.setItem("PhysicalCountData", JSON.stringify(oAddPhysicalCountData));
     if (oAddPhysicalCountData.LotSerial.length > 0) {
       this.showbatchser = true;
       this.showitemlist = true;
@@ -957,7 +970,7 @@ export class PhysicalCountComponent implements OnInit {
 
   showLotSerList() {
     var oAddPhysicalCountData: any = {};
-    var dataModel = localStorage.getItem("PhysicalCountData");
+    var dataModel = sessionStorage.getItem("PhysicalCountData");
     if (dataModel == null || dataModel == undefined || dataModel == "") {
     } else {
       oAddPhysicalCountData = JSON.parse(dataModel);
@@ -982,7 +995,7 @@ export class PhysicalCountComponent implements OnInit {
   viewSavedItems() {
     this.showSavedItems = true;
     var oAddPhysicalCountData: any = {};
-    var dataModel = localStorage.getItem("PhysicalCountData");
+    var dataModel = sessionStorage.getItem("PhysicalCountData");
     if (dataModel == null || dataModel == undefined || dataModel == "") {
     } else {
       oAddPhysicalCountData = JSON.parse(dataModel);
@@ -1002,7 +1015,7 @@ export class PhysicalCountComponent implements OnInit {
 
   ShowBatachSerListForClickRow(rowindex, gridData: any) {
     var oAddPhysicalCountData: any = {};
-    var dataModel = localStorage.getItem("PhysicalCountData");
+    var dataModel = sessionStorage.getItem("PhysicalCountData");
     if (dataModel == null || dataModel == undefined || dataModel == "") {
     } else {
       oAddPhysicalCountData = JSON.parse(dataModel);
@@ -1033,14 +1046,15 @@ export class PhysicalCountComponent implements OnInit {
     }
 
     var oAddPhysicalCountData: any = {};
-    var dataModel = localStorage.getItem("PhysicalCountData");
+    var dataModel = sessionStorage.getItem("PhysicalCountData");
     if (dataModel == null || dataModel == undefined || dataModel == "") {
       oAddPhysicalCountData.Detail = [];
       oAddPhysicalCountData.LotSerial = [];
-      oAddPhysicalCountData.ItemList = [];
+      oAddPhysicalCountData.ItemList = [];      
     } else {
       oAddPhysicalCountData = JSON.parse(dataModel);
     }
+    oAddPhysicalCountData.UDF = [];
 
     if (this.ItemTracking != "N") {
       if (this.batchserno == undefined || this.batchserno == "" || this.batchserno == null) {
@@ -1086,6 +1100,21 @@ export class PhysicalCountComponent implements OnInit {
         });
       }
     }
+
+    if(this.IsUDFEnabled == 'Y'){
+      this.UDF.forEach(e=>{
+        if(oAddPhysicalCountData.ItemList.findIndex(element=> element.LineNum == e.LineNo) != -1){
+          oAddPhysicalCountData.UDF.push(e);
+        }
+      })
+      let hdrarr = JSON.parse(sessionStorage.getItem("GRPOHdrUDF"))
+      if (sessionStorage.getItem("GRPOHdrUDF") != undefined && sessionStorage.getItem("GRPOHdrUDF") != "") {
+        hdrarr.forEach(element => {
+          oAddPhysicalCountData.UDF.push(element);
+        });
+      }  
+    }     
+
     this.SubmitPhysicalCount(oAddPhysicalCountData);
   }
 
@@ -1098,7 +1127,7 @@ export class PhysicalCountComponent implements OnInit {
 
   LotSerialDelete() {
     var oAddPhysicalCountData: any = {};
-    var dataModel = localStorage.getItem("PhysicalCountData");
+    var dataModel = sessionStorage.getItem("PhysicalCountData");
     if (dataModel == null || dataModel == undefined || dataModel == "") {
     } else {
       oAddPhysicalCountData = JSON.parse(dataModel);
@@ -1110,7 +1139,7 @@ export class PhysicalCountComponent implements OnInit {
     }
     this.BatchSerialArray.splice(this.rowindex, 1);
     this.gridData.data = this.BatchSerialArray;
-    localStorage.setItem("PhysicalCountData", JSON.stringify(oAddPhysicalCountData));
+    sessionStorage.setItem("PhysicalCountData", JSON.stringify(oAddPhysicalCountData));
   }
 
   ItemListRowDeleteClick(rowindex, gridData: any) {
@@ -1122,7 +1151,7 @@ export class PhysicalCountComponent implements OnInit {
 
   ItemListRowDelete() {
     var oAddPhysicalCountData: any = {};
-    var dataModel = localStorage.getItem("PhysicalCountData");
+    var dataModel = sessionStorage.getItem("PhysicalCountData");
     if (dataModel == null || dataModel == undefined || dataModel == "") {
     } else {
       oAddPhysicalCountData = JSON.parse(dataModel);
@@ -1142,11 +1171,11 @@ export class PhysicalCountComponent implements OnInit {
     }
     this.ItemArray.splice(this.rowindex, 1);
     this.gridData.data = this.ItemArray;
-    localStorage.setItem("PhysicalCountData", JSON.stringify(oAddPhysicalCountData));
+    sessionStorage.setItem("PhysicalCountData", JSON.stringify(oAddPhysicalCountData));
   }
 
   clearData() {
-    localStorage.setItem("PhysicalCountData", "");
+    sessionStorage.setItem("PhysicalCountData", "");
     // showLoader: boolean = false;
     // showLookupLoader: boolean = false;
     // serviceData: any[];
@@ -1223,9 +1252,8 @@ export class PhysicalCountComponent implements OnInit {
     }
     let piManualOrSingleDimentionBarcode = 0;
 
-    this.commonservice.checkAndScanCode("", this.ScanInputs).subscribe(
+    this.commonservice.checkAndScanCode("", this.ScanInputs, this.ItemCode, this.ItemTracking).subscribe(
       (data: any) => {
-
         if (data != null) {
           if (data.length > 0) {
             if (data[0].Error != null) {
@@ -1279,17 +1307,17 @@ export class PhysicalCountComponent implements OnInit {
         }
       },
       error => {
-        if(error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined){
-          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));               
-       } 
-       else{
-        this.toastr.error('', error);
-       }
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
       });
   }
 
 
-  onHiddenScanItemCodeClick(){
+  onHiddenScanItemCodeClick() {
     var inputValue = (<HTMLInputElement>document.getElementById('itemCodeInputPC')).value;
     if (inputValue.length > 0) {
       this.ItemCode = inputValue;
@@ -1297,7 +1325,7 @@ export class PhysicalCountComponent implements OnInit {
     this.OnItemChange();
   }
 
-  onHiddenScanSrNoClick(){
+  onHiddenScanSrNoClick() {
     var inputValue = (<HTMLInputElement>document.getElementById('batchSerialInputPC')).value;
     if (inputValue.length > 0) {
       this.batchserno = inputValue;
@@ -1306,28 +1334,113 @@ export class PhysicalCountComponent implements OnInit {
     this.OnLotChange();
   }
 
-  onHiddenScanCountedQtyClick(){ 
+  onHiddenScanCountedQtyClick() {
     var inputValue = (<HTMLInputElement>document.getElementById('countedQtyInputPC')).value;
     if (inputValue.length > 0) {
       this.CountedQty = inputValue;
-    } 
+    }
     this.onCountedQtyChanged();
   }
 
   isValidateCalled: boolean = false;
-  async validateBeforeSubmit():Promise<any>{
+  async validateBeforeSubmit(): Promise<any> {
     this.isValidateCalled = true;
     var currentFocus = document.activeElement.id;
-    console.log("validateBeforeSubmit current focus: "+currentFocus);
-    
-    if(currentFocus != undefined){
-      if(currentFocus == "itemCodeInputPC"){
+    console.log("validateBeforeSubmit current focus: " + currentFocus);
+
+    if (currentFocus != undefined) {
+      if (currentFocus == "itemCodeInputPC") {
         return this.OnItemChange();
-      } else if(currentFocus == "batchSerialInputPC"){
+      } else if (currentFocus == "batchSerialInputPC") {
         return this.OnLotChange();
-      } else if(currentFocus == "countedQtyInputPC"){
+      } else if (currentFocus == "countedQtyInputPC") {
         return await this.onCountedQtyChanged();
       }
     }
+  }
+
+  ShowUDF(displayArea):boolean {
+    this.displayArea = displayArea;
+    if(displayArea == 'Detail'){
+      let indx = this.DocNoDetails.findIndex(e=> e.ItemCode == this.ItemCode)
+      let subarray = [];
+      this.UDF.forEach(element => {
+        if (element.LineNo == this.DocNoDetails[indx].LineNum) {
+          subarray.push(element);
+        }
+      });    
+      this.commonservice.loadUDF(displayArea, this.commonservice.getUDFData(), subarray);
+    }else{
+      if (sessionStorage.getItem("GRPOHdrUDF") != undefined && sessionStorage.getItem("GRPOHdrUDF") != "") {
+        this.commonservice.loadUDF(displayArea, this.commonservice.getUDFData(), JSON.parse(sessionStorage.getItem("GRPOHdrUDF")));
+      } else {
+        this.commonservice.loadUDF(displayArea, this.commonservice.getUDFData());
+      }
+    }
+    this.templates = this.commonservice.getTemplateArray();
+    this.UDFComponentData = this.commonservice.getUDFComponentDataArray();
+    this.showUDF = true;
+    return true;
+  }
+
+  onUDFDialogClose() {
+    this.showUDF = false;
+    this.UDFComponentData = [];
+    this.templates = [];
+  }
+
+  getUDFSelectedItem(itUDFComponentData) {
+    this.onUDFDialogClose();
+    if (itUDFComponentData == null) {
+      return;
+    }
+
+    if (this.displayArea == "Detail") {
+      let indx = this.DocNoDetails.findIndex(e=> e.ItemCode == this.ItemCode)
+      while (this.UDF.length > 0) {
+        let index = this.UDF.findIndex(e => e.LineNo == this.DocNoDetails[indx].LineNum && e.DocEntry == this.DocEntry)
+        if (index == -1) {
+          break;
+        }
+        this.UDF.splice(index, 1);
+      }
+      if (itUDFComponentData.length > 0) {
+        for (var i = 0; i < itUDFComponentData.length; i++) {
+          let value = "";
+          if (itUDFComponentData[i].istextbox) {
+            value = itUDFComponentData[i].textBox;
+          } else {
+            value = itUDFComponentData[i].dropDown.FldValue;
+          }
+          let lineno = this.DocNoDetails[indx].LineNum
+          this.UDF.push({
+            Flag: "D",
+            LineNo: lineno,
+            Value: value,
+            Key: itUDFComponentData[i].AliasID,
+            DocEntry: this.DocEntry
+          });
+        }
+      }
+    } else {
+      if (itUDFComponentData.length > 0) {
+        for (var i = 0; i < itUDFComponentData.length; i++) {
+          let value = "";
+          if (itUDFComponentData[i].istextbox) {
+            value = itUDFComponentData[i].textBox;
+          } else {
+            value = itUDFComponentData[i].dropDown.FldValue;
+          }
+          this.UDF.push({
+            Flag: "H",
+            LineNo: -1,
+            Value: value,
+            Key: itUDFComponentData[i].AliasID
+          });
+        }
+        sessionStorage.setItem("GRPOHdrUDF", JSON.stringify(this.UDF));
+      }
+    }
+    this.templates = [];
   }
 }

@@ -99,7 +99,7 @@ body {
             border-top-left-radius: 5px;
             border-top-right-radius: 5px;
             @media screen and (max-width:479px){
-                display: none;
+                display: block;
             }
         }
         border-radius: 5px;

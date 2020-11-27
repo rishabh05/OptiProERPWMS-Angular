@@ -7,6 +7,8 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { PalletOperationType } from '../enums/PalletEnums';
+import { IUIComponentTemplate } from 'src/app/common/ui-component.interface';
+import { TranslateService } from '../../../node_modules/@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +31,7 @@ export class Commonservice {
     })
   }
 
-  constructor(private httpclient: HttpClient, private toastr: ToastrService, private router: Router) {
+  constructor(private httpclient: HttpClient, private toastr: ToastrService, private router: Router, private translate: TranslateService) {
     this.loadConfig();
     this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
   }
@@ -96,7 +98,7 @@ export class Commonservice {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': localStorage.getItem('accessToken')
+        'Authorization': sessionStorage.getItem('accessToken')
       })
     };
   }
@@ -170,19 +172,30 @@ export class Commonservice {
     this.customerUserDataSub.next(data);
   }
 
-  checkAndScanCode(vendCode: string, scanInputString) {
-    var jObject = { Gs1Token: JSON.stringify([{ Vsvendorid: vendCode, StrScan: scanInputString, CompanyDBId: sessionStorage.getItem("CompID") }]) };
+  checkAndScanCode(vendCode: string, scanInputString, ItemCode, Tracking, ScreenId?) {
+    if(ScreenId == undefined)ScreenId = "";
+    var jObject = {
+      Gs1Token: JSON.stringify([{
+        Vsvendorid: vendCode,
+        StrScan: scanInputString,
+        CompanyDBId: sessionStorage.getItem("CompID"),
+        ItemCode: ItemCode,
+        Tracking: Tracking,
+        ScreenId: ScreenId,
+        GS1SetupScanningEnabled: sessionStorage.getItem("GS1SetupScanningEnabled")
+      }])
+    };
     return this.httpclient.post(this.config_params.service_url + "/api/Gs1/GS1SETUP", jObject, this.httpOptions);
   }
 
-  RemoveLicenseAndSignout(toastr: ToastrService, router: Router, message: string, fromLogout:boolean = false) {
+  RemoveLicenseAndSignout(toastr: ToastrService, router: Router, message: string, fromLogout: boolean = false) {
     this.RemoveLicense().subscribe(
       (data: any) => {
-        this.signOut(this.toastr, this.router, message,fromLogout);
+        this.signOut(this.toastr, this.router, message, fromLogout);
       },
       error => {
         if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
-          this.signOut(this.toastr, this.router, message,fromLogout);
+          this.signOut(this.toastr, this.router, message, fromLogout);
         }
         else {
           this.toastr.error('', error);
@@ -211,17 +224,17 @@ export class Commonservice {
     return this.httpclient.post(this.config_params.service_url + "/MoveOrder/GetSettingOnSAP", jObject, this.httpOptions);
   }
 
-  signOut(toastr: ToastrService, router: Router, message: string, fromLogout: boolean= false) {
-    if(fromLogout){
+  signOut(toastr: ToastrService, router: Router, message: string, fromLogout: boolean = false) {
+    if (fromLogout) {
       toastr.success('', message);
-    }else{
+    } else {
       toastr.error('', message);
     }
     
     if(JSON.parse(localStorage.getItem("TaskInfo")) != "" && JSON.parse(localStorage.getItem("TaskInfo")) != undefined && JSON.parse(localStorage.getItem("TaskInfo")) != null){
      // this.CancelPickList((JSON.parse(localStorage.getItem("TaskInfo"))).OPTM_PICKLIST_CODE);
     }
-    
+
     sessionStorage.removeItem('isLoggedIn');
     sessionStorage.removeItem('selectedComp');
     sessionStorage.removeItem('loggedInUser');
@@ -256,21 +269,22 @@ export class Commonservice {
   }
 
   clearInboundData() {
-    localStorage.setItem("GRPOReceieveData", "");
-    localStorage.setItem("Line", "0")
-    localStorage.setItem("addToGRPOPONumbers", "");
-    localStorage.setItem("AddToGRPO", "");
-    localStorage.setItem("VendCode", "");
-    localStorage.setItem("VendName", "");
-    localStorage.setItem("selectedPO", "");
-    localStorage.setItem("PONumber", "");
-    localStorage.setItem("primaryAutoLots", "");
-    localStorage.setItem("VendRefNo", "");
-    localStorage.setItem("isFuturePOChecked", "false")
+    sessionStorage.setItem("GRPOReceieveData", "");
+    sessionStorage.setItem("Line", "0")
+    sessionStorage.setItem("addToGRPOPONumbers", "");
+    sessionStorage.setItem("AddToGRPO", "");
+    sessionStorage.setItem("VendCode", "");
+    sessionStorage.setItem("VendName", "");
+    sessionStorage.setItem("selectedPO", "");
+    sessionStorage.setItem("PONumber", "");
+    sessionStorage.setItem("primaryAutoLots", "");
+    sessionStorage.setItem("VendRefNo", "");
+    sessionStorage.setItem("isFuturePOChecked", "false"),
+      sessionStorage.setItem("GRPOHdrUDF", "");
   }
 
   getPalletList(opType: number, itemCode: string): Observable<any> {
-    var jObject = { 
+    var jObject = {
       PalletCode: JSON.stringify([{
         COMPANYDBNAME: sessionStorage.getItem("CompID"),
         OPERATIONTYPE: "" + opType,
@@ -671,17 +685,17 @@ export class Commonservice {
   GetPalletsWithRowsPresent(): Observable<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
-        COMPANYDBNAME: sessionStorage.getItem("CompID"), 
+        COMPANYDBNAME: sessionStorage.getItem("CompID"),
         WhseCode: sessionStorage.getItem("whseId")
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/Pallet/GetPalletsWithRowsPresent", jObject, this.httpOptions);
   }
-  
-  GetContainerWithRowsPresent(containerId:any): Observable<any> {
+
+  GetContainerWithRowsPresent(containerId: any): Observable<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
-        COMPANYDBNAME: sessionStorage.getItem("CompID"), 
+        COMPANYDBNAME: sessionStorage.getItem("CompID"),
         WhseCode: sessionStorage.getItem("whseId"),
         ContainerCode: containerId
       }])
@@ -703,7 +717,7 @@ export class Commonservice {
   onShipmentIDChange(OPTM_SHIPMENT_CODE): Observable<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
-        CompanyDBId: sessionStorage.getItem("CompID"), 
+        CompanyDBId: sessionStorage.getItem("CompID"),
         OPTM_WHSCODE: sessionStorage.getItem("whseId"),
         OPTM_SHIPMENT_CODE: OPTM_SHIPMENT_CODE
       }])
@@ -788,7 +802,7 @@ export class Commonservice {
   }
 
   CreateContainerForPacking(oSaveModel): Observable<any> {
-    let jObject = {PalletCode: JSON.stringify(oSaveModel)}; 
+    let jObject = { PalletCode: JSON.stringify(oSaveModel) };
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/CreateContainerForPacking", jObject, this.httpOptions);
   }
 
@@ -818,7 +832,174 @@ export class Commonservice {
         }
       }
     );
-  }  
+  }
+
+  GetUDFBasedOnScreen(OPTM_MODULECODE, OPTM_SCREENID): Observable<any> {
+    let jObject = {
+      DEFAULTSYSTEMBIN: JSON.stringify([{
+        CompanyDBId: sessionStorage.getItem("CompID"),
+        OPTM_MODULECODE: OPTM_MODULECODE,
+        OPTM_SCREENID: OPTM_SCREENID
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/WhsTrans/GetUDFBasedOnScreen", jObject, this.httpOptions);
+  }
+
+  public GetWMSUDFBasedOnScreen(moduleId) {
+    // this.showPDFLoading = true;
+    this.GetUDFBasedOnScreen("WMS", moduleId).subscribe(
+      (data: any) => {
+        // this.showPDFLoading = false;
+        if (data != undefined) {
+          if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+            this.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
+          this.UDFApiResponse = data;
+        } else {
+          this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+        }
+      },
+      error => {
+        // this.showLookupLoader = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
+
+  getUDFData(): any {
+    return this.UDFApiResponse;
+  }
+
+  UDFComponentData: IUIComponentTemplate[] = [];
+  itUDFComponents: IUIComponentTemplate = <IUIComponentTemplate>{};
+  templates = [];
+  UDFApiResponse;
+
+  loadUDF(displayArea, UDFData, UDF?): String {
+    this.onUDFDialogClose();
+    let data = UDFData;
+    let subarray = [];
+    let UDFStatus = "";
+    data.Fields.forEach(element => {
+      if (element.OPTM_DISPLAYAREA == displayArea) {
+        subarray.push(element);
+      }
+    });
+    if (subarray.length == 0) {
+      this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+      UDFStatus = "NO_DATA";
+      return UDFStatus;
+    }
+    let index = subarray.findIndex(e => e.OPTM_ISMANDATORY == 1)
+    if (index != -1) {
+      UDFStatus = "MANDATORY_AVL"
+    }
+    for (var i = 0; i < subarray.length; i++) {
+      let DropdownArray = data.ValidValues.filter(e => e.OPTM_SEQ == subarray[i].OPTM_SEQ);
+      if (DropdownArray.length == 0) {
+        this.addUDFdata(true, false, DropdownArray, subarray[i], UDF);
+      } else {
+        this.addUDFdata(false, true, DropdownArray, subarray[i], UDF);
+      }
+    }
+    return UDFStatus;
+  }
+
+  addUDFdata(istextbox, isdropdown, DropdownArray, Field, UDF?) {
+    this.itUDFComponents = <IUIComponentTemplate>{};
+    this.itUDFComponents.dropDown = "";
+    this.itUDFComponents.textBox = "";
+    this.itUDFComponents.ismandatory = Field.OPTM_ISMANDATORY == 1 ? true : false;
+    if (this.itUDFComponents.ismandatory) {
+      this.itUDFComponents.LabelName = Field.Descr + "*";
+    } else {
+      this.itUDFComponents.LabelName = Field.Descr;
+    }
+    this.itUDFComponents.istextbox = istextbox;
+    this.itUDFComponents.isdropDown = isdropdown;
+    this.itUDFComponents.OPTM_SEQ = Field.OPTM_SEQ;
+    this.itUDFComponents.AliasID = Field.AliasID;
+    this.itUDFComponents.Size = Field.SizeID;
+    let UDFRow = undefined;
+    if (UDF != undefined && UDF.length > 0) {
+      UDFRow = UDF.find(e => e.Key == Field.AliasID)
+    }
+    if (isdropdown) {
+      this.itUDFComponents.DropdownArray = DropdownArray;
+      if (UDFRow != undefined) {
+        this.itUDFComponents.dropDown = DropdownArray.find(e => e.FldValue == UDFRow.Value);
+      } else {
+        this.itUDFComponents.dropDown = DropdownArray[Number(Field.Dflt) - 1];
+      }
+    } else {
+      this.itUDFComponents.textType = Field.OPTM_FIELD_TYPE == "numeric" ? "number" : Field.OPTM_FIELD_TYPE;
+      if (UDFRow != undefined) {
+        this.itUDFComponents.textBox = UDFRow.Value
+      } else {
+        this.itUDFComponents.textBox = Field.Dflt
+      }
+    }
+    this.templates.push(this.templates.length);
+    this.UDFComponentData.push(this.itUDFComponents);
+  }
+
+  getTemplateArray(): any[] {
+    return this.templates;
+  }
+
+  getUDFComponentDataArray(): any[] {
+    return this.UDFComponentData;
+  }
+
+  onUDFDialogClose() {
+    // this.showUDF = false;
+    this.UDFComponentData = [];
+    this.templates = [];
+  }
+
+  ComponentVisibilityList = [];
+  async getComponentVisibilityList(moduleId): Promise<any> {
+    await this.GetUDFBasedOnSc("WMS", "15041").then(
+      (data: any) => {
+        if (data != null) {
+          // if (data.length > 0) {
+            this.ComponentVisibilityList = data.Fields;
+          // } else {
+            // this.toastr.error('', this.translate.instant("InValidPalletNo"));
+          // }
+        }
+        else {
+          this.toastr.error('', this.translate.instant("InValidPalletNo"));
+        }
+      },
+      error => {
+
+      }
+    );
+    // return true;
+  }
+
+  GetUDFBasedOnSc(OPTM_MODULECODE, OPTM_SCREENID): Promise<any> {
+    let jObject = {
+      DEFAULTSYSTEMBIN: JSON.stringify([{
+        CompanyDBId: sessionStorage.getItem("CompID"),
+        OPTM_MODULECODE: OPTM_MODULECODE,
+        OPTM_SCREENID: OPTM_SCREENID
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/WhsTrans/GetUDFBasedOnScreen", jObject, this.httpOptions).toPromise();
+  }
+
+  getComponentVisibility():any[]{
+    return this.ComponentVisibilityList;
+  }
 }
 
 

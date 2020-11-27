@@ -28,9 +28,9 @@ export class ChangeWarehouseComponent implements OnInit {
   constructor(private commonService: Commonservice, private signinService: SigninService,
     private router: Router, private toastr: ToastrService, private translate: TranslateService) {
     this.defaultWHS = { OPTM_WHSE: sessionStorage.getItem("whseId"), BPLid: 0 };
-    this.selectedRole = { OPTM_ROLEID: localStorage.getItem("SelectedRole"), BPLid: 0 };
-    this.selectedZone = { OPTM_WHSZONE: localStorage.getItem("SelectedZone"), BPLid: 0 };
-    this.selectedBin = { OPTM_BIN_RANGE: localStorage.getItem("SelectedBinRange"), BPLid: 0 };
+    this.selectedRole = { OPTM_ROLEID: sessionStorage.getItem("SelectedRole"), BPLid: 0 };
+    this.selectedZone = { OPTM_WHSZONE: sessionStorage.getItem("SelectedZone"), BPLid: 0 };
+    this.selectedBin = { OPTM_BIN_RANGE: sessionStorage.getItem("SelectedBinRange"), BPLid: 0 };
     if (sessionStorage.getItem("ShowBinRange") == "Y") {
       this.showBinRange = true;
     }
@@ -48,9 +48,9 @@ export class ChangeWarehouseComponent implements OnInit {
     if (this.showZone) this.showZoneList(true);
 
     this.defaultWHS = { OPTM_WHSE: sessionStorage.getItem("whseId"), BPLid: 0 };
-    this.selectedRole = { OPTM_ROLEID: localStorage.getItem("SelectedRole"), BPLid: 0 };
-    this.selectedZone = { OPTM_WHSZONE: localStorage.getItem("SelectedZone"), BPLid: 0 };
-    this.selectedBin = { OPTM_BIN_RANGE: localStorage.getItem("SelectedBinRange"), BPLid: 0 };
+    this.selectedRole = { OPTM_ROLEID: sessionStorage.getItem("SelectedRole"), BPLid: 0 };
+    this.selectedZone = { OPTM_WHSZONE: sessionStorage.getItem("SelectedZone"), BPLid: 0 };
+    this.selectedBin = { OPTM_BIN_RANGE: sessionStorage.getItem("SelectedBinRange"), BPLid: 0 };
     if (sessionStorage.getItem("ShowBinRange") == "Y") {
       this.showBinRange = true;
     }
@@ -216,9 +216,9 @@ export class ChangeWarehouseComponent implements OnInit {
     if (!this.validateDropDowns()) return false;
 
     sessionStorage.setItem("whseId", this.defaultWHS.OPTM_WHSE);
-    localStorage.setItem("SelectedRole", this.selectedRole.OPTM_ROLEID);
-    localStorage.setItem("SelectedZone", this.selectedZone.OPTM_WHSZONE);
-    localStorage.setItem("SelectedBinRange", this.selectedBin.OPTM_BIN_RANGE);
+    sessionStorage.setItem("SelectedRole", this.selectedRole.OPTM_ROLEID);
+    sessionStorage.setItem("SelectedZone", this.selectedZone.OPTM_WHSZONE);
+    sessionStorage.setItem("SelectedBinRange", this.selectedBin.OPTM_BIN_RANGE);
     this.setCookie('whseId', this.defaultWHS.OPTM_WHSE, 365);
     this.setCookie('Role', this.selectedRole.OPTM_ROLEID, 365);
     this.setCookie('Zone', this.selectedRole.OPTM_WHSZONE, 365);

@@ -48,7 +48,7 @@ export class ProductionIssueModel {
     constructor() { }
     Items: Item[];
     Lots: Lot[];
-    
+    UDF: any[];
 }
 
 export class RootObject {

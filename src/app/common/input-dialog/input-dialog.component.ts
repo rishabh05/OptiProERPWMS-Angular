@@ -32,7 +32,7 @@ export class InputDialogComponent implements OnInit {
     private inboundService: InboundService, private router: Router) { }
 
   ngOnInit() {
-    if (localStorage.getItem("AutoPalletIdGenerationChecked") == "True") {
+    if (sessionStorage.getItem("AutoPalletIdGenerationChecked") == "True") {
       this.autoGeneratePalletEnable = true;
     }
 

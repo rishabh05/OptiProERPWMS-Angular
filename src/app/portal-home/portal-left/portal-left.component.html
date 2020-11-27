@@ -123,7 +123,7 @@
                     <span class="text">{{'Packing'|translate}}</span>
                 </a>
             </li>
-            <li id="DROP" (click)="listClick($event, 'drop')" [ngClass]="{'active': selectedItem == 'drop'}" [ngStyle]="{'display':'flex'}">
+            <li id="DROP" (click)="listClick($event, 'drop')" [ngClass]="{'active': selectedItem == 'drop'}" [ngStyle]="{'display':'none'}">
                 <a>
                     <svg viewBox="0 0 128 128" class="icon">
                         <use xlink:href="#picklist"></use>
@@ -131,7 +131,7 @@
                     <span class="text">{{'drop'|translate}}</span>
                 </a>
             </li>
-            <li id="LOAD" (click)="listClick($event, 'load')" [ngClass]="{'active': selectedItem == 'load'}" [ngStyle]="{'display':'flex'}">
+            <li id="LOAD" (click)="listClick($event, 'load')" [ngClass]="{'active': selectedItem == 'load'}" [ngStyle]="{'display':'none'}">
                 <a>
                     <svg viewBox="0 0 128 128" class="icon">
                         <use xlink:href="#picklist"></use>

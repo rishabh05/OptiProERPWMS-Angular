@@ -13,13 +13,13 @@ export class ITRLIstComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    localStorage.setItem("ComingFrom", "itr");
+    sessionStorage.setItem("ComingFrom", "itr");
     let outbound: OutboundData = new OutboundData();
     outbound.ITRToBinNo = { ToBin: "" };
     var customerCode = "";
     var customerName = "";
     outbound.CustomerData = { CustomerCode: customerCode, CustomerName: customerName, TrackingId: "", CustRefNo: "" };
-    localStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
+    sessionStorage.setItem(CommonConstants.OutboundData, JSON.stringify(outbound));
   }
 
   backFromOutOrderScreen(event) {

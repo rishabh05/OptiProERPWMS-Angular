@@ -23,24 +23,12 @@ export class PortalLeftComponent implements OnInit {
   allOptionMenus: any = []
 
   constructor(private commonService: Commonservice, private router: Router, private menuService: MenuService, private translate: TranslateService, private toastr: ToastrService) {
-    // router.events.subscribe((val) => {
-    //   // get current url with last word
-    //   let partsOfUrl = this.router.url.split('/');
-    //   this.selectedItem = partsOfUrl[partsOfUrl.length - 1];
-    //   setTimeout(() => {
-    //     if (typeof (document.getElementById('opti_RightPanelID')) != 'undefined' && document.getElementById('opti_RightPanelID') != null) {
-    //       document.getElementById('opti_RightPanelID').classList.remove('opti_menusidebar-mobile-open');
-    //       document.getElementById('opti_LeftPanelID').classList.remove('opti_menusidebar-mobile-open');
-    //     }
-    //   }, 1000);
-
-    // });
   }
   selectedThemeColor: string = 'opticonstants.DEFAULTTHEMECOLOR';
   selectedItem: string;
 
   ngOnInit() {
-    if (localStorage.getItem("PalletizationEnabled") == "True") {
+    if (sessionStorage.getItem("PalletizationEnabled") == "True") {
       this.isPalletizationEnable = true;
     } else {
       this.isPalletizationEnable = false;
@@ -66,7 +54,7 @@ export class PortalLeftComponent implements OnInit {
     this.commonService.GetConfigurationParam().subscribe(
       data => {
         if (data != null && data.OPTM_CONF_PARAM != undefined) {
-          localStorage.setItem('ConfigurationParam', JSON.stringify(data.OPTM_CONF_PARAM));
+          sessionStorage.setItem('ConfigurationParam', JSON.stringify(data.OPTM_CONF_PARAM));
         }
       },
       error => {
@@ -82,7 +70,7 @@ export class PortalLeftComponent implements OnInit {
 
 
   getAllMenus() {
-    let menuLoaded = window.localStorage.getItem('IsMenuLoaded');
+    let menuLoaded = window.sessionStorage.getItem('IsMenuLoaded');
     //  if(!menuLoaded){
     this.menuService.getAllMenus().subscribe(
       data => {
@@ -91,7 +79,7 @@ export class PortalLeftComponent implements OnInit {
           this.allOptionMenus = data.Modules
         }
 
-        window.localStorage.setItem('IsMenuLoaded', 'true');
+        window.sessionStorage.setItem('IsMenuLoaded', 'true');
       },
       error => {
         if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
@@ -146,18 +134,18 @@ export class PortalLeftComponent implements OnInit {
 
     this.selectedItem = module;
     this.closeRightSidebar(event);
-    localStorage.setItem("ProdReceptItem", '');
-    localStorage.setItem("FromReceiptProd", 'false');
-    localStorage.setItem("GoodsReceiptModel", '');
-    localStorage.setItem("AvailableRejectQty", 0 + "");
-
+    sessionStorage.setItem("ProdReceptItem", '');
+    sessionStorage.setItem("FromReceiptProd", 'false');
+    sessionStorage.setItem("GoodsReceiptModel", '');
+    sessionStorage.setItem("AvailableRejectQty", 0 + "");
+    sessionStorage.setItem("GRPOHdrUDF", "");
     if (module == "outbound") {
       // manage delivery and shipment via delivery option in same outbound 
       if (fromWhere == 1) {
-        localStorage.setItem("deliveryOptionType", '1');
+        sessionStorage.setItem("deliveryOptionType", '1');
         module = module + '/outcustomer'
       } else if (fromWhere == 2) {
-        localStorage.setItem("deliveryOptionType", '2');
+        sessionStorage.setItem("deliveryOptionType", '2');
         module = module + '/deliveryThroughShipment'
       }
       this.onOutboundClick();
@@ -165,26 +153,26 @@ export class PortalLeftComponent implements OnInit {
       this.onInboundClick();
 
       if (fromWhere == 1) {
-        localStorage.setItem("inboundOptionType", '1');
+        sessionStorage.setItem("inboundOptionType", '1');
         //module = module + '/outcustomer'
       } else if (fromWhere == 2) {
-        localStorage.setItem("inboundOptionType", '2');
+        sessionStorage.setItem("inboundOptionType", '2');
         module = module + '/inboundAPI'
       }
     } else if (module == "whsTransfer") {
-      localStorage.setItem("fromscreen", "WhsTransfer");
+      sessionStorage.setItem("fromscreen", "WhsTransfer");
     } else if (module == "InventoryTransferRequest") {
-      localStorage.setItem("fromscreen", "InventoryTransferRequest");
+      sessionStorage.setItem("fromscreen", "InventoryTransferRequest");
     } else if (module == "binTransfer") {
-      localStorage.setItem("fromscreen", "");
-      localStorage.setItem("towhseId", sessionStorage.getItem("whseId"));
-      localStorage.setItem("fromwhseId", sessionStorage.getItem("whseId"));
+      sessionStorage.setItem("fromscreen", "");
+      sessionStorage.setItem("towhseId", sessionStorage.getItem("whseId"));
+      sessionStorage.setItem("fromwhseId", sessionStorage.getItem("whseId"));
     } else if (module == "picking") {
-      localStorage.setItem("PickType", "");
-      localStorage.setItem("PickTypeIndex", "");
-      localStorage.setItem("PickListSteps", "");
+      sessionStorage.setItem("PickType", "");
+      sessionStorage.setItem("PickTypeIndex", "");
+      sessionStorage.setItem("PickListSteps", "");
     } else if (module == "ShpLoading") {
-      localStorage.setItem("PickListSteps", "");
+      sessionStorage.setItem("PickListSteps", "");
     } else if (module == "shipment") {
       this.goToLink("http://localhost:6601/#/home/dashboard");
     }
@@ -208,7 +196,7 @@ export class PortalLeftComponent implements OnInit {
   }
 
   binClick() {
-    // localStorage.setItem("towhseId", sessionStorage.getItem("whseId"));
+    // sessionStorage.setItem("towhseId", sessionStorage.getItem("whseId"));
   }
 
   onInboundClick() {
@@ -216,8 +204,8 @@ export class PortalLeftComponent implements OnInit {
   }
 
   onOutboundClick() {
-    localStorage.setItem(CommonConstants.FROM_DTS, "False");
-    localStorage.setItem(CommonConstants.OutboundData, null);
-    localStorage.setItem("ComingFrom", "");
+    sessionStorage.setItem(CommonConstants.FROM_DTS, "False");
+    sessionStorage.setItem(CommonConstants.OutboundData, null);
+    sessionStorage.setItem("ComingFrom", "");
   }
 }

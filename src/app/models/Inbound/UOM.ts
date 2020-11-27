@@ -1,5 +1,6 @@
 export interface UOM{
     BaseQty: number;
+    AltQty: number;
     InventoryUOM: number;
     PurchaseUOM: string;
     SalesUOM: string;

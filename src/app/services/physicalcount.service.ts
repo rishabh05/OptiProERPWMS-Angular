@@ -117,10 +117,10 @@ export class PhysicalcountService {
    * check and scan code.
    * @param whsCode 
    */
-  checkAndScanCode(vendCode: string, scanInputString) {
-    var jObject = { Gs1Token: JSON.stringify([{ Vsvendorid: vendCode, StrScan: scanInputString, CompanyDBId: sessionStorage.getItem("CompID") }]) };
-    return this.httpclient.post(this.config_params.service_url + "/api/Gs1/GS1SETUP", jObject, this.commonService.httpOptions);
-  }
+  // checkAndScanCode(vendCode: string, scanInputString) {
+  //   var jObject = { Gs1Token: JSON.stringify([{ Vsvendorid: vendCode, StrScan: scanInputString, CompanyDBId: sessionStorage.getItem("CompID") }]) };
+  //   return this.httpclient.post(this.config_params.service_url + "/api/Gs1/GS1SETUP", jObject, this.commonService.httpOptions);
+  // }
 
   /**
   * This API method will return base64 string for pdf format for print.

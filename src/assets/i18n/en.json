@@ -220,7 +220,6 @@
   "BinNo": "Bin No.",
   "INVALIDBIN": "Invalid bin number.",
   "FrmNToBinCantSame": "From Bin and To Bin cannot be same",
-  "UOM": "UOM",
   "Manual": "Manual",
   "Quantity": "Quantity",
   "DeleteAll": "Delete all",
@@ -252,6 +251,7 @@
   "SearchBin": "Search Bin",
   "AvailableQty": "Available Qty.",
   "AvaliableMeterial": "Available Material",
+  "ExpiryDate": "Expiry Date",
   "BatchSrBinList": "Batch/Sr/Bin No. List",
   "NoOfCopiesCannotbeBlank": "No. of copies cannot be blank or zero",
   "NoOfCopiesShouldBeNumeric": "No. of copies must be numeric",
@@ -690,6 +690,14 @@
   "OneContPerPicklist": "Only one container / Tote allowed per picklist",
   "ItemTracking": "Tracking",
   "MAX_AVAIL_QTY": "Tote Qty",
+  "Qty_InventoryUOMMob": "Pick/Open Qty.(Inv. UoM)",
+  "Qty_InventoryUOMMobGRPO": "Recv./Open Qty.(Inv. UoM)",
+  "Qty_PurchaseUoMMob": "Recv./Open Qty.(Pur. UoM)",
+  "Qty_InventoryUOM": "Pick/Open Qty.(Inventory UoM)",
+  "Qty_InventoryUOMGRPO": "Receive/Open Qty.(Inventory UoM)",
+  "Qty_PurchaseUoM": "Receive/Open Qty.(Purchase UoM)",
+  "Qty_SalesUoM": "Pick/Open Qty.(Sales UoM)",
+  "Inbound_ItemName": "Item Name",
   "Dummy": "Dummy"
 }
  

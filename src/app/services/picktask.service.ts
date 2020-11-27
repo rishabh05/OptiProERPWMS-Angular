@@ -18,8 +18,8 @@ export class PickTaskService {
   }
 
   clearLocaStorage() {
-    localStorage.setItem("PickItemIndex", "");
-    localStorage.setItem("TaskDetail", "");
+    sessionStorage.setItem("PickItemIndex", "");
+    sessionStorage.setItem("TaskDetail", "");
   }
   GetPicklist(OPTM_PICK_TYPE): Observable<any> {
     let jObject = {
@@ -27,7 +27,7 @@ export class PickTaskService {
         CompanyDBId: sessionStorage.getItem("CompID"),
         OPTM_PICK_TYPE: OPTM_PICK_TYPE,
         loggedinWH: sessionStorage.getItem("whseId"),
-        loggedinUserGR: localStorage.getItem("UserGroup")
+        loggedinUserGR: sessionStorage.getItem("UserGroup")
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetPicklist", jObject, this.commonService.httpOptions);
@@ -39,7 +39,7 @@ export class PickTaskService {
         CompanyDBId: sessionStorage.getItem("CompID"),
         OPTM_TASK_CODE: OPTM_TASK_CODE,
         OPTM_PICKLIST_ID: OPTM_PICKLIST_ID,
-        OPTM_USER_GRP: localStorage.getItem("UserGroup")
+        OPTM_USER_GRP: sessionStorage.getItem("UserGroup")
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetDataBasedOnPickList", jObject, this.commonService.httpOptions);
@@ -154,7 +154,7 @@ export class PickTaskService {
         LOTNO: LOTNO,
         OPTM_SRC_BIN: OPTM_SRC_BIN,
         OPTM_WHSECODE: sessionStorage.getItem("whseId"),
-        OPTM_CREATEDBY: localStorage.getItem("UserGroup")
+        OPTM_CREATEDBY: sessionStorage.getItem("UserGroup")
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/IsValidBatchSerial", jObject, this.commonService.httpOptions);
@@ -173,7 +173,7 @@ export class PickTaskService {
     var jObject = {
       PalletCode: JSON.stringify([{
         OPTM_WHSECODE: sessionStorage.getItem("whseId"),
-        OPTM_USERGRP: localStorage.getItem("UserGroup"),
+        OPTM_USERGRP: sessionStorage.getItem("UserGroup"),
         OPTM_PICKTYPE: OPTM_PICKTYPE,
         CompanyDBId: sessionStorage.getItem("CompID"),
         OPTM_PICKLIST_ID: OPTM_PICKLIST_ID,

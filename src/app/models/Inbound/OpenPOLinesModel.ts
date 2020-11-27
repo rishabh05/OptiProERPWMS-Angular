@@ -11,7 +11,7 @@ export interface OpenPOLinesModel{
     OPENQTY: number;
     QCREQUIRED: string;
     ROWNUM: number;
-    RPTQTY: number;
+    RPTQTY;
     SHIPDATE: string;
     TOTALQTYINVUOM: number;
     TRACKING: string;
@@ -21,4 +21,6 @@ export interface OpenPOLinesModel{
     WHSE: string;
     UOMList: UOM[];
     PalletCode: string;
+    INVOPENQTY;
+    INVRPTQTY;
 }

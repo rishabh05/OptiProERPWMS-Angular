@@ -8,4 +8,10 @@ export class OutRequest {
     Whse:string
     ItemCode:string
     WHSCode
+    SODOCNETRY
+    PODOCNETRY
+    POLINENUM
+    SOLINENUM
+    INVODOCNETRY
+    INVLINENUM
 }

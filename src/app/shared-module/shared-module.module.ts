@@ -16,18 +16,21 @@ import { StatePersistingServiceService } from '../services/state-persisting-serv
 import { ShipmentinfoComponent } from '../common/shipmentinfo/shipmentinfo.component';
 import { TrnaslateLazyModule } from '../../translate-lazy.module';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { UDFdialogComponent } from 'src/app/common/udfdialog/udfdialog.component';
+import { DropDownsModule } from '../../../node_modules/@progress/kendo-angular-dropdowns';
 @NgModule({  
   imports: [ CommonModule, 
     GridModule, 
     FormsModule,
     TrnaslateLazyModule,
+    DropDownsModule,
     DialogsModule,PdfViewerModule,PerfectScrollbarModule],
     providers:[ ConfirmdialogService,StatePersistingServiceService],
   declarations: [ LookupComponent,ConfirmDialogComponent,ComonConfirmDialogComponent,DisplayPdfComponent,ShipmentinfoComponent,
-    PdfpipePipe,NumberFormatPipe, InputDialogComponent ],
+    PdfpipePipe,NumberFormatPipe, InputDialogComponent , UDFdialogComponent],
   entryComponents: [ ConfirmDialogComponent,DisplayPdfComponent, InputDialogComponent,ShipmentinfoComponent],
   exports:      [ LookupComponent,ConfirmDialogComponent,ComonConfirmDialogComponent,
-    DisplayPdfComponent,PdfpipePipe,NumberFormatPipe, InputDialogComponent, ShipmentinfoComponent]
+    DisplayPdfComponent,PdfpipePipe,NumberFormatPipe, InputDialogComponent, ShipmentinfoComponent, UDFdialogComponent]
     
 })
 export class SharedModule { }

@@ -7,13 +7,12 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { AutoLot } from '../../models/Inbound/AutoLot';
 import { RowClassArgs, GridComponent } from '@progress/kendo-angular-grid';
-import { bypassSanitizationTrustResourceUrl } from '@angular/core/src/sanitization/bypass';
 import { InventoryTransferService } from 'src/app/services/inventory-transfer.service';
 import { StatePersistingServiceService } from 'src/app/services/state-persisting-service.service';
 import { GridSettings } from 'src/app/interface/grid-settings.interface';
 import { ColumnSettings } from 'src/app/interface/column-settings.interface';
 import { process } from '@progress/kendo-data-query';
-import * as $ from 'jquery';
+import { IUIComponentTemplate } from 'src/app/common/ui-component.interface';
 @Component({
   selector: 'app-inbound-polist',
   templateUrl: './inbound-polist.component.html',
@@ -56,9 +55,8 @@ export class InboundPolistComponent implements OnInit {
   // caption related labels.
   PONo:any;
   future_PO_Invoice:any;
-
+  IsUDFEnabled = "N";
   inboundFromWhere: any = false;
-
 
 
   public gridSettings: GridSettings = {
@@ -92,9 +90,8 @@ export class InboundPolistComponent implements OnInit {
   }
    
   ngOnInit() {
-
-
-    this.inboundFromWhere = localStorage.getItem("inboundOptionType");
+    this.inboundFromWhere = sessionStorage.getItem("inboundOptionType");
+    this.IsUDFEnabled = sessionStorage.getItem("ISUDFEnabled");
     if(this.inboundFromWhere==1){
       this.PONo =  this.translate.instant("Inbound_PO#");
       this.future_PO_Invoice = this.translate.instant("Inbound_FuturePOs");
@@ -107,29 +104,24 @@ export class InboundPolistComponent implements OnInit {
     }
 
     // set future po to check if already checked.
-    if(localStorage.getItem("isFuturePOChecked")== "true"){
+    if(sessionStorage.getItem("isFuturePOChecked")== "true"){
       this.futurepo = true;
     }else{
       this.futurepo = false;
     }
 
-    var ponumber = localStorage.getItem("PONumber");
+    var ponumber = sessionStorage.getItem("PONumber");
     if (ponumber != undefined && ponumber != null && ponumber != "") {
       this.poCode = ponumber;
       this.OnPOChange();
     }
     this.selectedVendor = this.inboundMasterComponent.selectedVernder;
     this.showGRPOButton = false;
-
-    // if (this.savedStateExists) {
-    //   this.gridSettings = this.mapGridSettings(this.persistingService.get('gridSettings'))
-    // } else {
-    // }
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
-      var selectedPO = localStorage.getItem("selectedPO");
+      var selectedPO = sessionStorage.getItem("selectedPO");
       if (selectedPO != undefined && selectedPO != null && selectedPO != "") {
         this.poCode = selectedPO;
         this.disablePO = true;
@@ -159,7 +151,7 @@ export class InboundPolistComponent implements OnInit {
             this.showLookupLoader = false;
             this.serviceData = data.Table;
             //    console.log("get polist response serviceData:", this.serviceData);
-          var ibFromWhere:any = localStorage.getItem("inboundOptionType");
+          var ibFromWhere:any = sessionStorage.getItem("inboundOptionType");
           if(ibFromWhere==1){
             this.lookupfor = "POList";
           }else{
@@ -184,7 +176,7 @@ export class InboundPolistComponent implements OnInit {
   //future po change.
   toggleVisibility(e) {
     console.log("checkuncheck:",this.futurepo);
-    localStorage.setItem("isFuturePOChecked", JSON.stringify(this.futurepo));
+    sessionStorage.setItem("isFuturePOChecked", JSON.stringify(this.futurepo));
   }
   onItemlookupClick() {
     //console.log("item lookup click :");
@@ -231,26 +223,18 @@ export class InboundPolistComponent implements OnInit {
       this.poCode,this.inboundFromWhere).subscribe(
         (data: any) => {
           this.showLoader = false;
-          // console.log("api call resonse section :openPOLines()");
-          // console.log(data);
           this.showNonTrackItem = false;
           this.showBatchTrackItem = false;
           this.showSerialTrackItem = false;
           if (data.Table != undefined && data.Table != null) {
             this.openPOLinesModel = [];
-            // this.BatchItemsDetail = [];
-            // this.NonItemsDetail = [];
-            // this.SerialItemsDetail = [];
-
             if (data.Table.length == 0) {
               this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
               return;
             }
 
             this.openPOLinesModel = data.Table;
-
             if (this.savedStateExists) {
-              console.log("ng after me setTimeout savedState: True");
               this.gridSettings = this.mapGridSettings(this.persistingService.get('gridSettings'))
             } else {
              this.gridSettings.gridData = process(this.openPOLinesModel, {
@@ -258,21 +242,13 @@ export class InboundPolistComponent implements OnInit {
                take: this.defaultPageSize
              });
             }
-            // this.gridSettings.gridData = process(this.openPOLinesModel, {
-            //   skip: 0,
-            //   take: this.defaultPageSize
-            //   // Initial filter descriptor 
-            // });
 
-            // var  unmatchedPOLinesModel = data.Table;
             this.updateReceivedQtyForSavedItems();
-
             if (this.openPOLinesModel.length > 0) {
               this.showSerialTrackItem = true;
               // this.pagable = true;
             }
             if (this.openPOLinesModel.length > this.pageSize) {
-
               this.pagable = true;
             }
 
@@ -282,10 +258,9 @@ export class InboundPolistComponent implements OnInit {
               this.openPOLineModel = poline;
               // this.openPOLineModel.RPTQTY = poline.OPENQTY;
               this.openPOLineModel.DocNum = this.poCode;
-              this.inboundMasterComponent.setClickedItemDetail(this.openPOLineModel);
+              this.inboundMasterComponent.setClickedItemDetail(this.openPOLineModel);              
               this.getAutoLot(this.openPOLineModel.ITEMCODE);
             }
-
           } else if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
@@ -399,7 +374,6 @@ export class InboundPolistComponent implements OnInit {
   }
 
   async OnItemCodeChange() {
-
     if (this.itemCode == "" || this.itemCode == undefined) {
       return;
     }
@@ -409,7 +383,6 @@ export class InboundPolistComponent implements OnInit {
       data => {
         this.showLoader = false;
         if (data != undefined && data.length > 0) {
-          // console.log("" + data);
           if (data[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
               this.translate.instant("CommonSessionExpireMsg"));
@@ -440,15 +413,11 @@ export class InboundPolistComponent implements OnInit {
     return result
   }
 
-  onClickOpenPOLineRowOpenAutoLot(poline, grid: GridComponent) {
-    //const poline = selection.selectedRows[0].dataItem;
+  onClickOpenPOLineRowOpenAutoLot(poline, grid: GridComponent) {    
     this.openPOLineModel = poline;
-    // this.openPOLineModel.RPTQTY = 0;
     this.openPOLineModel.DocNum = this.poCode;
     this.inboundMasterComponent.setClickedItemDetail(this.openPOLineModel);
     if (this.openPOLineModel.TRACKING == 'N') {
-      // localStorage.setItem("PalletizationEnabledForItem", "True");
-      // this.inboundMasterComponent.inboundComponent = 3;
       this.getAutoLotForN(poline.ITEMCODE);
     } else {
       this.getAutoLot(poline.ITEMCODE);
@@ -473,12 +442,12 @@ export class InboundPolistComponent implements OnInit {
         else {
           this.autoLot.push(new AutoLot("N", itemCode, "", "", "", ""));
         }
-
-        //this.inboundMasterComponent.setAutoLots(this.autoLot);
-        localStorage.setItem("primaryAutoLots", JSON.stringify(this.autoLot));
-        // this.openPOLineModel = this.openPOLinesModel.find(e => e.ITEMCODE == itemCode);
+        if(!this.checkIfMandatoryUDFFilled()){
+          return;
+        }
+        sessionStorage.setItem("primaryAutoLots", JSON.stringify(this.autoLot));
         if (this.openPOLineModel != null) {
-          localStorage.setItem("PalletizationEnabledForItem", "True");
+          sessionStorage.setItem("PalletizationEnabledForItem", "True");
           this.inboundMasterComponent.inboundComponent = 3;
         }
       },
@@ -511,21 +480,15 @@ export class InboundPolistComponent implements OnInit {
         else {
           this.autoLot.push(new AutoLot("N", itemCode, "", "", "", ""));
         }
-
-        //this.inboundMasterComponent.setAutoLots(this.autoLot);
-        localStorage.setItem("primaryAutoLots", JSON.stringify(this.autoLot));
-        // this.openPOLineModel = this.openPOLinesModel.find(e => e.ITEMCODE == itemCode);
+        if(!this.checkIfMandatoryUDFFilled()){
+          return;
+        }
+        sessionStorage.setItem("primaryAutoLots", JSON.stringify(this.autoLot));
         if (this.openPOLinesModel != null && this.openPOLinesModel.length > 0) {
           if (this.openPOLineModel.TRACKING == 'N') {
-            // for(var i=0; i<this.openPOLinesModel.length; i++){
-            //   if(Number(this.openPOLinesModel[i].RPTQTY) != Number(this.openPOLinesModel[i].OPENQTY)){
-            //     this.openPOLinesModel[i].RPTQTY = this.openPOLinesModel[i].OPENQTY;
-            //     this.ShowBins();
-            //   }
-            // }
             this.ShowBins(itemCode);
           } else {
-            localStorage.setItem("PalletizationEnabledForItem", "True");
+            sessionStorage.setItem("PalletizationEnabledForItem", "True");
             this.inboundMasterComponent.inboundComponent = 3;
           }
         }
@@ -544,8 +507,8 @@ export class InboundPolistComponent implements OnInit {
 
   updateReceivedQtyForSavedItems() {
     // var  unmatchedPOLinesModel = array;
-    if (localStorage.getItem("GRPOReceieveData") != undefined && localStorage.getItem("GRPOReceieveData") != null && localStorage.getItem("GRPOReceieveData") != "") {
-      this.oSavedPOLotsArray = JSON.parse(localStorage.getItem("GRPOReceieveData"));
+    if (sessionStorage.getItem("GRPOReceieveData") != undefined && sessionStorage.getItem("GRPOReceieveData") != null && sessionStorage.getItem("GRPOReceieveData") != "") {
+      this.oSavedPOLotsArray = JSON.parse(sessionStorage.getItem("GRPOReceieveData"));
     } else {
       this.oSavedPOLotsArray = undefined;
     }
@@ -553,7 +516,6 @@ export class InboundPolistComponent implements OnInit {
     for (var k = 0; k < this.openPOLinesModel.length; k++) {
       this.openPOLinesModel[k].RPTQTY = 0;
     }
-
     if (this.oSavedPOLotsArray != undefined && this.oSavedPOLotsArray != null &&
       this.oSavedPOLotsArray.POReceiptLots != undefined && this.oSavedPOLotsArray.POReceiptLots != null &&
       this.oSavedPOLotsArray.POReceiptLots.length > 0 &&
@@ -570,8 +532,6 @@ export class InboundPolistComponent implements OnInit {
         }
       }
     }
-    // console.log("OpenPOlines items size:", this.openPOLinesModel.length);
-    //console.log("OpenPOlines items :", JSON.stringify(this.openPOLinesModel));
   }
 
   copyRemaingItemtoMainArray(unmatchedPOLinesModel: any[]) {
@@ -594,35 +554,35 @@ export class InboundPolistComponent implements OnInit {
     //   this.openConfirmationDialog();
     // }else{
     this.inboundMasterComponent.inboundComponent = 1;
-    localStorage.setItem("PONumber", "");
+    sessionStorage.setItem("PONumber", "");
     // }
   }
 
-  checkDataDiff(): boolean {
-    let addToGRPOArrayCount = 0, oSavedPOLotsArrayCount = 0;
-    if (localStorage.getItem("AddToGRPO") != "") {
-      this.addToGRPOArray = JSON.parse(localStorage.getItem("AddToGRPO"));
-      addToGRPOArrayCount = this.addToGRPOArray.POReceiptLots.length;
-    }
-    if (localStorage.getItem("GRPOReceieveData") != "") {
-      this.oSavedPOLotsArray = JSON.parse(localStorage.getItem("GRPOReceieveData"));
-      oSavedPOLotsArrayCount = this.oSavedPOLotsArray.POReceiptLots.length;
-    }
+  // checkDataDiff(): boolean {
+  //   let addToGRPOArrayCount = 0, oSavedPOLotsArrayCount = 0;
+  //   if (sessionStorage.getItem("AddToGRPO") != "") {
+  //     this.addToGRPOArray = JSON.parse(sessionStorage.getItem("AddToGRPO"));
+  //     addToGRPOArrayCount = this.addToGRPOArray.POReceiptLots.length;
+  //   }
+  //   if (sessionStorage.getItem("GRPOReceieveData") != "") {
+  //     this.oSavedPOLotsArray = JSON.parse(sessionStorage.getItem("GRPOReceieveData"));
+  //     oSavedPOLotsArrayCount = this.oSavedPOLotsArray.POReceiptLots.length;
+  //   }
 
-    if (addToGRPOArrayCount != oSavedPOLotsArrayCount) {
-      return true
-    }
-    return false;
-  }
+  //   if (addToGRPOArrayCount != oSavedPOLotsArrayCount) {
+  //     return true
+  //   }
+  //   return false;
+  // }
 
 
-  async  onAddtoGRPOClick() {
+  async onAddtoGRPOClick() {
     await this.validateBeforeSubmit();
 
-    this.oSavedPOLotsArray = JSON.parse(localStorage.getItem("GRPOReceieveData"));
+    this.oSavedPOLotsArray = JSON.parse(sessionStorage.getItem("GRPOReceieveData"));
     if (this.oSavedPOLotsArray != undefined && this.oSavedPOLotsArray != null && this.oSavedPOLotsArray != "") {
-      if (localStorage.getItem("AddToGRPO") != "") {
-        this.addToGRPOArray = JSON.parse(localStorage.getItem("AddToGRPO"));
+      if (sessionStorage.getItem("AddToGRPO") != "") {
+        this.addToGRPOArray = JSON.parse(sessionStorage.getItem("AddToGRPO"));
         this.manageGRPOData();
       } else {
         this.addToGRPOArray.Header = [];
@@ -631,8 +591,8 @@ export class InboundPolistComponent implements OnInit {
         this.addToGRPOArray.UDF = [];
         this.addToGRPOArray.LastSerialNumber = [];
       }
-      if (localStorage.getItem("addToGRPOPONumbers") != "") {
-        this.addToGRPOPONumbers = JSON.parse(localStorage.getItem("addToGRPOPONumbers"));
+      if (sessionStorage.getItem("addToGRPOPONumbers") != "") {
+        this.addToGRPOPONumbers = JSON.parse(sessionStorage.getItem("addToGRPOPONumbers"));
         // this.managePONumberListData();
       } else {
         this.addToGRPOPONumbers.PONumbers = [];
@@ -641,7 +601,6 @@ export class InboundPolistComponent implements OnInit {
       for (var i = 0; i < this.oSavedPOLotsArray.POReceiptLots.length; i++) {
         if (this.oSavedPOLotsArray.POReceiptLots[i].PONumber == this.poCode) {
           if (addpo) {
-
             let isExist = false;
             for (var c = 0; c < this.addToGRPOPONumbers.PONumbers.length; c++) {
               if (this.addToGRPOPONumbers.PONumbers[c].PONumber == this.poCode) {
@@ -656,7 +615,6 @@ export class InboundPolistComponent implements OnInit {
                 PONumber: this.oSavedPOLotsArray.POReceiptLots[i].PONumber
               });
             }
-
             addpo = false;
           }
    
@@ -698,27 +656,28 @@ export class InboundPolistComponent implements OnInit {
             }
           }
 
-          for (var k = 0; k < this.oSavedPOLotsArray.UDF.length; k++) {
-            if (this.oSavedPOLotsArray.UDF[k].Key == "OPTM_TARGETWHS" &&
-              this.oSavedPOLotsArray.UDF[k].LineNo == this.oSavedPOLotsArray.POReceiptLots[i].Line) {
-              this.addToGRPOArray.UDF.push({
-                Key: "OPTM_TARGETWHS",//UDF[iIndex].Key,
-                Value: this.oSavedPOLotsArray.UDF[k].Value,
-                Flag: 'D',
-                LineNo: this.oSavedPOLotsArray.UDF[k].LineNo
-              });
-            }
+          this.addToGRPOArray.UDF = this.oSavedPOLotsArray.UDF;
+          // for (var k = 0; k < this.oSavedPOLotsArray.UDF.length; k++) {
+          //   if (this.oSavedPOLotsArray.UDF[k].Key == "OPTM_TARGETWHS" &&
+          //     this.oSavedPOLotsArray.UDF[k].LineNo == this.oSavedPOLotsArray.POReceiptLots[i].Line) {
+          //     this.addToGRPOArray.UDF.push({
+          //       Key: "OPTM_TARGETWHS",//UDF[iIndex].Key,
+          //       Value: this.oSavedPOLotsArray.UDF[k].Value,
+          //       Flag: 'D',
+          //       LineNo: this.oSavedPOLotsArray.UDF[k].LineNo
+          //     });
+          //   }
 
-            if (this.oSavedPOLotsArray.UDF[k].Key == "OPTM_TARGETBIN" &&
-              this.oSavedPOLotsArray.UDF[k].LineNo == this.oSavedPOLotsArray.POReceiptLots[i].Line) {
-              this.addToGRPOArray.UDF.push({
-                Key: "OPTM_TARGETBIN",
-                Value: this.oSavedPOLotsArray.UDF[k].Value,
-                Flag: 'D',
-                LineNo: this.oSavedPOLotsArray.UDF[k].LineNo
-              });
-            }
-          }
+          //   if (this.oSavedPOLotsArray.UDF[k].Key == "OPTM_TARGETBIN" &&
+          //     this.oSavedPOLotsArray.UDF[k].LineNo == this.oSavedPOLotsArray.POReceiptLots[i].Line) {
+          //     this.addToGRPOArray.UDF.push({
+          //       Key: "OPTM_TARGETBIN",
+          //       Value: this.oSavedPOLotsArray.UDF[k].Value,
+          //       Flag: 'D',
+          //       LineNo: this.oSavedPOLotsArray.UDF[k].LineNo
+          //     });
+          //   }
+          // }
 
           for (var m = 0; m < this.oSavedPOLotsArray.LastSerialNumber.length; m++) {
             if (this.oSavedPOLotsArray.LastSerialNumber[m].ItemCode == this.oSavedPOLotsArray.POReceiptLots[i].ItemCode) {
@@ -731,14 +690,14 @@ export class InboundPolistComponent implements OnInit {
           }
           this.addToGRPOArray.Header = [];
           this.addToGRPOArray.Header.push({
-            NumAtCard: localStorage.getItem("VendRefNo")
+            NumAtCard: sessionStorage.getItem("VendRefNo")
           });
         }
       }
-      localStorage.setItem("AddToGRPO", JSON.stringify(this.addToGRPOArray));
-      localStorage.setItem("addToGRPOPONumbers", JSON.stringify(this.addToGRPOPONumbers));
+      sessionStorage.setItem("AddToGRPO", JSON.stringify(this.addToGRPOArray));
+      sessionStorage.setItem("addToGRPOPONumbers", JSON.stringify(this.addToGRPOPONumbers));
     }
-    localStorage.setItem("PONumber", "");
+    sessionStorage.setItem("PONumber", "");
     this.inboundMasterComponent.inboundComponent = 1;
   }
 
@@ -760,16 +719,12 @@ export class InboundPolistComponent implements OnInit {
           }
         }
 
-        for (var k = 0; k < this.addToGRPOArray.UDF.length; k++) {
-          if (this.addToGRPOArray.UDF[k].Key == "OPTM_TARGETWHS" &&
-            this.addToGRPOArray.UDF[k].LineNo == this.addToGRPOArray.POReceiptLots[i].Line) {
-            this.addToGRPOArray.UDF.splice(k, 1);
+        while(this.addToGRPOArray.UDF.length > 0){
+          let index = this.addToGRPOArray.UDF.findIndex(e => e.LineNo == this.addToGRPOArray.POReceiptLots[i].Line)
+          if(index == -1){
+            break;
           }
-
-          if (this.addToGRPOArray.UDF[k].Key == "OPTM_TARGETBIN" &&
-            this.addToGRPOArray.UDF[k].LineNo == this.addToGRPOArray.POReceiptLots[i].Line) {
-            this.addToGRPOArray.UDF.splice(k, 1);
-          }
+          this.addToGRPOArray.UDF.splice(index, 1);
         }
 
         for (var m = 0; m < this.addToGRPOArray.LastSerialNumber.length; m++) {
@@ -834,35 +789,33 @@ export class InboundPolistComponent implements OnInit {
         case ("Confirmation"):
           this.onAddtoGRPOClick();
           break;
-
       }
     } else {
       switch ($event.From) {
         case ("Confirmation"):
           this.inboundMasterComponent.inboundComponent = 1;
-          localStorage.setItem("PONumber", "");
+          sessionStorage.setItem("PONumber", "");
           break;
 
       }
     }
   }
 
-  prepareCommonData() {
-    var oSubmitPOLotsObj: any = {};
-    var dataModel = localStorage.getItem("GRPOReceieveData");
-    if (dataModel == null || dataModel == undefined || dataModel == "") {
-      oSubmitPOLotsObj.Header = [];
-      oSubmitPOLotsObj.POReceiptLots = [];
-      oSubmitPOLotsObj.POReceiptLotDetails = [];
-      oSubmitPOLotsObj.UDF = [];
-      oSubmitPOLotsObj.LastSerialNumber = [];
-    } else {
-      oSubmitPOLotsObj = JSON.parse(dataModel);
-    }
-    var oSubmitPOLotsObj = this.prepareSubmitPurchaseOrder(oSubmitPOLotsObj);
-    localStorage.setItem("GRPOReceieveData", JSON.stringify(oSubmitPOLotsObj));
-  }
-
+  // prepareCommonData() {
+  //   var oSubmitPOLotsObj: any = {};
+  //   var dataModel = sessionStorage.getItem("GRPOReceieveData");
+  //   if (dataModel == null || dataModel == undefined || dataModel == "") {
+  //     oSubmitPOLotsObj.Header = [];
+  //     oSubmitPOLotsObj.POReceiptLots = [];
+  //     oSubmitPOLotsObj.POReceiptLotDetails = [];
+  //     oSubmitPOLotsObj.UDF = [];
+  //     oSubmitPOLotsObj.LastSerialNumber = [];
+  //   } else {
+  //     oSubmitPOLotsObj = JSON.parse(dataModel);
+  //   }
+  //   var oSubmitPOLotsObj = this.prepareSubmitPurchaseOrder(oSubmitPOLotsObj);
+  //   sessionStorage.setItem("GRPOReceieveData", JSON.stringify(oSubmitPOLotsObj));
+  // }
 
   public ShowBins(itemCode) {
     this.inboundService.getRevBins(this.openPOLinesModel[0].QCREQUIRED, itemCode).subscribe(
@@ -884,7 +837,8 @@ export class InboundPolistComponent implements OnInit {
             if (Number(this.openPOLinesModel[i].RPTQTY) != Number(this.openPOLinesModel[i].OPENQTY)) {
               this.openPOLinesModel[i].RPTQTY = this.openPOLinesModel[i].OPENQTY;
               this.openPOLineModel = this.openPOLinesModel[i];
-              this.prepareCommonData();
+              // this.prepareCommonData();
+              this.inboundMasterComponent.prepareCommonData(this.inboundFromWhere, this.poCode, this.openPOLineModel.DOCENTRY, null, null, "", JSON.parse(sessionStorage.getItem("GRPOHdrUDF")), this.RecvbBinvalue);
             }
           }
         }
@@ -902,39 +856,39 @@ export class InboundPolistComponent implements OnInit {
     );
   }
 
-  getDefaultFromBin() {
-    this.inventoryTransferService.GetDefaultBinOrBinWithQty(this.itemCode,
-      localStorage.getItem("towhseId")).subscribe(
-        data => {
-          // this.getDefaultBinFlag = true;
-          if (data != null) {
-            let resultV = data.find(element => element.BINTYPE == 'V');
-            if (resultV != undefined) {
-              this.RecvbBinvalue = resultV.BINNO;
-            }
-            let resultD = data.find(element => element.BINTYPE == 'D');
-            if (resultD != undefined) {
-              this.RecvbBinvalue = resultD.BINNO;
-            }
-            let resultQ = data.find(element => element.BINTYPE == 'Q');
-            if (resultQ != undefined) {
-              this.RecvbBinvalue = resultQ.BINNO;
-            }
-            this.prepareCommonData();
-            return;
-          }
+  // getDefaultFromBin() {
+  //   this.inventoryTransferService.GetDefaultBinOrBinWithQty(this.itemCode,
+  //     sessionStorage.getItem("towhseId")).subscribe(
+  //       data => {
+  //         // this.getDefaultBinFlag = true;
+  //         if (data != null) {
+  //           let resultV = data.find(element => element.BINTYPE == 'V');
+  //           if (resultV != undefined) {
+  //             this.RecvbBinvalue = resultV.BINNO;
+  //           }
+  //           let resultD = data.find(element => element.BINTYPE == 'D');
+  //           if (resultD != undefined) {
+  //             this.RecvbBinvalue = resultD.BINNO;
+  //           }
+  //           let resultQ = data.find(element => element.BINTYPE == 'Q');
+  //           if (resultQ != undefined) {
+  //             this.RecvbBinvalue = resultQ.BINNO;
+  //           }
+  //           this.prepareCommonData();
+  //           return;
+  //         }
 
-        },
-        error => {
-          if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
-            this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
-          }
-          else {
-            this.toastr.error('', error);
-          }
-        }
-      );
-  }
+  //       },
+  //       error => {
+  //         if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+  //           this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+  //         }
+  //         else {
+  //           this.toastr.error('', error);
+  //         }
+  //       }
+  //     );
+  // }
 
 
   manageRecords(oSubmitPOLotsObj: any): any {
@@ -978,83 +932,53 @@ export class InboundPolistComponent implements OnInit {
   }
 
 
-  prepareSubmitPurchaseOrder(oSubmitPOLotsObj: any): any {
-    oSubmitPOLotsObj = this.manageRecords(oSubmitPOLotsObj);
-    if (localStorage.getItem("Line") == null || localStorage.getItem("Line") == undefined ||
-      localStorage.getItem("Line") == "") {
-      localStorage.setItem("Line", "0");
-    }
+  // prepareSubmitPurchaseOrder(oSubmitPOLotsObj: any): any {
+  //   oSubmitPOLotsObj = this.manageRecords(oSubmitPOLotsObj);
+  //   if (sessionStorage.getItem("Line") == null || sessionStorage.getItem("Line") == undefined ||
+  //     sessionStorage.getItem("Line") == "") {
+  //     sessionStorage.setItem("Line", "0");
+  //   }   
 
-    oSubmitPOLotsObj.POReceiptLots.push({
-      DiServerToken: sessionStorage.getItem("Token"),
-      PONumber: this.poCode,
-      DocEntry: this.openPOLineModel.DOCENTRY,
-      CompanyDBId: sessionStorage.getItem("CompID"),
-      LineNo: this.openPOLineModel.LINENUM,
-      ShipQty: this.openPOLineModel.RPTQTY.toString(),
-      OpenQty: this.openPOLineModel.OPENQTY.toString(),
-      WhsCode: sessionStorage.getItem("whseId"),
-      Tracking: this.openPOLineModel.TRACKING,
-      ItemCode: this.openPOLineModel.ITEMCODE,
-      LastSerialNumber: 0,
-      Line: Number(localStorage.getItem("Line")),
-      GUID: sessionStorage.getItem("GUID"),
-      UOM: "",
-      UsernameForLic: sessionStorage.getItem("UserId")
+  //   oSubmitPOLotsObj.POReceiptLots.push({
+  //     DiServerToken: sessionStorage.getItem("Token"),
+  //     PONumber: this.poCode,
+  //     DocEntry: this.openPOLineModel.DOCENTRY,
+  //     CompanyDBId: sessionStorage.getItem("CompID"),
+  //     LineNo: this.openPOLineModel.LINENUM,
+  //     ShipQty: this.openPOLineModel.RPTQTY.toString(),
+  //     OpenQty: this.openPOLineModel.OPENQTY.toString(),
+  //     WhsCode: sessionStorage.getItem("whseId"),
+  //     Tracking: this.openPOLineModel.TRACKING,
+  //     ItemCode: this.openPOLineModel.ITEMCODE,
+  //     LastSerialNumber: 0,
+  //     Line: Number(sessionStorage.getItem("Line")),
+  //     GUID: sessionStorage.getItem("GUID"),
+  //     UOM: "",
+  //     UsernameForLic: sessionStorage.getItem("UserId")
+  //   });
 
-      //------end Of parameter For License----
-    });
-    // oSubmitPOLotsObj.UDF = [];
-    oSubmitPOLotsObj.UDF.push({
-      Key: "OPTM_TARGETWHS",//UDF[iIndex].Key,
-      Value: "",
-      //LotNo: UDF[iIndex].LotNo,
-      Flag: 'D', // D = Line, H= Header, L = Lots
-      LineNo: Number(localStorage.getItem("Line"))
-    });
-    oSubmitPOLotsObj.UDF.push({
-      Key: "OPTM_TARGETBIN",//UDF[iIndex].Key,
-      Value: "",
-      //LotNo: UDF[iIndex].LotNo,
-      Flag: 'D', // D = Line, H= Header, L = Lots
-      LineNo: Number(localStorage.getItem("Line"))
-    });
+  //   oSubmitPOLotsObj.UDF = this.UDF;
 
-
-    // for (var iBtchIndex = 0; iBtchIndex < this.recvingQuantityBinArray.length; iBtchIndex++) {
-    oSubmitPOLotsObj.POReceiptLotDetails.push({
-      // POItemCode: this.Ponumber+this.openPOLineModel.ITEMCODE,
-      Bin: this.RecvbBinvalue,
-      LineNo: this.openPOLineModel.LINENUM,
-      LotNumber: "", //getUpperTableData.GoodsReceiptLineRow[iBtchIndex].SysSerNo,
-      LotQty: this.openPOLineModel.RPTQTY.toString(),
-      SysSerial: "0",
-      ExpireDate: "",//GetSubmitDateFormat(getUpperTableData.GoodsReceiptLineRow[iBtchIndex].EXPDATE), // oCurrentController.GetSubmitDateFormat(oActualGRPOModel.PoDetails[iIndex].ExpireDate),//oActualGRPOModel.PoDetails[iIndex].ExpireDate,
-      VendorLot: "",
-      //NoOfLabels: oActualGRPOModel.PoDetails[iIndex].NoOfLabels,
-      //Containers: piContainers,
-      SuppSerial: "",
-      ParentLineNo: Number(localStorage.getItem("Line")),
-      LotSteelRollId: "",
-      ItemCode: this.openPOLineModel.ITEMCODE,
-      PalletCode: ""
-    });
-    //  }
-
-    // for (var iLastIndexNumber = 0; iLastIndexNumber < this.LastSerialNumber.length; iLastIndexNumber++) {
-    //   oSubmitPOLotsObj.LastSerialNumber.push({
-    //     LastSerialNumber: this.LastSerialNumber[iLastIndexNumber],
-    //     LineId: this.LineId[iLastIndexNumber],
-    //     ItemCode: this.openPOLineModel.ITEMCODE
-    //   });
-    // }
-    localStorage.setItem("Line", "" + (Number(localStorage.getItem("Line")) + 1));
-
-    oSubmitPOLotsObj.Header.push({
-      NumAtCard: localStorage.getItem("VendRefNo")
-    });
-    return oSubmitPOLotsObj;
-  }
+  //   oSubmitPOLotsObj.POReceiptLotDetails.push({
+  //     Bin: this.RecvbBinvalue,
+  //     LineNo: this.openPOLineModel.LINENUM,
+  //     LotNumber: "", 
+  //     LotQty: this.openPOLineModel.RPTQTY.toString(),
+  //     SysSerial: "0",
+  //     ExpireDate: "",
+  //     VendorLot: "",
+  //     SuppSerial: "",
+  //     ParentLineNo: Number(sessionStorage.getItem("Line")),
+  //     LotSteelRollId: "",
+  //     ItemCode: this.openPOLineModel.ITEMCODE,
+  //     PalletCode: ""
+  //   });
+  //   sessionStorage.setItem("Line", "" + (Number(sessionStorage.getItem("Line")) + 1));
+  //   oSubmitPOLotsObj.Header.push({
+  //     NumAtCard: sessionStorage.getItem("VendRefNo")
+  //   });
+  //   return oSubmitPOLotsObj;
+  // }
 
   dataStateChange(state) {
     this.gridSettings.state = state;
@@ -1063,7 +987,6 @@ export class InboundPolistComponent implements OnInit {
 
   public saveGridSettings(grid: GridComponent): void {
     const columns = grid.columns;
-
     const gridConfig = {
       state: this.gridSettings.state,
       columnsConfig: columns.toArray().map(item => {
@@ -1073,7 +996,6 @@ export class InboundPolistComponent implements OnInit {
           .reduce((acc, curr) => ({ ...acc, ...{ [curr]: item[curr] } }), <ColumnSettings>{});
       })
     };
-
     this.persistingService.set('gridSettings', gridConfig);
   }
 
@@ -1113,5 +1035,103 @@ export class InboundPolistComponent implements OnInit {
         return this.OnItemCodeChangeBlur();
       }
     }
+  }
+
+
+  showUDF = false;
+  UDFComponentData: IUIComponentTemplate[] = [];
+  itUDFComponents: IUIComponentTemplate = <IUIComponentTemplate>{};
+  templates = [];
+  displayArea = "Header";
+
+  ShowUDF(displayArea, UDFButtonClicked, dataItem?): boolean {
+    if(dataItem != undefined){
+      this.openPOLineModel = dataItem;
+    }
+    let UDF = this.inboundMasterComponent.getUDF()
+    let subarray = [];
+    UDF.forEach(e => {
+      if (e.LineNo == this.openPOLineModel.LINENUM && e.DocEntry == this.openPOLineModel.DOCENTRY) {
+        subarray.push(e);
+      }
+    });    
+    // let index = this.UDF.findIndex(e => e.LineNo == lineNum);
+    // if (index == -1) {
+    this.displayArea = displayArea;
+    let UDFStatus = this.commonservice.loadUDF(displayArea, this.commonservice.getUDFData(), subarray);
+    if (!UDFButtonClicked) {
+      if (UDFStatus != "MANDATORY_AVL") {
+        return false;
+      }
+    }
+    this.templates = this.commonservice.getTemplateArray();
+    this.UDFComponentData = this.commonservice.getUDFComponentDataArray();
+    this.showUDF = true;
+    return true;
+  }
+
+  onUDFDialogClose() {
+    this.showUDF = false;
+    this.UDFComponentData = [];
+    this.templates = [];
+
+  }
+
+  getUDFSelectedItem(itUDFComponentData) {
+    this.onUDFDialogClose();
+    if (itUDFComponentData == null) {
+      return;
+    }
+
+    if (this.displayArea == "Detail") {
+      let UDF = this.inboundMasterComponent.getUDF()
+      while (UDF.length > 0) {
+        let index = UDF.findIndex(e => e.LineNo == this.openPOLineModel.LINENUM && e.DocEntry == this.openPOLineModel.DOCENTRY)
+        if (index == -1) {
+          break;
+        }
+        UDF.splice(index, 1);
+      }
+      if (itUDFComponentData.length > 0) {
+        for (var i = 0; i < itUDFComponentData.length; i++) {
+          let value = "";
+          if (itUDFComponentData[i].istextbox) {
+            value = itUDFComponentData[i].textBox;
+          } else {
+            value = itUDFComponentData[i].dropDown.FldValue;
+          }
+          UDF.push({
+            Flag: "D",
+            LineNo: this.openPOLineModel.LINENUM,
+            Value: value,
+            Key: itUDFComponentData[i].AliasID,
+            DocEntry: this.openPOLineModel.DOCENTRY
+          });
+        }
+        this.inboundMasterComponent.updateUDF(UDF);
+      }
+    }
+    this.templates = [];
+  }
+
+  checkIfMandatoryUDFFilled(): boolean{
+    if (this.IsUDFEnabled == 'Y') {
+      if (sessionStorage.getItem("GRPOHdrUDF") == undefined || sessionStorage.getItem("GRPOHdrUDF") == "") {
+        if (this.ShowUDF('Header', false)) {
+          return false;
+        }        
+      }
+      let UDF = this.inboundMasterComponent.getUDF()
+      let indx = -1;
+      if (UDF.length > 0) {
+        indx = UDF.findIndex(e => e.LineNo == this.openPOLineModel.LINENUM && e.DocEntry == this.openPOLineModel.DOCENTRY)
+      }
+      if (indx == -1) {
+        if (this.ShowUDF('Detail', false)) {
+          return false;
+        }
+      }      
+    }
+    return true;
   }
 }

@@ -11,15 +11,11 @@ import { ToastrModule } from 'ngx-toastr';
 import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { GridModule } from '@progress/kendo-angular-grid';
-// import { LookupComponent } from 'src/app/common/lookup/lookup.component';
 import { DialogsModule } from '@progress/kendo-angular-dialog';
 
 import { FormsModule } from '@angular/forms';
 import { OutboundModule } from './outbound/outbound.module';
 import { InputsModule } from '@progress/kendo-angular-inputs';
-
-import { PdfViewerModule } from 'ng2-pdf-viewer';
-import { PalletizationModule } from './palletization/palletization.module';
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -27,7 +23,7 @@ export function createTranslateLoader(http: HttpClient) {
 @NgModule({
   declarations: [
     AppComponent,
-    LandingComponent,
+    LandingComponent
   ],
   imports: [
     BrowserModule,

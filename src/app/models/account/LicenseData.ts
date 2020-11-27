@@ -32,5 +32,7 @@ export interface LicenseData{
     IsShippingEnable: string,
     GRPOPrintReport: string,
     IsGreaterQuantityAllowedThanOrder: string,
-    ProdReceiptPrintReport: string
+    ProdReceiptPrintReport: string,
+    UDFEnabled: string,
+    GS1SetupScanningEnabled: string
 }

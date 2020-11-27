@@ -20,7 +20,7 @@ export class InboundService {
   //   })
   // }
 
-  constructor(private httpclient: HttpClient,private commonService:Commonservice) {
+  constructor(private httpclient: HttpClient, private commonService: Commonservice) {
     this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
   }
 
@@ -41,22 +41,22 @@ export class InboundService {
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsVendorExists", jObject, this.commonService.httpOptions).toPromise();
   }
 
-  getItemList(futurepo: boolean, vendercode: string, po: string, optmType:string): Observable<any> {
+  getItemList(futurepo: boolean, vendercode: string, po: string, optmType: string): Observable<any> {
     let jObject = {
       GoodsReceiptToken: JSON.stringify([{
         UserId: '',
         CompanyDBId: sessionStorage.getItem("CompID"), WhseCode: sessionStorage.getItem("whseId"),
         VendorCode: vendercode,
-        FuturePO: futurepo, 
+        FuturePO: futurepo,
         PO: po,
         OPTM_TYPE: optmType
       }])
-    }; 
+    };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetItemList", jObject, this.commonService.httpOptions);
   }
 
-  getPOList(futurepo: boolean, vendercode: string, itemcode: string, optmType:string): Observable<any> {
-   // console.log("get polist method :");
+  getPOList(futurepo: boolean, vendercode: string, itemcode: string, optmType: string): Observable<any> {
+    // console.log("get polist method :");
     let jObject = {
       GoodsReceiptToken: JSON.stringify([{
         UserId: '',
@@ -65,20 +65,24 @@ export class InboundService {
         FuturePO: futurepo, IsCustom: false, GUID: sessionStorage.getItem("GUID"),
         UsernameForLic: sessionStorage.getItem("UserId"),
         OPTM_TYPE: optmType
-        
+
       }])
     };
     //console.log("get polist method call api :");
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetPOList", jObject, this.commonService.httpOptions);
   }
 
-  IsPOExists(poCode: string, cardCode: string,optmType:string): Promise<any> {
-    var jObject = { POCode: JSON.stringify([{ UserId: '', CompanyDBId: sessionStorage.getItem("CompID"), POCode: poCode,
-     CardCode: cardCode,OPTM_TYPE: optmType }]) };
+  IsPOExists(poCode: string, cardCode: string, optmType: string): Promise<any> {
+    var jObject = {
+      POCode: JSON.stringify([{
+        UserId: '', CompanyDBId: sessionStorage.getItem("CompID"), POCode: poCode,
+        CardCode: cardCode, OPTM_TYPE: optmType
+      }])
+    };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsPOExists", jObject, this.commonService.httpOptions).toPromise();
   }
 
-  GetOpenPOLines(futurepo: boolean, itemCode: string, po: string, optmType:string): Observable<any> {
+  GetOpenPOLines(futurepo: boolean, itemCode: string, po: string, optmType: string): Observable<any> {
     let jObject = {
       GoodsReceiptToken: JSON.stringify([{
         UserId: '',
@@ -115,23 +119,29 @@ export class InboundService {
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsGenealogyApplicable", jObject, this.commonService.httpOptions);
   }
 
-  getUOMs(itemCode: string): Observable<any> {
+  getUOMs(itemCode: string, PODOCNETRY, POLINENUM, INVODOCNETRY, INVLINENUM): Observable<any> {
     let jObject = {
       ItemKey: JSON.stringify([{
         CompanyDBId: sessionStorage.getItem("CompID"),
-        ItemCode: itemCode
+        ItemCode: itemCode,
+        PODOCNETRY: PODOCNETRY,
+        SODOCNETRY: 0,
+        SOLINENUM: 0,
+        POLINENUM: POLINENUM,
+        INVODOCNETRY: INVODOCNETRY,
+        INVLINENUM: INVLINENUM
       }])
     };
-   // console.log("getUOMs API's request:"+JSON.stringify(jObject));
+    // console.log("getUOMs API's request:"+JSON.stringify(jObject));
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/getUOM", jObject, this.commonService.httpOptions);
   }
 
   getRevBins(QCrequired: string, itemcode: string): Observable<any> {
     var jObject = {
       WhsCode: JSON.stringify([{
-        CompanyDBId: sessionStorage.getItem("CompID"), 
+        CompanyDBId: sessionStorage.getItem("CompID"),
         ItemCode: itemcode,
-        WhsCode: sessionStorage.getItem("whseId"), 
+        WhsCode: sessionStorage.getItem("whseId"),
         QCRequired: QCrequired,
         PageId: "GRPO",
         GUID: sessionStorage.getItem("GUID"),
@@ -168,15 +178,15 @@ export class InboundService {
   binChange(targetWhs: string, binCode: string): Promise<any> {
     var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), BinCode: binCode, ItemCode: '', WhsCode: targetWhs }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsBinExist", jObject, this.commonService.httpOptions).toPromise();
-  } 
+  }
 
   isBinExistForProduction(targetWhs: string, binCode: string, Status: string): Promise<any> {
     var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), BinCode: binCode, Status: Status, ItemCode: '', WhseCode: targetWhs }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/isBinExistForProduction", jObject, this.commonService.httpOptions).toPromise();
-  } 
- 
+  }
+
   SubmitGoodsReceiptPO(oSubmitPOLots: any): Observable<any> {
-    var jObject = { GoodsReceiptToken: JSON.stringify(oSubmitPOLots) };    
+    var jObject = { GoodsReceiptToken: JSON.stringify(oSubmitPOLots) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/SubmitGoodsReceiptPO", jObject, this.commonService.httpOptions);
   }
 
@@ -195,11 +205,12 @@ export class InboundService {
   getQCTargetWhse(): Observable<any> {
     var jObject = {
       WhsCode: JSON.stringify([{
-          CompanyDBId: sessionStorage.getItem("CompID"),
-          //Need to pass Username as Warehouses are filled Accordind to the Permission from Admin Portal 
-          //Chane dt 2-July-2018
-          UserId: sessionStorage.getItem("UserId")
-      }])};
+        CompanyDBId: sessionStorage.getItem("CompID"),
+        //Need to pass Username as Warehouses are filled Accordind to the Permission from Admin Portal 
+        //Chane dt 2-July-2018
+        UserId: sessionStorage.getItem("UserId")
+      }])
+    };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/GetWHS", jObject, this.commonService.httpOptions);
   }
 
@@ -207,45 +218,56 @@ export class InboundService {
    * check whs is valid or not.
    * @param whsCode 
    */
-  isWHSExists(whsCode:string){
+  isWHSExists(whsCode: string) {
 
-    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId:  sessionStorage.getItem("CompID"), ItemCode: '', WhsCode: whsCode}]) };
+    var jObject = { WhsCode: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), ItemCode: '', WhsCode: whsCode }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/IsWhsExist", jObject, this.commonService.httpOptions);
   }
 
-   /**
-   * check is serial exists or not.
-   * @param whsCode 
-   */
-  isSerialExists(itemCode:string, serialNo:string){
-    var jObject = { SerialNo: JSON.stringify([{ CompanyDBId:  sessionStorage.getItem("CompID"), ItemCode: itemCode, SerialNo: serialNo}]) };
+  /**
+  * check is serial exists or not.
+  * @param whsCode 
+  */
+  isSerialExists(itemCode: string, serialNo: string) {
+    var jObject = { SerialNo: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), ItemCode: itemCode, SerialNo: serialNo }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/CheckSerialNo", jObject, this.commonService.httpOptions);
   }
-  
+
   /**
    * check and scan code.
    * @param whsCode 
    */
-  checkAndScanCode(vendCode:string,scanInputString): Promise<any>{
-    var jObject = {Gs1Token: JSON.stringify([{Vsvendorid:vendCode,StrScan:scanInputString,CompanyDBId:sessionStorage.getItem("CompID")}])};
-    return this.httpclient.post(this.config_params.service_url + "/api/Gs1/GS1SETUP", jObject, this.commonService.httpOptions).toPromise();
+  // checkAndScanCode(vendCode: string, scanInputString, ItemCode, Tracking): Promise<any> {
+  //   var jObject = { Gs1Token: JSON.stringify([{ Vsvendorid: vendCode, 
+  //     StrScan: scanInputString, 
+  //     CompanyDBId: sessionStorage.getItem("CompID"),
+  //     ItemCode: ItemCode,
+  //     Tracking: Tracking,
+  //     ScreenId: "GRPO",
+  //     GS1SetupScanningEnabled: sessionStorage.getItem("GS1SetupScanningEnabled")
+  //   }]) };
+  //   return this.httpclient.post(this.config_params.service_url + "/api/Gs1/GS1SETUP", jObject, this.commonService.httpOptions).toPromise();
+  // }
+
+  /**
+  * This API method will return base64 string for pdf format for print.
+  * @param item 
+  * @param binNo 
+  * @param noOfCopies 
+  */
+  printingServiceForSubmitGRPO(psReceiptNo: string, rptid: any, NOOFLABELS): Observable<any> {
+    var jObject = {
+      PrintingObject: JSON.stringify([{
+        CompanyDBId: sessionStorage.getItem("CompID"),
+        USERID: sessionStorage.getItem("UserId"), RPTID: rptid, DOCNO: psReceiptNo,
+        NOOFLABELS: NOOFLABELS,
+        GUID: sessionStorage.getItem("GUID"), UsernameForLic: sessionStorage.getItem("UserId")
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/Printing/WMSPrintingService", jObject, this.commonService.httpOptions);
   }
 
-    /**
-    * This API method will return base64 string for pdf format for print.
-    * @param item 
-    * @param binNo 
-    * @param noOfCopies 
-    */
-   printingServiceForSubmitGRPO(psReceiptNo:string, rptid:any, NOOFLABELS) : Observable<any> {
-    var jObject = { PrintingObject: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"),
-    USERID: sessionStorage.getItem("UserId"), RPTID: rptid, DOCNO: psReceiptNo, 
-    NOOFLABELS: NOOFLABELS,
-    GUID: sessionStorage.getItem("GUID"), UsernameForLic: sessionStorage.getItem("UserId") }]) };
-    return this.httpclient.post(this.config_params.service_url + "/api/Printing/WMSPrintingService", jObject, this.commonService.httpOptions);
-   }
-
-   GetPalletListsForGRPO(opType: number, itemCode: string, BinCode: string): Observable<any> {
+  GetPalletListsForGRPO(opType: number, itemCode: string, BinCode: string): Observable<any> {
     var jObject = {
       PalletCode: JSON.stringify([{
         COMPANYDBNAME: sessionStorage.getItem("CompID"),

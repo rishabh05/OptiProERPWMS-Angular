@@ -138,11 +138,17 @@ export class OutboundService {
     return this.httpclient.post(this.config_params.service_url + "/api/Delivery/SoCustomerWiseLookup", body, this.commonService.httpOptions);
   }
 
-  public getUOMList(itemCode: string) {
+  public getUOMList(itemCode: string, SODOCNETRY, SOLINENUM): Promise<any> {
     this.outRequest = new OutRequest();
     this.outRequest.ItemCode = itemCode;
+    this.outRequest.PODOCNETRY = 0;
+    this.outRequest.SODOCNETRY = SODOCNETRY;
+    this.outRequest.SOLINENUM = SOLINENUM;
+    this.outRequest.POLINENUM = 0;
+    this.outRequest.INVODOCNETRY = 0;
+    this.outRequest.INVLINENUM = 0;
     var body: any = { ItemKey: this.prepareRequest() };
-    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/getUOM", body, this.commonService.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/getUOM", body, this.commonService.httpOptions).toPromise();
   }
 
   public getAvaliableMeterial(itemCode: string, docentry: string) {
@@ -181,10 +187,10 @@ export class OutboundService {
    * check and scan code.
    * @param whsCode 
    */
-  checkAndScanCode(vendCode: string, scanInputString) {
-    var jObject = { Gs1Token: JSON.stringify([{ Vsvendorid: vendCode, StrScan: scanInputString, CompanyDBId: sessionStorage.getItem("CompID") }]) };
-    return this.httpclient.post(this.config_params.service_url + "/api/Gs1/GS1SETUP", jObject, this.commonService.httpOptions);
-  }
+  // checkAndScanCode(vendCode: string, scanInputString) {
+  //   var jObject = { Gs1Token: JSON.stringify([{ Vsvendorid: vendCode, StrScan: scanInputString, CompanyDBId: sessionStorage.getItem("CompID") }]) };
+  //   return this.httpclient.post(this.config_params.service_url + "/api/Gs1/GS1SETUP", jObject, this.commonService.httpOptions);
+  // }
 
 
 

@@ -18,7 +18,6 @@ export class SigninService {
   private getItemListUrl: string = "/api/GoodReceiptPO/GetItemList";
   private OpenPOLinesurl: string = "/api/GoodReceiptPO/GetOpenPOLines";
   private AutoLotUrl: string = "/api/GoodReceiptPO/GetAutoLot";
-  private UOMUrl: string = "/api/GoodReceiptPO/getUOM";
   private RevBinUrl: string = "/api/GoodReceiptPO/GetBinsForReceiptWithReceivingBin";
   private BinExistUrl = "/api/GoodReceiptPO/IsBinExist";
   private SubmitPOUrl = "/api/GoodReceiptPO/SubmitGoodsReceiptPO";

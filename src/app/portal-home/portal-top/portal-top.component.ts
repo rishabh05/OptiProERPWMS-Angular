@@ -101,7 +101,7 @@ export class PortalTopComponent implements OnInit {
         case ("Logout"):
           this.commonService.RemoveLicenseAndSignout(this.toastr, this.router, 
                 this.translate.instant("Dashboard_LogoutSuccess"),true);
-          this.clearLocalStorage();
+          this.clearsessionStorage();
           break;
       }
     } else {
@@ -124,56 +124,56 @@ export class PortalTopComponent implements OnInit {
       this.updatetopBarSubs.unsubscribe();
   }
 
-  clearLocalStorage(){
-    localStorage.setItem("PhysicalCountData", "");
-    sessionStorage.setItem("whseId", "");
-    localStorage.setItem("Line", "");
-    localStorage.setItem("GRPOReceieveData", "");
-    localStorage.setItem("AddToGRPO", "");
-    localStorage.setItem("addToGRPOPONumbers", "");
-    localStorage.setItem("VendCode", "");
-    localStorage.setItem("VendName", "");
-    localStorage.setItem("selectedPO", "");
-    localStorage.setItem("PONumber", "");
-    localStorage.setItem("VendRefNo", "");
-    localStorage.setItem("GoodsReceiptModel", "");
-    localStorage.setItem("primaryAutoLots", "");
-    localStorage.setItem("PalletizationEnabledForItem", "");
-    localStorage.setItem("radioSelection", "");
-    localStorage.setItem("ComingFrom", "");
-    localStorage.setItem("OutboundData", "");
-    localStorage.setItem("towhseId", "");
-    localStorage.setItem("fromwhseId", "");
-    localStorage.setItem("IsSOAvailable", "");
-    localStorage.setItem("isCustEnabled", "");
-    localStorage.setItem("isUserIsSubcontracter", "");
-    localStorage.setItem("IsMenuLoaded", "");
-    localStorage.setItem("ProdReceptItem", "");
-    localStorage.setItem("FromReceiptProd", "");
-    localStorage.setItem("GoodsReceiptModel", "");
-    localStorage.setItem("AvailableRejectQty", "");
-    localStorage.setItem("fromscreen", "");
-    localStorage.setItem("ProdReceptItem", "");
-    localStorage.setItem("FromReceiptProd", "");
-    localStorage.setItem("AvailableRejectQty", "");
-    localStorage.setItem("primaryAutoLots", "");
-    localStorage.setItem("VendCode", "");
+  clearsessionStorage(){
+    // sessionStorage.setItem("PhysicalCountData", "");
+    // sessionStorage.setItem("whseId", "");
+    // sessionStorage.setItem("Line", "");
+    // sessionStorage.setItem("GRPOReceieveData", "");
+    // sessionStorage.setItem("AddToGRPO", "");
+    // sessionStorage.setItem("addToGRPOPONumbers", "");
+    // sessionStorage.setItem("VendCode", "");
+    // sessionStorage.setItem("VendName", "");
+    // sessionStorage.setItem("selectedPO", "");
+    // sessionStorage.setItem("PONumber", "");
+    // sessionStorage.setItem("VendRefNo", "");
+    // sessionStorage.setItem("GoodsReceiptModel", "");
+    // sessionStorage.setItem("primaryAutoLots", "");
+    // sessionStorage.setItem("PalletizationEnabledForItem", "");
+    // sessionStorage.setItem("radioSelection", "");
+    // sessionStorage.setItem("ComingFrom", "");
+    // sessionStorage.setItem("OutboundData", "");
+    // sessionStorage.setItem("towhseId", "");
+    // sessionStorage.setItem("fromwhseId", "");
+    // sessionStorage.setItem("IsSOAvailable", "");
+    // sessionStorage.setItem("isCustEnabled", "");
+    // sessionStorage.setItem("isUserIsSubcontracter", "");
+    // sessionStorage.setItem("IsMenuLoaded", "");
+    // sessionStorage.setItem("ProdReceptItem", "");
+    // sessionStorage.setItem("FromReceiptProd", "");
+    // sessionStorage.setItem("GoodsReceiptModel", "");
+    // sessionStorage.setItem("AvailableRejectQty", "");
+    // sessionStorage.setItem("fromscreen", "");
+    // sessionStorage.setItem("ProdReceptItem", "");
+    // sessionStorage.setItem("FromReceiptProd", "");
+    // sessionStorage.setItem("AvailableRejectQty", "");
+    // sessionStorage.setItem("primaryAutoLots", "");
+    // sessionStorage.setItem("VendCode", "");
 
     
-    localStorage.setItem("inlineSVGdata", "");
-    localStorage.setItem("inlineSVGrev", "");
-    localStorage.setItem("ThousandSeparator", "");
-    sessionStorage.setItem("UserId", "");
-    localStorage.setItem("DATEFORMAT", "");
-    localStorage.setItem("DecimalSeparator", "");
-    localStorage.setItem("DecimalPrecision", "");
-    sessionStorage.setItem("Token", "");
-    localStorage.setItem("PalletizationEnabled", "");
-    localStorage.setItem("AutoPalletIdGenerationChecked", "");
-    localStorage.setItem("DefaultValues", "");
-    sessionStorage.setItem("CompID", "");
-    sessionStorage.setItem("GUID", "");
-    localStorage.setItem("accessToken", "");
-    localStorage.setItem("PSURLFORADMIN", "");
+    // sessionStorage.setItem("inlineSVGdata", "");
+    // sessionStorage.setItem("inlineSVGrev", "");
+    // sessionStorage.setItem("ThousandSeparator", "");
+    // sessionStorage.setItem("UserId", "");
+    // sessionStorage.setItem("DATEFORMAT", "");
+    // sessionStorage.setItem("DecimalSeparator", "");
+    // sessionStorage.setItem("DecimalPrecision", "");
+    // sessionStorage.setItem("Token", "");
+    // sessionStorage.setItem("PalletizationEnabled", "");
+    // sessionStorage.setItem("AutoPalletIdGenerationChecked", "");
+    // sessionStorage.setItem("DefaultValues", "");
+    // sessionStorage.setItem("CompID", "");
+    // sessionStorage.setItem("GUID", "");
+    // sessionStorage.setItem("accessToken", "");
+    // sessionStorage.setItem("PSURLFORADMIN", "");
   }
 } 

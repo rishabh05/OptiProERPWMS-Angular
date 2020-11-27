@@ -8,10 +8,10 @@ export class NumberFormatPipe implements PipeTransform {
   transform(value: any, args?: any): any {
     
     let formattedNo = ""; 
-    var precision = localStorage.getItem("DecimalPrecision");
-    var decSeperator = localStorage.getItem("DecimalSeparator");
-    var thSeperator = localStorage.getItem("ThousandSeparator");
-    var dateFormat = localStorage.getItem("DATEFORMAT");
+    var precision = sessionStorage.getItem("DecimalPrecision");
+    var decSeperator = sessionStorage.getItem("DecimalSeparator");
+    var thSeperator = sessionStorage.getItem("ThousandSeparator");
+    var dateFormat = sessionStorage.getItem("DATEFORMAT");
     if(value == null && value == undefined){
       return value;
     }
@@ -55,7 +55,7 @@ export class NumberFormatPipe implements PipeTransform {
   }
   addDecimalDigitsToNo(formattedString: string, no: string, DecimalSeparator: string): string {
     var noOfDigitsAfterDesimal = no.toString().split(DecimalSeparator)[1].length;
-    var precision = localStorage.getItem("DecimalPrecision");
+    var precision = sessionStorage.getItem("DecimalPrecision");
     if (noOfDigitsAfterDesimal == 0) {
       formattedString = formattedString + DecimalSeparator;
       for (var i = 0; i < Number(precision); i++) {

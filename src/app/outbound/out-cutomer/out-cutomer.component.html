@@ -173,9 +173,10 @@
 
             <div class="row" *ngIf="deliveryOptionType==2">
                 <div class="col-12">
-                    <kendo-grid class="no-shadow" [kendoGridBinding]="DiliveryShipmentList" [resizable]="true" [pageSize]="pageSize" [pageable]="pagable" (pageChange)="pageChange($event)"
-                        [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup [height]=gridHeight (selectionChange)="onShipmentSelection($event)" [skip]="skip"
-                        [selectable]="true" #gridItem>
+                    <kendo-grid class="no-shadow" [kendoGridBinding]="DiliveryShipmentList" [resizable]="true" [pageSize]="pageSize" [pageable]="pagable"
+                        (pageChange)="pageChange($event)" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
+                        [height]=gridHeight (selectionChange)="onShipmentSelection($event)" [skip]="skip" [selectable]="true"
+                        #gridItem>
 
                         <ng-template kendoGridToolbarTemplate>
                             <span class="grid-toolbar-title">{{'SelectShipmentForDelivery'|translate}}</span>
@@ -219,14 +220,15 @@
 
                         <kendo-grid-column field="DeliverySeq" [width]="45" title="{{'DeliverySeq'|translate}}" headerClass="text-left" class="text-left">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                <input type="number" #DelSeq class="form-control form-control-sm text-right" name ="dataItem.DeliverySeq" id="DelSeq" value="{{dataItem.DeliverySeq}}"
-                                onkeydown="if(event.key==='.'||event.key==='e'||event.key==='='||event.key===','||event.key==='-'||event.key==='+'){event.preventDefault();}"  
-                                (input)="updateDeliverySeq(DelSeq.value, dataItem, rowIndex)" min =0 trim>
+                                <input type="number" #DelSeq class="form-control form-control-sm text-right" name="dataItem.DeliverySeq" id="DelSeq" value="{{dataItem.DeliverySeq}}"
+                                    onkeydown="if(event.key==='.'||event.key==='e'||event.key==='='||event.key===','||event.key==='-'||event.key==='+'){event.preventDefault();}"
+                                    (input)="updateDeliverySeq(DelSeq.value, dataItem, rowIndex)" min=0 trim>
                             </ng-template>
                         </kendo-grid-column>
                         <kendo-grid-column field="DeliverToLocation" width="90" title="{{'DeliverToLocation'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
-                                <input type="text" #DeliverToLocation class="form-control form-control-sm" name ="dataItem.DeliverToLocation" value="{{dataItem.DeliverToLocation}}" (input)="updateDeliverToLocation(DeliverToLocation.value, dataItem, rowIndex)">
+                                <input type="text" #DeliverToLocation class="form-control form-control-sm" name="dataItem.DeliverToLocation" value="{{dataItem.DeliverToLocation}}"
+                                    (input)="updateDeliverToLocation(DeliverToLocation.value, dataItem, rowIndex)">
                             </ng-template>
                         </kendo-grid-column>
                         <kendo-grid-column field="OPTM_SHIPTO" width="90" title="{{'PT_Ship_To'|translate}}"></kendo-grid-column>
@@ -237,9 +239,10 @@
             <div class="row" *ngIf='(orderCollection!==undefined && orderCollection!==null && orderCollection.length>0) && deliveryOptionType==1'>
                 <div class="col-12">
                     <div *ngIf="deliveryOptionType==1">
-                        <kendo-grid class="no-shadow" [kendoGridBinding]="orderCollection" [resizable]="true" [pageSize]="pageSize" [pageable]="pagable" (pageChange)="pageChange($event)"
-                            [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup [height]=gridHeight (selectionChange)="openSelectedDeleveryItem($event)" [skip]="skip"
-                            [selectable]="true" #gridItem>
+                        <kendo-grid class="no-shadow" [kendoGridBinding]="orderCollection" [resizable]="true" [pageSize]="pageSize" [pageable]="pagable"
+                            (pageChange)="pageChange($event)" [sortable]="true" [filterable]=isColumnFilter [groupable]=isColumnGroup
+                            [height]=gridHeight (selectionChange)="openSelectedDeleveryItem($event)" [skip]="skip" [selectable]="true"
+                            #gridItem>
 
                             <!-- grid for mobile start -->
                             <kendo-grid-column media="(max-width: 767px)" title="List" class="opti_mobile-grid-td">
@@ -280,6 +283,9 @@
                 <button type="button" class="btn btn-danger k-button btn-sm btn-icon-with-text" (mousedown)="cancel()">
                     <span class="k-icon k-i-close-outline" role="presentation"></span> {{'Cancel'|translate}}</button>
 
+                <button tabindex="-1" *ngIf="IsUDFEnabled == 'Y'" class="k-button k-primary btn custom-icon-button" type="button" (mousedown)="ShowUDF('Header', true)">
+                    <span class="k-icon k-i-plus-outline "></span>{{'UDF'|translate}}
+                </button>
                 <button type="button" [hidden]='!(orderCollection!==undefined && orderCollection!==null && orderCollection.length>0)' (mousedown)="prepareDeleiveryCollection()"
                     class="btn btn-success k-button btn-sm btn-icon-with-text">
                     <span class="k-icon k-i-check" role="presentation"></span> {{'Deleiver'|translate}}</button>
@@ -302,9 +308,12 @@
             </div>
         </div>
     </form>
-
-
 </div>
+
+<span *ngIf="showUDF">
+    <app-udfdialog [lookupfor]='displayArea' [templates]='templates' [UDFComponentData]='UDFComponentData' (UDFSaveClick)="getUDFSelectedItem($event)"></app-udfdialog>
+</span>
+
 <!-- Lookup -->
 <span *ngIf="showLookup==true && showLookupLoader==false">
     <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>

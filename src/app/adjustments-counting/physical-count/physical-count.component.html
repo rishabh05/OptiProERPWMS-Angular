@@ -54,6 +54,11 @@
                                     <button tabindex="-1" class="k-button k-primary btn" type="button" (mousedown)="onItemlookupClick()">
                                         <i class="opti-icon-search"></i>
                                     </button>
+
+                                    <button tabindex="-1" *ngIf="IsUDFEnabled == 'Y'&&false" class="k-button k-primary btn custom-icon-button" type="button" (mousedown)="ShowUDF('Detail')">
+                                        <span class="k-icon k-i-plus-outline "></span>{{'UDF'|translate}}
+                                    </button>
+
                                     <button tabindex="-1" style="padding: 0 6px;font-size:16px" class="k-button k-primary btn separate-btn" type="button" (mousedown)="viewSavedItems()"
                                         *ngIf="showitemlist">
                                         <i class="opti-icon-detail-view"></i>
@@ -233,6 +238,11 @@
                     <span class="k-icon k-i-plus-outline" role="presentation"></span> {{'Item'|translate}}</button>
                 <button type="button" class="k-button k-primary k-button btn-sm btn-icon-with-text" (mousedown)="onSaveClick()">
                     <span class="k-icon k-i-save" role="presentation"></span> {{'PhyCount_Save&Next'|translate}}</button>
+
+                <button tabindex="-1" *ngIf="IsUDFEnabled == 'Y'&&false" class="k-button k-primary btn custom-icon-button" type="button" (mousedown)="ShowUDF('Header')">
+                    <span class="k-icon k-i-plus-outline "></span>{{'UDF'|translate}}
+                </button>
+
                 <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text" (mousedown)="onSubmitClick()">
                     <span class="k-icon k-i-check" role="presentation"></span> {{'Submit'|translate}}</button>
 
@@ -322,6 +332,9 @@
     </kendo-dialog-actions>
 </kendo-dialog>
 
+<span *ngIf="showUDF">
+    <app-udfdialog [lookupfor]='displayArea' [templates]='templates' [UDFComponentData]='UDFComponentData' (UDFSaveClick)="getUDFSelectedItem($event)"></app-udfdialog>
+</span>
 
 <span *ngIf="showLookupLoader">
     <app-lookup [lookupfor]='lookupfor' [serviceData]='serviceData' (lookupvalue)="getLookupValue($event)"></app-lookup>

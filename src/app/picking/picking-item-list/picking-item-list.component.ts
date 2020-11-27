@@ -87,9 +87,9 @@ export class PickingItemListComponent implements OnInit {
   }
 
   cellClickHandler(row) {
-    localStorage.setItem("From", "tasklist");
-    localStorage.setItem("PickItemIndex", row.rowIndex);
-    localStorage.setItem("TaskDetail", JSON.stringify(this.PickTaskDetail));
+    sessionStorage.setItem("From", "tasklist");
+    sessionStorage.setItem("PickItemIndex", row.rowIndex);
+    sessionStorage.setItem("TaskDetail", JSON.stringify(this.PickTaskDetail));
     this.router.navigate(['home/picking/picking-item-details']);
   }
 
@@ -112,7 +112,7 @@ export class PickingItemListComponent implements OnInit {
           this.showLookupLoader = false;
           this.PickTaskDetail = data;
           this.PickTaskList = data.OPTM_WHSTASKLIST;
-          if (localStorage.getItem("PickType") == this.translate.instant("Container_Picking")) {
+          if (sessionStorage.getItem("PickType") == this.translate.instant("Container_Picking")) {
             for(var i=0; i<this.PickTaskList.length; i++){
               this.PickTaskList[i].CODE = data.OPTM_WHSTASK_DTL.find(e=>e.OPTM_TASKID == this.PickTaskList[i].OPTM_TASKID).OPTM_CONTCODE;
             }
