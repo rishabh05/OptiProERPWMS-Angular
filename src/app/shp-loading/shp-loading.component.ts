@@ -16,18 +16,27 @@ export class ShpLoadingComponent implements OnInit {
   ScanLoadLocation: string;
   PT_ShipmentId: string;
   shipmentCode: string;
+  shipmentID: number = 0
+  shipmentStatus: string;
+  shpStatusVal: number = 0
   LoadLocation: string;
   OPTM_WHSCODE: string;
   OPTM_BINCODE: string;
-  LoadContainersList: any[] = [];
+  LoadContainersList: any[] = [];  
   LastStep = 2;
   showLoader: boolean = false;
   FirstCont: any;
-  PickListSteps: any[] = [];
-  containerData: any[] = [];
+  ShpLoadingSteps: any[] = [];
+  LoadedcontainerData: any[] = [];
   stepIndex = 0;
   maxStep = 0;
   dialogOpened = false;
+  unloadCont: boolean = false;
+  showLookup: boolean = false;
+  serviceData: any = [];
+  lookupfor: string = '';
+  dialogTitle: string = '';
+  disableSubmit: boolean = true;
 
   @ViewChild('focusOnCont') focusOnCont;
   @ViewChild('focusOnDockDoor') focusOnDockDoor;
@@ -41,18 +50,18 @@ export class ShpLoadingComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.commonservice.GetSelectedSteps("Loading");
+    this.commonservice.GetSelectedSteps("Shp_Loading");
     setTimeout(() => {
-      this.setPickingSteps();
+      this.setShpLoadingSteps();
     }, 1000)
-    this.showFields = true;
+    this.showFields = false;
   }
 
-  setPickingSteps() {
-    this.PickListSteps = JSON.parse(localStorage.getItem("PickListSteps"));
-    if (this.PickListSteps != undefined && this.PickListSteps.length > 0) {
-      this.currentStep = this.getStepNo(this.PickListSteps[0].OPTM_STEP_CODE);
-      this.maxStep = this.PickListSteps.length;
+  setShpLoadingSteps() {
+    this.ShpLoadingSteps = JSON.parse(sessionStorage.getItem("ShpLoadingSteps"));
+    if (this.ShpLoadingSteps != undefined && this.ShpLoadingSteps.length > 0) {
+      this.currentStep = this.getStepNo(this.ShpLoadingSteps[0].OPTM_STEP_CODE);
+      this.maxStep = this.ShpLoadingSteps.length;
       this.changeText(this.currentStep)
     }
   }
@@ -65,6 +74,13 @@ export class ShpLoadingComponent implements OnInit {
         return 2;
       default:
         return 1;
+    }
+  }
+
+  getLookupValue(event) {
+    if (event.CLOSED != undefined && event.CLOSED) {
+      this.showLookup = false;
+      return
     }
   }
 
@@ -90,12 +106,23 @@ export class ShpLoadingComponent implements OnInit {
             this.LoadLocation = data.OPTM_SHPMNT_HDR[0].OPTM_DOCKDOORID;
             this.OPTM_WHSCODE = data.OPTM_SHPMNT_HDR[0].OPTM_WHSCODE;
             this.OPTM_BINCODE = data.OPTM_SHPMNT_HDR[0].OPTM_BINCODE;
-            this.LoadContainersList = data.OPTM_CONT_HDR;
-            this.FirstCont = this.LoadContainersList[0];
-            if(this.LoadContainersList.length == 0){
-              this.dialogOpened = true;
+            this.shipmentID = data.OPTM_SHPMNT_HDR[0].OPTM_SHIPMENTID;
+            let shpStatusVal: number = data.OPTM_SHPMNT_HDR[0].OPTM_STATUS;
+            if (shpStatusVal == 9) {
+              this.shipmentStatus = this.translate.instant("Loaded");
+              this.showFields = false;
+            } else if (shpStatusVal == 15 || shpStatusVal == 16 || shpStatusVal == 7){
+              this.shipmentStatus = this.translate.instant("Loading");
+              this.showFields = true;
             }
-            this.showFields = true;
+            this.LoadContainersList = data.OPTM_CONT_HDR;
+            //Below is the array that saves container data loaded on truck
+            this.LoadedcontainerData = data.LOADED_CONT;
+            this.FirstCont = this.LoadContainersList[0];
+            if(this.LoadContainersList.length == 0 && this.LoadedcontainerData.length == 0){
+              this.dialogTitle = this.translate.instant("ScanContAssignShp");
+              this.dialogOpened = true;
+            }            
           } else {
             this.toastr.error('', this.translate.instant("InvalidShipmentCode"));
             this.clearFields();
@@ -117,6 +144,99 @@ export class ShpLoadingComponent implements OnInit {
     );
   }
 
+  onLoadedContClick() {
+    this.showLookup = true;
+    this.lookupfor = "LoadedContList"
+    this.serviceData = this.LoadedcontainerData
+    
+  }
+
+  onUnloadContainerClick() {
+    this.dialogTitle = this.translate.instant("ScanContUnload");
+    this.unloadCont = true;
+    this.dialogOpened = true;
+  }
+
+  OnSelectContainer() {
+    if(this.containerCode == "" || this.containerCode == undefined || this.containerCode == null){
+      this.toastr.error('', this.translate.instant("ContainerCodeBlankMsg"))
+      return;
+    }
+    if (this.unloadCont) {
+      this.onConfirmClick();
+      this.UnloadContainer();
+      this.containerCode = '';
+    } else {
+      this.generateContainer();
+    }
+  }
+
+  UnloadContainer() {   
+
+    let index = this.LoadedcontainerData.findIndex(element => element.OPTM_CONTCODE == this.containerCode)
+    if (index > -1) {
+      this.ResetAfterSubmitOrUnload();
+      if (this.LoadedcontainerData[index].DB_FLG == 0) {
+        // Record is still not updated to database. Remove from local collection
+        this.LoadedcontainerData.splice(index, 1);
+        let result = this.LoadedcontainerData.filter(element => element.DB_FLG == 0)
+        if (result == undefined || result == null) {
+          //Not found any containers to save.
+          this.disableSubmit = true;
+        }
+        return;
+      } else if (this.LoadedcontainerData[index].DB_FLG == 1) {
+        //Container being deleted from Database
+        //If there are unsaved containers, let user save the loaded containers before Unloading one
+        let result = this.LoadedcontainerData.filter(element => element.DB_FLG == 0)
+        if (result != undefined && result.length > 0) {
+          this.toastr.error('', this.translate.instant("SaveUnsavedData"));
+          this.showFields = false;      
+          this.disableSubmit = false;
+          return;
+        }
+      }
+    } else {
+      this.toastr.error('', this.translate.instant("ContainerNotLoaded"));
+      return;
+    }
+    //Container is found and has been saved to database earlier. Delete from Db
+    this.showLoader = true;
+    this.commonservice.UnloadContainer(this.shipmentCode, this.containerCode).subscribe(
+      (data: any) => {
+        this.showLoader = false;
+        if (data != undefined) {
+          if (data.LICDATA != undefined && data.LICDATA[0].ErrorMsg == "7001") {
+            this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
+              this.translate.instant("CommonSessionExpireMsg"));
+            return;
+          }
+          if (data.OPTM_CONT_HDR.length > 0 || data.LOADED_CONT.length > 0) {
+            this.toastr.success('', this.translate.instant("shploadedMsg"));
+            this.LoadContainersList = data.OPTM_CONT_HDR;
+            //Below is the array that saves container data loaded on truck
+            this.LoadedcontainerData = data.LOADED_CONT;
+            this.disableSubmit = true;
+            this.FirstCont = this.LoadContainersList[0];
+          } else {
+            this.toastr.error('', data[0].ErrorMsg);
+          }
+        } else {
+          this.toastr.error('', this.translate.instant("InvalidShipmentCode"));
+        }
+      },
+      error => {
+        this.showLoader = false;
+        if (error.error.ExceptionMessage != null && error.error.ExceptionMessage != undefined) {
+          this.commonservice.unauthorizedToken(error, this.translate.instant("token_expired"));
+        }
+        else {
+          this.toastr.error('', error);
+        }
+      }
+    );
+  }
+  
   clearFields() {
     this.PT_ShipmentId = "";
     this.shipmentCode = "";
@@ -131,8 +251,8 @@ export class ShpLoadingComponent implements OnInit {
     }
     let result = this.LoadContainersList.find(element => element.OPTM_CONTCODE == this.ScanContainer)
     if (result != undefined) {
-      if (this.containerData.length > 0) {
-        let result = this.containerData.find(element => element.OPTM_CONTCODE == this.ScanContainer)
+      if (this.LoadedcontainerData != undefined && this.LoadedcontainerData.length > 0) {
+        let result = this.LoadedcontainerData.find(element => element.OPTM_CONTCODE == this.ScanContainer)
         if (result == undefined) {
           if (this.iterateSteps) {
             this.nextSteptoIterate();
@@ -151,7 +271,12 @@ export class ShpLoadingComponent implements OnInit {
         }
       }
     } else {
-      this.toastr.error('', this.translate.instant("InvalidContainerCode"));
+      let result = this.LoadedcontainerData.find(element => element.OPTM_CONTCODE == this.ScanContainer)
+      if (result != undefined) {
+        this.toastr.error('', this.translate.instant("DataAlreadySaved"));
+      } else {
+        this.toastr.error('', this.translate.instant("InvalidContainerCode"));
+      }
       this.ScanContainer = "";
     }
   }
@@ -183,32 +308,35 @@ export class ShpLoadingComponent implements OnInit {
 
   showFields: boolean = true;
   addScannedContainer(OPTM_SHIPMENT_CODE, OPTM_CONTCODE) {
-    this.containerData.push({
+    this.LoadedcontainerData.push({
       CompanyDBId: sessionStorage.getItem("CompID"),
       OPTM_SHIPMENT_CODE: OPTM_SHIPMENT_CODE,
-      OPTM_CONTCODE: OPTM_CONTCODE
+      OPTM_CONTCODE: OPTM_CONTCODE,
+      DB_FLG: 0
     });
+    this.disableSubmit = false;
     this.toastr.success('', this.translate.instant("contSaved"));
     this.ScanContainer = "";
     this.ScanLoadLocation = "";
-    if (this.LoadContainersList.length == this.containerData.length) {
-      this.showFields = false
-      this.toastr.success('', this.translate.instant("AllPickedCont"));
-    }else{
-      this.stepIndex = -1;
-      this.nextSteptoIterate();
-    }
+    let result = this.LoadedcontainerData.filter(element => element.DB_FLG == 0)
+    if (result != undefined) {
+      if (this.LoadContainersList.length == result.length) {
+        this.showFields = false;
+        this.toastr.success('', this.translate.instant("AllPickedCont"));
+      } else {
+        this.stepIndex = -1;
+        this.nextSteptoIterate();
+      }
+    }   
   }
 
   onSubmitClick() {
-    if (this.containerData.length <= 0) {
+    if (this.LoadedcontainerData.length <= 0) {
       this.toastr.error('', this.translate.instant("NoContSubmit"));
       return;
-    } else if (this.LoadContainersList.length != this.containerData.length) {
-      this.toastr.error('', this.translate.instant("AllContNotPicked"));
     }
     this.showLoader = true;
-    this.commonservice.SaveLoadTaskInformation(this.containerData).subscribe(
+    this.commonservice.SaveLoadTaskInformation(this.LoadedcontainerData).subscribe(
       (data: any) => {
         this.showLoader = false;
         if (data != undefined) {
@@ -217,13 +345,20 @@ export class ShpLoadingComponent implements OnInit {
               this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
-          if (data[0].Successmsg == "SUCCESSFULLY") {
+          if (data.OUTPUT.Successmsg == "SUCCESSFULLY") {
             this.toastr.success('', this.translate.instant("shploadedMsg"));
-            this.clearFields();
           } else {
             this.toastr.error('', data[0].ErrorMsg);
           }
-          this.clearDataAfterSubmit();
+          this.LoadContainersList = data.OPTM_CONT_HDR;
+          if (this.LoadContainersList.length > 0) {
+            //Below is the array that saves container data loaded on truck
+            this.LoadedcontainerData = data.LOADED_CONT;
+            this.FirstCont = this.LoadContainersList[0];            
+            this.ResetAfterSubmitOrUnload();
+          } else {
+            this.clearDataAfterSubmit();
+          }
         } else {
           this.toastr.error('', this.translate.instant("InvalidShipmentCode"));
         }
@@ -241,7 +376,7 @@ export class ShpLoadingComponent implements OnInit {
   }
 
   clearDataAfterSubmit() {
-    this.containerData = [];
+    this.LoadedcontainerData = [];
     this.LoadContainersList = [];
     this.PT_ShipmentId = "";
     this.shipmentCode = "";
@@ -250,19 +385,25 @@ export class ShpLoadingComponent implements OnInit {
     this.stepIndex = 0;
   }
 
+  ResetAfterSubmitOrUnload() {
+    this.currentStep = 1;
+    this.stepIndex = 0;
+    this.showFields = true;
+  }
+
   iterateSteps = false;
   nextSteptoIterate() {
     this.iterateSteps = true;
     if (this.stepIndex < this.maxStep - 1) {
       this.stepIndex = this.stepIndex + 1;
-      if (this.stepIndex >= 0 && this.stepIndex < this.PickListSteps.length) {
-        if (this.PickListSteps[this.stepIndex].OPTM_ITERATE == "Y") {
-          this.currentStep = this.getStepNo(this.PickListSteps[this.stepIndex].OPTM_STEP_CODE);
-          if (this.stepIndex == this.PickListSteps.length - 1) {
+      if (this.stepIndex >= 0 && this.stepIndex < this.ShpLoadingSteps.length) {
+        if (this.ShpLoadingSteps[this.stepIndex].OPTM_ITERATE == "Y") {
+          this.currentStep = this.getStepNo(this.ShpLoadingSteps[this.stepIndex].OPTM_STEP_CODE);
+          if (this.stepIndex == this.ShpLoadingSteps.length - 1) {
             this.LastStep = this.currentStep;
           }
         } else {
-          if (this.stepIndex == this.PickListSteps.length - 1) {
+          if (this.stepIndex == this.ShpLoadingSteps.length - 1) {
             this.LastStep = this.currentStep;
             this.addScannedContainer(this.shipmentCode, this.ScanContainer);
           } else {
@@ -282,9 +423,9 @@ export class ShpLoadingComponent implements OnInit {
   nextStep() {
     if (this.stepIndex < this.maxStep) {
       this.stepIndex = this.stepIndex + 1;
-      if (this.stepIndex >= 0 && this.stepIndex < this.PickListSteps.length) {
-        this.currentStep = this.getStepNo(this.PickListSteps[this.stepIndex].OPTM_STEP_CODE);
-        if (this.stepIndex == this.PickListSteps.length - 1) {
+      if (this.stepIndex >= 0 && this.stepIndex < this.ShpLoadingSteps.length) {
+        this.currentStep = this.getStepNo(this.ShpLoadingSteps[this.stepIndex].OPTM_STEP_CODE);
+        if (this.stepIndex == this.ShpLoadingSteps.length - 1) {
           this.LastStep = this.currentStep;
         }
       }
@@ -305,8 +446,8 @@ export class ShpLoadingComponent implements OnInit {
 
   prevStep() {
     this.stepIndex = this.stepIndex - 1;
-    if (this.stepIndex >= 0 && this.stepIndex < this.PickListSteps.length) {
-      this.currentStep = this.getStepNo(this.PickListSteps[this.stepIndex].OPTM_STEP_CODE);
+    if (this.stepIndex >= 0 && this.stepIndex < this.ShpLoadingSteps.length) {
+      this.currentStep = this.getStepNo(this.ShpLoadingSteps[this.stepIndex].OPTM_STEP_CODE);
     }
     if (this.currentStep >= 1) {
       this.changeText(this.currentStep)
@@ -327,15 +468,12 @@ export class ShpLoadingComponent implements OnInit {
 
   close_kendo_dialog() {
     this.dialogOpened = false;
+    this.unloadCont = false;
   }
 
 
   containerCode: string;
-  generateContainer() {
-    if(this.containerCode == "" || this.containerCode == undefined || this.containerCode == null){
-      this.toastr.error('', this.translate.instant("ContainerCodeBlankMsg"))
-      return;
-    }
+  generateContainer() {    
     this.PrepareModelAndCreateCont(this.containerCode);
   }
 

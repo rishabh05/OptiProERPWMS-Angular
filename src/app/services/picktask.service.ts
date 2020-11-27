@@ -51,24 +51,100 @@ export class PickTaskService {
         CompanyDBId: sessionStorage.getItem("CompID"),
         OPTM_CONTCODE: ScannedContCode,
         OPTM_TASKID: strTaskID,
-        OPTM_SHIPMENT_CODE: OPTM_SHIPMENT_CODE
+        OPTM_SHIPMENT_CODE: OPTM_SHIPMENT_CODE,
+        OPTM_WHSE: sessionStorage.getItem("whseId")
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/ValidatePackingContainer", jObject, this.commonService.httpOptions);
   } 
   
-  ValidateTote(ScannedContCode: string, strTaskID: string, strBin: string): Observable<any> {
+  ValidateTote(ScannedContCode: string, strTaskID: string, strBin: string, intPickSeq: number, intMaxPickSeq: number, allowMultToteOrCont:string): Observable<any> {
     let jObject = {
       PalletCode: JSON.stringify([{
         CompanyDBId: sessionStorage.getItem("CompID"),
         OPTM_CONTCODE: ScannedContCode,
         OPTM_TASKID: strTaskID,
         OPTM_WHSE: sessionStorage.getItem("whseId"),
-        OPTM_BIN: strBin
+        OPTM_BIN: strBin,
+        OPTM_PICK_SEQ: intPickSeq,
+        OPTM_MAX_PICK_SEQ: intMaxPickSeq,
+        OPTM_ALLOW_MULTI_TOTE_CONT: allowMultToteOrCont
       }])
     };
-    return this.httpclient.post(this.config_params.service_url + "/api/PickList/ValidateTote", jObject, this.commonService.httpOptions);
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/ValidateToteAtPicking", jObject, this.commonService.httpOptions);
+  }   
+
+  ValidateScannedBinForDropping(ScannedBinCode: string): Observable<any> {
+    let jObject = {
+      PalletCode: JSON.stringify([{
+        CompanyDBId: sessionStorage.getItem("CompID"),     
+        OPTM_WHSE: sessionStorage.getItem("whseId"),
+        OPTM_BIN: ScannedBinCode
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/ValidateScannedBinForDropping", jObject, this.commonService.httpOptions);
   } 
+  
+  ValidateAndDropTote(ScannedBinCode: string, ScannedTote: string, blnDropFlg: boolean, blnPickDropAllowedInAnyBin: boolean): Observable<any> {
+    let jObject = {
+      PalletCode: JSON.stringify([{
+        CompanyDBId: sessionStorage.getItem("CompID"),     
+        OPTM_WHSE: sessionStorage.getItem("whseId"),
+        OPTM_BIN: ScannedBinCode,
+        OPTM_TOTE: ScannedTote,
+        OPTM_USER_NAME: sessionStorage.getItem("UserId"),
+        OPTM_DROP_FLG: blnDropFlg,
+        DROP_IN_ANY_BIN: blnPickDropAllowedInAnyBin
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/ValidateToteAndDropAtProperBin", jObject, this.commonService.httpOptions);
+  } 
+
+  ValidateAndDropContainer(ScannedBinCode: string, ScannedContainer: string, blnDropFlg: boolean, blnPickDropAllowedInAnyBin: boolean): Observable<any> {
+    let jObject = {
+      PalletCode: JSON.stringify([{
+        CompanyDBId: sessionStorage.getItem("CompID"),     
+        OPTM_WHSE: sessionStorage.getItem("whseId"),
+        OPTM_BIN: ScannedBinCode,
+        OPTM_CONTCODE: ScannedContainer,
+        OPTM_USER_NAME: sessionStorage.getItem("UserId"),
+        OPTM_DROP_FLG: blnDropFlg,
+        DROP_IN_ANY_BIN: blnPickDropAllowedInAnyBin
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/ValidateContainerAndDropAtProperBin", jObject, this.commonService.httpOptions);
+  } 
+
+  /*
+  ValidateAndDropPicklist(ScannedBinCode: string, ScannedPicklist: string, blnPickDropAllowedInAnyBin: boolean): Observable<any> {
+    let jObject = {
+      PalletCode: JSON.stringify([{
+        CompanyDBId: sessionStorage.getItem("CompID"),     
+        OPTM_WHSE: sessionStorage.getItem("whseId"),
+        OPTM_BIN: ScannedBinCode,
+        OPTM_PICKLIST_ID: ScannedPicklist,
+        OPTM_USER_NAME: sessionStorage.getItem("UserId"),
+        DROP_IN_ANY_BIN: blnPickDropAllowedInAnyBin
+      }])
+    };    
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/DropPicklist", jObject, this.commonService.httpOptions);
+  } 
+  */
+
+  DropPickListAPI(OPTM_PICKLIST_ID: number, UserGrp: string, compId: string, dropBin: string, intPickOpn: number, blnPickDropAllowedInAnyBin: boolean) {
+    var jObject = {
+      PalletCode: JSON.stringify([{
+        CompanyDBId: compId,
+        OPTM_PICKLIST_ID: OPTM_PICKLIST_ID,
+        OPTM_USER_NAME: UserGrp,
+        OPTM_BIN: dropBin,
+        OPTM_WHSE: sessionStorage.getItem("whseId"),
+        OPTM_PICK_OPN: intPickOpn,
+        DROP_IN_ANY_BIN: blnPickDropAllowedInAnyBin
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/DropPickList", jObject, this.commonService.httpOptions);
+  }
 
   IsValidBatchSerial(ITEMCODE: string, LOTNO: string, OPTM_SRC_BIN: string): Observable<any> {
     let jObject = {
@@ -85,7 +161,7 @@ export class PickTaskService {
   }
 
   SubmitPickList(oSubmitPOLots: any): Observable<any> {
-    var jObject = { PalletCode: JSON.stringify(oSubmitPOLots) };
+    var jObject = { PickPackCont: JSON.stringify(oSubmitPOLots) };
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/SavePickTaskInformation", jObject, this.commonService.httpOptions);
   }
 
@@ -197,6 +273,29 @@ export class PickTaskService {
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetToteShipments", jObject, this.commonService.httpOptions);
   }
 
+  GetShpmntPackStatus(OPTM_SHIPMENTID): Observable<any> {
+    let jObject = {
+      PalletCode: JSON.stringify([{
+        COMPANYDBNAME: sessionStorage.getItem("CompID"),
+        OPTM_SHIPMENTID: OPTM_SHIPMENTID,
+        OPTM_WHSE: sessionStorage.getItem("whseId")
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetShpmntPackStatus", jObject, this.commonService.httpOptions);
+  }
+
+  
+  GetShipmentRelTotes(OPTM_SHIPMENTID): Observable<any> {
+    let jObject = {
+      PalletCode: JSON.stringify([{
+        COMPANYDBNAME: sessionStorage.getItem("CompID"),
+        OPTM_SHIPMENTID: OPTM_SHIPMENTID,
+        OPTM_WHSE: sessionStorage.getItem("whseId")
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetShipmentRelTotes", jObject, this.commonService.httpOptions);
+  }
+
   GetToteItemBtchSer(OPTM_TOTE_NUMBER, OPTM_SHIPMENTID, OPTM_BINCODE): Observable<any> {
     let jObject = {
       PalletCode: JSON.stringify([{
@@ -210,11 +309,13 @@ export class PickTaskService {
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetToteItemBtchSer", jObject, this.commonService.httpOptions);
   }
    
-  ValidateSelectedToteForPacking(OPTM_TOTE_NUMBER): Observable<any> {
+  ValidateSelectedToteForPacking(OPTM_TOTE_NUMBER: string, OPTM_BINCODE: string): Observable<any> {
     let jObject = {
       PalletCode: JSON.stringify([{
         COMPANYDBNAME: sessionStorage.getItem("CompID"),
-        OPTM_TOTE_NUMBER: OPTM_TOTE_NUMBER
+        OPTM_TOTE_NUMBER: OPTM_TOTE_NUMBER,
+        OPTM_WHSE: sessionStorage.getItem("whseId"),
+        OPTM_BIN: OPTM_BINCODE
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/ValidateSelectedToteForPacking", jObject, this.commonService.httpOptions);
@@ -244,7 +345,7 @@ export class PickTaskService {
   GetToteShipmentItems(OPTM_TOTE_NUMBER, OPTM_SHIPMENT_CODE): Observable<any> {
     let jObject = {
       PalletCode: JSON.stringify([{
-        COMPANYDBNAME: sessionStorage.getItem("CompID"),
+        CompanyDBId: sessionStorage.getItem("CompID"),
         OPTM_TOTE_NUMBER: OPTM_TOTE_NUMBER,
         OPTM_SHIPMENT_CODE: OPTM_SHIPMENT_CODE
       }])
@@ -252,11 +353,26 @@ export class PickTaskService {
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetToteShipmentItems", jObject, this.commonService.httpOptions);
   }
   
-  SavePackingContainerAndUpdateShipment(PackingContainerDtl): Observable<any> {
+  SavePackingContainerAndUpdateShipment(oSubmitPickPackObj): Observable<any> {
     let jObject = {
-      PalletCode: JSON.stringify(PackingContainerDtl)
+      PickPackCont: JSON.stringify(oSubmitPickPackObj)
     };
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/SavePackingContainerAndUpdateShipment", jObject, this.commonService.httpOptions);
+  }
+
+  checkIfPickDropAllowedInAnyBin():boolean {
+    let blnPickDropAllowedInAnyBin = false;
+    var confiParams: any;
+    confiParams = JSON.parse(localStorage.getItem('ConfigurationParam'));
+    let result = confiParams.find(e => e.OPTM_PARAM_NAME == "Param_Allow_PickDrop_In_Any_Bin")
+    if (result != undefined) {
+      if (result.OPTM_PARAM_VALUE != undefined || result.OPTM_PARAM_VALUE != '') {
+        if (result.OPTM_PARAM_VALUE == "Y") {
+          blnPickDropAllowedInAnyBin = true;
+        }        
+      }      
+    }
+    return blnPickDropAllowedInAnyBin;
   }
 }
 

@@ -1,0 +1,54 @@
+<kendo-dialog *ngIf="pageopened" (close)="close('cancel')" [width]="550">
+    <kendo-dialog-titlebar>
+        {{titleMessage}}
+    </kendo-dialog-titlebar>
+    <div class="px-3">
+        <div class="form-group row">
+            <div class="input-group input-group-sm">
+                <label class="col-sm-4 col-form-label">{{'Container'|translate}}</label>
+                <input type="text" value={{OPTM_CONTAINERCODE}} disabled> 
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="input-group input-group-sm">
+                <label class="col-sm-4 col-form-label">{{'ItemCode'|translate}}</label>
+                <input type="text" value={{OPTM_ITEMCODE}} disabled> 
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="input-group input-group-sm">
+                <label class="col-sm-4 col-form-label">{{'BatchSerial'|translate}}</label>
+                <input type="text" value={{OPTM_BTCHSER}} disabled> 
+            </div>
+        </div>
+        <div class="form-group row">
+                <div class="input-group input-group-sm">
+                    <label class="col-sm-4 col-form-label">{{'ItemTracking'|translate}}</label>
+                    <input type="text" value={{OPTM_TRACKING}} disabled> 
+                </div>
+            </div>
+        <div class="form-group row">
+            <div class="input-group input-group-sm">
+                <label class="col-sm-4 col-form-label">{{'PackedQuantity'|translate}}</label>
+                <input type="text" class="text-right" value={{OPTM_QTY}} disabled> 
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="input-group input-group-sm">
+                <label class="col-sm-4 col-form-label">{{'RemoveQuantity'|translate}}</label>
+                <input type="text" class="text-right"
+                    [(ngModel)]="remove_Qty" placeholder="{{'Ph_EnterQty'|translate}}" [disabled]="OPTM_TRACKING == 'S'? true : false">
+            </div>
+        </div>
+    </div>
+
+        
+    <kendo-dialog-actions>
+        <button kendoButton (click)="close('no')">{{noButtonText}}</button>
+        <button class="ml-1" kendoButton (click)="close('yes')" primary="true">{{yesButtonText}}</button>
+    </kendo-dialog-actions>
+</kendo-dialog>
+
+<div class="opti_loader full-section" *ngIf="showLoader">
+    <div class="opti_spinner"></div>
+</div>

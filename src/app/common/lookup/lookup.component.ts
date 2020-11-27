@@ -68,6 +68,8 @@ export class LookupComponent implements OnInit {
     } else {
       this.dialogOpened = false;
       this.lookupvalue.emit('close')
+      let returnValue = {"CLOSED": true};
+      this.lookupkey.emit(returnValue);
     }
   }
   public state: State = {
@@ -187,8 +189,19 @@ export class LookupComponent implements OnInit {
       this.showToteList();
     }else if(this.lookupfor == "ToteShipmentList"){
       this.showToteShipmentList();
+    }else if(this.lookupfor == "ShipmentItemList"){
+      this.showShipmentItemList();
+    }else if(this.lookupfor == "RelatedToteList"){
+      this.showRelatedToteList();
+    }else if(this.lookupfor == "ItemBTCHSER"){
+      this.showItemBTCHSER();
+    } else if(this.lookupfor == "PackedContents"){
+      this.showPackedContents();
+    } else if(this.lookupfor == "LoadedContList"){
+      this.showLoadedContList();
     }
-
+    
+    
     this.clearFilters();
     this.isColumnFilter = false
   }
@@ -1116,6 +1129,175 @@ showBins() {
         this.dialogOpened = true;
       }
     }
+  }
+
+  showShipmentItemList(){
+    this.table_head = [
+      {
+        field: 'OPTM_ITEMCODE',
+        title: this.translate.instant("ItemCode"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'SHP_QTY',
+        title: this.translate.instant("ShipQty"),
+        type: 'numeric',
+        width: '100'
+      },
+      {
+        field: 'PACK_QTY',
+        title: this.translate.instant("PackedQuantity"),
+        type: 'numeric',
+        width: '100'
+      },
+      {
+        field: 'BAL_QTY',
+        title: this.translate.instant("BalToPack"),
+        type: 'numeric',
+        width: '100'
+      }
+    ];
+    this.lookupTitle = this.translate.instant("ShipmentItemList");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
+
+  showRelatedToteList(){
+    this.table_head = [
+      {
+        field: 'OPTM_CODE',
+        title: this.translate.instant("Tote"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'OPTM_BIN',
+        title: this.translate.instant("Bin"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'OPTM_ITEMCODE',
+        title: this.translate.instant("ItemCode"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'BAL_QTY',
+        title: this.translate.instant("BalToPack"),
+        type: 'numeric',
+        width: '100'
+      }
+    ];
+    this.lookupTitle = this.translate.instant("ShipmentTotesList");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }  
+  
+  showPackedContents() {
+    this.table_head = [
+      {
+        field: 'OPTM_CONTAINERCODE',
+        title: this.translate.instant("Container"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'OPTM_ITEMCODE',
+        title: this.translate.instant("ItemCode"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'OPTM_BTCHSER',
+        title: this.translate.instant("BatchSerial"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'OPTM_Tracking',
+        title: this.translate.instant("ItemTracking"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'OPTM_QTY',
+        title: this.translate.instant("PackedQuantity"),
+        type: 'numeric',
+        width: '100'
+      }
+    ];
+    this.lookupTitle = this.translate.instant("PackedContents");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
+
+  showItemBTCHSER(){
+    this.table_head = [
+      {
+        field: 'OPTM_ITEMCODE',
+        title: this.translate.instant("ItemCode"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'OPTM_BTCHSER',
+        title: this.translate.instant("BatchSerial"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'SHIP_BTCHSER_QTY',
+        title: this.translate.instant("ShipQty"),
+        type: 'numeric',
+        width: '100'
+      },
+      {
+        field: 'MAX_AVAIL_QTY',
+        title: this.translate.instant("MAX_AVAIL_QTY"),
+        type: 'numeric',
+        width: '100'
+      }
+    ];
+    this.lookupTitle = this.translate.instant("ItemBTCHSER");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
+
+  showLoadedContList(){
+    this.table_head = [
+      {
+        field: 'OPTM_CONTCODE',
+        title: this.translate.instant("ContainerCode"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'OPTM_CONTAINERID',
+        title: this.translate.instant("ContainerId"),
+        type: 'text',
+        width: '100'
+      }
+    ];
+    this.lookupTitle = this.translate.instant("LoadedContList");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }    
   }
 
   Done() {
