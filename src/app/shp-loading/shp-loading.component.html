@@ -39,10 +39,11 @@
                 <label for="inputPassword" class="col-sm-4 col-form-label">{{'LoadContainers'|translate}}</label>
                 <div class="col-sm-8">
                   <div class="input-group input-group-sm">
-                      <kendo-dropdownlist class="form-control" 
-                      [data]="LoadContainersList" textField="OPTM_CONTCODE" valueField="OPTM_CONTCODE"   name="FirstCont"
-                      [(ngModel)]="FirstCont"></kendo-dropdownlist>                      
-                      <div class="input-group-append">
+                                           
+                      <div class="col-sm-12 input-group-append">
+                          <kendo-dropdownlist class="form-control" 
+                          [data]="LoadContainersList" textField="OPTM_CONTCODE" valueField="OPTM_CONTCODE"   name="FirstCont"
+                          [(ngModel)]="FirstCont"></kendo-dropdownlist> 
                         <div class="btn-group ml-1">
                           <div class="dropdown show">
                             <a class="btn btn-success btn-sm toggle-btn" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" data-placement="top"
