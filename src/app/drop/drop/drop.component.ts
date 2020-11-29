@@ -329,7 +329,7 @@ export class DropComponent implements OnInit {
             this.toastr.error("", this.translate.instant(data));
             this.dropLocation = "";
           } else {
-            this.SetStepsToStartPosition();
+            this.SetToNextStep();
           }
         } else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));

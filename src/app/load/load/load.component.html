@@ -10,6 +10,21 @@
             <div class="po-details-sec">
 
               <div class="form-group row">
+                <label for="inputPassword" class="col-sm-4 col-form-label">{{'Equipment'|translate}}</label>
+                <div class="col-sm-8">
+                  <div class="input-group input-group-sm">
+                    <input type="text" class="form-control form-control-sm" id="Equipment" name="Equipment" [(ngModel)]="Equipment"
+                      (blur)="onEquipmentChange()" trim="blur">
+                      <div class="input-group-append">
+                          <button tabIndex="-1" class="k-button k-primary btn" type="button" (click)="ClearFrmCtrlData('Equipment')">
+                              <i class="opti-icon-remove"></i>
+                          </button>
+                      </div>
+                  </div>
+                </div>
+              </div>
+                
+              <div class="form-group row">
                 <label for="DropOption" class="col-sm-4 col-form-label">{{'Load'|translate}}</label>
                 <div class="col-sm-8">
                   <div class="input-group ">
@@ -24,7 +39,7 @@
                 <label for="inputPassword" class="col-sm-4 col-form-label">{{loadField_lbl}}</label>
                 <div class="col-sm-8">
                   <div class="input-group input-group-sm">
-                    <input type="text" class="form-control form-control-sm" id="LoadValue" name="LoadValue" [(ngModel)]="LoadValue" (blur)="onPicklistContToteChange()"
+                    <input type="text" class="form-control form-control-sm" id="LoadValue" name="LoadValue" [(ngModel)]="LoadValue" (blur)="onContToteChange()"
                       trim="blur">
                     <!-- <div class="input-group-append">
                       <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="GetLoadpedToteList()">
@@ -34,33 +49,18 @@
                   </div>
                 </div>
               </div>
-
+              
               <div class="form-group row">
-                <label for="inputPassword" class="col-sm-4 col-form-label">{{'Equipment'|translate}}</label>
+                <label for="inputPassword" class="col-sm-4 col-form-label">{{'MoveFrmLoc'|translate}}</label>
                 <div class="col-sm-8">
                   <div class="input-group input-group-sm">
-                    <input type="text" class="form-control form-control-sm" id="Equipment" name="Equipment" [(ngModel)]="Equipment"
-                      (blur)="onEquipmentChange()" trim="blur">
-                    <!-- <div class="input-group-append">
-                      <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="GetToteShipments()">
-                        <i class="opti-icon-search"></i>
-                      </button>
-                    </div> -->
-                  </div>
-                </div>
-              </div>
-
-              <div class="form-group row">
-                <label for="inputPassword" class="col-sm-4 col-form-label">{{'To Location'|translate}}</label>
-                <div class="col-sm-8">
-                  <div class="input-group input-group-sm">
-                    <input type="text" class="form-control form-control-sm" id="toLocation" name="toLocation" [(ngModel)]="toLocation"
-                      (blur)="onToLocationChange()" trim="blur">
-                    <!-- <div class="input-group-append">
-                      <button tabIndex="-1" class="k-button k-primary btn" type="button" (mousedown)="GetToteShipments()">
-                        <i class="opti-icon-search"></i>
-                      </button>
-                    </div> -->
+                    <input type="text" class="form-control form-control-sm" id="MoveFrmLoc" name="MoveFrmLoc" [(ngModel)]="MoveFrmLoc"
+                      (blur)="onFrmLocationChange()" trim="blur">
+                      <div class="input-group-append">
+                          <button tabIndex="-1" class="k-button k-primary btn" type="button" (click)="ClearFrmCtrlData('MoveFrmLoc')">
+                              <i class="opti-icon-remove"></i>
+                          </button>
+                      </div>
                   </div>
                 </div>
               </div>

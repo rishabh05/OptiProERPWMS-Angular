@@ -1309,12 +1309,6 @@ showBins() {
         title: this.translate.instant("ContainerCode"),
         type: 'text',
         width: '100'
-      },
-      {
-        field: 'OPTM_CONTAINERID',
-        title: this.translate.instant("ContainerId"),
-        type: 'text',
-        width: '100'
       }
     ];
     this.lookupTitle = this.translate.instant("LoadedContList");

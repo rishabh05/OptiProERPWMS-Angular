@@ -21,6 +21,8 @@ export class LoadComponent implements OnInit {
   maxStep = 2;
   scannedDropOption = "";
   loadField_lbl = "";
+  Equipment: string = '';
+  MoveFrmLoc; string = '';
   @ViewChild('focusOnDropLoc') focusOnDropLoc;
   @ViewChild('focusOnConfirmDropOption') focusOnConfirmDropOption;
 
@@ -89,10 +91,22 @@ export class LoadComponent implements OnInit {
     this.selectedDropOption = event;
   }
 
-  onPicklistContToteChange() {
+  onEquipmentChange() {
+
   }
 
-  onDropLocationChange() {
+  ClearFrmCtrlData(fldName: string) {
+    if (fldName == 'Equipment') {
+      this.Equipment = '';
+    } else if (fldName == 'MoveFrmLoc') {
+      this.MoveFrmLoc = '';
+    }    
+  }
+
+  onContToteChange() {
+  }
+
+  onFrmLocationChange() {
 
   }
 
