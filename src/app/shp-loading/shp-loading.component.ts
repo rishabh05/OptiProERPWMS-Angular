@@ -80,7 +80,11 @@ export class ShpLoadingComponent implements OnInit {
   getLookupValue(event) {
     if (event.CLOSED != undefined && event.CLOSED) {
       this.showLookup = false;
-      return
+      return;
+    }
+    if (this.lookupfor == "LoadedContList") {
+      this.showLookup = false;
+      return;
     }
   }
 
@@ -106,15 +110,7 @@ export class ShpLoadingComponent implements OnInit {
             this.LoadLocation = data.OPTM_SHPMNT_HDR[0].OPTM_DOCKDOORID;
             this.OPTM_WHSCODE = data.OPTM_SHPMNT_HDR[0].OPTM_WHSCODE;
             this.OPTM_BINCODE = data.OPTM_SHPMNT_HDR[0].OPTM_BINCODE;
-            this.shipmentID = data.OPTM_SHPMNT_HDR[0].OPTM_SHIPMENTID;
-            let shpStatusVal: number = data.OPTM_SHPMNT_HDR[0].OPTM_STATUS;
-            if (shpStatusVal == 9) {
-              this.shipmentStatus = this.translate.instant("Loaded");
-              this.showFields = false;
-            } else if (shpStatusVal == 15 || shpStatusVal == 16 || shpStatusVal == 7){
-              this.shipmentStatus = this.translate.instant("Loading");
-              this.showFields = true;
-            }
+            this.shipmentID = data.OPTM_SHPMNT_HDR[0].OPTM_SHIPMENTID;            
             this.LoadContainersList = data.OPTM_CONT_HDR;
             //Below is the array that saves container data loaded on truck
             this.LoadedcontainerData = data.LOADED_CONT;
@@ -122,7 +118,8 @@ export class ShpLoadingComponent implements OnInit {
             if(this.LoadContainersList.length == 0 && this.LoadedcontainerData.length == 0){
               this.dialogTitle = this.translate.instant("ScanContAssignShp");
               this.dialogOpened = true;
-            }            
+            } 
+            this.setShipmentStatus(data.OPTM_SHPMNT_HDR[0].OPTM_STATUS);                      
           } else {
             this.toastr.error('', this.translate.instant("InvalidShipmentCode"));
             this.clearFields();
@@ -144,6 +141,23 @@ export class ShpLoadingComponent implements OnInit {
     );
   }
 
+  setShipmentStatus(shpStatusVal: number) {
+    if (shpStatusVal == 9) {
+      this.shipmentStatus = this.translate.instant("Loaded");
+      this.showFields = false;
+    } else if (shpStatusVal == 15 || shpStatusVal == 16 || shpStatusVal == 7){
+      if (shpStatusVal == 7) {
+        this.shipmentStatus = this.translate.instant("Staged");
+      } else if (shpStatusVal == 15) {
+        this.shipmentStatus = this.translate.instant("Loading");
+      } else if (shpStatusVal == 16) {
+        this.shipmentStatus = this.translate.instant("Unloaded");
+      }
+      this.showFields = true;
+    } 
+
+  }
+  
   onLoadedContClick() {
     this.showLookup = true;
     this.lookupfor = "LoadedContList"
@@ -211,8 +225,9 @@ export class ShpLoadingComponent implements OnInit {
               this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
+          this.setShipmentStatus(data.OPTM_SHPMNT_HDR[0].OPTM_STATUS);
           if (data.OPTM_CONT_HDR.length > 0 || data.LOADED_CONT.length > 0) {
-            this.toastr.success('', this.translate.instant("shploadedMsg"));
+            this.toastr.success('', this.translate.instant("ContUnloaded"));
             this.LoadContainersList = data.OPTM_CONT_HDR;
             //Below is the array that saves container data loaded on truck
             this.LoadedcontainerData = data.LOADED_CONT;
@@ -222,7 +237,7 @@ export class ShpLoadingComponent implements OnInit {
             this.toastr.error('', data[0].ErrorMsg);
           }
         } else {
-          this.toastr.error('', this.translate.instant("InvalidShipmentCode"));
+          this.toastr.error('', this.translate.instant("InvalidContCode"));
         }
       },
       error => {
@@ -240,6 +255,7 @@ export class ShpLoadingComponent implements OnInit {
   clearFields() {
     this.PT_ShipmentId = "";
     this.shipmentCode = "";
+    this.shipmentStatus = '';
     this.LoadLocation = "";
     this.LoadContainersList = [];
     this.FirstCont = {OPTM_CONTCODE: ''};
@@ -311,6 +327,7 @@ export class ShpLoadingComponent implements OnInit {
     this.LoadedcontainerData.push({
       CompanyDBId: sessionStorage.getItem("CompID"),
       OPTM_SHIPMENT_CODE: OPTM_SHIPMENT_CODE,
+      OPTM_WHSCODE: sessionStorage.getItem("whseId"),
       OPTM_CONTCODE: OPTM_CONTCODE,
       DB_FLG: 0
     });
@@ -345,12 +362,13 @@ export class ShpLoadingComponent implements OnInit {
               this.translate.instant("CommonSessionExpireMsg"));
             return;
           }
-          if (data.OUTPUT.Successmsg == "SUCCESSFULLY") {
+          if (data.OUTPUT[0].Successmsg == "SUCCESSFULLY") {
             this.toastr.success('', this.translate.instant("shploadedMsg"));
           } else {
-            this.toastr.error('', data[0].ErrorMsg);
+            this.toastr.error('', data.OUTPUT[0].ErrorMsg);
           }
           this.LoadContainersList = data.OPTM_CONT_HDR;
+          this.setShipmentStatus(data.OPTM_SHPMNT_HDR[0].OPTM_STATUS);
           if (this.LoadContainersList.length > 0) {
             //Below is the array that saves container data loaded on truck
             this.LoadedcontainerData = data.LOADED_CONT;
@@ -380,6 +398,7 @@ export class ShpLoadingComponent implements OnInit {
     this.LoadContainersList = [];
     this.PT_ShipmentId = "";
     this.shipmentCode = "";
+    this.shipmentStatus = '';
     this.LoadLocation = "";
     this.currentStep = 1;
     this.stepIndex = 0;

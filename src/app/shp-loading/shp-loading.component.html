@@ -47,7 +47,7 @@
                           <div class="dropdown show">
                             <a class="btn btn-success btn-sm toggle-btn" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" data-placement="top"
                                 aria-haspopup="true" aria-expanded="false">
-                                <i class="opti-icon-more"></i>
+                                <i>{{'ViewOrUnload'|translate}}</i>
                             </a>
                             <div class="dropdown-menu mr-3 mb-1" aria-labelledby="dropdownMenuLink">                                
                                 <a class="dropdown-item cursor-pointer" (click)="onLoadedContClick()">
@@ -124,7 +124,7 @@
           <i class="opti-icon-arrow-back"></i>
         </button>
         <button [disabled]="disableSubmit" class="btn btn-success k-button btn-sm btn-icon-with-text" type="button" (click)="onSubmitClick()">
-          <span class="k-icon k-i-check" role="presentation"></span>{{'Submit'|translate}}</button>
+          <span class="k-icon k-i-check" role="presentation"></span>{{'load'|translate}}</button>
       </div>
     </div>
   </form>
