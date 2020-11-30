@@ -363,7 +363,7 @@ export class PickTaskService {
   checkIfPickDropAllowedInAnyBin():boolean {
     let blnPickDropAllowedInAnyBin = false;
     var confiParams: any;
-    confiParams = JSON.parse(localStorage.getItem('ConfigurationParam'));
+    confiParams = JSON.parse(sessionStorage.getItem('ConfigurationParam'));
     let result = confiParams.find(e => e.OPTM_PARAM_NAME == "Param_Allow_PickDrop_In_Any_Bin")
     if (result != undefined) {
       if (result.OPTM_PARAM_VALUE != undefined || result.OPTM_PARAM_VALUE != '') {

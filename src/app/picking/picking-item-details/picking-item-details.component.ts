@@ -129,12 +129,12 @@ export class PickingItemDetailsComponent implements OnInit {
   ngOnInit() {
     var intPicklistID: number = 0;
     this.clearScanningFields();
-    this.TaskInfo[0] = JSON.parse(localStorage.getItem("TaskInfo"));
-    this.PickListSteps = JSON.parse(localStorage.getItem("PickListSteps"));
+    this.TaskInfo[0] = JSON.parse(sessionStorage.getItem("TaskInfo"));
+    this.PickListSteps = JSON.parse(sessionStorage.getItem("PickListSteps"));
     this.compId = sessionStorage.getItem("CompID");
     this.PickOperationList = ["", "Pick_To_Tote", "Pick_To_Container", ""];
-    if (localStorage.getItem("TaskInfo") != undefined && localStorage.getItem("TaskInfo") != "" && localStorage.getItem("TaskInfo") != "null") {
-      this.index = Number(localStorage.getItem("PickItemIndex"));
+    if (sessionStorage.getItem("TaskInfo") != undefined && sessionStorage.getItem("TaskInfo") != "" && sessionStorage.getItem("TaskInfo") != "null") {
+      this.index = Number(sessionStorage.getItem("PickItemIndex"));
     }
     //this.getPickTaskList(this.TaskInfo[0].OPTM_TASK_CODE, this.TaskInfo[0].OPTM_PICKLIST_ID);
     intPicklistID = this.TaskInfo[0].OPTM_PICKLIST_ID;
@@ -414,7 +414,7 @@ export class PickingItemDetailsComponent implements OnInit {
         this.PickTaskList[i].OPTM_ITEMCODE = this.PickTaskDetail.OPTM_WHSTASK_DTL.find(e => e.OPTM_TASKID == this.PickTaskList[i].OPTM_TASKID).OPTM_CONTCODE;//[i].OPTM_CONTCODE;
       }
       this.IsContPicking = false;
-      this.setPickingSteps(localStorage.getItem("PickTypeKey"), this.TaskInfo[0].OPTM_PICK_OPER);
+      this.setPickingSteps(sessionStorage.getItem("PickTypeKey"), this.TaskInfo[0].OPTM_PICK_OPER);
       this.cont_batch_serial_placeholder = this.translate.instant("Ph_Enter_Cont_Code")
     } else {
       this.itemcodeValue = this.PickTaskList[index].OPTM_ITEMCODE;
@@ -1203,7 +1203,7 @@ export class PickingItemDetailsComponent implements OnInit {
     //Add Container and Item Details to Packing Container and Packing Contents collection
     this.AddUpdatePickPackContents();
 
-    if (localStorage.getItem("PickType") != this.translate.instant("Container_Picking")) {
+    if (sessionStorage.getItem("PickType") != this.translate.instant("Container_Picking")) {
       if (this.OPTM_Tracking == 'B') {
         let result = this.BtchNoneArray.findIndex(element => element.OPTM_ContBtchSer == this.PT_Enter_ContBtchSer);
         if (result == -1) {
@@ -1405,7 +1405,7 @@ export class PickingItemDetailsComponent implements OnInit {
             this.toastr.success('', this.translate.instant("PickSubmitMsg"));
             if (this.completedTaskCount == this.totalPickTaskCount) {              
               if (this.blnPickAndDropTogether) {
-                if (localStorage.getItem("PickType") == this.translate.instant("Container_Picking")) {
+                if (sessionStorage.getItem("PickType") == this.translate.instant("Container_Picking")) {
                   //In case of container Picking, Container should always be dropped at Pickdrop Bin
                   this.PickListDropBin = this.PickDropBin; 
                 } else {
@@ -1621,16 +1621,16 @@ export class PickingItemDetailsComponent implements OnInit {
 
     if ((this.OPTM_Tracking == 'B' || this.OPTM_Tracking == 'N') && sessionStorage.getItem("PickType") != this.translate.instant("Container_Picking")) {
       for (var i = 0; i < this.BtchNoneArray.length; i++) {
-        this.SubmitPickTaskData.push(new PickTaskModel(this.TaskInfo[0].OPTM_PICKLIST_ID, this.TaskInfo[0].OPTM_PICKLIST_CODE, this.PickTaskList[this.index].OPTM_TASKID, sessionStorage.getItem("whseId"), this.BtchNoneArray[i].OPTM_Location, this.BtchNoneArray[i].OPTM_ContBtchSer, this.BtchNoneArray[i].OPTM_Qty, contValue, sessionStorage.getItem("UserId"), "N", toteValue, this.containerAlreadyCreated, this.OPTM_STARTDATETIME, localStorage.getItem("PickTypeIndex"), this.UserGrp, this.PickListDropBin, this.TaskInfo[0].OPTM_PICK_OPER, this.AllowMultiTotesOrCont));
+        this.SubmitPickTaskData.push(new PickTaskModel(this.TaskInfo[0].OPTM_PICKLIST_ID, this.TaskInfo[0].OPTM_PICKLIST_CODE, this.PickTaskList[this.index].OPTM_TASKID, sessionStorage.getItem("whseId"), this.BtchNoneArray[i].OPTM_Location, this.BtchNoneArray[i].OPTM_ContBtchSer, this.BtchNoneArray[i].OPTM_Qty, contValue, sessionStorage.getItem("UserId"), "N", toteValue, this.containerAlreadyCreated, this.OPTM_STARTDATETIME, sessionStorage.getItem("PickTypeIndex"), this.UserGrp, this.PickListDropBin, this.TaskInfo[0].OPTM_PICK_OPER, this.AllowMultiTotesOrCont));
       }
     } else {
       for (var i = 0; i < this.ContBtchSerArray.length; i++) {
         let result = this.PickListSteps.find(element => element.OPTM_TASKID == this.PickTaskList[this.index].OPTM_TASKID);
         if (result == undefined) {
-          if (localStorage.getItem("PickType") == this.translate.instant("Container_Picking")) {
-            this.SubmitPickTaskData.push(new PickTaskModel(this.TaskInfo[0].OPTM_PICKLIST_ID, this.TaskInfo[0].OPTM_PICKLIST_CODE, this.PickTaskList[this.index].OPTM_TASKID, sessionStorage.getItem("whseId"), this.PT_Enter_Location, this.ContBtchSerArray[i], 1, contValue, sessionStorage.getItem("UserId"), "Y", toteValue, this.containerAlreadyCreated, this.OPTM_STARTDATETIME, localStorage.getItem("PickTypeIndex"), this.UserGrp, this.PickListDropBin,this.TaskInfo[0].OPTM_PICK_OPER, this.AllowMultiTotesOrCont));
+          if (sessionStorage.getItem("PickType") == this.translate.instant("Container_Picking")) {
+            this.SubmitPickTaskData.push(new PickTaskModel(this.TaskInfo[0].OPTM_PICKLIST_ID, this.TaskInfo[0].OPTM_PICKLIST_CODE, this.PickTaskList[this.index].OPTM_TASKID, sessionStorage.getItem("whseId"), this.PT_Enter_Location, this.ContBtchSerArray[i], 1, contValue, sessionStorage.getItem("UserId"), "Y", toteValue, this.containerAlreadyCreated, this.OPTM_STARTDATETIME, sessionStorage.getItem("PickTypeIndex"), this.UserGrp, this.PickListDropBin,this.TaskInfo[0].OPTM_PICK_OPER, this.AllowMultiTotesOrCont));
           } else {
-            this.SubmitPickTaskData.push(new PickTaskModel(this.TaskInfo[0].OPTM_PICKLIST_ID, this.TaskInfo[0].OPTM_PICKLIST_CODE, this.PickTaskList[this.index].OPTM_TASKID, sessionStorage.getItem("whseId"), this.PT_Enter_Location, this.ContBtchSerArray[i], 1, contValue, sessionStorage.getItem("UserId"), "N", toteValue, this.containerAlreadyCreated, this.OPTM_STARTDATETIME, localStorage.getItem("PickTypeIndex"), this.UserGrp, this.PickListDropBin,this.TaskInfo[0].OPTM_PICK_OPER, this.AllowMultiTotesOrCont));
+            this.SubmitPickTaskData.push(new PickTaskModel(this.TaskInfo[0].OPTM_PICKLIST_ID, this.TaskInfo[0].OPTM_PICKLIST_CODE, this.PickTaskList[this.index].OPTM_TASKID, sessionStorage.getItem("whseId"), this.PT_Enter_Location, this.ContBtchSerArray[i], 1, contValue, sessionStorage.getItem("UserId"), "N", toteValue, this.containerAlreadyCreated, this.OPTM_STARTDATETIME, sessionStorage.getItem("PickTypeIndex"), this.UserGrp, this.PickListDropBin,this.TaskInfo[0].OPTM_PICK_OPER, this.AllowMultiTotesOrCont));
           }
         } else {
           this.toastr.error('', this.translate.instant("DataAlreadySaved"));
@@ -1669,7 +1669,7 @@ export class PickingItemDetailsComponent implements OnInit {
     } else if (this.TaskInfo[0].OPTM_PICK_OPER == "2") {
       PickContType = 2; // Pick To Container
       contCode = this.ScannedContOrTote;
-    } if (localStorage.getItem("PickType") == this.translate.instant("Container_Picking")) {
+    } if (sessionStorage.getItem("PickType") == this.translate.instant("Container_Picking")) {
       PickContType = 3; // Prebuilt Container Picking
       contCode = this.PT_Enter_ContBtchSer; //This variable stores the Container code in Container Picking
       ItemCode = "";
@@ -1847,7 +1847,7 @@ export class PickingItemDetailsComponent implements OnInit {
   */
   checkIfPickAndDropTogether() {
     this.blnPickAndDropTogether = false;
-    this.confiParams = JSON.parse(localStorage.getItem('ConfigurationParam'));
+    this.confiParams = JSON.parse(sessionStorage.getItem('ConfigurationParam'));
     let result = this.confiParams.find(e => e.OPTM_PARAM_NAME == "Param_Pick_And_Drop_Together")
     if (result != undefined) {
       if (result.OPTM_PARAM_VALUE != undefined || result.OPTM_PARAM_VALUE != '') {

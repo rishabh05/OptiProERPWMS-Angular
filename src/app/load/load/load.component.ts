@@ -52,7 +52,7 @@ export class LoadComponent implements OnInit {
   }
 
   setLoadingSteps() {
-    this.LoadSteps = JSON.parse(localStorage.getItem("LoadSteps"));
+    this.LoadSteps = JSON.parse(sessionStorage.getItem("LoadSteps"));
     if (this.LoadSteps != undefined && this.LoadSteps.length > 0) {
       this.currentStep = this.getStepNo(this.LoadSteps[0].OPTM_STEP_CODE);
       this.maxStep = this.LoadSteps.length;

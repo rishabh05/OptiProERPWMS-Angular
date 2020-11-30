@@ -55,8 +55,8 @@ export class AppComponent {
               else document.addEventListener('DOMContentLoaded', insertIT);
           };
 
-      if (isLocalStorage && (localStorage.getItem('inlineSVGrev') == that.svgVersion)) {
-          data = localStorage.getItem('inlineSVGdata');
+      if (isLocalStorage && (sessionStorage.getItem('inlineSVGrev') == that.svgVersion)) {
+          data = sessionStorage.getItem('inlineSVGdata');
           if (data) {
               insert();
               return true;
@@ -71,8 +71,8 @@ export class AppComponent {
                   data = request.responseText;
                   insert();
                   if (isLocalStorage) {
-                      localStorage.setItem('inlineSVGdata', data);
-                      localStorage.setItem('inlineSVGrev', that.svgVersion);
+                      sessionStorage.setItem('inlineSVGdata', data);
+                      sessionStorage.setItem('inlineSVGrev', that.svgVersion);
                   }
               }
           }

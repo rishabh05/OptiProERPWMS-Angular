@@ -231,8 +231,8 @@ export class Commonservice {
       toastr.error('', message);
     }
     
-    if(JSON.parse(localStorage.getItem("TaskInfo")) != "" && JSON.parse(localStorage.getItem("TaskInfo")) != undefined && JSON.parse(localStorage.getItem("TaskInfo")) != null){
-     // this.CancelPickList((JSON.parse(localStorage.getItem("TaskInfo"))).OPTM_PICKLIST_CODE);
+    if(JSON.parse(sessionStorage.getItem("TaskInfo")) != "" && JSON.parse(sessionStorage.getItem("TaskInfo")) != undefined && JSON.parse(sessionStorage.getItem("TaskInfo")) != null){
+     // this.CancelPickList((JSON.parse(sessionStorage.getItem("TaskInfo"))).OPTM_PICKLIST_CODE);
     }
 
     sessionStorage.removeItem('isLoggedIn');
@@ -771,7 +771,7 @@ export class Commonservice {
             return; 
           }
           if (OPTM_TRANS_CATEGORY == "Picking") {
-            localStorage.setItem("PickListSteps", JSON.stringify(data.OPTM_TRANS_STEPS));
+            sessionStorage.setItem("PickListSteps", JSON.stringify(data.OPTM_TRANS_STEPS));
           } else if (OPTM_TRANS_CATEGORY == "Drop") {
             sessionStorage.setItem("DropSteps", JSON.stringify(data.OPTM_TRANS_STEPS));
           } else if (OPTM_TRANS_CATEGORY == "Loading") {

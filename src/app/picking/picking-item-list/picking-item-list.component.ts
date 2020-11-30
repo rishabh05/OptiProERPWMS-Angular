@@ -26,7 +26,7 @@ export class PickingItemListComponent implements OnInit {
     userLang = /(fr|en)/gi.test(userLang) ? userLang : 'fr';
     translate.use(userLang);
     translate.onLangChange.subscribe((event: LangChangeEvent) => {
-      this.ShipDetail = JSON.parse(localStorage.getItem("TaskInfo"));
+      this.ShipDetail = JSON.parse(sessionStorage.getItem("TaskInfo"));
       this.shipmentno = this.translate.instant("PickListCode") + ": " + this.ShipDetail.OPTM_PICKLIST_CODE;
     });
   }
@@ -81,7 +81,7 @@ export class PickingItemListComponent implements OnInit {
   ngOnInit() {
     this.picktaskService.clearLocaStorage();
     this.compId = sessionStorage.getItem("CompID");
-    this.ShipDetail = JSON.parse(localStorage.getItem("TaskInfo"));
+    this.ShipDetail = JSON.parse(sessionStorage.getItem("TaskInfo"));
     this.shipmentno = this.translate.instant("PickListCode") + ": " + this.ShipDetail.OPTM_PICKLIST_CODE;
     this.getPickTaskList(this.ShipDetail.OPTM_TASK_CODE, this.ShipDetail.OPTM_PICKLIST_ID);
   }
