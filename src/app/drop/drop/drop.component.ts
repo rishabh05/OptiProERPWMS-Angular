@@ -16,6 +16,7 @@ export class DropComponent implements OnInit {
   showLoader: boolean = false;
   DropOption = "";
   dropLocation: string = "";
+  prevdropLocation: string = "";
   dropValue: string = "";
   processStep: boolean = true;
   selectedDropOption: string = "";
@@ -314,6 +315,9 @@ export class DropComponent implements OnInit {
       return;
     }
     this.dropLocation = this.dropLocation.trim();
+    if (this.prevdropLocation == this.dropLocation) {
+      return;
+    }
     this.showLoader = true;
     
     this.picktaskService.ValidateScannedBinForDropping(this.dropLocation).subscribe(
@@ -329,7 +333,8 @@ export class DropComponent implements OnInit {
             this.toastr.error("", this.translate.instant(data));
             this.dropLocation = "";
           } else {
-            this.SetToNextStep();
+            this.prevdropLocation = this.dropLocation;
+            this.SetStepsToStartPosition();
           }
         } else {
           this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
