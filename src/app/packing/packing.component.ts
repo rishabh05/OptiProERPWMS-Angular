@@ -403,15 +403,10 @@ export class PackingComponent implements OnInit {
   }
   
   GetToteShipments() {
-    this.GetToteShipmentsFromDB();
-    if (this.SHIPMENTS.length > 0) {
-      this.showLookup = true;
-      this.lookupfor = "ToteShipmentList";
-      this.serviceData = this.SHIPMENTS;
-    }
+    this.GetToteShipmentsFromDB(true);    
   }
 
-  GetToteShipmentsFromDB() {
+  GetToteShipmentsFromDB(showlookup: boolean) {
     if (this.ToteValue == "" || this.ToteValue == undefined) {
       this.toastr.error('', this.translate.instant("ToteBlankMsg"))
       return;
@@ -431,6 +426,11 @@ export class PackingComponent implements OnInit {
             this.SHIPMENTS = data.SHIPMENTS
             if (data.SHIPMENT_ITEMS.length > 0) {
               this.SHIPMENT_ITEMS = data.SHIPMENT_ITEMS;
+            }
+            if (showlookup) {
+              this.showLookup = true;
+              this.lookupfor = "ToteShipmentList";
+              this.serviceData = this.SHIPMENTS;
             }
           } else {
             this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
@@ -519,7 +519,7 @@ export class PackingComponent implements OnInit {
     if (this.ShipmentCode == "" || this.ShipmentCode == undefined) {
       return;
     }
-    this.GetToteShipmentsFromDB();
+    this.GetToteShipmentsFromDB(false);
     let result = this.SHIPMENTS.filter(e => e.OPTM_SHIPMENT_CODE == this.ShipmentCode);
     if (result != null) {
       this.ShipmentCode = result[0].OPTM_SHIPMENT_CODE;
