@@ -205,6 +205,9 @@
                                 </div>
                             </ng-template>
                         </kendo-grid-checkbox-column>
+                        <kendo-grid-column field="OPTM_BPCODE" width="110" title="{{'Outbound_Customer'|translate}}">                            
+                        </kendo-grid-column>
+                        <kendo-grid-column field="OPTM_SHIPTO" width="90" title="{{'PT_Ship_To'|translate}}"></kendo-grid-column>
                         <kendo-grid-column field="OPTM_SHIPMENT_CODE" width="110" title="{{'ShipmentCode'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem class="text-left">
                                 <a class="dropdown-item" style="color: blue; " class="text-left" (click)="showShipmentList(dataItem.OPTM_SHIPMENTID)">{{dataItem.OPTM_SHIPMENT_CODE}}</a>
@@ -231,7 +234,7 @@
                                     (input)="updateDeliverToLocation(DeliverToLocation.value, dataItem, rowIndex)">
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column field="OPTM_SHIPTO" width="90" title="{{'PT_Ship_To'|translate}}"></kendo-grid-column>
+                        
                     </kendo-grid>
                 </div>
             </div>

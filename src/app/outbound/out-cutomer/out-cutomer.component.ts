@@ -1779,6 +1779,7 @@ export class OutCutomerComponent implements OnInit {
         // this.SelectedRowsforShipmentArr.push(dataitem);
 
         this.SelectedRowsforShipmentArr.push({
+          CUSTOMER_AND_SHIPTO: dataitem.OPTM_BPCODE + '||' + dataitem.OPTM_SHIPTO,
           ShipmentID: dataitem.OPTM_SHIPMENTID
         })
       }
@@ -1933,7 +1934,7 @@ export class OutCutomerComponent implements OnInit {
             this.SelectedRowsforShipmentArr = [];
             this.resetShipmentList();
             this.showPrintConfirmDialog();
-            //   this.getShipmentList();
+            this.getShipmentList();
           } else if (resp[0].ErrorMsg == "7001") {
             this.showLookupLoader = false;
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router,
