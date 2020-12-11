@@ -101,21 +101,24 @@ export class OutCutomerComponent implements OnInit {
     if (this.deliveryOptionType == '1') {
       this.pageTitle = this.translate.instant("Outbound_Delivery")
       this.setOutboundPageInfo()
+      if(this.IsUDFEnabled == "Y"){
+        this.commonservice.GetWMSUDFBasedOnScreen("15035");
+      } 
       // set page ui for outbound.
     } else if (this.deliveryOptionType == '2') {
       // set page ui for shipment.
       this.pageTitle = this.translate.instant("Outbound_Delivery_through_Shipment")
       this.setShipmentPageInfo();
+      if(this.IsUDFEnabled == "Y"){
+        this.commonservice.GetWMSUDFBasedOnScreen("15036");
+      } 
     }
     this.updateSalesOrderList();
     this.ShowPickListReport = (JSON.parse(sessionStorage.getItem('ConfigData'))).ShowPickListReport;
     this.ShowPackListReport = (JSON.parse(sessionStorage.getItem('ConfigData'))).ShowPackListReport;
     this.ShowBOLReport = (JSON.parse(sessionStorage.getItem('ConfigData'))).ShowBOLReport;
     // this.initializeShipmentLines();
-    this.IsUDFEnabled = sessionStorage.getItem("ISUDFEnabled");
-    if(this.IsUDFEnabled == "Y"){
-      this.commonservice.GetWMSUDFBasedOnScreen("15041");
-    }    
+    this.IsUDFEnabled = sessionStorage.getItem("ISUDFEnabled");       
   }
 
   // initializeShipmentLines() {
