@@ -181,7 +181,7 @@ export class ShpLoadingComponent implements OnInit {
       this.UnloadContainer();
       this.containerCode = '';
     } else {
-      this.generateContainer();
+      //this.generateContainer();
     }
   }
 
@@ -494,8 +494,9 @@ export class ShpLoadingComponent implements OnInit {
 
 
   containerCode: string;
+  /*
   generateContainer() {    
-    this.PrepareModelAndCreateCont(this.containerCode);
+    //this.PrepareModelAndCreateCont(this.containerCode);
   }
 
   PrepareModelAndCreateCont(containerCode: any) {
@@ -593,6 +594,6 @@ export class ShpLoadingComponent implements OnInit {
         }
       }
     );
-  }
+  }*/
 
 }

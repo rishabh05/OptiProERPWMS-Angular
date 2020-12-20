@@ -801,11 +801,13 @@ export class Commonservice {
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/GetConfigurationParam", jObject, this.httpOptions);
   }
 
+  /*
   CreateContainerForPacking(oSaveModel): Observable<any> {
     let jObject = { PalletCode: JSON.stringify(oSaveModel) };
     return this.httpclient.post(this.config_params.service_url + "/api/PickList/CreateContainerForPacking", jObject, this.httpOptions);
   }
-
+  */
+ 
   CancelPickListAPI(OPTM_PICKLIST_ID, compId, translate) {
     if (OPTM_PICKLIST_ID == "" || OPTM_PICKLIST_ID == undefined) {
       return;

@@ -631,6 +631,7 @@
   "PICKLIST_STEPS_NOT_DEF": "Picklist closure steps not defined. Cannot continue.",
   "DROP_BIN_NOT_MATCH": "Scanned Drop Bin does not match",
   "Reached_END_Picklist": "Reached end of Picklist",
+  "No_Picktasks_In_Gr": "All tasks picked",
   "CONT_DAMAGE": "Scanned Container Damaged",
   "ReqQuantity": "Required Qty",
   "PickQuantity": "Pick Quantity",
