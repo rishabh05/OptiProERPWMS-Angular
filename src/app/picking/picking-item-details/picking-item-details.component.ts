@@ -819,6 +819,10 @@ export class PickingItemDetailsComponent implements OnInit {
   }
 
   skipPickTask() {
+    if (this.completedTaskCount == this.totalPickTaskCount) {
+      this.toastr.info('', this.translate.instant("No_Picktasks_In_Gr"));
+      return;
+    }
     this.clearFields();
     this.stepIndex = 0;
     this.stepIncrementValue = 1;

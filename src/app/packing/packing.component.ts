@@ -1012,6 +1012,7 @@ export class PackingComponent implements OnInit {
 
       if(index != -1){
         this.PickPackContents[index].OPTM_QTY = Number(this.PickPackContents[index].OPTM_QTY) + Number(this.scannedQty);
+        this.PickPackContents[index].OPTM_QTY = this.decimalPipe.transform(this.PickPackContents[index].OPTM_QTY, '1.6-6')
         return;
       }
     }
