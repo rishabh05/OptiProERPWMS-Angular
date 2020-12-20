@@ -887,13 +887,15 @@ export class Commonservice {
     let data = UDFData;
     let subarray = [];
     let UDFStatus = "";
-    data.Fields.forEach(element => {
-      if (element.OPTM_DISPLAYAREA == displayArea) {
-        subarray.push(element);
-      }
-    });
+    if(data != undefined){
+      data.Fields.forEach(element => {
+        if (element.OPTM_DISPLAYAREA == displayArea) {
+          subarray.push(element);
+        }
+      });
+    }
     if (subarray.length == 0) {
-      this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
+      // this.toastr.error('', this.translate.instant("CommonNoDataAvailableMsg"));
       UDFStatus = "NO_DATA";
       return UDFStatus;
     }
@@ -965,8 +967,43 @@ export class Commonservice {
   }
 
   ComponentVisibilityList = [];
-  async getComponentVisibilityList(moduleId, screenId, CntrlId): Promise<any> {
-    await this.GetControlVisibility("WMS", moduleId, screenId, CntrlId).then(
+  ComponentVisibilityList2 = [];
+  // async getComponentVisibilityList(moduleId, screenId, CntrlId): Promise<any> {
+  //   await this.GetControlVisibility("WMS", moduleId, screenId, CntrlId).then(
+  //     (data: any) => {
+  //       if (data != null) {
+  //         // if (data.length > 0) {
+  //           this.ComponentVisibilityList = data;
+  //         // } else {
+  //           // this.toastr.error('', this.translate.instant("InValidPalletNo"));
+  //         // }
+  //       }
+  //       else {
+  //         // this.toastr.error('', this.translate.instant("InValidPalletNo"));
+  //       }
+  //     },
+  //     error => {
+
+  //     }
+  //   );
+  //   // return true;
+  // }
+
+  // GetControlVisibility(ApplicationID, ModuleID, ScreenID, ControlID): Promise<any> {
+  //   let jObject = {
+  //     UserId: JSON.stringify([{
+  //       CompanyDBId: sessionStorage.getItem("CompID"),
+  //       ApplicationID: ApplicationID,
+  //       ModuleID: ModuleID,
+  //       ScreenID: ScreenID,
+  //       ControlID: ControlID
+  //     }])
+  //   };
+  //   return this.httpclient.post(this.config_params.service_url + "/api/menu/GetAllControl", jObject, this.httpOptions).toPromise();
+  // }
+
+  getComponentVisibilityList(moduleId, screenId, CntrlId){
+    this.GetControlVisibility("WMS", moduleId, screenId, CntrlId).subscribe(
       (data: any) => {
         if (data != null) {
           // if (data.length > 0) {
@@ -986,7 +1023,41 @@ export class Commonservice {
     // return true;
   }
 
-  GetControlVisibility(ApplicationID, ModuleID, ScreenID, ControlID): Promise<any> {
+  async getComponentVisibilityList2(moduleId, screenId, CntrlId):Promise<any>{
+    await this.GetControlVisibility2("WMS", moduleId, screenId, CntrlId).then(
+      (data: any) => {
+        if (data != null) {
+          // if (data.length > 0) {
+            this.ComponentVisibilityList2 = data;
+          // } else {
+            // this.toastr.error('', this.translate.instant("InValidPalletNo"));
+          // }
+        }
+        else {
+          // this.toastr.error('', this.translate.instant("InValidPalletNo"));
+        }
+      },
+      error => {
+
+      }
+    );
+    // return true;
+  }
+
+  GetControlVisibility(ApplicationID, ModuleID, ScreenID, ControlID): Observable<any> {
+    let jObject = {
+      UserId: JSON.stringify([{
+        CompanyDBId: sessionStorage.getItem("CompID"),
+        ApplicationID: ApplicationID,
+        ModuleID: ModuleID,
+        ScreenID: ScreenID,
+        ControlID: ControlID
+      }])
+    };
+    return this.httpclient.post(this.config_params.service_url + "/api/menu/GetAllControl", jObject, this.httpOptions);
+  }
+
+  GetControlVisibility2(ApplicationID, ModuleID, ScreenID, ControlID): Promise<any> {
     let jObject = {
       UserId: JSON.stringify([{
         CompanyDBId: sessionStorage.getItem("CompID"),
@@ -1001,6 +1072,10 @@ export class Commonservice {
 
   getComponentVisibility():any[]{
     return this.ComponentVisibilityList;
+  }
+
+  getComponentVisibility2():any[]{
+    return this.ComponentVisibilityList2;
   }
 }
 

@@ -365,6 +365,7 @@ export class ShpLoadingComponent implements OnInit {
           if (data.OUTPUT[0].Successmsg == "SUCCESSFULLY") {
             this.toastr.success('', this.translate.instant("shploadedMsg"));
             this.LoadContainersList = [];
+            this.FirstCont = {OPTM_CONTCODE: ''};
           } else {
             this.toastr.error('', data.OUTPUT[0].ErrorMsg);
           }
