@@ -1053,7 +1053,8 @@ export class Commonservice {
         ApplicationID: ApplicationID,
         ModuleID: ModuleID,
         ScreenID: ScreenID,
-        ControlID: ControlID
+        ControlID: ControlID,
+        UserId: sessionStorage.getItem("UserId")
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/menu/GetAllControl", jObject, this.httpOptions);
@@ -1066,7 +1067,8 @@ export class Commonservice {
         ApplicationID: ApplicationID,
         ModuleID: ModuleID,
         ScreenID: ScreenID,
-        ControlID: ControlID
+        ControlID: ControlID,
+        UserId: sessionStorage.getItem("UserId")
       }])
     };
     return this.httpclient.post(this.config_params.service_url + "/api/menu/GetAllControl", jObject, this.httpOptions).toPromise();

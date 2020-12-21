@@ -176,6 +176,12 @@ export class SigninComponent implements OnInit {
         }
     }
 
+    onCompanyChange() {
+        this.defaultWHS = { OPTM_WHSE: this.translate.instant("SelectWarehouse"), BPLid: 0 };
+        this.selectedWhse = "";
+        this.setCookie('whseId', this.selectedWhse, 365);
+    }
+
     showDialog(dialogFor: string, yesbtn: string, nobtn: string, msg: string) {
         this.dialogFor = dialogFor;
         this.yesButtonText = yesbtn;
@@ -244,6 +250,7 @@ export class SigninComponent implements OnInit {
         this.companyName = [];
         this.selectedItem = this.translate.instant("Login_SelectCompany");
         this.defaultWHS = { OPTM_WHSE: this.translate.instant("SelectWarehouse"), BPLid: 0 };
+        this.selectedRole = { OPTM_ROLEID: this.translate.instant("SelectRole"), BPLid: 0 };
     }
 
     private getLicenseData(LoginTrigger) {
@@ -295,7 +302,7 @@ export class SigninComponent implements OnInit {
                     sessionStorage.setItem("IsGreaterQuantityAllowedThanOrder", this.licenseData[1].IsGreaterQuantityAllowedThanOrder);
                     sessionStorage.setItem("IsPrintingEnabledForProdReceipt", this.licenseData[1].ProdReceiptPrintReport);
                     sessionStorage.setItem("AutoPalletIdGenerationChecked", this.licenseData[0].AutoPalletIdGenerationChecked);
-                    sessionStorage.setItem("ISUDFEnabled",this.licenseData[1].UDFEnabled);
+                    sessionStorage.setItem("ISUDFEnabled", this.licenseData[1].UDFEnabled);
                     sessionStorage.setItem("GS1SetupScanningEnabled", this.licenseData[1].GS1SetupScanningEnabled);
 
                     if (this.selectedRole != null) {
@@ -412,6 +419,7 @@ export class SigninComponent implements OnInit {
                 return;
             }
         }
+        // this.defaultWHS = { OPTM_WHSE: this.translate.instant("SelectWarehouse"), BPLid: 0 };
         this.signinService.getWHS(this.selectedItem).subscribe(
             data => {
                 this.whsList = data.Table;
@@ -573,6 +581,14 @@ export class SigninComponent implements OnInit {
             this.toastr.error('', this.translate.instant("Login_SelectwarehouseMsg"), this.commonService.toast_config.iconClasses.error);
             return true;
         }
+        else if ((this.whsList.findIndex(e => e.OPTM_WHSE == document.getElementById("whseId").innerText.trim()) == -1)) {
+            this.showLoader = false;
+            this.toastr.error('', "Please select correct warehouse for selected company.", this.commonService.toast_config.iconClasses.error);
+            this.defaultWHS = { OPTM_WHSE: this.translate.instant("SelectWarehouse"), BPLid: 0 };
+            this.selectedWhse = "";
+            this.setCookie('whseId', this.selectedWhse, 365);
+            return true;
+        }
         // else if (document.getElementById("Role").innerText.trim() == this.translate.instant("SelectRole") ||
         //     document.getElementById("Role").innerText.trim() == "") {
         //     this.showLoader = false;
@@ -593,6 +609,22 @@ export class SigninComponent implements OnInit {
         // }
         return false;
     }
+
+    checkSelectedWhse() {
+        if (document.getElementById("whseId").innerText.trim() == this.translate.instant("SelectWarehouse") ||
+        document.getElementById("whseId").innerText.trim() == "") {
+            return;
+        }        
+        if ((this.whsList.findIndex(e => e.OPTM_WHSE == document.getElementById("whseId").innerText.trim()) == -1)) {
+            this.showLoader = false;
+            this.toastr.error('', "Please select correct warehouse for selected company.", this.commonService.toast_config.iconClasses.error);
+            this.defaultWHS = { OPTM_WHSE: this.translate.instant("SelectWarehouse"), BPLid: 0 };
+            this.selectedWhse = "";
+            this.setCookie('whseId', this.selectedWhse, 365);
+            return true;
+        }
+    }
+
     /**
     * function for get cookie data
     * @param cname 

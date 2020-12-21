@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { PortalHomeRoutingModule } from './portal-home-routing.module';
 import { PortalLeftComponent } from './portal-left/portal-left.component';
-// import { PortalRightComponent } from './portal-right/portal-right.component';
+import { PortalRightComponent } from './portal-right/portal-right.component';
 import { PortalTopComponent } from './portal-top/portal-top.component';
 import { PortalHomeComponent } from './portal-home.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
@@ -52,7 +52,7 @@ import { PalletizationModule } from '../palletization/palletization.module';
     InventoryTransferModule,
     PalletizationModule
   ],
-  declarations: [PortalHomeComponent, PortalLeftComponent, PortalTopComponent, DashboardComponent, ChangeWarehouseComponent],
+  declarations: [PortalHomeComponent, PortalLeftComponent, PortalTopComponent, DashboardComponent, ChangeWarehouseComponent, PortalRightComponent],
   providers:[DashboardComponent ]
 })
 export class PortalHomeModule { }

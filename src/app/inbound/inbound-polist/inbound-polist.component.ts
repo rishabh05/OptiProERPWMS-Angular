@@ -13,6 +13,7 @@ import { GridSettings } from 'src/app/interface/grid-settings.interface';
 import { ColumnSettings } from 'src/app/interface/column-settings.interface';
 import { process } from '@progress/kendo-data-query';
 import { IUIComponentTemplate } from 'src/app/common/ui-component.interface';
+import { ModuleIds, ScreenIds, ControlIds } from '../../enums/enums';
 @Component({
   selector: 'app-inbound-polist',
   templateUrl: './inbound-polist.component.html',
@@ -89,7 +90,7 @@ export class InboundPolistComponent implements OnInit {
     });
   }
    
-  ngOnInit() {
+  async ngOnInit() {
     this.inboundFromWhere = sessionStorage.getItem("inboundOptionType");
     this.IsUDFEnabled = sessionStorage.getItem("ISUDFEnabled");
     if(this.inboundFromWhere==1){
@@ -117,6 +118,21 @@ export class InboundPolistComponent implements OnInit {
     }
     this.selectedVendor = this.inboundMasterComponent.selectedVernder;
     this.showGRPOButton = false;
+
+    // await this.commonservice.getComponentVisibilityList(ModuleIds.POReceipt, ScreenIds.POList, ControlIds.POList_GRID1);
+    // let ItemDetailArr = this.commonservice.getComponentVisibility();
+    let ItemDetailArr = this.inboundMasterComponent.InboundUserPreference.filter(e=> e.OPTM_SCREENID == ScreenIds.POList && e.OPTM_CONTROLID == ControlIds.POList_GRID1);
+    this.setItemDetailColumnVisibility(ItemDetailArr);
+  }
+
+  gridColumnVisibilityArry: any = {};
+  setItemDetailColumnVisibility(ColumnArry) {
+    this.gridColumnVisibilityArry.ROWNUM = ColumnArry.find(e=> e.OPTM_FIELDID == "ROWNUM") != undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "ROWNUM").OPTM_VISIBILITYSTATUS:""
+    this.gridColumnVisibilityArry.ITEMCODE = ColumnArry.find(e=> e.OPTM_FIELDID == "ITEMCODE") != undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "ITEMCODE").OPTM_VISIBILITYSTATUS:""
+    this.gridColumnVisibilityArry.ITEMNAME = ColumnArry.find(e=> e.OPTM_FIELDID == "ITEMNAME") != undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "ITEMNAME").OPTM_VISIBILITYSTATUS:""
+    this.gridColumnVisibilityArry.OPENQTY = ColumnArry.find(e=> e.OPTM_FIELDID == "OPENQTY")!= undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "OPENQTY").OPTM_VISIBILITYSTATUS:""
+    this.gridColumnVisibilityArry.RPTQTY = ColumnArry.find(e=> e.OPTM_FIELDID == "RPTQTY")!= undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "RPTQTY").OPTM_VISIBILITYSTATUS:""
+    this.gridColumnVisibilityArry.UDF = ColumnArry.find(e=> e.OPTM_FIELDID == "UDF")!= undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "UDF").OPTM_VISIBILITYSTATUS:""
   }
 
   ngAfterViewInit() {
@@ -823,6 +839,7 @@ export class InboundPolistComponent implements OnInit {
         this.showLoader = false;
         // console.log(data);
         if (data != null) {
+          this.RecvbBinvalue = "";
           if (data.length > 0) {
             if (this.openPOLinesModel[0].QCREQUIRED == "Y") {
               this.RecvbBinvalue = data[0].BINNO;
@@ -833,12 +850,19 @@ export class InboundPolistComponent implements OnInit {
             }
           }
 
+          if(this.RecvbBinvalue == ""){
+            this.toastr.error("", this.translate.instant("Please declare receiving bin to process selected item."))
+            this.openPOLinesModel[i].RPTQTY = 0;
+            return;
+          }
+
           for (var i = 0; i < this.openPOLinesModel.length; i++) {
             if (Number(this.openPOLinesModel[i].RPTQTY) != Number(this.openPOLinesModel[i].OPENQTY)) {
               this.openPOLinesModel[i].RPTQTY = this.openPOLinesModel[i].OPENQTY;
               this.openPOLineModel = this.openPOLinesModel[i];
               // this.prepareCommonData();
-              this.inboundMasterComponent.prepareCommonData(this.inboundFromWhere, this.poCode, this.openPOLineModel.DOCENTRY, null, null, "", JSON.parse(sessionStorage.getItem("GRPOHdrUDF")), this.RecvbBinvalue);
+              // sessionStorage.getItem("GRPOHdrUDF")
+              this.inboundMasterComponent.prepareCommonData(this.inboundFromWhere, this.poCode, this.openPOLineModel.DOCENTRY, undefined, null, "", "", this.RecvbBinvalue);
             }
           }
         }

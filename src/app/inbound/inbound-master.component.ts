@@ -18,6 +18,7 @@ export class InboundMasterComponent implements OnInit {
   public AddtoGRPOFlag: boolean = false;
   public SubmitPOArray: OpenPOLinesModel[] = [];
   UDFDetails: any[];
+  public InboundUserPreference: any[];
   udfArray = [];
 
   ngOnInit() {
@@ -96,7 +97,9 @@ export class InboundMasterComponent implements OnInit {
     if (fromPOList != undefined) {
       UomEntry = -1
     } else {
-      UomEntry = uomSelectedVal.UomEntry;
+      if(uomSelectedVal != undefined){
+        UomEntry = uomSelectedVal.UomEntry;
+      }      
     }
     oSubmitPOLotsObj.POReceiptLots.push({
       OPTM_TYPE: inboundFromWhere,
@@ -166,7 +169,7 @@ export class InboundMasterComponent implements OnInit {
           LotNumber: recvingQuantityBinArray[iBtchIndex].LotNumber,
           LotQty: lotqty,
           SysSerial: "0",
-          ExpireDate: this.GetSubmitDateFormat(expiryDate),
+          ExpireDate: this.GetSubmitDateFormat(recvingQuantityBinArray[iBtchIndex].expiryDate),
           VendorLot: recvingQuantityBinArray[iBtchIndex].VendorLot,
           SuppSerial: recvingQuantityBinArray[iBtchIndex].VendorLot,
           ParentLineNo: templine,

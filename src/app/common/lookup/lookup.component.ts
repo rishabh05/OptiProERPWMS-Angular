@@ -199,6 +199,8 @@ export class LookupComponent implements OnInit {
       this.showPackedContents();
     } else if(this.lookupfor == "LoadedContList"){
       this.showLoadedContList();
+    }else if(this.lookupfor == "GetBatSerProdRec"){
+      this.showSBProdReceiptList();
     }
     
     
@@ -1318,6 +1320,30 @@ showBins() {
       }
     }
   }    
+
+  showSBProdReceiptList(){
+    this.table_head = [
+      {
+        field: 'OPTM_BTCHSERNO',
+        title: this.translate.instant("BatchSerial_No"),
+        type: 'text',
+        width: '100'
+      },
+      {
+        field: 'OPTM_QUANTITY',
+        title: this.translate.instant("Quantity"),
+        type: 'text',
+        width: '100'
+      }
+    ];
+    this.lookupTitle = this.translate.instant("ItemDetail");
+    if (this.serviceData !== undefined) {
+      if (this.serviceData.length > 0) {
+        this.dialogOpened = true;
+      }
+    }
+  }
+
   skip: any = 0;
   pageChange(event: PageChangeEvent) {
       this.skip = event.skip;

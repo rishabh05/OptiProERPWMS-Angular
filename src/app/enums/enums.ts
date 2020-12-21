@@ -1,26 +1,48 @@
 
+export enum ScreenIds
+{
+    VendorList = 1,
+    POList = 2,
+    GRPO = 3,
+    CustList = 4,
+    SOList = 5,
+    Delivery = 6,
+    WH_BIN_Transfer = 7,
+    ITRList = 8,
+    ITROperationScreen = 9,
+    ProdIssue_Orderlist = 10,
+    ProdIssueScreen = 11,
+    ProdRec_Orderlist = 12,
+    ProdRecScreen = 13
+}
 
-export enum UserType {
-    /// <summary>
-    /// No Type.
-    /// </summary>
-    None = 0,
-    /// <summary>
-    /// Enum to represent User.
-    /// </summary>
-    User = 1,
-    /// <summary>
-    /// Enum to represent Customer.
-    /// </summary>
-    Customer = 2,
-    /// <summary>
-    /// Enum to represent Vendor.
-    /// </summary>
-    Vendor = 3,
-    /// <summary>
-    /// Enum to represent SuperAdmin.
-    /// </summary>
-    SuperAdmin = 4
+export enum ModuleIds
+{
+    POReceipt = 1,
+    AP_Invoice = 2,
+    SO_Delivery = 3,
+    SHP_Delivery = 4,
+    WH_BIN_Transfer = 5,
+    IT_By_ITR = 6,
+    ProdIssue = 7,
+    ProdReceipt = 8
+}
+
+export enum ControlIds {
+    POList_GRID1 = "GRID_ITEM_QTY_DETAIL",
+    GRPO_GRID1 = "GRID_GRPO_ITEM_DETAIL",
+    GRPO_GRID2 = "GRID_BTCHSER_QTY",
+    SOList_GRID1 = "GRID_PICKITEM_QTY_DETAIL",
+    ITRList_GRID1 = "GRID_ITRLIST_ITEM_DETAIL",
+    DEL_GRID1 = "GRID_DEL_ITEM_DETAIL",
+    DEL_GRID2 = "GRID_PICKED_BTCHSER_QTY",
+    WH_BIN_View_Items_GRID = "GRID_VIEW_ITEMS",
+    PRODISSUE_GRID1 = "GRID_PRODISSUE_ORDERLIST",
+    PRODISSUE_GRID2 = "GRID_PRODISSUE_BTCHSER",
+    PRODREC_GRID1 = "GRID_PRODREC_ORDERLIST",
+    PRODREC_GRID2 = "GRID_PRODREC_BTCHSER",
+    ITROPR_GRID1 = "GRID_ITROPR_ITEM_DETAIL",
+    ITROPR_GRID2 = "GRID_ITROPR__DETAIL",
 }
 
 export  enum ModuleName {
@@ -146,19 +168,3 @@ Closed = 8,
 Updated = 9
 }
 
-export enum PurchaseInquiryItemStatus
-{
-
-New = 1,
-Updated = 2,
-Cancelled = 3,
-
-}
-
-export enum OperationType
-{
-
-add = 1,
-Update = 2,
-
-}

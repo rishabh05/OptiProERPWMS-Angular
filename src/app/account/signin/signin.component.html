@@ -62,7 +62,7 @@
                                 <label class="k-form-field">
                                   <span class="opti_form-label">{{'Login_Company'|translate}} </span>
                                   <kendo-dropdownlist class="form-control form-control-sm"
-                                  
+                                  (valueChange) = "onCompanyChange($event)"
                                    [data]="companyName" name="selectedItem"
                                    [(ngModel)]="selectedItem"
                                    id="compId"
@@ -77,6 +77,7 @@
                                    valueField="BPLid"
                                    id="whseId"
                                    name = "defaultWHS"
+                                   (blur)="checkSelectedWhse()"
                                    (valueChange) = "onWhsChange($event)"
                                    [(ngModel)]="defaultWHS"
                                   ></kendo-dropdownlist>

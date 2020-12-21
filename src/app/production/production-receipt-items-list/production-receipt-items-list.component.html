@@ -65,33 +65,38 @@
                         <kendo-grid-column media="(max-width: 767px)" class="opti_mobile-grid-td">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex='rowIndex'>
                                 <dl class="opti_mobile_grid_dl" (touchend)="onGridItemClick(dataItem)">
-                                    <dt *ngIf="tracking!='N'">{{'ItemCode'|translate}}</dt>
-                                    <dd *ngIf="tracking!='N'">{{ dataItem.ITEMCODE }}</dd>
+                                    <dt [hidden]="gridColumnVisibilityArry.ITEMCODE == 'False'" *ngIf="tracking!='N'">{{'ItemCode'|translate}}</dt>
+                                    <dd [hidden]="gridColumnVisibilityArry.ITEMCODE == 'False'" *ngIf="tracking!='N'">{{ dataItem.ITEMCODE }}</dd>
 
-                                    <dt>{{'OpenQty'|translate}}</dt>
-                                    <dd>{{ dataItem.OPENQTY }}</dd>
+                                    <dt [hidden]="gridColumnVisibilityArry.OPENQTY == 'False'">{{'OpenQty'|translate}}</dt>
+                                    <dd [hidden]="gridColumnVisibilityArry.OPENQTY == 'False'">{{ dataItem.OPENQTY }}</dd>
                                 </dl>
                                 <dl class="opti_mobile_grid_dl" (touchend)="onGridItemClick(dataItem)">
-                                    <dt class="d-flex align-items-center">{{'Status'|translate}}
+                                    <dt class="d-flex align-items-center"><span *ngIf="!(gridColumnVisibilityArry.Status == 'False')">{{'Status'|translate}}</span>
                                         <button (click)="confirmDialogForDeleteAcceptItem(rowIndex,gridItem)" class="btn btn-danger k-button btn-sm btn-icon ml-auto"
                                             type="button">
                                             <span class="k-icon k-i-delete"></span>
                                         </button>
                                     </dt>
-                                    <dd>{{ dataItem.Status }}</dd>
-                                    <dt d-flex align-items-center>
-                                        <button tabindex="-1" *ngIf="IsUDFEnabled == 'Y'" class="k-button k-primary btn custom-icon-button" type="button" (mousedown)="ShowUDF('Detail', true, dataItem)">
+                                    <dd [hidden]="gridColumnVisibilityArry.Status == 'False'">{{ dataItem.Status }}</dd>
+
+                                    <dt ><span class="d-flex align-items-center" *ngIf="!(gridColumnVisibilityArry.ReceiveQty == 'False')">{{'Inbound_ReceiveQty'|translate}}</span> <button [hidden]="gridColumnVisibilityArry.UDF == 'False'" tabindex="-1" *ngIf="IsUDFEnabled == 'Y'" class="k-button k-primary btn custom-icon-button float-right" type="button" (mousedown)="ShowUDF('Detail', true, dataItem)">
+                                            <span class="k-icon k-i-plus-outline"></span>{{'UDF'|translate}}
+                                        </button></dt>
+                                    <dd [hidden]="gridColumnVisibilityArry.ReceiveQty == 'False'">{{ dataItem.ReceiveQty }}</dd>
+
+                                    <!-- <dt  d-flex align-items-center>
+                                        <button [hidden]="gridColumnVisibilityArry.UDF == 'False'" tabindex="-1" *ngIf="IsUDFEnabled == 'Y'" class="k-button k-primary btn custom-icon-button" type="button" (mousedown)="ShowUDF('Detail', true, dataItem)">
                                             <span class="k-icon k-i-plus-outline"></span>{{'UDF'|translate}}
                                         </button>
                                     </dt>
-                                    <dd></dd>
+                                    <dd></dd> -->
                                 </dl>
                             </ng-template>
                         </kendo-grid-column>
                         <!-- grid for mobile end -->
 
-                        <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE" title="{{'ItemCode'|translate}}">
-
+                        <kendo-grid-column [hidden]="gridColumnVisibilityArry.ITEMCODE == 'False'" media="(min-width: 768px)" field="ITEMCODE" title="{{'ItemCode'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem>
                                 <a class="col-template-mousedown" (mousedown)="onGridItemClick(dataItem)">
                                     {{dataItem.ITEMCODE}}
@@ -99,9 +104,7 @@
                             </ng-template>
                         </kendo-grid-column>
 
-                        <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" title="{{'OpenQty'|translate}}" headerClass="text-right" class="text-right">
-
-
+                        <kendo-grid-column [hidden]="gridColumnVisibilityArry.OPENQTY == 'False'" media="(min-width: 768px)" field="OPENQTY" title="{{'OpenQty'|translate}}" headerClass="text-right" class="text-right">
                             <ng-template kendoGridCellTemplate let-dataItem>
                                 <a class="col-template-mousedown" (mousedown)="onGridItemClick(dataItem)">
                                     {{dataItem.OPENQTY |numberFormat}}
@@ -109,16 +112,14 @@
                             </ng-template>
                         </kendo-grid-column>
 
-                        <kendo-grid-column media="(min-width: 768px)" field="Status" title="{{'Status'|translate}}">
-
+                        <kendo-grid-column [hidden]="gridColumnVisibilityArry.Status == 'False'" media="(min-width: 768px)" field="Status" title="{{'Status'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem>
                                 <a class="col-template-mousedown" (mousedown)="onGridItemClick(dataItem)">
                                     {{dataItem.Status}}
                                 </a>
                             </ng-template>
-
                         </kendo-grid-column>
-                        <kendo-grid-column media="(min-width: 768px)" field="ReceiveQty" title="{{'Inbound_ReceiveQty'|translate}}" headerClass="text-right"
+                        <kendo-grid-column [hidden]="gridColumnVisibilityArry.ReceiveQty == 'False'" media="(min-width: 768px)" field="ReceiveQty" title="{{'Inbound_ReceiveQty'|translate}}" headerClass="text-right"
                             class="text-right">
                             <ng-template kendoGridCellTemplate let-dataItem>
                                 <a class="col-template-mousedown" (mousedown)="onGridItemClick(dataItem)">
@@ -126,7 +127,7 @@
                                 </a>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column media="(min-width: 768px)" *ngIf="IsUDFEnabled == 'Y'" field="UDF" title="{{'UDF'|translate}}">
+                        <kendo-grid-column [hidden]="gridColumnVisibilityArry.UDF == 'False'" media="(min-width: 768px)" *ngIf="IsUDFEnabled == 'Y'" field="UDF" title="{{'UDF'|translate}}">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                 <button tabindex="-1" class="k-button k-primary btn custom-icon-button" type="button" (mousedown)="ShowUDF('Detail', true, dataItem)">
                                     <span class="k-icon k-i-plus-outline "></span>{{'UDF'|translate}}

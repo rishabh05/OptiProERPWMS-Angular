@@ -95,7 +95,7 @@ export class OutCutomerComponent implements OnInit {
     this.customerCode = '';
     this.showLookup = false;
     this.ShipmentHDR = [];
-
+    this.IsUDFEnabled = sessionStorage.getItem("ISUDFEnabled");    
     let option = sessionStorage.getItem("deliveryOptionType");
     this.deliveryOptionType = option;
     if (this.deliveryOptionType == '1') {
@@ -118,7 +118,7 @@ export class OutCutomerComponent implements OnInit {
     this.ShowPackListReport = (JSON.parse(sessionStorage.getItem('ConfigData'))).ShowPackListReport;
     this.ShowBOLReport = (JSON.parse(sessionStorage.getItem('ConfigData'))).ShowBOLReport;
     // this.initializeShipmentLines();
-    this.IsUDFEnabled = sessionStorage.getItem("ISUDFEnabled");       
+       
   }
 
   // initializeShipmentLines() {
@@ -1666,7 +1666,7 @@ export class OutCutomerComponent implements OnInit {
     this.yesButtonText = this.translate.instant("yes");
     this.noButtonText = this.translate.instant("no");
     this.dialogFor = "receivePDFDialog";
-    this.dialogMsg = "Do you want to print report?";
+    this.dialogMsg = this.translate.instant("ProReceiptReport");
     this.showConfirmDialog = true; // show dialog 
   }
 
@@ -1770,8 +1770,9 @@ export class OutCutomerComponent implements OnInit {
   selectall: boolean = false;
 
   selectShipmentRow(isCheck, dataitem, idx) {
-    if (isCheck) {
-      this.DiliveryShipmentList[idx].Selected = true;
+    if (isCheck) {      
+      var indx = this.DiliveryShipmentList.findIndex(r => r.OPTM_SHIPMENTID == dataitem.OPTM_SHIPMENTID);
+      this.DiliveryShipmentList[indx].Selected = true;
       // for (let i = 0; i < this.DiliveryShipmentList.length; i++) {
       //   if (this.DiliveryShipmentList[i].OPTM_CONTCODE == dataitem.OPTM_CONTCODE) {
       //     this.DiliveryShipmentList[i].Selected = true;
@@ -1795,8 +1796,9 @@ export class OutCutomerComponent implements OnInit {
         }
       }
       var index = this.SelectedRowsforShipmentArr.findIndex(r => r.ShipmentID == dataitem.OPTM_SHIPMENTID);
-      if (index > -1)
+      if (index > -1){
         this.SelectedRowsforShipmentArr.splice(index, 1);
+      }        
     }
   }
 

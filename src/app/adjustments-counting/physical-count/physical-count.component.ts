@@ -87,7 +87,7 @@ export class PhysicalCountComponent implements OnInit {
     this.getPhysicalCountData();
     this.IsUDFEnabled = sessionStorage.getItem("ISUDFEnabled");
     if (this.IsUDFEnabled == "Y") {
-      this.commonservice.GetWMSUDFBasedOnScreen("15041");
+      this.commonservice.GetWMSUDFBasedOnScreen("15112");
     }
   }
 

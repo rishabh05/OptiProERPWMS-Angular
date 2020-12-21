@@ -9,6 +9,7 @@ import { AutoLot } from 'src/app/models/Inbound/AutoLot';
 import { RowClassArgs } from '@progress/kendo-angular-grid';
 import { InboundService } from '../../services/inbound.service';
 import { IUIComponentTemplate } from 'src/app/common/ui-component.interface';
+import { ModuleIds, ScreenIds, ControlIds } from '../../enums/enums';
 
 @Component({
   selector: 'app-production-receipt-items-list',
@@ -41,12 +42,25 @@ export class ProductionReceiptItemsListComponent implements OnInit {
   constructor(private router: Router, private commonservice: Commonservice,
     private toastr: ToastrService, private translate: TranslateService,
     private productionService: ProductionService, private inboundService: InboundService) { }
-  ngOnInit() {
+  
+  async ngOnInit() {
     this.enableSubmitButton(false);
     this.IsUDFEnabled = sessionStorage.getItem("ISUDFEnabled");
     if(this.IsUDFEnabled == 'Y'){
-      this.commonservice.GetWMSUDFBasedOnScreen("15041");
+      this.commonservice.GetWMSUDFBasedOnScreen("15116");
     }
+    await this.commonservice.getComponentVisibilityList(ModuleIds.ProdReceipt, ScreenIds.ProdRec_Orderlist, ControlIds.PRODREC_GRID1);
+    let ItemDetailArr = this.commonservice.getComponentVisibility();
+    this.setAddedGridItemVisibility(ItemDetailArr);
+  }
+
+  gridColumnVisibilityArry: any = {};
+  setAddedGridItemVisibility(ColumnArry){
+    this.gridColumnVisibilityArry.ITEMCODE = ColumnArry.find(e=> e.OPTM_FIELDID == "ITEMCODE") != undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "ITEMCODE").OPTM_VISIBILITYSTATUS:""
+    this.gridColumnVisibilityArry.Status = ColumnArry.find(e=> e.OPTM_FIELDID == "Status") != undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "Status").OPTM_VISIBILITYSTATUS:""
+    this.gridColumnVisibilityArry.UDF = ColumnArry.find(e=> e.OPTM_FIELDID == "UDF")!= undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "UDF").OPTM_VISIBILITYSTATUS:""
+    this.gridColumnVisibilityArry.OPENQTY = ColumnArry.find(e=> e.OPTM_FIELDID == "OPENQTY")!= undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "OPENQTY").OPTM_VISIBILITYSTATUS:""
+    this.gridColumnVisibilityArry.ReceiveQty = ColumnArry.find(e=> e.OPTM_FIELDID == "ReceiveQty")!= undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "ReceiveQty").OPTM_VISIBILITYSTATUS:""
   }
 
   ngAfterViewInit(): void {
@@ -220,12 +234,10 @@ export class ProductionReceiptItemsListComponent implements OnInit {
 
     }
   }
-  onGridItemClick(selectedData) {
+  async onGridItemClick(selectedData) {
     // yaha data all parameter nikalne padenge or same model kark vaha bhejna padega.
     //var selectedData:any =this.gridDataNew[selection.index];
     let autoLot: any[] = [];
-
-
     autoLot.push(new AutoLot("N", selectedData.ITEMCODE, "", "", "", ""));
     sessionStorage.setItem("primaryAutoLots", JSON.stringify(autoLot));
     var selected = {
@@ -246,6 +258,7 @@ export class ProductionReceiptItemsListComponent implements OnInit {
     sessionStorage.setItem("AvailableRejectQty", this.availableRejQty.toString());
     sessionStorage.setItem("PalletizationEnabledForItem", "True");
     this.prodReceiptComponent = 2;
+    await this.commonservice.getComponentVisibilityList2(ModuleIds.ProdReceipt, ScreenIds.ProdRecScreen, ControlIds.PRODREC_GRID1);
     // console.log("recept value:"+this.prodReceiptComponent);
   }
 

@@ -16,7 +16,7 @@ export class ProductionService {
   //   })
   // }
 
-  constructor(private httpclient: HttpClient,private commonService:Commonservice) {
+  constructor(private httpclient: HttpClient, private commonService: Commonservice) {
     this.config_params = JSON.parse(sessionStorage.getItem('ConfigData'));
   }
 
@@ -59,7 +59,7 @@ export class ProductionService {
   }
 
   submitProductionRecepit(submitReceiptProdData: any): Observable<any> {
-    var jObject = { 
+    var jObject = {
       GoodsReceiptModel: JSON.stringify(submitReceiptProdData),
       UsernameForLic: sessionStorage.getItem("UserId")
     };
@@ -71,13 +71,17 @@ export class ProductionService {
    */
   isSerialExists(serialNo: string, itemCode: string, transType: number, tracking: string, wono: string,
     fromReceiptProduction: boolean): Observable<any> {
-    if(fromReceiptProduction){
-      var jObject = { SerialNo: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), ItemCode: itemCode, SerialNo: serialNo,
-       TransType: transType, TRACKING: tracking, WONO: wono }]) };
+    if (fromReceiptProduction) {
+      var jObject = {
+        SerialNo: JSON.stringify([{
+          CompanyDBId: sessionStorage.getItem("CompID"), ItemCode: itemCode, SerialNo: serialNo,
+          TransType: transType, TRACKING: tracking, WONO: wono
+        }])
+      };
       return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/CheckSerialNoPROD", jObject, this.commonService.httpOptions);
     } else {
       //return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/CheckSerialNoPROD", jObject, this.commonService.httpOptions);
-      var jObject = { SerialNo: JSON.stringify([{ CompanyDBId:  sessionStorage.getItem("CompID"), ItemCode: itemCode, SerialNo: serialNo}]) };
+      var jObject = { SerialNo: JSON.stringify([{ CompanyDBId: sessionStorage.getItem("CompID"), ItemCode: itemCode, SerialNo: serialNo }]) };
       return this.httpclient.post(this.config_params.service_url + "/api/GoodReceiptPO/CheckSerialNo", jObject, this.commonService.httpOptions);
     }
   }
@@ -96,14 +100,17 @@ export class ProductionService {
     return this.httpclient.post(this.config_params.service_url + "/api/ProductionIssue/GetBOMItemForProductionIssue", jObject, this.commonService.httpOptions);
   }
 
-
-
   public submitProduction(req: any) {
-    var body: any = { 
+    var body: any = {
       ProductionIssueModel: JSON.stringify(req),
       UsernameForLic: sessionStorage.getItem("UserId")
     };
     return this.httpclient.post(this.config_params.service_url + "/api/ProductionIssue/SubmitProductionIssue", body, this.commonService.httpOptions);
   }
 
+  GetBatchSerialForProdReceipt(poNumber: string, poStatus: string, btchser) {
+    var jObject = { BATCHNO: JSON.stringify([{ COMPANYDBNAME: sessionStorage.getItem("CompID"), 
+    WHSCODE: sessionStorage.getItem("whseId"), GUID: sessionStorage.getItem("GUID"), UsernameForLic: sessionStorage.getItem("UserId"), PONumber: poNumber, Status: poStatus, BTCHSER: btchser }]) };
+    return this.httpclient.post(this.config_params.service_url + "/api/ProductionReceipt/GetBatchesSerialForProductionReceipt", jObject, this.commonService.httpOptions);
+  }
 }

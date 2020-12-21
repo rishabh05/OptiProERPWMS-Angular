@@ -13,6 +13,7 @@ import { InventoryTransferService } from 'src/app/services/inventory-transfer.se
 import { InboundService } from 'src/app/services/inbound.service';
 import { PackingModel } from 'src/app/models/outbound/PackingModel';
 import { IUIComponentTemplate } from 'src/app/common/ui-component.interface';
+import { ModuleIds, ScreenIds, ControlIds } from '../../enums/enums';
 
 // This file called from Outbound -> SO delivery, Shipment delivery, IT by ITR.
 
@@ -94,7 +95,7 @@ export class OutOrderComponent implements OnInit {
 
   constructor(private inboundService: InboundService, private outboundservice: OutboundService, private router: Router, private commonservice: Commonservice, private toastr: ToastrService, private translate: TranslateService,
     private inventoryTransferService: InventoryTransferService) { }
-  ngOnInit() {
+  async ngOnInit() {
     console.log("oninit outorder")
     this.IsUDFEnabled = sessionStorage.getItem("ISUDFEnabled");
     if (sessionStorage.getItem(CommonConstants.FROM_DTS) == "true") {
@@ -110,7 +111,7 @@ export class OutOrderComponent implements OnInit {
       this.fromITR = true;
       this.pagetitle = this.translate.instant("InvTransfer_ByITR");
       if (this.IsUDFEnabled == 'Y') {
-        this.commonservice.GetWMSUDFBasedOnScreen("15041");
+        this.commonservice.GetWMSUDFBasedOnScreen("15111");
       }
     } else {
       this.fromITR = false;
@@ -173,6 +174,26 @@ export class OutOrderComponent implements OnInit {
     this.ShowPickListReport = (JSON.parse(sessionStorage.getItem('ConfigData'))).ShowPickListReport;
     this.ShowPackListReport = (JSON.parse(sessionStorage.getItem('ConfigData'))).ShowPackListReport;
     this.ShowBOLReport = (JSON.parse(sessionStorage.getItem('ConfigData'))).ShowBOLReport;
+
+    if (sessionStorage.getItem("ComingFrom") == "itr") {
+      await this.commonservice.getComponentVisibilityList2(ModuleIds.IT_By_ITR, ScreenIds.ITRList,
+        ControlIds.ITRList_GRID1);
+    }else{
+      await this.commonservice.getComponentVisibilityList2(ModuleIds.SO_Delivery, ScreenIds.SOList,
+        ControlIds.SOList_GRID1);
+    }
+    
+    let ItemDetailArr = this.commonservice.getComponentVisibility2();
+    this.setItemDetailColumnVisibility(ItemDetailArr);
+  }
+
+  gridColumnVisibilityArry: any = {};
+  setItemDetailColumnVisibility(ColumnArry){
+    this.gridColumnVisibilityArry.ITEMCODE = ColumnArry.find(e=> e.OPTM_FIELDID == "ITEMCODE") != undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "ITEMCODE").OPTM_VISIBILITYSTATUS:""
+    this.gridColumnVisibilityArry.ROWNUM = ColumnArry.find(e=> e.OPTM_FIELDID == "ROWNUM") != undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "ROWNUM").OPTM_VISIBILITYSTATUS:""
+    this.gridColumnVisibilityArry.OPENQTY = ColumnArry.find(e=> e.OPTM_FIELDID == "OPENQTY") != undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "OPENQTY").OPTM_VISIBILITYSTATUS:""
+    this.gridColumnVisibilityArry.RPTQTY = ColumnArry.find(e=> e.OPTM_FIELDID == "RPTQTY")!= undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "RPTQTY").OPTM_VISIBILITYSTATUS:""
+    this.gridColumnVisibilityArry.UDF = ColumnArry.find(e=> e.OPTM_FIELDID == "UDF")!= undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "UDF").OPTM_VISIBILITYSTATUS:""
   }
 
   ngAfterViewInit(): void {
@@ -348,7 +369,7 @@ export class OutOrderComponent implements OnInit {
     }
   }
 
-  public openPOByUOM(selectdeData: any) {
+  async openPOByUOM(selectdeData: any) {
     let outboundData: string = sessionStorage.getItem(CommonConstants.OutboundData);
     if (outboundData != undefined && outboundData != '') {
       this.outbound = JSON.parse(outboundData);
@@ -362,11 +383,16 @@ export class OutOrderComponent implements OnInit {
       // })
       // this.outbound.UDF = this.UDF;
       sessionStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+      if (sessionStorage.getItem("ComingFrom") == "itr") {
+        await this.commonservice.getComponentVisibilityList2(ModuleIds.IT_By_ITR, ScreenIds.ITROperationScreen, ControlIds.ITROPR_GRID1);
+      }else{
+        await this.commonservice.getComponentVisibilityList2(ModuleIds.SO_Delivery, ScreenIds.Delivery, ControlIds.DEL_GRID1);
+      }      
       this.router.navigate(['home/outbound/outprodissue', { skipLocationChange: true }]);
     }
   }
 
-  public openNextScreen(index: any) {
+  async openNextScreen(index: any) {
     let outboundData: string = sessionStorage.getItem(CommonConstants.OutboundData);
     if (outboundData != undefined && outboundData != '') {
       this.outbound = JSON.parse(outboundData);
@@ -378,6 +404,11 @@ export class OutOrderComponent implements OnInit {
       }
       // this.outbound.UDF = this.UDF;
       sessionStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+      if (sessionStorage.getItem("ComingFrom") == "itr") {
+        await this.commonservice.getComponentVisibilityList2(ModuleIds.IT_By_ITR, ScreenIds.ITROperationScreen, ControlIds.ITROPR_GRID1);
+      }else{
+        await this.commonservice.getComponentVisibilityList2(ModuleIds.SO_Delivery, ScreenIds.Delivery, ControlIds.DEL_GRID1);
+      }      
       this.router.navigate(['home/outbound/outprodissue', { skipLocationChange: true }]);
     }
   }
@@ -695,7 +726,7 @@ export class OutOrderComponent implements OnInit {
             hdr.WhsCode = o.Item.WHSCODE;
             hdr.Tracking = o.Item.TRACKING;
             hdr.ItemCode = o.Item.ITEMCODE;
-            hdr.UOM = o.Item.SelectedUOMEntry;
+            hdr.UOM = o.Item.SelectedUOMEntry == undefined ? -1:o.Item.SelectedUOMEntry;
             hdr.UOMName = o.Item.UOM;
             hdr.Line = hdrLineVal;//0
             if (this.outbound.CustomerData.CustRefNo != null && this.outbound.CustomerData.CustRefNo != undefined) {
@@ -1162,6 +1193,7 @@ export class OutOrderComponent implements OnInit {
               ITEMCODE: this.selectedPallets[j].ITEMCODE,
               LOTNO: this.selectedPallets[j].LOTNO,
               MeterialPickQty: this.selectedPallets[j].QTY,
+              RPTQTY: this.selectedPallets[j].QTY,
               PALLETNO: this.selectedPallets[j].Pallet,
               SYSNUMBER: this.selectedPallets[j].SYSNUMBER,
               TOTALQTY: this.selectedPallets[j].QTY,

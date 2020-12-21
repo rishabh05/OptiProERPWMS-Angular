@@ -10,6 +10,7 @@ import { OutboundData } from 'src/app/models/outbound/outbound-data';
 import { CommonConstants } from 'src/app/const/common-constants';
 import { Lot, Item, ProductionIssueModel } from 'src/app/models/Production/IFP';
 import { IUIComponentTemplate } from 'src/app/common/ui-component.interface';
+import { ModuleIds, ScreenIds, ControlIds } from '../../../enums/enums';
 
 
 @Component({
@@ -46,25 +47,32 @@ export class ProdOrderlistComponent implements OnInit {
   constructor(private router: Router, private productionService: ProductionService, public productionIssueComponent: ProductionIssueComponent,
     private toastr: ToastrService, private translate: TranslateService, private commonservice: Commonservice) { }
 
-  ngOnInit() {
-
-
+  async ngOnInit() {
     let outboundData: string = sessionStorage.getItem("OutboundData");
     if (outboundData != undefined && outboundData != '') {
       this.outbound = JSON.parse(outboundData);
-
       if (this.outbound != null && this.outbound.OrderData !== undefined && this.outbound.OrderData !== null && this.outbound.OrderData["Order No"] !== undefined && this.outbound.OrderData["Order No"] !== null) {
         this.orderNumber = this.outbound.OrderData["Order No"];
         this.orderNo = this.outbound.OrderData["Order No"];
         this.getItemListForOrder();
-
       }
       this.calculatePickQty();
     }
     this.IsUDFEnabled = sessionStorage.getItem("ISUDFEnabled");
     if(this.IsUDFEnabled == 'Y'){
-      this.commonservice.GetWMSUDFBasedOnScreen("15041");
+      this.commonservice.GetWMSUDFBasedOnScreen("15117");
     }    
+    await this.commonservice.getComponentVisibilityList(ModuleIds.ProdIssue, ScreenIds.ProdIssue_Orderlist, ControlIds.PRODISSUE_GRID1);
+    let ItemDetailArr = this.commonservice.getComponentVisibility();
+    this.setAddedGridItemVisibility(ItemDetailArr);
+  }
+
+  gridColumnVisibilityArry: any = {};
+  setAddedGridItemVisibility(ColumnArry){
+    this.gridColumnVisibilityArry.ItemCode = ColumnArry.find(e=> e.OPTM_FIELDID == "ItemCode") != undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "ItemCode").OPTM_VISIBILITYSTATUS:""
+    this.gridColumnVisibilityArry.BalQty = ColumnArry.find(e=> e.OPTM_FIELDID == "BalQty") != undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "BalQty").OPTM_VISIBILITYSTATUS:""
+    this.gridColumnVisibilityArry.UDF = ColumnArry.find(e=> e.OPTM_FIELDID == "UDF")!= undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "UDF").OPTM_VISIBILITYSTATUS:""
+    this.gridColumnVisibilityArry.RPTQTY = ColumnArry.find(e=> e.OPTM_FIELDID == "RPTQTY")!= undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "RPTQTY").OPTM_VISIBILITYSTATUS:""
   }
 
   ngAfterViewInit(): void {
@@ -202,8 +210,7 @@ export class ProdOrderlistComponent implements OnInit {
     );
   }
 
-  public openPOByUOM(selectdeData: any) {
-
+  async openPOByUOM(selectdeData: any) {
     // let selectdeData = selection.selectedRows[0].dataItem;
     let outboundData: string = sessionStorage.getItem(CommonConstants.OutboundData);
     if (outboundData != undefined && outboundData != '' && outboundData != null && outboundData != 'null') {
@@ -214,6 +221,7 @@ export class ProdOrderlistComponent implements OnInit {
         return;
       }
       sessionStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
+      await this.commonservice.getComponentVisibilityList2(ModuleIds.ProdIssue, ScreenIds.ProdIssueScreen, ControlIds.PRODISSUE_GRID1);
       this.prodOrderlist = false;
     }
   }

@@ -10,6 +10,7 @@ import { Location } from '@angular/common';
 import { InboundService } from 'src/app/services/inbound.service';
 import { IUIComponentTemplate } from 'src/app/common/ui-component.interface';
 import { FieldAccessorPipe } from '../../../../node_modules/@progress/kendo-angular-grid/dist/es2015/rendering/common/field-accessor.pipe';
+import { ModuleIds, ScreenIds, ControlIds } from '../../enums/enums';
 
 @Component({
   selector: 'app-bin-transfer',
@@ -119,7 +120,7 @@ export class BinTransferComponent implements OnInit {
   }
   // End UI Section
 
-  ngOnInit() {
+  async ngOnInit() {
     this.batchNoPlaceholder = this.translate.instant("BatchNo");
     if (sessionStorage.getItem("PalletizationEnabled") == "True") {
       this.isPalletizationEnable = true;
@@ -160,6 +161,18 @@ export class BinTransferComponent implements OnInit {
     if (this.IsUDFEnabled == 'Y') {
       this.commonservice.GetWMSUDFBasedOnScreen("15108");
     }
+    // await this.commonservice.getComponentVisibilityList(ModuleIds.WH_BIN_Transfer, ScreenIds.WH_BIN_Transfer, ControlIds.WH_BIN_View_Items_GRID);
+    // let ItemDetailArr = this.commonservice.getComponentVisibility();
+    // this.setAddedGridItemVisibility(ItemDetailArr);
+  }
+
+  gridColumnVisibilityArry: any = {};
+  setAddedGridItemVisibility(ColumnArry){
+    this.gridColumnVisibilityArry.ItemCode = ColumnArry.find(e=> e.OPTM_FIELDID == "ItemCode") != undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "ItemCode").OPTM_VISIBILITYSTATUS:""
+    this.gridColumnVisibilityArry.Qty = ColumnArry.find(e=> e.OPTM_FIELDID == "Qty") != undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "Qty").OPTM_VISIBILITYSTATUS:""
+    this.gridColumnVisibilityArry.LotNo = ColumnArry.find(e=> e.OPTM_FIELDID == "LotNo") != undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "LotNo").OPTM_VISIBILITYSTATUS:""
+    this.gridColumnVisibilityArry.BinNo = ColumnArry.find(e=> e.OPTM_FIELDID == "BinNo")!= undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "BinNo").OPTM_VISIBILITYSTATUS:""
+    this.gridColumnVisibilityArry.ToBin = ColumnArry.find(e=> e.OPTM_FIELDID == "ToBin")!= undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "ToBin").OPTM_VISIBILITYSTATUS:""
   }
 
   ngAfterViewInit(): void {

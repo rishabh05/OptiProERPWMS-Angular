@@ -251,52 +251,60 @@
                             <kendo-grid-column media="(max-width: 767px)" title="{{'Items'|translate}}" class="opti_mobile-grid-td">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <dl class="opti_mobile_grid_dl" (touchend)="openPOByUOM(dataItem,dataItem.ITEMCODE)">
-                                        <dt class="d-flex align-items-center">{{'LINENUM'|translate}}
+                                        <dt [hidden]="gridColumnVisibilityArry.ROWNUM == 'False'" class="d-flex align-items-center">{{'LINENUM'|translate}}
                                             <!-- <span class="opti_arrow-grid-detail float-right text-center opti_vertical-align ml-auto">›</span> -->
                                         </dt>
-                                        <dd>{{ dataItem.ROWNUM|numberFormat }}</dd>
+                                        <dd [hidden]="gridColumnVisibilityArry.ROWNUM == 'False'">{{ dataItem.ROWNUM|numberFormat }}</dd>
 
-                                        <dt>{{'ItemCode'|translate}}</dt>
-                                        <dd>{{ dataItem.ITEMCODE }}</dd>
+                                        <dt [hidden]="gridColumnVisibilityArry.ITEMCODE == 'False'">{{'ItemCode'|translate}}</dt>
+                                        <dd [hidden]="gridColumnVisibilityArry.ITEMCODE == 'False'">{{ dataItem.ITEMCODE }}</dd>
                                     </dl>
                                     <dl class="opti_mobile_grid_dl" (touchend)="openPOByUOM(dataItem,dataItem.ITEMCODE)">
-                                        <dt class="d-flex align-items-center">{{'OpenQty'|translate}}
+                                        <dt [hidden]="gridColumnVisibilityArry.OPENQTY == 'False'" class="d-flex align-items-center">{{'OpenQty'|translate}}
                                             <span class="opti_arrow-grid-detail float-right text-center opti_vertical-align ml-auto">></span>
                                         </dt>
-                                        <dd>{{ dataItem.OPENQTY|numberFormat }}</dd>
+                                        <dd [hidden]="gridColumnVisibilityArry.OPENQTY == 'False'">{{ dataItem.OPENQTY|numberFormat }}</dd>
 
-                                        <dt>{{'PickQty'|translate}} &nbsp; <button tabindex="-1" *ngIf="IsUDFEnabled == 'Y'" class="k-button float-right k-primary btn custom-icon-button" type="button" (mousedown)="ShowUDF('Detail', true, dataItem)">
+                                        <dt>
+                                            <span class="d-flex align-items-center" *ngIf="!(gridColumnVisibilityArry.RPTQTY == 'False')">{{'PickQty'|translate}}</span>
+                                            <button [hidden]="gridColumnVisibilityArry.UDF == 'False'" tabindex="-1" *ngIf="IsUDFEnabled == 'Y'" class="k-button float-right k-primary btn custom-icon-button"
+                                                type="button" (mousedown)="ShowUDF('Detail', true, dataItem)">
                                                 <span class="k-icon k-i-plus-outline"></span>{{'UDF'|translate}}
-                                            </button></dt>
-                                        <dd>{{ dataItem.RPTQTY|numberFormat }}</dd>
+                                            </button>
+                                        </dt>
+                                        <dd [hidden]="gridColumnVisibilityArry.RPTQTY == 'False'">{{ dataItem.RPTQTY|numberFormat }}</dd>
                                     </dl>
                                 </ng-template>
                             </kendo-grid-column>
                             <!-- grid for mobile end -->
 
-                            <kendo-grid-column media="(min-width: 768px)" field="ROWNUM" title="{{'LINENUM'|translate}}" [width]="6">
+                            <kendo-grid-column [hidden]="gridColumnVisibilityArry.ROWNUM == 'False'" media="(min-width: 768px)" field="ROWNUM" title="{{'LINENUM'|translate}}"
+                                [width]="6">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <a class="col-template-mousedown" (mousedown)="openPOByUOM(dataItem,dataItem.ITEMCODE)">{{dataItem.ROWNUM}}</a>
                                 </ng-template>
                             </kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="ITEMCODE" title="{{'ItemCode'|translate}}" [width]="6">
+                            <kendo-grid-column [hidden]="gridColumnVisibilityArry.ITEMCODE == 'False'" media="(min-width: 768px)" field="ITEMCODE" title="{{'ItemCode'|translate}}"
+                                [width]="6">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <a class="col-template-mousedown" (mousedown)="openPOByUOM(dataItem,dataItem.ITEMCODE)">{{dataItem.ITEMCODE}}</a>
                                 </ng-template>
 
                             </kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="OPENQTY" headerClass="text-right" class="text-right" [width]="6" title="{{'OpenQty'|translate}}">
+                            <kendo-grid-column [hidden]="gridColumnVisibilityArry.OPENQTY == 'False'" media="(min-width: 768px)" field="OPENQTY" headerClass="text-right"
+                                class="text-right" [width]="6" title="{{'OpenQty'|translate}}">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <a class="col-template-mousedown" (mousedown)="openPOByUOM(dataItem,dataItem.ITEMCODE)">{{dataItem.OPENQTY | numberFormat}}</a>
                                 </ng-template>
                             </kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" field="RPTQTY" headerClass="text-right" class="text-right" [width]="6" format="{0:n3}"
-                                title="{{'PickQty'|translate}}">
+                            <kendo-grid-column [hidden]="gridColumnVisibilityArry.RPTQTY == 'False'" media="(min-width: 768px)" field="RPTQTY" headerClass="text-right"
+                                class="text-right" [width]="6" format="{0:n3}" title="{{'PickQty'|translate}}">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <a class="col-template-mousedown" (mousedown)="openPOByUOM(dataItem,dataItem.ITEMCODE)">{{dataItem.RPTQTY | numberFormat}}</a>
                                 </ng-template>
                             </kendo-grid-column>
-                            <kendo-grid-column media="(min-width: 768px)" *ngIf="IsUDFEnabled == 'Y'" [width]="4" field="UDF" title="{{'UDF'|translate}}">
+                            <kendo-grid-column [hidden]="gridColumnVisibilityArry.UDF == 'False'" media="(min-width: 768px)" *ngIf="IsUDFEnabled == 'Y'"
+                                [width]="4" field="UDF" title="{{'UDF'|translate}}">
                                 <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                                     <button tabindex="-1" *ngIf="IsUDFEnabled == 'Y'" class="k-button k-primary btn custom-icon-button" type="button" (mousedown)="ShowUDF('Detail', true, dataItem)">
                                         <span class="k-icon k-i-plus-outline "></span>{{'UDF'|translate}}
@@ -306,7 +314,6 @@
                         </kendo-grid>
                     </div>
                 </div>
-
             </div>
         </div>
         <div class="fix-footer-btnBar">

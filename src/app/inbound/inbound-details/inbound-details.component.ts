@@ -8,6 +8,7 @@ import { InboundMasterComponent } from '../inbound-master.component';
 import { StatePersistingServiceService } from '../../services/state-persisting-service.service';
 import { CommonConstants } from '../../const/common-constants';
 import { IUIComponentTemplate } from 'src/app/common/ui-component.interface';
+import { ModuleIds } from '../../enums/enums';
 @Component({
   selector: 'app-inbound-details',
   templateUrl: './inbound-details.component.html',
@@ -82,18 +83,25 @@ export class InboundDetailsComponent implements OnInit, AfterViewInit {
   inboundFromWhere: any = false;
   ngOnInit() {
     this.inboundFromWhere = sessionStorage.getItem("inboundOptionType");
+    this.IsUDFEnabled = sessionStorage.getItem("ISUDFEnabled");
     if (this.inboundFromWhere == 1) {
       this.PONo = this.translate.instant("Inbound_PO#");
       this.future_PO_Invoice = this.translate.instant("Inbound_FuturePOs");
       this.addGRPODetailGridTitle = this.translate.instant("Inbound_PurchaseOrderNumber");
-      // this.GetUDFBasedOnScreen("15041");
-      
+      if(this.IsUDFEnabled == "Y"){
+        this.commonservice.GetWMSUDFBasedOnScreen("15041");
+      }
+      this.commonservice.getComponentVisibilityList(ModuleIds.POReceipt, "", "");
       // change captions and api calling according to normal inbound.
     } else if (this.inboundFromWhere == 2) {
       this.future_PO_Invoice = this.translate.instant("Inbound_FutureInvoices");
       this.PONo = this.translate.instant("Inbound_InvoiceNo");
       this.addGRPODetailGridTitle = this.translate.instant("Inbound_InvoiceNo");
       // change captions and api calling according to normal inbound.
+      if(this.IsUDFEnabled == "Y"){
+        this.commonservice.GetWMSUDFBasedOnScreen("15042");
+      }      
+      this.commonservice.getComponentVisibilityList(ModuleIds.AP_Invoice, "", "");
     }
     // set future po to check if already checked.
     if (sessionStorage.getItem("isFuturePOChecked") == "true") {
@@ -112,10 +120,7 @@ export class InboundDetailsComponent implements OnInit, AfterViewInit {
       this.showNext = false;
     }
     this.dateAvailableToReceieve();
-    this.IsUDFEnabled = sessionStorage.getItem("ISUDFEnabled");
-    if(this.IsUDFEnabled == "Y"){
-      this.commonservice.GetWMSUDFBasedOnScreen("15041");
-    }
+    
   }
 
 
@@ -402,6 +407,7 @@ export class InboundDetailsComponent implements OnInit, AfterViewInit {
 
     if (this.VendCode != undefined && this.VendCode != "") {
       this.inboundMasterComponent.selectedVernder = this.VendCode;
+      this.inboundMasterComponent.InboundUserPreference = this.commonservice.getComponentVisibility();
       this.inboundMasterComponent.inboundComponent = 2;
       sessionStorage.setItem("VendCode", this.VendCode);
       sessionStorage.setItem("VendName", this.VendName);
@@ -421,7 +427,7 @@ export class InboundDetailsComponent implements OnInit, AfterViewInit {
   onPOSelection($event) {
     sessionStorage.setItem("selectedPO", $event.selectedRows[0].dataItem.PONumber);
     this.inboundMasterComponent.inboundComponent = 2;
-
+    this.inboundMasterComponent.InboundUserPreference = this.commonservice.getComponentVisibility();
     this.persistingService.set('gridSettings', null);
   }
 
@@ -791,6 +797,11 @@ export class InboundDetailsComponent implements OnInit, AfterViewInit {
     }    
     if (!UDFButtonClicked) {
       if (UDFStatus != "MANDATORY_AVL") {
+        return false;
+      }
+    }else{
+      if (UDFStatus != "NO_DATA") {
+        this.toastr.error('', this.translate.instant("No UDF available"));
         return false;
       }
     }

@@ -19,6 +19,7 @@ import { InventoryTransferService } from '../../services/inventory-transfer.serv
 import { PackingModel } from '../../models/outbound/PackingModel';
 import { PickingModule } from '../../picking/picking.module';
 import { IUIComponentTemplate } from 'src/app/common/ui-component.interface';
+import { ModuleIds, ScreenIds, ControlIds } from '../../enums/enums';
 
 
 
@@ -97,6 +98,7 @@ export class OutProdissueComponent implements OnInit {
     if (sessionStorage.getItem(CommonConstants.FROM_DTS) == "true") {
       this.fromShipment = true;
     }
+    
     //lsOutbound
     let outboundData = sessionStorage.getItem(CommonConstants.OutboundData);
     if (outboundData != undefined && outboundData != '') {
@@ -108,7 +110,8 @@ export class OutProdissueComponent implements OnInit {
       this.UDF = this.outbound.UDF;
       // }
       this.currentOrderNo = this.outbound.OrderData["Order No"]
-
+      let ItemDetailArr = this.commonservice.getComponentVisibility2();
+      this.setItemDetailColumnVisibility(ItemDetailArr); 
       if (sessionStorage.getItem("ComingFrom") != "itr" && sessionStorage.getItem("ComingFrom") != "ProductionIssue") {
         // call api to get uom data by item id.
         await this.ourboundService.getUOMList(this.selected.ITEMCODE, this.docEntry, this.selected.LINENUM).then(
@@ -181,10 +184,7 @@ export class OutProdissueComponent implements OnInit {
           this.selectedPackingModel.PkgNo = '';
           this.selectedPackingModel.PkgType = '';
         }
-
       }
-
-
 
       this._requiredMeterialQty = parseFloat(this.selected.OPENQTY);
       this._remainingMeterial = this._requiredMeterialQty - this._pickedMeterialQty;
@@ -202,9 +202,35 @@ export class OutProdissueComponent implements OnInit {
         );
       }
     }
-    this.commonservice.GetWMSUDFBasedOnScreen("15041");
+
+    if (sessionStorage.getItem("ComingFrom") == "itr"){
+      await this.commonservice.getComponentVisibilityList2(ModuleIds.IT_By_ITR, ScreenIds.ITROperationScreen, ControlIds.ITROPR_GRID2);
+    }else if(sessionStorage.getItem("ComingFrom") == "ProductionIssue"){
+      await this.commonservice.getComponentVisibilityList2(ModuleIds.ProdIssue, ScreenIds.ProdIssueScreen, ControlIds.PRODISSUE_GRID2);
+    }else{
+      await this.commonservice.getComponentVisibilityList2(ModuleIds.SO_Delivery, ScreenIds.Delivery, ControlIds.DEL_GRID2);
+    }
+    let LotGridColArr = this.commonservice.getComponentVisibility2();
+    this.setLotColumnVisibility(LotGridColArr);
   }
 
+  gridColumnVisibilityArry: any = {};
+  setLotColumnVisibility(ColumnArry) {
+    this.gridColumnVisibilityArry.LOTNO = ColumnArry.find(e=> e.OPTM_FIELDID == "LOTNO") != undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "LOTNO").OPTM_VISIBILITYSTATUS:""
+    this.gridColumnVisibilityArry.BINNO = ColumnArry.find(e=> e.OPTM_FIELDID == "BINNO") != undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "BINNO").OPTM_VISIBILITYSTATUS:""
+    this.gridColumnVisibilityArry.TOTALQTY = ColumnArry.find(e=> e.OPTM_FIELDID == "TOTALQTY") != undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "TOTALQTY").OPTM_VISIBILITYSTATUS:""
+    this.gridColumnVisibilityArry.MeterialPickQty = ColumnArry.find(e=> e.OPTM_FIELDID == "MeterialPickQty")!= undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "MeterialPickQty").OPTM_VISIBILITYSTATUS:""
+  } 
+
+  setItemDetailColumnVisibility(ColumnArry){
+    this.gridColumnVisibilityArry.ITEMCODE = ColumnArry.find(e=> e.OPTM_FIELDID == "ITEMCODE") != undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "ITEMCODE").OPTM_VISIBILITYSTATUS:""
+    this.gridColumnVisibilityArry.RPTQTY = ColumnArry.find(e=> e.OPTM_FIELDID == "RPTQTY") != undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "RPTQTY").OPTM_VISIBILITYSTATUS:""
+    this.gridColumnVisibilityArry.OPENQTY = ColumnArry.find(e=> e.OPTM_FIELDID == "OPENQTY") != undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "OPENQTY").OPTM_VISIBILITYSTATUS:""
+    this.gridColumnVisibilityArry.INVOPENQTY = ColumnArry.find(e=> e.OPTM_FIELDID == "INVOPENQTY")!= undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "INVOPENQTY").OPTM_VISIBILITYSTATUS:""
+    this.gridColumnVisibilityArry.UOM = ColumnArry.find(e=> e.OPTM_FIELDID == "UOM")!= undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "UOM").OPTM_VISIBILITYSTATUS:""
+    this.gridColumnVisibilityArry.ShowPackingDetails = ColumnArry.find(e=> e.OPTM_FIELDID == "ShowPackingDetails")!= undefined? ColumnArry.find(e=> e.OPTM_FIELDID == "ShowPackingDetails").OPTM_VISIBILITYSTATUS:""
+  }
+  
   onUoMChange(event, gridItem) {
 
     // gridItem.data = this.openPOLineModel[0];
