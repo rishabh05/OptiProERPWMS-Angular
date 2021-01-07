@@ -800,7 +800,7 @@ export class InboundDetailsComponent implements OnInit, AfterViewInit {
         return false;
       }
     }else{
-      if (UDFStatus != "NO_DATA") {
+      if (UDFStatus == "NO_DATA") {
         this.toastr.error('', this.translate.instant("No UDF available"));
         return false;
       }
@@ -835,7 +835,8 @@ export class InboundDetailsComponent implements OnInit, AfterViewInit {
           Flag: "H",
           LineNo: -1,
           Value: value,
-          Key: itUDFComponentData[i].AliasID
+          Key: itUDFComponentData[i].AliasID,
+          DocEntry: 0
         });
       }
       sessionStorage.setItem("GRPOHdrUDF", JSON.stringify(this.UDF));

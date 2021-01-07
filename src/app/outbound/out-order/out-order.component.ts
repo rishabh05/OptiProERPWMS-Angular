@@ -2476,7 +2476,8 @@ export class OutOrderComponent implements OnInit {
             Flag: "H",
             LineNo: -1,
             Value: value,
-            Key: itUDFComponentData[i].AliasID
+            Key: itUDFComponentData[i].AliasID,
+            DocEntry: 0
           });
         }
         sessionStorage.setItem("GRPOHdrUDF", JSON.stringify(this.UDF));

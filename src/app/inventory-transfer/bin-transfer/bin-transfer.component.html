@@ -49,7 +49,7 @@
                                     </button>
                                 </div>
                                 <div class="ml-1 d-flex">
-                                    <button tabindex="-1" *ngIf="IsUDFEnabled == 'Y'" class="k-button k-primary btn custom-icon-button" type="button" (mousedown)="ShowUDF('Detail')">
+                                    <button tabindex="-1" *ngIf="IsUDFEnabled == 'Y'" class="k-button k-primary btn custom-icon-button" type="button" (mousedown)="ShowUDF('Detail', true)">
                                         <span class="k-icon k-i-plus-outline "></span>{{'UDF'|translate}}
                                     </button>
                                 </div>
@@ -316,7 +316,7 @@
                 <button type="button" class="btn btn-primary k-button btn-sm btn-icon-with-text mr-1" (mousedown)="ShowSavedData()">
                     <span class="k-icon k-i-preview" role="presentation"></span>
                     {{'InvTransfer_ViewLines'|translate}}</button>
-                <button tabindex="-1" *ngIf="IsUDFEnabled == 'Y'" class="k-button k-primary btn custom-icon-button" type="button" (mousedown)="ShowUDF('Header')">
+                <button tabindex="-1" *ngIf="IsUDFEnabled == 'Y'" class="k-button k-primary btn custom-icon-button" type="button" (mousedown)="ShowUDF('Header', true)">
                     <span class="k-icon k-i-plus-outline "></span>{{'UDF'|translate}}
                 </button>
                 <button type="button" class="btn btn-success k-button btn-sm btn-icon-with-text" (mousedown)="SubmitPutAway()">

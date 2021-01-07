@@ -1,5 +1,6 @@
 <!-- Grid Modal-->
 <kendo-dialog [width]="750"  *ngIf="dialogOpened" (close)="close_kendo_dialog()">
+<!-- <kendo-window [(top)]="100" [(left)]="50" title="Status" *ngIf="true" (close)="openClose(false)"> -->
 
     <kendo-dialog-titlebar>
         {{lookupTitle}}
@@ -47,3 +48,4 @@
     <div class="mt-3 clearfix" *ngIf="showSelection==true"></div>
     <button id="btnDone" *ngIf="showSelection==true" (click)="Done()">Done</button>
 </kendo-dialog>
+<!-- </kendo-window> -->

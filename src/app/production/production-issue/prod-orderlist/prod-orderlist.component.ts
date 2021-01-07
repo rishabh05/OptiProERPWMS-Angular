@@ -221,8 +221,8 @@ export class ProdOrderlistComponent implements OnInit {
         return;
       }
       sessionStorage.setItem(CommonConstants.OutboundData, JSON.stringify(this.outbound));
-      await this.commonservice.getComponentVisibilityList2(ModuleIds.ProdIssue, ScreenIds.ProdIssueScreen, ControlIds.PRODISSUE_GRID1);
       this.prodOrderlist = false;
+      await this.commonservice.getComponentVisibilityList2(ModuleIds.ProdIssue, ScreenIds.ProdIssueScreen, ControlIds.PRODISSUE_GRID1);
     }
   }
 
@@ -710,7 +710,8 @@ export class ProdOrderlistComponent implements OnInit {
             Flag: "H",
             LineNo: -1,
             Value: value,
-            Key: itUDFComponentData[i].AliasID
+            Key: itUDFComponentData[i].AliasID,
+            DocEntry: 0
           });
         }
         sessionStorage.setItem("GRPOHdrUDF", JSON.stringify(this.UDF));

@@ -910,7 +910,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    if (this.fromReceiptProduction) {
+    if (this.fromReceiptProduction && this.isGenelogyEnabled == 'Y' && this.ScanInputs != "") {
       if (this.openPOLineModel[0].TRACKING == "B") {
         if (Number(this.qty) > this.btchserQty) {
           this.toastr.error('', this.translate.instant("Quantity is more than batch quantity."))
@@ -928,6 +928,11 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         }
         if (Number(this.qty) + l > this.BtchSerData.length) {
           this.toastr.error('', this.translate.instant("Quantity taken is more than available serials."))
+          this.qty = undefined;
+          return;
+        } else if (this.recvingQuantityBinArray.findIndex(e => e.LotNumber == this.ScanInputs) != -1) {
+          this.toastr.error('', this.translate.instant("Serial already taken, please select different serial"))
+          this.ScanInputs = "";
           this.qty = undefined;
           return;
         }
@@ -969,6 +974,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
       }
     }
   }
+
   isGenelogyEnabled: any = "N";
   AddUpdateBatSerNo(autoLots: any[]) {
     this.MfrSerial = this.searlNo = "";
@@ -2509,8 +2515,17 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
         }
       } else if (this.lookupfor == "GetBatSerProdRec") {
         this.ScanInputs = $event[0];
-        this.qty = $event[1];
-        this.btchserQty = $event[1];
+        if (this.openPOLineModel[0].TRACKING == 'S') {
+          this.qty = $event[1];
+          this.btchserQty = $event[1];
+        } else {
+          this.qty = Number(this.OpenQty) - Number(this.openPOLineModel[0].RPTQTY);
+          this.btchserQty = Number(this.OpenQty) - Number(this.openPOLineModel[0].RPTQTY);
+          if (this.qty == 0) {
+            this.qty = undefined;
+            this.btchserQty = undefined
+          }
+        }
       }
     }
   }
@@ -3544,7 +3559,7 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
             LineNo: lineNum,
             Value: value,
             Key: itUDFComponentData[i].AliasID,
-
+            DocEntry: 0
           });
         }
       }
@@ -3609,21 +3624,30 @@ export class InboundGRPOComponent implements OnInit, AfterViewInit {
     }
     // this.showLookupLoader = true;
     // this.showLookup = false;
-    this.productionService.GetBatchSerialForProdReceipt(this.Ponumber, this.receiptData.status, btchser).subscribe(
+    this.productionService.GetBatchSerialForProdReceipt(this.Ponumber, this.receiptData.status, btchser, this.tracking).subscribe(
       (data: any) => {
         if (data != null) {
           if (data.length > 0) {
             if (event == 'blur') {
-              let result = data.find(e=>e.OPTM_BTCHSERNO == this.ScanInputs);
-              if(result == undefined){
+              let result = data.find(e => e.OPTM_BTCHSERNO == this.ScanInputs);
+              if (result == undefined) {
                 this.ScanInputs = "";
                 this.toastr.error('', this.translate.instant("ProdReceipt_InvalidBatchSerial"));
                 return;
               }
               this.BtchSerData = data;
               this.ScanInputs = result.OPTM_BTCHSERNO;
-              this.qty = result.OPTM_QUANTITY;
-              this.btchserQty = result.OPTM_QUANTITY;
+              if (this.openPOLineModel[0].TRACKING == 'S') {
+                this.qty = result.OPTM_QUANTITY;
+                this.btchserQty = result.OPTM_QUANTITY;
+              } else {
+                this.qty = Number(this.OpenQty) - Number(this.openPOLineModel[0].RPTQTY);
+                this.btchserQty = Number(this.OpenQty) - Number(this.openPOLineModel[0].RPTQTY);
+                if (this.qty == 0) {
+                  this.qty = undefined;
+                  this.btchserQty = undefined
+                }
+              }
             } else {
               this.serviceData = data;
               this.BtchSerData = data;

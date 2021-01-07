@@ -443,6 +443,7 @@ export class OutCutomerComponent implements OnInit {
     this.showLookupLoader = true;
     this.outboundservice.getCustomerList().subscribe(
       resp => {
+        this.showLookupLoader = false;
         if (resp != undefined && resp != null) {
           if (resp[0].ErrorMsg == "7001") {
             this.commonservice.RemoveLicenseAndSignout(this.toastr, this.router, this.translate.instant("CommonSessionExpireMsg"));//.subscribe();
@@ -812,7 +813,7 @@ export class OutCutomerComponent implements OnInit {
             this.showLookupLoader = false;
             this.trackingId = "";
             this.CustRefNo = "";
-            this.toastr.success('', this.translate.instant("DeleiverySuccess") + " : " + data[0].SuccessNo);
+            this.toastr.success('', this.translate.instant("SODeleiverySuccess") + " : " + data[0].SuccessNo);
             this.clearOutbound();
             sessionStorage.setItem("GRPOHdrUDF", "");
             if (this.invoiceStatus == "N" || this.invoiceStatus == "n") {
@@ -2018,7 +2019,8 @@ export class OutCutomerComponent implements OnInit {
           Flag: "H",
           LineNo: -1,
           Value: value,
-          Key: itUDFComponentData[i].AliasID
+          Key: itUDFComponentData[i].AliasID,
+          DocEntry: 0
         });
       }
       sessionStorage.setItem("GRPOHdrUDF", JSON.stringify(this.UDF));

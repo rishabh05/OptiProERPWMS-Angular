@@ -108,9 +108,9 @@ export class ProductionService {
     return this.httpclient.post(this.config_params.service_url + "/api/ProductionIssue/SubmitProductionIssue", body, this.commonService.httpOptions);
   }
 
-  GetBatchSerialForProdReceipt(poNumber: string, poStatus: string, btchser) {
+  GetBatchSerialForProdReceipt(poNumber: string, poStatus: string, btchser, tracking: string) {
     var jObject = { BATCHNO: JSON.stringify([{ COMPANYDBNAME: sessionStorage.getItem("CompID"), 
-    WHSCODE: sessionStorage.getItem("whseId"), GUID: sessionStorage.getItem("GUID"), UsernameForLic: sessionStorage.getItem("UserId"), PONumber: poNumber, Status: poStatus, BTCHSER: btchser }]) };
+    WHSCODE: sessionStorage.getItem("whseId"), GUID: sessionStorage.getItem("GUID"), UsernameForLic: sessionStorage.getItem("UserId"), PONumber: poNumber, Status: poStatus, BTCHSER: btchser,Tracking: tracking }]) };
     return this.httpclient.post(this.config_params.service_url + "/api/ProductionReceipt/GetBatchesSerialForProductionReceipt", jObject, this.commonService.httpOptions);
   }
 }

@@ -1328,15 +1328,16 @@ showBins() {
         title: this.translate.instant("BatchSerial_No"),
         type: 'text',
         width: '100'
-      },
-      {
-        field: 'OPTM_QUANTITY',
-        title: this.translate.instant("Quantity"),
-        type: 'text',
-        width: '100'
       }
+      // ,
+      // {
+      //   field: 'OPTM_QUANTITY',
+      //   title: this.translate.instant("Quantity"),
+      //   type: 'text',
+      //   width: '100'
+      // }
     ];
-    this.lookupTitle = this.translate.instant("ItemDetail");
+    this.lookupTitle = this.translate.instant("BatchSerial_No");
     if (this.serviceData !== undefined) {
       if (this.serviceData.length > 0) {
         this.dialogOpened = true;
